@@ -17,6 +17,7 @@ cat > Modules/Setup.local <<-EOF
 readline 
 _ctypes
 _uuid
+_blake2
 EOF
 ./configure --prefix=$TOOLS $bootstrap_opt
 make
