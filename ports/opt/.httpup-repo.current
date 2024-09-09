@@ -127,6 +127,7 @@ perl-xml-simple
 keyutils
 gst-plugins-base
 libseccomp
+discord
 alsa-utils
 libgpg-error
 cbindgen
@@ -670,6 +671,9 @@ gst-plugins-base/Pkgfile
 libseccomp/.footprint
 libseccomp/.md5sum
 libseccomp/Pkgfile
+discord/.footprint
+discord/.md5sum
+discord/Pkgfile
 alsa-utils/Pkgfile
 alsa-utils/post-install
 libgpg-error/.footprint

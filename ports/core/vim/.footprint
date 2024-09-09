@@ -898,7 +898,6 @@ drwxr-xr-x	root/root	usr/share/vim/vim91/indent/
 -rw-r--r--	root/root	usr/share/vim/vim91/indent/postscr.vim
 -rw-r--r--	root/root	usr/share/vim/vim91/indent/pov.vim
 -rw-r--r--	root/root	usr/share/vim/vim91/indent/prolog.vim
--rw-r--r--	root/root	usr/share/vim/vim91/indent/proto.vim
 -rw-r--r--	root/root	usr/share/vim/vim91/indent/ps1.vim
 -rw-r--r--	root/root	usr/share/vim/vim91/indent/pyrex.vim
 -rw-r--r--	root/root	usr/share/vim/vim91/indent/python.vim

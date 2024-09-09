@@ -36,7 +36,6 @@ d:autoconf
 d:openssh
 d:libnl
 d:mpfr
-d:pkg-config
 d:ports
 d:aaa_filesystem
 d:lzo
@@ -238,7 +237,8 @@ f:db09442c289465e594255e94cc6404b7:stripping/stripping.sh
 f:98ce4fee336d080f0366d1e7d5efc76b:stripping/cleanup.sh
 f:766d69e68903da9e524daf97f6791420:python3-babel/.footprint
 f:59e5d9fb8b133a95e8ab7fa40275df2f:python3-babel/Pkgfile
-f:dc9a3329854f0cd9e70d6e2cd759c486:vim/.footprint
+f:74cfe1d76f27ed28d8d0d3001e01e6f9:vim/.footprint
+f:1fa723b0d32ca342bcc92184e5eaae30:vim/.md5sum
 f:ccaef693c3eed0e459a317e43a854e48:vim/Pkgfile
 f:01d9126306492d812322ca765f776e8f:gzip/.md5sum
 f:734c597ead93b8da37679f60e212f968:gzip/Pkgfile
@@ -261,7 +261,7 @@ f:4531f4675086a111a18e1738cc95baa4:libuv/.footprint
 f:d61cefed841a876f78551b13823571cd:libuv/Pkgfile
 f:885b22246758d41ffe5fd05455c813eb:texinfo/.md5sum
 f:810abc840271a83a5834ec357da0aabe:texinfo/Pkgfile
-f:1065746d4b5951cb1a3a8ab6b56cae19:glibc/.footprint
+f:c1e04356f8eff02dc18e60b6d25faa30:glibc/.footprint
 f:e0073dea2ca1f0d5a72808c1df3bc360:glibc/.md5sum
 f:48aee8f690a8707e83f344d0886614c8:glibc/bootstrap-post-install
 f:cabf312a0adc98de9d52a411b2c14baa:glibc/genlocales
@@ -296,8 +296,8 @@ f:87088bde32a1cb75ad97e38a71de8e32:libnl/.footprint
 f:f3a7449b934bff169520abcb39d91fae:libnl/Pkgfile
 f:0ee51c12a773dc55a52f378f635b2631:mpfr/.md5sum
 f:1bcb46a8fab7f552ed0e968c85ea9a56:mpfr/Pkgfile
-f:2037765769d8f0316f6897c8ed26861b:pkg-config/.footprint
-f:c2c6516f3a308fb9e7ce55a47aa5125c:pkg-config/Pkgfile
+f:c59c8f078d8502fdbcfb6e0264b503dd:ports/.footprint
+f:9590518e99daca1122ee54b4d62f0133:ports/.md5sum
 f:9354f24f89e0b1375f1c14edb8eb9d37:ports/Pkgfile
 f:0de7bd216b8233739cb7b96163837c03:ports/repokey.pub
 f:30bf48f24b529e27f46f7bdb6bb13b6f:aaa_filesystem/profile
@@ -327,7 +327,8 @@ f:bd566ecc2f902cf225453ae103f36bd7:aaa_filesystem/os-release
 f:935ada68f22e8bc423af7028cd69d761:aaa_filesystem/i18n.sh
 f:5f582adf42b23bd6df17100410cb362d:aaa_filesystem/shells
 f:59609811f647ff063a820bd4413fb04f:lzo/Pkgfile
-f:9c7a69e0298694b7422ac0592d2b5ce1:man-db/.footprint
+f:f98ef7c55ed2c4f57456278611fe653d:man-db/.footprint
+f:a1ee01d02f7a03b0abaceb0cf0ae72f9:man-db/.md5sum
 f:b1d9b493f99f1b2419c81c93e703e1ea:man-db/Pkgfile
 f:da96f545b863e57c6ab2598c1ea9a740:gcc13/c99
 f:73c247be61e6eda3a12a4155d516b153:gcc13/Pkgfile
@@ -337,6 +338,7 @@ f:29d74a67beda16759fd7363c84358f8e:python3-cairo/Pkgfile
 f:08cd009209ade62554a0f4ecd5d77386:python3-mako/.footprint
 f:45dd78ad0d7d489f3fd6aa96622ad9f2:python3-mako/Pkgfile
 f:fefd637c79fdc499a29aacb4e1640336:prt-utils/.footprint
+f:25d7c2a0e5bcfb0ebf282c06eac26b2a:prt-utils/.md5sum
 f:72c5619fed9896fddb50f3901e3928f2:prt-utils/Pkgfile
 f:156f314630b38707bf4492a8d938f8a1:prt-utils/README
 f:633c31796a2ffd0a88c8cddfcfc7bdb5:flex/Pkgfile
@@ -427,7 +429,8 @@ f:2f320548ab71473463a996f87a90d4af:python3-jinja2/Pkgfile
 f:4457f2cd93fc69cb3c0b355e53de3093:python3-requests/.footprint
 f:82bc35890943a63164619e5ddd452359:python3-requests/Pkgfile
 f:13d563477b94959f59dfeb8dfec46599:python3-requests/requests-2.32.2-use_system_certs-1.patch
-f:7651c9202e96cbccbf1ef6f599398d97:expat/.footprint
+f:25469cf5eb0460ffc6662b38b05c4dd1:expat/.footprint
+f:d17b9a5a126e3d759135b491f1260d5f:expat/.md5sum
 f:78df2d7cba46db2289b91e28841a4268:expat/Pkgfile
 f:62476e91260bf3734ec7d22afd9ca823:libxcrypt/.md5sum
 f:1cd75b347de66461644f146f2fc505ea:libxcrypt/Pkgfile
@@ -468,7 +471,7 @@ f:ac8b9ae66ca071ed247f8acbace05d61:gcc/.md5sum
 f:da96f545b863e57c6ab2598c1ea9a740:gcc/c99
 f:44165b7d16f6bfdc144fb10a28d2f13d:gcc/Pkgfile
 f:3d333df77302ed89e06a4a8539943b7d:gcc/c89
-f:aa6f51610d4214272ba36fa7b46bcf40:.httpup-repo.current
+f:a770012fec40e68c8eeb263b619120a5:.httpup-repo.current
 f:8308c18e7b27f5589e22643f08fdc777:gperf/Pkgfile
 f:fbc82ed761feeb25cc3a540927c8a8c0:linux-headers/.footprint
 f:2de3c911a2b460c265ceed876f0f73d1:linux-headers/.md5sum
@@ -553,7 +556,8 @@ f:9fd81fbb3dbd751e4da955e7b5ac8f37:man-pages/Pkgfile
 f:6fb45d13d24556217a8106faff51b517:shell-files/shell-files.sh
 f:a6b9b6d73781e92c782278cbe80270dc:python3-pluggy/.footprint
 f:c49b415ccffaf37e75785c48e9adc452:python3-pluggy/Pkgfile
-f:61816f92c0fa3a9aa227e11271212043:python3-wheel/.footprint
+f:c264c3936a57a354092ead0bb8b6f60d:python3-wheel/.footprint
+f:0092385302b81e78925f9cb08caa4f9f:python3-wheel/.md5sum
 f:ecc0d48fe56f9d7100f188ad828c0dda:python3-wheel/Pkgfile
 f:48be172d91ac8130d1c5fbc1d38d9149:python3-wheel/plasmalog.log
 f:cb08c2aafbb51505146a63bd68cfca59:python3-psutil/.footprint
@@ -671,7 +675,13 @@ f:2e18992072ebc7c45c593593fb71a50f:isl/Pkgfile
 f:f2bda546ba7caab907f37cd84851ef63:wpa_supplicant/.footprint
 f:0ca770e0659e2aeb418f233016ee68bd:wpa_supplicant/Pkgfile
 f:dace26d9323391e9bc9f647964536f4a:wpa_supplicant/wpa_supplicant.conf
-f:01a1ad4245cca0e615c904b469b99236:pkgconf/Pkgfile
+f:c6ae47fcfb985dca02037258b0b08e96:pkgconf/.footprint
+f:d19e51effbbede2f9ecdf60b43b34d5e:pkgconf/.md5sum
+f:96f9f36ec74ba300132ea8b20f21359c:pkgconf/Pkgfile
+f:01a1ad4245cca0e615c904b469b99236:pkgconf/Pkgfile.bak
+f:6fec70b14f238ad94caf5dac367ee427:pkgconf/README
+f:b5bee6aa847bfdcf84ef31229dba32a9:pkgconf/i686-pc-linux-gnu.personality
+f:c6d689e4e8bc7b2b3e13a911bab36e27:pkgconf/x86_64-pc-linux-gnu.personality
 f:751419260aa954499f7abaabaa882bbe:genfstab/COPYING
 f:d32239bcb673463ab874e80d47fae504:genfstab/LICENSE
 f:6661d079e2eac3e70a754e0e57fc0085:genfstab/Pkgfile
