@@ -1,0 +1,28 @@
+drwxr-xr-x	root/root	opt/
+drwxr-xr-x	root/root	opt/kf6/
+drwxr-xr-x	root/root	opt/kf6/include/
+drwxr-xr-x	root/root	opt/kf6/include/KF6/
+drwxr-xr-x	root/root	opt/kf6/include/KF6/KPlotting/
+-rw-r--r--	root/root	opt/kf6/include/KF6/KPlotting/KPlotAxis
+-rw-r--r--	root/root	opt/kf6/include/KF6/KPlotting/KPlotObject
+-rw-r--r--	root/root	opt/kf6/include/KF6/KPlotting/KPlotPoint
+-rw-r--r--	root/root	opt/kf6/include/KF6/KPlotting/KPlotWidget
+-rw-r--r--	root/root	opt/kf6/include/KF6/KPlotting/kplotaxis.h
+-rw-r--r--	root/root	opt/kf6/include/KF6/KPlotting/kplotobject.h
+-rw-r--r--	root/root	opt/kf6/include/KF6/KPlotting/kplotpoint.h
+-rw-r--r--	root/root	opt/kf6/include/KF6/KPlotting/kplotting_export.h
+-rw-r--r--	root/root	opt/kf6/include/KF6/KPlotting/kplotting_version.h
+-rw-r--r--	root/root	opt/kf6/include/KF6/KPlotting/kplotwidget.h
+drwxr-xr-x	root/root	opt/kf6/lib/
+drwxr-xr-x	root/root	opt/kf6/lib/cmake/
+drwxr-xr-x	root/root	opt/kf6/lib/cmake/KF6Plotting/
+-rw-r--r--	root/root	opt/kf6/lib/cmake/KF6Plotting/KF6PlottingConfig.cmake
+-rw-r--r--	root/root	opt/kf6/lib/cmake/KF6Plotting/KF6PlottingConfigVersion.cmake
+-rw-r--r--	root/root	opt/kf6/lib/cmake/KF6Plotting/KF6PlottingTargets-release.cmake
+-rw-r--r--	root/root	opt/kf6/lib/cmake/KF6Plotting/KF6PlottingTargets.cmake
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6Plotting.so -> libKF6Plotting.so.6
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6Plotting.so.6 -> libKF6Plotting.so.6.5.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6Plotting.so.6.5.0
+drwxr-xr-x	root/root	opt/kf6/lib/plugins/
+drwxr-xr-x	root/root	opt/kf6/lib/plugins/designer/
+-rwxr-xr-x	root/root	opt/kf6/lib/plugins/designer/kplotting6widgets.so

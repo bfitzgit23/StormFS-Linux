@@ -1,0 +1,11 @@
+# Depends on: kde-frameworks-6
+
+name=konsole
+version=24.05.0
+release=1
+source=(https://download.kde.org/stable/release-service/${version}/src/$name-$version.tar.xz
+konsole-24.05.0-scrollbar-1.patch)
+build_opt="-DCMAKE_INSTALL_PREFIX=$KF6_PREFIX
+      -DCMAKE_BUILD_TYPE=Release         
+      -DBUILD_TESTING=OFF                
+      -Wno-dev .."

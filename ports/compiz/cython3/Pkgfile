@@ -1,0 +1,12 @@
+# description	: C-Extensions for Python3
+# depends	: python3
+
+name=cython3
+version=3.0.7
+release=1
+source=(https://github.com/cython/cython/archive/$version.tar.gz)
+
+pkg_build() {
+	python3 setup.py build
+	python3 setup.py install --root=$PKG --optimize=1
+}

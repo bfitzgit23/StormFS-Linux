@@ -1,0 +1,5 @@
+drwxr-xr-x	root/root	opt/
+drwxr-xr-x	root/root	opt/qt6/
+drwxr-xr-x	root/root	opt/qt6/plugins/
+drwxr-xr-x	root/root	opt/qt6/plugins/platformthemes/
+-rwxr-xr-x	root/root	opt/qt6/plugins/platformthemes/libqtlxqt.so

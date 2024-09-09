@@ -1,0 +1,26 @@
+# Description: Evented I/O for V8 javascript.
+# URL: https://nodejs.org/
+# Maintainer: Tim Biermann, tbier at posteo dot de
+# Depends on: which icu brotli c-ares libuv libnghttp2
+# Optional: http-parser npm
+
+name=nodejs
+version=22.7.0
+release=1
+source=(https://nodejs.org/dist/v$version/node-v$version.tar.xz)
+
+build() {
+  cd node-v$version
+
+
+  ./configure --prefix=/usr          \
+            --shared-cares         \
+            --shared-libuv         \
+            --shared-openssl       \
+            --shared-nghttp2       \
+            --shared-zlib          \
+            --with-intl=system-icu &&
+make
+  make DESTDIR=$PKG install
+ ln -sf node $PKG/usr/share/doc/node-$version
+}

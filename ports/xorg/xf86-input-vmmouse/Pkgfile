@@ -1,0 +1,20 @@
+# Description: xorg driver xf86-input-vmmouse
+# URL: http://xorg.freedesktop.org
+# Maintainer: CRUX Xorg Team, xorg-ports at crux dot nu
+# Depends on: xorg-server
+
+name=xf86-input-vmmouse
+version=13.2.0
+release=1
+source=(https://www.x.org/releases/individual/driver/$name-$version.tar.xz)
+
+build() {
+	cd xf86-input-vmmouse-$version
+
+	./configure \
+		--prefix=/usr \
+		--with-udev-rules-dir=/lib/udev/rules.d
+
+	make
+	make DESTDIR=$PKG install
+}

@@ -1,0 +1,20 @@
+# Description: libsamplerate is a sample rate converter for audio.
+# URL:         https://github.com/libsndfile/$name/
+# Maintainer:  B.r.i.a.n M.a.d.o.n.n.a b.m.a.d.o.n.n.a.s.t.e.r @ g.m.a.i.l.c.o.m
+# Depends on:  
+# Optional: alsa-lib libsndfile fftw
+
+name=libsamplerate
+version=0.2.2
+release=1
+source=(https://github.com/libsndfile/$name/releases/download/$version/$name-$version.tar.xz)
+
+build() {
+	cd $name-$version
+
+	./configure --prefix=/usr    \
+            --disable-static \
+            --docdir=/usr/share/doc/$name-$version &&
+make
+	make DESTDIR=$PKG install
+}

@@ -1,0 +1,25 @@
+# Description: A library that provides a secure layer over a reliable transport layer
+# URL: https://gnutls.org
+# Maintainer: Tim Biermann, tbier at posteo dot de
+# Depends on: libunistring nettle p11-kit libtasn1
+# Optional: brotli libidn2
+
+name=gnutls
+version=3.8.7.1
+release=2
+source=(https://www.gnupg.org/ftp/gcrypt/$name/v${version:0:3}/$name-$version.tar.xz)
+
+build() {
+  cd $name-3.8.7
+
+
+  prt-get isinst brotli && PKGMK_GNUTLS+=' --with-brotli'
+  prt-get isinst libidn2 && PKGMK_GNUTLS+=' --with-idn'
+
+  ./configure --prefix=/usr \
+            --docdir=/usr/share/doc/$name-$version \
+            --with-default-trust-store-pkcs11="pkcs11:" &&
+make
+  make DESTDIR=$PKG install
+rm -r $PKG/usr/share/{doc,info,locale}
+}

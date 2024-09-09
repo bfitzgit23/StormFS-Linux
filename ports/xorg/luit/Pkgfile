@@ -1,0 +1,18 @@
+# Description: ICE authority file utility
+# URL: http://xorg.freedesktop.org
+# Maintainer: CRUX Xorg Team, xorg-ports at crux dot nu
+# Depends on: xorg-server
+
+name=luit
+version=20240102
+release=1
+source=(https://invisible-mirror.net/archives/$name/$name-$version.tgz)
+
+build() {
+	cd luit-$version
+
+CFLAGS='-U_XOPEN_SOURCE -D_XOPEN_SOURCE=600'	./configure $XORG_CONFIG
+
+	make
+	make DESTDIR=$PKG install
+}

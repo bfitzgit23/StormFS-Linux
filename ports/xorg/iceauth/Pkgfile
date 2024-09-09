@@ -1,0 +1,18 @@
+# Description: ICE authority file utility
+# URL: http://xorg.freedesktop.org
+# Maintainer: CRUX Xorg Team, xorg-ports at crux dot nu
+# Depends on: xorg-server
+
+name=iceauth
+version=1.0.9
+release=1
+source=(https://www.x.org/releases/individual/app/iceauth-$version.tar.xz)
+
+build() {
+	cd iceauth-$version
+
+	./configure $XORG_CONFIG
+
+	make
+	make DESTDIR=$PKG install
+}

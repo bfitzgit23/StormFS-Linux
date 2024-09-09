@@ -1,0 +1,18 @@
+# Description: 
+# URL: 
+# Maintainer:  
+# Depends on:  glibc libxcrypt
+
+name=mkinitcpio-busybox
+version=1.36.1
+release=1
+source=(https://busybox.net/downloads/busybox-$version.tar.bz2
+config)
+
+pkg_build() {
+sed 's|^\(CONFIG_EXTRA_CFLAGS\)=.*|\1="'"$safeflags"'"|' "$SRC/config" > $SRC/busybox-$version/.config
+cd $SRC
+  export KCONFIG_NOTIMESTAMP=1
+  make -C "busybox-$version"
+  install -Dm755 "$SRC/busybox-$version/busybox" "$PKG/usr/lib/initcpio/busybox"
+}

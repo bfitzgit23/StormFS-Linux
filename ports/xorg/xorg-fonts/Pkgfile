@@ -1,0 +1,16 @@
+# Description: The Xorg libraries provide library routines that are used within all X Window applications.
+# URL:         https://www.x.org/
+# Maintainer:  B.r.i.a.n M.a.d.o.n.n.a b.m.a.d.o.n.n.a.s.t.e.r @ g.m.a.i.l.c.o.m
+# Depends on: xcursor-themes xorg-font-adobe-100dpi xorg-font-daewoo-misc xorg-font-adobe-75dpi  xorg-font-dec-misc xorg-font-adobe-utopia-100dpi xorg-font-dejavu-ttf xorg-font-adobe-utopia-75dpi xorg-font-ibm-type1 xorg-font-adobe-utopia-type1 xorg-font-isas-misc xorg-font-alias xorg-font-jis-misc xorg-font-arabic-misc xorg-font-micro-misc xorg-font-bh-100dpi xorg-font-misc-cyrillic xorg-font-bh-75dpi xorg-font-misc-ethiopic xorg-font-bh-lucidatypewriter-100dpi xorg-font-misc-meltho xorg-font-bh-lucidatypewriter-75dpi xorg-font-misc-misc xorg-font-bh-ttf xorg-font-mutt-misc xorg-font-bh-type1 xorg-font-schumacher-misc xorg-font-bitstream-100dpi xorg-font-screen-cyrillic xorg-font-bitstream-75dpi xorg-font-sony-misc xorg-font-bitstream-type1 xorg-font-sun-misc xorg-font-bitstream-vera xorg-font-util xorg-font-cronyx-cyrillic xorg-font-winitzki-cyrillic xorg-font-cursor-misc xorg-font-xfree86-type1
+
+
+name=xorg-fonts
+version=7x
+release=1
+source=()
+
+build() {
+
+
+	mkdir $PKG/usr
+}

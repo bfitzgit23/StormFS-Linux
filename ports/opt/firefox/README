@@ -1,0 +1,12 @@
+For sandboxing webapps you will need to install these optional dependencies:
+wasi-libc
+lld
+wasi-compiler-rt
+wasi-libc++
+See https://hacks.mozilla.org/2020/02/securing-firefox-with-webassembly/ 
+to learn why you might want to enable this feature. A different approach,
+https://wiki.gentoo.org/wiki/Simple_sandbox , can be implemented without
+any additional dependencies.
+
+If you compile firefox frequently, consider installing ccache and sccache,
+so that later updates can use the artifacts left over from previous builds.

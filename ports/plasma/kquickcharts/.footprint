@@ -1,0 +1,35 @@
+drwxr-xr-x	root/root	opt/
+drwxr-xr-x	root/root	opt/kf6/
+drwxr-xr-x	root/root	opt/kf6/lib/
+drwxr-xr-x	root/root	opt/kf6/lib/cmake/
+drwxr-xr-x	root/root	opt/kf6/lib/cmake/KF6QuickCharts/
+-rw-r--r--	root/root	opt/kf6/lib/cmake/KF6QuickCharts/KF6QuickChartsConfig.cmake
+-rw-r--r--	root/root	opt/kf6/lib/cmake/KF6QuickCharts/KF6QuickChartsConfigVersion.cmake
+lrwxrwxrwx	root/root	opt/kf6/lib/libQuickCharts.so -> libQuickCharts.so.1
+lrwxrwxrwx	root/root	opt/kf6/lib/libQuickCharts.so.1 -> libQuickCharts.so.6.5.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libQuickCharts.so.6.5.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libQuickChartsControls.so -> libQuickChartsControls.so.1
+lrwxrwxrwx	root/root	opt/kf6/lib/libQuickChartsControls.so.1 -> libQuickChartsControls.so.6.5.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libQuickChartsControls.so.6.5.0
+drwxr-xr-x	root/root	opt/kf6/lib/qml/
+drwxr-xr-x	root/root	opt/kf6/lib/qml/org/
+drwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/
+drwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/quickcharts/
+-rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/quickcharts/QuickCharts.qmltypes
+drwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/quickcharts/controls/
+-rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/quickcharts/controls/KirigamiTheme.qml
+-rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/quickcharts/controls/Legend.qml
+-rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/quickcharts/controls/LegendDelegate.qml
+-rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/quickcharts/controls/LineChartControl.qml
+-rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/quickcharts/controls/PieChartControl.qml
+-rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/quickcharts/controls/QuickChartsControls.qmltypes
+-rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/quickcharts/controls/Theme.qml
+-rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/quickcharts/controls/kde-qmlmodule.version
+-rwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/quickcharts/controls/libQuickChartsControlsplugin.so
+-rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/quickcharts/controls/qmldir
+-rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/quickcharts/kde-qmlmodule.version
+-rwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/quickcharts/libQuickChartsplugin.so
+-rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/quickcharts/qmldir
+drwxr-xr-x	root/root	opt/kf6/share/
+drwxr-xr-x	root/root	opt/kf6/share/qlogging-categories6/
+-rw-r--r--	root/root	opt/kf6/share/qlogging-categories6/kquickcharts.categories

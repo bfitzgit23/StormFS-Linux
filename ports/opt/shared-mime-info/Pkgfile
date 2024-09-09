@@ -1,0 +1,26 @@
+# Description: Core database of common types
+# URL: https://freedesktop.org/Software/shared-mime-info
+# Maintainer: Tim Biermann, tbier at posteo dot de
+# Depends on: glib libxml2 itstool
+# Optional: xmlto
+
+name=shared-mime-info
+version=2.4
+release=1
+# https://gitlab.freedesktop.org/xdg/shared-mime-info/-/blob/master/xdgmime
+_xdgmimever=fe2f298fa691b225bdea31d816cf6728df91ba6d
+source=(https://gitlab.freedesktop.org/xdg/shared-mime-info/-/archive/2.4/$name-$version.tar.bz2)
+
+build() {
+    cd $name-$version
+wget https://anduin.linuxfromscratch.org/BLFS/xdgmime/xdgmime.tar.xz
+tar -xf xdgmime.tar.xz &&
+make -C xdgmime    
+mkdir build &&
+cd    build &&
+
+meson setup --prefix=/usr --buildtype=release -Dupdate-mimedb=true .. &&
+ninja
+  
+  DESTDIR=$PKG ninja install
+}

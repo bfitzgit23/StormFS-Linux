@@ -1,0 +1,28 @@
+# Description: The Extra Cmake Modules package contains extra CMake modules used by KDE Frameworks 5 and other packages.
+# URL:         https://download.kde.org/
+# Maintainer:  B r i a n M a d o n n a  b.m.a.d.o.n.n.a.s.t.e.r@g.m.a.i.l.c..o.m
+# Depends on:  cmake
+# Optional: sphinxx pyqt
+
+name=extra-cmake-modules
+version=6.5.0
+release=1
+source=(https://download.kde.org/stable/frameworks/6.5/$name-$version.tar.xz)
+
+build() {
+	cd $name-$version
+
+	sed -i '/"lib64"/s/64//' kde-modules/KDEInstallDirsCommon.cmake &&
+
+sed -e '/PACKAGE_INIT/i set(SAVE_PACKAGE_PREFIX_DIR "${PACKAGE_PREFIX_DIR}")' \
+    -e '/^include/a set(PACKAGE_PREFIX_DIR "${SAVE_PACKAGE_PREFIX_DIR}")' \
+    -i ECMConfig.cmake.in &&
+
+mkdir build &&
+cd    build &&
+
+cmake -DCMAKE_INSTALL_PREFIX=/usr .. &&
+make
+
+	make DESTDIR=$PKG install
+}

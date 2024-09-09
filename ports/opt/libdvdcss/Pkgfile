@@ -1,0 +1,6 @@
+# Depends on: 
+
+name=libdvdcss
+version=1.4.3
+release=1
+source=(https://get.videolan.org/libdvdcss/1.4.3/libdvdcss-1.4.3.tar.bz2)

@@ -1,0 +1,17 @@
+# Description: The mdadm package contains administration tools for software RAID.
+# URL:         https://www.kernel.org/pub/
+# Maintainer:  B.r.i.a.n M.a.d.o.n.n.a b.m.a.d.o.n.n.a.s.t.e.r @ g.m.a.i.l.c.o.m
+# Depends on:  
+# Optional: mta
+
+name=mdadm
+version=4.2
+release=1
+source=(https://www.kernel.org/pub/linux/utils/raid/$name/$name-$version.tar.xz)
+
+build() {
+	cd $name-$version
+	make
+	
+	make BINDIR=/usr/sbin DESTDIR=$PKG install
+}

@@ -1,0 +1,30 @@
+# Description: The AccountsService package provides a set of D-Bus interfaces for querying and manipulating user account information and an implementation of those interfaces based on the usermod(8), useradd(8) and userdel(8) commands.
+# URL:          https://www.freedesktop.org/software/accountsservice/
+# Maintainer:  B.r.i.a.n M.a.d.o.n.n.a b.m.a.d.o.n.n.a.s.t.e.r @ g.m.a.i.l.c.o.m
+# Depends on:  polkit glib gobject-introspection systemd vala
+# Optional:    gtk-doc xmlto python3-python-dbusmock python3-gobject
+
+name=accountsservice
+version=23.13.9
+release=1
+source=(https://www.freedesktop.org/software/$name/$name-$version.tar.xz)
+pkg_build() {
+mv tests/dbusmock{,-tests}	
+sed -e '/accounts_service\.py/s/dbusmock/dbusmock-tests/' \
+    -e 's/assertEquals/assertEqual/'                      \
+    -i tests/test-libaccountsservice.py
+sed -i '/^SIMULATED_SYSTEM_LOCALE/s/en_IE.UTF-8/en_HK.iso88591/' tests/test-daemon.py
+mkdir build &&
+cd    build &&
+
+meson setup ..            \
+      --prefix=/usr       \
+      --buildtype=release \
+      -Dadmin_group=adm   &&
+grep 'print_indent'     ../subprojects/mocklibc-1.0/src/netgroup.c \
+     | sed 's/ {/;/' >> ../subprojects/mocklibc-1.0/src/netgroup.h &&
+sed -i '1i#include <stdio.h>'                                      \
+    ../subprojects/mocklibc-1.0/src/netgroup.h
+ninja
+DESTDIR=$PKG ninja install
+}

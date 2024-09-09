@@ -1,0 +1,6 @@
+# Depends on: gnome-backgrounds gnome-desktop gtk4 libadwaita xdg-desktop-portal xdg-desktop-portal-gtk
+
+name=xdg-desktop-portal-gnome
+version=46.2
+release=1
+source=(https://download.gnome.org/sources/${name}/46/${name}-${version}.tar.xz)

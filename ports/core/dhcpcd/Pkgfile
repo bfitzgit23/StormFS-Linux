@@ -1,0 +1,17 @@
+# Description: Implementation of the DHCP client specified in RFC2131
+# URL:         
+# Maintainer:  Emmett1, emmett1 dot 2miligrams at gmail dot com
+# Depends on:  
+
+name=dhcpcd
+version=10.0.10
+bootscriptsversion=20240522
+release=1
+source=(https://github.com/NetworkConfiguration/dhcpcd/releases/download/v$version/$name-$version.tar.xz)
+build_opt=" --prefix=/usr                
+            --sysconfdir=/etc            
+            --libexecdir=/usr/lib/dhcpcd 
+            --dbdir=/var/lib/dhcpcd      
+            --runstatedir=/run           
+            --disable-privsep"
+

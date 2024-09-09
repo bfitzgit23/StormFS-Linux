@@ -1,0 +1,18 @@
+# Description: Generate C bindings from rust code
+# URL: https://github.com/eqrion/cbindgen
+# Maintainer: John McQuah, jmcquah at disroot dot org
+# Depends on: rustc
+# Optional: sccache
+
+name=cbindgen
+version=0.27.0
+release=1
+source=(https://github.com/mozilla/$name/archive/v$version/$name-v$version.tar.gz)
+
+build() {
+	cd $name-$version
+
+cargo build --release
+mkdir -p $PKG/usr/bin/
+install -Dm755 target/release/cbindgen $PKG/usr/bin/
+}

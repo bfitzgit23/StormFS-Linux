@@ -1,0 +1,25 @@
+# Description: Newt is a programming library for color text mode, widget based user interfaces. It can be used to add stacked windows, entry widgets, checkboxes, radio buttons, labels, plain text fields, scrollbars, etc., to text mode user interfaces. Newt is based on the S-Lang library.
+# URL:         https://releases.pagure.org/$name
+# Maintainer:  B.r.i.a.n M.a.d.o.n.n.a b.m.a.d.o.n.n.a.s.t.e.r @ g.m.a.i.l.c.o.m
+# Depends on:  popt slang
+# Optional: gpm
+
+name=newt
+version=0.52.24
+release=1
+source=(https://releases.pagure.org/$name/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+
+	sed -e '/install -m 644 $(LIBNEWT)/ s/^/#/' \
+    -e '/$(LIBNEWT):/,/rv/ s/^/#/'          \
+    -e 's/$(LIBNEWT)/$(LIBNEWTSH)/g'        \
+    -i Makefile.in                          &&
+
+./configure --prefix=/usr           \
+            --with-gpm-support      \
+            --with-python=python3.11 &&
+make
+	make DESTDIR=$PKG install
+}

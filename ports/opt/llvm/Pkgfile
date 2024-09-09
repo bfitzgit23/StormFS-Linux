@@ -1,0 +1,58 @@
+# Description: LLVM compiler backend
+# URL: https://llvm.org/
+# Maintainer: B.r.i.a.n M.a.d.o.n.n.a b.m.a.d.o.n.n.a.s.t.e.r @ g.m.a.i.l.c.o.m
+# Depends on: cmake libffi libxml2 ninja python3-setuptools
+# Optional: doxygen git Ggaphviz python3-pygments rsync recommonmark texlive install-tl-unx valgrind  pyyaml zip ocaml psutil Z3
+
+name=llvm
+version=18.1.7
+release=1
+source=(https://github.com/llvm/llvm-project/releases/download/llvmorg-18.1.7/llvm-18.1.7.src.tar.xz
+https://anduin.linuxfromscratch.org/BLFS/llvm/llvm-cmake-18.src.tar.xz
+https://anduin.linuxfromscratch.org/BLFS/llvm/llvm-third-party-18.src.tar.xz
+https://github.com/llvm/llvm-project/releases/download/llvmorg-18.1.7/clang-18.1.7.src.tar.xz
+https://github.com/llvm/llvm-project/releases/download/llvmorg-18.1.7/compiler-rt-18.1.7.src.tar.xz)
+unpack_source() {
+tar -xf $PKGMK_SOURCE_DIR/$name-$version.src.tar.xz   -C $SRC
+cd $SRC/$name-$version.src
+tar xf $PKGMK_SOURCE_DIR/llvm-cmake-18.src.tar.xz   
+tar xf $PKGMK_SOURCE_DIR//llvm-third-party-18.src.tar.xz       		      
+tar xf $PKGMK_SOURCE_DIR/compiler-rt-$version.src.tar.xz -C projects               
+sed '/LLVM_COMMON_CMAKE_UTILS/s@../cmake@llvm-cmake-18.src@'          \
+    -i CMakeLists.txt                                                 &&
+sed '/LLVM_THIRD_PARTY_DIR/s@../third-party@llvm-third-party-18.src@' \
+    -i cmake/modules/HandleLLVMOptions.cmake
+tar xf $PKGMK_SOURCE_DIR/clang-$version.src.tar.xz -C tools &&
+mv tools/clang-$version.src tools/clang
+tar -xf $PKGMK_SOURCE_DIR/compiler-rt-$version.src.tar.xz -C projects    &&
+mv projects/compiler-rt-$version.src projects/compiler-rt &&
+sed '/^set(LLVM_COMMON_CMAKE_UTILS/d'                   \
+    -i projects/compiler-rt/CMakeLists.txt
+    grep -rl '#!.*python' | xargs sed -i '1s/python$/python3/'
+#    patch -Np2 -d tools/clang <$PKGMK_SOURCE_DIR/clang-18-enable_default_ssp-1.patch
+sed 's/clang_dfsan/& -fno-stack-protector/' \
+    -i projects/compiler-rt/test/dfsan/origin_unaligned_memtrans.c
+}
+
+build() {
+	cd $SRC/$name-$version.src
+
+mkdir -v build &&
+cd       build &&
+
+CC=gcc CXX=g++                                  \
+cmake -DCMAKE_INSTALL_PREFIX=/usr               \
+      -DLLVM_ENABLE_FFI=ON                      \
+      -DCMAKE_BUILD_TYPE=Release                \
+      -DLLVM_BUILD_LLVM_DYLIB=ON                \
+      -DLLVM_LINK_LLVM_DYLIB=ON                 \
+      -DLLVM_ENABLE_RTTI=ON                     \
+      -DLLVM_TARGETS_TO_BUILD="host;AMDGPU;BPF" \
+      -DLLVM_BINUTILS_INCDIR=/usr/include       \
+      -DLLVM_INCLUDE_BENCHMARKS=OFF             \
+      -DCLANG_DEFAULT_PIE_ON_LINUX=ON           \
+      -Wno-dev -G Ninja ..                      &&
+ninja
+DESTDIR=$PKG ninja install &&
+cp bin/FileCheck $PKG/usr/bin
+}

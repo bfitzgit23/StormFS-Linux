@@ -1,0 +1,26 @@
+# Description: Low-level data structure handling, portability wrappers, and interfaces for runtime functionality
+# URL: https://www.gtk.org/
+# Maintainer: CRUX System Team, core-ports at crux dot nu
+# Depends on: elfutils libpcre2 meson ninja util-linux
+
+name=glib
+version=2.80.4
+release=1
+source=(https://download.gnome.org/sources/glib/2.80/$name-$version.tar.xz
+https://www.linuxfromscratch.org/patches/blfs/svn/glib-skip_warnings-1.patch)
+
+build() {
+ cd $name-$version	
+patch -Np1 -i $SRC/glib-skip_warnings-1.patch
+mkdir build &&
+cd    build &&
+
+meson setup ..                 \
+      --prefix=/usr            \
+      --buildtype=release      \
+      -Dintrospection=enabled \
+      -Dman-pages=enabled      &&
+ninja
+DESTDIR=$PKG ninja install
+}
+

@@ -1,0 +1,7 @@
+# Depends on: layer-shell-qt liblxqt libfm-qt lxqt-menu-data gvfs oxygen-icons 
+
+name=pcmanfm-qt
+version=2.0.0
+release=1
+source=(https://github.com/lxqt/${name}/releases/download/${version}/${name}-${version}.tar.xz)
+

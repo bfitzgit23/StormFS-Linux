@@ -1,0 +1,16 @@
+# Description: 
+# URL: "https://gitlab.com/compiz/
+# Maintainer:B.r.i.a.n M.a.d.o.n.n.a B.m.a.d.o.n.n.a.s.t.e.r@g.m.a.i.l.c.o.m  
+# Depends on:  emerald
+
+name=emerald-themes
+version=0.8.18
+release=1
+source=(https://gitlab.com/compiz/$name/-/archive/master/$name-master.tar.bz2)
+
+pkg_build() {
+    NOCONFIGURE=1 ./autogen.sh
+  ./configure --prefix=/usr
+  make
+make install
+}
