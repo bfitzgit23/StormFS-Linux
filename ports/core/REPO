@@ -300,7 +300,9 @@ f:c59c8f078d8502fdbcfb6e0264b503dd:ports/.footprint
 f:9590518e99daca1122ee54b4d62f0133:ports/.md5sum
 f:9354f24f89e0b1375f1c14edb8eb9d37:ports/Pkgfile
 f:0de7bd216b8233739cb7b96163837c03:ports/repokey.pub
-f:30bf48f24b529e27f46f7bdb6bb13b6f:aaa_filesystem/profile
+f:f3161c5aeb7a0322205830fa41e0050b:aaa_filesystem/.footprint
+f:79ea5cc4bda726f58be5b981734ca82d:aaa_filesystem/.md5sum
+f:bb4ecd1841c089616127b8d291717722:aaa_filesystem/profile
 f:b8419160170a41ae01abab13a3b887df:aaa_filesystem/hostname
 f:f1dd87922e8fddfe73ef20ae76c2f777:aaa_filesystem/umask.sh
 f:b3ab812ec55780f8da4ebc66a798de7b:aaa_filesystem/.vimrc
@@ -308,7 +310,7 @@ f:3efa20695418cb235cef08ca534387d3:aaa_filesystem/extrapaths.sh
 f:7a9dcf4e4b24dbbe1064b16db851fe65:aaa_filesystem/.bash_profile
 f:5cbb5efc6adba814bafb91e534b09836:aaa_filesystem/locale.conf
 f:3e47d3ddb26a72616c5889a4f266cadf:aaa_filesystem/resolv.conf
-f:968f59690cb50b2cc98d7dd33f0d72f8:aaa_filesystem/Pkgfile
+f:337a0fa616d2eef58ea0690321ef91f8:aaa_filesystem/Pkgfile
 f:c374459fd914c975b41e68902a40c9e1:aaa_filesystem/dircolors.sh
 f:6336f6a759a3cff8a5f02daabf3c9be3:aaa_filesystem/locale.sh
 f:f673b48cd03445c429a2f813eac2dbbd:aaa_filesystem/group

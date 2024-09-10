@@ -1,6 +1,6 @@
 name=aaa_filesystem
 version=1
-release=1
+release=2
 source=(fstab
 	group
 	hostname

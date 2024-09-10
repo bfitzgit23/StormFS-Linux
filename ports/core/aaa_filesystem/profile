@@ -40,7 +40,8 @@ pathappend () {
 export -f pathremove pathprepend pathappend
 
 # Set the initial path
-export PATH=/usr/bin
+export PATH=/usr/bin:/opt/kf6/bin/:/usr/sbin
+
 
 # Attempt to provide backward compatibility with LFS earlier than 11
 if [ ! -L /bin ]; then
@@ -81,5 +82,7 @@ for script in /etc/profile.d/*.sh ; do
 done
 
 unset script RED GREEN NORMAL
-
+export PATH="/usr/lib/ccache/:$PATH"
+export CCACHE_DIR="/var/cache/ccache"
+export CCACHE_COMPILERCHECK="%compiler% -dumpversion; crux"
 # End /etc/profile
