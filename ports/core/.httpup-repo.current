@@ -36,7 +36,6 @@ autoconf
 openssh
 libnl
 mpfr
-pkg-config
 ports
 aaa_filesystem
 lzo
@@ -239,6 +238,7 @@ stripping/cleanup.sh
 python3-babel/.footprint
 python3-babel/Pkgfile
 vim/.footprint
+vim/.md5sum
 vim/Pkgfile
 gzip/.md5sum
 gzip/Pkgfile
@@ -296,10 +296,12 @@ libnl/.footprint
 libnl/Pkgfile
 mpfr/.md5sum
 mpfr/Pkgfile
-pkg-config/.footprint
-pkg-config/Pkgfile
+ports/.footprint
+ports/.md5sum
 ports/Pkgfile
 ports/repokey.pub
+aaa_filesystem/.footprint
+aaa_filesystem/.md5sum
 aaa_filesystem/profile
 aaa_filesystem/hostname
 aaa_filesystem/umask.sh
@@ -328,6 +330,7 @@ aaa_filesystem/i18n.sh
 aaa_filesystem/shells
 lzo/Pkgfile
 man-db/.footprint
+man-db/.md5sum
 man-db/Pkgfile
 gcc13/c99
 gcc13/Pkgfile
@@ -337,6 +340,7 @@ python3-cairo/Pkgfile
 python3-mako/.footprint
 python3-mako/Pkgfile
 prt-utils/.footprint
+prt-utils/.md5sum
 prt-utils/Pkgfile
 prt-utils/README
 flex/Pkgfile
@@ -428,6 +432,7 @@ python3-requests/.footprint
 python3-requests/Pkgfile
 python3-requests/requests-2.32.2-use_system_certs-1.patch
 expat/.footprint
+expat/.md5sum
 expat/Pkgfile
 libxcrypt/.md5sum
 libxcrypt/Pkgfile
@@ -554,6 +559,7 @@ shell-files/shell-files.sh
 python3-pluggy/.footprint
 python3-pluggy/Pkgfile
 python3-wheel/.footprint
+python3-wheel/.md5sum
 python3-wheel/Pkgfile
 python3-wheel/plasmalog.log
 python3-psutil/.footprint
@@ -671,7 +677,13 @@ isl/Pkgfile
 wpa_supplicant/.footprint
 wpa_supplicant/Pkgfile
 wpa_supplicant/wpa_supplicant.conf
+pkgconf/.footprint
+pkgconf/.md5sum
 pkgconf/Pkgfile
+pkgconf/Pkgfile.bak
+pkgconf/README
+pkgconf/i686-pc-linux-gnu.personality
+pkgconf/x86_64-pc-linux-gnu.personality
 genfstab/COPYING
 genfstab/LICENSE
 genfstab/Pkgfile

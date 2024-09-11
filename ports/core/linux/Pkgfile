@@ -1,10 +1,10 @@
 # Description: Linux kernel, sources and modules
 # URL:         
 # Maintainer:  Emmett1, emmett1 dot 2miligrams at gmail dot com
-# Depends on:  elfutils mkinitramfs openssl linux-firmware dracut
+# Depends on:  elfutils openssl linux-firmware dracut
 
 name=linux
-version=6.10.6
+version=6.10.9
 release=1
 source=(https://www.kernel.org/pub/linux/kernel/v6.x/linux-$version.tar.xz
         config)

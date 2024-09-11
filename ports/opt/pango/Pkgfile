@@ -1,7 +1,7 @@
 # Description: A library for layout and rendering of text
 # URL: https://www.gtk.org/
 # Maintainer: CRUX System Team, core-ports at crux dot nu
-# Depends on: fontconfig freerype harfbuzz fribidi gLib
+# Depends on: fontconfig freerype harfbuzz fribidi 
 # Optional: cairo gobject-introspection xorg-libs cantarell gi-docGen  help2man libthai sysprof
 name=pango
 version=1.54.0

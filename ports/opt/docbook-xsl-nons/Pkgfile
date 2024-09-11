@@ -6,31 +6,26 @@
 name=docbook-xsl-nons
 version=1.79.2
 release=4
-source=(https://github.com/docbook/xslt10-stylesheets/releases/download/release/1.79.2/docbook-xsl-nons-1.79.2.tar.bz2
- https://www.linuxfromscratch.org/patches/blfs/svn/docbook-xsl-nons-1.79.2-stack_fix-1.patch)
+source=(https://github.com/docbook/xslt10-stylesheets/releases/download/release/$version/$name-$version.tar.bz2 
+https://www.linuxfromscratch.org/patches/blfs/svn/$name-$version-stack_fix-1.patch)
 
-build() {
-	wget https://github.com/docbook/xslt10-stylesheets/releases/download/release/1.79.2/docbook-xsl-doc-1.79.2.tar.bz2
-	cd $name-$version
 
-	patch -Np1 -i ../docbook-xsl-nons-1.79.2-stack_fix-1.patch
-	tar -xf $SRC/docbook-xsl-doc-1.79.2.tar.bz2 --strip-components=1
-	install -v -m 0755 -d $PKG/usr/share/xml/docbook/xsl-stylesheets-nons-$version
+pkg_build() {
+
+
+	
+	install -v -m 0755 -d $PKG/usr/share/xml/docbook/xsl-stylesheets-$version
 
 	cp -v -R \
-		VERSION assembly common eclipse epub epub3 fo \
-		highlighting html htmlhelp images javahelp lib manpages params \
-		profiling roundtrip slides template tests tools webhelp website \
+		VERSION common eclipse epub epub3 fo \
+		highlighting html htmlhelp images javahelp lib manpages \
+		params profiling roundtrip slides template tests tools website \
 		xhtml xhtml-1_1 xhtml5 \
-		$PKG/usr/share/xml/docbook/xsl-stylesheets-nons-$version
+		$PKG/usr/share/xml/docbook/xsl-stylesheets-$version
 
-	ln -s VERSION $PKG/usr/share/xml/docbook/xsl-stylesheets-nons-${version}/VERSION.xsl
+	ln -s VERSION $PKG/usr/share/xml/docbook/xsl-stylesheets-${version}/VERSION.xsl
 
-	ln -sf xsl-stylesheets-nons-$version $PKG/usr/share/xml/docbook/xsl-stylesheets-nons
+	ln -sf xsl-stylesheets-$version $PKG/usr/share/xml/docbook/xsl-stylesheets
 
-install -v -m644 -D README \
-                    $PKG/usr/share/doc/$name-$version/README.txt &&
-install -v -m644    RELEASE-NOTES* NEWS* \
-                    $PKG/usr/share/doc/$name-$version
-cp -v -R doc/* $PKG/usr/share/doc/$name-$version
+	find $PKG \( -name "NEWS*" -o -name "README*" -o -name "ChangeLog*" \) -delete
 }

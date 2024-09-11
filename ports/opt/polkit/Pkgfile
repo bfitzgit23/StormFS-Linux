@@ -8,11 +8,10 @@ version=125
 release=1
 source=(https://github.com/$name-org/$name/archive/$version/$name-$version.tar.gz)
 
-build() {
+pkg_build() {
  
 
-  cd $name-$version
-mkdir build &&
+ mkdir build &&
 cd    build &&
 
 meson setup ..                   \
@@ -21,13 +20,9 @@ meson setup ..                   \
       -D man=true                \
       -D session_tracking=logind \
       -D tests=true
-grep 'print_indent'             ../subprojects/mocklibc-1.0/src/netgroup.c \
-     | sed 's/ {/;/' >>         ../subprojects/mocklibc-1.0/src/netgroup.h &&
-
-sed -i '1 i #include <stdio.h>' ../subprojects/mocklibc-1.0/src/netgroup.h
 ninja
   DESTDIR=$PKG ninja install
 
 
-  rm -r $PKG/usr/share/locale
+  rm -rf $PKG/usr/share/locale
 }

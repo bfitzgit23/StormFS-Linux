@@ -122,7 +122,7 @@ Setting locales
 ```
 
 Setting /etc/fstab
-# Double check /etc/fstab to verify it looks correct from ewrlier.
+# Double check /etc/fstab to verify it looks correct from earlier.
 ```
 # echo '/dev/sdXY / ext4 defaults 0 1' >> /etc/fstab
 # echo '/dev/sdXY swap swap defaults 0 0' >> /etc/fstab
@@ -147,18 +147,147 @@ Install grub
 
 # grub-mkconfig -o /boot/grub/grub.cfg
 ```
+(Configure Systemd)
+# systemd-machine-id-setup
+# systemctl preset-all
+Optional
+systemctl disable systemd-networkd-wait-online
 
+Mask udev's .link file for the default policy: 
+ln -s /dev/null /etc/systemd/network/99-default.link
+Name Network Card
+cat > /etc/systemd/network/10-ether0.link << "EOF"
+[Match]
+# Change the MAC address as appropriate for your network device
+MACAddress=12:34:45:78:90:AB
+
+[Link]
+Name=ether0
+EOF
+Static IP Configuration
+cat > /etc/systemd/network/10-eth-static.network << "EOF"
+[Match]
+Name=<network-device-name>
+
+[Network]
+Address=192.168.0.2/24
+Gateway=192.168.0.1
+DNS=192.168.0.1
+Domains=<Your Domain Name>
+EOF
+DHCP Configuration
+cat > /etc/systemd/network/10-eth-dhcp.network << "EOF"
+[Match]
+Name=<network-device-name>
+
+[Network]
+DHCP=ipv4
+
+[DHCPv4]
+UseDomains=true
+EOF
+Optional
+# systemctl disable systemd-resolved
+
+cat > /etc/resolv.conf << "EOF"
+# Begin /etc/resolv.conf
+
+domain <Your Domain Name>
+nameserver <IP address of your primary nameserver>
+nameserver <IP address of your secondary nameserver>
+
+# End /etc/resolv.conf
+EOF
+
+Configure /etc/hosts
+cat > /etc/hosts << "EOF"
+# Begin /etc/hosts
+
+<192.168.0.2> <FQDN> [alias1] [alias2] ...
+::1       ip6-localhost ip6-loopback
+ff02::1   ip6-allnodes
+ff02::2   ip6-allrouters
+
+# End /etc/hosts
+EOF
+If Clock Set to Local
+cat > /etc/adjtime << "EOF"
+0.0 0 0.0
+0
+LOCAL
+EOF
+Change Time
+# timedatectl set-time YYYY-MM-DD HH:MM:SS
+# timedatectl set-timezone TIMEZONE
+# timedatectl list-timezones
+Vconsole
+# echo FONT=Lat2-Terminus16 > /etc/vconsole.conf
+Creating the /etc/inputrc File 
+
+cat > /etc/inputrc << "EOF"
+# Begin /etc/inputrc
+# Modified by Chris Lynn <roryo@roryo.dynup.net>
+
+# Allow the command prompt to wrap to the next line
+set horizontal-scroll-mode Off
+
+# Enable 8-bit input
+set meta-flag On
+set input-meta On
+
+# Turns off 8th bit stripping
+set convert-meta Off
+
+# Keep the 8th bit for display
+set output-meta On
+
+# none, visible or audible
+set bell-style none
+
+# All of the following map the escape sequence of the value
+# contained in the 1st argument to the readline specific functions
+"\eOd": backward-word
+"\eOc": forward-word
+
+# for linux console
+"\e[1~": beginning-of-line
+"\e[4~": end-of-line
+"\e[5~": beginning-of-history
+"\e[6~": end-of-history
+"\e[3~": delete-char
+"\e[2~": quoted-insert
+
+# for xterm
+"\eOH": beginning-of-line
+"\eOF": end-of-line
+
+# for Konsole
+"\e[H": beginning-of-line
+"\e[F": end-of-line
+
+# End /etc/inputrc
+EOF
+Disabling Screen Clear
+mkdir -pv /etc/systemd/system/getty@tty1.service.d
+
+cat > /etc/systemd/system/getty@tty1.service.d/noclear.conf << EOF
+[Service]
+TTYVTDisallocate=no
+EOF
+
+Change Default Dump Size
+mkdir -pv /etc/systemd/coredump.conf.d
+
+cat > /etc/systemd/coredump.conf.d/maxuse.conf << EOF
+[Coredump]
+MaxUse=5G
+EOF
 You might wanna install packages before rebooting to your installed lfs like 'xorg', 'networkmanager'?
 ```
-# prt-get depinst xorg lxdm lxde networkmanager
+# prt-get depinst xorg-server openssh dhcpcd networkmanager
 ```
 
-Enable some needed services
-```
-# ln -sv /etc/sv/dbus /var/service
-# ln -sv /etc/sv/networkmanager /var/service
-# ln -sv /etc/sv/lxdm /var/service
-```
+
 
 You can run 'prt-get' to see the options on how to use it
 ```

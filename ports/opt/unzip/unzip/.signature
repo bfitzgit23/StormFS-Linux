@@ -1,0 +1,7 @@
+untrusted comment: verify with /etc/ports/opt.pub
+RWSE3ohX2g5d/RuvXYvJhKL6u25H66hnRE7em9kKl1KEHlcgQKMomFIE34UIsoFHju8QMOUBOibNw2WjWUsVEDOo/emdS5IyDQQ=
+SHA256 (Pkgfile) = e8289fa1c583afdcd46d442f966257f90a6d75f272fdf687fe48743f0058e46b
+SHA256 (.footprint) = a1d2c71a5371982b87a8a14082aa2236258f84e0d602ec39247e0d63bf46ffdd
+SHA256 (unzip60.tar.gz) = 036d96991646d0449ed0aa952e4fbe21b476ce994abc276e49d30e686708bd37
+SHA256 (28-cve-2022-0529-and-cve-2022-0530.patch) = a27efd8c4950fb3d942d602ad7846996e02aafd77a8ad1e26700e42ae6c1cd37
+SHA256 (cumulative.patch) = f4173a8e2a2eea7f537ef8919369c2b6bac43d9ccd05345755ac0d1457c24234
