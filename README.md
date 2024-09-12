@@ -35,22 +35,22 @@ Like its name, this script is to bootstrap main system of BFS. Theres a few stag
 
 Stage 1 need to run as regular user to build temporary toolchain. Temporary toolchain is build inside `/tmp` directory so, when reboot, your system might wipe completely the toolchain. But dont worry, at the end of stage 1 the temporary toolchain will get compress as backup incase you wanna reuse it.
 ```
-$ ./bootstrap 1
+$ ./bootstrap.sh 1
 ```
 
 Stage 2 need to run as root to build base LFS system. You can use `sudo` or `doas`. Also, base LFS system is build inside `/tmp` directory, and also, you can compress LFS base system to use it anytime you want without bootstrap again.
 ```
-# ./bootstrap 2
+# ./bootstrap.sh 2
 ```
 
 Stage 3 also need to run as root to rebuild base system. This stage is completely optional if you wanna skip it. This stage is rebuild base without using temporary toolchain that build on stage 1, but it use its own toolchain instead. Its not in any LFS book but this is my way to make sure my base system is working completely. So if everything is rebuild fine, then i'm assure you that your LFS system is working 100%.
 ```
-# ./bootstrap 3
+# ./bootstrap.sh 3
 ```
 
 Stage 4 is for compressing your base system into `lfs-rootfs.tar.xz` file, temporary toolchain is excluded. See installing from existing tarball below.
 ```
-$ ./bootstrap 4
+$ ./bootstrap.sh 4
 ```
 
 Okay thats all for bootstrapping BFS  base. Just keep `lfs-rootfs.tar.xz` to reuse in the future or share with your friends.
@@ -147,7 +147,7 @@ Install grub
 
 # grub-mkconfig -o /boot/grub/grub.cfg
 ```
-(Configure Systemd)
+Configure Systemd
 # systemd-machine-id-setup
 # systemctl preset-all
 Optional
@@ -299,12 +299,6 @@ You can reboot now
 # exit
 # reboot
 ```
-
-# runit
-`lfs-scripts` is use `runit` as default init. Basically the initscripts is almost same as the one used in Void Linux, so no need headache to figure out how to use it. I will point some important point of `runit` used:
-- theres no runit config file (/etc/runit/rc.conf)
-- to enable service, just make symlink from `/etc/sv/<service>` to `/var/service`
-- ...
 
 # writing ports
 Writing ports is so damn easy, you can learn from existing ports or use `gentemplate.sh` script to generate a very basic port. 
