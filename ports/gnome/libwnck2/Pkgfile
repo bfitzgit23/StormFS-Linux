@@ -1,0 +1,20 @@
+# Description: at-spi2-core cairo fontconfig freetype2 gdk-pixbuf2 glib2 gtk2 harfbuzz libx11 libXres pango startup-notification
+# URL:         
+# Maintainer:  
+# Depends on:  
+
+name=libwnck2
+version=2.31.0
+release=1
+source=(https://download.gnome.org/sources/libwnck/2.31/libwnck-$version.tar.xz
+WindowActionMenu-unset-window-and-stop-async-events-on-dispose.patch)
+
+pkg_build() {
+	 ./configure --prefix=/usr --sysconfdir=/etc \
+        --localstatedir=/var --disable-static
+    make
+make install
+   rm -rf $PKG/usr/bin/wnckprop
+    rm -rf $PKG/usr/bin/wnck-urgency-monitor
+    rm -rf $PKG/usr/bin
+}

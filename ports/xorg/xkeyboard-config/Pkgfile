@@ -1,0 +1,20 @@
+# Description: Bitmaps for X
+# URL: http://xorg.freedesktop.org
+# Maintainer: CRUX Xorg Team, xorg-ports at crux dot nu
+# Depends on: xorg-libs
+
+
+name=xkeyboard-config
+version=2.41
+release=1
+source=(https://www.x.org/releases/individual/data/$name/$name-$version.tar.xz)
+
+build() {
+	cd $name-$version
+	mkdir build &&
+cd    build &&
+
+meson setup --prefix=$XORG_PREFIX --buildtype=release .. &&
+ninja
+DESTDIR=$PKG ninja install
+}

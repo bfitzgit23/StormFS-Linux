@@ -1,0 +1,5 @@
+#!/bin/sh
+mkdir -pv /etc/clang &&
+for i in clang clang++; do
+  echo -fstack-protector-strong > /etc/clang/$i.cfg
+done

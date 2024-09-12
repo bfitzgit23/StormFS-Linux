@@ -1,0 +1,19 @@
+# Description: A debugging and profiling system for Linux programs
+# URL: https://valgrind.org/
+# Maintainer: Matt Housh, jaeger at crux dot ninja
+# Optional: gdb llvm which
+
+name=valgrind
+version=3.23.0
+release=1
+source=(https://sourceware.org/pub/$name/$name-$version.tar.bz2)
+
+build() {
+  cd $name-$version
+ sed -i 's|/doc/valgrind||' docs/Makefile.in &&
+
+./configure --prefix=/usr \
+            --datadir=/usr/share/doc/valgrind-$version &&
+make
+  make DESTDIR=$PKG install
+}

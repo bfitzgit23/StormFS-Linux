@@ -1,0 +1,19 @@
+# Description: A 2D graphics library with support for multiple output devices
+# URL: https://www.cairographics.org/
+# Maintainer: CRUX System Team, core-ports at crux dot nu
+# Depends on: fontconfig glib pixman libxext libxrender xcb-util libpng
+# Optional: ghostscript gtk+-3 gtk+-2 gtk-doc libdrm librsvg libxml2 lzo mesa poppler valgrind jbig2dec libspectre Skia
+name=cairo
+version=1.18.2
+release=1
+source=(https://www.cairographics.org/releases/$name-$version.tar.xz)
+
+build() {
+	cd $name-$version
+        mkdir build &&
+cd    build &&
+
+meson setup --prefix=/usr --buildtype=release -Dxlib-xcb=enabled  .. &&
+ninja
+DESTDIR=$PKG ninja install
+}

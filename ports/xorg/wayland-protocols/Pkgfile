@@ -1,0 +1,10 @@
+# Description: Specifications of extended Wayland protocols
+# URL: https://wayland.freedesktop.org/
+# Maintainer: Tim Biermann, tbier at posteo dot de
+# Depends on: wayland
+
+name=wayland-protocols
+version=1.37
+release=1
+source=(https://gitlab.freedesktop.org/wayland/wayland-protocols/-/releases/$version/downloads/$name-$version.tar.xz)
+

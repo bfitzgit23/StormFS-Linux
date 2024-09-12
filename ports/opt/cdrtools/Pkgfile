@@ -1,0 +1,29 @@
+# Description: cdrtools (cdrecord) is a set of command line programs that allows to record CD/DVD/BluRay media.
+# URL: http://cdrtools.sourceforge.net/private/cdrecord.html
+# Maintainer: samsep10l at dark_bakura at protonmail dot com
+# Depends on:
+# Optional:
+
+name=cdrtools
+version=3.02
+_commit=a09
+release=1
+source=(https://netcologne.dl.sourceforge.net/project/$name/alpha/$name-${version}${_commit}.tar.bz2)
+
+build() {
+    cd $name-$version
+
+    ## When running make below, an "error" related to lconfig.h will be thrown,
+    ## but a second make running will dispatch the error. lconfig.h it will be
+    ## generated from lconfig.h.in, and the build will be proceed.
+    ## So, the "real" options while build passing to make it is on the second
+    ## make invocation.
+
+    ## 20230901: added an always condition true to avoid "pkgmk" stop the
+    ## script invocation
+    make -e INS_BASE=/usr DEFMANBASE=. || true
+    make -e INS_BASE=/usr DEFMANBASE=share DESTDIR=$PKG install
+
+    ## delete usr/share/man/man3 to avoid override possible system man pages?
+    rm -r $PKG/usr/share/man/man3
+}

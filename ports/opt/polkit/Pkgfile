@@ -1,0 +1,28 @@
+# Description: Application development toolkit for controlling system-wide privileges
+# URL: https://gitlab.freedesktop.org/polkit/polkit/
+# Maintainer: Tim Biermann, tbier at posteo dot de
+# Depends on: dbus duktape gobject-introspection intltool util-linux glib
+
+name=polkit
+version=125
+release=1
+source=(https://github.com/$name-org/$name/archive/$version/$name-$version.tar.gz)
+
+pkg_build() {
+ 
+
+ mkdir build &&
+cd    build &&
+
+meson setup ..                   \
+      --prefix=/usr              \
+      --buildtype=release        \
+      -D man=true                \
+      -D session_tracking=logind \
+      -D tests=true
+ninja
+  DESTDIR=$PKG ninja install
+
+
+  rm -rf $PKG/usr/share/locale
+}

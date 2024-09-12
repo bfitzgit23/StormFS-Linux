@@ -1,0 +1,26 @@
+# Description: PulseAudio is a cross-platform, networked sound server
+# URL: https://www.freedesktop.org/wiki/Software/PulseAudio/
+# Maintainer: Tim Biermann, tbier at posteo dot de
+# Depends on: libsndfile
+# Optional: avahi bluez5 doxygen fftw gtk3 libsamplerate sbc valgrind jack libasyncns lirc orc soxr tdb webrtc audioprocessing
+
+name=pulseaudio
+version=17.0
+release=1
+source=(https://freedesktop.org/software/$name/releases/$name-$version.tar.xz)
+
+build() {
+  cd $name-$version
+  mkdir build &&
+cd    build &&
+
+meson setup --prefix=/usr       \
+            --buildtype=release \
+            -Ddatabase=gdbm     \
+            -Ddoxygen=false     \
+            -Dbluez5=disabled   \
+            ..                  &&
+ninja
+  DESTDIR=$PKG ninja install
+#rm -fv $PKG/etc/dbus-1/system.d/pulseaudio-system.conf
+}

@@ -1,0 +1,20 @@
+# Description: X11 client-side library
+# URL: https://xcb.freedesktop.org/
+# Maintainer: CRUX Xorg Team, xorg-ports at crux dot nu
+# Depends on: libXau libXdmcp xcb-proto
+
+name=libxcb
+version=1.17.0
+release=1
+source=(https://xorg.freedesktop.org/archive/individual/lib/$name-$version.tar.xz)
+
+build() {
+	cd $name-$version
+
+	./configure $XORG_CONFIG      \
+            --without-doxygen \
+            --docdir='${datadir}'/doc/libxcb-1.16 &&
+	make
+	make DESTDIR=$PKG install
+chown -Rv root:root $PKG$XORG_PREFIX/share/doc/libxcb-1.16
+}

@@ -1,0 +1,18 @@
+# Description: Tool for modifying keymaps and pointer button mappings in X
+# URL: http://xorg.freedesktop.org
+# Maintainer: CRUX Xorg Team, xorg-ports at crux dot nu
+# Depends on: libX11
+
+name=xpr
+version=1.2.0
+release=1
+source=(https://www.x.org/releases/individual/app/xpr-$version.tar.xz)
+
+build() {
+	cd xpr-$version
+
+	./configure $XORG_CONFIG
+
+	make
+	make DESTDIR=$PKG install
+}

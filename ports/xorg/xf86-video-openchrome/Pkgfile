@@ -1,0 +1,17 @@
+# Description: xorg driver xf86-video-openchrome
+# URL: http://www.freedesktop.org/wiki/Openchrome/
+# Maintainer: CRUX Xorg Team, xorg-ports at crux dot nu
+# Depends on: xorg-server
+
+name=xf86-video-openchrome
+version=0.6.0
+release=2
+source=(https://xorg.freedesktop.org/archive/individual/driver/xf86-video-openchrome-$version.tar.bz2)
+
+build() {
+	cd xf86-video-openchrome-$version
+
+	./configure --prefix=/usr
+	make -j1 CFLAGS+=" -fcommon"
+	make DESTDIR=$PKG install
+}

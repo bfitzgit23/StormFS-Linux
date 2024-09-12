@@ -1,0 +1,19 @@
+# Description: Convert xml to many other formats.
+# URL: https://pagure.io/xmlto
+# Maintainer: John McQuah, jmcquah at disroot dot org
+# Depends on: docbook-xsl
+
+name=xmlto
+version=0.0.28
+release=1
+source=(https://releases.pagure.org/$name/$name-$version.tar.bz2)
+
+build() {
+	cd $name-$version
+
+	LINKS="/usr/bin/links" \
+./configure --prefix=/usr &&
+
+make
+	make DESTDIR=$PKG install
+}

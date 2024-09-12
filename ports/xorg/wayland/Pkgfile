@@ -1,0 +1,23 @@
+# Description: X compat server to be used with wayland
+# URL: https://wayland.freedesktop.org/xserver.html
+# Maintainer: CRUX Xorg Team, xorg-ports at crux dot nu
+# Depends on: libxml2
+
+name=wayland
+version=1.23.1
+release=1
+source=(https://gitlab.freedesktop.org/$name/$name/-/releases/$version/downloads/$name-$version.tar.xz)
+
+build() {
+
+	cd $name-$version
+	mkdir build &&
+	cd    build &&
+
+meson setup ..            \
+      --prefix=/usr       \
+      --buildtype=release \
+      -Ddocumentation=false &&
+ninja
+	DESTDIR=$PKG ninja install
+}

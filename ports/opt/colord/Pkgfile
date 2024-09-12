@@ -1,0 +1,17 @@
+# Depends on: dbus glib gobject-introspection lcms2 polkit sqlite libgudev libgusb systemd vala 
+
+name=colord
+version=1.4.7
+release=1
+source=(https://www.freedesktop.org/software/${name}/releases/${name}-${version}.tar.xz
+https://www.linuxfromscratch.org/patches/blfs/svn/$name-$version-upstream_fixes-1.patch)
+build_opt="--prefix=/usr            
+      --buildtype=release      
+      -Ddaemon_user=colord     
+      -Dvapi=true              
+      -Dsystemd=true           
+      -Dlibcolordcompat=true   
+      -Dargyllcms_sensor=false 
+      -Dbash_completion=false  
+      -Ddocs=false             
+      -Dman=false"

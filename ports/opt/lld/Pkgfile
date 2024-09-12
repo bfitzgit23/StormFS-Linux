@@ -1,0 +1,29 @@
+# Description: Linker from the LLVM project
+# URL: https://lld.llvm.org/
+# Maintainer: CRUX System Team, core-ports at crux dot nu
+# Depends on: llvm
+
+name=lld
+version=18.1.5
+release=1
+source=(https://github.com/llvm/llvm-project/releases/download/llvmorg-$version/lld-$version.src.tar.xz
+  https://github.com/llvm/llvm-project/releases/download/llvmorg-$version/cmake-$version.src.tar.xz
+  0002-PATCH-lld-Import-compact_unwind_encoding.h-from-libu.patch)
+
+build() {
+  patch -d $name-$version.src -p2 -i $SRC/0002-PATCH-lld-Import-compact_unwind_encoding.h-from-libu.patch
+
+  mv cmake-$version.src cmake
+
+  cmake -S $name-$version.src -B build -G Ninja \
+    -D CMAKE_INSTALL_PREFIX=/usr \
+    -D CMAKE_BUILD_TYPE=Release \
+    -D CMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+    -D CMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
+    -D LLVM_LINK_LLVM_DYLIB=ON \
+    -D LLVM_PARALLEL_COMPILE_JOBS="${JOBS:-1}" \
+    -Wno-dev
+
+  cmake --build build
+  DESTDIR=$PKG cmake --install build
+}

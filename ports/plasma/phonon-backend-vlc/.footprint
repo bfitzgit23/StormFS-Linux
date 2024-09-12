@@ -1,0 +1,6 @@
+drwxr-xr-x	root/root	usr/
+drwxr-xr-x	root/root	usr/lib/
+drwxr-xr-x	root/root	usr/lib/plugins/
+drwxr-xr-x	root/root	usr/lib/plugins/phonon4qt6_backend/
+-rwxr-xr-x	root/root	usr/lib/plugins/phonon4qt6_backend/phonon_vlc_qt6.so
+drwxr-xr-x	root/root	usr/share/

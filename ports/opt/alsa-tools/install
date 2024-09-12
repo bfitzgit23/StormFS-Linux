@@ -1,0 +1,54 @@
+#!/bin/sh
+_tools=(
+  as10k1
+  echomixer
+  envy24control
+  hda-verb
+  hdajackretask
+  hdajacksensetest
+  hdspconf
+  hdsploader
+  hdspmixer
+  hwmixvolume
+  ld10k1
+  mixartloader
+  pcxhrloader
+  # qlo10k1  # disabled, because build is broken
+  rmedigicontrol
+  sb16_csp
+  seq/sbiload
+  sscape_ctl
+  vxloader
+  us428control
+  usx2yloader
+)
+
+prepare() {
+  for tool in "${_tools[@]}"; do
+    (
+      cd $pkgname-$pkgver/$tool
+      autoreconf -vfi
+    )
+  done
+}
+
+build() {
+  # not using upstream's global makefile as it's trying to be too clever
+  for tool in "${_tools[@]}"; do
+    (
+      cd $pkgname-$pkgver/$tool
+      ./configure --prefix=/usr --sbindir=/usr/bin
+      make
+    )
+  done
+}
+
+package() {
+  depends+=(
+    alsa-lib libasound.so
+  )
+
+  for tool in "${_tools[@]}"; do
+    make DESTDIR="$pkgdir" install -C $pkgname-$pkgver/$tool
+  done
+}

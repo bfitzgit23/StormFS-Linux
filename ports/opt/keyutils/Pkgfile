@@ -1,0 +1,17 @@
+# Description: Keyutils is a set of utilities for managing the key retention facility in the kernel, which can be used by filesystems, block devices and more to gain and retain the authorization and encryption keys required to perform secure operations.
+# URL:         https://people.redhat.com/~dhowells/keyutils/
+# Maintainer:  B.r.i.a.n M.a.d.o.n.n.a b.m.a.d.o.n.n.a.s.t.e.r @ g.m.a.i.l.c.o.m
+# Depends on:  kerberos
+
+name=keyutils
+version=1.6.1
+release=1
+source=( https://people.redhat.com/~dhowells/$name/$name-$version.tar.bz2)
+
+build() {
+	cd $name-$version
+
+	sed -i 's:$(LIBDIR)/$(PKGCONFIG_DIR):/usr/lib/pkgconfig:' Makefile &&
+make
+make NO_ARLIB=1 LIBDIR=/usr/lib BINDIR=/usr/bin SBINDIR=/usr/sbin DESTDIR=$PKG install
+}

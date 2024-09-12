@@ -1,0 +1,18 @@
+# Description: xorg XKB keyboard description compiler
+# URL: https://xorg.freedesktop.org
+# Maintainer: CRUX Xorg Team, xorg-ports at crux dot nu
+# Depends on: libxkbfile
+
+name=xkbcomp
+version=1.4.7
+release=1
+source=(https://www.x.org/releases/individual/app/xkbcomp-$version.tar.xz)
+
+build() {
+	cd xkbcomp-$version
+
+	./configure $XORG_CONFIG
+
+	make
+	make DESTDIR=$PKG pkgconfigdir=/usr/share/pkgconfig install
+}

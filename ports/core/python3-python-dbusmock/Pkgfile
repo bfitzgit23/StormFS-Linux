@@ -1,0 +1,6 @@
+# Depends on: dbus-python
+
+name=python3-python-dbusmock
+version=0.31.1
+release=1
+source=(https://files.pythonhosted.org/packages/source/p/python-dbusmock/python-dbusmock-${version}.tar.gz)

@@ -1,0 +1,5 @@
+47e26237223d5ee0e6b674f028b56dae  clang-18.1.7.src.tar.xz
+31753c0ec6271a37c12a17cf84187098  compiler-rt-18.1.7.src.tar.xz
+ad39785449a878df1eed590339c3a8c4  llvm-18.1.7.src.tar.xz
+bf2ad617d47ce40fe77c0e5c26b1fe43  llvm-cmake-18.src.tar.xz
+5ebac19868c66cdac8b87077faefd38c  llvm-third-party-18.src.tar.xz

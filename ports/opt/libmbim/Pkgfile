@@ -1,0 +1,18 @@
+# Description: The libmbim package contains a GLib-based library for talking to WWAN modems and devices which speak the Mobile Interface Broadband Model (MBIM) protocol.
+# URL:         https://www.freedesktop.org/software/libmbim/
+# Maintainer:  B.r.i.a.n M.a.d.o.n.n.a b.m.a.d.o.n.n.a.s.t.e.r @ g.m.a.i.l.c.o.m
+# Depends on:  gobject-introspection
+# Optional: gtk-doc help2man
+
+name=libmbim
+version=1.26.4
+release=1
+source=(https://www.freedesktop.org/software/$name/$name-$version.tar.xz)
+
+build() {
+	cd $name-$version
+
+	./configure --prefix=/usr --disable-static &&
+make
+	make DESTDIR=$PKG install
+}

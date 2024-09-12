@@ -1,0 +1,10 @@
+# Depends on: python3-six python3-webencodings
+
+name=python3-html5lib
+version=1.1
+release=1
+source=(https://files.pythonhosted.org/packages/source/h/html5lib/html5lib-${version}.tar.gz)
+pkg_build() {
+  python3 setup.py build
+  python3 setup.py install --root="${PKG}" --optimize=1 --skip-build
+}

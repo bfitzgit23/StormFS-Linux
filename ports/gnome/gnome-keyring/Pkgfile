@@ -1,0 +1,16 @@
+# Depends on: dbus gcr3 linux-pam libxslt openssh gnupg valgrind 
+
+name=gnome-keyring
+version=46.2
+release=1
+source=(https://download.gnome.org/sources/${name}/46/${name}-${version}.tar.xz)
+build_pkg() {
+sed -i 's:"/desktop:"/org:' schema/*.xml &&
+
+./configure --prefix=/usr      \
+            --sysconfdir=/etc  \
+            --enable-ssh-agent &&
+make
+make install
+}
+

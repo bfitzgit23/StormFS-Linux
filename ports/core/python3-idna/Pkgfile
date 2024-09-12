@@ -1,0 +1,10 @@
+# Depends on: 
+
+name=python3-idna
+version=3.8
+release=1
+source=(https://files.pythonhosted.org/packages/source/i/idna/idna-${version}.tar.gz)
+pkg_build() {
+python3 -m build --no-isolation --wheel
+python3 -m installer --destdir="$PKG" dist/*.whl
+}

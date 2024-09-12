@@ -1,0 +1,31 @@
+# Description: Sudo (superuser do)
+# URL: https://www.sudo.ws/sudo/
+# Maintainer:
+# Depends on: zlib linux-pam
+
+name=sudo
+version=1.9.16
+release=1
+source=(https://www.sudo.ws/dist/$name-$version.tar.gz
+$name.pam)
+
+
+build() {
+	cd $name-$version
+
+	./configure \
+		--prefix=/usr \
+		--libexecdir=/usr/lib \
+		--with-secure-path \
+		--with-all-insults \
+		--with-env-editor \
+		--docdir=/usr/share/doc/$name-$version \
+		--with-passprompts="[sudo] password for %p: " &&
+	make
+	make DESTDIR=$PKG install
+
+	# PAM service file
+	install -D -m 0644 $SRC/$name.pam $PKG/etc/pam.d/$name
+
+#	rm -r $PKG/usr/share/doc $PKG/run
+}

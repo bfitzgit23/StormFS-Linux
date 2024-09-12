@@ -1,0 +1,19 @@
+# Description: libcanberra is an implementation of the XDG Sound Theme and Name Specifications, for generating event sounds on free desktops, such as GNOME.
+# URL:         https://0pointer.de/lennart/projects/libcanberra
+# Maintainer:  B.r.i.a.n M.a.d.o.n.n.a b.m.a.d.o.n.n.a.s.t.e.r @ g.m.a.i.l.c.o.m
+# Depends on:  libvorbis alsa-lib gstreamer gtk3 sound-theme-freedesktop
+# Optional: gtk pulseaudio tdb
+
+name=libcanberra
+version=0.30
+release=1
+source=(https://0pointer.de/lennart/projects/$name/$name-$version.tar.xz
+https://www.linuxfromscratch.org/patches/blfs/svn/$name-$version-wayland-1.patch)
+
+build() {
+	cd $name-$version
+patch -Np1 -i $PKGMK_SOURCE_DIR/$name-$version-wayland-1.patch
+	./configure --prefix=/usr --disable-oss &&
+make
+	make DESTDIR=$PKG install
+}

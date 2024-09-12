@@ -1,0 +1,28 @@
+# Description: Userspace interface to kernel DRM services
+# URL: https://dri.freedesktop.org/
+# Maintainer: B.r.i.a.n M.a.d.o.n.n.a b.m.a.d.o.n.n.a.s.t.e.r @ g.m.a.i.l.c.o.m
+# Depends on: xorg-libs
+# Optional:   cairo cmake docbook-xml docbook-xsl-nons docutils libxslt libatomic_ops valgrind cunit
+
+name=libdrm
+version=2.4.123
+release=1
+source=(https://dri.freedesktop.org/libdrm/libdrm-$version.tar.xz)
+
+build() {
+
+	cd $name-$version
+	mkdir build &&
+	cd    build &&
+
+	meson setup --prefix=$XORG_PREFIX \
+            --buildtype=release   \
+            -Dudev=true           \
+            -Dintel=enabled 	  \
+            -Dvalgrind=enabled    \
+            -Damdgpu=enabled      \
+            -Dnouveau=enabled     \
+            ..                    &&
+ninja
+	DESTDIR=$PKG ninja install
+}

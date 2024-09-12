@@ -1,0 +1,6 @@
+# Depends on: itstool lihxml2
+
+name=gnome-user-docs
+version=46.4
+release=1
+source=(https://download.gnome.org/sources/${name}/46/${name}-${version}.tar.xz)

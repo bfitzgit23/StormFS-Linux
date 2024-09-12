@@ -1,0 +1,6 @@
+# Depends on: gtk4 gsettings-desktop-schemas itstool libadwaita 
+
+name=gnome-logs
+version=45.0
+release=1
+source=(https://download.gnome.org/sources/${name}/45/${name}-${version}.tar.xz)

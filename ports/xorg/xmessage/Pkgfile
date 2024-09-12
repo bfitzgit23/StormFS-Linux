@@ -1,0 +1,18 @@
+# Description: x window sniper
+# URL: http://xorg.freedesktop.org
+# Maintainer: CRUX Xorg Team, xorg-ports at crux dot nu
+# Depends on: libXmu
+
+name=xmessage
+version=1.0.7
+release=1
+source=(https://www.x.org/releases/individual/app/xmessage-$version.tar.xz)
+
+build() {
+	cd xmessage-$version
+
+	./configure $XORG_CONFIG
+
+	make
+	make DESTDIR=$PKG install
+}

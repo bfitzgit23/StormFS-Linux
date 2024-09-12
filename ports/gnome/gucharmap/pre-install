@@ -1,0 +1,2 @@
+#!/bin/sh
+rm  -fv /usr/share/glib-2.0/schemas/org.gnome.Charmap.enums.xml

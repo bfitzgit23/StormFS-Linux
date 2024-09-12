@@ -1,0 +1,27 @@
+# Description: Small build system with a focus on speed
+# URL: https://ninja-build.org/
+# Maintainer: CRUX System Team, core-ports at crux dot nu
+# Depends on:
+# Optional: bash-completion zsh
+
+name=meson
+version=1.5.1
+release=1
+source=(https://github.com/mesonbuild/meson/releases/download/$version/meson-$version.tar.gz)
+
+build() {
+	
+	cd $name-$version
+
+	
+	/usr/bin/python3 setup.py build
+
+	/usr/bin/python3 setup.py install \
+		--prefix=/usr --root=$PKG --optimize=1 --skip-build
+
+	prt-get isinst bash-completion && install -m 0644 -Dt $PKG/usr/share/bash-completion/completions data/shell-completions/bash/*
+	prt-get isinst zsh && install -m 0644 -Dt $PKG/usr/share/zsh/site-functions data/shell-completions/zsh/*
+
+	install -d $PKG/usr/share/vim/vimfiles
+	cp -rt $PKG/usr/share/vim/vimfiles data/syntax-highlighting/vim/*/
+}

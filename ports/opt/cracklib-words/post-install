@@ -1,0 +1,5 @@
+#!/bin/bash
+	if [[ -n ${ROOT} ]] && create-cracklib-dict -h >&/dev/null ; then
+		create-cracklib-dict /usr/share/dict/* >/dev/null
+		eend $?
+	fi

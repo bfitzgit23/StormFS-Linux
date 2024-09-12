@@ -1,0 +1,16 @@
+# Description: XCB utilities library
+# URL: https://xcb.freedesktop.org/
+# Maintainer: CRUX Xorg Team, xorg-ports at crux dot nu
+# Depends on: libxcb
+
+name=xcb-util
+version=0.4.1
+release=1
+source=(https://xorg.freedesktop.org/archive/individual/lib/xcb-util-$version.tar.xz)
+
+build() {
+	cd xcb-util-$version
+	./configure $XORG_CONFIG &&
+	make
+	make DESTDIR=$PKG install
+}

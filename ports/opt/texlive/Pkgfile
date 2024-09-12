@@ -1,0 +1,60 @@
+# Description: TeX distribution for UNIX compatible systems
+# URL: https://www.tug.org/tetex/
+# Maintainer: Tim Biermann, tbier at posteo dot de
+# Depends on: cairo fontconfig freetype gc, graphite2 harfbuzz icu libpaper libpng
+
+name=texlive
+version=20230313
+release=2
+source=(https://ftp.math.utah.edu/pub/tex/historic/systems/$name/2023/$name-$version-source.tar.xz
+https://www.linuxfromscratch.org/patches/blfs/svn/$name-$version-source-security_fix-1.patch)
+build() {
+
+  cd $name-$version-source
+
+  export TEXARCH=$(uname -m | sed -e 's/i.86/i386/' -e 's/$/-linux/') &&
+
+patch -Np1 -i ../texlive-20230313-source-security_fix-1.patch &&
+
+mkdir texlive-build &&
+cd    texlive-build &&
+
+../configure -C                                   \
+    --prefix=$TEXLIVE_PREFIX                      \
+    --bindir=$TEXLIVE_PREFIX/bin/$TEXARCH         \
+    --datarootdir=$TEXLIVE_PREFIX                 \
+    --includedir=$TEXLIVE_PREFIX/include          \
+    --infodir=$TEXLIVE_PREFIX/texmf-dist/doc/info \
+    --libdir=$TEXLIVE_PREFIX/lib                  \
+    --mandir=$TEXLIVE_PREFIX/texmf-dist/doc/man   \
+    --disable-native-texlive-build                \
+    --disable-static --enable-shared              \
+    --disable-dvisvgm                             \
+    --with-system-cairo                           \
+    --with-system-fontconfig                      \
+    --with-system-freetype2                       \
+    --with-system-gmp                             \
+    --with-system-graphite2                       \
+    --with-system-harfbuzz                        \
+    --with-system-icu                             \
+    --with-system-libgs                           \
+    --with-system-libpaper                        \
+    --with-system-libpng                          \
+    --with-system-mpfr                            \
+    --with-system-pixman                          \
+    --with-system-zlib                            \
+    --with-banner-add=" - BLFS" &&
+
+make
+make DESTDIR=$PKG install-strip &&
+/sbin/ldconfig     &&
+make texlinks      &&
+mkdir -pv                                $PKG/$TEXLIVE_PREFIX/tlpkg/TeXLive/ &&
+install -v -m644 ../texk/tests/TeXLive/* $PKG/$TEXLIVE_PREFIX/tlpkg/TeXLive/ &&
+wget ftp://tug.org/texlive/historic/2023/texlive-20230311-tlpdb-full.tar.gz
+tar -xf texlive-20230311-tlpdb-full.tar.gz -C $PKG/$TEXLIVE_PREFIX/tlpkg
+wget ftp://tug.org/texlive/historic/2023/texlive-20230313-texmf.tar.xz
+tar -xf texlive-20230313-texmf.tar.xz -C $PKG/$TEXLIVE_PREFIX --strip-components=1
+mkdir -p $PKG/usr/lib/
+ln -svf $PKG/$TEXLIVE_PREFIX/lib/libkpathsea.so $PKG/usr/lib
+}

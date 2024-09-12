@@ -1,0 +1,18 @@
+# Description: X cursor management library
+# URL: http://xorg.freedesktop.org
+# Maintainer: CRUX Xorg Team, xorg-ports at crux dot nu
+# Depends on: libXfixes libXrender
+
+name=libXcursor
+version=1.2.2
+release=1
+source=(https://www.x.org/releases/individual/lib/libXcursor-$version.tar.xz)
+
+build() {
+	cd libXcursor-$version
+
+	./configure $XORG_CONFIG $docdir
+
+	make
+	make DESTDIR=$PKG install
+}

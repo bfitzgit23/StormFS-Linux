@@ -1,0 +1,23 @@
+# Description: A C++ wrapper for GTK3+
+# URL: https://www.gtkmm.org/en/
+# Maintainer: Tim Biermann, tbier at posteo dot de
+# Depends on: atkmm cairomm gtk3 pangomm
+
+name=gtkmm3
+version=3.24.7
+release=1
+source=(https://download.gnome.org/sources/gtkmm/${version%.*}/gtkmm-$version.tar.xz)
+
+build() {
+  meson setup gtkmm-$version build \
+    --prefix=/usr \
+    --sysconfdir=/etc \
+    --buildtype=plain \
+    --wrap-mode nodownload \
+    -D b_lto=true \
+    -D b_pie=true \
+    -D build-demos=false \
+    -D build-tests=false
+  meson compile -C build
+  DESTDIR=$PKG meson install -C build
+}

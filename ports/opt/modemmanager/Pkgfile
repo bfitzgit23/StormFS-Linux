@@ -1,0 +1,24 @@
+# Description: ModemManager provides a unified high level API for communicating with mobile broadband modems, regardless of the protocol used to communicate with the actual device.
+# URL:          https://www.freedesktop.org/software/$name/
+# Maintainer:  B.r.i.a.n M.a.d.o.n.n.a b.m.a.d.o.n.n.a.s.t.e.r @ g.m.a.i.l.c.o.m
+# Depends on:  libgudev gobject-introspection libmbim libqmi polkit vala
+# Optional: gtk-doc
+
+name=modemmanager
+version=1.18.12
+release=1
+source=(https://www.freedesktop.org/software/ModemManager/ModemManager-$version.tar.xz)
+
+build() {
+	cd ModemManager-$version
+
+	./configure --prefix=/usr                 \
+            --sysconfdir=/etc             \
+            --localstatedir=/var          \
+            --disable-static              \
+            --disable-maintainer-mode     \
+            --with-systemd-journal        \
+            --with-systemd-suspend-resume &&
+make
+	make DESTDIR=$PKG install
+}

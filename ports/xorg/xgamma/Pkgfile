@@ -1,0 +1,18 @@
+# Description: Query or set X gamma correction
+# URL: http://xorg.freedesktop.org
+# Maintainer: CRUX Xorg Team, xorg-ports at crux dot nu
+# Depends on: libXxf86vm
+
+name=xgamma
+version=1.0.7
+release=1
+source=(https://www.x.org/releases/individual/app/xgamma-$version.tar.xz)
+
+build() {
+	cd xgamma-$version
+
+	./configure $XORG_CONFIG
+
+	make
+	make DESTDIR=$PKG install
+}

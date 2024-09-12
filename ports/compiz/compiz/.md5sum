@@ -1,0 +1,9 @@
+9fd3c94338665ac4e02aa4211d967aa9  0001-reverse-unity-config.patch
+fc6e23432ff5639186fbc8ce9112ce2b  0002-focus-prevention-disable.patch
+6ba804e3a4521a3ee3b884433e23a324  0003-gtk-extents.patch
+c213867b72190beaf4088512f80f080f  0004-screenshot-launch-fix.patch
+611b9526fc189eca24e413e22db121a1  0005-no-compile-gschemas.patch
+21438262636d3f60d4d5cc8bd90f57f7  0006-Drop-toggle-shaded-since-it-s-no-longer-included-in-.patch
+a2e9b216b9b58c819ad4a8f113669de9  0007-64-bit-time-t-compat.patch
+39314b97decf7739daa7411b95a3f7ea  1001-fix-crash-in-vertexbuffer.patch
+79ab7b0594186e6fc02568cbd2dc7c8c  compiz-0.9.14.2.tar.xz

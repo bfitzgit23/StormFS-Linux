@@ -1,0 +1,11 @@
+# Depends on: 
+
+name=python3-chardet
+version=5.1.0
+release=1
+source=(https://files.pythonhosted.org/packages/source/c/chardet/chardet-${version}.tar.gz)
+pkg_build() {
+
+python3 -m build --wheel --no-isolation
+python3 -m installer --destdir="$PKG" dist/*.whl
+}
