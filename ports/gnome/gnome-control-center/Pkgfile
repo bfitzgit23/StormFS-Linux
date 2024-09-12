@@ -1,6 +1,0 @@
-# Depends on: accountsservice colord-gtk gnome-online-accounts  gnome-settings-daemon gsound libadwaita libgtop libpwquality kerberos shared-mime-info tecla udisks cups samba gnome-bluetooth ibus modemmanager libnma xorg-server xwayland python3-python-dbusmock
-
-name=gnome-control-center
-version=46.4
-release=1
-source=(https://download.gnome.org/sources/${name}/46/${name}-${version}.tar.xz)

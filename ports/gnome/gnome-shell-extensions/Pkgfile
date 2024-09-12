@@ -1,6 +1,0 @@
-# Depends on: libgtop sassc
-
-name=gnome-shell-extensions
-version=46.2
-release=1
-source=(https://download.gnome.org/sources/$name/46/$name-$version.tar.xz)

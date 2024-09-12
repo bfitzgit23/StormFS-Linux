@@ -1,9 +1,0 @@
-# Depends on: libevdev libgudev libxml2
-
-name=libwacom
-version=2.12.2
-release=1
-source=(https://github.com/linuxwacom/${name}/releases/download/${name}-${version}/${name}-${version}.tar.xz)
-build_opt="--prefix=/usr
-      --buildtype=release 
-      -D tests=disabled "

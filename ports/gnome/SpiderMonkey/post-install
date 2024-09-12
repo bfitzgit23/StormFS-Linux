@@ -1,3 +1,0 @@
-#!/bin/sh
-rm -v /usr/lib/libjs_static.ajs &&
-sed -i '/@NSPR_CFLAGS@/d' /usr/bin/js115-config

@@ -1,6 +1,0 @@
-# Depends on: spirv-llvm-translator
-
-name=libclc
-version=18.1.8.src
-release=1
-source=(https://github.com/llvm/llvm-project/releases/download/llvmorg-${version%.*}/${name}-${version}.tar.xz)

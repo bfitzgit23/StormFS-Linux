@@ -1,11 +1,0 @@
---2024-06-02 04:04:53--  https://gitlab.archlinux.org/archlinux/packaging/packages/mkinitcpio/-/raw/main/0001-trigger.patch?ref_type=heads
-Resolving gitlab.archlinux.org... 213.133.111.15, 2a01:4f8:222:174c::1
-Connecting to gitlab.archlinux.org|213.133.111.15|:443... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 455 [text/plain]
-Saving to: ‘0001-trigger.patch?ref_type=heads’
-
-          0001-trig   0%[                    ]       0  --.-KB/s               0001-trigger.patch? 100%[===================>]     455  --.-KB/s    in 0s      
-
-2024-06-02 04:04:53 (628 MB/s) - ‘0001-trigger.patch?ref_type=heads’ saved [455/455]
-

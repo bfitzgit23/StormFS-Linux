@@ -1,6 +1,0 @@
-# Depends on: dbus glib gtk3 libhandy libxml2 libxslt vala
-
-name=dconf-editor
-version=45.0.1
-release=1
-source=(https://download.gnome.org/sources/${name}/45/${name}-${version}.tar.xz)

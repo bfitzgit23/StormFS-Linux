@@ -1,7 +1,0 @@
-#!/bin/bash
-cat > /etc/polkit-1/rules.d/40-adm.rules << "EOF"
-polkit.addAdminRule(function(action, subject) {
-   return ["unix-group:adm"];
-   });
-EOF
-systemctl enable accounts-daemon

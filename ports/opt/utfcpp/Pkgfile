@@ -1,6 +1,0 @@
-# Depends on: cmake
-
-name=utfcpp
-version=4.0.5
-release=1
-source=(https://github.com/nemtrif/${name}/archive/v${version}/${name}-${version}.tar.gz)

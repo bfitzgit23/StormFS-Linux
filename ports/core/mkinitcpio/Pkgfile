@@ -1,6 +1,0 @@
-# Depends on: gawk mkinitcpio-busybox kmod util-linux libarchive coreutils bash binutils diffutils findutils grep zstd systemd asciidoc
-name=mkinitcpio
-version=39.2
-release=1
-source=(https://sources.archlinux.org/other/${name}/${name}-${version}.tar.xz
-0001-trigger.patch)

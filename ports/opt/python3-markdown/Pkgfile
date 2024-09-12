@@ -1,6 +1,0 @@
-# Depends on: 
-
-name=python3-markdown
-version=3.4.1
-release=1
-source=(https://files.pythonhosted.org/packages/source/M/Markdown/Markdown-${version}.tar.gz)

@@ -1,6 +1,0 @@
-# Depends on: appstream freerdp gtk-vnc itstool libhandy vala
-
-name=gnome-connections
-version=46.0
-release=1
-source=(https://download.gnome.org/sources/${name}/46/${name}-${version}.tar.xz)
