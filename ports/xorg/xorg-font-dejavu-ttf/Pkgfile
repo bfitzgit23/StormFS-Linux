@@ -1,7 +1,7 @@
 # Description: A font family based on the Bitstream Vera Fonts
 # URL:         https://dejavu-fonts.github.io/
 # Maintainer:  CRUX Xorg Team, xorg-ports at crux dot nu
-# Depends on:  fontconfig xorg-mkfontscale
+# Depends on:  fontconfig mkfontscale
 
 name=xorg-font-dejavu-ttf
 version=2.37

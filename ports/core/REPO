@@ -162,7 +162,6 @@ d:runit
 d:dbus
 d:isl
 d:wpa_supplicant
-d:pkgconf
 d:genfstab
 d:python3-idna
 d:popt
@@ -688,13 +687,6 @@ f:2e18992072ebc7c45c593593fb71a50f:isl/Pkgfile
 f:f2bda546ba7caab907f37cd84851ef63:wpa_supplicant/.footprint
 f:0ca770e0659e2aeb418f233016ee68bd:wpa_supplicant/Pkgfile
 f:dace26d9323391e9bc9f647964536f4a:wpa_supplicant/wpa_supplicant.conf
-f:c6ae47fcfb985dca02037258b0b08e96:pkgconf/.footprint
-f:d19e51effbbede2f9ecdf60b43b34d5e:pkgconf/.md5sum
-f:96f9f36ec74ba300132ea8b20f21359c:pkgconf/Pkgfile
-f:01a1ad4245cca0e615c904b469b99236:pkgconf/Pkgfile.bak
-f:6fec70b14f238ad94caf5dac367ee427:pkgconf/README
-f:b5bee6aa847bfdcf84ef31229dba32a9:pkgconf/i686-pc-linux-gnu.personality
-f:c6d689e4e8bc7b2b3e13a911bab36e27:pkgconf/x86_64-pc-linux-gnu.personality
 f:751419260aa954499f7abaabaa882bbe:genfstab/COPYING
 f:d32239bcb673463ab874e80d47fae504:genfstab/LICENSE
 f:6661d079e2eac3e70a754e0e57fc0085:genfstab/Pkgfile

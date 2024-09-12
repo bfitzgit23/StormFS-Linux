@@ -1,7 +1,7 @@
 # Description: xorg font font-bh-100dpi
 # URL: https//xorg.freedesktop.org
 # Maintainer: CRUX Xorg Team, xorg-ports at crux dot nu
-# Depends on: xorg-bdftopcf xorg-font-util xorg-mkfontscale
+# Depends on: bdftopcf xorg-font-util mkfontscale
 
 name=xorg-font-bh-100dpi
 version=1.0.4

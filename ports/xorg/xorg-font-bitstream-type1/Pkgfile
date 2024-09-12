@@ -1,7 +1,7 @@
 # Description: xorg font font-bitstream-type1
 # URL: https//xorg.freedesktop.org
 # Maintainer: CRUX Xorg Team, xorg-ports at crux dot nu
-# Depends on: fontconfig xorg-mkfontscale
+# Depends on: fontconfig mkfontscale
 
 name=xorg-font-bitstream-type1
 version=1.0.4
