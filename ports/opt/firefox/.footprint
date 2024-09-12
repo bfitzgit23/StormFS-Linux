@@ -48,4 +48,4 @@ drwxr-xr-x	root/root	usr/share/
 drwxr-xr-x	root/root	usr/share/applications/
 -rw-r--r--	root/root	usr/share/applications/firefox.desktop
 drwxr-xr-x	root/root	usr/share/pixmaps/
-lrwxrwxrwx	root/root	usr/share/pixmaps/firefox.png -> /usr/lib/firefox/browser/chrome/icons/default/default48.png
+lrwxrwxrwx	root/root	usr/share/pixmaps/firefox.png -> /usr/lib/firefox/browser/chrome/icons/default/default128.png

@@ -5,7 +5,7 @@
 # Optional: http-parser npm
 
 name=nodejs
-version=22.7.0
+version=22.8.0
 release=1
 source=(https://nodejs.org/dist/v$version/node-v$version.tar.xz)
 

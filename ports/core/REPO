@@ -216,8 +216,9 @@ f:5f07411f39e938de16da6fff01ece73d:e2fsprogs/Pkgfile
 f:2b4367c1624d754429279359fc181d7a:readline/.footprint
 f:57e84db30e2b3766336905c3d6e72ae0:readline/Pkgfile
 f:dd1764b84cfca6b677f44978218a75da:readline/readline-8.2-upstream_fix-1.patch
-f:f5df6dc500dad8c792fb78b12bb11770:python3-build/.footprint
-f:3ffeb8394ce3fff850d1a938ff841b7a:python3-build/Pkgfile
+f:266d716a41c56c1446350c0e42f9dddc:python3-build/.footprint
+f:41e9fd3e8f3e526297d95008973f86fd:python3-build/.md5sum
+f:f167137f563b8f7da0137c09082a4bc7:python3-build/Pkgfile
 f:9781759609ee571e158e1ada31352960:automake/.footprint
 f:c1fa64f42ce364f92ab007b6f6bca96d:automake/Pkgfile
 f:3a3ff7de4a52a92ab9f8f32feb36dc21:python3-doxyqml/.footprint
@@ -259,8 +260,9 @@ f:a366e1e18ca367d645c631a1634ca949:git/.footprint
 f:e45262ad8048bce8b16c55d334dcaa80:git/Pkgfile
 f:4531f4675086a111a18e1738cc95baa4:libuv/.footprint
 f:d61cefed841a876f78551b13823571cd:libuv/Pkgfile
-f:885b22246758d41ffe5fd05455c813eb:texinfo/.md5sum
-f:810abc840271a83a5834ec357da0aabe:texinfo/Pkgfile
+f:fb398183f6615f8569317b3e3f2171ec:texinfo/.footprint
+f:e4b5ebac9bf5f23b0aa0d115c3f6ed7b:texinfo/.md5sum
+f:0c0ddb21b4c04c94d38b3078f7b61fff:texinfo/Pkgfile
 f:c1e04356f8eff02dc18e60b6d25faa30:glibc/.footprint
 f:e0073dea2ca1f0d5a72808c1df3bc360:glibc/.md5sum
 f:48aee8f690a8707e83f344d0886614c8:glibc/bootstrap-post-install
@@ -361,8 +363,9 @@ f:99bbe0ecb6bb0db1bcbf26f37f888602:pkgutils/pkgutils_add-compress-infopages.patc
 f:90780586554ccac0db1bd837e2f89938:python3-markupsafe/.footprint
 f:d0dcaedc144b0d8f3040c7e780678c55:python3-markupsafe/Pkgfile
 f:63c7d1b75639b882e4167e5e57825c17:dosfstools/Pkgfile
-f:ceb3510d04edd1b9f610c8f504af643b:linux-firmware/.footprint
-f:c0313c74ef4957b804237ca25194f269:linux-firmware/Pkgfile
+f:8c3a330be7dd5ac10dd1403ac8e45cd6:linux-firmware/.footprint
+f:b75de31abafb9682de208a4595f13089:linux-firmware/.md5sum
+f:537933e8c8862438293d6153713c9a43:linux-firmware/Pkgfile
 f:d41d8cd98f00b204e9800998ecf8427e:linux-firmware/.nostrip
 f:6a5ac7e89b791aae556de0f745916f7f:bzip2/bzip2-1.0.8-install_docs-1.patch
 f:93f62266752266aff0ae92f3106a6cf2:bzip2/.md5sum
@@ -581,6 +584,7 @@ f:3c2b1369e34b44e79963aa0f8a335136:linux-pam/Pkgfile
 f:4949df820b71e7e8a6194c08706a2923:linux-pam/other
 f:6362b0bfc92504b3f8aec8ed3cd7b861:linux-pam/common-account
 f:4dd6ee87cdef05000ceb4fda0cb75a86:python3-pip/.footprint
+f:5c2c999b793751d14098ed9ad1b24dc9:python3-pip/.md5sum
 f:01c42d147d2abdc417121ac854d1e8f1:python3-pip/Pkgfile
 f:649492df279cb01f652335ade3c18d25:linux/.footprint
 f:6fd3cc49a60533d4f3c271c53480f86c:linux/.md5sum

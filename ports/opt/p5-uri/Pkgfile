@@ -5,7 +5,7 @@
 # Optional:	p5-business-isbn
 
 name=p5-uri
-version=5.28
+version=5.29
 release=1
 source=(http://search.cpan.org/CPAN/authors/id/O/OA/OALDERS/URI-${version}.tar.gz)
 

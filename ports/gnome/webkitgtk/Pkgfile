@@ -1,7 +1,7 @@
 # Depends on: cairo cmake gst-plugins-base gst-plugins-bad gtk3 gtk4 icu lcms2 libgudev libsecret libsoup libtasn1 libwebp  mesa openjpeg ruby  sqlite unifdef which bubblewrap enchant geoclue glib gobject-introspection hicolor-icon-theme libavif libjxl libseccomp xdg-dbus-proxy
 
 name=webkitgtk
-version=2.44.3
+version=2.44.4
 release=1
 source=(https://webkitgtk.org/releases/webkitgtk-${version}.tar.xz)
 build() {
