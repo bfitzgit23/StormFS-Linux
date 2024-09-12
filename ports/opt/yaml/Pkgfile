@@ -1,6 +1,0 @@
-# Depends on: 
-
-name=yaml
-version=0.2.5
-release=1
-source=(https://github.com/${name}/lib${name}/releases/download/${version}/${name}-${version}.tar.gz)

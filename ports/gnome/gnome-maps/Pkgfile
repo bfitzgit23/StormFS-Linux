@@ -1,6 +1,0 @@
-# Depends on: desktop-file-utils geoclue geocode-glib  gjs libadwaita libportal libshumate libgweather rest
-
-name=gnome-maps
-version=46.11
-release=1
-source=(https://download.gnome.org/sources/${name}/46/${name}-${version}.tar.xz)

@@ -1,9 +1,0 @@
-# Depends on: extra-cmake-modules qt6
-
-name=oxygen-icons
-version=6.0.0
-release=1
-source=(https://download.kde.org/stable/${name}/$name-$version.tar.xz)
-pre_build() {
-sed -i '/( oxygen/ s/)/scalable )/' CMakeLists.txt
-}

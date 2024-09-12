@@ -1,6 +1,0 @@
-# Depends on: fuse gdk-pixbuf json-glib pipewire dbus bubblewrap
-
-name=xdg-desktop-portal
-version=1.18.2
-release=1
-source=(https://github.com/flatpak/${name}/releases/download/${version}/${name}-${version}.tar.xz)

@@ -1,8 +1,0 @@
-#
-# /etc/ports/core.httpup: core's port collection
-#
-
-ROOT_DIR=/usr/ports/compiz
-URL=https://codeberg.org/bmadonnaster/BFS-Linux/raw/branch/main/ports/compiz
-
-# End of file
