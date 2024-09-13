@@ -1,0 +1,6 @@
+# Depends on: pipewire libadwaita gst-plugins-bad rustc
+
+name=snapshot
+version=46.3
+release=1
+source=(https://download.gnome.org/sources/${name}/46/${name}-${version}.tar.xz)

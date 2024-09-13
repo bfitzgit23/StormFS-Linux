@@ -1,0 +1,7 @@
+# Depends on: python3-attrs
+
+name=libei
+version=1.3.0
+release=1
+source=(https://gitlab.freedesktop.org/libinput/${name}/-/archive/${version}/${name}-${version}.tar.gz)
+build_opt="--prefix=/usr --buildtype=release -D tests=disabled"

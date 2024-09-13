@@ -1,0 +1,14 @@
+# Description: Firmware files for Linux
+# URL:         http://git.kernel.org/?p=linux/kernel/git/firmware/linux-firmware.git;a=summary
+# Maintainer:  Emmett1, emmett1 dot 2miligrams at gmail dot com
+# Depends on:  rdfind
+
+name=linux-firmware
+version=20240909
+release=1
+source=(https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/snapshot/linux-firmware-$version.tar.gz)
+
+build() {
+        cd $name-$version
+        make DESTDIR=$PKG install
+}

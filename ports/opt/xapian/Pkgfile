@@ -1,0 +1,20 @@
+# Description: Xapian is an open source search engine library.
+# URL:          https://oligarchy.co.uk/xapian/
+# Maintainer:  B.r.i.a.n M.a.d.o.n.n.a b.m.a.d.o.n.n.a.s.t.e.r @ g.m.a.i.l.c.o.m
+# Depends on:  
+# Optional: valgrind
+
+name=xapian
+version=1.4.25
+release=1
+source=(https://oligarchy.co.uk/$name/$version/$name-core-$version.tar.xz)
+
+build() {
+	cd $name-core-$version
+
+	./configure --prefix=/usr    \
+            --disable-static \
+            --docdir=/usr/share/doc/$name-core-$version &&
+make
+	make DESTDIR=$PKG install
+}

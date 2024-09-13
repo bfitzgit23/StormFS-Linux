@@ -1,0 +1,26 @@
+# Description: libblockdev is a C library supporting GObject Introspection for manipulation of block devices. It has a plugin-based architecture where each technology (like LVM, Btrfs, MD RAID, Swap,...) is implemented in a separate plugin, possibly with multiple implementations (e.g. using LVM CLI or the new LVM DBus API).
+# URL:         https://github.com/storaged-project/libblockdev/
+# Maintainer:  B.r.i.a.n M.a.d.o.n.n.a b.m.a.d.o.n.n.a.s.t.e.r @ g.m.a.i.l.c.o.m
+# Depends on:  glib cryptsetup gobject-introspection keyutils libbytesize libnvme lvm2 ndctl mdadm parted
+# Optional:    btrfs-progs gtk-doc mdadm parted volume_key targetcli
+
+name=libblockdev
+version=3.1.1
+release=1
+source=(https://github.com/storaged-project/$name/releases/download/$version-1/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+
+	./configure --prefix=/usr      \
+            --sysconfdir=/etc  \
+            --with-python3     \
+            --without-escrow   \
+            --without-gtk-doc  \
+            --with-lvm      \
+            --with-lvm_dbus \
+            --with-nvdimm   \
+            --with-tools    &&
+make
+	make DESTDIR=$PKG install
+}

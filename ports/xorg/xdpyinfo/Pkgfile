@@ -1,0 +1,16 @@
+# Description: Display information utility for X
+# URL: http://xorg.freedesktop.org
+# Maintainer: CRUX Xorg Team, xorg-ports at crux dot nu
+# Depends on: libXcomposite libXinerama libXrender libXtst libXxf86vm
+
+name=xdpyinfo
+version=1.3.4
+release=1
+source=(https://xorg.freedesktop.org/archive/individual/app/xdpyinfo-$version.tar.xz)
+
+build() {
+	cd xdpyinfo-$version
+	./configure $XORG_CONFIG
+	make
+	make DESTDIR=$PKG install
+}

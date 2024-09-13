@@ -1,0 +1,17 @@
+# Description: A script that automates pasting to a number of pastebin services
+# URL:         https://wgetpaste.zlin.dk/
+# Maintainer:  B.r.i.a.n M.a.d.o.n.n.a b.m.a.d.o.n.n.a.s.t.e.r @ g.m.a.i.l.c.o.m
+# Depends on:  wget
+
+name=wgetpaste
+version=2.33
+release=1
+source=(https://github.com/zlin/$name/releases/download/$version/$name-$version.tar.xz
+        https://wgetpaste.zlin.dk/$name.example)
+
+build() {
+	cd $name-$version
+  install -Dm755 ${name} "${PKG}"/usr/bin/${name}
+  install -Dm644 _${name} "${PKG}"/usr/share/zsh/site-functions/_${name}
+  install -Dm644 "${SRC}"/${name}.example ${PKG}/usr/share/${name}/${name}.example
+}

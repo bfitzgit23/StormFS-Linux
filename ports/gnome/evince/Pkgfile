@@ -1,0 +1,19 @@
+# Depends on: openjpeg2 gsettings-desktop-schemas gtk3 itstool libhandy libxml2 gnome-keyring glib gobject-introspection libarchive libsecret poppler cups gnome-desktop gspell gst-plugins-base libgxps libtiff 
+
+name=evince
+version=46.3.1
+release=1
+source=(https://download.gnome.org/sources/${name}/46/${name}-${version}.tar.xz)
+pkg_build() {
+mkdir build &&
+cd    build &&
+
+CPPFLAGS+=" -I/opt/texlive/2024/include" \
+meson setup --prefix=/usr          \
+            --buildtype=release    \
+            -D gtk_doc=false       \
+            --wrap-mode=nodownload \
+            ..                     &&
+ninja
+ninja install
+}

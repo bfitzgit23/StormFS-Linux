@@ -1,0 +1,17 @@
+# Depends on: gcr3 gnupg gpgme itstool libhandy libpwquality libsecret vala libsoup3 p11-kit openssh avahi gnome-keyring 
+
+name=seahorse
+version=43.0
+release=1
+source=(https://download.gnome.org/sources/${name}/43/${name}-${version}.tar.xz
+https://www.linuxfromscratch.org/patches/blfs/svn/$name-$version-upstream_fixes-1.patch)
+build_pkg () {
+sed -i -r 's:"(/apps):"/org/gnome\1:' data/*.xml &&
+
+mkdir build &&
+cd    build &&
+
+meson setup --prefix=/usr --buildtype=release .. &&
+ninja
+ninja install
+}

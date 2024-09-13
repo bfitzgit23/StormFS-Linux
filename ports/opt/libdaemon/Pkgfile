@@ -1,0 +1,11 @@
+# Description: The libdaemon package is a lightweight C library that eases the writing of UNIX daemons.
+# URL:         https://0pointer.de/lennart/projects/libdaemon/
+# Maintainer:  B.r.i.a.n M.a.d.o.n.n.a b.m.a.d.o.n.n.a.s.t.e.r @ g.m.a.i.l.c.o.m
+# Depends on:  
+# Optional: doxygen lynx
+
+name=libdaemon
+version=0.14
+release=1
+source=(https://0pointer.de/lennart/projects/$name/$name-$version.tar.gz)
+

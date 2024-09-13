@@ -1,0 +1,21 @@
+# Depends on: icu rustc which llvm 
+
+name=SpiderMonkey
+version=115.13.0esr.source
+release=1
+source=(https://archive.mozilla.org/pub/firefox/releases/115.13.0esr/source/firefox-115.13.0esr.source.tar.xz)
+pkg_build () {
+cd $SRC/firefox-115.13.0
+mkdir obj &&
+cd    obj &&
+../js/src/configure --prefix=/usr            \
+                    --disable-debug-symbols  \
+                    --disable-jemalloc       \
+                    --enable-readline        \
+                    --with-intl-api          \
+                    --with-system-icu        \
+                    --with-system-zlib       &&
+make
+make install
+}
+

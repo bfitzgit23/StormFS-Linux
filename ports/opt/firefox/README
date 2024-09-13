@@ -1,0 +1,2 @@
+If you compile firefox frequently, consider installing ccache and sccache,
+so that later updates can use the artifacts left over from previous builds.

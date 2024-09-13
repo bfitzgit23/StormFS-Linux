@@ -1,0 +1,22 @@
+# Depends on: adwaita-icon-theme evolution-data-server gcr4 gnome-autoar shared-mime-info webkitgtk bogofilter enchant gnome-desktop gspell highlightitstool libcanberra libgweather libnotify openldap seahorse
+
+name=evolution
+version=3.52.4
+release=1
+source=(https://download.gnome.org/sources/${name}/${version%.*}/${name}-${version}.tar.xz)
+pkg_build () {
+mkdir build &&
+cd    build &&
+
+cmake -D CMAKE_INSTALL_PREFIX=/usr \
+      -D SYSCONF_INSTALL_DIR=/etc  \
+      -D ENABLE_INSTALLED_TESTS=ON \
+      -D ENABLE_PST_IMPORT=OFF     \
+      -D ENABLE_YTNEF=OFF          \
+      -D ENABLE_CONTACT_MAPS=OFF   \
+      -D ENABLE_MARKDOWN=OFF       \
+      -D ENABLE_WEATHER=ON         \
+      -G Ninja .. &&
+ninja
+ninja install
+}

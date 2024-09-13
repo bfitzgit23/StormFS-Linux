@@ -1,0 +1,34 @@
+# Description: Provides a way to load and enumerate PKCS #11 (a Cryptographic Token Interface Standard) modules
+# URL:         
+# Maintainer:  Emmett1, emmett1 dot 2miligrams at gmail dot com
+# Depends on:  
+# Optional: libtasn1 make-ca gtk-doc libxslt nss
+name=p11-kit
+version=0.25.3
+release=1
+source=(https://github.com/p11-glue/p11-kit/releases/download/$version/p11-kit-$version.tar.xz)
+
+build() {
+	cd $name-$version
+
+	sed '20,$ d' -i trust/trust-extract-compat &&
+cat >> trust/trust-extract-compat << "EOF"
+# Copy existing anchor modifications to /etc/ssl/local
+/usr/libexec/make-ca/copy-trust-modifications
+
+# Update trust stores
+/usr/sbin/make-ca -r
+EOF
+mkdir p11-build &&
+cd    p11-build &&
+
+meson setup ..            \
+      --prefix=/usr       \
+      --buildtype=release \
+      -Dtrust_paths=/etc/pki/anchors &&
+ninja
+DESTDIR=$PKG ninja install &&
+ln -sfv /usr/libexec/p11-kit/trust-extract-compat \
+        $PKG/usr/bin/update-ca-certificates
+ln -sfv ./pkcs11/p11-kit-trust.so $PKG/usr/lib/libnssckbi.so
+}

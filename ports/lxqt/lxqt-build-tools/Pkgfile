@@ -1,0 +1,6 @@
+# Depends on: cmake qt6
+
+name=lxqt-build-tools
+version=2.0.0
+release=1
+source=(https://github.com/lxqt/${name}/releases/download/${version}/${name}-${version}.tar.xz)

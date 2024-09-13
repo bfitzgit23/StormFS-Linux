@@ -1,0 +1,6 @@
+# Depends on: gtk3 xfconf startup-notifcation libgtop libgudev
+
+name=libxfce4ui
+version=4.18.6
+release=1
+source=(https://archive.xfce.org/src/xfce/${name}/${version%.*}/${name}-${version}.tar.bz2)

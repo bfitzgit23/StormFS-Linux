@@ -1,0 +1,21 @@
+# Description:  The BlueZ package contains the Bluetooth protocol stack for Linux.
+# URL:         https://www.kernel.org/pub/linux/bluetooth/
+# Maintainer:  B.r.i.a.n M.a.d.o.n.n.a b.m.a.d.o.n.n.a.s.t.e.r @ g.m.a.i.l.c.o.m
+# Depends on:  dbus glib libical
+# Optional:	docutils
+
+
+name=bluez
+version=5.78
+release=1
+source=(https://www.kernel.org/pub/linux/bluetooth/$name-$version.tar.xz)
+build_opt="--prefix=/usr         
+            --sysconfdir=/etc     
+            --localstatedir=/var  
+            --disable-manpages    
+            --enable-library"
+post_build() {
+
+install -v -dm755 $PKG/etc/bluetooth &&
+install -v -m644 src/main.conf $PKG/etc/bluetooth/main.conf
+}

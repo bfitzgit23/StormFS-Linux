@@ -1,0 +1,23 @@
+# Description: 
+# URL: https://gnome.org         
+# Maintainer:  b.r.i.a.n m.a.d.o.n.n.a b.m.a.d.o.n.n.a.s.t.e.r@g.m.a.i.l.c.o.m
+# Depends on:  at-spi2-core cairo dconf gdk-pixbuf glib glibc gsettings-desktop-schemas gtk3 libcanberra libgtop libICE libSM libX11 libXcomposite libXcursor libXdamage libXext libXfixes libXcursor libXinerama libXpresent libXrandr libXrender libXres pango startup-notification zenity
+
+name=metacity
+version=3.52.0
+release=1
+source=(https://download.gnome.org/sources/$name/3.52/$name-$version.tar.xz
+0001-frames-Add-basic-color-scheme-support.patch)
+
+pkg_build() {
+  ./configure \
+    --prefix=/usr \
+    --sysconfdir=/etc \
+    --localstatedir=/var \
+    --disable-debug \
+    --enable-compile-warnings \
+    --disable-vulkan
+  sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
+  make
+make install
+}

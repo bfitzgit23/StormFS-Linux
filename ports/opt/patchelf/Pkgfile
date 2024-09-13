@@ -1,0 +1,6 @@
+# Depends on: 
+
+name=patchelf
+version=0.18.0
+release=1
+source=(https://github.com/NixOS/${name}/releases/download/${version}/${name}-${version}.tar.gz)

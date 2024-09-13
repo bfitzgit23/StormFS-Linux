@@ -1,0 +1,20 @@
+# Description: Text and graphics mode WWW browser
+# URL:         http://links.twibright.com/
+# Maintainer:  Emmett1, emmett1 dot 2miligrams at gmail dot com
+# Depends on:  openssl libevent
+
+name=links
+version=2.29
+release=1
+source=(http://links.twibright.com/download/$name-$version.tar.bz2)
+
+build() {
+	cd $name-$version
+
+	./configure --prefix=/usr --mandir=/usr/share/man
+	make
+	make DESTDIR=$PKG install
+install -v -d -m755 $PKG/usr/share/doc/links-2.29 &&
+install -v -m644 doc/links_cal/* KEYS BRAILLE_HOWTO \
+    $PKG/usr/share/doc/links-2.29
+}

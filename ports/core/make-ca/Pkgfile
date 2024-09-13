@@ -1,0 +1,16 @@
+# Description: A stream oriented C library for parsing XML
+# URL:         
+# Maintainer:  Emmett1, emmett1 dot 2miligrams at gmail dot com
+# Depends on:  
+
+name=make-ca
+version=1.13
+release=1
+source=(https://github.com/lfs-book/make-ca/releases/download/v1.13/$name-$version.tar.xz)
+
+build() {
+        cd $name-$version
+
+make DESTDIR=$PKG install &&
+install -vdm755 $PKG/etc/ssl/local
+}

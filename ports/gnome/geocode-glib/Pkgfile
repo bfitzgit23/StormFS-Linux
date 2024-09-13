@@ -1,0 +1,10 @@
+# Depends on: json-glib libsoup glib gObject-introspection
+
+name=geocode-glib
+version=3.26.4
+release=1
+source=(https://download.gnome.org/sources/${name}/${version%.*}/${name}-${version}.tar.xz)
+build_opt="--prefix /usr           
+            --buildtype=release     
+            -Denable-gtk-doc=false  
+            -Dsoup2=false"

@@ -1,0 +1,24 @@
+# Description: The JSON-C implements a reference counting object model that allows you to easily construct JSON objects in C, output them as JSON formatted strings and parse JSON formatted strings back into the C representation of JSON objects.
+# URL:          https://s3.amazonaws.com/
+# Maintainer:  cmake doxygen
+# Depends on:  graphviz
+
+name=json-c
+version=0.17
+release=1
+source=(https://s3.amazonaws.com/json-c_releases/releases/json-c-$version.tar.gz)
+
+build() {
+	cd $name-$version
+
+	mkdir build &&
+	cd    build &&
+
+cmake -DCMAKE_INSTALL_PREFIX=/usr \
+      -DCMAKE_BUILD_TYPE=Release \
+      -DBUILD_STATIC_LIBS=OFF    \
+      .. &&
+make
+doxygen doc/Doxyfile
+	make DESTDIR=$PKG install
+}

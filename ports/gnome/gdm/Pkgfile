@@ -1,0 +1,12 @@
+# Depends on: accountsservice dconf libcanberra gtk3 linux-pam
+
+name=gdm
+version=46.2
+release=1
+source=(https://download.gnome.org/sources/${name}/46/${name}-${version}.tar.xz)
+built_opt" --prefix=/usr       
+      --buildtype=release 
+      -Dgdm-xsession=true 
+      -Drun-dir=/run/gdm
+      -Dinitial-vt=7
+      -Ddefault-pam-config=lfs"

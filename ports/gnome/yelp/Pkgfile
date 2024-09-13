@@ -1,0 +1,6 @@
+# Depends on: webkitgtk-41 webkitgtk gsettings-desktop-schemas yelp-xsl desktop-file-utils
+
+name=yelp
+version=42.2
+release=1
+source=(https://download.gnome.org/sources/${name}/42/${name}-${version}.tar.xz)

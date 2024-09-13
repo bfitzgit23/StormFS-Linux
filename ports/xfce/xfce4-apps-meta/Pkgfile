@@ -1,0 +1,11 @@
+# Description: Gnome apps meta package
+# URL:  https://gnome.org/
+# Maintainer: B.r.i.a.n M.a.d.o.n.n.a b.m.a.d.o.n.n.a.s.t.e.r@g.m.a.i.l.c.o.m
+# Depends on: parole xfce4-terminal ristretto xfce4-dev-tools xfce4-notifyd xfce4-pulseaudio-plugin xfburn
+name=xfce4-apps-meta
+version=4.18.4
+release=1
+source=()
+build() {
+    mkdir $PKG/usr
+}

@@ -1,0 +1,17 @@
+# Description: X Window System initializer
+# URL: http://xorg.freedesktop.org
+# Maintainer: CRUX Xorg Team, xorg-ports at crux dot nu
+# Depends on: xorg-server xorg-libs
+# optional: twm xclock xterm
+name=xinit
+version=1.4.2
+release=1
+source=(https://www.x.org/releases/individual/app/$name-$version.tar.xz)
+
+build() {
+	cd $name-$version
+
+	./configure $XORG_CONFIG --with-xinitdir=/etc/X11/app-defaults &&
+	make
+	make DESTDIR=$PKG install
+}

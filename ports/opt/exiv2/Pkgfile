@@ -1,0 +1,24 @@
+# Description: Exiv2 is a C++ library and a command line utility for managing image and video metadata.
+# URL:         https://github.com/Exiv2/
+# Maintainer:  B.r.i.a.n M.a.d.o.n.n.a b.m.a.d.o.n.n.a.s.t.e.r @ g.m.a.i.l.c.o.m
+# Depends on:  cmake brotli curl inih
+# Optional: libssh doxygen graphviz libxslt
+
+name=exiv2
+version=0.28.3
+release=1
+source=(https://github.com/$name/$name/archive/v$version/$name-$version.tar.gz)
+pkg_build() {
+mkdir build &&
+cd    build &&
+
+cmake -DCMAKE_INSTALL_PREFIX=/usr  \
+      -DCMAKE_BUILD_TYPE=Release   \
+      -DEXIV2_ENABLE_VIDEO=yes     \
+      -DEXIV2_ENABLE_WEBREADY=yes  \
+      -DEXIV2_ENABLE_CURL=yes      \
+      -DEXIV2_BUILD_SAMPLES=no     \
+      -G "Unix Makefiles" .. &&
+make
+make DESTDIR=$PKG install
+}

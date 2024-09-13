@@ -1,0 +1,144 @@
+# Description: The Mozilla Firefox browser with Alsa support
+# URL: https://www.mozilla.com/firefox/
+# Maintainer: John McQuah, jmcquah at disroot dot org
+# Depends on: cbindgen dbus-glib gtk3 libnotify llvm  nodejs pulseAudio alsa-lib  python3 sqlite startup-notification unzip
+# Optional: icu libevent libvpx libwebp nasm nss curl doxygen ffmpeg liboauth pciutils valgrind wget wireless-tools yasm libproxy
+
+name=firefox
+version=130.0
+release=1
+source=(https://ftp.mozilla.org/pub/$name/releases/$version/source/$name-$version.source.tar.xz
+  firefox.desktop
+  icu-linebreak-classes.patch
+  node-stdout-nonblocking-wrapper)
+
+build() {
+  chmod a+x $SRC/node-stdout-nonblocking-wrapper
+
+  cd $name-$version
+
+  for p in $SRC/*.patch; do
+    patch -p1 -i $p
+  done
+
+  if [ "$(/usr/bin/python3 -c "import sys; print(sys.stdout.encoding)")" != 'utf-8' ]; then
+    printf "\e[031mError: set an UTF-8 locale to compile this!\033[0m\n"
+    exit 1
+  fi
+
+  prt-get isinst sccache 2>/dev/null && export RUSTC_WRAPPER='/usr/bin/sccache'
+  mkdir -p "$PKGMK_SOURCE_DIR/rust"
+  export CARGO_HOME="$PKGMK_SOURCE_DIR/rust"
+
+  export MACH_BUILD_PYTHON_NATIVE_PACKAGE_SOURCE=system
+  export MOZBUILD_STATE_PATH=${PWD}/mozbuild
+
+  cat > .mozconfig << EOF
+  export NODEJS="$SRC/node-stdout-nonblocking-wrapper"
+  mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/firefox-shared
+  unset MOZ_TELEMETRY_REPORTING
+  ac_add_options --prefix=/usr
+  ac_add_options --libdir=/usr/lib
+  ac_add_options --enable-strip
+  ac_add_options --enable-release
+  ac_add_options --enable-install-strip
+  ac_add_options --enable-official-branding
+  ac_add_options --enable-application=browser
+  ac_add_options --enable-optimize
+  ac_add_options --with-system-ffi
+  ac_add_options --with-system-jpeg
+  ac_add_options --with-system-libvpx
+  ac_add_options --with-system-nspr
+  ac_add_options --with-system-nss
+  ac_add_options --with-system-pixman
+  ac_add_options --with-system-png
+  ac_add_options --with-system-webp
+  ac_add_options --with-system-zlib
+  ac_add_options --without-wasm-sandboxed-libraries
+  ac_add_options --disable-eme
+  ac_add_options --disable-tests
+  ac_add_options --disable-vtune
+  ac_add_options --disable-updater
+  ac_add_options --disable-jemalloc
+  ac_add_options --disable-elf-hack
+  ac_add_options --disable-callgrind
+  ac_add_options --disable-profiling
+  ac_add_options --disable-necko-wifi
+  ac_add_options --disable-crashreporter
+  ac_add_options --disable-accessibility
+  ac_add_options --disable-debug
+  ac_add_options --disable-debug-symbols
+  ac_add_options --disable-parental-controls
+  ac_add_options --disable-system-extension-dirs
+EOF
+
+  # unicode internationalization
+  prt-get isinst icu 2>/dev/null && \
+    echo 'ac_add_options --with-system-icu' >> .mozconfig
+
+  # audio
+  PKGMK_FFAUDIO="alsa"
+  [ -e /usr/lib/libpulse.so -o -e /usr/lib/apulse/libpulse.so ] && PKGMK_FFAUDIO+=",pulseaudio"
+  [ -e /usr/lib/libjack.so ] && PKGMK_FFAUDIO+=",jack"
+  [ -e /usr/lib/libsndio.so ] && PKGMK_FFAUDIO+=",sndio"
+  echo "ac_add_options --enable-audio-backends=${PKGMK_FFAUDIO}" >> .mozconfig
+
+  if prt-get isinst wayland xorg-server 2>/dev/null ; then
+    echo 'ac_add_options --enable-default-toolkit=cairo-gtk3-x11-wayland' >> .mozconfig
+  elif prt-get isinst wayland 2>/dev/null ; then 
+    echo 'ac_add_options --enable-default-toolkit=cairo-gtk3-wayland-only' >> .mozconfig
+  else
+    echo 'ac_add_options --enable-default-toolkit=cairo-gtk3-x11-only' >> .mozconfig
+  fi
+
+  if [ -e '/usr/bin/ccache' ]; then
+    echo 'ac_add_options --enable-ccache' >> .mozconfig
+    PATH=$(echo ${PATH} | awk -v RS=: -v ORS=: '/ccache/ {next} {print}' | sed 's/:*$//')
+  fi
+
+  export CFLAGS="$CFLAGS -w"
+  export CXXFLAGS="$CXXFLAGS -w"
+  export LDFLAGS="$LDFLAGS -Wl,-rpath=/usr/lib/firefox,--enable-new-dtags"
+
+  if prt-get isinst lld 2>/dev/null; then
+      echo 'ac_add_options --enable-linker=lld' >> .mozconfig
+      export LDFLAGS+=" -Wl,--thinlto-jobs=$((JOBS / 2))"
+  else
+      echo 'ac_add_options --enable-linker=bfd' >> .mozconfig
+  fi
+
+  export CC=clang CXX=clang++ AR=llvm-ar NM=llvm-nm RANLIB=llvm-ranlib RUSTFLAGS="-C opt-level=2 $RUSTFLAGS"
+  export MOZ_MAKE_FLAGS="-j ${JOBS-1}"
+
+  # Disable notification when build system has finished
+  export MOZ_NOSPAM=1
+
+  # Specify the Python environment to use
+  #export MACH_BUILD_PYTHON_NATIVE_PACKAGE_SOURCE=system
+  export MACH_BUILD_PYTHON_NATIVE_PACKAGE_SOURCE=pip
+  export PIP_NETWORK_INSTALL_RESTRICTED_VIRTUALENVS=mach
+  mkdir -p $SRC/bin
+  ln -s /usr/bin/pip3 $SRC/bin/pip
+  ln -s /usr/bin/python3 $SRC/bin/python
+  export PATH="$SRC/bin:$PATH"
+
+  # python/mach/mach/mixin/process.py fails to detect SHELL
+  export SHELL='/bin/bash'
+
+  ./mach build
+  DESTDIR=$PKG ./mach install
+
+  # Remove crap
+  rm -r $PKG/usr/lib/firefox/browser/features
+  rm $PKG/usr/lib/firefox/removed-files
+
+  install -D -m 0644 $SRC/firefox.desktop $PKG/usr/share/applications/firefox.desktop
+
+  mkdir -p $PKG/etc/revdep.d
+  echo "/usr/lib/firefox" > $PKG/etc/revdep.d/firefox
+
+  mkdir -p $PKG/usr/share/pixmaps
+  ln -s /usr/lib/firefox/browser/chrome/icons/default/default128.png \
+          $PKG/usr/share/pixmaps/firefox.png
+}
+

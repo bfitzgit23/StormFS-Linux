@@ -1,0 +1,13 @@
+# Description: A compressed GIF library compatible with libungif
+# URL: https://giflib.sourceforge.net
+# Maintainer: Tim Biermann, tbier at posteo dot de
+# Depends on: xmlto
+
+name=giflib
+version=5.2.2
+release=1
+source=(https://sourceforge.net/projects/giflib/files/$name-$version.tar.gz
+giflib-5.2.2-upstream_fixes-1.patch)
+pre_build() {
+cp pic/gifgrid.gif doc/giflib-logo.gif
+}

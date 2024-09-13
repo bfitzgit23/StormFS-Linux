@@ -1,0 +1,34 @@
+# Description: A fast compiler cache
+# URL: https://ccache.dev/
+# Maintainer: Tim Biermann, tbier at posteo dot de
+# Depends on: fmt xxhash zstd
+# Optional: asciidoctor clang-ccache-bindings gcc-fortran-ccache-bindings hiredis mingw-ccache-bindings
+
+name=ccache
+version=4.10.2
+release=1
+source=(https://github.com/$name/$name/releases/download/v$version/$name-$version.tar.xz)
+
+build() {
+  prt-get isinst hiredis && PKGMK_CCACHE+=' -D REDIS_STORAGE_BACKEND=ON' || PKGMK_CCACHE+=' -D REDIS_STORAGE_BACKEND=OFF'
+
+  cmake -S $name-$version -B build -G Ninja $PKGMK_CCACHE \
+    -D CMAKE_INSTALL_PREFIX=/usr \
+    -D CMAKE_INSTALL_LIBDIR=lib \
+    -D CMAKE_BUILD_TYPE=Release \
+    -D CMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
+    -D CMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+    -D DEPS=LOCAL \
+    -D ENABLE_IPO=ON \
+    -D ENABLE_TESTING=OFF \
+    -D ENABLE_DOCUMENTATION=OFF
+
+  cmake --build build
+  DESTDIR=$PKG cmake --install build
+
+  install -d $PKG/usr/lib/ccache
+
+  for c in cc gcc g++ cpp c++; do
+    ln -s /usr/bin/ccache $PKG/usr/lib/ccache/$c
+  done
+}

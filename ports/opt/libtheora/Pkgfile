@@ -1,0 +1,24 @@
+# Description: a free and open video compression format
+# URL: https://www.theora.org/
+# Maintainer: Tim Biermann, tbier at posteo dot de
+# Depends on: libogg
+# Optional: libvorbis sdl12-compat libpng doxygen texlive tl-unx bibtex transfig valgrind
+
+name=libtheora
+version=1.1.1
+release=1
+source=(https://downloads.xiph.org/releases/theora/$name-$version.tar.xz)
+
+build() {
+  cd $name-$version
+
+  sed -i 's/png_\(sizeof\)/\1/g' examples/png2theora.c &&
+./configure --prefix=/usr --disable-static &&
+make
+make DESTDIR=$PKG install
+cd examples/.libs &&
+for E in *; do
+mkdir -p $PKG/usr/bin/theora_${E}
+  install -v -m755 $E $PKG/usr/bin/theora_${E}
+done
+}

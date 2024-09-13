@@ -1,0 +1,22 @@
+# Description: Decompress utility for zipfiles
+# URL: https://infozip.sourceforge.net/UnZip.html
+# Maintainer: CRUX System Team, core-ports at crux dot nu
+
+name=unzip
+version=6.0
+release=8
+source=(https://downloads.sourceforge.net/sourceforge/infozip/${name}${version//./}.tar.gz
+  https://www.linuxfromscratch.org/patches/blfs/svn/$name-$version-consolidated_fixes-1.patch)
+
+build() {
+	cd ${name}${version//./}
+	patch -Np1 -i ../unzip-6.0-consolidated_fixes-1.patch
+
+
+		make -f unix/Makefile prefix=/usr \
+		D_USE_BZ2=-DUSE_BZIP2 L_BZ2=-lbz2 \
+		LF2="$LDFLAGS" CF="$CFLAGS $CPPFLAGS -I. $DEFINES" \
+		unzips
+	make -f unix/Makefile prefix="${PKG}"/usr install
+	ln -sf unzip $PKG/usr/bin/zipinfo
+	}

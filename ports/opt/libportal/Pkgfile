@@ -1,0 +1,6 @@
+# Depends on: glib gobject-introspection gtk3 gtk4 xdg-desktop-portal xdg-desktop-portal-gtk xdg-desktop-portal-gnome
+
+name=libportal
+version=0.8.0
+release=1
+source=(https://github.com/flatpak/${name}/releases/download/${version}/${name}-${version}.tar.xz)

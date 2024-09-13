@@ -1,0 +1,50 @@
+# Description: QtWebEngine integrates chromium's web capabilities into Qt. It ships with its own copy of ninja which it uses for the build if it cannot find a system copy, and various copies of libraries from ffmpeg, icu, libvpx, and zlib (including libminizip) which have been forked by the chromium developers. This package and browsers using it may be useful if you need to use a website designed for google chrome, or chromium, browsers.
+# URL:          https://anduin.linuxfromscratch.org/
+# Maintainer:  B.r.i.a.n M.a.d.o.n.n.a b.m.a.d.o.n.n.a.s.t.e.r @ g.m.a.i.l.c.o.m
+# Depends on:  nodejs nss pciutils qt6 alsa-lib pulseaudio ffmpeg icu libxml2 libwebp libxslt opus libevent kerberos pipewire poppler jsoncpp libsrtp snappy python3-html5lib
+
+name=qtwebengine
+version=6.7.2
+release=1
+source=(https://download.qt.io/official_releases/qt/${version%.*}/$version/submodules/qtwebengine-everywhere-src-$version.tar.xz
+  ninja-1.12.patch
+  ninja-1.12-2.patch
+  https://www.linuxfromscratch.org/patches/blfs/svn/$name-$version-ffmpeg7_fixes-1.patch
+  no-h264.patch)
+
+build () {
+cd $SRC
+  sed -e 's/^#define BA_LB_COUNT.*$/#define BA_LB_COUNT 40/' \
+    -i qtwebengine-everywhere-src-$version/src/3rdparty/chromium/third_party/blink/renderer/platform/text/text_break_iterator.cc
+
+  patch -Np1 -d qtwebengine-everywhere-src-$version -i $SRC/ninja-1.12-2.patch
+  patch -Np1 -d qtwebengine-everywhere-src-$version/src/3rdparty/chromium -i $SRC/qtwebengine-6.7.2-ffmpeg7_fixes-1.patch
+  patch -Np1 -d qtwebengine-everywhere-src-$version -i $SRC/no-h264.patch
+  cd $SRC/qtwebengine-everywhere-src-$version/src/3rdparty/chromium
+  ./build/linux/unbundle/replace_gn_files.py --system-libraries $SYSLIBS
+#cd $SRC/$name-everywhere-src-$version
+cd $SRC
+#mkdir build &&
+#cd    build &&
+export JOBS=24
+cmake -S qtwebengine-everywhere-src-$version -B build -G Ninja $PKGMK_QT6 \
+      -D CMAKE_MESSAGE_LOG_LEVEL=STATUS        \
+      -D QT_FEATURE_webengine_system_ffmpeg=OFF \
+      -D QT_FEATURE_webengine_system_icu=ON \
+      -D QT_FEATURE_webengine_system_libevent=ON \
+      -D QT_FEATURE_webengine_proprietary_codecs=ON \
+      -D QT_FEATURE_webengine_webrtc_pipewire=ON \
+      -D QT_BUILD_EXAMPLES_BY_DEFAULT=OFF \
+      -D QT_FEATURE_webengine_spellchecker=ON \
+      -D QT_FEATURE_webengine_geolocation=ON \
+      -D QT_FEATURE_qtpdf_build=ON \
+      -D QT_FEATURE_qtpdf_quick_build=ON \
+      -D QT_FEATURE_webenginedriver=ON \
+      -D QT_FEATURE_qtpdf_widgets_build=ON \
+      -D QT_FEATURE_pdf_v8=ON \
+      -D QT_FEATURE_webengine_printing_and_pdf=ON \
+      -D INSTALL_GN=on \
+      -Wno-dev
+  cmake --build build
+  DESTDIR=$PKG cmake --install build
+}

@@ -1,0 +1,18 @@
+# Description: BDF to PCF font file converter
+# URL: http://xorg.freedesktop.org
+# Maintainer: CRUX Xorg Team, xorg-ports at crux dot nu
+# Depends on: harfbuzz
+
+name=bdftopcf
+version=1.1.1
+release=1
+source=(https://www.x.org/archive/individual/util/bdftopcf-$version.tar.xz)
+
+build() {
+	cd bdftopcf-$version
+
+	./configure $XORG_CONFIG
+
+	make
+	make DESTDIR=$PKG install
+}

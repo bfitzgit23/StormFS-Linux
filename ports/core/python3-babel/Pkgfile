@@ -1,0 +1,36 @@
+# Description: A collection of tools for internationalizing Python applications
+# URL: https://babel.pocoo.org/
+# Maintainer: Tim Biermann, tbier at posteo dot de
+# Depends on: python3-pytz
+
+name=python3-babel
+version=2.15.0
+release=1
+cldrver=44.0 # $SRC/babel-$version/scripts/download_import_cldr.py
+
+source=(https://github.com/python-babel/babel/archive/v$version/$name-$version.tar.gz
+  https://unicode.org/Public/cldr/${cldrver::2}/cldr-common-$cldrver.zip)
+
+unpack_source() {
+  for file in ${source[@]}; do
+    case ${file##*/} in
+      $name-$version.tar.gz)
+        bsdtar -p -o -C $SRC -xf $(get_filename $file) ;;
+      cldr-common-$cldrver.zip)
+        cp $(get_filename $file) $SRC/babel-$version/cldr/cldr-common-$cldrver.zip ;;
+      *)
+        cp $(get_filename $file) $SRC ;;
+    esac
+  done
+}
+
+build() {
+  cd babel-$version
+
+  /usr/bin/python3 setup.py import_cldr
+  /usr/bin/python3 setup.py build
+  /usr/bin/python3 setup.py install --root=$PKG \
+    --optimize=1 \
+    --skip-build
+  mv $PKG/usr/bin/pybabel $PKG/usr/bin/py3babel
+}

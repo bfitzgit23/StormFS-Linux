@@ -1,0 +1,35 @@
+# Description: SVG rendering library with cairo backend
+# URL: https://wiki.gnome.org/Projects/LibRsvg
+# Maintainer: Tim Biermann, tbier at posteo dot de
+# Depends on: cairo gdk-pixbuf  pango rustc
+# Optional: object-introspection vala docutils gi-docgen xorg-fonts
+
+name=librsvg
+version=2.58.3
+release=1
+source=(https://download.gnome.org/sources/librsvg/2.58/$name-$version.tar.xz)
+
+build() {
+  cd $name-$version
+
+  prt-get isinst sccache && export RUSTC_WRAPPER=/usr/bin/sccache
+  [[ ! -e $PKGMK_SOURCE_DIR/rust ]] && mkdir $PKGMK_SOURCE_DIR/rust
+
+  prt-get isinst vala && PKGMK_LIBRSVG+=' --enable-vala'
+
+  export CARGO_PROFILE_RELEASE_LTO=true
+  export CARGO_PROFILE_RELEASE_CODEGEN_UNITS=1
+
+  ./configure $PKGMK_LIBRSVG \
+    --prefix=/usr \
+    --enable-pixbuf-loader \
+    --disable-gtk-doc \
+    --disable-debug \
+    --disable-nls
+
+  make
+  make DESTDIR=$PKG install
+
+  find $PKG/usr/lib -type f -name '*.la' -print -delete
+  rm -r $PKG/usr/share/doc
+}

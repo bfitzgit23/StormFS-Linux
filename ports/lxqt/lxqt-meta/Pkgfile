@@ -1,0 +1,14 @@
+# Description: KDE Plasma 6 meta port
+# URL: https://kde.org/plasma-desktop/
+# Maintainer: CRUX KDE Ports, kde-ports at crux dot nu
+# Depends on:lxqt-config lxqt-session libdbusmenu-lxqt lxqt-globalkeys lxqt-sudo libfm-extra lxqt-menu-data lxqt-themes libfm-qt menu-cache liblxqt lxqt-openssh-askpass muparser libqtxdg lxqt-panel obconf-qt libsysstat lxqt-policykit pcmanfm-qt lxqt-about lxqt-powermanagement qterminal  lxqt-admin lxqt-qtplugin qtxdg-tools lxqt-build-tools lxqt-runner xdg-desktop-portal-lxqt
+name=lxqt-meta
+version=2.0.0
+release=1
+source=()
+
+build() {
+    mkdir $PKG/usr
+}
+
+# vim: set ts=4 et:
