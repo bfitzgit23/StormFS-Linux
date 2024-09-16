@@ -33,6 +33,7 @@ iceauth
 libepoxy
 libXxf86vm
 xorg-apps
+brian@192.168.68.66
 libXt
 xkbevd
 xclip
@@ -288,6 +289,12 @@ libXxf86vm/Pkgfile
 xorg-apps/.footprint
 xorg-apps/.md5sum
 xorg-apps/Pkgfile
+brian@192.168.68.66/.footprint
+brian@192.168.68.66/.md5sum
+brian@192.168.68.66/xorg-server-21.1.diff
+brian@192.168.68.66/Pkgfile
+brian@192.168.68.66/xorg-server-21.1.patch
+brian@192.168.68.66/xorg-abi.patch
 libXt/.footprint
 libXt/.md5sum
 libXt/Pkgfile
@@ -741,6 +748,8 @@ xf86-input-joystick/Pkgfile
 xdriinfo/.footprint
 xdriinfo/.md5sum
 xdriinfo/Pkgfile
+pixman/.footprint
+pixman/.md5sum
 pixman/Pkgfile
 xcb-util-keysyms/.footprint
 xcb-util-keysyms/.md5sum

@@ -1,8 +1,8 @@
 # Description: Qt Free Edition, version 5.x.
 # URL: http://www.qt.io/
 # Maintainer: CRUX System Team, core-ports at crux dot nu
-# Depends on: xorg-libs dbus gdk-pixbuf gst-plugins-base libepoxy libmng libwebp libxkbcommon xorg-libxcomposite xorg-libxcursor xorg-libxi xorg-libxinerama xorg-xcb-util-image xorg-xcb-util-keysyms xorg-xcb-util-renderutil xorg-xcb-util-wm jaspere libmng alsa-lib make-ca cups double-conversion glib harfbuzz icu libjpeg-turbo libinput libpng libtiff mesa mtdev pcre2 wayland xcb-util-image xcb-util-cursor xcb-util-keysyms xcb-util-renderutil xcb-util-wm
-# Optional: assimp bluez gtk3 ibus krb5 libsdl2 mariadb openal pulseaudio unixodbc vulkan-headers xkeyboard-config
+# Depends on: dbus gdk-pixbuf gst-plugins-base libepoxy libmng libwebp libxkbcommon libXcomposite libXcursor libXi libXinerama jasper alsa-lib make-ca cups double-conversion glib harfbuzz icu libjpeg-turbo libinput libpng libtiff mesa mtdev pcre2 wayland xcb-util-image xcb-util-cursor xcb-util-keysyms xcb-util-renderutil xcb-util-wm
+
 
 name=qt6
 version=6.7.2

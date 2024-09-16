@@ -1,4 +1,4 @@
-# Depends on: poppler-data fontconfig gobject-introspection boost cairo lcms2 libjpeg-turbo libpng nss openjpeg2 gpgme
+# Depends on: poppler-data fontconfig gobject-introspection boost cairo lcms2 libjpeg-turbo libpng nss openjpeg2 gpgme qt6
 
 name=poppler
 version=24.08.0

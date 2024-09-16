@@ -5,12 +5,12 @@
 # Optional : make-ca
 
 name=glib-networking
-version=2.78.0
+version=2.80.0
 release=1
-source=(https://download.gnome.org/sources/$name/${version:0:4}/$name-$version.tar.xz)
+source=(https://download.gnome.org/sources/$name/2.80/$name-$version.tar.xz)
 
-build() {
-  cd $name-$version
+pkg_build() {
+
 mkdir build &&
 cd    build &&
 

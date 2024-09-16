@@ -184,6 +184,7 @@ librsvg
 libatasmart
 giflib
 qca
+nvidia
 libusb
 python3-ply
 libstatgrab
@@ -490,6 +491,8 @@ python3-attrs/Pkgfile
 libaio/.footprint
 libaio/.md5sum
 libaio/Pkgfile
+links/.footprint
+links/.md5sum
 links/Pkgfile
 accountsservice/.footprint
 accountsservice/.md5sum
@@ -617,6 +620,8 @@ taglib/.footprint
 taglib/.md5sum
 taglib/Pkgfile
 duktape/Pkgfile
+cpio/.footprint
+cpio/.md5sum
 cpio/Pkgfile
 sbc/Pkgfile
 libassuan/.footprint
@@ -639,6 +644,8 @@ spirv-llvm-translator/.footprint
 spirv-llvm-translator/.md5sum
 spirv-llvm-translator/Pkgfile
 sdl12-compat/Pkgfile
+xmlto/.footprint
+xmlto/.md5sum
 xmlto/Pkgfile
 libcddb/Pkgfile
 libsass/.footprint
@@ -838,6 +845,15 @@ giflib/giflib-5.2.2-upstream_fixes-1.patch
 qca/.footprint
 qca/.md5sum
 qca/Pkgfile
+nvidia/.footprint
+nvidia/.md5sum
+nvidia/nvidia-powerd.rc
+nvidia/pre-install
+nvidia/90-nvidia-uvm.rules
+nvidia/Pkgfile
+nvidia/10-nvidia-drm-outputclass.conf
+nvidia/README
+nvidia/.signature
 libusb/.footprint
 libusb/.md5sum
 libusb/Pkgfile
@@ -908,6 +924,8 @@ graphene/Pkgfile
 graphviz/.footprint
 graphviz/.md5sum
 graphviz/Pkgfile
+nettle/.footprint
+nettle/.md5sum
 nettle/Pkgfile
 v4l-utils/Pkgfile
 libjxl/.footprint

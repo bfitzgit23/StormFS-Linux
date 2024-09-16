@@ -8,6 +8,11 @@ name=cpio
 version=2.15
 release=1
 source=(https://ftp.gnu.org/gnu/$name/$name-$version.tar.bz2)
+CFLAGS+=' -fcommon'
 build_opt="--prefix=/usr 
             --enable-mt   
             --with-rmt=/usr/libexec/rmt"
+pre_build() {
+CFLAGS+=' -fcommon'
+autoreconf -fi
+}

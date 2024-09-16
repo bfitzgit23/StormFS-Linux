@@ -276,9 +276,9 @@ glibc/Pkgfile
 glibc/glibc-2.39-fhs-1.patch
 glibc/ld.so.conf
 glibc/glibc-2.40-fhs-1.patch
+acl/.footprint
+acl/.md5sum
 acl/Pkgfile
-acl/a.out
-acl/dummy.c
 attr/Pkgfile
 libnsl/.footprint
 libnsl/.md5sum
