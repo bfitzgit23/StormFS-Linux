@@ -2,15 +2,15 @@
 # URL: https://www.libjpeg-turbo.org/
 # Maintainer: CRUX System Team, core-ports at crux dot nu
 # Depends on: nasm cmake
-$ Optional: yasm
+# Optional: yasm
 name=libjpeg-turbo
-version=3.0.1
+version=3.0.4
 release=1
-source=(https://downloads.sourceforge.net/project/$name/$version/$name-$version.tar.gz)
+source=(https://github.com/libjpeg-turbo/libjpeg-turbo/releases/download/$version/$name-$version.tar.gz)
 
-build() {
+pkg_build() {
 
-	cd $name-$version
+
 	
 	mkdir build &&
 cd    build &&

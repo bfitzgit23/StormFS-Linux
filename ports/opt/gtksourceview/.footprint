@@ -131,6 +131,7 @@ drwxr-xr-x	root/root	usr/share/gtksourceview-5/language-specs/
 -rw-r--r--	root/root	usr/share/gtksourceview-5/language-specs/glsl.lang
 -rw-r--r--	root/root	usr/share/gtksourceview-5/language-specs/go.lang
 -rw-r--r--	root/root	usr/share/gtksourceview-5/language-specs/gradle.lang
+-rw-r--r--	root/root	usr/share/gtksourceview-5/language-specs/groff.lang
 -rw-r--r--	root/root	usr/share/gtksourceview-5/language-specs/groovy.lang
 -rw-r--r--	root/root	usr/share/gtksourceview-5/language-specs/gtk-doc.lang
 -rw-r--r--	root/root	usr/share/gtksourceview-5/language-specs/gtkrc.lang

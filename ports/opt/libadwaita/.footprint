@@ -5,6 +5,7 @@ drwxr-xr-x	root/root	usr/include/
 drwxr-xr-x	root/root	usr/include/libadwaita-1/
 -rw-r--r--	root/root	usr/include/libadwaita-1/adw-about-dialog.h
 -rw-r--r--	root/root	usr/include/libadwaita-1/adw-about-window.h
+-rw-r--r--	root/root	usr/include/libadwaita-1/adw-accent-color.h
 -rw-r--r--	root/root	usr/include/libadwaita-1/adw-action-row.h
 -rw-r--r--	root/root	usr/include/libadwaita-1/adw-alert-dialog.h
 -rw-r--r--	root/root	usr/include/libadwaita-1/adw-animation-target.h
@@ -15,9 +16,11 @@ drwxr-xr-x	root/root	usr/include/libadwaita-1/
 -rw-r--r--	root/root	usr/include/libadwaita-1/adw-avatar.h
 -rw-r--r--	root/root	usr/include/libadwaita-1/adw-banner.h
 -rw-r--r--	root/root	usr/include/libadwaita-1/adw-bin.h
+-rw-r--r--	root/root	usr/include/libadwaita-1/adw-bottom-sheet.h
 -rw-r--r--	root/root	usr/include/libadwaita-1/adw-breakpoint-bin.h
 -rw-r--r--	root/root	usr/include/libadwaita-1/adw-breakpoint.h
 -rw-r--r--	root/root	usr/include/libadwaita-1/adw-button-content.h
+-rw-r--r--	root/root	usr/include/libadwaita-1/adw-button-row.h
 -rw-r--r--	root/root	usr/include/libadwaita-1/adw-carousel-indicator-dots.h
 -rw-r--r--	root/root	usr/include/libadwaita-1/adw-carousel-indicator-lines.h
 -rw-r--r--	root/root	usr/include/libadwaita-1/adw-carousel.h
@@ -34,10 +37,13 @@ drwxr-xr-x	root/root	usr/include/libadwaita-1/
 -rw-r--r--	root/root	usr/include/libadwaita-1/adw-flap.h
 -rw-r--r--	root/root	usr/include/libadwaita-1/adw-fold-threshold-policy.h
 -rw-r--r--	root/root	usr/include/libadwaita-1/adw-header-bar.h
+-rw-r--r--	root/root	usr/include/libadwaita-1/adw-layout-slot.h
+-rw-r--r--	root/root	usr/include/libadwaita-1/adw-layout.h
 -rw-r--r--	root/root	usr/include/libadwaita-1/adw-leaflet.h
 -rw-r--r--	root/root	usr/include/libadwaita-1/adw-length-unit.h
 -rw-r--r--	root/root	usr/include/libadwaita-1/adw-main.h
 -rw-r--r--	root/root	usr/include/libadwaita-1/adw-message-dialog.h
+-rw-r--r--	root/root	usr/include/libadwaita-1/adw-multi-layout-view.h
 -rw-r--r--	root/root	usr/include/libadwaita-1/adw-navigation-direction.h
 -rw-r--r--	root/root	usr/include/libadwaita-1/adw-navigation-split-view.h
 -rw-r--r--	root/root	usr/include/libadwaita-1/adw-navigation-view.h
@@ -49,6 +55,8 @@ drwxr-xr-x	root/root	usr/include/libadwaita-1/
 -rw-r--r--	root/root	usr/include/libadwaita-1/adw-preferences-row.h
 -rw-r--r--	root/root	usr/include/libadwaita-1/adw-preferences-window.h
 -rw-r--r--	root/root	usr/include/libadwaita-1/adw-spin-row.h
+-rw-r--r--	root/root	usr/include/libadwaita-1/adw-spinner-paintable.h
+-rw-r--r--	root/root	usr/include/libadwaita-1/adw-spinner.h
 -rw-r--r--	root/root	usr/include/libadwaita-1/adw-split-button.h
 -rw-r--r--	root/root	usr/include/libadwaita-1/adw-spring-animation.h
 -rw-r--r--	root/root	usr/include/libadwaita-1/adw-spring-params.h
@@ -77,6 +85,8 @@ drwxr-xr-x	root/root	usr/include/libadwaita-1/
 drwxr-xr-x	root/root	usr/lib/
 drwxr-xr-x	root/root	usr/lib/girepository-1.0/
 -rw-r--r--	root/root	usr/lib/girepository-1.0/Adw-1.typelib
+lrwxrwxrwx	root/root	usr/lib/libadwaita-1-internal.so -> libadwaita-1-internal.so.0
+-rwxr-xr-x	root/root	usr/lib/libadwaita-1-internal.so.0
 lrwxrwxrwx	root/root	usr/lib/libadwaita-1.so -> libadwaita-1.so.0
 -rwxr-xr-x	root/root	usr/lib/libadwaita-1.so.0
 drwxr-xr-x	root/root	usr/lib/pkgconfig/

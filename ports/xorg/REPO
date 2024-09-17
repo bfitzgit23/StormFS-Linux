@@ -82,6 +82,7 @@ d:xorg-font-bh-100dpi
 d:xwininfo
 d:xorg-font-dejavu-ttf
 d:xorg-font-misc-misc
+d:mesa-demos
 d:xf86-video-vesa
 d:xkbcomp
 d:libXrender
@@ -321,10 +322,10 @@ f:1809a7591c650c4fa934fad9ed29abd1:xorg-font-cronyx-cyrillic/.footprint
 f:2104ca789c999126eb74425038f1617a:xorg-font-cronyx-cyrillic/.md5sum
 f:f3b6a24586b10cdc81163dbf8f4c62c3:xorg-font-cronyx-cyrillic/Pkgfile
 f:426af16fc0ab898959f307065c8b3e90:xorg-font-cronyx-cyrillic/post-install
-f:6ab0a3e2416c613dd6d8fde2a22a94a4:mesa/.footprint
-f:3373dcce817746d0aa54902110108171:mesa/.md5sum
+f:b348c460db8c8b7f0fce380cc717d015:mesa/.footprint
+f:ad912076060cace109ec0f1e7010d70a:mesa/.md5sum
 f:b4f8779303542471e8a279f27721e9b4:mesa/README.md
-f:c4666a5064b92b7282e9f1f069673e71:mesa/Pkgfile
+f:da6b9c367f498500d4546b97421ada8a:mesa/Pkgfile
 f:287febbebb6a4a5fbeb967cdd2469214:mesa/30710.patch
 f:1415335a4ef4398495b620730eff7ab8:xorgproto/.footprint
 f:867ebb67965553a6f3ec38a3726a8c19:xorgproto/.md5sum
@@ -454,6 +455,9 @@ f:34340f27c34fc16fecdeed6f1346eb7e:xorg-font-misc-misc/.footprint
 f:1af5d64dbc9bfaedecea3f0e4aff334b:xorg-font-misc-misc/.md5sum
 f:6fa6b2c6d937ea90ef26c237dc1ea3d0:xorg-font-misc-misc/Pkgfile
 f:5f60cd35a6c077df42446f08ed28f177:xorg-font-misc-misc/post-install
+f:5f86b858257467056787fa1d39114b00:mesa-demos/.footprint
+f:fa1d665771b832bb40dd213300d25928:mesa-demos/.md5sum
+f:fabb6f459d861aef345f94f2af85a393:mesa-demos/Pkgfile
 f:eabbde8bea29dc756e74ae18190447e2:xf86-video-vesa/.footprint
 f:4362ab7593ff0daff1c62639fc01f19b:xf86-video-vesa/.md5sum
 f:08419fbfa5569b00c5121df128a3ada9:xf86-video-vesa/Pkgfile
