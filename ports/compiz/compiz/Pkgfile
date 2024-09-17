@@ -1,4 +1,4 @@
-# Depends on: boost fuse2 glibmm glu libnotify libwnck libxslt cython3 python3-cairo metacity protobuf python3-gobject xorg-server intltool python3-setuptools cmake 
+# Depends on: boost fuse2 glibmm glu libnotify libwnck libxslt cython3 python3-cairo metacity protobuf python3-gobject intltool python3-setuptools cmake 
 
 name=compiz
 version=0.9.14.2

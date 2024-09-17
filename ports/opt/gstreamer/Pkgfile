@@ -16,11 +16,9 @@ build() {
 cd    build &&
 
 meson  setup ..            \
-       --prefix=/usr       \
-       --buildtype=release \
-       -Dgst_debug=false   \
-       -Dpackage-origin=https://www.linuxfromscratch.org/blfs/view/systemd/ \
-       -Dpackage-name="GStreamer 1.22.6 BLFS" &&
+             --prefix=/usr       \
+      --buildtype=release \
+      -D gst_debug=false  &&
 ninja
 	DESTDIR=$PKG ninja install
 }

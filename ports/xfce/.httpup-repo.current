@@ -9,6 +9,7 @@ libxfce4ui
 xfce4-session
 garcon
 ristretto
+exo
 xfce4-apps-meta
 xfce4-pulseaudio-plugin
 tumbler
@@ -56,6 +57,9 @@ garcon/Pkgfile
 ristretto/.footprint
 ristretto/.md5sum
 ristretto/Pkgfile
+exo/.footprint
+exo/.md5sum
+exo/Pkgfile
 xfce4-apps-meta/.footprint
 xfce4-apps-meta/.md5sum
 xfce4-apps-meta/Pkgfile

@@ -1,4 +1,4 @@
-# Depends on: fribidi gdk-pixbuf graphene iso-codes libepoxy libxkbcommon pango gobject-introspection python3-gobject wayland-protocols glib colord cups python3-docutils python3-gi_docgen highlight vulkan-loader
+# Depends on: fribidi gdk-pixbuf graphene iso-codes libepoxy libxkbcommon pango gobject-introspection python3-gobject wayland-protocols glib colord cups python3-docutils python3-gi_docgen highlight vulkan-loader gst-plugins-bad gst-plugins-ugly shaderc sassc
 name=gtk4
 version=4.14.6
 release=1
@@ -7,4 +7,4 @@ build_opt="--prefix=/usr
             --buildtype=release     
             -Dbroadway-backend=true 
             -Dintrospection=enabled 
-            -Dvulkan=disabled"
+            -Dvulkan=enabled"

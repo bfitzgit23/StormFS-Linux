@@ -25,6 +25,6 @@ drwxr-xr-x	root/root	usr/share/
 drwxr-xr-x	root/root	usr/share/aclocal/
 -rw-r--r--	root/root	usr/share/aclocal/soundtouch.m4
 drwxr-xr-x	root/root	usr/share/doc/
-drwxr-xr-x	root/root	usr/share/doc/soundtouch-2.3.2/
--rw-r--r--	root/root	usr/share/doc/soundtouch-2.3.2/COPYING.TXT
--rw-r--r--	root/root	usr/share/doc/soundtouch-2.3.2/README.html
+drwxr-xr-x	root/root	usr/share/doc/soundtouch-2.3.3/
+-rw-r--r--	root/root	usr/share/doc/soundtouch-2.3.3/COPYING.TXT
+-rw-r--r--	root/root	usr/share/doc/soundtouch-2.3.3/README.html

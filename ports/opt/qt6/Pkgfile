@@ -7,10 +7,11 @@
 name=qt6
 version=6.7.2
 release=1
-source=(https://download.qt.io/archive/qt/6.7/$version/single/qt-everywhere-src-$version.tar.xz)
+source=(https://download.qt.io/archive/qt/6.7/$version/single/qt-everywhere-src-$version.tar.xz
+qt6-base-cflags.patch)
 
-build() {
-	cd qt-everywhere-src-$version
+pkg_build() {
+
 export QT6PREFIX=/opt/qt6
 #sed -i '/if __cpp_lib_span/s/if/ifdef/' qtbase/src/corelib/tools/qspan.h
 ./configure -prefix $QT6PREFIX      \

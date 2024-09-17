@@ -19,7 +19,7 @@ build_opt="    --prefix=/usr
     --disable-python     
     --disable-qt3        
     --disable-qt4
-    --disable-qt5-alternate
+    --disable-qt5
     --enable-qt6        
     --enable-core-docs   
     --with-distro=none   

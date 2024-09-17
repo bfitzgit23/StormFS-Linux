@@ -1,4 +1,4 @@
-# Depends on: libsoup gnome-online-accounts gtk3 json-glib vala gcr3 glib gobject-introspection uhttpmock
+# Depends on: libsoup gnome-online-accounts gtk3 json-glib vala gcr glib gobject-introspection uhttpmock
 
 name=libgdata
 version=0.18.1

@@ -42,6 +42,7 @@ drwxr-xr-x	root/root	usr/include/blockdev/fs/
 -rw-r--r--	root/root	usr/include/blockdev/part.h
 -rw-r--r--	root/root	usr/include/blockdev/plugins.h
 -rw-r--r--	root/root	usr/include/blockdev/sizes.h
+-rw-r--r--	root/root	usr/include/blockdev/smart.h
 -rw-r--r--	root/root	usr/include/blockdev/swap.h
 -rw-r--r--	root/root	usr/include/blockdev/utils.h
 drwxr-xr-x	root/root	usr/lib/
@@ -95,6 +96,14 @@ lrwxrwxrwx	root/root	usr/lib/libbd_nvme.so.3 -> libbd_nvme.so.3.0.0
 lrwxrwxrwx	root/root	usr/lib/libbd_part.so -> libbd_part.so.3.0.0
 lrwxrwxrwx	root/root	usr/lib/libbd_part.so.3 -> libbd_part.so.3.0.0
 -rwxr-xr-x	root/root	usr/lib/libbd_part.so.3.0.0
+-rwxr-xr-x	root/root	usr/lib/libbd_smart.la
+lrwxrwxrwx	root/root	usr/lib/libbd_smart.so -> libbd_smart.so.3.0.0
+lrwxrwxrwx	root/root	usr/lib/libbd_smart.so.3 -> libbd_smart.so.3.0.0
+-rwxr-xr-x	root/root	usr/lib/libbd_smart.so.3.0.0
+-rwxr-xr-x	root/root	usr/lib/libbd_smartmontools.la
+lrwxrwxrwx	root/root	usr/lib/libbd_smartmontools.so -> libbd_smartmontools.so.3.0.0
+lrwxrwxrwx	root/root	usr/lib/libbd_smartmontools.so.3 -> libbd_smartmontools.so.3.0.0
+-rwxr-xr-x	root/root	usr/lib/libbd_smartmontools.so.3.0.0
 -rwxr-xr-x	root/root	usr/lib/libbd_swap.la
 lrwxrwxrwx	root/root	usr/lib/libbd_swap.so -> libbd_swap.so.3.0.0
 lrwxrwxrwx	root/root	usr/lib/libbd_swap.so.3 -> libbd_swap.so.3.0.0
