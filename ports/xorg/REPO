@@ -458,6 +458,7 @@ f:5f60cd35a6c077df42446f08ed28f177:xorg-font-misc-misc/post-install
 f:5f86b858257467056787fa1d39114b00:mesa-demos/.footprint
 f:fa1d665771b832bb40dd213300d25928:mesa-demos/.md5sum
 f:fabb6f459d861aef345f94f2af85a393:mesa-demos/Pkgfile
+f:1cf51b7eb8a82969b25823290f23ed98:mesa-demos/mesa-demos-system-data.patch
 f:eabbde8bea29dc756e74ae18190447e2:xf86-video-vesa/.footprint
 f:4362ab7593ff0daff1c62639fc01f19b:xf86-video-vesa/.md5sum
 f:08419fbfa5569b00c5121df128a3ada9:xf86-video-vesa/Pkgfile

@@ -1153,9 +1153,8 @@ f:1145c0c75497d8a438ba40742101251d:x264/.footprint
 f:f3a27ed04eaedeabf5142ec4e87eb836:x264/.md5sum
 f:3b767004b5b922d8efbb530abe68c73a:x264/Pkgfile
 f:6ad6b174f98c5f78d4dca260d241916a:libdecor/.footprint
-f:7bf7affb2bbd7ac97ca79791931d3c68:libdecor/.md5sum
-f:c91f9d5754c0564604475f7f89919423:libdecor/Pkgfile
-f:1cf51b7eb8a82969b25823290f23ed98:libdecor/mesa-demos-system-data.patch
+f:00578fbca6003ec5d528ac01b41880d4:libdecor/.md5sum
+f:1252e7c999bfd5d714233d8b7897177d:libdecor/Pkgfile
 f:abe6e59d12801297e9f7ea39805ff402:utfcpp/.footprint
 f:69ac08f5ecb0860ceed57c42f888c9ce:utfcpp/.md5sum
 f:d3fb8e8bff43e09a7da02d67732c8947:utfcpp/Pkgfile
