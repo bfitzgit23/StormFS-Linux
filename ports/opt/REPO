@@ -1006,11 +1006,9 @@ f:ee09cd992a876cd38e8405a38a0a7437:ndctl/Pkgfile
 f:bb1a41381c56c72dbd61142432564e74:highlight/.footprint
 f:b8655f7f6ba2de602cdadb8d8f9ce7c9:highlight/.md5sum
 f:1c8fd1cce25e5b4abb06dabf099bba32:highlight/Pkgfile
-f:5aa3eb92b13814989ac9958deee6dcc4:x265/.footprint
-f:c708225cfae9054cdf6b894651497909:x265/.md5sum
-f:c4f5b8033f07892042a19b7016170136:x265/Version.cmake
-f:0aa06772e1a4e7bbb11ed7cf04de81f2:x265/Pkgfile
-f:0fca2a2b3979f07fe6c486170de80811:x265/.signature
+f:e9881397e9da33f716eee489876075ce:x265/.footprint
+f:3c31a228fcc02d80eaabc4afe37175be:x265/.md5sum
+f:8b523e142b79de95cefb3f8cb2522cb9:x265/Pkgfile
 f:5c988644746157b33a67db6201894b1c:cyrus-sasl/.footprint
 f:2fb295d2273904eba1606c81a409cb3e:cyrus-sasl/.md5sum
 f:a6415c5b99c0eaeca8ebbfe9f73dc791:cyrus-sasl/Pkgfile
