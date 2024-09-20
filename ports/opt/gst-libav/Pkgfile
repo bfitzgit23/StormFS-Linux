@@ -1,6 +1,6 @@
 # Depends on: ffmpeg gst-plugins-base yasm
 
 name=gst-libav
-version=1.24.7
+version=1.24.8
 release=1
 source=(https://gstreamer.freedesktop.org/src/${name}/${name}-${version}.tar.xz)

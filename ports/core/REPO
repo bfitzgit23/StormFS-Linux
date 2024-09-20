@@ -425,8 +425,8 @@ f:b48f69fceb50584ec17b005888d31565:mpc/.md5sum
 f:aa43d392b211d1db5ed5a9e6523fde7a:mpc/Pkgfile
 f:4e9a83f183c8e7e138a646c8a12f471b:mpdecimal/Pkgfile
 f:024183560af924ea2e2bacafad291306:curl/.footprint
-f:9df75bb43741238e89c7b98553d10f2c:curl/.md5sum
-f:b139442de9201d9110ecee959e14b988:curl/Pkgfile
+f:db3be6d971ba5d098a3cf0e01cef4b1b:curl/.md5sum
+f:53e5f698ea5351a6e7c899bb7de1cc68:curl/Pkgfile
 f:475045bb4b54bbdeed599629264696a3:curl/cacert.pem
 f:b3564bf19e81b1dda6e7fe0e85d36591:python3-pytz/.footprint
 f:b6cfbdadc56cff2df3fcb7f15564e42d:python3-pytz/Pkgfile
@@ -724,8 +724,10 @@ f:1320661e25eea9e416dd8a6307632c68:pkgconf/.footprint
 f:b6a1d25eb5d8e5d6c567a5fce8f0a170:pkgconf/.md5sum
 f:01a1ad4245cca0e615c904b469b99236:pkgconf/Pkgfile
 f:751419260aa954499f7abaabaa882bbe:genfstab/COPYING
+f:a6da953c8db95f6d4bc910978b3dae56:genfstab/.footprint
+f:10bdfe449a99142e7f3ee4f0c841fd0e:genfstab/.md5sum
 f:d32239bcb673463ab874e80d47fae504:genfstab/LICENSE
-f:6661d079e2eac3e70a754e0e57fc0085:genfstab/Pkgfile
+f:a54bfe8b904a04f165ca60e056a590c9:genfstab/Pkgfile
 f:83777297ee9a2fa4ce5aecb997fddf71:genfstab/genfstab
 f:4443c7af1bfcb6997b26ef7d50173a66:python3-idna/.footprint
 f:a7d1ed1962a17ed339a9a01f685f9782:python3-idna/.md5sum

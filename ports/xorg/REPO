@@ -322,11 +322,10 @@ f:1809a7591c650c4fa934fad9ed29abd1:xorg-font-cronyx-cyrillic/.footprint
 f:2104ca789c999126eb74425038f1617a:xorg-font-cronyx-cyrillic/.md5sum
 f:f3b6a24586b10cdc81163dbf8f4c62c3:xorg-font-cronyx-cyrillic/Pkgfile
 f:426af16fc0ab898959f307065c8b3e90:xorg-font-cronyx-cyrillic/post-install
-f:b348c460db8c8b7f0fce380cc717d015:mesa/.footprint
-f:ad912076060cace109ec0f1e7010d70a:mesa/.md5sum
+f:fcf7d025559497aca3a103cc1396e542:mesa/.footprint
+f:f7e744f9cf2f7e622b99914c7501ea81:mesa/.md5sum
 f:b4f8779303542471e8a279f27721e9b4:mesa/README.md
-f:da6b9c367f498500d4546b97421ada8a:mesa/Pkgfile
-f:287febbebb6a4a5fbeb967cdd2469214:mesa/30710.patch
+f:ec81d6d7f2e0d6150dafa62d1ea8fbe2:mesa/Pkgfile
 f:1415335a4ef4398495b620730eff7ab8:xorgproto/.footprint
 f:867ebb67965553a6f3ec38a3726a8c19:xorgproto/.md5sum
 f:42974b6c5cbcaab221a68cfa7db4c988:xorgproto/Pkgfile
@@ -736,7 +735,7 @@ f:a31edbed94d402a7aad61beae802dc33:xorg-font-adobe-utopia-75dpi/Pkgfile
 f:9f57484b5cc781d6c8d051b4a83a5749:xorg-font-adobe-utopia-75dpi/post-install
 f:742cebf8f92bd34d68d60dac1554ea25:xscreensaver/.footprint
 f:0b883327279f3f18424b62a04dfca9d7:xscreensaver/.md5sum
-f:1b876b3a45320526f30a614f077ce537:xscreensaver/Pkgfile
+f:7675be1fc9b3f783b3c1bde5ef29cc59:xscreensaver/Pkgfile
 f:718f18e105093982d279cf91cce136bf:xscreensaver/post-install
 f:2f4143aafa81e9afe301737e82a814fc:libva/.footprint
 f:a715734151ba3be7ca1bc48fe21d9ef8:libva/.md5sum

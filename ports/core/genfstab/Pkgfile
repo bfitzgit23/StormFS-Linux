@@ -6,7 +6,7 @@
 name=genfstab
 version=1.0
 release=1
-source=(COPYING LICENSE README.md genfstab)
+source=(COPYING LICENSE genfstab)
 
 build() {
 	mkdir -p $PKG/usr/bin

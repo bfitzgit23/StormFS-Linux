@@ -4,7 +4,7 @@
 # Depends on:  bluez gstreamer gst-plugins-base pulseaudio sbc v4l-util
 # Optional:	alsa-lib avahi fdk-aac ffmpeg libcanberra libdrm libcamera libxcb libsndfile libusb opus sdl2 valgrind xorg-libs doxygen graphviz jack ldacbt libcamera libmysofa vulkan xmltoman
 name=pipewire
-version=1.2.3
+version=1.2.4
 release=1
 source=(https://github.com/PipeWire/$name/archive/$version/$name-$version.tar.gz)
 

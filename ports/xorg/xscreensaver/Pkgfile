@@ -2,7 +2,7 @@
 
 name=xscreensaver
 version=6.09
-release=1
+release=2
 source=(https://www.jwz.org/${name}/${name}-${version}.tar.gz)
 build () {
 cd $name-$version
