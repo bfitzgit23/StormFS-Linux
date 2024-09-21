@@ -1,0 +1,31 @@
+# Description: a programming library for color text mode
+# URL: https://pagure.io/newt
+# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Depends on: libnewt popt-32 slang-32
+# Optional: tcl-32
+
+name=libnewt-32
+version=0.52.24
+release=1
+source=(https://releases.pagure.org/newt/newt-$version.tar.gz)
+
+build() {
+	cd newt-$version
+
+	if prt-get isinst tcl-32; then
+		sed -i "s:tcl8.4:tcl8.6:" Makefile.in
+		echo '#define USE_INTERP_RESULT 1' >> config.h
+	fi
+
+	./autogen.sh
+	./configure \
+		--prefix=/usr \
+		--libdir=/usr/lib32 \
+		--without-python \
+		--disable-nls
+
+	make
+	make DESTDIR=$PKG install
+
+	rm -r $PKG/usr/{bin,include,share}
+}

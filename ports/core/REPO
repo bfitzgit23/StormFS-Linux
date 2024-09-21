@@ -103,7 +103,6 @@ d:tzdata
 d:python3-urllib3
 d:zstsd
 d:zlib
-d:ncurses-32
 d:check
 d:nano
 d:httpup
@@ -511,7 +510,6 @@ f:ddadf1f5905c82180d394aeef3fdb867:zstsd/Pkgfile
 f:3add29bc503355ef6abeb9c0ada7fef7:zlib/.footprint
 f:ef88e96fd43c771e52d3a6d9035c68da:zlib/.md5sum
 f:f5b009d89732e98979500562da9bf315:zlib/Pkgfile
-f:9bcc1e6bead9841f93e3317f6c1c5dd1:ncurses-32/Pkgfile
 f:2750e8aab131a42a8bfe74fa2ff7cac9:check/Pkgfile
 f:3fc54a8393a06f1882b368b4c71ccbda:nano/.footprint
 f:13398b5eea196c97a83d2fb25fd55b32:nano/Pkgfile
@@ -778,6 +776,7 @@ f:ab2f2697cb440d140083aa2d8df31704:python3-tomli/Pkgfile
 f:be140c3ad686469f2f8e53f8a18eec17:freetype2/Pkgfile
 f:3e9028bed0f2b0c31a7e9e168e487b08:elfutils/.footprint
 f:b7e7894c94ca67e248ea24956f006699:elfutils/Pkgfile
+f:ef88e96fd43c771e52d3a6d9035c68da:zlib-32/.md5sum
 f:9b0065cd4c6eb01e07a4b9c24c644315:zlib-32/Pkgfile
 f:e31e9ba28753874fbcaedcd223bc832c:bc/.footprint
 f:afda09900030e1a96f4575c04c261bf7:bc/Pkgfile

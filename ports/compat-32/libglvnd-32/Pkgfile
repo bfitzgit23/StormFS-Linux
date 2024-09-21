@@ -1,0 +1,21 @@
+# Description: The GL Vendor-Neutral Dispatch library
+# URL: https://github.com/NVIDIA/libglvnd
+# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Depends on: libglvnd libXext-32
+
+name=libglvnd-32
+version=1.7.0
+release=1
+source=(https://github.com/NVIDIA/${name%-32}/archive/v$version/${name%-32}-$version.tar.gz)
+
+build() {
+	cd ${name%-32}-$version
+	./autogen.sh
+	./configure --prefix=/usr \
+		--disable-headers \
+		--build=i686-unknown-linux-gnu \
+		--libdir=/usr/lib32
+	make
+	make DESTDIR=$PKG install
+	rm -r $PKG/usr/include
+}

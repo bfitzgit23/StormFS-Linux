@@ -1,0 +1,24 @@
+# Description: Lets users edit command lines as they are typed in
+# URL: https://tiswww.case.edu/php/chet/readline/rltop.html
+# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Depends on: ncurses-32
+
+name=readline-32
+version=8.2.13
+release=1
+source=(https://ftp.gnu.org/gnu/${name%-*}/${name%-*}-${version:0:3}.tar.gz)
+
+build() {
+	cd ${name%-*}-${version:0:3}
+
+	./configure --prefix=/usr --libdir=/usr/lib32
+	make -j1 SHLIB_LIBS=-lncurses
+	make -j1 DESTDIR=$PKG install
+
+	install -d $PKG/lib32
+	mv $PKG/usr/lib32/lib*.so.* $PKG/lib32
+	ln -sf ../../lib32/libhistory.so.${version:0:3} $PKG/usr/lib32/libhistory.so
+	ln -sf ../../lib32/libreadline.so.${version:0:3} $PKG/usr/lib32/libreadline.so
+
+	rm -r $PKG/usr/{bin,include,share/man,share}
+}

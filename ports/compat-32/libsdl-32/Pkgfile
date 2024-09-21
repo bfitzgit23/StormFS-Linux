@@ -1,0 +1,27 @@
+# Description: SDL, Simple DirectMedia Layer
+# URL: http://www.libsdl.org
+# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Depends on: alsa-lib-32 glib-32 libsdl mesa-32
+
+name=libsdl-32
+version=1.2.15
+release=2
+source=(http://www.libsdl.org/release/SDL-$version.tar.gz)
+
+build() {
+  cd SDL-$version
+
+  export PKG_CONFIG_PATH='/usr/lib32/pkgconfig:/usr/share/pkgconfig'
+  ./configure --prefix=/usr \
+              --mandir=/usr/man \
+              --libdir=/usr/lib32 \
+              --program-suffix=-32 \
+              --enable-alsa
+
+  make
+  make DESTDIR=$PKG install
+  rm -r $PKG/usr/{include,man,share}
+
+  # --program-suffix=-32 is being ignored
+  mv $PKG/usr/bin/sdl-config $PKG/usr/bin/sdl-config-32
+}

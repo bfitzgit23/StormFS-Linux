@@ -1,0 +1,24 @@
+# Description: A small library defining error values for GnuPG components
+# URL: https://www.gnupg.org/
+# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Depends on: libgpg-error
+
+name=libgpg-error-32
+version=1.50
+release=1
+source=(https://www.gnupg.org/ftp/gcrypt/${name%-*}/${name%-*}-$version.tar.bz2)
+
+build() {
+	cd ${name%-*}-$version
+
+	./configure \
+		--prefix=/usr \
+		--libdir=/usr/lib32 \
+		--disable-nls \
+		--enable-static
+
+	make
+	make DESTDIR=$PKG install
+
+	rm -r $PKG/usr/{share,bin,include}
+}

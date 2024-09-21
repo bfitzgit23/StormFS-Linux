@@ -1,0 +1,4 @@
+#!/bin/sh
+# Updating 32-bit GIO module cache...
+/usr/bin/gio-querymodules-32 /usr/lib32/gio/modules
+

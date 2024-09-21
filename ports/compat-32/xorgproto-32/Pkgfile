@@ -1,0 +1,25 @@
+# Description: xorg xorgproto
+# URL: http://xorg.freedesktop.org
+# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Depends on: xorg-xorgproto
+
+name=xorg-xorgproto-32
+version=2024.1
+release=1
+source=(https://xorg.freedesktop.org/archive/individual/proto/xorgproto-$version.tar.xz)
+
+build() {
+	meson setup xorgproto-$version build \
+		--prefix=/usr \
+		--libdir=/usr/lib32 \
+		--datadir=/usr/lib32 \
+		--buildtype=plain \
+		--wrap-mode nodownload \
+		-D b_lto=true \
+		-D b_pie=true \
+		-D legacy=false
+	meson compile -C build
+	DESTDIR=$PKG meson install -C build
+
+	rm -r $PKG/usr/include $PKG/usr/lib32/doc $PKG/usr/lib32/pkgconfig/applewmproto.pc
+}

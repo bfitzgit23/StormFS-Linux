@@ -1,0 +1,24 @@
+# Description: DSP library derived from speex
+# URL: https://www.speex.org/
+# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Depends on: speexdsp
+
+name=speexdsp-32
+version=1.2.1
+release=1
+source=(https://ftp.osuosl.org/pub/xiph/releases/speex/speexdsp-$version.tar.gz)
+
+build() {
+	cd speexdsp-$version
+
+	./configure \
+		--prefix=/usr \
+		--libdir=/usr/lib32
+
+	sed -i -e '/^SUBDIRS *=/s|\bdoc\b||' Makefile
+
+	make
+	make DESTDIR=$PKG install
+
+	rm -r $PKG/usr/include
+}

@@ -1,0 +1,22 @@
+# Description: X Fixes extension client library
+# URL: http://xorg.freedesktop.org
+# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Depends on: xorg-libx11-32
+
+name=xorg-libxfixes-32
+version=6.0.1
+release=1
+source=(https://www.x.org/releases/individual/lib/libXfixes-$version.tar.xz)
+
+build() {
+	cd libXfixes-$version
+
+	./configure \
+		--prefix=/usr \
+		--libdir=/usr/lib32
+
+	make
+	make DESTDIR=$PKG install
+
+	rm -r $PKG/usr/{include,share/man,share}
+}

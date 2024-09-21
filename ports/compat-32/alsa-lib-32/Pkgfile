@@ -1,0 +1,18 @@
+# Description: ALSA libraries
+# URL: http://www.alsa-project.org
+# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Depends on: alsa-lib
+
+name=alsa-lib-32
+version=1.2.12
+release=1
+source=(https://www.alsa-project.org/files/pub/lib/alsa-lib-$version.tar.bz2)
+
+build() {
+    cd alsa-lib-$version
+    ./configure --prefix=/usr --libdir=/usr/lib32 --disable-python
+    make
+    make DESTDIR=$PKG install
+
+    rm -r $PKG/usr/{bin,include,share}
+}

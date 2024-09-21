@@ -1,0 +1,8 @@
+drwxr-xr-x	root/root	usr/
+drwxr-xr-x	root/root	usr/lib32/
+drwxr-xr-x	root/root	usr/lib32/libffi/
+drwxr-xr-x	root/root	usr/lib32/libffi/include/
+-rw-r--r--	root/root	usr/lib32/libffi/include/ffi.h
+-rw-r--r--	root/root	usr/lib32/libffi/include/ffitarget.h
+drwxr-xr-x	root/root	usr/lib32/pkgconfig/
+-rw-r--r--	root/root	usr/lib32/pkgconfig/libffi.pc

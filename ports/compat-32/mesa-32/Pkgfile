@@ -1,0 +1,74 @@
+# Description: Mesa 3D Graphics Library
+# URL: https://www.mesa3d.org/
+# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Depends on: elfutils-32 expat-32 libdrm-32 libglvnd-32 llvm-32 mesa xorg-libxdamage-32 xorg-libxrandr-32 xorg-libxshmfence-32 xorg-libxvmc-32 xorg-libxxf86vm-32
+# Optional: clang-32 glslang libclc libva-32 libvdpau-32 spirv-llvm-translator-32 vulkan-loader-32 wayland-protocols
+
+name=mesa-32
+version=24.2.3
+release=1
+source=(https://archive.mesa3d.org/mesa-$version.tar.xz
+	x86-linux-gnu x86-linux-gnu-ccache)
+
+build() {
+	export PKG_CONFIG_LIBDIR='/usr/lib32/pkgconfig:/usr/share/pkgconfig'
+
+	prt-get isinst ccache && local _cross_file='x86-linux-gnu-ccache' || local _cross_file='x86-linux-gnu'
+
+	prt-get isinst directx-headers-32 && PKGMK_MESA_GALLIUM+='d3d12,'
+	prt-get isinst clang-32 libclc && PKGMK_MESA+=' -D gallium-opencl=icd' PKGMK_MESA_GALLIUM+='iris,'
+	prt-get isinst clang-32 libclc rust-bindgen spirv-llvm-translator-32 && PKGMK_MESA+=' -D gallium-rusticl=true'
+	prt-get isinst libunwind-32 && PKGMK_MESA+=' -D libunwind=enabled'
+	prt-get isinst libva-32 && PKGMK_MESA+=' -D gallium-va=enabled' || PKGMK_MESA+=' -D gallium-va=disabled'
+	prt-get isinst libvdpau-32 && PKGMK_MESA+=' -D gallium-vdpau=enabled' || PKGMK_MESA+=' -D gallium-vdpau=disabled'
+	prt-get isinst lm_sensors-32 && PKGMK_MESA+=' -D lmsensors=enabled'
+	if prt-get isinst vulkan-loader-32; then
+		prt-get isinst cbindgen rust-bindgen && PKGMK_MESA_VULKAN_DRIVERS+='nouveau,'
+		prt-get isinst directx-headers-32 && PKGMK_MESA_VULKAN_DRIVERS+='microsoft-experimental,'
+		prt-get isinst glslang && PKGMK_MESA_VULKAN_DRIVERS+='amd,' PKGMK_MESA_VULKAN_LAYERS+='overlay,'
+		prt-get isinst clang-32 glslang libclc lua python3-ply spirv-llvm-translator-32 && PKGMK_MESA_VULKAN_DRIVERS+='intel,' PKGMK_MESA_VULKAN_LAYERS+='intel-nullhw,'
+		VULKAN_DRIVERS=${PKGMK_MESA_VULKAN_DRIVERS#,}intel_hasvk,swrast,virtio
+		PKGMK_MESA_GALLIUM+='zink,'
+	else
+		VULKAN_DRIVERS=""
+		VULKAN_LAYERS=""
+	fi
+	prt-get isinst wayland-protocols && PKGMK_MESA_PLATFORMS+='wayland'
+	## for future references
+	#prt-get isinst xorg-libxdamage-32 xorg-libxrandr-32 xorg-libxshmfence-32 xorg-libxvmc-32 xorg-libxxf86vm-32 && PKGMK_MESA_PLATFORMS+=',x11'
+	PKGMK_MESA_PLATFORMS+=',x11'
+
+	meson setup mesa-$version build $PKGMK_MESA \
+		--cross-file=$SRC/$_cross_file \
+		--prefix=/usr \
+		--libdir=/usr/lib32 \
+		--sysconfdir=/etc \
+		--buildtype=plain \
+		-D b_lto=false \
+		-D b_pie=true \
+		-D dri3=enabled \
+		-D egl=enabled \
+		-D llvm=enabled \
+		-D shared-llvm=enabled \
+		-D gbm=enabled \
+		-D gles1=disabled \
+		-D gles2=enabled \
+		-D glx=dri \
+		-D osmesa=true \
+		-D gallium-xa=enabled \
+		-D gallium-drivers=${PKGMK_MESA_GALLIUM}crocus,nouveau,r300,r600,radeonsi,svga,swrast,virgl,i915 \
+		-D platforms=${PKGMK_MESA_PLATFORMS#,} \
+		-D shared-glapi=enabled \
+		-D video-codecs=all \
+		-D glvnd=enabled \
+		-D vulkan-drivers=$VULKAN_DRIVERS \
+		-D vulkan-layers=$VULKAN_LAYERS
+
+	meson compile -C build -j ${JOBS:-1}
+	DESTDIR=$PKG meson install -C build
+
+	# indirect rendering symlink
+	ln -s libGLX_mesa.so.0 $PKG/usr/lib32/libGLX_indirect.so.0
+	rm -r $PKG/usr/{include,share/{drirc.d,glvnd}}
+	rm -rf $PKG/usr/{bin,share/vulkan/{explicit_layer.d,implicit_layer.d}}
+}

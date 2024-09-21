@@ -1,0 +1,26 @@
+# Description: Free library for arbitrary precision arithmetic
+# URL: https://gmplib.org/
+# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+
+name=libgmp-32
+version=6.3.0
+release=1
+source=(https://gmplib.org/download/gmp/gmp-$version.tar.xz)
+
+build() {
+	cd gmp-$version
+
+	./configure \
+		--prefix=/usr \
+		--libdir=/usr/lib32 \
+		--enable-cxx \
+		--build=i686-pc-linux-gnu
+
+	make
+	make DESTDIR=$PKG install
+
+	mv $PKG/usr/include/gmp{,-32}.h
+	rm $PKG/usr/include/gmpxx.h
+
+	rm -r $PKG/usr/share
+}

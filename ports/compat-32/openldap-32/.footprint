@@ -1,0 +1,11 @@
+drwxr-xr-x	root/root	usr/
+drwxr-xr-x	root/root	usr/lib32/
+lrwxrwxrwx	root/root	usr/lib32/liblber.so -> liblber.so.2.0.200
+lrwxrwxrwx	root/root	usr/lib32/liblber.so.2 -> liblber.so.2.0.200
+-rw-r--r--	root/root	usr/lib32/liblber.so.2.0.200
+lrwxrwxrwx	root/root	usr/lib32/libldap.so -> libldap.so.2.0.200
+lrwxrwxrwx	root/root	usr/lib32/libldap.so.2 -> libldap.so.2.0.200
+-rw-r--r--	root/root	usr/lib32/libldap.so.2.0.200
+drwxr-xr-x	root/root	usr/lib32/pkgconfig/
+-rw-r--r--	root/root	usr/lib32/pkgconfig/lber.pc
+-rw-r--r--	root/root	usr/lib32/pkgconfig/ldap.pc

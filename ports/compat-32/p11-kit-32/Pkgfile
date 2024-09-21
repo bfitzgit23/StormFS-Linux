@@ -1,0 +1,29 @@
+# Description: Provides a way to load and enumerate PKCS#11 modules
+# URL: https://p11-glue.github.io/p11-glue/p11-kit.html
+# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Depends on: libffi-32 libtasn1-32 p11-kit
+
+name=p11-kit-32
+version=0.25.5
+release=1
+source=(https://github.com/p11-glue/${name%-*}/releases/download/$version/${name%-*}-$version.tar.xz)
+
+build() {
+	meson setup p11-kit-$version build \
+		--prefix=/usr \
+		--libdir=/usr/lib32 \
+		--libexecdir=/usr/lib32 \
+		--buildtype=plain \
+		--wrap-mode=nodownload \
+		-D b_lto=true \
+		-D b_pie=true \
+		-D trust_paths=/etc/pki/anchors \
+		-D module_path=/usr/lib/pkcs11 \
+		-D nls=false
+	meson compile -C build
+	DESTDIR=$PKG meson install -C build
+
+	rm -r \
+		$PKG/etc $PKG/usr/{bin,lib,include,share} \
+		$PKG/usr/lib32/p11-kit/{trust-extract-compat,p11-kit-{remote,server}}
+}

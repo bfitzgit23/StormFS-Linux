@@ -1,0 +1,15 @@
+drwxr-xr-x	root/root	usr/
+drwxr-xr-x	root/root	usr/lib32/
+drwxr-xr-x	root/root	usr/lib32/libcanberra-0.30/
+-rwxr-xr-x	root/root	usr/lib32/libcanberra-0.30/libcanberra-alsa.la
+-rwxr-xr-x	root/root	usr/lib32/libcanberra-0.30/libcanberra-alsa.so
+-rwxr-xr-x	root/root	usr/lib32/libcanberra-0.30/libcanberra-multi.la
+-rwxr-xr-x	root/root	usr/lib32/libcanberra-0.30/libcanberra-multi.so
+-rwxr-xr-x	root/root	usr/lib32/libcanberra-0.30/libcanberra-null.la
+-rwxr-xr-x	root/root	usr/lib32/libcanberra-0.30/libcanberra-null.so
+-rwxr-xr-x	root/root	usr/lib32/libcanberra.la
+lrwxrwxrwx	root/root	usr/lib32/libcanberra.so -> libcanberra.so.0.2.5
+lrwxrwxrwx	root/root	usr/lib32/libcanberra.so.0 -> libcanberra.so.0.2.5
+-rwxr-xr-x	root/root	usr/lib32/libcanberra.so.0.2.5
+drwxr-xr-x	root/root	usr/lib32/pkgconfig/
+-rw-r--r--	root/root	usr/lib32/pkgconfig/libcanberra.pc

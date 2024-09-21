@@ -1,0 +1,21 @@
+drwxr-xr-x	root/root	usr/
+drwxr-xr-x	root/root	usr/lib32/
+-rwxr-xr-x	root/root	usr/lib32/libdummy-indicator-blank.la
+-rwxr-xr-x	root/root	usr/lib32/libdummy-indicator-blank.so
+-rwxr-xr-x	root/root	usr/lib32/libdummy-indicator-entry-func.la
+-rwxr-xr-x	root/root	usr/lib32/libdummy-indicator-entry-func.so
+-rwxr-xr-x	root/root	usr/lib32/libdummy-indicator-null.la
+-rwxr-xr-x	root/root	usr/lib32/libdummy-indicator-null.so
+-rwxr-xr-x	root/root	usr/lib32/libdummy-indicator-signaler.la
+-rwxr-xr-x	root/root	usr/lib32/libdummy-indicator-signaler.so
+-rwxr-xr-x	root/root	usr/lib32/libdummy-indicator-simple.la
+-rwxr-xr-x	root/root	usr/lib32/libdummy-indicator-simple.so
+-rwxr-xr-x	root/root	usr/lib32/libdummy-indicator-visible.la
+-rwxr-xr-x	root/root	usr/lib32/libdummy-indicator-visible.so
+-rwxr-xr-x	root/root	usr/lib32/libindicator.la
+lrwxrwxrwx	root/root	usr/lib32/libindicator.so -> libindicator.so.7.0.0
+lrwxrwxrwx	root/root	usr/lib32/libindicator.so.7 -> libindicator.so.7.0.0
+-rwxr-xr-x	root/root	usr/lib32/libindicator.so.7.0.0
+drwxr-xr-x	root/root	usr/lib32/pkgconfig/
+-rw-r--r--	root/root	usr/lib32/pkgconfig/indicator-0.4.pc
+drwxr-xr-x	root/root	usr/share/

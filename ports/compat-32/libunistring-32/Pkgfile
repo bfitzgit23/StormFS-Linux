@@ -1,0 +1,22 @@
+# Description: Functions for manipulating Unicode strings and C strings.
+# URL: https://www.gnu.org/software/libunistring/
+# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Depends on: libunistring
+
+name=libunistring-32
+version=1.2
+release=1
+source=(https://ftp.gnu.org/gnu/libunistring/libunistring-$version.tar.xz)
+
+build() {
+	cd libunistring-$version
+
+	./configure \
+		--prefix=/usr \
+		--libdir=/usr/lib32
+
+	make
+	make DESTDIR=$PKG install
+
+	rm -r $PKG/usr/{include,share}
+}

@@ -1,0 +1,22 @@
+# Description: Library for manipulation of TIFF (Tag Image File Format) images
+# URL: http://www.libtiff.org/
+# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Depends on: libjpeg-turbo-32 libtiff zlib-32
+
+name=libtiff-32
+version=4.6.0t
+release=1
+source=(http://www.libtiff.org/downloads/tiff-$version.tar.xz)
+
+build() {
+	cd tiff-$version
+
+	./configure \
+		--prefix=/usr \
+		--libdir=/usr/lib32
+
+	make
+	make DESTDIR=$PKG install
+
+	rm -r $PKG/usr/{bin,include,share/man,share}
+}

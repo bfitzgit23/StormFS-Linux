@@ -1,0 +1,61 @@
+drwxr-xr-x	root/root	usr/
+drwxr-xr-x	root/root	usr/lib32/
+lrwxrwxrwx	root/root	usr/lib32/libEGL_nvidia.so.0 -> libEGL_nvidia.so.560.35.03
+-rwxr-xr-x	root/root	usr/lib32/libEGL_nvidia.so.560.35.03
+lrwxrwxrwx	root/root	usr/lib32/libGLESv1_CM_nvidia.so.1 -> libGLESv1_CM_nvidia.so.560.35.03
+-rwxr-xr-x	root/root	usr/lib32/libGLESv1_CM_nvidia.so.560.35.03
+lrwxrwxrwx	root/root	usr/lib32/libGLESv2_nvidia.so.2 -> libGLESv2_nvidia.so.560.35.03
+-rwxr-xr-x	root/root	usr/lib32/libGLESv2_nvidia.so.560.35.03
+lrwxrwxrwx	root/root	usr/lib32/libGLX_nvidia.so.0 -> libGLX_nvidia.so.560.35.03
+-rwxr-xr-x	root/root	usr/lib32/libGLX_nvidia.so.560.35.03
+-rwxr-xr-x	root/root	usr/lib32/libOpenCL.so.1.0.0
+lrwxrwxrwx	root/root	usr/lib32/libcuda.so -> libcuda.so.560.35.03
+lrwxrwxrwx	root/root	usr/lib32/libcuda.so.1 -> libcuda.so.560.35.03
+-rwxr-xr-x	root/root	usr/lib32/libcuda.so.560.35.03
+lrwxrwxrwx	root/root	usr/lib32/libnvcuvid.so -> libnvcuvid.so.560.35.03
+lrwxrwxrwx	root/root	usr/lib32/libnvcuvid.so.1 -> libnvcuvid.so.560.35.03
+-rwxr-xr-x	root/root	usr/lib32/libnvcuvid.so.560.35.03
+lrwxrwxrwx	root/root	usr/lib32/libnvidia-allocator.so -> libnvidia-allocator.so.560.35.03
+lrwxrwxrwx	root/root	usr/lib32/libnvidia-allocator.so.1 -> libnvidia-allocator.so.560.35.03
+-rwxr-xr-x	root/root	usr/lib32/libnvidia-allocator.so.560.35.03
+lrwxrwxrwx	root/root	usr/lib32/libnvidia-eglcore.so -> libnvidia-eglcore.so.560.35.03
+lrwxrwxrwx	root/root	usr/lib32/libnvidia-eglcore.so.1 -> libnvidia-eglcore.so.560.35.03
+-rwxr-xr-x	root/root	usr/lib32/libnvidia-eglcore.so.560.35.03
+lrwxrwxrwx	root/root	usr/lib32/libnvidia-encode.so -> libnvidia-encode.so.560.35.03
+lrwxrwxrwx	root/root	usr/lib32/libnvidia-encode.so.1 -> libnvidia-encode.so.560.35.03
+-rwxr-xr-x	root/root	usr/lib32/libnvidia-encode.so.560.35.03
+lrwxrwxrwx	root/root	usr/lib32/libnvidia-fbc.so -> libnvidia-fbc.so.560.35.03
+lrwxrwxrwx	root/root	usr/lib32/libnvidia-fbc.so.1 -> libnvidia-fbc.so.560.35.03
+-rwxr-xr-x	root/root	usr/lib32/libnvidia-fbc.so.560.35.03
+lrwxrwxrwx	root/root	usr/lib32/libnvidia-glcore.so -> libnvidia-glcore.so.560.35.03
+lrwxrwxrwx	root/root	usr/lib32/libnvidia-glcore.so.1 -> libnvidia-glcore.so.560.35.03
+-rwxr-xr-x	root/root	usr/lib32/libnvidia-glcore.so.560.35.03
+lrwxrwxrwx	root/root	usr/lib32/libnvidia-glsi.so -> libnvidia-glsi.so.560.35.03
+lrwxrwxrwx	root/root	usr/lib32/libnvidia-glsi.so.1 -> libnvidia-glsi.so.560.35.03
+-rwxr-xr-x	root/root	usr/lib32/libnvidia-glsi.so.560.35.03
+lrwxrwxrwx	root/root	usr/lib32/libnvidia-glvkspirv.so -> libnvidia-glvkspirv.so.560.35.03
+lrwxrwxrwx	root/root	usr/lib32/libnvidia-glvkspirv.so.1 -> libnvidia-glvkspirv.so.560.35.03
+-rwxr-xr-x	root/root	usr/lib32/libnvidia-glvkspirv.so.560.35.03
+lrwxrwxrwx	root/root	usr/lib32/libnvidia-gpucomp.so -> libnvidia-gpucomp.so.560.35.03
+lrwxrwxrwx	root/root	usr/lib32/libnvidia-gpucomp.so.1 -> libnvidia-gpucomp.so.560.35.03
+-rwxr-xr-x	root/root	usr/lib32/libnvidia-gpucomp.so.560.35.03
+-rwxr-xr-x	root/root	usr/lib32/libnvidia-ml.so.560.35.03
+lrwxrwxrwx	root/root	usr/lib32/libnvidia-nvvm.so -> libnvidia-nvvm.so.560.35.03
+lrwxrwxrwx	root/root	usr/lib32/libnvidia-nvvm.so.1 -> libnvidia-nvvm.so.560.35.03
+-rwxr-xr-x	root/root	usr/lib32/libnvidia-nvvm.so.560.35.03
+lrwxrwxrwx	root/root	usr/lib32/libnvidia-opencl.so -> libnvidia-opencl.so.560.35.03
+lrwxrwxrwx	root/root	usr/lib32/libnvidia-opencl.so.1 -> libnvidia-opencl.so.560.35.03
+-rwxr-xr-x	root/root	usr/lib32/libnvidia-opencl.so.560.35.03
+lrwxrwxrwx	root/root	usr/lib32/libnvidia-opticalflow.so -> libnvidia-opticalflow.so.560.35.03
+lrwxrwxrwx	root/root	usr/lib32/libnvidia-opticalflow.so.1 -> libnvidia-opticalflow.so.560.35.03
+-rwxr-xr-x	root/root	usr/lib32/libnvidia-opticalflow.so.560.35.03
+lrwxrwxrwx	root/root	usr/lib32/libnvidia-ptxjitcompiler.so -> libnvidia-ptxjitcompiler.so.560.35.03
+lrwxrwxrwx	root/root	usr/lib32/libnvidia-ptxjitcompiler.so.1 -> libnvidia-ptxjitcompiler.so.560.35.03
+-rwxr-xr-x	root/root	usr/lib32/libnvidia-ptxjitcompiler.so.560.35.03
+lrwxrwxrwx	root/root	usr/lib32/libnvidia-tls.so -> libnvidia-tls.so.560.35.03
+lrwxrwxrwx	root/root	usr/lib32/libnvidia-tls.so.1 -> libnvidia-tls.so.560.35.03
+-rwxr-xr-x	root/root	usr/lib32/libnvidia-tls.so.560.35.03
+drwxr-xr-x	root/root	usr/lib32/vdpau/
+lrwxrwxrwx	root/root	usr/lib32/vdpau/libvdpau_nvidia.so -> libvdpau_nvidia.so.560.35.03
+lrwxrwxrwx	root/root	usr/lib32/vdpau/libvdpau_nvidia.so.1 -> libvdpau_nvidia.so.560.35.03
+-rwxr-xr-x	root/root	usr/lib32/vdpau/libvdpau_nvidia.so.560.35.03

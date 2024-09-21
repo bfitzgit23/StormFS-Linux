@@ -1,0 +1,24 @@
+drwxr-xr-x	root/root	usr/
+drwxr-xr-x	root/root	usr/lib32/
+drwxr-xr-x	root/root	usr/lib32/cmake/
+drwxr-xr-x	root/root	usr/lib32/cmake/SDL2/
+-rw-r--r--	root/root	usr/lib32/cmake/SDL2/SDL2Config.cmake
+-rw-r--r--	root/root	usr/lib32/cmake/SDL2/SDL2ConfigVersion.cmake
+-rw-r--r--	root/root	usr/lib32/cmake/SDL2/SDL2Targets-release.cmake
+-rw-r--r--	root/root	usr/lib32/cmake/SDL2/SDL2Targets.cmake
+-rw-r--r--	root/root	usr/lib32/cmake/SDL2/SDL2mainTargets-release.cmake
+-rw-r--r--	root/root	usr/lib32/cmake/SDL2/SDL2mainTargets.cmake
+-rw-r--r--	root/root	usr/lib32/cmake/SDL2/SDL2staticTargets-release.cmake
+-rw-r--r--	root/root	usr/lib32/cmake/SDL2/SDL2staticTargets.cmake
+-rw-r--r--	root/root	usr/lib32/cmake/SDL2/SDL2testTargets-release.cmake
+-rw-r--r--	root/root	usr/lib32/cmake/SDL2/SDL2testTargets.cmake
+-rw-r--r--	root/root	usr/lib32/cmake/SDL2/sdlfind.cmake
+lrwxrwxrwx	root/root	usr/lib32/libSDL2-2.0.so -> libSDL2-2.0.so.0
+lrwxrwxrwx	root/root	usr/lib32/libSDL2-2.0.so.0 -> libSDL2-2.0.so.0.3000.7
+-rwxr-xr-x	root/root	usr/lib32/libSDL2-2.0.so.0.3000.7
+-rw-r--r--	root/root	usr/lib32/libSDL2.a
+lrwxrwxrwx	root/root	usr/lib32/libSDL2.so -> libSDL2-2.0.so
+-rw-r--r--	root/root	usr/lib32/libSDL2_test.a
+-rw-r--r--	root/root	usr/lib32/libSDL2main.a
+drwxr-xr-x	root/root	usr/lib32/pkgconfig/
+-rw-r--r--	root/root	usr/lib32/pkgconfig/sdl2.pc

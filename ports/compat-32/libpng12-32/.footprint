@@ -1,0 +1,9 @@
+drwxr-xr-x	root/root	usr/
+drwxr-xr-x	root/root	usr/lib32/
+lrwxrwxrwx	root/root	usr/lib32/libpng.so.3 -> libpng.so.3.59.0
+-rwxr-xr-x	root/root	usr/lib32/libpng.so.3.59.0
+-rw-r--r--	root/root	usr/lib32/libpng12.a
+-rwxr-xr-x	root/root	usr/lib32/libpng12.la
+lrwxrwxrwx	root/root	usr/lib32/libpng12.so -> libpng12.so.0.59.0
+lrwxrwxrwx	root/root	usr/lib32/libpng12.so.0 -> libpng12.so.0.59.0
+-rwxr-xr-x	root/root	usr/lib32/libpng12.so.0.59.0

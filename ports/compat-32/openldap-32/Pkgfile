@@ -1,0 +1,45 @@
+# Description: Lightweight Directory Access Protocol (LDAP) Toolkit
+# URL: https://www.openldap.org/
+# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Depends on: openldap openssl-32
+
+name=openldap-32
+version=2.6.8
+release=1
+source=(https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-$version.tgz)
+
+build() {
+	cd openldap-$version
+
+	export CC="gcc -m32"
+	export CXX="g++ -m32"
+
+	./configure --prefix=/usr \
+		--libdir=/usr/lib32 \
+		--sysconfdir=/etc \
+		--libexecdir=/usr/sbin \
+		--localstatedir=/var/lib/openldap \
+		--with-threads \
+		--without-cyrus-sasl \
+		--enable-dynamic \
+		--enable-ipv6 \
+		--enable-shared \
+		--enable-crypt \
+		--disable-static \
+		--disable-wrappers \
+		--disable-spasswd \
+		--disable-bdb \
+		--disable-hdb
+
+	# This is need to not get  fatal error: ldap_config.h: No such file or directory
+	cd include
+	make
+	make DESTDIR=$PKG install
+
+	cd ../libraries
+	make depend
+	make
+	make DESTDIR=$PKG install
+
+	rm -r $PKG/etc $PKG/usr/include $PKG/usr/lib32/*.la
+}

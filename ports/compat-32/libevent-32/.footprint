@@ -1,0 +1,33 @@
+drwxr-xr-x	root/root	usr/
+drwxr-xr-x	root/root	usr/lib32/
+lrwxrwxrwx	root/root	usr/lib32/libevent-2.1.so.7 -> libevent-2.1.so.7.0.1
+-rwxr-xr-x	root/root	usr/lib32/libevent-2.1.so.7.0.1
+-rw-r--r--	root/root	usr/lib32/libevent.a
+-rwxr-xr-x	root/root	usr/lib32/libevent.la
+lrwxrwxrwx	root/root	usr/lib32/libevent.so -> libevent-2.1.so.7.0.1
+lrwxrwxrwx	root/root	usr/lib32/libevent_core-2.1.so.7 -> libevent_core-2.1.so.7.0.1
+-rwxr-xr-x	root/root	usr/lib32/libevent_core-2.1.so.7.0.1
+-rw-r--r--	root/root	usr/lib32/libevent_core.a
+-rwxr-xr-x	root/root	usr/lib32/libevent_core.la
+lrwxrwxrwx	root/root	usr/lib32/libevent_core.so -> libevent_core-2.1.so.7.0.1
+lrwxrwxrwx	root/root	usr/lib32/libevent_extra-2.1.so.7 -> libevent_extra-2.1.so.7.0.1
+-rwxr-xr-x	root/root	usr/lib32/libevent_extra-2.1.so.7.0.1
+-rw-r--r--	root/root	usr/lib32/libevent_extra.a
+-rwxr-xr-x	root/root	usr/lib32/libevent_extra.la
+lrwxrwxrwx	root/root	usr/lib32/libevent_extra.so -> libevent_extra-2.1.so.7.0.1
+lrwxrwxrwx	root/root	usr/lib32/libevent_openssl-2.1.so.7 -> libevent_openssl-2.1.so.7.0.1
+-rwxr-xr-x	root/root	usr/lib32/libevent_openssl-2.1.so.7.0.1
+-rw-r--r--	root/root	usr/lib32/libevent_openssl.a
+-rwxr-xr-x	root/root	usr/lib32/libevent_openssl.la
+lrwxrwxrwx	root/root	usr/lib32/libevent_openssl.so -> libevent_openssl-2.1.so.7.0.1
+lrwxrwxrwx	root/root	usr/lib32/libevent_pthreads-2.1.so.7 -> libevent_pthreads-2.1.so.7.0.1
+-rwxr-xr-x	root/root	usr/lib32/libevent_pthreads-2.1.so.7.0.1
+-rw-r--r--	root/root	usr/lib32/libevent_pthreads.a
+-rwxr-xr-x	root/root	usr/lib32/libevent_pthreads.la
+lrwxrwxrwx	root/root	usr/lib32/libevent_pthreads.so -> libevent_pthreads-2.1.so.7.0.1
+drwxr-xr-x	root/root	usr/lib32/pkgconfig/
+-rw-r--r--	root/root	usr/lib32/pkgconfig/libevent.pc
+-rw-r--r--	root/root	usr/lib32/pkgconfig/libevent_core.pc
+-rw-r--r--	root/root	usr/lib32/pkgconfig/libevent_extra.pc
+-rw-r--r--	root/root	usr/lib32/pkgconfig/libevent_openssl.pc
+-rw-r--r--	root/root	usr/lib32/pkgconfig/libevent_pthreads.pc

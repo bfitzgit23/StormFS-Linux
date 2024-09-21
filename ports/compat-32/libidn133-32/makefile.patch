@@ -1,0 +1,42 @@
+diff -Naur libidn-1.33.orig/Makefile.am libidn-1.33/Makefile.am
+--- libidn-1.33.orig/Makefile.am	2021-09-06 15:02:37.335225836 +0200
++++ libidn-1.33/Makefile.am	2021-09-06 15:03:12.460226448 +0200
+@@ -16,8 +16,7 @@
+ # You should have received a copy of the GNU General Public License
+ # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ 
+-SUBDIRS = gl lib/gl lib po src doc gltests lib/gltests tests examples	\
+-	java csharp
++SUBDIRS = gl lib/gl lib
+ 
+ EXTRA_DIST = cfg.mk maint.mk .clcopying
+ EXTRA_DIST += COPYING.LESSERv2 COPYING.LESSERv3 COPYINGv2 COPYINGv3
+diff -Naur libidn-1.33.orig/cfg.mk libidn-1.33/cfg.mk
+--- libidn-1.33.orig/cfg.mk	2021-09-06 15:02:37.323225836 +0200
++++ libidn-1.33/cfg.mk	2021-09-06 15:06:00.011229365 +0200
+@@ -39,25 +39,6 @@
+ exclude_file_name_regexp--sc_useless_cpp_parens = ^lib/nfkc.c$$
+ exclude_file_name_regexp--sc_prohibit_strncpy = ^src/idn.c$$
+ 
+-doc/Makefile.gdoc:
+-	printf "gdoc_MANS =\ngdoc_TEXINFOS =\n" > doc/Makefile.gdoc
+-
+-autoreconf: doc/Makefile.gdoc
+-	for f in po/*.po.in; do \
+-		cp $$f `echo $$f | sed 's/.in//'`; \
+-	done
+-	touch ChangeLog
+-	mv build-aux/config.rpath build-aux/config.rpath-
+-	test -f ./configure || autoreconf --install
+-	mv build-aux/config.rpath- build-aux/config.rpath
+-
+-update-po: refresh-po
+-	for f in `ls po/*.po | grep -v quot.po`; do \
+-		cp $$f $$f.in; \
+-	done
+-	git add po/*.po.in
+-	git commit -m "Sync with TP." po/LINGUAS po/*.po.in
+-
+ bootstrap: autoreconf
+ 	./configure $(CFGFLAGS)
+ 

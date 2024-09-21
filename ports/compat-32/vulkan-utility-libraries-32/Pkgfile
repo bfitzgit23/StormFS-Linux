@@ -1,0 +1,24 @@
+# Description: Utility libraries for Vulkan developers, 32-bit
+# URL: https://www.khronos.org/vulkan/
+# Maintainer: CRUX System Team, core-ports at crux dot nu
+# Depends on: vulkan-utility-libraries
+# Optional:
+
+name=vulkan-utility-libraries-32
+version=1.3.290.0
+_commit=5f26cf65a18bc89a8e3d6569c14314b6fdac8d4d
+release=1
+source=(https://github.com/KhronosGroup/Vulkan-Utility-Libraries/archive/$_commit/vulkan-utility-libraries-$version.tar.gz)
+
+build() {
+  cmake -S Vulkan-Utility-Libraries-$_commit -B build -G Ninja \
+    -D CMAKE_INSTALL_PREFIX=/usr \
+    -D CMAKE_INSTALL_LIBDIR=lib32 \
+    -D CMAKE_BUILD_TYPE=Release \
+    -D CMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
+    -Wno-dev
+  cmake --build build
+  DESTDIR=$PKG cmake --install build
+
+  rm -r $PKG/usr/include/
+}

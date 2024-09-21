@@ -1,0 +1,21 @@
+drwxr-xr-x	root/root	usr/
+drwxr-xr-x	root/root	usr/lib32/
+-rw-r--r--	root/root	usr/lib32/libtheora.a
+-rwxr-xr-x	root/root	usr/lib32/libtheora.la
+lrwxrwxrwx	root/root	usr/lib32/libtheora.so -> libtheora.so.0.3.10
+lrwxrwxrwx	root/root	usr/lib32/libtheora.so.0 -> libtheora.so.0.3.10
+-rwxr-xr-x	root/root	usr/lib32/libtheora.so.0.3.10
+-rw-r--r--	root/root	usr/lib32/libtheoradec.a
+-rwxr-xr-x	root/root	usr/lib32/libtheoradec.la
+lrwxrwxrwx	root/root	usr/lib32/libtheoradec.so -> libtheoradec.so.1.1.4
+lrwxrwxrwx	root/root	usr/lib32/libtheoradec.so.1 -> libtheoradec.so.1.1.4
+-rwxr-xr-x	root/root	usr/lib32/libtheoradec.so.1.1.4
+-rw-r--r--	root/root	usr/lib32/libtheoraenc.a
+-rwxr-xr-x	root/root	usr/lib32/libtheoraenc.la
+lrwxrwxrwx	root/root	usr/lib32/libtheoraenc.so -> libtheoraenc.so.1.1.2
+lrwxrwxrwx	root/root	usr/lib32/libtheoraenc.so.1 -> libtheoraenc.so.1.1.2
+-rwxr-xr-x	root/root	usr/lib32/libtheoraenc.so.1.1.2
+drwxr-xr-x	root/root	usr/lib32/pkgconfig/
+-rw-r--r--	root/root	usr/lib32/pkgconfig/theora.pc
+-rw-r--r--	root/root	usr/lib32/pkgconfig/theoradec.pc
+-rw-r--r--	root/root	usr/lib32/pkgconfig/theoraenc.pc

@@ -1,0 +1,20 @@
+# Description: X11 XFree86 video mode extension library
+# URL: http://xorg.freedesktop.org
+# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Depends on: xorg-libxext-32
+
+name=xorg-libxxf86vm-32
+version=1.1.5
+release=1
+source=(https://www.x.org/releases/individual/lib/libXxf86vm-$version.tar.xz)
+
+build() {
+	cd libXxf86vm-$version
+
+	./configure --prefix=/usr --libdir=/usr/lib32
+
+	make
+	make DESTDIR=$PKG install
+
+	rm -r $PKG/usr/{include,share/man,share}
+}

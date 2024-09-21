@@ -1,0 +1,9 @@
+drwxr-xr-x	root/root	usr/
+drwxr-xr-x	root/root	usr/lib32/
+-rw-r--r--	root/root	usr/lib32/libdbusmenu-gtk.a
+-rwxr-xr-x	root/root	usr/lib32/libdbusmenu-gtk.la
+lrwxrwxrwx	root/root	usr/lib32/libdbusmenu-gtk.so -> libdbusmenu-gtk.so.4.0.12
+lrwxrwxrwx	root/root	usr/lib32/libdbusmenu-gtk.so.4 -> libdbusmenu-gtk.so.4.0.12
+-rwxr-xr-x	root/root	usr/lib32/libdbusmenu-gtk.so.4.0.12
+drwxr-xr-x	root/root	usr/lib32/pkgconfig/
+-rw-r--r--	root/root	usr/lib32/pkgconfig/dbusmenu-gtk-0.4.pc

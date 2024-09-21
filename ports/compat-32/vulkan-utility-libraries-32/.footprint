@@ -1,0 +1,9 @@
+drwxr-xr-x	root/root	usr/
+drwxr-xr-x	root/root	usr/lib32/
+drwxr-xr-x	root/root	usr/lib32/cmake/
+drwxr-xr-x	root/root	usr/lib32/cmake/VulkanUtilityLibraries/
+-rw-r--r--	root/root	usr/lib32/cmake/VulkanUtilityLibraries/VulkanUtilityLibraries-targets-release.cmake
+-rw-r--r--	root/root	usr/lib32/cmake/VulkanUtilityLibraries/VulkanUtilityLibraries-targets.cmake
+-rw-r--r--	root/root	usr/lib32/cmake/VulkanUtilityLibraries/VulkanUtilityLibrariesConfig.cmake
+-rw-r--r--	root/root	usr/lib32/libVulkanLayerSettings.a
+-rw-r--r--	root/root	usr/lib32/libVulkanSafeStruct.a

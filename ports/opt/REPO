@@ -92,6 +92,7 @@ d:python3-gi_docgen
 d:libnvme
 d:libdvdnav
 d:libxmlb
+d:jq
 d:python3-markdown
 d:gavl
 d:lynx
@@ -219,6 +220,7 @@ d:libcdio-paranoia
 d:fakeroot
 d:gtksourceview
 d:kmix
+d:faudio
 d:boost
 d:ndctl
 d:highlight
@@ -235,6 +237,7 @@ d:libpsl
 d:libburn
 d:nodejs
 d:qrencode
+d:cdparanoia
 d:libmusicbrainz
 d:inih
 d:poppler-data
@@ -257,7 +260,6 @@ d:npth
 d:patchelf
 d:libsndfile
 d:json-glib
-d:cdparanoia-iii
 d:libavif
 d:hicolor-icon-theme
 d:gst-plugins-good
@@ -347,6 +349,7 @@ d:gst-libav
 d:zip
 d:upower
 d:brotli
+d:oniguruma
 d:libndp
 d:keybinder-3.0
 f:ca9be4b79508e0592b1f77331842edaf:lmdb/.footprint
@@ -614,6 +617,9 @@ f:e32b26aaf094670f25abc74c46c3c7ce:libdvdnav/Pkgfile
 f:4f855a49d15a8e471c9e740676506655:libxmlb/.footprint
 f:9ed565a47fe764932af4ccccabb4e3a7:libxmlb/.md5sum
 f:a62995eb9f97e860c120cccca8990193:libxmlb/Pkgfile
+f:f8969ac84554eda49420957e2fe8ac76:jq/.footprint
+f:7935707b4a8d751d3490812a3df19f1b:jq/.md5sum
+f:8689c45f9078c558ef6cb234bab59790:jq/Pkgfile
 f:a5ae1103e7ffb8fd4abb0a6e07cd7522:python3-markdown/.footprint
 f:da05bf6ea0d048b5ea0a903e43df59f6:python3-markdown/.md5sum
 f:fcceccd87464d12166e73ba8586aae3d:python3-markdown/Pkgfile
@@ -995,6 +1001,9 @@ f:0e49337f96b0e9cc91534247519ca73f:gtksourceview/.footprint
 f:17b24ec1dacd78150d665acb4522d551:gtksourceview/.md5sum
 f:c9031b6fc69935503d307ea0620174d0:gtksourceview/Pkgfile
 f:9af8a1c1d93972d71e6a93266d798d0b:kmix/Pkgfile
+f:7934623e65b35307aab457b8de88a259:faudio/.footprint
+f:ad2b4b3cc8d5b5aed535fe81e60835a7:faudio/.md5sum
+f:ae1af5d5dd0133c4581f1a7ef7056c83:faudio/Pkgfile
 f:7a7abee2517e0f4ea119e995828e28fa:boost/.footprint
 f:95d1c9cf7dbe7d23e4ca74cd2cb6e391:boost/.md5sum
 f:f51613ae6204ab24aaadfa1c12471f07:boost/boost-1.85.0-python-numpy-2.patch
@@ -1046,6 +1055,9 @@ f:749ea3ee80d72e18402431b0454453aa:nodejs/Pkgfile
 f:8bd77bfbe5c74ac32c48ab7910cb7d14:qrencode/.footprint
 f:083a12e53d34c7ccc3af81ecc89bffbc:qrencode/.md5sum
 f:71f04f19f44e104f8d5104f5c0d6af1f:qrencode/Pkgfile
+f:5f115daf5f0e68184861c47b54be7fef:cdparanoia/.footprint
+f:209686f8a5b019fcb4c16da105b018e1:cdparanoia/.md5sum
+f:965c4190c938ec27144ed5490565ec45:cdparanoia/Pkgfile
 f:eaa57f634ae8959e6a2a87c48f1810ff:libmusicbrainz/Pkgfile
 f:17a6ad11b579f0e8986887f714a228c6:inih/.footprint
 f:288650f1e526bef1c47e1824a9083b9f:inih/.md5sum
@@ -1112,7 +1124,6 @@ f:94faa0b37d7da96e574736db7f9b8983:libsndfile/Pkgfile
 f:62ee65c0e95e2f974f5d3350b22557e9:json-glib/.footprint
 f:9df64d92c2c5a8e58dc61cb45e6b2ef7:json-glib/.md5sum
 f:54187c3b28d6f1ee6da1e993d796bb12:json-glib/Pkgfile
-f:b5429751d275d3e4f84d485dc8a8e5c5:cdparanoia-iii/Pkgfile
 f:708dc7fa1c40db73ba51e7634ad02217:libavif/.footprint
 f:ecb236af7be78c5476efafc373571e45:libavif/.md5sum
 f:e5ed6f9ff1854da0e9f5bcc23e5c960b:libavif/Pkgfile
@@ -1403,6 +1414,9 @@ f:fbd0c4f7f638b4d09f4b70cf4cf19d0e:upower/Pkgfile
 f:8a895d786cefa971ef3c88751cdbc685:brotli/.footprint
 f:98272e5d6d69b897919864abf031c85c:brotli/.md5sum
 f:96797713e36ab3aa007caa470cc259ae:brotli/Pkgfile
+f:b11cdb8dc94e901f961c10aa9a11f477:oniguruma/.footprint
+f:a24342bca5e9e8a396a8f97ea09d1b57:oniguruma/.md5sum
+f:e7e351db35e3f37180895a6d71ae7bc1:oniguruma/Pkgfile
 f:3154c582a4d79446359bee1c04941a62:libndp/.footprint
 f:d76de439a814d291a74fc46632b0b082:libndp/.md5sum
 f:6eeee0fb1cb8b66c584c4dc0267441a2:libndp/Pkgfile

@@ -1,0 +1,39 @@
+# Description: CUPS - Common UNIX Printing System
+# URL: https://www.cups.org
+# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Depends on: avahi-32 cups
+# Optional: dbus-32 gnutls-32
+
+name=cups-32
+version=2.4.10
+release=1
+source=(https://github.com/OpenPrinting/cups/releases/download/v$version/${name%-*}-$version-source.tar.gz)
+
+build() {
+	cd ${name%-*}-$version
+
+	PKGMK_CUPS=' --with-tls=openssl'
+	prt-get isinst gnutls-32 && PKGMK_CUPS=' --with-tls=gnutls'
+
+
+	CC=cc CXX=c++ \
+	./configure \
+		--prefix=/usr $PKGMK_CUPS \
+		--sysconfdir=/etc \
+		--libdir=/usr/lib32 \
+		--localstatedir=/var \
+		--with-docdir=/usr/share/cups/doc \
+		--with-logdir=/var/log/cups \
+		--with-cups-user=daemon \
+		--with-cups-group=lp \
+		--with-languages="" \
+		--without-{java,perl,php,python} \
+		--without-rcdir \
+		--with-optim="$CFLAGS" \
+		--enable-acl \
+		--disable-{pam,dbus,dnssd,systemd} \
+		--without-systemd
+
+	make
+	make BUILDROOT=$PKG install-libs
+}
