@@ -1,0 +1,17 @@
+d:libdbusmenu-gtk2
+d:libappindicator-gtk2
+f:d2c08caca0a8df7e381f9f801334fd25:libdbusmenu-gtk2/.footprint
+f:a357f543075e9bbdf13f70e7afe89b0d:libdbusmenu-gtk2/.md5sum
+f:48242e2e03c53e45fd5def9ad8614931:libdbusmenu-gtk2/0003_port-tools-dbusmenu-bench-to-py3.patch
+f:b85d49f12702c8fb0af5c42bd68fb6f6:libdbusmenu-gtk2/Pkgfile
+f:4ef7a9590c4a1051ee19295c57edee00:libdbusmenu-gtk2/0001_no-deprecated-gnome-common-macros.patch
+f:7b482c0ad8f7f0935c078a1589184854:libdbusmenu-gtk2/0004_prevent-test-json-from-failing.patch
+f:8a50ef6a7356e238fc7098f7e015e4c2:libdbusmenu-gtk2/.signature
+f:ba9bcef48fa8985a8fbe9f5204eb113a:libappindicator-gtk2/.footprint
+f:82e5568bccd61aed1cecba82a91867b3:libappindicator-gtk2/0001-Glib.Timeout-fix.patch
+f:ae30a7c8490db4a23aa2517f46638caf:libappindicator-gtk2/improved-plasma-support.patch
+f:83f2d42f411acc3715747757499c31c1:libappindicator-gtk2/Pkgfile
+f:32196d39df7c1f3b9550167bb457e07d:libappindicator-gtk2/0002-Fix-mono-nunit-pkgconfig-name.patch
+f:5fed2c13610e7c7d34b6275f3a798a5b:libappindicator-gtk2/.signature
+f:81af83069fa963044a6bb7f023b1b171:libappindicator-gtk2/0003-Fix-Mono-assemblies-directory.patch
+f:528f5aaabbc3c3cdd9abe35e40686596:libappindicator-gtk2/badfunction.patch
