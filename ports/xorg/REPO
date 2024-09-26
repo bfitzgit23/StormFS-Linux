@@ -390,7 +390,7 @@ f:efddb62898c444a372c180cf7daf61e3:xf86-video-vboxvideo/.footprint
 f:d830c7e4fa88116e5b211f343ee93342:sessreg/Pkgfile
 f:50912b199cbacbb72307d62f02c1d1ba:sessreg/.md5sum
 f:992394068ae7968bd51060f10c70021a:sessreg/.footprint
-f:4d7fa5358a564595d3ac0e9d5e29a5ee:.httpup-repo.current
+f:282cc9be03e7c21cd6a4871687ca879c:.httpup-repo.current
 f:9da380c79dd23472f6f5dd1c938382b0:xorg-font-screen-cyrillic/Pkgfile
 f:d40ec099a8805ce206708c559f62b8a8:xorg-font-screen-cyrillic/.md5sum
 f:5ac91be1065ec4cce7d67acc0e45b5cb:xorg-font-screen-cyrillic/.footprint

@@ -44,6 +44,8 @@ drwxr-xr-x	root/root	usr/lib/dracut/modules.d/01systemd-ac-power/
 -rwxr-xr-x	root/root	usr/lib/dracut/modules.d/01systemd-ac-power/module-setup.sh
 drwxr-xr-x	root/root	usr/lib/dracut/modules.d/01systemd-ask-password/
 -rwxr-xr-x	root/root	usr/lib/dracut/modules.d/01systemd-ask-password/module-setup.sh
+drwxr-xr-x	root/root	usr/lib/dracut/modules.d/01systemd-bsod/
+-rwxr-xr-x	root/root	usr/lib/dracut/modules.d/01systemd-bsod/module-setup.sh
 drwxr-xr-x	root/root	usr/lib/dracut/modules.d/01systemd-coredump/
 -rwxr-xr-x	root/root	usr/lib/dracut/modules.d/01systemd-coredump/module-setup.sh
 drwxr-xr-x	root/root	usr/lib/dracut/modules.d/01systemd-creds/
@@ -65,7 +67,11 @@ drwxr-xr-x	root/root	usr/lib/dracut/modules.d/01systemd-ldconfig/
 drwxr-xr-x	root/root	usr/lib/dracut/modules.d/01systemd-modules-load/
 -rwxr-xr-x	root/root	usr/lib/dracut/modules.d/01systemd-modules-load/module-setup.sh
 drwxr-xr-x	root/root	usr/lib/dracut/modules.d/01systemd-networkd/
+-rw-r--r--	root/root	usr/lib/dracut/modules.d/01systemd-networkd/99-default.network
+-rw-r--r--	root/root	usr/lib/dracut/modules.d/01systemd-networkd/99-wait-online-dracut.conf
 -rwxr-xr-x	root/root	usr/lib/dracut/modules.d/01systemd-networkd/module-setup.sh
+-rwxr-xr-x	root/root	usr/lib/dracut/modules.d/01systemd-networkd/networkd-config.sh
+-rwxr-xr-x	root/root	usr/lib/dracut/modules.d/01systemd-networkd/networkd-run.sh
 drwxr-xr-x	root/root	usr/lib/dracut/modules.d/01systemd-pcrphase/
 -rwxr-xr-x	root/root	usr/lib/dracut/modules.d/01systemd-pcrphase/module-setup.sh
 drwxr-xr-x	root/root	usr/lib/dracut/modules.d/01systemd-portabled/
@@ -200,6 +206,7 @@ drwxr-xr-x	root/root	usr/lib/dracut/modules.d/80test-makeroot/
 -rwxr-xr-x	root/root	usr/lib/dracut/modules.d/80test-makeroot/module-setup.sh
 drwxr-xr-x	root/root	usr/lib/dracut/modules.d/80test-root/
 -rwxr-xr-x	root/root	usr/lib/dracut/modules.d/80test-root/module-setup.sh
+-rwxr-xr-x	root/root	usr/lib/dracut/modules.d/80test-root/test-init.sh
 drwxr-xr-x	root/root	usr/lib/dracut/modules.d/80test/
 -rwxr-xr-x	root/root	usr/lib/dracut/modules.d/80test/hard-off.sh
 -rwxr-xr-x	root/root	usr/lib/dracut/modules.d/80test/module-setup.sh
@@ -289,12 +296,17 @@ drwxr-xr-x	root/root	usr/lib/dracut/modules.d/90multipath/
 -rwxr-xr-x	root/root	usr/lib/dracut/modules.d/90multipath/multipathd-stop.sh
 -rw-r--r--	root/root	usr/lib/dracut/modules.d/90multipath/multipathd.service
 -rwxr-xr-x	root/root	usr/lib/dracut/modules.d/90multipath/multipathd.sh
+drwxr-xr-x	root/root	usr/lib/dracut/modules.d/90numlock/
+-rwxr-xr-x	root/root	usr/lib/dracut/modules.d/90numlock/module-setup.sh
+-rwxr-xr-x	root/root	usr/lib/dracut/modules.d/90numlock/numlock.sh
 drwxr-xr-x	root/root	usr/lib/dracut/modules.d/90nvdimm/
 -rwxr-xr-x	root/root	usr/lib/dracut/modules.d/90nvdimm/module-setup.sh
 drwxr-xr-x	root/root	usr/lib/dracut/modules.d/90overlayfs/
 -rwxr-xr-x	root/root	usr/lib/dracut/modules.d/90overlayfs/module-setup.sh
 -rwxr-xr-x	root/root	usr/lib/dracut/modules.d/90overlayfs/mount-overlayfs.sh
 -rwxr-xr-x	root/root	usr/lib/dracut/modules.d/90overlayfs/prepare-overlayfs.sh
+drwxr-xr-x	root/root	usr/lib/dracut/modules.d/90pcmcia/
+-rwxr-xr-x	root/root	usr/lib/dracut/modules.d/90pcmcia/module-setup.sh
 drwxr-xr-x	root/root	usr/lib/dracut/modules.d/90ppcmac/
 -rwxr-xr-x	root/root	usr/lib/dracut/modules.d/90ppcmac/load-thermal.sh
 -rwxr-xr-x	root/root	usr/lib/dracut/modules.d/90ppcmac/module-setup.sh
@@ -302,6 +314,8 @@ drwxr-xr-x	root/root	usr/lib/dracut/modules.d/90qemu-net/
 -rwxr-xr-x	root/root	usr/lib/dracut/modules.d/90qemu-net/module-setup.sh
 drwxr-xr-x	root/root	usr/lib/dracut/modules.d/90qemu/
 -rwxr-xr-x	root/root	usr/lib/dracut/modules.d/90qemu/module-setup.sh
+drwxr-xr-x	root/root	usr/lib/dracut/modules.d/90systemd-cryptsetup/
+-rwxr-xr-x	root/root	usr/lib/dracut/modules.d/90systemd-cryptsetup/module-setup.sh
 drwxr-xr-x	root/root	usr/lib/dracut/modules.d/91crypt-gpg/
 -rwxr-xr-x	root/root	usr/lib/dracut/modules.d/91crypt-gpg/crypt-gpg-lib.sh
 -rwxr-xr-x	root/root	usr/lib/dracut/modules.d/91crypt-gpg/module-setup.sh
@@ -329,13 +343,9 @@ drwxr-xr-x	root/root	usr/lib/dracut/modules.d/95cifs/
 -rwxr-xr-x	root/root	usr/lib/dracut/modules.d/95cifs/parse-cifsroot.sh
 drwxr-xr-x	root/root	usr/lib/dracut/modules.d/95dasd/
 -rwxr-xr-x	root/root	usr/lib/dracut/modules.d/95dasd/module-setup.sh
--rwxr-xr-x	root/root	usr/lib/dracut/modules.d/95dasd/parse-dasd.sh
 drwxr-xr-x	root/root	usr/lib/dracut/modules.d/95dasd_mod/
 -rwxr-xr-x	root/root	usr/lib/dracut/modules.d/95dasd_mod/module-setup.sh
 -rwxr-xr-x	root/root	usr/lib/dracut/modules.d/95dasd_mod/parse-dasd-mod.sh
-drwxr-xr-x	root/root	usr/lib/dracut/modules.d/95dasd_rules/
--rwxr-xr-x	root/root	usr/lib/dracut/modules.d/95dasd_rules/module-setup.sh
--rwxr-xr-x	root/root	usr/lib/dracut/modules.d/95dasd_rules/parse-dasd.sh
 drwxr-xr-x	root/root	usr/lib/dracut/modules.d/95dcssblk/
 -rwxr-xr-x	root/root	usr/lib/dracut/modules.d/95dcssblk/module-setup.sh
 -rwxr-xr-x	root/root	usr/lib/dracut/modules.d/95dcssblk/parse-dcssblk.sh
@@ -355,6 +365,8 @@ drwxr-xr-x	root/root	usr/lib/dracut/modules.d/95fcoe/
 drwxr-xr-x	root/root	usr/lib/dracut/modules.d/95fstab-sys/
 -rwxr-xr-x	root/root	usr/lib/dracut/modules.d/95fstab-sys/module-setup.sh
 -rwxr-xr-x	root/root	usr/lib/dracut/modules.d/95fstab-sys/mount-sys.sh
+drwxr-xr-x	root/root	usr/lib/dracut/modules.d/95hwdb/
+-rw-r--r--	root/root	usr/lib/dracut/modules.d/95hwdb/module-setup.sh
 drwxr-xr-x	root/root	usr/lib/dracut/modules.d/95iscsi/
 -rwxr-xr-x	root/root	usr/lib/dracut/modules.d/95iscsi/cleanup-iscsi.sh
 -rwxr-xr-x	root/root	usr/lib/dracut/modules.d/95iscsi/iscsiroot.sh
@@ -384,8 +396,6 @@ drwxr-xr-x	root/root	usr/lib/dracut/modules.d/95nvmf/
 -rwxr-xr-x	root/root	usr/lib/dracut/modules.d/95nvmf/nbftroot.sh
 -rwxr-xr-x	root/root	usr/lib/dracut/modules.d/95nvmf/nvmf-autoconnect.sh
 -rwxr-xr-x	root/root	usr/lib/dracut/modules.d/95nvmf/parse-nvmf-boot-connections.sh
-drwxr-xr-x	root/root	usr/lib/dracut/modules.d/95qeth_rules/
--rwxr-xr-x	root/root	usr/lib/dracut/modules.d/95qeth_rules/module-setup.sh
 drwxr-xr-x	root/root	usr/lib/dracut/modules.d/95resume/
 -rwxr-xr-x	root/root	usr/lib/dracut/modules.d/95resume/module-setup.sh
 -rwxr-xr-x	root/root	usr/lib/dracut/modules.d/95resume/parse-resume.sh
@@ -415,9 +425,6 @@ drwxr-xr-x	root/root	usr/lib/dracut/modules.d/95virtiofs/
 drwxr-xr-x	root/root	usr/lib/dracut/modules.d/95zfcp/
 -rwxr-xr-x	root/root	usr/lib/dracut/modules.d/95zfcp/module-setup.sh
 -rwxr-xr-x	root/root	usr/lib/dracut/modules.d/95zfcp/parse-zfcp.sh
-drwxr-xr-x	root/root	usr/lib/dracut/modules.d/95zfcp_rules/
--rwxr-xr-x	root/root	usr/lib/dracut/modules.d/95zfcp_rules/module-setup.sh
--rwxr-xr-x	root/root	usr/lib/dracut/modules.d/95zfcp_rules/parse-zfcp.sh
 drwxr-xr-x	root/root	usr/lib/dracut/modules.d/95znet/
 -rwxr-xr-x	root/root	usr/lib/dracut/modules.d/95znet/module-setup.sh
 -rwxr-xr-x	root/root	usr/lib/dracut/modules.d/95znet/parse-ccw.sh
