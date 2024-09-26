@@ -103,7 +103,6 @@ tzdata
 python3-urllib3
 zstsd
 zlib
-ncurses-32
 check
 nano
 httpup
@@ -295,6 +294,7 @@ xz/.md5sum
 xz/Pkgfile
 libpng/.footprint
 libpng/libpng-apng.patch
+libpng/.md5sum
 libpng/libpng-1.6.43-apng.patch
 libpng/Pkgfile
 autoconf/Pkgfile
@@ -504,12 +504,12 @@ pcre2/.footprint
 pcre2/Pkgfile
 tzdata/Pkgfile
 python3-urllib3/.footprint
+python3-urllib3/.md5sum
 python3-urllib3/Pkgfile
 zstsd/Pkgfile
 zlib/.footprint
 zlib/.md5sum
 zlib/Pkgfile
-ncurses-32/Pkgfile
 check/Pkgfile
 nano/.footprint
 nano/Pkgfile
@@ -722,10 +722,13 @@ pkgconf/.footprint
 pkgconf/.md5sum
 pkgconf/Pkgfile
 genfstab/COPYING
+genfstab/.footprint
+genfstab/.md5sum
 genfstab/LICENSE
 genfstab/Pkgfile
 genfstab/genfstab
 python3-idna/.footprint
+python3-idna/.md5sum
 python3-idna/Pkgfile
 popt/Pkgfile
 lfs-bootscripts/lfs-bootscripts_add-support-uefi.patch
@@ -773,6 +776,7 @@ python3-tomli/Pkgfile
 freetype2/Pkgfile
 elfutils/.footprint
 elfutils/Pkgfile
+zlib-32/.md5sum
 zlib-32/Pkgfile
 bc/.footprint
 bc/Pkgfile

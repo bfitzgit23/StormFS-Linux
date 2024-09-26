@@ -1,0 +1,20 @@
+# Description: Library for manipulation of TIFF (Tag Image File Format) images
+# URL: http://www.simplesystems.org/libtiff/
+# Maintainer: Tim Biermann, tbier at posteo dot de
+# Depends on: libjpeg-turbo zlib
+
+name=libtiff4
+version=3.9.7
+release=1
+source=(http://download.osgeo.org/libtiff/tiff-$version.tar.gz
+  libtiff4-soname.patch)
+
+build() {
+  cd tiff-$version
+  patch -Np1 -i $SRC/libtiff4-soname.patch
+  ./autogen.sh
+  ./configure --prefix=/usr
+  make
+  make DESTDIR=$PKG -C libtiff install
+  rm -rf $PKG/usr/{bin,include,lib/libtiff{,xx}.{la,a,so},share}
+}

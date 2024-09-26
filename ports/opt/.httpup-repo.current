@@ -92,6 +92,7 @@ python3-gi_docgen
 libnvme
 libdvdnav
 libxmlb
+jq
 python3-markdown
 gavl
 lynx
@@ -219,6 +220,7 @@ libcdio-paranoia
 fakeroot
 gtksourceview
 kmix
+faudio
 boost
 ndctl
 highlight
@@ -235,6 +237,7 @@ libpsl
 libburn
 nodejs
 qrencode
+cdparanoia
 libmusicbrainz
 inih
 poppler-data
@@ -257,7 +260,6 @@ npth
 patchelf
 libsndfile
 json-glib
-cdparanoia-iii
 libavif
 hicolor-icon-theme
 gst-plugins-good
@@ -269,6 +271,7 @@ libvorbis
 fribidi
 pipewire
 x264
+libdecor
 utfcpp
 modemmanager
 libssh2
@@ -346,6 +349,7 @@ gst-libav
 zip
 upower
 brotli
+oniguruma
 libndp
 keybinder-3.0
 lmdb/.footprint
@@ -613,6 +617,9 @@ libdvdnav/Pkgfile
 libxmlb/.footprint
 libxmlb/.md5sum
 libxmlb/Pkgfile
+jq/.footprint
+jq/.md5sum
+jq/Pkgfile
 python3-markdown/.footprint
 python3-markdown/.md5sum
 python3-markdown/Pkgfile
@@ -994,6 +1001,9 @@ gtksourceview/.footprint
 gtksourceview/.md5sum
 gtksourceview/Pkgfile
 kmix/Pkgfile
+faudio/.footprint
+faudio/.md5sum
+faudio/Pkgfile
 boost/.footprint
 boost/.md5sum
 boost/boost-1.85.0-python-numpy-2.patch
@@ -1045,6 +1055,9 @@ nodejs/Pkgfile
 qrencode/.footprint
 qrencode/.md5sum
 qrencode/Pkgfile
+cdparanoia/.footprint
+cdparanoia/.md5sum
+cdparanoia/Pkgfile
 libmusicbrainz/Pkgfile
 inih/.footprint
 inih/.md5sum
@@ -1111,7 +1124,6 @@ libsndfile/Pkgfile
 json-glib/.footprint
 json-glib/.md5sum
 json-glib/Pkgfile
-cdparanoia-iii/Pkgfile
 libavif/.footprint
 libavif/.md5sum
 libavif/Pkgfile
@@ -1149,6 +1161,9 @@ pipewire/Pkgfile
 x264/.footprint
 x264/.md5sum
 x264/Pkgfile
+libdecor/.footprint
+libdecor/.md5sum
+libdecor/Pkgfile
 utfcpp/.footprint
 utfcpp/.md5sum
 utfcpp/Pkgfile
@@ -1399,6 +1414,9 @@ upower/Pkgfile
 brotli/.footprint
 brotli/.md5sum
 brotli/Pkgfile
+oniguruma/.footprint
+oniguruma/.md5sum
+oniguruma/Pkgfile
 libndp/.footprint
 libndp/.md5sum
 libndp/Pkgfile

@@ -5,6 +5,7 @@ drwxr-xr-x	root/root	usr/include/
 -rw-r--r--	root/root	usr/include/unictype.h
 -rw-r--r--	root/root	usr/include/unigbrk.h
 -rw-r--r--	root/root	usr/include/unilbrk.h
+-rw-r--r--	root/root	usr/include/unimetadata.h
 -rw-r--r--	root/root	usr/include/uniname.h
 -rw-r--r--	root/root	usr/include/uninorm.h
 -rw-r--r--	root/root	usr/include/unistdio.h
@@ -22,37 +23,10 @@ drwxr-xr-x	root/root	usr/include/unistring/
 -rw-r--r--	root/root	usr/include/uniwbrk.h
 -rw-r--r--	root/root	usr/include/uniwidth.h
 drwxr-xr-x	root/root	usr/lib/
--rwxr-xr-x	root/root	usr/lib/libunistring.la
-lrwxrwxrwx	root/root	usr/lib/libunistring.so -> libunistring.so.5.0.0
-lrwxrwxrwx	root/root	usr/lib/libunistring.so.5 -> libunistring.so.5.0.0
--rwxr-xr-x	root/root	usr/lib/libunistring.so.5.0.0
+lrwxrwxrwx	root/root	usr/lib/libunistring.so -> libunistring.so.5.1.0
+lrwxrwxrwx	root/root	usr/lib/libunistring.so.5 -> libunistring.so.5.1.0
+-rwxr-xr-x	root/root	usr/lib/libunistring.so.5.1.0
 drwxr-xr-x	root/root	usr/share/
-drwxr-xr-x	root/root	usr/share/doc/
-drwxr-xr-x	root/root	usr/share/doc/libunistring-1.1/
--rw-r--r--	root/root	usr/share/doc/libunistring-1.1/libunistring_1.html
--rw-r--r--	root/root	usr/share/doc/libunistring-1.1/libunistring_10.html
--rw-r--r--	root/root	usr/share/doc/libunistring-1.1/libunistring_11.html
--rw-r--r--	root/root	usr/share/doc/libunistring-1.1/libunistring_12.html
--rw-r--r--	root/root	usr/share/doc/libunistring-1.1/libunistring_13.html
--rw-r--r--	root/root	usr/share/doc/libunistring-1.1/libunistring_14.html
--rw-r--r--	root/root	usr/share/doc/libunistring-1.1/libunistring_15.html
--rw-r--r--	root/root	usr/share/doc/libunistring-1.1/libunistring_16.html
--rw-r--r--	root/root	usr/share/doc/libunistring-1.1/libunistring_17.html
--rw-r--r--	root/root	usr/share/doc/libunistring-1.1/libunistring_18.html
--rw-r--r--	root/root	usr/share/doc/libunistring-1.1/libunistring_19.html
--rw-r--r--	root/root	usr/share/doc/libunistring-1.1/libunistring_2.html
--rw-r--r--	root/root	usr/share/doc/libunistring-1.1/libunistring_20.html
--rw-r--r--	root/root	usr/share/doc/libunistring-1.1/libunistring_21.html
--rw-r--r--	root/root	usr/share/doc/libunistring-1.1/libunistring_22.html
--rw-r--r--	root/root	usr/share/doc/libunistring-1.1/libunistring_3.html
--rw-r--r--	root/root	usr/share/doc/libunistring-1.1/libunistring_4.html
--rw-r--r--	root/root	usr/share/doc/libunistring-1.1/libunistring_5.html
--rw-r--r--	root/root	usr/share/doc/libunistring-1.1/libunistring_6.html
--rw-r--r--	root/root	usr/share/doc/libunistring-1.1/libunistring_7.html
--rw-r--r--	root/root	usr/share/doc/libunistring-1.1/libunistring_8.html
--rw-r--r--	root/root	usr/share/doc/libunistring-1.1/libunistring_9.html
--rw-r--r--	root/root	usr/share/doc/libunistring-1.1/libunistring_abt.html
--rw-r--r--	root/root	usr/share/doc/libunistring-1.1/libunistring_toc.html
 drwxr-xr-x	root/root	usr/share/info/
--rw-r--r--	root/root	usr/share/info/libunistring-1.1
--rw-r--r--	root/root	usr/share/info/libunistring.info
+-rw-r--r--	root/root	usr/share/info/libunistring-1.2.gz
+-rw-r--r--	root/root	usr/share/info/libunistring.info.gz

@@ -82,6 +82,7 @@ xorg-font-bh-100dpi
 xwininfo
 xorg-font-dejavu-ttf
 xorg-font-misc-misc
+mesa-demos
 xf86-video-vesa
 xkbcomp
 libXrender
@@ -325,7 +326,6 @@ mesa/.footprint
 mesa/.md5sum
 mesa/README.md
 mesa/Pkgfile
-mesa/30710.patch
 xorgproto/.footprint
 xorgproto/.md5sum
 xorgproto/Pkgfile
@@ -454,6 +454,10 @@ xorg-font-misc-misc/.footprint
 xorg-font-misc-misc/.md5sum
 xorg-font-misc-misc/Pkgfile
 xorg-font-misc-misc/post-install
+mesa-demos/.footprint
+mesa-demos/.md5sum
+mesa-demos/Pkgfile
+mesa-demos/mesa-demos-system-data.patch
 xf86-video-vesa/.footprint
 xf86-video-vesa/.md5sum
 xf86-video-vesa/Pkgfile
