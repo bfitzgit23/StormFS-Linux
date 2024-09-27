@@ -55,20 +55,20 @@ drwxr-xr-x	root/root	usr/lib/cmake/harfbuzz/
 drwxr-xr-x	root/root	usr/lib/girepository-1.0/
 -rw-r--r--	root/root	usr/lib/girepository-1.0/HarfBuzz-0.0.typelib
 lrwxrwxrwx	root/root	usr/lib/libharfbuzz-cairo.so -> libharfbuzz-cairo.so.0
-lrwxrwxrwx	root/root	usr/lib/libharfbuzz-cairo.so.0 -> libharfbuzz-cairo.so.0.60900.0
--rwxr-xr-x	root/root	usr/lib/libharfbuzz-cairo.so.0.60900.0
+lrwxrwxrwx	root/root	usr/lib/libharfbuzz-cairo.so.0 -> libharfbuzz-cairo.so.0.61001.0
+-rwxr-xr-x	root/root	usr/lib/libharfbuzz-cairo.so.0.61001.0
 lrwxrwxrwx	root/root	usr/lib/libharfbuzz-gobject.so -> libharfbuzz-gobject.so.0
-lrwxrwxrwx	root/root	usr/lib/libharfbuzz-gobject.so.0 -> libharfbuzz-gobject.so.0.60900.0
--rwxr-xr-x	root/root	usr/lib/libharfbuzz-gobject.so.0.60900.0
+lrwxrwxrwx	root/root	usr/lib/libharfbuzz-gobject.so.0 -> libharfbuzz-gobject.so.0.61001.0
+-rwxr-xr-x	root/root	usr/lib/libharfbuzz-gobject.so.0.61001.0
 lrwxrwxrwx	root/root	usr/lib/libharfbuzz-icu.so -> libharfbuzz-icu.so.0
-lrwxrwxrwx	root/root	usr/lib/libharfbuzz-icu.so.0 -> libharfbuzz-icu.so.0.60900.0
--rwxr-xr-x	root/root	usr/lib/libharfbuzz-icu.so.0.60900.0
+lrwxrwxrwx	root/root	usr/lib/libharfbuzz-icu.so.0 -> libharfbuzz-icu.so.0.61001.0
+-rwxr-xr-x	root/root	usr/lib/libharfbuzz-icu.so.0.61001.0
 lrwxrwxrwx	root/root	usr/lib/libharfbuzz-subset.so -> libharfbuzz-subset.so.0
-lrwxrwxrwx	root/root	usr/lib/libharfbuzz-subset.so.0 -> libharfbuzz-subset.so.0.60900.0
--rwxr-xr-x	root/root	usr/lib/libharfbuzz-subset.so.0.60900.0
+lrwxrwxrwx	root/root	usr/lib/libharfbuzz-subset.so.0 -> libharfbuzz-subset.so.0.61001.0
+-rwxr-xr-x	root/root	usr/lib/libharfbuzz-subset.so.0.61001.0
 lrwxrwxrwx	root/root	usr/lib/libharfbuzz.so -> libharfbuzz.so.0
-lrwxrwxrwx	root/root	usr/lib/libharfbuzz.so.0 -> libharfbuzz.so.0.60900.0
--rwxr-xr-x	root/root	usr/lib/libharfbuzz.so.0.60900.0
+lrwxrwxrwx	root/root	usr/lib/libharfbuzz.so.0 -> libharfbuzz.so.0.61001.0
+-rwxr-xr-x	root/root	usr/lib/libharfbuzz.so.0.61001.0
 drwxr-xr-x	root/root	usr/lib/pkgconfig/
 -rw-r--r--	root/root	usr/lib/pkgconfig/harfbuzz-cairo.pc
 -rw-r--r--	root/root	usr/lib/pkgconfig/harfbuzz-gobject.pc
@@ -124,6 +124,7 @@ drwxr-xr-x	root/root	usr/share/gtk-doc/html/harfbuzz/
 -rw-r--r--	root/root	usr/share/gtk-doc/html/harfbuzz/api-index-1-8-5.html
 -rw-r--r--	root/root	usr/share/gtk-doc/html/harfbuzz/api-index-1-8-6.html
 -rw-r--r--	root/root	usr/share/gtk-doc/html/harfbuzz/api-index-1-9-0.html
+-rw-r--r--	root/root	usr/share/gtk-doc/html/harfbuzz/api-index-10-0-0.html
 -rw-r--r--	root/root	usr/share/gtk-doc/html/harfbuzz/api-index-2-0-0.html
 -rw-r--r--	root/root	usr/share/gtk-doc/html/harfbuzz/api-index-2-1-0.html
 -rw-r--r--	root/root	usr/share/gtk-doc/html/harfbuzz/api-index-2-2-0.html

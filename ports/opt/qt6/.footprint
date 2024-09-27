@@ -22,7 +22,6 @@ drwxr-xr-x	root/root	opt/qt6/bin/
 -rwxr-xr-x	root/root	opt/qt6/bin/qdbusviewer
 -rwxr-xr-x	root/root	opt/qt6/bin/qdbusxml2cpp
 -rwxr-xr-x	root/root	opt/qt6/bin/qdistancefieldgenerator
--rwxr-xr-x	root/root	opt/qt6/bin/qdoc
 -rwxr-xr-x	root/root	opt/qt6/bin/qmake
 -rwxr-xr-x	root/root	opt/qt6/bin/qmake6
 -rwxr-xr-x	root/root	opt/qt6/bin/qml

@@ -308,7 +308,6 @@ drwxr-xr-x	root/root	opt/kf6/lib/plugins/kwin/plugins/
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/kwin/plugins/BounceKeysPlugin.so
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/kwin/plugins/StickyKeysPlugin.so
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/kwin/plugins/buttonsrebind.so
--rwxr-xr-x	root/root	opt/kf6/lib/plugins/kwin/plugins/eis.so
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/kwin/plugins/krunnerintegration.so
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/kwin/plugins/nightlight.so
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/kwin/plugins/screencast.so

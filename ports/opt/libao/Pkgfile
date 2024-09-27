@@ -5,15 +5,19 @@
 # Optional: a graphical environment alsa pulseaudio
 
 name=libao
-version=1.2.0
+version=1.2.2
 release=1
-source=(https://downloads.xiph.org/releases/ao/libao-$version.tar.gz)
+source=(https://github.com/xiph/${name}/archive/${version}/${name}-${version}.tar.gz)
 
-build() {
-	cd $name-$version
 
-	./configure --prefix=/usr &&
-make
-	make DESTDIR=$PKG install &&
-install -v -m644 README /usr/share/doc/$name-$version
+pkg_build() {
+CFLAGS+=' -Wno-error=implicit-function-declaration'
+	autoreconf -fiv	
+	./configure --prefix=/usr --enable-alsa-mmap
+	make -j1
+	make DESTDIR="${PKG}" install
+
+	rm -r "${PKG}"/usr/share/doc
 }
+# s-sht-mode
+

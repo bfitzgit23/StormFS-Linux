@@ -5,25 +5,32 @@
 # Optional:
 
 name=cdrtools
-version=3.02
-_commit=a09
-release=1
-source=(https://netcologne.dl.sourceforge.net/project/$name/alpha/$name-${version}${_commit}.tar.bz2)
+version=3.02a09
+release=2
+source=(https://downloads.sourceforge.net/cdrtools/cdrtools-$version.tar.bz2)
 
-build() {
-    cd $name-$version
+pkg_build() {
 
-    ## When running make below, an "error" related to lconfig.h will be thrown,
-    ## but a second make running will dispatch the error. lconfig.h it will be
-    ## generated from lconfig.h.in, and the build will be proceed.
-    ## So, the "real" options while build passing to make it is on the second
-    ## make invocation.
+  sed -i 's|/opt/schily|/usr|g'           DEFAULTS/Defaults.linux &&
+sed -i 's|DEFINSGRP=.*|DEFINSGRP=root|' DEFAULTS/Defaults.linux &&
+sed -i 's|INSDIR=\s*sbin|INSDIR=bin|'   rscsi/Makefile          &&
 
-    ## 20230901: added an always condition true to avoid "pkgmk" stop the
-    ## script invocation
-    make -e INS_BASE=/usr DEFMANBASE=. || true
-    make -e INS_BASE=/usr DEFMANBASE=share DESTDIR=$PKG install
+export GMAKE_NOWARN=true &&
+export CFLAGS="$CFLAGS -std=gnu89 -fno-strict-aliasing" &&
 
-    ## delete usr/share/man/man3 to avoid override possible system man pages?
-    rm -r $PKG/usr/share/man/man3
+make -j1 INS_BASE=/usr  \
+         DEFINSUSR=root \
+         DEFINSGRP=root \
+         VERSION_OS="LinuxFromScratch"
+GMAKE_NOWARN=true &&
+
+make DESTDIR=$PKG INS_BASE=/usr    \
+     DEFINSUSR=root   \
+     DEFINSGRP=root   \
+     MANSUFF_LIB=3cdr \
+     install          &&
+
+install -v -m755 -d $PKG/usr/share/doc/$name-$version &&
+install -v -m644 README.* READMEs/* ABOUT doc/*.ps \
+                    $PKG/usr/share/doc/$name-$version
 }

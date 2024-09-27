@@ -6,8 +6,8 @@ drwxr-xr-x	root/root	opt/kf6/
 drwxr-xr-x	root/root	opt/kf6/bin/
 -rwxr-xr-x	root/root	opt/kf6/bin/ark
 drwxr-xr-x	root/root	opt/kf6/lib/
-lrwxrwxrwx	root/root	opt/kf6/lib/libkerfuffle.so.24 -> libkerfuffle.so.24.05.0
--rwxr-xr-x	root/root	opt/kf6/lib/libkerfuffle.so.24.05.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libkerfuffle.so.24 -> libkerfuffle.so.24.08.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libkerfuffle.so.24.08.0
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/kerfuffle/
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/kerfuffle/kerfuffle_cli7z.so

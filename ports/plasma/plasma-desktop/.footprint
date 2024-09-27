@@ -100,8 +100,6 @@ drwxr-xr-x	root/root	opt/kf6/libexec/
 drwxr-xr-x	root/root	opt/kf6/libexec/kf6/
 drwxr-xr-x	root/root	opt/kf6/libexec/kf6/kauth/
 -rwxr-xr-x	root/root	opt/kf6/libexec/kf6/kauth/kcmdatetimehelper
--rwxr-xr-x	root/root	opt/kf6/libexec/kimpanel-ibus-panel
--rwxr-xr-x	root/root	opt/kf6/libexec/kimpanel-ibus-panel-launcher
 drwxr-xr-x	root/root	opt/kf6/share/
 drwxr-xr-x	root/root	opt/kf6/share/applications/
 -rw-r--r--	root/root	opt/kf6/share/applications/kaccess.desktop

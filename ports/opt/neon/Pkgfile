@@ -5,18 +5,18 @@
 # Optional: gnutls libxml2 kerberos nss xmlto libproxy pakchois
 
 name=neon
-version=0.32.5
+version=0.33.0
 release=1
 source=(https://notroj.github.io/$name/$name-$version.tar.gz)
 
-build() {
-	cd $name-$version
+pkg_build() {
+
 
 	./configure --prefix=/usr    \
             --with-ssl       \
             --enable-shared  \
             --disable-static &&
 make
-make docs
+
 	make DESTDIR=$PKG install
 }

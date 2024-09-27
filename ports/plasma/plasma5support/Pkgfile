@@ -1,4 +1,4 @@
-# Depends on: kconfig kcoreaddons ki18n
+# Depends on: kconfig kcoreaddons ki18n libksysguard
 
 name=plasma5support
 version=6.1.4

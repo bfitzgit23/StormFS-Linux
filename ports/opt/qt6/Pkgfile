@@ -7,12 +7,15 @@
 name=qt6
 version=6.7.2
 release=1
-source=(https://download.qt.io/archive/qt/6.7/$version/single/qt-everywhere-src-$version.tar.xz
-qt6-base-cflags.patch)
-
+source=(https://download.qt.io/archive/qt/6.7/$version/single/qt-everywhere-src-$version.tar.xz)
+keep_static=1
 pkg_build() {
 
 export QT6PREFIX=/opt/qt6
+if [ "$(uname -m)" == "i686" ]; then
+    sed -e "/^#elif defined(Q_CC_GNU_ONLY)/s/.*/& \&\& 0/" \
+        -i qtbase/src/corelib/global/qtypes.h
+fi
 #sed -i '/if __cpp_lib_span/s/if/ifdef/' qtbase/src/corelib/tools/qspan.h
 ./configure -prefix $QT6PREFIX      \
             -sysconfdir /etc/xdg    \
@@ -25,6 +28,7 @@ export QT6PREFIX=/opt/qt6
             -skip qt3d              \
             -skip qtquick3dphysics  \
             -skip qtwebengine       \
+            -no-feature-clang	    \
             -Wno-dev                &&
 ninja
 DESTDIR=$PKG ninja install

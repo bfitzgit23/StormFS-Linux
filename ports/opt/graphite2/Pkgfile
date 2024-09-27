@@ -1,7 +1,7 @@
 # Description: reimplementation of the SIL Graphite text processing engine.
 # URL: https://github.com/silnrsi/graphite
 # Maintainer: Tim Biermann, tbier at posteo dot de
-# Depends on: freetype
+# Depends on: freetype cmake
 # Optional: asciidoc dblatex doxygen graphviz
 
 name=graphite2

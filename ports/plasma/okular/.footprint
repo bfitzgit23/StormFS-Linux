@@ -41,9 +41,9 @@ drwxr-xr-x	root/root	lib/cmake/Okular6/
 -rw-r--r--	root/root	lib/cmake/Okular6/Okular6ConfigVersion.cmake
 -rw-r--r--	root/root	lib/cmake/Okular6/Okular6Targets-release.cmake
 -rw-r--r--	root/root	lib/cmake/Okular6/Okular6Targets.cmake
-lrwxrwxrwx	root/root	lib/libOkular6Core.so -> libOkular6Core.so.1
-lrwxrwxrwx	root/root	lib/libOkular6Core.so.1 -> libOkular6Core.so.1.0.0
--rwxr-xr-x	root/root	lib/libOkular6Core.so.1.0.0
+lrwxrwxrwx	root/root	lib/libOkular6Core.so -> libOkular6Core.so.2
+lrwxrwxrwx	root/root	lib/libOkular6Core.so.2 -> libOkular6Core.so.2.0.0
+-rwxr-xr-x	root/root	lib/libOkular6Core.so.2.0.0
 drwxr-xr-x	root/root	lib/plugins/
 drwxr-xr-x	root/root	lib/plugins/kf6/
 drwxr-xr-x	root/root	lib/plugins/kf6/parts/

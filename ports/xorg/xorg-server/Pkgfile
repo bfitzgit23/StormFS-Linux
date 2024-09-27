@@ -1,7 +1,7 @@
 # Description: X Window System server
 # URL: http://xorg.freedesktop.org
 # Maintainer: CRUX Xorg Team, xorg-ports at crux dot nu
-# Depends on: libxcvt pixman xorg-fonts xkeyboard-config libepoxy libtirpc libinput systemd xorg-driver xorg-apps
+# Depends on: libxcvt pixman xorg-fonts xkeyboard-config libepoxy libtirpc libinput systemd xorg-apps
 
 name=xorg-server
 version=21.1.13

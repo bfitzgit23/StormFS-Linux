@@ -81,9 +81,6 @@ drwxr-xr-x	root/root	opt/kf6/mkspecs/modules/
 -rw-r--r--	root/root	opt/kf6/mkspecs/modules/qt_KF6UserFeedbackCore.pri
 -rw-r--r--	root/root	opt/kf6/mkspecs/modules/qt_KF6UserFeedbackWidgets.pri
 drwxr-xr-x	root/root	opt/kf6/share/
-drwxr-xr-x	root/root	opt/kf6/share/KDE/
-drwxr-xr-x	root/root	opt/kf6/share/KDE/UserFeedbackConsole/
--rw-r--r--	root/root	opt/kf6/share/KDE/UserFeedbackConsole/user-feedback-manual.qch
 drwxr-xr-x	root/root	opt/kf6/share/applications/
 -rw-r--r--	root/root	opt/kf6/share/applications/org.kde.kuserfeedback-console.desktop
 drwxr-xr-x	root/root	opt/kf6/share/locale/

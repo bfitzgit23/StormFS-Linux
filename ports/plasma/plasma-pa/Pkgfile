@@ -1,4 +1,4 @@
-# Depends on: kdeclarative kstatusnotifieritem libplasma pulseaudio
+# Depends on: kdeclarative kstatusnotifieritem libplasma pulseaudio pulseaudio-qt
 
 name=plasma-pa
 version=6.1.4
