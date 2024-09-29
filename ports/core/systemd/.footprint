@@ -313,7 +313,6 @@ lrwxrwxrwx	root/root	usr/lib/systemd/system/initrd-root-fs.target.wants/systemd-
 -rw-r--r--	root/root	usr/lib/systemd/system/initrd.target
 drwxr-xr-x	root/root	usr/lib/systemd/system/initrd.target.wants/
 lrwxrwxrwx	root/root	usr/lib/systemd/system/initrd.target.wants/systemd-battery-check.service -> ../systemd-battery-check.service
-lrwxrwxrwx	root/root	usr/lib/systemd/system/initrd.target.wants/systemd-bsod.service -> ../systemd-bsod.service
 -rw-r--r--	root/root	usr/lib/systemd/system/integritysetup-pre.target
 -rw-r--r--	root/root	usr/lib/systemd/system/integritysetup.target
 -rw-r--r--	root/root	usr/lib/systemd/system/kexec.target
@@ -449,7 +448,6 @@ lrwxrwxrwx	root/root	usr/lib/systemd/system/sysinit.target.wants/veritysetup.tar
 -rw-r--r--	root/root	usr/lib/systemd/system/systemd-battery-check.service
 -rw-r--r--	root/root	usr/lib/systemd/system/systemd-binfmt.service
 -rw-r--r--	root/root	usr/lib/systemd/system/systemd-boot-check-no-failures.service
--rw-r--r--	root/root	usr/lib/systemd/system/systemd-bsod.service
 -rw-r--r--	root/root	usr/lib/systemd/system/systemd-confext.service
 -rw-r--r--	root/root	usr/lib/systemd/system/systemd-coredump.socket
 -rw-r--r--	root/root	usr/lib/systemd/system/systemd-coredump@.service
@@ -579,7 +577,6 @@ drwxr-xr-x	root/root	usr/lib/systemd/system/user@0.service.d/
 -rwxr-xr-x	root/root	usr/lib/systemd/systemd-battery-check
 -rwxr-xr-x	root/root	usr/lib/systemd/systemd-binfmt
 -rwxr-xr-x	root/root	usr/lib/systemd/systemd-boot-check-no-failures
--rwxr-xr-x	root/root	usr/lib/systemd/systemd-bsod
 -rwxr-xr-x	root/root	usr/lib/systemd/systemd-cgroups-agent
 -rwxr-xr-x	root/root	usr/lib/systemd/systemd-coredump
 lrwxrwxrwx	root/root	usr/lib/systemd/systemd-cryptsetup -> ../../bin/systemd-cryptsetup
