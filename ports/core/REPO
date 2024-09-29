@@ -412,7 +412,7 @@ f:a1ee01d02f7a03b0abaceb0cf0ae72f9:man-db/.md5sum
 f:f98ef7c55ed2c4f57456278611fe653d:man-db/.footprint
 f:2ec12607a9f1187964d0c0d25b787bc3:systemd/Pkgfile
 f:e4b00dd35d269ddfb015272d9a92fc54:systemd/.md5sum
-f:7dd8e2d798910177788290a97969be4a:systemd/.footprint
+f:dc4d7095707fde555dc4dfce21a6618c:systemd/.footprint
 f:b62c73c1081c32f7c75f961c11584542:systemd/post-install
 f:558647d8976439318210486516b6ef81:squashfs-tools/Pkgfile
 f:fab3174a113a14c3aae0b59842931642:squashfs-tools/squashfs-tools-4.5-symlink_install.patch
@@ -734,10 +734,10 @@ f:f87bc003e02b07545914e38ffd7eede4:glibc/ld.so.conf
 f:c09d72512e51e65bbecf7aa8dd97032a:python3-doxyqml/Pkgfile
 f:235b8f83b4cb3baef5166ee4229de149:python3-doxyqml/.md5sum
 f:3a3ff7de4a52a92ab9f8f32feb36dc21:python3-doxyqml/.footprint
-f:95253df674ddba223e6dcd15448f86fd:linux/Pkgfile
-f:6fd3cc49a60533d4f3c271c53480f86c:linux/.md5sum
-f:649492df279cb01f652335ade3c18d25:linux/.footprint
-f:c1d69837835274c676cdeea5a5bf7dea:linux/config
+f:9a4a4f721bb7453506189d93124655bd:linux/Pkgfile
+f:ed6f14fd7d0071ce1e4428866aecb6ec:linux/.md5sum
+f:e4a3e1fae7a7840348580adbebde5c91:linux/.footprint
+f:abce2c5336e763d13014107b2f6c9591:linux/config
 f:d41d8cd98f00b204e9800998ecf8427e:linux/.nostrip
 f:d46a087b6d7e13f86947d64381f36516:linux/Pkgfile.bak
 f:9be579244fb71792fbe411bade2239a2:linux/post-install
@@ -767,6 +767,8 @@ f:a1ca8907cf934def921ce525c8184c2a:openssl/Pkgfile
 f:01261cad89457e59ee96b9115b7c6445:openssl/.md5sum
 f:e7cbc94a820c6273210d46943ce1ed00:openssl/.footprint
 f:153d2bccdc841bae7acec3d5c26a7a04:zstd/Pkgfile
+f:81987231463136f7be69b53bddbd9738:zstd/.md5sum
+f:a634efd586ed12f8209803cf538745f4:zstd/.footprint
 f:db09442c289465e594255e94cc6404b7:stripping/stripping.sh
 f:56df1fe7fff47a6733fabe7a5e0f80dd:stripping/Pkgfile
 f:98ce4fee336d080f0366d1e7d5efc76b:stripping/cleanup.sh

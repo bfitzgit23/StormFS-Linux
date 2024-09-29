@@ -1,5 +1,9 @@
+d:asciidoc
 d:libdbusmenu-gtk2
 d:libappindicator-gtk2
+f:47b4e79f352334d0f198796b66e0bf3f:asciidoc/Pkgfile
+f:3d00b3f04ef5c83ed231917a80b6400c:asciidoc/.md5sum
+f:1c425b898969001067b877520daa091c:asciidoc/.footprint
 f:b85d49f12702c8fb0af5c42bd68fb6f6:libdbusmenu-gtk2/Pkgfile
 f:a357f543075e9bbdf13f70e7afe89b0d:libdbusmenu-gtk2/.md5sum
 f:4ef7a9590c4a1051ee19295c57edee00:libdbusmenu-gtk2/0001_no-deprecated-gnome-common-macros.patch
