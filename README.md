@@ -54,7 +54,7 @@ $ ./bootstrap.sh 4
 ```
 
 Okay thats all for bootstrapping BFS  base. Just keep `lfs-rootfs.tar.xz` to reuse in the future or share with your friends.
-
+```
 # install to disk
 First thing to do is making partition and mount it but i will not teach it here, i assume you already know if you come for LFS stuff. I assume you mount the partition into `/mnt/lfs` directory.
 # Example partition layout
@@ -71,7 +71,7 @@ mount /dev/nvme0n1p1 /mnt/bfs/boot/efi/ (EFI)
 # mount other partitions
 mkdir /mnt/bfs/home
 mount /dev/md127 /mnt/bfs/home/
-
+```
 Extract compressed base file system into `/mnt/lfs`
 ```
 # tar -xvf lfs-rootfs.tar.xz -C /mnt/bfs
@@ -132,8 +132,10 @@ Sync ports
 ```
 # ports -u
 ```
+```
 Install kernel from kernel.org or ports
 # prt-get depinst linux
+```
 
 Install grub
 ```
@@ -148,6 +150,7 @@ Install grub
 # grub-mkconfig -o /boot/grub/grub.cfg
 ```
 Configure Systemd
+```
 # systemd-machine-id-setup
 # systemctl preset-all
 Optional
@@ -198,7 +201,8 @@ nameserver <IP address of your secondary nameserver>
 
 # End /etc/resolv.conf
 EOF
-
+```
+```
 Configure /etc/hosts
 cat > /etc/hosts << "EOF"
 # Begin /etc/hosts
@@ -282,6 +286,7 @@ cat > /etc/systemd/coredump.conf.d/maxuse.conf << EOF
 [Coredump]
 MaxUse=5G
 EOF
+```
 You might wanna install packages before rebooting to your installed lfs like 'xorg', 'networkmanager'?
 ```
 # prt-get depinst xorg-server openssh dhcpcd networkmanager
