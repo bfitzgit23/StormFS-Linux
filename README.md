@@ -122,7 +122,7 @@ Setting locales
 ```
 
 Setting /etc/fstab
-# Double check /etc/fstab to verify it looks correct from earlier.
+Double check /etc/fstab to verify it looks correct from earlier.
 ```
 # echo '/dev/sdXY / ext4 defaults 0 1' >> /etc/fstab
 # echo '/dev/sdXY swap swap defaults 0 0' >> /etc/fstab
@@ -305,7 +305,7 @@ You can reboot now
 # reboot
 ```
 
-# writing ports
+# Writing Ports
 Writing ports is so damn easy, you can learn from existing ports or use `gentemplate.sh` script to generate a very basic port. 
 
 Change to `contrib` directory to make new port. If you want to contribute your port, add it to `contrib` directory then make PR.
