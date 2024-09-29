@@ -446,6 +446,10 @@ drwxr-xr-x	root/root	usr/include/linux/isdn/
 -rw-r--r--	root/root	usr/include/linux/mdio.h
 -rw-r--r--	root/root	usr/include/linux/media-bus-format.h
 -rw-r--r--	root/root	usr/include/linux/media.h
+drwxr-xr-x	root/root	usr/include/linux/media/
+drwxr-xr-x	root/root	usr/include/linux/media/raspberrypi/
+-rw-r--r--	root/root	usr/include/linux/media/raspberrypi/pisp_be_config.h
+-rw-r--r--	root/root	usr/include/linux/media/raspberrypi/pisp_common.h
 -rw-r--r--	root/root	usr/include/linux/mei.h
 -rw-r--r--	root/root	usr/include/linux/mei_uuid.h
 -rw-r--r--	root/root	usr/include/linux/membarrier.h
@@ -947,6 +951,7 @@ drwxr-xr-x	root/root	usr/include/linux/usb/
 drwxr-xr-x	root/root	usr/include/misc/
 -rw-r--r--	root/root	usr/include/misc/cxl.h
 -rw-r--r--	root/root	usr/include/misc/fastrpc.h
+-rw-r--r--	root/root	usr/include/misc/mrvl_cn10k_dpi.h
 -rw-r--r--	root/root	usr/include/misc/ocxl.h
 -rw-r--r--	root/root	usr/include/misc/pvpanic.h
 drwxr-xr-x	root/root	usr/include/misc/uacce/

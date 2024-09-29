@@ -11,7 +11,7 @@ f:8a50ef6a7356e238fc7098f7e015e4c2:libdbusmenu-gtk2/.signature
 f:d2c08caca0a8df7e381f9f801334fd25:libdbusmenu-gtk2/.footprint
 f:7b482c0ad8f7f0935c078a1589184854:libdbusmenu-gtk2/0004_prevent-test-json-from-failing.patch
 f:48242e2e03c53e45fd5def9ad8614931:libdbusmenu-gtk2/0003_port-tools-dbusmenu-bench-to-py3.patch
-f:54d127ec12e3951c4c20a7ad91fde150:.httpup-repo.current
+f:e77c2733b731b07c3a9a34c0c5d35bda:.httpup-repo.current
 f:83f2d42f411acc3715747757499c31c1:libappindicator-gtk2/Pkgfile
 f:ae30a7c8490db4a23aa2517f46638caf:libappindicator-gtk2/improved-plasma-support.patch
 f:5fed2c13610e7c7d34b6275f3a798a5b:libappindicator-gtk2/.signature
