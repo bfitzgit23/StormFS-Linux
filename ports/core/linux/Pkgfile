@@ -4,13 +4,13 @@
 # Depends on:  elfutils openssl linux-firmware dracut
 
 name=linux
-version=6.10.10
+version=6.11.0
 release=1
-source=(https://www.kernel.org/pub/linux/kernel/v6.x/linux-$version.tar.xz
+source=(https://www.kernel.org/pub/linux/kernel/v6.x/linux-6.11.tar.xz
         config)
 
 build() {
-	cd linux-$version
+	cd linux-6.11
 
 	make mrproper
 
@@ -18,7 +18,7 @@ build() {
 	make olddefconfig
 
 	sed '/^CONFIG_LOCALVERSION=/d' -i .config
-	echo 'CONFIG_LOCALVERSION="-LFS"' >> .config
+	echo 'CONFIG_LOCALVERSION="-BFS-Linux"' >> .config
 
 	kernver=${version}$(grep CONFIG_LOCALVERSION= .config | cut -d '"' -f2)
 
@@ -28,7 +28,7 @@ build() {
 
 	mkdir -p $PKG/boot
 
-	cp  arch/x86/boot/bzImage $PKG/boot/vmlinuz-lfs
+	cp  arch/x86/boot/bzImage $PKG/boot/vmlinuz-BFS-Linux-$version
 	echo $kernver > $PKG/lib/modules/KERNELVERSION
 
 	make clean
@@ -64,7 +64,7 @@ build() {
 	done
 
 	rm -f $PKG/lib/modules/$kernver/{build,source}
-	mv $SRC/linux-$version $PKG/lib/modules/$kernver/build
+	mv $SRC/linux-6.11 $PKG/lib/modules/$kernver/build
 	ln -sv build $PKG/lib/modules/$kernver/source
 
 	# remove now broken symlinks
