@@ -19,6 +19,7 @@ build() {
 		--with-secure-path \
 		--with-all-insults \
 		--with-env-editor \
+		--with-pam \
 		--docdir=/usr/share/doc/$name-$version \
 		--with-passprompts="[sudo] password for %p: " &&
 	make

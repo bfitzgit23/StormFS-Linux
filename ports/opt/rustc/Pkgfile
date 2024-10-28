@@ -6,7 +6,7 @@
 
 
 name=rustc
-version=1.80.1
+version=1.81.0
 release=1
 source=(https://static.rust-lang.org/dist/$name-$version-src.tar.xz)
 build() {
@@ -22,7 +22,7 @@ cat << EOF > config.toml
 # Tell x.py the editors have reviewed the content of this file
 # and updated it to follow the major changes of the building system,
 # so x.py will not warn us to do such a review.
-change-id = 125535
+change-id = 127866
 
 [llvm]
 # by default, rust will build for a myriad of architectures
@@ -50,12 +50,12 @@ tools = ["cargo", "clippy", "rustdoc", "rustfmt"]
 vendor = true
 
 [install]
-prefix = "/opt/rustc-1.80.1"
-docdir = "share/doc/rustc-1.80.1"
+prefix = "/opt/rustc-1.81.0"
+docdir = "share/doc/rustc-1.81.0"
 
 [rust]
 channel = "stable"
-description = "for BLFS r12.1-1743"
+description = "for BLFS r12.2-352"
 
 # Enable the same optimizations as the official upstream build.
 lto = "thin"
@@ -71,12 +71,20 @@ llvm-config = "/usr/bin/llvm-config"
 # dumped to the screen when config.toml is parsed.
 llvm-config = "/usr/bin/llvm-config"
 EOF
+sed '/MirOpt/d' -i src/bootstrap/src/core/builder.rs &&
 
+sed 's/!path.ends_with("cargo")/true/' \
+    -i src/bootstrap/src/core/build_steps/tool.rs &&
 
+sed 's/^.*build_wasm.*$/#[allow(unreachable_code)]&return false;/' \
+    -i src/bootstrap/src/lib.rs
+sed '/CondBitmap/,/^}/s/LLVM_VERSION.*/& \&\& LLVM_VERSION_LT(19, 0)/' \
+        -i compiler/rustc_llvm/llvm-wrapper/RustWrapper.cpp &&
 
+rm -v tests/coverage/mcdc/{cond*,if,inline*,nest*,non_*}.rs
 
-{ [ ! -e /usr/include/libssh2.h ] ||
-  export LIBSSH2_SYS_USE_PKG_CONFIG=1; } &&
+[ ! -e /usr/include/libssh2.h ] || export LIBSSH2_SYS_USE_PKG_CONFIG=1
+[ ! -e /usr/include/sqlite3.h ] || export LIBSQLITE3_SYS_USE_PKG_CONFIG=1
 python3 x.py build
 DESTDIR=$PKG python3 x.py install
 find $PKG/opt/$name-$version -name "*.old" -delete

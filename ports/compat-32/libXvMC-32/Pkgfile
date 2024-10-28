@@ -1,9 +1,9 @@
 # Description: X Video Motion Compensation extension client library
 # URL: http://xorg.freedesktop.org
 # Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
-# Depends on: xorg-libxv-32 xorg-libxvmc
+# Depends on: libXv-32 libXvMC
 
-name=xorg-libxvmc-32
+name=libXvMC-32
 version=1.0.14
 release=1
 source=(https://www.x.org/releases/individual/lib/libXvMC-$version.tar.xz)

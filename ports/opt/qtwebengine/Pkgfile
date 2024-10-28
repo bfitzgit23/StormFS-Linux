@@ -5,21 +5,20 @@
 # Optional: dav1d fdk-aac gnutls graphite2 keyutils krb5 lame lcms2 libpcre2 libvdpau numactl pipewire x264 x265
 
 name=qtwebengine
-version=6.7.2
+version=6.7.3
 release=1
 source=(https://download.qt.io/official_releases/qt/${version%.*}/$version/submodules/qtwebengine-everywhere-src-$version.tar.xz
-  ninja-1.12.patch
   ninja-1.12-2.patch
-  qtwebengine-ffmpeg-7.patch
   no-h264.patch
-)
+  03-gn-bootstrap.patch)
+
 
 build() {
 
 
 #  SYSLIBS="freetype harfbuzz-ng libdrm libevent libpng libxml libxslt"
 
-  prt-get isinst alsa-lib && PKGMK_QT6+=' -D QT_FEATURE_webengine_system_alsa=ON'
+    prt-get isinst alsa-lib && PKGMK_QT6+=' -D QT_FEATURE_webengine_system_alsa=ON'
   prt-get isinst krb5 && PKGMK_QT6+=' -D QT_FEATURE_webengine_kerberos=ON'
   prt-get isinst lcms2 && PKGMK_QT6+=' -D QT_FEATURE_webengine_system_liblcms2=ON'
   prt-get isinst openjpeg2 && PKGMK_QT6+=' -D QT_FEATURE_webengine_system_libopenjpeg2=ON'
@@ -34,34 +33,36 @@ build() {
     PATH="$(echo ${PATH} | awk -v RS=: -v ORS=: '/ccache/ {next} {print}' | sed 's/:*$//')"
   fi
 
-  sed -e 's/^#define BA_LB_COUNT.*$/#define BA_LB_COUNT 40/' \
-    -i qtwebengine-everywhere-src-$version/src/3rdparty/chromium/third_party/blink/renderer/platform/text/text_break_iterator.cc
+ 
 
-  patch -Np1 -d qtwebengine-everywhere-src-$version -i $SRC/ninja-1.12-2.patch
-  patch -Np1 -d qtwebengine-everywhere-src-$version/src/3rdparty/chromium -i $SRC/qtwebengine-ffmpeg-7.patch
+   patch -Np1 -d qtwebengine-everywhere-src-$version -i $SRC/ninja-1.12-2.patch
   patch -Np1 -d qtwebengine-everywhere-src-$version -i $SRC/no-h264.patch
+  patch -Np1 -d qtwebengine-everywhere-src-$version -i $SRC/03-gn-bootstrap.patch
+
 
   cd $SRC/qtwebengine-everywhere-src-$version/src/3rdparty/chromium
   ./build/linux/unbundle/replace_gn_files.py --system-libraries $SYSLIBS
 
-  cd $SRC
-
-  export NINJAFLAGS="-j $(( $(awk '/^MemAvailable:/ {print $2}' /proc/meminfo) / 3000000))"
+cd $SRC
+#  export NINJAFLAGS="-j $(( $(awk '/^MemAvailable:/ {print $2}' /proc/meminfo) / 3000000))"
 
   PYTHON=/usr/bin/python3 \
   cmake -S qtwebengine-everywhere-src-$version -B build -G Ninja $PKGMK_QT6 \
     -D CMAKE_BUILD_TYPE=Release \
     -D CMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
     -D CMAKE_C_FLAGS_RELEASE="$CFLAGS" \
-    -D QT_FEATURE_webengine_system_ffmpeg=ON \
-    -D QT_FEATURE_webengine_system_icu=ON \
+        -D QT_FEATURE_webengine_system_icu=ON \
     -D QT_FEATURE_webengine_system_libevent=ON \
     -D QT_FEATURE_webengine_proprietary_codecs=ON \
     -D QT_FEATURE_webengine_system_libxml=ON \
     -D QT_FEATURE_webengine_ozone_x11=ON \
     -D QT_FEATURE_qtpdf_build=ON \
     -D QT_FEATURE_webengine_system_re2=OFF \
+    -D QT_FEATURE_webengine_system_libvpx=OFF \
+    -D QT_FEATURE_webengine_system_ffmpeg=OFF \
+    -D QT_FEATURE_webengine_embedded_build=OFF \
     -D QT_BUILD_EXAMPLES_BY_DEFAULT=OFF \
+    -D WARNINGS_ARE_ERRORS=OFF \
     -Wno-dev
   cmake --build build
   DESTDIR=$PKG cmake --install build

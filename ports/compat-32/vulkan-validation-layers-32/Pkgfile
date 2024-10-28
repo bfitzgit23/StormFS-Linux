@@ -1,7 +1,7 @@
 # Description: Vulkan validation layers, 32bit
 # URL: https://www.khronos.org/vulkan/
 # Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
-# Depends on: robin-hood-hashing-32 spirv-tools-32 vulkan-utility-libraries-32 vulkan-validation-layers xorg-libxrandr-32
+# Depends on: robin-hood-hashing-32 spirv-tools-32 vulkan-utility-libraries-32 vulkan-validation-layers libXrandr-32
 # Optional: wayland-32
 
 name=vulkan-validation-layers-32

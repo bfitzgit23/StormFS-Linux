@@ -3,47 +3,56 @@
 # Maintainer: Danny Rawlins, crux at romster dot me
 
 name=tcl
-version=8.6.14
+version=8.6.15
 release=1
 source=(https://downloads.sourceforge.net/project/$name/Tcl/$version/$name$version-src.tar.gz
 https://downloads.sourceforge.net/tcl/$name$version-html.tar.gz)
+# use this to keep static libraries (*.a)
+keep_static=1
+
+# use this to keep libtool files (*.la)
+keep_libtool=1
 
 
 pkg_build() {
-	SRCDIR=$(pwd)
-	cd $SRC/$name$version/unix
-	  ./configure \
-    --prefix=/usr \
-    --mandir=/usr/share/man \
-    --enable-threads \
-    --enable-64bit
+SRCDIR=$(pwd)
+  cd unix
 
-	make
+ ./configure --prefix=/usr           \
+            --mandir=/usr/share/man \
+            --disable-rpath
 
-  make INSTALL_ROOT="$PKG" install install-private-headers
-	ln -sf tclsh${version%.*} "$PKG/usr/bin/tclsh"
-	ln -sf libtcl${version%.*}.so "$PKG/usr/lib/libtcl.so"
-	install -Dm0644 -t "$PKG/usr/share/licenses/$pkgname/" ../license.terms
-	install -Dm644 tcl.m4 -t "$PKG/usr/share/aclocal"
-	chmod 644 "$PKG/usr/lib/libtclstub8.6.a"
+  make
+  make INSTALL_ROOT=$PKG install install-private-headers
 
-	# remove buildroot traces
-	_tclver=8.6
-	sed -e "s#$srcdir/$_archive/unix#/usr/lib#" \
-		-e "s#$RC/$_archive#/usr/include#" \
-		-e "s#'{/usr/lib} '#'/usr/lib/tcl$_tclver'#" \
-		-i "$PKG/usr/lib/tclConfig.sh"
+  install -d $PKG/usr/include/tcl/{generic,unix,compat}
+  cp ../generic/*.h $PKG/usr/include/tcl/generic
+  cp ../unix/*.h $PKG/usr/include/tcl/unix
+  cp ../compat/*.h $PKG/usr/include/tcl/compat
 
-	tdbcver=tdbc1.1.7
-	sed -e "s#$SRC/$_archive/unix/pkgs/$tdbcver#/usr/lib/$tdbcver#" \
-		-e "s#$SRC/$_archive/pkgs/$tdbcver/generic#/usr/include#" \
-		-e "s#$SRC/$_archive/pkgs/$tdbcver/library#/usr/lib/tcl${pkgver%.*}#" \
-		-e "s#$SRC/$_archive/pkgs/$tdbcver#/usr/include#" \
-		-i "$PKG/usr/lib/$tdbcver/tdbcConfig.sh"
+  ln -s tclsh${version%.*} $PKG/usr/bin/tclsh
+  ln -s libtcl${version%.*}.so $PKG/usr/lib/libtcl.so
+  ln -s libtclstub${version%.*}.a $PKG/usr/lib/libtclstub.a
 
-	itclver=itcl4.2.4
-	sed -e "s#$SRC/$_archive/unix/pkgs/$itclver#/usr/lib/$itclver#" \
-		-e "s#$SRC/$_archive/pkgs/$itclver/generic#/usr/include#" \
-		-e "s#$SRC/$_archive/pkgs/$itclver#/usr/include#" \
-		-i "$PKG/usr/lib/$itclver/itclConfig.sh"
+  # remove $SRC traces
+  sed \
+    -e "s|$SRC/tcl$version/unix|/usr/lib|g" \
+    -e "s|$SRC/tcl$version|/usr/include|g" \
+    -i $PKG/usr/lib/tclConfig.sh
+
+  local tdbcver=tdbc1.1.9
+  sed \
+    -e "s|$SRC/tcl$version/unix/pkgs/$tdbcver|/usr/lib/$tdbcver|g" \
+    -e "s|$SRC/tcl$version/pkgs/$tdbcver/generic|/usr/include|g" \
+    -e "s|$SRC/tcl$version/pkgs/$tdbcver/library|/usr/lib/tcl${version%.*}|g" \
+    -e "s|$SRC/tcl$version/pkgs/$tdbcver|/usr/include|g" \
+    -i $PKG/usr/lib/$tdbcver/tdbcConfig.sh
+
+  local itclver=itcl4.3.0
+  sed \
+    -e "s|$SRC/tcl$version/unix/pkgs/$itclver|/usr/lib/$itclver|g" \
+    -e "s|$SRC/tcl$version/pkgs/$itclver/generic|/usr/include|g" \
+    -e "s|$SRC/tcl$version/pkgs/$itclver|/usr/include|g" \
+    -i $PKG/usr/lib/$itclver/itclConfig.sh
+unset SRCDIR
 }

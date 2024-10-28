@@ -4,9 +4,9 @@ name=vlc
 version=3.0.21
 release=1
 source=(https://download.videolan.org/$name/$version/$name-$version.tar.xz
-\vlc-3.0.21-fedora_ffmpeg7-1.patch
+vlc-3.0.21-fedora_ffmpeg7-1.patch
 vlc-3.0.21-taglib-1.patch)
-build_opt="--disable-lua"
+build_opt="--disable-lua --disable-libplacebo"
 
 pre_build() {
 	export LUAC=/usr/bin/luac5.2                   &&

@@ -1,7 +1,7 @@
 # Depends on: cairo cmake gst-plugins-base gst-plugins-bad gtk3 gtk4 icu lcms2 libgudev libsecret libsoup libtasn1 libwebp  mesa openjpeg ruby  sqlite unifdef which bubblewrap enchant geoclue glib gobject-introspection hicolor-icon-theme libavif libjxl libseccomp xdg-dbus-proxy
 
 name=webkitgtk-41
-version=2.44.4
+version=2.46.2
 release=1
 source=(https://webkitgtk.org/releases/webkitgtk-${version}.tar.xz)
 build() {
@@ -37,6 +37,7 @@ build() {
       -D USE_WOFF2=OFF                \
       -D USE_GTK4=OFF                 \
       -D ENABLE_BUBBLEWRAP_SANDBOX=ON \
+      -D USE_SYSTEM_SYSPROF_CAPTURE=NO \
       -W no-dev -G Ninja ..           &&
    
 

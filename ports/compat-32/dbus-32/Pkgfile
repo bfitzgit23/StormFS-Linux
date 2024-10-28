@@ -15,7 +15,7 @@ build() {
 prt-get depinst libX11-32
 before continuing with dbus-32.\033[0m\n" &&
 exit 1
-
+CFLAGS+=" -m32" CXXFLAGS+=" -m32" \
 	./configure --prefix=/usr \
 		--libdir=/usr/lib32 \
 		--with-dbus-daemondir=/usr/sbin \

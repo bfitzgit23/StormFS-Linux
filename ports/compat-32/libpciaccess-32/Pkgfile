@@ -4,7 +4,7 @@
 # Depends on: libpciaccess zlib-32
 # Optional: hwdata
 
-name=xorg-libpciaccess-32
+name=libpciaccess-32
 version=0.18.1
 release=1
 source=(https://www.x.org/releases/individual/lib/libpciaccess-$version.tar.xz)

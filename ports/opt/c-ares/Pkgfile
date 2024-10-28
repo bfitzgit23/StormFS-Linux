@@ -4,7 +4,7 @@
 # Depends On: cmake
 # Optional: 
 name=c-ares
-version=1.33.1
+version=1.34.2
 release=1
 source=(https://github.com/c-ares/c-ares/releases/download/v$version/c-ares-$version.tar.gz)
 build() {

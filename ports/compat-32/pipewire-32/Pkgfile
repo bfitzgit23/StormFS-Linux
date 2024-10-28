@@ -5,7 +5,7 @@
 # Optional: avahi-32 jack-32 libsdl2-32 libsndfile-32 pulseaudio-32 vulkan-loader-32 xorg-libxcb-32
 
 name=pipewire-32
-version=1.2.4
+version=1.2.6
 release=1
 source=(https://gitlab.freedesktop.org/pipewire/pipewire/-/archive/$version/pipewire-$version.tar.bz2)
 

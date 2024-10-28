@@ -4,16 +4,14 @@
 # Depends on:  
 
 name=python3-markupsafe
-version=2.1.5
+version=3.0.2
 release=1
-source=(https://pypi.org/packages/source/M/MarkupSafe/MarkupSafe-$version.tar.gz)
+source=(https://pypi.io/packages/source/m/markupsafe/markupsafe-$version.tar.gz)
 
-build() {
-        cd MarkupSafe-$version
+pkg_build() {
 
 		/usr/bin/python3 setup.py build
 
 	/usr/bin/python3 setup.py install --prefix=/usr \
 		--root=$PKG --optimize=1
-
 }

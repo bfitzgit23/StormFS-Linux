@@ -5,7 +5,7 @@
 # Optional: help2man libnotify webkitgtk
 
 name=zenity
-version=4.0.2
+version=4.0.3
 release=1
 source=(https://download.gnome.org/sources/$name/4.0/$name-$version.tar.xz)
 

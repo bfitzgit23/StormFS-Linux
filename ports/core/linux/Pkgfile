@@ -4,13 +4,13 @@
 # Depends on:  elfutils openssl linux-firmware dracut
 
 name=linux
-version=6.11.0
+version=6.11.4
 release=1
-source=(https://www.kernel.org/pub/linux/kernel/v6.x/linux-6.11.tar.xz
+source=(https://www.kernel.org/pub/linux/kernel/v6.x/$name-$version.tar.xz
         config)
 
 build() {
-	cd linux-6.11
+	cd $name-$version
 
 	make mrproper
 
@@ -64,7 +64,7 @@ build() {
 	done
 
 	rm -f $PKG/lib/modules/$kernver/{build,source}
-	mv $SRC/linux-6.11 $PKG/lib/modules/$kernver/build
+	mv $SRC/$name-$version $PKG/lib/modules/$kernver/build
 	ln -sv build $PKG/lib/modules/$kernver/source
 
 	# remove now broken symlinks

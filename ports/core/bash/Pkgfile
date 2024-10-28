@@ -1,9 +1,9 @@
 name=bash
-version=5.2.32
+version=5.2.37
 release=1
-source=(https://ftp.gnu.org/gnu/$name/$name-$version.tar.gz
-	bashrc
-	profile)
+source=(https://ftp.gnu.org/gnu/$name/$name-$version.tar.gz)
+#	bashrc
+#	profile
 build_opt="--without-bash-malloc --with-installed-readline"
 
 bootstrap_build() {
@@ -17,7 +17,7 @@ post_build() {
 	mkdir -p $PKG/bin
 	mv $PKG/usr/bin/bash $PKG/bin
 	
-	install -d $PKG/etc
-	install -m644 $SRC/bashrc $PKG/etc
-	install -m644 $SRC/profile $PKG/etc
+#	install -d $PKG/etc
+#	install -m644 $SRC/bashrc $PKG/etc
+#	install -m644 $SRC/profile $PKG/etc
 }

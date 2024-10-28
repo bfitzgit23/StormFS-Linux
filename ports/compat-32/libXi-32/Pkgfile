@@ -1,9 +1,9 @@
 # Description: X Input client library
 # URL: http://xorg.freedesktop.org
 # Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
-# Depends on: xorg-libxext-32 xorg-libxfixes-32 xorg-libxi
+# Depends on: libXext-32 libXfixes-32 libXi
 
-name=xorg-libxi-32
+name=libXi-32
 version=1.8.2
 release=1
 source=(https://www.x.org/releases/individual/lib/libXi-$version.tar.xz)

@@ -1,9 +1,9 @@
 # Description: X Resize and Rotate extension client library
 # URL: http://xorg.freedesktop.org
 # Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
-# Depends on: xorg-libxext-32 xorg-libxrandr xorg-libxrender-32
+# Depends on: libXext-32 libXrandr libXrender-32
 
-name=xorg-libxrandr-32
+name=libXrandr-32
 version=1.5.4
 release=1
 source=(https://www.x.org/releases/individual/lib/libXrandr-$version.tar.xz)

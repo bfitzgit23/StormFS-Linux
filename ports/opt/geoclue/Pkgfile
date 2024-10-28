@@ -1,4 +1,4 @@
-# Depends on: json-glib libsoup avahi libnotify modemmanager vala
+# Depends on: json-glib libsoup3 avahi libnotify modemmanager vala
 
 name=geoclue
 version=2.7.1

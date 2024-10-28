@@ -1,0 +1,5 @@
+#!/bin/sh
+if [ -e /usr/include/glib-2.0 ]; then
+    rm -rf /usr/include/glib-2.0.old &&
+    mv -vf /usr/include/glib-2.0{,.old}
+fi

@@ -11,7 +11,7 @@ source=(https://www.mpg123.de/download/${name%-*}-$version.tar.bz2)
 
 build() {
   cd ${name%-*}-$version
-
+CFLAGS+=" -m32" CXXFLAGS+=" -m32" \
   ./configure --prefix=/usr \
     --libdir=/usr/lib32 \
     --host=i686-pc-linux-gnu

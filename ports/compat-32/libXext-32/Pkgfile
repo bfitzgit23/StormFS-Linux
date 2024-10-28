@@ -1,9 +1,9 @@
 # Description: Common X extensions client library
 # URL: http://xorg.freedesktop.org
 # Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
-# Depends on: xorg-libx11-32 xorg-libxext
+# Depends on: libx11-32 libXext
 
-name=xorg-libxext-32
+name=libXext-32
 version=1.3.6
 release=1
 source=(https://www.x.org/releases/individual/lib/libXext-$version.tar.xz)

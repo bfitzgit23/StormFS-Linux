@@ -1,7 +1,7 @@
 # Description: Direct3D 12 to Vulkan translation library By WineHQ.
 # URL: https://github.com/d3d12/vkd3d
 # Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
-# Depends on: spirv-tools-32 vulkan-loader-32 xorg-xcb-util-keysyms-32 vkd3d
+# Depends on: spirv-tools-32 vulkan-loader-32 xcb-util-keysyms-32 vkd3d
 
 name=vkd3d-32
 version=1.13

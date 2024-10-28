@@ -1,7 +1,7 @@
 # Description: Vulkan loader, 32bit
 # URL: https://www.khronos.org/vulkan/
 # Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
-# Depends on: vulkan-loader xorg-libxrandr-32
+# Depends on: vulkan-loader libXrandr-32
 # Optional: wayland-32
 
 name=vulkan-loader-32

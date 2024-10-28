@@ -273,6 +273,7 @@ f:ad866f941baa2106cdb4849d665b0a5d:xcursorgen/Pkgfile
 f:9de66176c780b339bb4deeb1994b396d:xcursorgen/.md5sum
 f:718d6abb9bd826d6206467f882f9d2db:xcursorgen/.footprint
 f:e60d860638784709432a1a641cd0ec1f:libpthread-stubs/Pkgfile
+f:04f76afd6b065a2abac74b231999cefa:libpthread-stubs/.md5sum
 f:31240cf509bff3ff25e609f3831ca769:libpthread-stubs/.signature
 f:166743012568efcef0f71de67a014bd9:libpthread-stubs/.footprint
 f:c465466afd43073125b0d074d07b9674:luit/Pkgfile
@@ -390,7 +391,7 @@ f:efddb62898c444a372c180cf7daf61e3:xf86-video-vboxvideo/.footprint
 f:d830c7e4fa88116e5b211f343ee93342:sessreg/Pkgfile
 f:50912b199cbacbb72307d62f02c1d1ba:sessreg/.md5sum
 f:992394068ae7968bd51060f10c70021a:sessreg/.footprint
-f:282cc9be03e7c21cd6a4871687ca879c:.httpup-repo.current
+f:dacc4b9ffb1d7ab9a335f0a9ba6c9c2f:.httpup-repo.current
 f:9da380c79dd23472f6f5dd1c938382b0:xorg-font-screen-cyrillic/Pkgfile
 f:d40ec099a8805ce206708c559f62b8a8:xorg-font-screen-cyrillic/.md5sum
 f:5ac91be1065ec4cce7d67acc0e45b5cb:xorg-font-screen-cyrillic/.footprint
@@ -439,9 +440,9 @@ f:ed000eae89d4a75785e15a87c9421a26:xorg-server/.footprint
 f:68e6f375bc9e8d7717a5ae80c1f3f627:xf86-video-dummy/Pkgfile
 f:476393168d0744ef1ba205ee083c5ed2:xf86-video-dummy/.md5sum
 f:67c732729a448a6aa90a438f61840755:xf86-video-dummy/.footprint
-f:ec81d6d7f2e0d6150dafa62d1ea8fbe2:mesa/Pkgfile
-f:f7e744f9cf2f7e622b99914c7501ea81:mesa/.md5sum
-f:fcf7d025559497aca3a103cc1396e542:mesa/.footprint
+f:6a5460f6307faac25d837c69a6e9287e:mesa/Pkgfile
+f:f81a8a8c47c0b3f87485dd360569f76f:mesa/.md5sum
+f:f65ed3d810003bef93f948d312116347:mesa/.footprint
 f:b4f8779303542471e8a279f27721e9b4:mesa/README.md
 f:fa8ac71695eba7619d40eee83f68c404:libxkbfile/Pkgfile
 f:e5b3c06325147df110585b81f30b3181:libxkbfile/.md5sum
@@ -610,8 +611,8 @@ f:e185b20a9c8f55e75b104d86e86acdb2:libXdamage/.footprint
 f:ffe75cc8be4a95b9d57dc8e3bb72f128:libXcomposite/Pkgfile
 f:75c1579d39ed68f2c44a8586d6223bb8:libXcomposite/.md5sum
 f:eb1e6845d60c52e28593661236065e6e:libXcomposite/.footprint
-f:cc5c3e24b99293ff692c4d1afa651c3d:xtrans/Pkgfile
-f:acc4590d6fe4f44cb222f61309a6ee8a:xtrans/.md5sum
+f:04246f954cc0dfeefe69ee9fd3bedfb4:xtrans/Pkgfile
+f:c2394916da67fc59889839fe77475973:xtrans/.md5sum
 f:a18bdfe70762698db3964e86b35510c9:xtrans/.footprint
 f:92c571e976d4f27febe38a41b99665df:libXxf86vm/Pkgfile
 f:0ee3a35e8a5ae1c93788187e4f80971c:libXxf86vm/.md5sum
@@ -722,8 +723,8 @@ f:5f7065c31eb07c15d949f0b4f5d909dd:xcb-util-renderutil/.footprint
 f:fb6efa91f21a7e18e2f2b4a849d71d73:xf86-input-evdev/Pkgfile
 f:d51fb8ad8e4af1ad4ee68adccdbfa8c1:xf86-input-evdev/.md5sum
 f:70ab58d175a585113471e5e91548100b:xf86-input-evdev/.footprint
-f:c96704e7c010ab84f711a2bce919a548:xterm/Pkgfile
-f:21001769a6b1f29b48db11da31884772:xterm/.md5sum
+f:a43100dcb211c1b0bf9ac6bcf2f03936:xterm/Pkgfile
+f:5b6c8620d0655b5f261057da5cb17a02:xterm/.md5sum
 f:59b384a129d5bed5ff12e33b8eb2a0bb:xterm/.footprint
 f:b7f2c2542ce0337729ee27913dc0f9c8:pixman/Pkgfile
 f:0d8d18683500a8470a063616576299a1:pixman/.md5sum

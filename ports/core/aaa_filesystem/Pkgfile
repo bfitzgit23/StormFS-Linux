@@ -15,12 +15,25 @@ source=(fstab
 	shells
 	inputrc
 	profile
-bash_completion.sh 
+bash_completion.sh
+debuginfod.csh 
+debuginfod.sh
 dircolors.sh
 extrapaths.sh
+gawk.csh
+gawk.sh
 readline.sh
 umask.sh
 i18n.sh
+kf6.sh
+qt5.sh
+qt6.sh
+readline.sh
+rustc.sh
+umask.sh
+vte.csh
+vte.sh
+xorg.sh
 bashrc
 .bash_profile
 .profile
@@ -48,7 +61,7 @@ pkg_build() {
 		mkdir -pv $PKG/usr/{,local/}share/}
 		mkdir -pv $PKG/var/{cache,local,log,mail,opt,spool}
 		mkdir -pv $PKG/var/lib/{color,misc,locate}
-
+	        mkdir -pv $PKG/root
 #	done
 	
 	# man page dirs
@@ -88,6 +101,18 @@ pkg_build() {
 	install -dm0755 $PKG/etc/profile.d
 	install -m644 locale.sh $PKG/etc/profile.d
 	install -m644 bash_completion.sh $PKG/etc/profile.d
+	install -m644 debuginfod.csh $PKG/etc/profile.d
+	install -m644 debuginfod.sh $PKG/etc/profile.d
+	install -m644 gawk.csh $PKG/etc/profile.d
+	install -m644 gawk.sh $PKG/etc/profile.d
+	install -m644 kf6.sh $PKG/etc/profile.d
+	install -m644 locale.sh $PKG/etc/profile.d
+  	install -m644 qt5.sh $PKG/etc/profile.d
+	install -m644 qt6.sh $PKG/etc/profile.d
+	install -m644 rustc.sh $PKG/etc/profile.d
+	install -m644 vte.csh $PKG/etc/profile.d
+	install -m644 vte.sh $PKG/etc/profile.d
+	install -m644 xorg.sh $PKG/etc/profile.d
 	install -dm0755 $PKG/etc/bash_completion.d
 	install -m644 dircolors.sh $PKG/etc/profile.d
 	install -m644 extrapaths.sh $PKG/etc/profile.d
@@ -103,8 +128,12 @@ pkg_build() {
 	install -m644 .vimrc $PKG/etc/skel
 	install -m644 bashrc $PKG/etc
 	install -m644 issue $PKG/etc
+	install -m644 .bash_profile $PKG/root
+	install -m644 .profile $PKG/root
+	install -m644 .bashrc $PKG/root
+	install -m644 .bash_logout $PKG/root
+	install -m644 .vimrc $PKG/root
 	dircolors -p > $PKG/etc/dircolors
-		
 	echo rolling > $PKG/etc/lfs-release
 	cat os-release > $PKG/etc/os-release
 }

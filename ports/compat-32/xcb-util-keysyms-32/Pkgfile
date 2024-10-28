@@ -1,9 +1,9 @@
 # Description: XCB utilities library
 # URL: https://xcb.freedesktop.org/
 # Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
-# Depends on: xorg-libxcb-32 xorg-xcb-util-keysyms
+# Depends on: libxcb-32 xcb-util-keysyms
 
-name=xorg-xcb-util-keysyms-32
+name=xcb-util-keysyms-32
 version=0.4.1
 release=1
 source=(https://xcb.freedesktop.org/dist/xcb-util-keysyms-$version.tar.xz)

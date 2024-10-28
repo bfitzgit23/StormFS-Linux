@@ -1,11 +1,11 @@
 # Description: Mesa 3D Graphics Library
 # URL: https://www.mesa3d.org/
 # Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
-# Depends on: elfutils-32 expat-32 libdrm-32 libglvnd-32 llvm-32 mesa xorg-libxdamage-32 xorg-libxrandr-32 xorg-libxshmfence-32 xorg-libxvmc-32 xorg-libxxf86vm-32
+# Depends on: elfutils-32 expat-32 libdrm-32 libglvnd-32 llvm-32 mesa libXdamage-32 libXrandr-32 libxshmfence-32 libXvMC-32 libXxf86vm-32
 # Optional: clang-32 glslang libclc libva-32 libvdpau-32 spirv-llvm-translator-32 vulkan-loader-32 wayland-protocols
 
 name=mesa-32
-version=24.2.3
+version=24.2.5
 release=1
 source=(https://archive.mesa3d.org/mesa-$version.tar.xz
 	x86-linux-gnu x86-linux-gnu-ccache)

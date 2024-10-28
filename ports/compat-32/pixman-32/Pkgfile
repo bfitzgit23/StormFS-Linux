@@ -1,9 +1,9 @@
 # Description: Pixel manipulation library
 # URL: https://xorg.freedesktop.org
 # Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
-# Depends on: xorg-libpixman
+# Depends on: pixman
 
-name=xorg-libpixman-32
+name=xorg-pixman-32
 version=0.43.4
 release=1
 source=(https://www.x.org/releases/individual/lib/pixman-$version.tar.xz)

@@ -1,9 +1,9 @@
 # Description: X11 client-side library
 # URL: https://xcb.freedesktop.org/
 # Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
-# Depends on: libinput-32 libpthread-stubs-32 libxslt-32 xorg-libxau-32 xorg-libxcb xorg-libxdmcp-32
+# Depends on: libinput-32 libpthread-stubs-32 libxslt-32 libxau-32 libxcb libXdmcp-32
 
-name=xorg-libxcb-32
+name=libxcb-32
 version=1.17.0
 release=1
 source=(https://xorg.freedesktop.org/archive/individual/lib/libxcb-$version.tar.xz)

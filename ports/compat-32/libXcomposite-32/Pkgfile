@@ -1,9 +1,9 @@
 # Description: X Composite extension client library
 # URL: http://xorg.freedesktop.org
 # Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
-# Depends on: xorg-libxcomposite xorg-libxext-32 xorg-libxfixes-32
+# Depends on: libXcomposite libXext-32 libXfixes-32
 
-name=xorg-libxcomposite-32
+name=libXcomposite-32
 version=0.4.6
 release=1
 source=(https://www.x.org/releases/individual/lib/libXcomposite-$version.tar.xz)

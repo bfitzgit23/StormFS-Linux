@@ -25,5 +25,6 @@ build() {
 
 	rm -r \
 		$PKG/usr/share/doc \
+		$PKG/usr/share/gtk-doc \
 		$PKG/usr/{bin,include,share/man}
 }

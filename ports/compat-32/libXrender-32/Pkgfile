@@ -1,9 +1,9 @@
 # Description: X Render extension client library
 # URL: http://xorg.freedesktop.org
 # Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
-# Depends on: xorg-libx11-32 xorg-libxrender
+# Depends on: libx11-32 libXrender
 
-name=xorg-libxrender-32
+name=libXrender-32
 version=0.9.11
 release=1
 source=(https://www.x.org/releases/individual/lib/libXrender-$version.tar.xz)

@@ -9,7 +9,7 @@ source=(https://github.com/tukaani-project/xz/releases/download/v$version/xz-$ve
 
 build() {
 	cd xz-$version
-
+CFLAGS+=" -m32" CXXFLAGS+=" -m32" \
 	autoreconf -vfi
 	./configure \
 		--prefix=/usr \

@@ -10,7 +10,7 @@ source=(https://github.com/openssl/openssl/releases/download/openssl-$version/op
 
 build() {
 	cd openssl-$version
-
+CFLAGS+=" -m32" CXXFLAGS+=" -m32" \
 	./Configure --prefix=/usr \
 		--libdir=/usr/lib32 \
 		--openssldir=/etc/ssl \

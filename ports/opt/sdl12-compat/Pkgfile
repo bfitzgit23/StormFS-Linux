@@ -19,5 +19,5 @@ cmake -DCMAKE_INSTALL_PREFIX=/usr \
       ..  &&
 make	
 	DESTDIR=$PKG make install
-	rm -vf $PKG/usr/lib/libSDLmain.a
+	rm -vf $PKG/usr/lib/libSDLmain.a $PKG/usr/bin/sdl-config $PKG/usr/include/SDL/SDL.h $PKG/usr/include/SDL/SDL_active.h $PKG/usr/include/SDL/SDL_audio.h $PKG/usr/include/SDL/SDL_byteorder.h $PKG/usr/include/SDL/SDL_cdrom.h $PKG/usr/include/SDL/SDL_config.h $PKG/usr/include/SDL/SDL_cpuinfo.h $PKG/usr/include/SDL/SDL_endian.h $PKG/usr/include/SDL/SDL_error.h $PKG/usr/include/SDL/SDL_events.h $PKG/usr/include/SDL/SDL_getenv.h $PKG/usr/include/SDL/SDL_joystick.h $PKG/usr/include/SDL/SDL_keyboard.h $PKG/usr/include/SDL/SDL_keysym.h $PKG/usr/include/SDL/SDL_loadso.h $PKG/usr/include/SDL/SDL_main.h $PKG/usr/include/SDL/SDL_mouse.h $PKG/usr/include/SDL/SDL_mutex.h $PKG/usr/include/SDL/SDL_name.h $PKG/usr/include/SDL/SDL_opengl.h $PKG/usr/include/SDL/SDL_platform.h $PKG/usr/include/SDL/SDL_quit.h $PKG/usr/include/SDL/SDL_rwops.h $PKG/usr/include/SDL/SDL_stdinc.h $PKG/usr/include/SDL/SDL_syswm.h $PKG/usr/include/SDL/SDL_thread.h $PKG/usr/include/SDL/SDL_timer.h $PKG/usr/include/SDL/SDL_types.h $PKG/usr/include/SDL/SDL_version.h $PKG/usr/include/SDL/SDL_video.h $PKG/usr/include/SDL/begin_code.h $PKG/usr/include/SDL/close_code.h $PKG/usr/lib/libSDL-1.2.so.0 $PKG/usr/lib/libSDL.so $PKG/usr/share/aclocal/sdl.m4
 }

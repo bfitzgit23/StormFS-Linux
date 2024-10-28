@@ -5,22 +5,22 @@
 # Optional: doxygen git Ggaphviz python3-pygments rsync recommonmark texlive install-tl-unx valgrind  pyyaml zip ocaml psutil Z3
 
 name=llvm
-version=18.1.7
+version=19.1.0
 release=1
-source=(https://github.com/llvm/llvm-project/releases/download/llvmorg-18.1.7/llvm-18.1.7.src.tar.xz
-https://anduin.linuxfromscratch.org/BLFS/llvm/llvm-cmake-18.src.tar.xz
-https://anduin.linuxfromscratch.org/BLFS/llvm/llvm-third-party-18.src.tar.xz
-https://github.com/llvm/llvm-project/releases/download/llvmorg-18.1.7/clang-18.1.7.src.tar.xz
-https://github.com/llvm/llvm-project/releases/download/llvmorg-18.1.7/compiler-rt-18.1.7.src.tar.xz)
+source=(https://github.com/llvm/llvm-project/releases/download/llvmorg-19.1.0/llvm-19.1.0.src.tar.xz
+https://anduin.linuxfromscratch.org/BLFS/llvm/llvm-cmake-19.src.tar.xz
+https://anduin.linuxfromscratch.org/BLFS/llvm/llvm-third-party-19.src.tar.xz
+https://github.com/llvm/llvm-project/releases/download/llvmorg-19.1.0/clang-19.1.0.src.tar.xz
+https://github.com/llvm/llvm-project/releases/download/llvmorg-19.1.0/compiler-rt-19.1.0.src.tar.xz)
 unpack_source() {
 tar -xf $PKGMK_SOURCE_DIR/$name-$version.src.tar.xz   -C $SRC
 cd $SRC/$name-$version.src
-tar xf $PKGMK_SOURCE_DIR/llvm-cmake-18.src.tar.xz   
-tar xf $PKGMK_SOURCE_DIR//llvm-third-party-18.src.tar.xz       		      
+tar xf $PKGMK_SOURCE_DIR/llvm-cmake-19.src.tar.xz   
+tar xf $PKGMK_SOURCE_DIR//llvm-third-party-19.src.tar.xz       		      
 tar xf $PKGMK_SOURCE_DIR/compiler-rt-$version.src.tar.xz -C projects               
-sed '/LLVM_COMMON_CMAKE_UTILS/s@../cmake@llvm-cmake-18.src@'          \
+sed '/LLVM_COMMON_CMAKE_UTILS/s@../cmake@llvm-cmake-19.src@'          \
     -i CMakeLists.txt                                                 &&
-sed '/LLVM_THIRD_PARTY_DIR/s@../third-party@llvm-third-party-18.src@' \
+sed '/LLVM_THIRD_PARTY_DIR/s@../third-party@llvm-third-party-19.src@' \
     -i cmake/modules/HandleLLVMOptions.cmake
 tar xf $PKGMK_SOURCE_DIR/clang-$version.src.tar.xz -C tools &&
 mv tools/clang-$version.src tools/clang

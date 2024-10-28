@@ -283,7 +283,7 @@ f:5fd3ddba0070169a7deef86257d556c0:networkmanager-qt/.footprint
 f:8933d4ca4b9cc8ac1b1af941eb69fe76:oxygen-sounds/Pkgfile
 f:a83ce5d7415d7ef72717a3aecf3e136a:oxygen-sounds/.md5sum
 f:3af9e57abd2951a94ad446a9f17d4c25:oxygen-sounds/.footprint
-f:48d186b149ac18007339f7843abf24b2:.httpup-repo.current
+f:99a90fe006bcd4ae619907aa331a420f:.httpup-repo.current
 f:efc97ce02cefc259cafefca4530f2d76:kactivities/Pkgfile
 f:30be9d2f5eb4d84551cc05348fd71888:kactivities/.md5sum
 f:d1ef8688f1ecf8bc2e47c66a6c262c6a:kdoctools/Pkgfile
@@ -423,6 +423,7 @@ f:687f3dfdc3f597a74da283171fa2663b:phonon/.md5sum
 f:39e29f7db7acb5b4e576fe4651e00215:phonon/.footprint
 f:f0f4a55d36c65786fd97989e77b9400c:kdeplasma-addons/Pkgfile
 f:6e3d88e5e57a7ed3809403ff7de87e3e:kdeplasma-addons/.md5sum
+f:1e7338401ff512fa2e53afbe21c32fec:kdeplasma-addons/.footprint
 f:1eeea7fd65180cfac20de5ac6beaad5d:dolphin-plugins/Pkgfile
 f:4a97fb92fcaf26c4eca8cd14a11abf79:dolphin-plugins/.md5sum
 f:7f45a035a965e9e0f70b76332ffba3c9:dolphin-plugins/.footprint

@@ -1,0 +1,8 @@
+#
+# /etc/ports/compat-32.httpup: core's port collection
+#
+
+ROOT_DIR=/usr/ports/compat-32
+URL=https://codeberg.org/bmadonnaster/BFS-Linux/raw/branch/main/ports/compat-32
+
+# End of file

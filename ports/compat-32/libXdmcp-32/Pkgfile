@@ -1,9 +1,9 @@
 # Description: xorg lib libXdmcp
 # URL: http://xorg.freedesktop.org
 # Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
-# Depends on: xorg-libxdmcp xorg-xorgproto-32
+# Depends on: libXdmcp xorgproto-32
 
-name=xorg-libxdmcp-32
+name=libXdmcp-32
 version=1.1.5
 release=1
 source=(https://www.x.org/releases/individual/lib/libXdmcp-$version.tar.xz)

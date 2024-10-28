@@ -1,10 +1,10 @@
 # Description: xorg lib xtrans
 # URL: http://xorg.freedesktop.org
 # Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
-# Depends on: xorg-xtrans
+# Depends on: xtrans
 
-name=xorg-xtrans-32
-version=1.5.0
+name=xtrans-32
+version=1.5.1
 release=1
 source=(https://www.x.org/releases/individual/lib/xtrans-$version.tar.xz)
 
