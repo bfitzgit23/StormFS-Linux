@@ -374,7 +374,6 @@ f:aa43d392b211d1db5ed5a9e6523fde7a:mpc/Pkgfile
 f:d709d7f1e2ef542a759f8eb15d158828:python3-mako/.md5sum
 f:791da7d2c4da9730d97c852a870e22d7:python3-mako/Pkgfile
 f:7912d59c9562d7881006b94ccc8b0c7a:python3-mako/.footprint
-f:49125cb16fcf1f2b208be7b7163ed809:elfutils/elfutils-0.170-gcc-8-1.patch
 f:71905ceed300457cbc18124c136ca105:elfutils/.md5sum
 f:ec4ff8fbd988348f7ca6e276b3ed1034:elfutils/Pkgfile
 f:89257a62652a2e29b68564c4c0cd0b22:elfutils/.footprint
