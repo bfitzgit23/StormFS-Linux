@@ -4,7 +4,7 @@
 # Depends on: util-macros
 
 name=xtrans
-version=1.5.1
+version=1.5.2
 release=1
 source=(https://www.x.org/releases/individual/lib/xtrans-$version.tar.xz)
 

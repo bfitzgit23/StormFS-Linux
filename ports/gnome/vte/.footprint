@@ -19,6 +19,7 @@ drwxr-xr-x	root/root	usr/include/vte-2.91-gtk4/vte/
 -rw-r--r--	root/root	usr/include/vte-2.91-gtk4/vte/vteterminal.h
 -rw-r--r--	root/root	usr/include/vte-2.91-gtk4/vte/vtetypebuiltins-gtk4.h
 -rw-r--r--	root/root	usr/include/vte-2.91-gtk4/vte/vtetypebuiltins.h
+-rw-r--r--	root/root	usr/include/vte-2.91-gtk4/vte/vteuuid.h
 -rw-r--r--	root/root	usr/include/vte-2.91-gtk4/vte/vteversion.h
 drwxr-xr-x	root/root	usr/include/vte-2.91/
 drwxr-xr-x	root/root	usr/include/vte-2.91/vte/
@@ -32,6 +33,7 @@ drwxr-xr-x	root/root	usr/include/vte-2.91/vte/
 -rw-r--r--	root/root	usr/include/vte-2.91/vte/vteterminal.h
 -rw-r--r--	root/root	usr/include/vte-2.91/vte/vtetypebuiltins-gtk3.h
 -rw-r--r--	root/root	usr/include/vte-2.91/vte/vtetypebuiltins.h
+-rw-r--r--	root/root	usr/include/vte-2.91/vte/vteuuid.h
 -rw-r--r--	root/root	usr/include/vte-2.91/vte/vteversion.h
 drwxr-xr-x	root/root	usr/lib/
 drwxr-xr-x	root/root	usr/lib/girepository-1.0/
@@ -40,8 +42,8 @@ drwxr-xr-x	root/root	usr/lib/girepository-1.0/
 lrwxrwxrwx	root/root	usr/lib/libvte-2.91-gtk4.so -> libvte-2.91-gtk4.so.0
 -rwxr-xr-x	root/root	usr/lib/libvte-2.91-gtk4.so.0
 lrwxrwxrwx	root/root	usr/lib/libvte-2.91.so -> libvte-2.91.so.0
-lrwxrwxrwx	root/root	usr/lib/libvte-2.91.so.0 -> libvte-2.91.so.0.7600.3
--rwxr-xr-x	root/root	usr/lib/libvte-2.91.so.0.7600.3
+lrwxrwxrwx	root/root	usr/lib/libvte-2.91.so.0 -> libvte-2.91.so.0.7800.1
+-rwxr-xr-x	root/root	usr/lib/libvte-2.91.so.0.7800.1
 drwxr-xr-x	root/root	usr/lib/pkgconfig/
 -rw-r--r--	root/root	usr/lib/pkgconfig/vte-2.91-gtk4.pc
 -rw-r--r--	root/root	usr/lib/pkgconfig/vte-2.91.pc

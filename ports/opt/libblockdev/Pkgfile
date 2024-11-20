@@ -5,22 +5,16 @@
 # Optional:    btrfs-progs gtk-doc mdadm parted volume_key targetcli
 
 name=libblockdev
-version=3.2.0
+version=3.2.1
 release=1
-source=(https://github.com/storaged-project/libblockdev/releases/download/3.2.0/$name-$version.tar.gz)
+source=(https://github.com/storaged-project/libblockdev/releases/download/$version/$name-$version.tar.gz)
+keep_libtool=1
+build_opt=" --sysconfdir=/etc  
+            --with-python3     
+            --without-escrow   
+            --without-gtk-doc  
+            --with-lvm      
+            --with-lvm_dbus 
+            --with-nvdimm   
+            --with-tools"
 
-build() {
-	cd $name-$version
-
-	./configure --prefix=/usr      \
-            --sysconfdir=/etc  \
-            --with-python3     \
-            --without-escrow   \
-            --without-gtk-doc  \
-            --with-lvm      \
-            --with-lvm_dbus \
-            --with-nvdimm   \
-            --with-tools    &&
-make
-	make DESTDIR=$PKG install
-}

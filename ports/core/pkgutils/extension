@@ -1,4 +1,11 @@
 # extra function for pkgmk
+if [ "$PKGMK_ARCH" = 32 ]; then
+        export PKG_CONFIG_LIBDIR="/usr/lib32/pkgconfig:/usr/share/pkgconfig"
+        export CC="${CC:-gcc} -m32"
+        export CXX="${CXX:-g++} -m32"
+else
+        unset PKGMK_ARCH
+fi
 
 # use these only if build() function not exist
 if [ ! "$(command -v build)" ]; then

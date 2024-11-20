@@ -5,12 +5,11 @@
 # Optional:  doxygen graphviz gnupg clisp qt5-alternate swig
 
 name=gpgme
-version=1.23.2
+version=1.24.0
 release=1
 source=(https://www.gnupg.org/ftp/gcrypt/$name/$name-$version.tar.bz2)
 
-build() {
-	cd $name-$version
+pkg_build() {
 
 	mkdir build &&
 cd    build &&

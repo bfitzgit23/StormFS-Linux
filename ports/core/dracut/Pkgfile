@@ -3,7 +3,7 @@
 # Maintainer: Matt Housh, jaeger at crux dot ninja
 # Depends on: cpio mkinitcpio-busybox
 name=dracut
-version=103
+version=105
 release=1
 source=(https://github.com/dracut-ng/dracut-ng/archive/$version/$name-$version.tar.gz
     https://crux.nu/files/$name-man-pages-$version.tar.xz)

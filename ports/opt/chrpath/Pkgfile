@@ -3,15 +3,18 @@
 # Maintainer: Juergen Daubert, jue at crux dot nu
 
 name=chrpath
-version=0.16
+version=0.18
 release=1
 source=(http://http.debian.net/debian/pool/main/c/chrpath/chrpath_$version.orig.tar.gz)
 
 build() {
-  cd $name-$version
-  ./configure --prefix=/usr \
-    --mandir=/usr/share/man
-  make
-  make DESTDIR=$PKG install
-  rm -fr $PKG/usr/doc
+	cd $name
+
+	./bootstrap
+	./configure --prefix=/usr
+	make
+	make DESTDIR=$PKG install
+
+	rm -r $PKG/usr/doc
 }
+

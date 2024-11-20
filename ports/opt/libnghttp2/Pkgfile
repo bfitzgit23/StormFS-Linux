@@ -4,7 +4,7 @@
 # Optional: libxml2 boost c-ares cython jansson libevent sphinx jemalloc libev mruby spdylay cUnit
 
 name=libnghttp2
-version=1.63.0
+version=1.64.0
 release=1
 source=(https://github.com/nghttp2/nghttp2/releases/download/v$version/nghttp2-$version.tar.xz)
 

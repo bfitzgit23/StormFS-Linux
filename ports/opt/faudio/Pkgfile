@@ -4,7 +4,7 @@
 # Depends on: dl2 gst-libav
 
 name=faudio
-version=24.09
+version=24.11
 release=1
 source=(https://github.com/FNA-XNA/FAudio/archive/$version/$name-$version.tar.gz)
 

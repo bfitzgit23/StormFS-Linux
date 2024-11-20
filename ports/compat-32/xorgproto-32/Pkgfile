@@ -6,10 +6,11 @@
 name=xorgproto-32
 version=2024.1
 release=1
-source=(https://xorg.freedesktop.org/archive/individual/proto/xorgproto-$version.tar.xz)
+source=(https://xorg.freedesktop.org/archive/individual/proto/xorgproto-$version.tar.xz
+cross-file.txt)
 
 build() {
-	meson setup xorgproto-$version build \
+	meson setup xorgproto-$version build --cross-file cross-file.txt \
 		--prefix=/usr \
 		--libdir=/usr/lib32 \
 		--datadir=/usr/lib32 \

@@ -4,7 +4,7 @@
 # Depends on: glib-32 gstreamer libcap-32 libgmp-32
 
 name=gstreamer-32
-version=1.24.8
+version=1.24.9
 release=1
 source=(https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-$version.tar.xz
 	x86-linux-gnu x86-linux-gnu-ccache)

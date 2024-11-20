@@ -1,19 +1,27 @@
 name=linux-pam
-version=1.6.1
+version=1.7.0
 release=1
-source=(https://github.com/$name/$name/releases/download/v$version/Linux-PAM-$version.tar.xz
-https://github.com/$name/$name/releases/download/v$version/Linux-PAM-$version-docs.tar.xz
+source=(https://github.com/linux-pam/linux-pam/releases/download/v$version/Linux-PAM-$version.tar.xz
+https://anduin.linuxfromscratch.org/BLFS/Linux-PAM/Linux-PAM-$version-docs.tar.xz
 	other
 	system-account
 	system-auth
 	system-password
 	system-session)
-build_opt="--libdir=/usr/lib
-	   --enable-securedir=/lib/security
-	   --docdir=/usr/share/doc/Linux-PAM-$version"
+build_opt="  	--prefix=/usr
+	        --buildtype=release
+                -D docdir=/usr/share/doc/Linux-PAM-$version
+		--sbindir=/sbin
+		--libdir=/lib
+		--buildtype=plain
+		--wrap-mode=nodownload
+		-D b_lto=true
+		-D b_pie=true
+		-D securedir=/lib/security \
+		-D pam_userdb=disabled \
+		-D docs=disabled"
 post_build() {
 	chmod -v 4755 $PKG/sbin/unix_chkpwd
-	
 	install -v -m755 -d $PKG/etc/pam.d
 	for i in other system-account system-auth system-password system-session; do
 		install -m644 $SRC/$i $PKG/etc/pam.d/$i

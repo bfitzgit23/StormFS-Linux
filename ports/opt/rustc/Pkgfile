@@ -6,7 +6,7 @@
 
 
 name=rustc
-version=1.81.0
+version=1.82.0
 release=1
 source=(https://static.rust-lang.org/dist/$name-$version-src.tar.xz)
 build() {
@@ -50,8 +50,8 @@ tools = ["cargo", "clippy", "rustdoc", "rustfmt"]
 vendor = true
 
 [install]
-prefix = "/opt/rustc-1.81.0"
-docdir = "share/doc/rustc-1.81.0"
+prefix = "/opt/rustc-1.82.0"
+docdir = "share/doc/rustc-1.82.0"
 
 [rust]
 channel = "stable"

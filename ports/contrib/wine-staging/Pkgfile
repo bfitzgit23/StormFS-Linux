@@ -1,0 +1,49 @@
+# Description: WINE with staging patches
+# URL: https://wiki.winehq.org/Wine-Staging
+# Maintainer: Matt Housh, jaeger at crux dot ninja
+# Depends on: fontconfig-32 freeglut-32 gnutls-32 lcms2-32 mpg123-32 openal-32 libXcomposite-32 libXcursor-32 libXinerama-32 libXrandr-32  vkd3d-32 mingw-w64-gcc libgcrypt-32
+
+# GECKO_VERSION: 2.47.4
+# MONO_VERSION:  9.3.0
+
+name=wine-staging
+version=9.21
+release=1
+source=(https://dl.winehq.org/wine/source/9.x/wine-$version.tar.xz \
+    https://github.com/$name/$name/archive/v$version/$name-$version.tar.gz \
+    https://dl.winehq.org/wine/wine-gecko/2.47.4/wine-gecko-2.47.4-x86.msi \
+    https://dl.winehq.org/wine/wine-gecko/2.47.4/wine-gecko-2.47.4-x86_64.msi \
+    https://dl.winehq.org/wine/wine-mono/9.3.0/wine-mono-9.3.0-x86.msi)
+
+build() {
+    cd $name-$version
+    ./staging/patchinstall.py DESTDIR=../wine-$version --all -W server-Stored_ACLs
+    cd ..
+
+    export CPPFLAGS="${CPPFLAGS/-D_FORTIFY_SOURCE=2/} -D_FORTIFY_SOURCE=0"
+
+    install -d wine64
+    cd wine64
+    ../wine-$version/configure \
+        --prefix=/usr \
+        --libdir=/usr/lib \
+        --enable-win64 \
+        --enable-archs=i386,x86_64
+    make depend
+    make
+    make DESTDIR=$PKG install
+
+    install -d $PKG/usr/share/wine/gecko
+    install -d $PKG/usr/share/wine/mono
+
+    install -t $PKG/usr/share/wine/gecko/ \
+        $SRC/wine-gecko-2.47.4-x86.msi \
+        $SRC/wine-gecko-2.47.4-x86_64.msi
+
+    install $SRC/wine-mono-9.3.0-x86.msi $PKG/usr/share/wine/mono/
+
+    rm -r $PKG/usr/share/man/??.UTF-8
+
+    install -d $PKG/etc/revdep.d
+    echo -e "/usr/lib/wine/x86_64-unix\n" > $PKG/etc/revdep.d/$name
+}

@@ -16,7 +16,7 @@ build() {
 	CFLAGS="-DSQLITE_SECURE_DELETE=1 -DSQLITE_ENABLE_COLUMN_METADATA=1 \
 		-DSQLITE_ENABLE_UNLOCK_NOTIFY=1 -DSQLITE_ENABLE_DBSTAT_VTAB=1 \
 		-DSQLITE_ENABLE_FTS3=1 $CFLAGS" \
-	./configure --prefix=/usr --libdir=/usr/lib32 --enable-readline
+	./configure --host=i686-pc-linux-gnu --prefix=/usr --libdir=/usr/lib32 --enable-readline
 
 	make
 	make DESTDIR=$PKG install

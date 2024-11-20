@@ -15,6 +15,7 @@ build() {
 	sed -i '/^Libs:/s/-ludev/-ludev -lrt/' src/libudev/libudev.pc.in
 
 	./configure --prefix=/usr \
+	    --host=x86_64-pc-linux-gnux32 \
 		--libdir=/usr/lib32 \
 		--sbindir=/sbin --bindir=/sbin \
 		--sysconfdir=/etc \

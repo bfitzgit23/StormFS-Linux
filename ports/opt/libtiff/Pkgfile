@@ -4,7 +4,7 @@
 # Depends on: libjpeg-turbo zlib
 # Optional: freeglut libjpeg-turbo sphinx libwebp JBIG-KITLERC
 name=libtiff
-version=4.6.0
+version=4.7.0
 release=1
 source=(http://download.osgeo.org/libtiff/tiff-$version.tar.gz)
 

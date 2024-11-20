@@ -3,7 +3,7 @@
 # Maintainer: CRUX System Team, core-ports at crux dot nu
 
 name=libgpg-error
-version=1.50
+version=1.51
 release=1
 source=(https://www.gnupg.org/ftp/gcrypt/$name/$name-$version.tar.bz2)
 

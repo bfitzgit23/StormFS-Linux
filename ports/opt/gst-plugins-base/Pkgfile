@@ -5,7 +5,7 @@
 # Optional: alsa-lib cdparanoia-iii gobject-introspection ISO codes libgudev libjpeg-turbo libogg libpng libtheora libvorbis mesa pango wayland-protocols xorg-libs graphene gtk3 opus qt5-alternate sdl2 valgrind hotdoc libvisual orc tremor
 
 name=gst-plugins-base
-version=1.24.8
+version=1.24.9
 release=1
 source=(https://gstreamer.freedesktop.org/src/$name/$name-$version.tar.xz)
 

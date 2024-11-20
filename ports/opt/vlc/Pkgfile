@@ -6,15 +6,15 @@ release=1
 source=(https://download.videolan.org/$name/$version/$name-$version.tar.xz
 vlc-3.0.21-fedora_ffmpeg7-1.patch
 vlc-3.0.21-taglib-1.patch)
-build_opt="--disable-lua --disable-libplacebo"
+build_opt="--enable-lua --enable-qt --enable-wayland --disable-libplacebo"
 
 pre_build() {
 	export LUAC=/usr/bin/luac5.2                   &&
 export LUA_LIBS="$(pkg-config --libs lua52)"   &&
 export CPPFLAGS="$(pkg-config --cflags lua52)"
 }
-pre_build() {
-BUILDCC=gcc ./configure --prefix=/usr --disable-libplacebo  &&
-make
-make DESTDIR=$PKG install
-}
+#pre_build() {
+#BUILDCC=gcc ./configure --prefix=/usr --disable-libplacebo  &&
+#make
+#make DESTDIR=$PKG install
+#}

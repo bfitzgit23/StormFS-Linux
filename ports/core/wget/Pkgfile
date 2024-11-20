@@ -4,7 +4,7 @@
 # Depends on:  libpsl make-ca
 
 name=wget
-version=1.24.5
+version=1.25.0
 release=1
 source=(https://ftp.gnu.org/gnu/$name/$name-$version.tar.gz)
 

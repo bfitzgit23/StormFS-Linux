@@ -3,7 +3,7 @@
 # Maintainer:  Emmett1, emmett1 dot 2miligrams at gmail dot com
 
 name=libnl
-version=3.8.0
+version=3.11.0
 release=1
 source=(https://github.com/thom311/libnl/releases/download/libnl${version//./_}/libnl-$version.tar.gz)
 

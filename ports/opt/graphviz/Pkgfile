@@ -5,12 +5,12 @@
 # Optional: ghostscript gtk libgd librsvg libxrender pango poppler swig tcl
 
 name=graphviz
-version=12.1.0
+version=12.2.0
 release=1
 source=(https://gitlab.com/graphviz/graphviz/-/archive/$version/$name-$version.tar.bz2)
 
-build() {
-	cd $name-$version
+pkg_build() {
+	
 awk -i inplace '/aghtmlstr/ && ++f == 2 {getline} 1' \
     lib/cgraph/cgraph.h
 	sed -i '/LIBPOSTFIX="64"/s/64//' configure.ac &&

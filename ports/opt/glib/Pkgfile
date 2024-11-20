@@ -15,7 +15,7 @@ pkg_build() {
 
 mkdir build &&
 cd    build &&
-prt-get isinst gobject-introspection && PKGMK_INTROSPECTION=' -D introspection=disabled'
+prt-get isinst gobject-introspection && PKGMK_INTROSPECTION=' -D introspection=enabled'
 meson setup ..                  \
             --prefix=/usr             \
       --buildtype=release       \

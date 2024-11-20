@@ -23,7 +23,6 @@ drwxr-xr-x	root/root	usr/lib32/cmake/llvm/
 -rw-r--r--	root/root	usr/lib32/cmake/llvm/FindLibpfm.cmake
 -rw-r--r--	root/root	usr/lib32/cmake/llvm/FindOCaml.cmake
 -rw-r--r--	root/root	usr/lib32/cmake/llvm/FindSphinx.cmake
--rw-r--r--	root/root	usr/lib32/cmake/llvm/FindTerminfo.cmake
 -rw-r--r--	root/root	usr/lib32/cmake/llvm/FindZ3.cmake
 -rw-r--r--	root/root	usr/lib32/cmake/llvm/Findzstd.cmake
 -rw-r--r--	root/root	usr/lib32/cmake/llvm/GenerateVersionFromVCS.cmake
@@ -48,9 +47,9 @@ drwxr-xr-x	root/root	usr/lib32/cmake/llvm/
 -rw-r--r--	root/root	usr/lib32/cmake/llvm/UseLibtool.cmake
 -rw-r--r--	root/root	usr/lib32/cmake/llvm/VersionFromVCS.cmake
 -rw-r--r--	root/root	usr/lib32/cmake/llvm/llvm-driver-template.cpp.in
-lrwxrwxrwx	root/root	usr/lib32/libLLVM-18.so -> libLLVM.so.18.1
-lrwxrwxrwx	root/root	usr/lib32/libLLVM.so -> libLLVM.so.18.1
--rwxr-xr-x	root/root	usr/lib32/libLLVM.so.18.1
+lrwxrwxrwx	root/root	usr/lib32/libLLVM-19.so -> libLLVM.so.19.1
+lrwxrwxrwx	root/root	usr/lib32/libLLVM.so -> libLLVM.so.19.1
+-rwxr-xr-x	root/root	usr/lib32/libLLVM.so.19.1
 -rw-r--r--	root/root	usr/lib32/libLLVMAArch64AsmParser.a
 -rw-r--r--	root/root	usr/lib32/libLLVMAArch64CodeGen.a
 -rw-r--r--	root/root	usr/lib32/libLLVMAArch64Desc.a
@@ -91,6 +90,7 @@ lrwxrwxrwx	root/root	usr/lib32/libLLVM.so -> libLLVM.so.18.1
 -rw-r--r--	root/root	usr/lib32/libLLVMCFGuard.a
 -rw-r--r--	root/root	usr/lib32/libLLVMCFIVerify.a
 -rw-r--r--	root/root	usr/lib32/libLLVMCodeGen.a
+-rw-r--r--	root/root	usr/lib32/libLLVMCodeGenData.a
 -rw-r--r--	root/root	usr/lib32/libLLVMCodeGenTypes.a
 -rw-r--r--	root/root	usr/lib32/libLLVMCore.a
 -rw-r--r--	root/root	usr/lib32/libLLVMCoroutines.a
@@ -176,6 +176,7 @@ lrwxrwxrwx	root/root	usr/lib32/libLLVM.so -> libLLVM.so.18.1
 -rw-r--r--	root/root	usr/lib32/libLLVMObjCopy.a
 -rw-r--r--	root/root	usr/lib32/libLLVMObject.a
 -rw-r--r--	root/root	usr/lib32/libLLVMObjectYAML.a
+-rw-r--r--	root/root	usr/lib32/libLLVMOptDriver.a
 -rw-r--r--	root/root	usr/lib32/libLLVMOption.a
 -rw-r--r--	root/root	usr/lib32/libLLVMOrcDebugging.a
 -rw-r--r--	root/root	usr/lib32/libLLVMOrcJIT.a
@@ -196,6 +197,7 @@ lrwxrwxrwx	root/root	usr/lib32/libLLVM.so -> libLLVM.so.18.1
 -rw-r--r--	root/root	usr/lib32/libLLVMRISCVTargetMCA.a
 -rw-r--r--	root/root	usr/lib32/libLLVMRemarks.a
 -rw-r--r--	root/root	usr/lib32/libLLVMRuntimeDyld.a
+-rw-r--r--	root/root	usr/lib32/libLLVMSandboxIR.a
 -rw-r--r--	root/root	usr/lib32/libLLVMScalarOpts.a
 -rw-r--r--	root/root	usr/lib32/libLLVMSelectionDAG.a
 -rw-r--r--	root/root	usr/lib32/libLLVMSparcAsmParser.a
@@ -211,8 +213,8 @@ lrwxrwxrwx	root/root	usr/lib32/libLLVM.so -> libLLVM.so.18.1
 -rw-r--r--	root/root	usr/lib32/libLLVMSystemZDisassembler.a
 -rw-r--r--	root/root	usr/lib32/libLLVMSystemZInfo.a
 -rw-r--r--	root/root	usr/lib32/libLLVMTableGen.a
+-rw-r--r--	root/root	usr/lib32/libLLVMTableGenBasic.a
 -rw-r--r--	root/root	usr/lib32/libLLVMTableGenCommon.a
--rw-r--r--	root/root	usr/lib32/libLLVMTableGenGlobalISel.a
 -rw-r--r--	root/root	usr/lib32/libLLVMTarget.a
 -rw-r--r--	root/root	usr/lib32/libLLVMTargetParser.a
 -rw-r--r--	root/root	usr/lib32/libLLVMTextAPI.a
@@ -244,8 +246,8 @@ lrwxrwxrwx	root/root	usr/lib32/libLLVM.so -> libLLVM.so.18.1
 -rw-r--r--	root/root	usr/lib32/libLLVMXCoreInfo.a
 -rw-r--r--	root/root	usr/lib32/libLLVMXRay.a
 -rw-r--r--	root/root	usr/lib32/libLLVMipo.a
-lrwxrwxrwx	root/root	usr/lib32/libLTO.so -> libLTO.so.18.1
--rwxr-xr-x	root/root	usr/lib32/libLTO.so.18.1
-lrwxrwxrwx	root/root	usr/lib32/libRemarks.so -> libRemarks.so.18.1
--rwxr-xr-x	root/root	usr/lib32/libRemarks.so.18.1
+lrwxrwxrwx	root/root	usr/lib32/libLTO.so -> libLTO.so.19.1
+-rwxr-xr-x	root/root	usr/lib32/libLTO.so.19.1
+lrwxrwxrwx	root/root	usr/lib32/libRemarks.so -> libRemarks.so.19.1
+-rwxr-xr-x	root/root	usr/lib32/libRemarks.so.19.1
 drwxr-xr-x	root/root	usr/share/

@@ -5,9 +5,9 @@
 # Optional: texlive
 
 name=libunwind
-version=1.6.2
+version=1.8.1
 release=1
-source=(https://download.savannah.nongnu.org/releases/libunwind/$name-$version.tar.gz)
+source=(https://github.com/libunwind/$name/releases/download/v$version/$name-$version.tar.gz)
 
 build() {
 	cd $name-$version

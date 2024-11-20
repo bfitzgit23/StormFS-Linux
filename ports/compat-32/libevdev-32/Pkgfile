@@ -3,13 +3,14 @@
 # Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
 # Depends on: libevdev
 
-name=xorg-libevdev-32
+name=libevdev-32
 version=1.13.3
 release=1
-source=(https://www.freedesktop.org/software/libevdev/libevdev-$version.tar.xz)
+source=(https://www.freedesktop.org/software/libevdev/libevdev-$version.tar.xz
+cross-file.txt)
 
 build() {
-	meson setup build libevdev-$version \
+	meson setup build libevdev-$version --cross-file cross-file.txt \
 		--prefix=/usr \
 		--libdir=/usr/lib32 \
 		--buildtype=plain \

@@ -14,6 +14,7 @@ build() {
 	autoreconf -fi
 
 	./configure \
+	    --host=i686-pc-linux-gnu      \
 		--prefix=/usr \
 		--libdir=/usr/lib32 \
 		--disable-padlock-support \

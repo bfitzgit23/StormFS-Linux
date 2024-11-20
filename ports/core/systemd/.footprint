@@ -11,15 +11,15 @@ drwxr-xr-x	root/root	etc/init.d/
 drwxr-xr-x	root/root	etc/kernel/
 drwxr-xr-x	root/root	etc/kernel/install.d/
 drwxr-xr-x	root/root	etc/modules-load.d/
+drwxr-xr-x	root/root	etc/pam.d/
+-rw-r--r--	root/root	etc/pam.d/systemd-run0
+-rw-r--r--	root/root	etc/pam.d/systemd-user
 drwxr-xr-x	root/root	etc/ssh/
 drwxr-xr-x	root/root	etc/ssh/ssh_config.d/
 lrwxrwxrwx	root/root	etc/ssh/ssh_config.d/20-systemd-ssh-proxy.conf -> ../../../usr/lib/systemd/ssh_config.d/20-systemd-ssh-proxy.conf
-drwxr-xr-x	root/root	etc/ssh/sshd_config.d/
-lrwxrwxrwx	root/root	etc/ssh/sshd_config.d/20-systemd-userdb.conf -> ../../../usr/lib/systemd/sshd_config.d/20-systemd-userdb.conf
 drwxr-xr-x	root/root	etc/sysctl.d/
 drwxr-xr-x	root/root	etc/systemd/
 -rw-r--r--	root/root	etc/systemd/coredump.conf
--rw-r--r--	root/root	etc/systemd/homed.conf
 -rw-r--r--	root/root	etc/systemd/journal-upload.conf
 -rw-r--r--	root/root	etc/systemd/journald.conf
 -rw-r--r--	root/root	etc/systemd/logind.conf
@@ -48,7 +48,6 @@ drwxr-xr-x	root/root	usr/bin/
 -rwxr-xr-x	root/root	usr/bin/bootctl
 -rwxr-xr-x	root/root	usr/bin/busctl
 -rwxr-xr-x	root/root	usr/bin/coredumpctl
--rwxr-xr-x	root/root	usr/bin/homectl
 -rwxr-xr-x	root/root	usr/bin/hostnamectl
 -rwxr-xr-x	root/root	usr/bin/importctl
 -rwxr-xr-x	root/root	usr/bin/journalctl
@@ -76,8 +75,6 @@ lrwxrwxrwx	root/root	usr/bin/systemd-confext -> systemd-sysext
 -rwxr-xr-x	root/root	usr/bin/systemd-detect-virt
 -rwxr-xr-x	root/root	usr/bin/systemd-dissect
 -rwxr-xr-x	root/root	usr/bin/systemd-escape
--rwxr-xr-x	root/root	usr/bin/systemd-firstboot
-lrwxrwxrwx	root/root	usr/bin/systemd-home-fallback-shell -> homectl
 -rwxr-xr-x	root/root	usr/bin/systemd-hwdb
 -rwxr-xr-x	root/root	usr/bin/systemd-id128
 -rwxr-xr-x	root/root	usr/bin/systemd-inhibit
@@ -92,15 +89,12 @@ lrwxrwxrwx	root/root	usr/bin/systemd-resolve -> resolvectl
 -rwxr-xr-x	root/root	usr/bin/systemd-socket-activate
 -rwxr-xr-x	root/root	usr/bin/systemd-stdio-bridge
 -rwxr-xr-x	root/root	usr/bin/systemd-sysext
--rwxr-xr-x	root/root	usr/bin/systemd-sysusers
 -rwxr-xr-x	root/root	usr/bin/systemd-tmpfiles
 -rwxr-xr-x	root/root	usr/bin/systemd-tty-ask-password-agent
 lrwxrwxrwx	root/root	usr/bin/systemd-umount -> systemd-mount
--rwxr-xr-x	root/root	usr/bin/systemd-vmspawn
 -rwxr-xr-x	root/root	usr/bin/systemd-vpick
 -rwxr-xr-x	root/root	usr/bin/timedatectl
 -rwxr-xr-x	root/root	usr/bin/udevadm
--rwxr-xr-x	root/root	usr/bin/userdbctl
 -rwxr-xr-x	root/root	usr/bin/varlinkctl
 drwxr-xr-x	root/root	usr/include/
 -rw-r--r--	root/root	usr/include/libudev.h
@@ -146,18 +140,11 @@ drwxr-xr-x	root/root	usr/lib/modprobe.d/
 -rw-r--r--	root/root	usr/lib/modprobe.d/README
 -rw-r--r--	root/root	usr/lib/modprobe.d/systemd.conf
 drwxr-xr-x	root/root	usr/lib/modules-load.d/
-drwxr-xr-x	root/root	usr/lib/pam.d/
--rw-r--r--	root/root	usr/lib/pam.d/systemd-run0
--rw-r--r--	root/root	usr/lib/pam.d/systemd-user
 drwxr-xr-x	root/root	usr/lib/pkgconfig/
 -rw-r--r--	root/root	usr/lib/pkgconfig/libsystemd.pc
 -rw-r--r--	root/root	usr/lib/pkgconfig/libudev.pc
-drwxr-xr-x	root/root	usr/lib/rpm/
-drwxr-xr-x	root/root	usr/lib/rpm/macros.d/
--rw-r--r--	root/root	usr/lib/rpm/macros.d/macros.systemd
 drwxr-xr-x	root/root	usr/lib/security/
 -rwxr-xr-x	root/root	usr/lib/security/pam_systemd.so
--rwxr-xr-x	root/root	usr/lib/security/pam_systemd_home.so
 -rwxr-xr-x	root/root	usr/lib/security/pam_systemd_loadkey.so
 drwxr-xr-x	root/root	usr/lib/sysctl.d/
 -rw-r--r--	root/root	usr/lib/sysctl.d/50-coredump.conf
@@ -236,8 +223,6 @@ drwxr-xr-x	root/root	usr/lib/systemd/repart/definitions/sysext.repart.d/
 -rw-r--r--	root/root	usr/lib/systemd/resolv.conf
 drwxr-xr-x	root/root	usr/lib/systemd/ssh_config.d/
 -rw-r--r--	root/root	usr/lib/systemd/ssh_config.d/20-systemd-ssh-proxy.conf
-drwxr-xr-x	root/root	usr/lib/systemd/sshd_config.d/
--rw-r--r--	root/root	usr/lib/systemd/sshd_config.d/20-systemd-userdb.conf
 drwxr-xr-x	root/root	usr/lib/systemd/system-generators/
 -rwxr-xr-x	root/root	usr/lib/systemd/system-generators/systemd-cryptsetup-generator
 -rwxr-xr-x	root/root	usr/lib/systemd/system-generators/systemd-debug-generator
@@ -318,7 +303,6 @@ lrwxrwxrwx	root/root	usr/lib/systemd/system/initrd.target.wants/systemd-bsod.ser
 -rw-r--r--	root/root	usr/lib/systemd/system/integritysetup.target
 -rw-r--r--	root/root	usr/lib/systemd/system/kexec.target
 -rw-r--r--	root/root	usr/lib/systemd/system/kmod-static-nodes.service
--rw-r--r--	root/root	usr/lib/systemd/system/ldconfig.service
 -rw-r--r--	root/root	usr/lib/systemd/system/local-fs-pre.target
 -rw-r--r--	root/root	usr/lib/systemd/system/local-fs.target
 drwxr-xr-x	root/root	usr/lib/systemd/system/local-fs.target.wants/
@@ -407,7 +391,6 @@ lrwxrwxrwx	root/root	usr/lib/systemd/system/sysinit.target.wants/dev-hugepages.m
 lrwxrwxrwx	root/root	usr/lib/systemd/system/sysinit.target.wants/dev-mqueue.mount -> ../dev-mqueue.mount
 lrwxrwxrwx	root/root	usr/lib/systemd/system/sysinit.target.wants/integritysetup.target -> ../integritysetup.target
 lrwxrwxrwx	root/root	usr/lib/systemd/system/sysinit.target.wants/kmod-static-nodes.service -> ../kmod-static-nodes.service
-lrwxrwxrwx	root/root	usr/lib/systemd/system/sysinit.target.wants/ldconfig.service -> ../ldconfig.service
 lrwxrwxrwx	root/root	usr/lib/systemd/system/sysinit.target.wants/proc-sys-fs-binfmt_misc.automount -> ../proc-sys-fs-binfmt_misc.automount
 lrwxrwxrwx	root/root	usr/lib/systemd/system/sysinit.target.wants/sys-fs-fuse-connections.mount -> ../sys-fs-fuse-connections.mount
 lrwxrwxrwx	root/root	usr/lib/systemd/system/sysinit.target.wants/sys-kernel-config.mount -> ../sys-kernel-config.mount
@@ -415,7 +398,6 @@ lrwxrwxrwx	root/root	usr/lib/systemd/system/sysinit.target.wants/sys-kernel-debu
 lrwxrwxrwx	root/root	usr/lib/systemd/system/sysinit.target.wants/sys-kernel-tracing.mount -> ../sys-kernel-tracing.mount
 lrwxrwxrwx	root/root	usr/lib/systemd/system/sysinit.target.wants/systemd-ask-password-console.path -> ../systemd-ask-password-console.path
 lrwxrwxrwx	root/root	usr/lib/systemd/system/sysinit.target.wants/systemd-binfmt.service -> ../systemd-binfmt.service
-lrwxrwxrwx	root/root	usr/lib/systemd/system/sysinit.target.wants/systemd-firstboot.service -> ../systemd-firstboot.service
 lrwxrwxrwx	root/root	usr/lib/systemd/system/sysinit.target.wants/systemd-hibernate-clear.service -> ../systemd-hibernate-clear.service
 lrwxrwxrwx	root/root	usr/lib/systemd/system/sysinit.target.wants/systemd-hwdb-update.service -> ../systemd-hwdb-update.service
 lrwxrwxrwx	root/root	usr/lib/systemd/system/sysinit.target.wants/systemd-journal-catalog-update.service -> ../systemd-journal-catalog-update.service
@@ -426,7 +408,6 @@ lrwxrwxrwx	root/root	usr/lib/systemd/system/sysinit.target.wants/systemd-modules
 lrwxrwxrwx	root/root	usr/lib/systemd/system/sysinit.target.wants/systemd-random-seed.service -> ../systemd-random-seed.service
 lrwxrwxrwx	root/root	usr/lib/systemd/system/sysinit.target.wants/systemd-repart.service -> ../systemd-repart.service
 lrwxrwxrwx	root/root	usr/lib/systemd/system/sysinit.target.wants/systemd-sysctl.service -> ../systemd-sysctl.service
-lrwxrwxrwx	root/root	usr/lib/systemd/system/sysinit.target.wants/systemd-sysusers.service -> ../systemd-sysusers.service
 lrwxrwxrwx	root/root	usr/lib/systemd/system/sysinit.target.wants/systemd-tmpfiles-setup-dev-early.service -> ../systemd-tmpfiles-setup-dev-early.service
 lrwxrwxrwx	root/root	usr/lib/systemd/system/sysinit.target.wants/systemd-tmpfiles-setup-dev.service -> ../systemd-tmpfiles-setup-dev.service
 lrwxrwxrwx	root/root	usr/lib/systemd/system/sysinit.target.wants/systemd-tmpfiles-setup.service -> ../systemd-tmpfiles-setup.service
@@ -456,7 +437,6 @@ lrwxrwxrwx	root/root	usr/lib/systemd/system/sysinit.target.wants/veritysetup.tar
 -rw-r--r--	root/root	usr/lib/systemd/system/systemd-creds.socket
 -rw-r--r--	root/root	usr/lib/systemd/system/systemd-creds@.service
 -rw-r--r--	root/root	usr/lib/systemd/system/systemd-exit.service
--rw-r--r--	root/root	usr/lib/systemd/system/systemd-firstboot.service
 -rw-r--r--	root/root	usr/lib/systemd/system/systemd-fsck-root.service
 -rw-r--r--	root/root	usr/lib/systemd/system/systemd-fsck@.service
 -rw-r--r--	root/root	usr/lib/systemd/system/systemd-growfs-root.service
@@ -465,9 +445,6 @@ lrwxrwxrwx	root/root	usr/lib/systemd/system/sysinit.target.wants/veritysetup.tar
 -rw-r--r--	root/root	usr/lib/systemd/system/systemd-hibernate-clear.service
 -rw-r--r--	root/root	usr/lib/systemd/system/systemd-hibernate-resume.service
 -rw-r--r--	root/root	usr/lib/systemd/system/systemd-hibernate.service
--rw-r--r--	root/root	usr/lib/systemd/system/systemd-homed-activate.service
--rw-r--r--	root/root	usr/lib/systemd/system/systemd-homed-firstboot.service
--rw-r--r--	root/root	usr/lib/systemd/system/systemd-homed.service
 -rw-r--r--	root/root	usr/lib/systemd/system/systemd-hostnamed.service
 -rw-r--r--	root/root	usr/lib/systemd/system/systemd-hostnamed.socket
 -rw-r--r--	root/root	usr/lib/systemd/system/systemd-hwdb-update.service
@@ -525,11 +502,6 @@ lrwxrwxrwx	root/root	usr/lib/systemd/system/sysinit.target.wants/veritysetup.tar
 -rw-r--r--	root/root	usr/lib/systemd/system/systemd-sysext.service
 -rw-r--r--	root/root	usr/lib/systemd/system/systemd-sysext.socket
 -rw-r--r--	root/root	usr/lib/systemd/system/systemd-sysext@.service
--rw-r--r--	root/root	usr/lib/systemd/system/systemd-sysupdate-reboot.service
--rw-r--r--	root/root	usr/lib/systemd/system/systemd-sysupdate-reboot.timer
--rw-r--r--	root/root	usr/lib/systemd/system/systemd-sysupdate.service
--rw-r--r--	root/root	usr/lib/systemd/system/systemd-sysupdate.timer
--rw-r--r--	root/root	usr/lib/systemd/system/systemd-sysusers.service
 -rw-r--r--	root/root	usr/lib/systemd/system/systemd-time-wait-sync.service
 -rw-r--r--	root/root	usr/lib/systemd/system/systemd-timedated.service
 -rw-r--r--	root/root	usr/lib/systemd/system/systemd-timesyncd.service
@@ -548,10 +520,7 @@ lrwxrwxrwx	root/root	usr/lib/systemd/system/sysinit.target.wants/veritysetup.tar
 -rw-r--r--	root/root	usr/lib/systemd/system/systemd-update-utmp-runlevel.service
 -rw-r--r--	root/root	usr/lib/systemd/system/systemd-update-utmp.service
 -rw-r--r--	root/root	usr/lib/systemd/system/systemd-user-sessions.service
--rw-r--r--	root/root	usr/lib/systemd/system/systemd-userdbd.service
--rw-r--r--	root/root	usr/lib/systemd/system/systemd-userdbd.socket
 -rw-r--r--	root/root	usr/lib/systemd/system/systemd-vconsole-setup.service
--rw-r--r--	root/root	usr/lib/systemd/system/systemd-vmspawn@.service
 -rw-r--r--	root/root	usr/lib/systemd/system/systemd-volatile-root.service
 -rw-r--r--	root/root	usr/lib/systemd/system/time-set.target
 -rw-r--r--	root/root	usr/lib/systemd/system/time-sync.target
@@ -588,8 +557,6 @@ lrwxrwxrwx	root/root	usr/lib/systemd/systemd-cryptsetup -> ../../bin/systemd-cry
 -rwxr-xr-x	root/root	usr/lib/systemd/systemd-fsck
 -rwxr-xr-x	root/root	usr/lib/systemd/systemd-growfs
 -rwxr-xr-x	root/root	usr/lib/systemd/systemd-hibernate-resume
--rwxr-xr-x	root/root	usr/lib/systemd/systemd-homed
--rwxr-xr-x	root/root	usr/lib/systemd/systemd-homework
 -rwxr-xr-x	root/root	usr/lib/systemd/systemd-hostnamed
 -rwxr-xr-x	root/root	usr/lib/systemd/systemd-import
 -rwxr-xr-x	root/root	usr/lib/systemd/systemd-import-fs
@@ -628,18 +595,14 @@ lrwxrwxrwx	root/root	usr/lib/systemd/systemd-cryptsetup -> ../../bin/systemd-cry
 -rwxr-xr-x	root/root	usr/lib/systemd/systemd-sulogin-shell
 -rwxr-xr-x	root/root	usr/lib/systemd/systemd-sysctl
 lrwxrwxrwx	root/root	usr/lib/systemd/systemd-sysroot-fstab-check -> system-generators/systemd-fstab-generator
--rwxr-xr-x	root/root	usr/lib/systemd/systemd-sysupdate
 -rwxr-xr-x	root/root	usr/lib/systemd/systemd-time-wait-sync
 -rwxr-xr-x	root/root	usr/lib/systemd/systemd-timedated
 -rwxr-xr-x	root/root	usr/lib/systemd/systemd-timesyncd
 lrwxrwxrwx	root/root	usr/lib/systemd/systemd-udevd -> ../../bin/udevadm
 -rwxr-xr-x	root/root	usr/lib/systemd/systemd-update-done
--rwxr-xr-x	root/root	usr/lib/systemd/systemd-update-helper
 -rwxr-xr-x	root/root	usr/lib/systemd/systemd-update-utmp
 -rwxr-xr-x	root/root	usr/lib/systemd/systemd-user-runtime-dir
 -rwxr-xr-x	root/root	usr/lib/systemd/systemd-user-sessions
--rwxr-xr-x	root/root	usr/lib/systemd/systemd-userdbd
--rwxr-xr-x	root/root	usr/lib/systemd/systemd-userwork
 -rwxr-xr-x	root/root	usr/lib/systemd/systemd-vconsole-setup
 -rwxr-xr-x	root/root	usr/lib/systemd/systemd-veritysetup
 -rwxr-xr-x	root/root	usr/lib/systemd/systemd-volatile-root
@@ -673,18 +636,8 @@ drwxr-xr-x	root/root	usr/lib/systemd/user/
 -rw-r--r--	root/root	usr/lib/systemd/user/systemd-tmpfiles-setup.service
 -rw-r--r--	root/root	usr/lib/systemd/user/timers.target
 -rw-r--r--	root/root	usr/lib/systemd/user/xdg-desktop-autostart.target
-drwxr-xr-x	root/root	usr/lib/sysusers.d/
--rw-r--r--	root/root	usr/lib/sysusers.d/README
--rw-r--r--	root/root	usr/lib/sysusers.d/basic.conf
--rw-r--r--	root/root	usr/lib/sysusers.d/systemd-coredump.conf
--rw-r--r--	root/root	usr/lib/sysusers.d/systemd-journal.conf
--rw-r--r--	root/root	usr/lib/sysusers.d/systemd-network.conf
--rw-r--r--	root/root	usr/lib/sysusers.d/systemd-oom.conf
--rw-r--r--	root/root	usr/lib/sysusers.d/systemd-resolve.conf
--rw-r--r--	root/root	usr/lib/sysusers.d/systemd-timesync.conf
 drwxr-xr-x	root/root	usr/lib/tmpfiles.d/
 -rw-r--r--	root/root	usr/lib/tmpfiles.d/20-systemd-ssh-generator.conf
--rw-r--r--	root/root	usr/lib/tmpfiles.d/20-systemd-userdb.conf
 -rw-r--r--	root/root	usr/lib/tmpfiles.d/README
 -rw-r--r--	root/root	usr/lib/tmpfiles.d/credstore.conf
 -rw-r--r--	root/root	usr/lib/tmpfiles.d/etc.conf
@@ -801,7 +754,6 @@ drwxr-xr-x	root/root	usr/share/bash-completion/completions/
 -rw-r--r--	root/root	usr/share/bash-completion/completions/bootctl
 -rw-r--r--	root/root	usr/share/bash-completion/completions/busctl
 -rw-r--r--	root/root	usr/share/bash-completion/completions/coredumpctl
--rw-r--r--	root/root	usr/share/bash-completion/completions/homectl
 -rw-r--r--	root/root	usr/share/bash-completion/completions/hostnamectl
 -rw-r--r--	root/root	usr/share/bash-completion/completions/importctl
 -rw-r--r--	root/root	usr/share/bash-completion/completions/journalctl
@@ -830,15 +782,12 @@ drwxr-xr-x	root/root	usr/share/bash-completion/completions/
 -rw-r--r--	root/root	usr/share/bash-completion/completions/systemd-resolve
 -rw-r--r--	root/root	usr/share/bash-completion/completions/systemd-run
 -rw-r--r--	root/root	usr/share/bash-completion/completions/systemd-sysext
--rw-r--r--	root/root	usr/share/bash-completion/completions/systemd-vmspawn
 -rw-r--r--	root/root	usr/share/bash-completion/completions/systemd-vpick
 -rw-r--r--	root/root	usr/share/bash-completion/completions/timedatectl
 -rw-r--r--	root/root	usr/share/bash-completion/completions/udevadm
 drwxr-xr-x	root/root	usr/share/dbus-1/
 drwxr-xr-x	root/root	usr/share/dbus-1/interfaces/
 -rw-r--r--	root/root	usr/share/dbus-1/interfaces/org.freedesktop.LogControl1.xml
--rw-r--r--	root/root	usr/share/dbus-1/interfaces/org.freedesktop.home1.Home.xml
--rw-r--r--	root/root	usr/share/dbus-1/interfaces/org.freedesktop.home1.Manager.xml
 -rw-r--r--	root/root	usr/share/dbus-1/interfaces/org.freedesktop.hostname1.xml
 -rw-r--r--	root/root	usr/share/dbus-1/interfaces/org.freedesktop.import1.Manager.xml
 -rw-r--r--	root/root	usr/share/dbus-1/interfaces/org.freedesktop.import1.Transfer.xml
@@ -880,7 +829,6 @@ drwxr-xr-x	root/root	usr/share/dbus-1/interfaces/
 drwxr-xr-x	root/root	usr/share/dbus-1/services/
 lrwxrwxrwx	root/root	usr/share/dbus-1/services/org.freedesktop.systemd1.service -> ../system-services/org.freedesktop.systemd1.service
 drwxr-xr-x	root/root	usr/share/dbus-1/system-services/
--rw-r--r--	root/root	usr/share/dbus-1/system-services/org.freedesktop.home1.service
 -rw-r--r--	root/root	usr/share/dbus-1/system-services/org.freedesktop.hostname1.service
 -rw-r--r--	root/root	usr/share/dbus-1/system-services/org.freedesktop.import1.service
 -rw-r--r--	root/root	usr/share/dbus-1/system-services/org.freedesktop.locale1.service
@@ -894,7 +842,6 @@ drwxr-xr-x	root/root	usr/share/dbus-1/system-services/
 -rw-r--r--	root/root	usr/share/dbus-1/system-services/org.freedesktop.timedate1.service
 -rw-r--r--	root/root	usr/share/dbus-1/system-services/org.freedesktop.timesync1.service
 drwxr-xr-x	root/root	usr/share/dbus-1/system.d/
--rw-r--r--	root/root	usr/share/dbus-1/system.d/org.freedesktop.home1.conf
 -rw-r--r--	root/root	usr/share/dbus-1/system.d/org.freedesktop.hostname1.conf
 -rw-r--r--	root/root	usr/share/dbus-1/system.d/org.freedesktop.import1.conf
 -rw-r--r--	root/root	usr/share/dbus-1/system.d/org.freedesktop.locale1.conf
@@ -2046,7 +1993,6 @@ drwxr-xr-x	root/root	usr/share/polkit-1/
 drwxr-xr-x	root/root	usr/share/polkit-1/actions/
 -rw-r--r--	root/root	usr/share/polkit-1/actions/io.systemd.credentials.policy
 -rw-r--r--	root/root	usr/share/polkit-1/actions/io.systemd.mount-file-system.policy
--rw-r--r--	root/root	usr/share/polkit-1/actions/org.freedesktop.home1.policy
 -rw-r--r--	root/root	usr/share/polkit-1/actions/org.freedesktop.hostname1.policy
 -rw-r--r--	root/root	usr/share/polkit-1/actions/org.freedesktop.import1.policy
 -rw-r--r--	root/root	usr/share/polkit-1/actions/org.freedesktop.locale1.policy

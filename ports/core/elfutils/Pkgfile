@@ -1,6 +1,26 @@
+# Description: A collection of utilities to handle ELF objects.
+# URL: https://sourceware.org/elfutils/
+# Maintainer: CRUX System Team, core-ports at crux dot nu
+# Depends on: bzip2 xz zlib
+
 name=elfutils
-version=0.189
-release=1
-source=(https://sourceware.org/ftp/$name/$version/$name-$version.tar.bz2)
-build_opt="--disable-debuginfod --enable-libdebuginfod=dummy"
+version=0.192
+release=2
+source=(https://sourceware.org/$name/ftp/$version/$name-$version.tar.bz2
+	libeu.patch)
 keep_static=1
+pkg_build () {
+	autoreconf -vfi
+
+	CFLAGS+=" -ffat-lto-objects" \
+	./configure \
+		--prefix=/usr \
+		--program-prefix=eu- \
+		--enable-deterministic-archives \
+		--disable-debuginfod \
+		--disable-libdebuginfod \
+		--disable-nls
+
+	make
+	make DESTDIR=$PKG install
+}

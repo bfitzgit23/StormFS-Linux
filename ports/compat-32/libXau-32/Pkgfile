@@ -3,7 +3,7 @@
 # Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
 # Depends on: xorg-libxau xorg-xorgproto-32
 
-name=xorg-libxau-32
+name=libXau-32
 version=1.0.11
 release=1
 source=(https://www.x.org/releases/individual/lib/libXau-$version.tar.xz)

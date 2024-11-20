@@ -4,9 +4,9 @@
 # Depends on: libjpeg-turbo-32 libtiff zlib-32
 
 name=libtiff-32
-version=4.6.0t
+version=4.7.0
 release=1
-source=(http://www.libtiff.org/downloads/tiff-$version.tar.xz)
+source=(https://download.osgeo.org/libtiff/tiff-$version.tar.gz)
 
 build() {
 	cd tiff-$version

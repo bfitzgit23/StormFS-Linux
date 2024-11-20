@@ -2,13 +2,13 @@ drwxr-xr-x	root/root	usr/
 drwxr-xr-x	root/root	usr/lib32/
 -rw-r--r--	root/root	usr/lib32/libtiff.a
 -rwxr-xr-x	root/root	usr/lib32/libtiff.la
-lrwxrwxrwx	root/root	usr/lib32/libtiff.so -> libtiff.so.6.0.3
-lrwxrwxrwx	root/root	usr/lib32/libtiff.so.6 -> libtiff.so.6.0.3
--rwxr-xr-x	root/root	usr/lib32/libtiff.so.6.0.3
+lrwxrwxrwx	root/root	usr/lib32/libtiff.so -> libtiff.so.6.1.0
+lrwxrwxrwx	root/root	usr/lib32/libtiff.so.6 -> libtiff.so.6.1.0
+-rwxr-xr-x	root/root	usr/lib32/libtiff.so.6.1.0
 -rw-r--r--	root/root	usr/lib32/libtiffxx.a
 -rwxr-xr-x	root/root	usr/lib32/libtiffxx.la
-lrwxrwxrwx	root/root	usr/lib32/libtiffxx.so -> libtiffxx.so.6.0.3
-lrwxrwxrwx	root/root	usr/lib32/libtiffxx.so.6 -> libtiffxx.so.6.0.3
--rwxr-xr-x	root/root	usr/lib32/libtiffxx.so.6.0.3
+lrwxrwxrwx	root/root	usr/lib32/libtiffxx.so -> libtiffxx.so.6.1.0
+lrwxrwxrwx	root/root	usr/lib32/libtiffxx.so.6 -> libtiffxx.so.6.1.0
+-rwxr-xr-x	root/root	usr/lib32/libtiffxx.so.6.1.0
 drwxr-xr-x	root/root	usr/lib32/pkgconfig/
 -rw-r--r--	root/root	usr/lib32/pkgconfig/libtiff-4.pc

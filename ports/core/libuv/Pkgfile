@@ -3,7 +3,7 @@
 # Maintainer: CRUX System Team, core-ports at crux dot nu
 
 name=libuv
-version=1.48.0
+version=1.49.2
 release=1
 source=(https://dist.libuv.org/dist/v$version/$name-v$version.tar.gz)
 

@@ -4,7 +4,7 @@
 # Depends on: xorg-libs
 
 name=libglvnd
-version=1.6.0
+version=1.7.0
 release=1
 source=(https://github.com/NVIDIA/$name/archive/v$version/$name-$version.tar.gz)
 

@@ -4,7 +4,7 @@
 # Depends on: libinput xorg-server
 
 name=xf86-input-libinput
-version=1.4.0
+version=1.5.0
 release=1
 source=(https://www.x.org/releases/individual/driver/xf86-input-libinput-$version.tar.xz)
 

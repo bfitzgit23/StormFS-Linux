@@ -4,10 +4,9 @@
 # Depends on: xorg-server
 
 name=xf86-video-nouveau
-version=1.0.17
+version=1.0.18
 release=2
-source=(https://www.x.org/archive/individual/driver/xf86-video-nouveau-$version.tar.bz2
-	xorg-server-21.1.patch)
+source=(https://www.x.org/archive/individual/driver/xf86-video-nouveau-$version.tar.xz)
 
 pkg_build() {
 	export CFLAGS="${CFLAGS/-fno-plt} -DFB_ACCESS_WRAPPER"

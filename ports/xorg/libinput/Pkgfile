@@ -5,7 +5,7 @@
 # Optional: wayland-protocols
 
 name=libinput
-version=1.26.2
+version=1.27.0
 release=1
 source=(https://gitlab.freedesktop.org/libinput/libinput/-/archive/$version/$name-$version.tar.bz2)
 

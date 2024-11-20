@@ -3,9 +3,9 @@
 if [ -f /lib/modules/KERNELVERSION ]; then
 	kver=$(cat /lib/modules/KERNELVERSION)
 else
-	kver=$(file /boot/vmlinuz-BFS-Linux-6.11.4 | cut -d ' ' -f9)
+	kver=$(file /boot/vmlinuz-BFS-Linux-6.11.8 | cut -d ' ' -f9)
 fi
 
-dracut -f /boot/vmlinuz-BFS-Linux-6.11.4.img $kver
+dracut -f /boot/vmlinuz-BFS-Linux-6.11.8.img $kver
 depmod $kver
 

@@ -5,18 +5,17 @@
 # Optional: wayland-32
 
 name=vulkan-loader-32
-_name=Vulkan-Loader
-version=1.3.290.0
-_version=vulkan-sdk-$version
+version=1.3.301
 release=1
-source=(https://github.com/KhronosGroup/Vulkan-Loader/archive/$_version/$_name-$version.tar.gz)
+source=(https://github.com/KhronosGroup/Vulkan-Loader/archive/v${version}/Vulkan-Loader-${version}.tar.gz)
+
 
 build() {
 	prt-get isinst wayland-32 || PKGMK_VULKAN_LOADER+=' -D BUILD_WSI_WAYLAND_SUPPORT=OFF'
 
 	export ASFLAGS='--32'
 
-	cmake -S $_name-$_version -B build -G Ninja $PKGMK_VULKAN_LOADER \
+	cmake -S Vulkan-Loader-$version -B build -G Ninja $PKGMK_VULKAN_LOADER \
 		-D CMAKE_INSTALL_PREFIX=/usr \
 		-D CMAKE_INSTALL_LIBDIR=lib32 \
 		-D CMAKE_BUILD_TYPE=Release \

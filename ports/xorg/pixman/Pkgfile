@@ -3,12 +3,12 @@
 # Maintainer: CRUX Xorg Team, xorg-ports at crux dot nu
 
 name=pixman
-version=0.43.4
+version=0.44.0
 release=1
 source=(https://www.x.org/releases/individual/lib/$name-$version.tar.xz)
 
-build() {
-	cd $name-$version
+pkg_build() {
+
 	mkdir build &&
 	cd    build &&
 

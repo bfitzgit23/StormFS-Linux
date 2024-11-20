@@ -5,7 +5,7 @@
 
 
 name=xkeyboard-config
-version=2.41
+version=2.43
 release=1
 source=(https://www.x.org/releases/individual/data/$name/$name-$version.tar.xz)
 

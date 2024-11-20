@@ -4,13 +4,11 @@
 # Depends on:  
 
 name=unrar
-version=7.0.9
+version=7.1.1
 release=1
 source=(https://www.rarlab.com/rar/unrarsrc-$version.tar.gz)
 
-build() {
-	cd $name
-
+pkg_build() {
 	make -f makefile
 	mkdir -p $PKG/usr/bin
 	DESTDIR=$PKG install -v -m755 unrar $PKG/usr/bin

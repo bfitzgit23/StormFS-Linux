@@ -5,12 +5,12 @@
 # Optional:    boost
 
 name=swig
-version=4.1.1
+version=4.3.0
 release=1
 source=(https://downloads.sourceforge.net/$name/$name-$version.tar.gz)
 
-build() {
-	cd $name-$version
+pkg_build() {
+
 
 	./configure --prefix=/usr                      \
             --without-javascript               \

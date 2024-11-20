@@ -5,11 +5,11 @@
 # Optional: icu-32
 
 name=harfbuzz-32
-version=9.0.0
+version=10.1.0
 release=1
 source=(https://github.com/harfbuzz/harfbuzz/releases/download/$version/${name%-*}-$version.tar.xz)
 
-build() {
+pkg_build() {
 	meson setup build ${name%-*}-$version \
 		--prefix=/usr \
 		--libdir=/usr/lib32 \

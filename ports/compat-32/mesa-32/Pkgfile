@@ -5,7 +5,7 @@
 # Optional: clang-32 glslang libclc libva-32 libvdpau-32 spirv-llvm-translator-32 vulkan-loader-32 wayland-protocols
 
 name=mesa-32
-version=24.2.5
+version=24.2.7
 release=1
 source=(https://archive.mesa3d.org/mesa-$version.tar.xz
 	x86-linux-gnu x86-linux-gnu-ccache)

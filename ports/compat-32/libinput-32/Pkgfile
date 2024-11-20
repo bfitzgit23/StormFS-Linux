@@ -1,10 +1,11 @@
 # Description: A library that handles input devices for display servers
 # URL: https://wayland.freedesktop.org/libinput/doc/latest/index.html
 # Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
-# Depends on: eudev-32 libinput mtdev-32 xorg-libevdev-32
+# Depends on: eudev-32 libinput mtdev-32 libevdev-32
+
 
 name=libinput-32
-version=1.26.2
+version=1.27.0
 release=1
 source=(https://gitlab.freedesktop.org/libinput/libinput/-/archive/$version/libinput-$version.tar.bz2)
 

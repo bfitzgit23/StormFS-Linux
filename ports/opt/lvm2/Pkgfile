@@ -5,28 +5,16 @@
 # Optional:    valgrind which xfsprogs reiserfsprogs thin-provisioning-tools vdo
 
 name=lvm2
-version=2.03.26
+version=2.03.28
 release=1
 source=(https://sourceware.org/ftp/$name/LVM2.$version.tgz)
-
-build() {
-	cd LVM2.$version
-
-	PATH+=:/usr/sbin                \
-./configure --prefix=/usr        \
-            --enable-cmdlib      \
-            --enable-pkgconfig   \
-           --with-thin-check=    \
-     	   --with-thin-dump=     \
-     	   --with-thin-repair=   \
-     	   --with-thin-restore=  \
-     	   --with-cache-check=   \
-     	   --with-cache-dump=    \
-     	   --with-cache-repair=  \
-     	   --with-cache-restore= \
-            --enable-udev_sync  &&
-make
-
+build_opt="--prefix=/usr
+            --enable-cmdlib 
+            --enable-pkgconfig
+            --enable-systemd
+            --enable-dmeventd
+            --enable-udev_sync"
+post_build() {
 	make DESTDIR=$PKG install
 	make DESTDIR=$PKG install_systemd_units
 }
