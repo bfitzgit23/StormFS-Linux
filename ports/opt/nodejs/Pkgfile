@@ -5,7 +5,7 @@
 # Optional: brotli c-ares icu
 
 name=nodejs
-version=23.2.0
+version=23.3.0
 release=1
 source=(https://nodejs.org/dist/v$version/node-v$version.tar.xz
   system-c-ares.patch)

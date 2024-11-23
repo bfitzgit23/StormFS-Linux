@@ -1,7 +1,7 @@
 # Depends on: kde-frameworks-6
 
 name=konsole
-version=24.08.0
+version=24.08.3
 release=1
 source=(https://download.kde.org/stable/release-service/${version}/src/$name-$version.tar.xz
 https://www.linuxfromscratch.org/patches/blfs/svn/$name-$version-scrollbar-1.patch)

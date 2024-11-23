@@ -4,7 +4,7 @@
 # Depends on:  
 
 name=libxml2
-version=2.13.3
+version=2.13.5
 release=1
 source=(https://download.gnome.org/sources/libxml2/2.13/$name-$version.tar.xz)
 

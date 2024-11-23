@@ -58,9 +58,9 @@ drwxr-xr-x	root/root	usr/lib/cmake/libxml2/
 -rw-r--r--	root/root	usr/lib/cmake/libxml2/libxml2-config.cmake
 -rw-r--r--	root/root	usr/lib/libxml2.a
 -rwxr-xr-x	root/root	usr/lib/libxml2.la
-lrwxrwxrwx	root/root	usr/lib/libxml2.so -> libxml2.so.2.13.3
-lrwxrwxrwx	root/root	usr/lib/libxml2.so.2 -> libxml2.so.2.13.3
--rwxr-xr-x	root/root	usr/lib/libxml2.so.2.13.3
+lrwxrwxrwx	root/root	usr/lib/libxml2.so -> libxml2.so.2.13.5
+lrwxrwxrwx	root/root	usr/lib/libxml2.so.2 -> libxml2.so.2.13.5
+-rwxr-xr-x	root/root	usr/lib/libxml2.so.2.13.5
 drwxr-xr-x	root/root	usr/lib/pkgconfig/
 -rw-r--r--	root/root	usr/lib/pkgconfig/libxml-2.0.pc
 drwxr-xr-x	root/root	usr/lib/python3.12/
@@ -79,9 +79,9 @@ drwxr-xr-x	root/root	usr/share/
 drwxr-xr-x	root/root	usr/share/aclocal/
 -rw-r--r--	root/root	usr/share/aclocal/libxml.m4
 drwxr-xr-x	root/root	usr/share/doc/
-drwxr-xr-x	root/root	usr/share/doc/libxml2-2.13.3/
--rw-r--r--	root/root	usr/share/doc/libxml2-2.13.3/xmlcatalog.html
--rw-r--r--	root/root	usr/share/doc/libxml2-2.13.3/xmllint.html
+drwxr-xr-x	root/root	usr/share/doc/libxml2-2.13.5/
+-rw-r--r--	root/root	usr/share/doc/libxml2-2.13.5/xmlcatalog.html
+-rw-r--r--	root/root	usr/share/doc/libxml2-2.13.5/xmllint.html
 drwxr-xr-x	root/root	usr/share/gtk-doc/
 drwxr-xr-x	root/root	usr/share/gtk-doc/html/
 drwxr-xr-x	root/root	usr/share/gtk-doc/html/libxml2/

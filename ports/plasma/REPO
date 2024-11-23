@@ -595,9 +595,9 @@ f:2caa3b967709ec6c6d9be8eb78276984:kconfigwidgets/.md5sum
 f:fcdd8861914ca402192a631d013b5e8d:kconfigwidgets/Pkgfile
 f:50f91f4a02d99a82713226b559759eb8:kconfigwidgets/.footprint
 f:55a1d034ed4437adea09e2095c60fa9e:konsole/konsole-24.05.0-scrollbar-1.patch
-f:6921f10b513e73f57900b786ee740024:konsole/.md5sum
-f:5265894a85fb4a5f4750fd019846d119:konsole/Pkgfile
-f:eec4eb15319bdc24e00450b9750c6168:konsole/.footprint
+f:79c0aec5633a36744c6b654129dc7bc1:konsole/.md5sum
+f:e27ac82f3bb7d5ccd612334862cf1997:konsole/Pkgfile
+f:1534935add24a954fb0cd38f9e2b0b17:konsole/.footprint
 f:559cc10c15d644074b02d1dcb6e047f0:kwrited/.md5sum
 f:06b937534731add54779e8815843b2e7:kwrited/Pkgfile
 f:1d4a4815b2136168c8a562d3ecbd057b:kwrited/.footprint

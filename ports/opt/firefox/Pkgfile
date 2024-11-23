@@ -26,7 +26,7 @@ build() {
     exit 1
   fi
 
-  prt-get isinst sccache 2>/dev/null && export RUSTC_WRAPPER='/usr/bin/sccache'
+  prt-get isinst sccache >/dev/null && export RUSTC_WRAPPER='/usr/bin/sccache'
   mkdir -p "$PKGMK_SOURCE_DIR/rust"
   export CARGO_HOME="$PKGMK_SOURCE_DIR/rust"
 
@@ -73,7 +73,7 @@ build() {
 EOF
 
   # unicode internationalization
-  prt-get isinst icu 2>/dev/null && \
+  prt-get isinst icu >/dev/null && \
     echo 'ac_add_options --with-system-icu' >> .mozconfig
 
   # audio
@@ -83,9 +83,9 @@ EOF
   [ -e /usr/lib/libsndio.so ] && PKGMK_FFAUDIO+=",sndio"
   echo "ac_add_options --enable-audio-backends=${PKGMK_FFAUDIO}" >> .mozconfig
 
-  if prt-get isinst wayland xorg-server 2>/dev/null ; then
+  if prt-get isinst wayland xorg-server >/dev/null ; then
     echo 'ac_add_options --enable-default-toolkit=cairo-gtk3-x11-wayland' >> .mozconfig
-  elif prt-get isinst wayland 2>/dev/null ; then 
+  elif prt-get isinst wayland >/dev/null ; then 
     echo 'ac_add_options --enable-default-toolkit=cairo-gtk3-wayland-only' >> .mozconfig
   else
     echo 'ac_add_options --enable-default-toolkit=cairo-gtk3-x11-only' >> .mozconfig
@@ -100,7 +100,7 @@ EOF
   export CXXFLAGS="$CXXFLAGS -w"
   export LDFLAGS="$LDFLAGS -Wl,-rpath=/usr/lib/firefox,--enable-new-dtags"
 
-  if prt-get isinst lld 2>/dev/null; then
+  if prt-get isinst lld >/dev/null; then
       echo 'ac_add_options --enable-linker=lld' >> .mozconfig
       export LDFLAGS+=" -Wl,--thinlto-jobs=$((JOBS / 2))"
   else
@@ -125,6 +125,11 @@ EOF
   # python/mach/mach/mixin/process.py fails to detect SHELL
   export SHELL='/bin/bash'
 
+for i in {43..47}; do
+   sed -i '/ZWJ/s/}/,CLASS_CHARACTER&/' intl/lwbrk/LineBreaker.cpp 
+done
+sed -i 's/icu-i18n/icu-uc &/' js/moz.configure
+
   ./mach build
   DESTDIR=$PKG ./mach install
 
@@ -141,4 +146,3 @@ EOF
   ln -s /usr/lib/firefox/browser/chrome/icons/default/default128.png \
           $PKG/usr/share/pixmaps/firefox.png
 }
-

@@ -130,6 +130,7 @@ d:shell-files
 d:diffutils
 d:iana-etc
 d:python3-mako
+d:exfatprogs
 d:check
 d:git
 d:efibootmgr
@@ -595,8 +596,8 @@ f:e243bc20283b6faa643b0b3362de3ca5:rsync/rsyncd
 f:137fcdf99275efaeb77d6d5d61a18dd1:rsync/rsyncd.conf
 f:120363b510b0310ba3b3b5f993b8a61b:rsync/.footprint
 f:bd6cc8e2c83d5e845af20a30e105fb5f:rsync/rsync.driver
-f:94cfc53714a7aa81879a96f0c0417a94:iproute2/.md5sum
-f:643bd1641fec43f9fd419926e982ebbe:iproute2/Pkgfile
+f:11dca2f7857f81b0fb91ba8062606c30:iproute2/.md5sum
+f:d18ac111f700bde4e3f134c326909a95:iproute2/Pkgfile
 f:e62616b8667fcc286bc626786ef15a98:iproute2/.footprint
 f:0092385302b81e78925f9cb08caa4f9f:python3-wheel/.md5sum
 f:ecc0d48fe56f9d7100f188ad828c0dda:python3-wheel/Pkgfile
@@ -664,6 +665,9 @@ f:905a1052b0f01571692eef2ca2d28c76:iana-etc/.footprint
 f:d709d7f1e2ef542a759f8eb15d158828:python3-mako/.md5sum
 f:791da7d2c4da9730d97c852a870e22d7:python3-mako/Pkgfile
 f:7912d59c9562d7881006b94ccc8b0c7a:python3-mako/.footprint
+f:ff7cfbe3e022f1c02994ff1d94af0dac:exfatprogs/.md5sum
+f:d8461eaab8716d9787b545e79fc3907c:exfatprogs/Pkgfile
+f:7cacf5f6913370b7910377d1984c0707:exfatprogs/.footprint
 f:2750e8aab131a42a8bfe74fa2ff7cac9:check/Pkgfile
 f:e597b8c0acf90a3650d52ddcb6676e48:git/.md5sum
 f:e45262ad8048bce8b16c55d334dcaa80:git/Pkgfile
