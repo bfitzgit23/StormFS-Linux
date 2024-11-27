@@ -1,6 +1,3 @@
-drwxr-xr-x	root/root	sbin/
--rwxr-xr-x	root/root	sbin/mdadm
--rwxr-xr-x	root/root	sbin/mdmon
 drwxr-xr-x	root/root	usr/
 drwxr-xr-x	root/root	usr/lib/
 drwxr-xr-x	root/root	usr/lib/udev/
@@ -9,6 +6,9 @@ drwxr-xr-x	root/root	usr/lib/udev/rules.d/
 -rw-r--r--	root/root	usr/lib/udev/rules.d/63-md-raid-arrays.rules
 -rw-r--r--	root/root	usr/lib/udev/rules.d/64-md-raid-assembly.rules
 -rw-r--r--	root/root	usr/lib/udev/rules.d/69-md-clustered-confirm-device.rules
+drwxr-xr-x	root/root	usr/sbin/
+-rwxr-xr-x	root/root	usr/sbin/mdadm
+-rwxr-xr-x	root/root	usr/sbin/mdmon
 drwxr-xr-x	root/root	usr/share/
 drwxr-xr-x	root/root	usr/share/man/
 drwxr-xr-x	root/root	usr/share/man/man4/

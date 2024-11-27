@@ -95,6 +95,7 @@ lrwxrwxrwx	root/root	usr/bin/systemd-umount -> systemd-mount
 -rwxr-xr-x	root/root	usr/bin/systemd-vpick
 -rwxr-xr-x	root/root	usr/bin/timedatectl
 -rwxr-xr-x	root/root	usr/bin/udevadm
+-rwxr-xr-x	root/root	usr/bin/ukify
 -rwxr-xr-x	root/root	usr/bin/varlinkctl
 drwxr-xr-x	root/root	usr/include/
 -rw-r--r--	root/root	usr/include/libudev.h
@@ -124,6 +125,7 @@ drwxr-xr-x	root/root	usr/lib/kernel/
 -rw-r--r--	root/root	usr/lib/kernel/install.conf
 drwxr-xr-x	root/root	usr/lib/kernel/install.d/
 -rwxr-xr-x	root/root	usr/lib/kernel/install.d/50-depmod.install
+-rwxr-xr-x	root/root	usr/lib/kernel/install.d/60-ukify.install
 -rwxr-xr-x	root/root	usr/lib/kernel/install.d/90-loaderentry.install
 -rwxr-xr-x	root/root	usr/lib/kernel/install.d/90-uki-copy.install
 -rwxr-xr-x	root/root	usr/lib/libnss_myhostname.so.2
@@ -607,6 +609,7 @@ lrwxrwxrwx	root/root	usr/lib/systemd/systemd-udevd -> ../../bin/udevadm
 -rwxr-xr-x	root/root	usr/lib/systemd/systemd-veritysetup
 -rwxr-xr-x	root/root	usr/lib/systemd/systemd-volatile-root
 -rwxr-xr-x	root/root	usr/lib/systemd/systemd-xdg-autostart-condition
+lrwxrwxrwx	root/root	usr/lib/systemd/ukify -> ../../bin/ukify
 drwxr-xr-x	root/root	usr/lib/systemd/user-environment-generators/
 -rwxr-xr-x	root/root	usr/lib/systemd/user-environment-generators/30-systemd-environment-d-generator
 drwxr-xr-x	root/root	usr/lib/systemd/user-generators/
@@ -911,6 +914,7 @@ drwxr-xr-x	root/root	usr/share/man/man1/
 -rwxr-xr-x	root/root	usr/share/man/man1/systemd-vpick.1.gz
 -rwxr-xr-x	root/root	usr/share/man/man1/systemd.1.gz
 -rwxr-xr-x	root/root	usr/share/man/man1/timedatectl.1.gz
+-rw-r--r--	root/root	usr/share/man/man1/ukify.1.gz
 -rwxr-xr-x	root/root	usr/share/man/man1/varlinkctl.1.gz
 drwxr-xr-x	root/root	usr/share/man/man3/
 -rwxr-xr-x	root/root	usr/share/man/man3/SD_ALERT.3.gz

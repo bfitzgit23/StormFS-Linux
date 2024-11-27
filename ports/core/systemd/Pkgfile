@@ -12,6 +12,7 @@ https://anduin.linuxfromscratch.org/LFS/$name-man-pages-$version.tar.xz)
 
 pkg_build() {
 
+
 	sed -i -e 's/GROUP="render"/GROUP="video"/' \
        -e 's/GROUP="sgx", //' rules.d/50-udev-default.rules.in
 
@@ -36,7 +37,7 @@ meson setup ..                 \
       -D dev-kvm-mode=0660     \
       -D nobody-group=nogroup  \
       -D sysupdate=disabled    \
-      -D ukify=disabled        \
+      -D ukify=enabled        \
       -D docdir=/usr/share/doc/$name-$version &&
 
 ninja

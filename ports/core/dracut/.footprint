@@ -8,6 +8,7 @@ drwxr-xr-x	root/root	usr/bin/
 -rwxr-xr-x	root/root	usr/bin/lsinitrd
 drwxr-xr-x	root/root	usr/lib/
 drwxr-xr-x	root/root	usr/lib/dracut/
+-rwxr-xr-x	root/root	usr/lib/dracut/dracut-cpio
 lrwxrwxrwx	root/root	usr/lib/dracut/dracut-functions -> dracut-functions.sh
 -rwxr-xr-x	root/root	usr/lib/dracut/dracut-functions.sh
 -rwxr-xr-x	root/root	usr/lib/dracut/dracut-init.sh
@@ -731,6 +732,27 @@ drwxr-xr-x	root/root	usr/lib/kernel/
 drwxr-xr-x	root/root	usr/lib/kernel/install.d/
 -rwxr-xr-x	root/root	usr/lib/kernel/install.d/50-dracut.install
 -rwxr-xr-x	root/root	usr/lib/kernel/install.d/51-dracut-rescue.install
+drwxr-xr-x	root/root	usr/lib/systemd/
+drwxr-xr-x	root/root	usr/lib/systemd/system/
+lrwxrwxrwx	root/root	usr/lib/systemd/system/dracut-cmdline.service -> ../../dracut/modules.d/98dracut-systemd/dracut-cmdline.service
+lrwxrwxrwx	root/root	usr/lib/systemd/system/dracut-initqueue.service -> ../../dracut/modules.d/98dracut-systemd/dracut-initqueue.service
+lrwxrwxrwx	root/root	usr/lib/systemd/system/dracut-mount.service -> ../../dracut/modules.d/98dracut-systemd/dracut-mount.service
+lrwxrwxrwx	root/root	usr/lib/systemd/system/dracut-pre-mount.service -> ../../dracut/modules.d/98dracut-systemd/dracut-pre-mount.service
+lrwxrwxrwx	root/root	usr/lib/systemd/system/dracut-pre-pivot.service -> ../../dracut/modules.d/98dracut-systemd/dracut-pre-pivot.service
+lrwxrwxrwx	root/root	usr/lib/systemd/system/dracut-pre-trigger.service -> ../../dracut/modules.d/98dracut-systemd/dracut-pre-trigger.service
+lrwxrwxrwx	root/root	usr/lib/systemd/system/dracut-pre-udev.service -> ../../dracut/modules.d/98dracut-systemd/dracut-pre-udev.service
+lrwxrwxrwx	root/root	usr/lib/systemd/system/dracut-shutdown-onfailure.service -> ../../dracut/modules.d/98dracut-systemd/dracut-shutdown-onfailure.service
+lrwxrwxrwx	root/root	usr/lib/systemd/system/dracut-shutdown.service -> ../../dracut/modules.d/98dracut-systemd/dracut-shutdown.service
+drwxr-xr-x	root/root	usr/lib/systemd/system/initrd.target.wants/
+lrwxrwxrwx	root/root	usr/lib/systemd/system/initrd.target.wants/dracut-cmdline.service -> ../dracut-cmdline.service
+lrwxrwxrwx	root/root	usr/lib/systemd/system/initrd.target.wants/dracut-initqueue.service -> ../dracut-initqueue.service
+lrwxrwxrwx	root/root	usr/lib/systemd/system/initrd.target.wants/dracut-mount.service -> ../dracut-mount.service
+lrwxrwxrwx	root/root	usr/lib/systemd/system/initrd.target.wants/dracut-pre-mount.service -> ../dracut-pre-mount.service
+lrwxrwxrwx	root/root	usr/lib/systemd/system/initrd.target.wants/dracut-pre-pivot.service -> ../dracut-pre-pivot.service
+lrwxrwxrwx	root/root	usr/lib/systemd/system/initrd.target.wants/dracut-pre-trigger.service -> ../dracut-pre-trigger.service
+lrwxrwxrwx	root/root	usr/lib/systemd/system/initrd.target.wants/dracut-pre-udev.service -> ../dracut-pre-udev.service
+drwxr-xr-x	root/root	usr/lib/systemd/system/sysinit.target.wants/
+lrwxrwxrwx	root/root	usr/lib/systemd/system/sysinit.target.wants/dracut-shutdown.service -> ../dracut-shutdown.service
 drwxr-xr-x	root/root	usr/share/
 drwxr-xr-x	root/root	usr/share/bash-completion/
 drwxr-xr-x	root/root	usr/share/bash-completion/completions/

@@ -16,6 +16,7 @@ cd    build &&
 
 meson setup ..                   \
       --prefix=/usr              \
+      -D introspection=true	\
       --buildtype=release        \
       -D man=true                \
       -D session_tracking=logind \

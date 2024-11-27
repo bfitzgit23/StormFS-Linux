@@ -1,17 +1,24 @@
 # Description: An event-driven initramfs infrastructure
 # URL: https://github.com/dracut-ng/dracut-ng
 # Maintainer: Matt Housh, jaeger at crux dot ninja
-# Depends on: cpio mkinitcpio-busybox
+# Depends on: cpio mkinitcpio-busybox asciidoc rustc
 name=dracut
 version=105
 release=1
 source=(https://github.com/dracut-ng/dracut-ng/archive/$version/$name-$version.tar.gz
-    https://crux.nu/files/$name-man-pages-$version.tar.xz)
+    https://crux.nu/files/$name-man-pages-$version.tar.xz
+   dracut-103-acct-user-group-gentoo.patch 
+   dracut-105-systemd-cryptsetup.patch
+dracut-105-ensure-abs-args-for-objcopy.patch
+gentoo-ldconfig-paths-r1.patch
+dracut-105-fix-check_kernel_module.patch)
 
-build() {
-    cd dracut-ng-$version
+pkg_build() {
+
     ./configure --prefix=/usr \
         --sysconfdir=/etc \
+        --systemdsystemunitdir=/usr/lib/systemd/system \
+         --enable-dracut-cpio \
         --disable-documentation
     make
     make DESTDIR=$PKG install

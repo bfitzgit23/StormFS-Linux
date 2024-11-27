@@ -12,6 +12,10 @@ source=(https://nodejs.org/dist/v$version/node-v$version.tar.xz
 
 build() {
   cd node-v$version
+sed '/pkgicu/s/icu-i18n/& icu-uc/' -i configure.py
+ # /usr/lib/libnode.so uses malloc_usable_size, which is incompatible with fortification level 3
+#  export CFLAGS="${CFLAGS/_FORTIFY_SOURCE=3/_FORTIFY_SOURCE=2}"
+#  export CXXFLAGS="${CXXFLAGS/_FORTIFY_SOURCE=3/_FORTIFY_SOURCE=2}"
 
   prt-get isinst brotli && PKGMK_NODEJS+=' --shared-brotli'
   prt-get isinst c-ares && PKGMK_NODEJS+=' --shared-cares'
@@ -19,19 +23,19 @@ build() {
   prt-get isinst icu && PKGMK_NODEJS+=' --with-intl=system-icu'
 
   ./configure ${PKGMK_NODEJS} \
-    --prefix=/usr \
-    --ninja \
-    --without-npm \
-    --shared-libuv \
-    --shared-zlib \
-    --shared-openssl \
-    --shared-nghttp2 \
-    --experimental-http-parser
+                --shared-brotli        \
+            --shared-cares         \
+            --shared-libuv         \
+            --shared-openssl       \
+            --shared-nghttp2       \
+            --shared-zlib          \
+            --ninja		   \
+            --with-intl=system-icu &&
 
   make
   make DESTDIR=$PKG install
 
-  rm -r $PKG/usr/share/doc
+  rm -rf $PKG/usr/share/doc
 
   # clean up
   find $PKG -type f \( \

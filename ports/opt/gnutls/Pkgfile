@@ -9,9 +9,7 @@ version=3.8.8
 release=2
 source=(https://www.gnupg.org/ftp/gcrypt/$name/v${version:0:3}/$name-$version.tar.xz)
 
-build() {
-  cd $name-3.8.7
-
+pkg_build() {
 
   prt-get isinst brotli && PKGMK_GNUTLS+=' --with-brotli'
   prt-get isinst libidn2 && PKGMK_GNUTLS+=' --with-idn'

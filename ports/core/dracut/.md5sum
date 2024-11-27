@@ -1,2 +1,7 @@
+d0bdc5cd8f5714ceb8372b2a9d6857a2  dracut-103-acct-user-group-gentoo.patch
+5a2c2b429dabc14ec02943bdd10127c5  dracut-105-ensure-abs-args-for-objcopy.patch
+402a367deec3a34e0942c006128532ae  dracut-105-fix-check_kernel_module.patch
+a78dc238a1361a9f90ee46a3a93e3074  dracut-105-systemd-cryptsetup.patch
 2b001f101c067e3ccd1cca6216e665e1  dracut-105.tar.gz
 67bcc34935d46310b5e4a516ac04f550  dracut-man-pages-105.tar.xz
+175d7e6a7d6a95580863e6875f9cc2c8  gentoo-ldconfig-paths-r1.patch
