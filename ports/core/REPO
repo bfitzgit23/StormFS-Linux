@@ -596,8 +596,8 @@ f:878a905982924dc54ea0ddf51a6af143:runit/shutdown.8
 f:affd863880d58efd3a1965d19dd5f01d:runit/sigcont.patch
 f:8480841d24a6794251efde590d6ab3d7:runit/Pkgfile
 f:b125194bead61d56eab773eb8d43fca2:runit/halt
-f:8cd99833a68ead114a90ab84af4cfe6e:make-ca/.md5sum
-f:a543970dcce10786035ffaabd549490a:make-ca/Pkgfile
+f:9364a87e3f0f37a00e4ed784e3896dd1:make-ca/.md5sum
+f:673a77aa8d03fcf6fd24d892892f9cc5:make-ca/Pkgfile
 f:bb23dde17fd6f135d2ac7978b6b8d980:make-ca/.footprint
 f:b6a1d25eb5d8e5d6c567a5fce8f0a170:pkgconf/.md5sum
 f:01a1ad4245cca0e615c904b469b99236:pkgconf/Pkgfile
@@ -606,8 +606,8 @@ f:1588165c8a7a820b1a21011a15c3f724:python3-flit-core/.md5sum
 f:2a7aae7c7cf62c3cd581c2575c0c2713:python3-flit-core/Pkgfile
 f:594a737d91436af90622bdbfc95541c3:python3-flit-core/.footprint
 f:39e65caf258a38aebfe847a89ac5822f:sudo/sudo.pam
-f:e6c22db995f5436b53b4e0b70038f8fe:sudo/.md5sum
-f:b28be54de3acad6ff78e3c8888f774f5:sudo/Pkgfile
+f:b86dd9d184189ae55c409dd7e44cb026:sudo/.md5sum
+f:fe24aef848c5b96051f16b83cd946557:sudo/Pkgfile
 f:759ec5721f56211651b9e9025b979a19:sudo/.footprint
 f:bedb4a6ca1b2cfa1c542c6eb15b668d4:make/.md5sum
 f:f29cf872e75534908200999f0782d8fc:make/Pkgfile
@@ -804,8 +804,8 @@ f:cb587ce605915320c9a2f5128d861c85:perl-xml-parser/.footprint
 f:beb475f2213e2b0f78ed99c5f6f86f05:python3-python-dbusmock/Pkgfile
 f:bbf7f81dbde65c9e797163372b8ccea7:python3-python-dbusmock/.footprint
 f:8de27f52477023a3303c9416d0662a49:mtools/Pkgfile
-f:d9833c781b9501b52b9ad00548fd8825:linux-headers/.md5sum
-f:777d9fc0fc1b0994db5481ce00110a9c:linux-headers/Pkgfile
+f:ac7bd23f1cbba70ae5ac3e3cefe14a20:linux-headers/.md5sum
+f:cece03b31b86931dc908f70e4298e133:linux-headers/Pkgfile
 f:367189c746f7149c4fa9df0a2cd6a630:linux-headers/.footprint
 f:d630893efad418d62f09d7bf13e75c16:shadow/groupmod
 f:8ff42911de6b941926a27aeb3bc90c6e:shadow/groupadd
