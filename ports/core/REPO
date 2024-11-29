@@ -241,8 +241,8 @@ f:5a847e96eed226e44ce802d8525ecc27:libpng/.md5sum
 f:3d9b41450c224322ac2a044fb264c753:libpng/Pkgfile
 f:0808feafa99c0e8d2a245b88325bc397:libpng/.footprint
 f:195a9189f8565a6b67e3bd539693245b:procps-ng/Pkgfile
-f:1cb6b259c132ad595fce1978055e777f:sqlite/.md5sum
-f:23ce9f17e98f25abe8c8e540384cefba:sqlite/Pkgfile
+f:53c3b180a18a9e3a23283ae70c24f5a4:sqlite/.md5sum
+f:6fa7ee74fdb83d1c09b57e529c5e72fd:sqlite/Pkgfile
 f:5de02b8b4ea0d0ed1485212b87a3e15f:sqlite/.footprint
 f:04c8a329d64319bf8342230c80236498:mkinitcpio-busybox/0001-ash-fix-unset_var-pattern-repl.patch
 f:2ace7b315454cccee0da17ec1e40114e:mkinitcpio-busybox/busybox.patch
