@@ -37,7 +37,7 @@ meson setup ..                 \
       -D dev-kvm-mode=0660     \
       -D nobody-group=nogroup  \
       -D sysupdate=disabled    \
-      -D ukify=enabled        \
+      -D ukify=disabled        \
       -D docdir=/usr/share/doc/$name-$version &&
 
 ninja

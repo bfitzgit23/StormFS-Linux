@@ -10,16 +10,17 @@ source=(https://sourceware.org/$name/ftp/$version/$name-$version.tar.bz2
 	libeu.patch)
 keep_static=1
 pkg_build () {
+	sed -e 's/run-backtrace-native.sh//g' -i tests/Makefile.am
 	autoreconf -vfi
 
-	CFLAGS+=" -ffat-lto-objects" \
+	CPPFLAGS="-D_FORTIFY_SOURCE=-0"\
 	./configure \
 		--prefix=/usr \
 		--program-prefix=eu- \
+		--sysconfdir=/etc    \
 		--enable-deterministic-archives \
-		--disable-debuginfod \
-		--disable-libdebuginfod \
-		--disable-nls
+		--disable-hardening \
+		 --enable-maintainer-mode
 
 	make
 	make DESTDIR=$PKG install
