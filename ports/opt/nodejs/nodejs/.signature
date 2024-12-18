@@ -1,6 +1,0 @@
-untrusted comment: verify with /etc/ports/opt.pub
-RWSE3ohX2g5d/V6Q8HC7zBe3o7p+G3hazd5dGM4ZtGz+hrZvt2MCq8fdst3YtypmemZ4OREXcmdr3JOxKN/b8D5K7jAp22qSuwQ=
-SHA256 (Pkgfile) = 88dafae55ec7787ef3527a8e18ce9af0e047d419c2712f4660ff739351317f0f
-SHA256 (.footprint) = def23a3729301dfd00b0facca8cd0509d93d42520eef6f841a018cfb874da59f
-SHA256 (node-v23.3.0.tar.xz) = 42a6b5611aeec6723f4b6f98f1c205fc1fa32399df41dbed6a27083afd48c5c1
-SHA256 (system-c-ares.patch) = 1ab0f849fe4fae2d295b6c60c12825d5f2c29f5b28b721916d1b550704b0f5f3

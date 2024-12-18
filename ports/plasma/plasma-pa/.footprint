@@ -1,8 +1,8 @@
 drwxr-xr-x	root/root	opt/
 drwxr-xr-x	root/root	opt/kf6/
 drwxr-xr-x	root/root	opt/kf6/lib/
-lrwxrwxrwx	root/root	opt/kf6/lib/libplasma-volume.so.6 -> libplasma-volume.so.6.1.4
--rwxr-xr-x	root/root	opt/kf6/lib/libplasma-volume.so.6.1.4
+lrwxrwxrwx	root/root	opt/kf6/lib/libplasma-volume.so.6 -> libplasma-volume.so.6.2.4
+-rwxr-xr-x	root/root	opt/kf6/lib/libplasma-volume.so.6.2.4
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/kf6/
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/kf6/kded/
@@ -77,6 +77,11 @@ drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/ru/kcontrol/
 drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/ru/kcontrol/plasma-pa/
 -rw-r--r--	root/root	opt/kf6/share/doc/HTML/ru/kcontrol/plasma-pa/index.cache.bz2
 -rw-r--r--	root/root	opt/kf6/share/doc/HTML/ru/kcontrol/plasma-pa/index.docbook
+drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sl/
+drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sl/kcontrol/
+drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sl/kcontrol/plasma-pa/
+-rw-r--r--	root/root	opt/kf6/share/doc/HTML/sl/kcontrol/plasma-pa/index.cache.bz2
+-rw-r--r--	root/root	opt/kf6/share/doc/HTML/sl/kcontrol/plasma-pa/index.docbook
 drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sv/
 drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sv/kcontrol/
 drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sv/kcontrol/plasma-pa/

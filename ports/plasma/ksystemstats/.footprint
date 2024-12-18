@@ -14,6 +14,7 @@ drwxr-xr-x	root/root	opt/kf6/lib/plugins/ksystemstats/
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/ksystemstats/ksystemstats_plugin_network.so
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/ksystemstats/ksystemstats_plugin_osinfo.so
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/ksystemstats/ksystemstats_plugin_power.so
+-rwxr-xr-x	root/root	opt/kf6/lib/plugins/ksystemstats/ksystemstats_plugin_pressure.so
 drwxr-xr-x	root/root	opt/kf6/lib/systemd/
 drwxr-xr-x	root/root	opt/kf6/lib/systemd/user/
 -rw-r--r--	root/root	opt/kf6/lib/systemd/user/plasma-ksystemstats.service

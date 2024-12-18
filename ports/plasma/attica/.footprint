@@ -97,8 +97,8 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/KF6Attica/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6Attica/KF6AtticaTargets-release.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6Attica/KF6AtticaTargets.cmake
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6Attica.so -> libKF6Attica.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6Attica.so.6 -> libKF6Attica.so.6.5.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6Attica.so.6.5.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6Attica.so.6 -> libKF6Attica.so.6.9.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6Attica.so.6.9.0
 drwxr-xr-x	root/root	opt/kf6/lib/pkgconfig/
 -rw-r--r--	root/root	opt/kf6/lib/pkgconfig/KF6Attica.pc
 drwxr-xr-x	root/root	opt/kf6/share/

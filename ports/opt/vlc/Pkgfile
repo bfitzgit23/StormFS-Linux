@@ -6,7 +6,7 @@ release=1
 source=(https://download.videolan.org/$name/$version/$name-$version.tar.xz
 vlc-3.0.21-fedora_ffmpeg7-1.patch
 vlc-3.0.21-taglib-1.patch)
-build_opt="--enable-lua --enable-qt --enable-wayland --disable-libplacebo"
+build_opt="--enable-lua --enable-wayland --disable-libplacebo"
 
 pre_build() {
 	export LUAC=/usr/bin/luac5.2                   &&

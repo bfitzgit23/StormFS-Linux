@@ -5,12 +5,12 @@
 # Optional: libxkbcommon wayland-protocols xorg-libs alsa ibus libsamplerate nasm pipewire pulseaudio directfb fcitx jack sndio
 
 name=sdl2
-version=2.30.9
+version=2.30.10
 release=1
 source=(https://www.libsdl.org/release/SDL2-$version.tar.gz)
 
-build() {
-	cd SDL2-$version
+pkg_build() {
+
 	./configure --prefix=/usr &&
 make
 pushd docs  &&

@@ -17,6 +17,9 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/ar/LC_MESSAGES/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ast/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ast/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/ast/LC_MESSAGES/plasma-welcome.mo
+drwxr-xr-x	root/root	opt/kf6/share/locale/az/
+drwxr-xr-x	root/root	opt/kf6/share/locale/az/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/az/LC_MESSAGES/plasma-welcome.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/be/
 drwxr-xr-x	root/root	opt/kf6/share/locale/be/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/be/LC_MESSAGES/plasma-welcome.mo
@@ -32,6 +35,9 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/ca@valencia/LC_MESSAGES/
 drwxr-xr-x	root/root	opt/kf6/share/locale/cs/
 drwxr-xr-x	root/root	opt/kf6/share/locale/cs/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/cs/LC_MESSAGES/plasma-welcome.mo
+drwxr-xr-x	root/root	opt/kf6/share/locale/da/
+drwxr-xr-x	root/root	opt/kf6/share/locale/da/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/da/LC_MESSAGES/plasma-welcome.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/de/
 drwxr-xr-x	root/root	opt/kf6/share/locale/de/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/de/LC_MESSAGES/plasma-welcome.mo

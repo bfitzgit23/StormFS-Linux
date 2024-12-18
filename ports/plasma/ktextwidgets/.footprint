@@ -29,8 +29,8 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/KF6TextWidgets/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6TextWidgets/KF6TextWidgetsTargets-release.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6TextWidgets/KF6TextWidgetsTargets.cmake
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6TextWidgets.so -> libKF6TextWidgets.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6TextWidgets.so.6 -> libKF6TextWidgets.so.6.5.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6TextWidgets.so.6.5.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6TextWidgets.so.6 -> libKF6TextWidgets.so.6.9.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6TextWidgets.so.6.9.0
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/designer/
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/designer/ktextwidgets6widgets.so

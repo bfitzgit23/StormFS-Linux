@@ -5,7 +5,7 @@ drwxr-xr-x	root/root	opt/kf6/bin/
 -rwxr-xr-x	root/root	opt/kf6/bin/kde-add-printer
 -rwxr-xr-x	root/root	opt/kf6/bin/kde-print-queue
 drwxr-xr-x	root/root	opt/kf6/lib/
--rwxr-xr-x	root/root	opt/kf6/lib/libkcupslib.so.6.1.4
+-rwxr-xr-x	root/root	opt/kf6/lib/libkcupslib.so.6.2.4
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/kf6/
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/kf6/kded/

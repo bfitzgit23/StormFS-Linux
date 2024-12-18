@@ -35,11 +35,11 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/KF6IconThemes/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6IconThemes/KF6IconThemesTargets-release.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6IconThemes/KF6IconThemesTargets.cmake
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6IconThemes.so -> libKF6IconThemes.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6IconThemes.so.6 -> libKF6IconThemes.so.6.5.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6IconThemes.so.6.5.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6IconThemes.so.6 -> libKF6IconThemes.so.6.9.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6IconThemes.so.6.9.0
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6IconWidgets.so -> libKF6IconWidgets.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6IconWidgets.so.6 -> libKF6IconWidgets.so.6.5.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6IconWidgets.so.6.5.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6IconWidgets.so.6 -> libKF6IconWidgets.so.6.9.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6IconWidgets.so.6.9.0
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/designer/
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/designer/kiconthemes6widgets.so

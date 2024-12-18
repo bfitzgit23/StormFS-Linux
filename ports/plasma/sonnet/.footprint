@@ -44,11 +44,11 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/KF6Sonnet/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6Sonnet/KF6SonnetTargets-release.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6Sonnet/KF6SonnetTargets.cmake
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6SonnetCore.so -> libKF6SonnetCore.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6SonnetCore.so.6 -> libKF6SonnetCore.so.6.5.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6SonnetCore.so.6.5.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6SonnetCore.so.6 -> libKF6SonnetCore.so.6.9.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6SonnetCore.so.6.9.0
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6SonnetUi.so -> libKF6SonnetUi.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6SonnetUi.so.6 -> libKF6SonnetUi.so.6.5.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6SonnetUi.so.6.5.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6SonnetUi.so.6 -> libKF6SonnetUi.so.6.9.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6SonnetUi.so.6.9.0
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/designer/
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/designer/sonnet6widgets.so

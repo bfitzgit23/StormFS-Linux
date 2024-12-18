@@ -20,6 +20,7 @@ export QT6DIR
 
 # End /etc/profile.d/qt6.sh
 EOF
+mkdir -p /etc/sudoers.d
 cat > /etc/sudoers.d/qt << "EOF"
 Defaults env_keep += QT6DIR
 EOF

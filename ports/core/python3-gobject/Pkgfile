@@ -4,7 +4,7 @@
 # Depends on: gobject-introspection python3-cairo
 
 name=python3-gobject
-version=3.48.2
+version=3.50.0
 release=1
 source=(https://ftp.gnome.org/pub/GNOME/sources/pygobject/${version::4}/pygobject-$version.tar.xz)
 

@@ -9,6 +9,7 @@ drwxr-xr-x	root/root	opt/kf6/include/ksysguard/faces/
 -rw-r--r--	root/root	opt/kf6/include/ksysguard/faces/sensorfaces_export.h
 drwxr-xr-x	root/root	opt/kf6/include/ksysguard/formatter/
 -rw-r--r--	root/root	opt/kf6/include/ksysguard/formatter/Formatter.h
+-rw-r--r--	root/root	opt/kf6/include/ksysguard/formatter/FormatterWrapper.h
 -rw-r--r--	root/root	opt/kf6/include/ksysguard/formatter/Unit.h
 -rw-r--r--	root/root	opt/kf6/include/ksysguard/formatter/formatter_export.h
 drwxr-xr-x	root/root	opt/kf6/include/ksysguard/processcore/
@@ -51,20 +52,20 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/KSysGuard/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KSysGuard/KSysGuardLibraryTargets-release.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KSysGuard/KSysGuardLibraryTargets.cmake
 lrwxrwxrwx	root/root	opt/kf6/lib/libKSysGuardFormatter.so -> libKSysGuardFormatter.so.2
-lrwxrwxrwx	root/root	opt/kf6/lib/libKSysGuardFormatter.so.2 -> libKSysGuardFormatter.so.6.1.4
--rwxr-xr-x	root/root	opt/kf6/lib/libKSysGuardFormatter.so.6.1.4
+lrwxrwxrwx	root/root	opt/kf6/lib/libKSysGuardFormatter.so.2 -> libKSysGuardFormatter.so.6.2.4
+-rwxr-xr-x	root/root	opt/kf6/lib/libKSysGuardFormatter.so.6.2.4
 lrwxrwxrwx	root/root	opt/kf6/lib/libKSysGuardSensorFaces.so -> libKSysGuardSensorFaces.so.2
-lrwxrwxrwx	root/root	opt/kf6/lib/libKSysGuardSensorFaces.so.2 -> libKSysGuardSensorFaces.so.6.1.4
--rwxr-xr-x	root/root	opt/kf6/lib/libKSysGuardSensorFaces.so.6.1.4
+lrwxrwxrwx	root/root	opt/kf6/lib/libKSysGuardSensorFaces.so.2 -> libKSysGuardSensorFaces.so.6.2.4
+-rwxr-xr-x	root/root	opt/kf6/lib/libKSysGuardSensorFaces.so.6.2.4
 lrwxrwxrwx	root/root	opt/kf6/lib/libKSysGuardSensors.so -> libKSysGuardSensors.so.2
-lrwxrwxrwx	root/root	opt/kf6/lib/libKSysGuardSensors.so.2 -> libKSysGuardSensors.so.6.1.4
--rwxr-xr-x	root/root	opt/kf6/lib/libKSysGuardSensors.so.6.1.4
+lrwxrwxrwx	root/root	opt/kf6/lib/libKSysGuardSensors.so.2 -> libKSysGuardSensors.so.6.2.4
+-rwxr-xr-x	root/root	opt/kf6/lib/libKSysGuardSensors.so.6.2.4
 lrwxrwxrwx	root/root	opt/kf6/lib/libKSysGuardSystemStats.so -> libKSysGuardSystemStats.so.2
-lrwxrwxrwx	root/root	opt/kf6/lib/libKSysGuardSystemStats.so.2 -> libKSysGuardSystemStats.so.6.1.4
--rwxr-xr-x	root/root	opt/kf6/lib/libKSysGuardSystemStats.so.6.1.4
+lrwxrwxrwx	root/root	opt/kf6/lib/libKSysGuardSystemStats.so.2 -> libKSysGuardSystemStats.so.6.2.4
+-rwxr-xr-x	root/root	opt/kf6/lib/libKSysGuardSystemStats.so.6.2.4
 lrwxrwxrwx	root/root	opt/kf6/lib/libprocesscore.so -> libprocesscore.so.10
-lrwxrwxrwx	root/root	opt/kf6/lib/libprocesscore.so.10 -> libprocesscore.so.6.1.4
--rwxr-xr-x	root/root	opt/kf6/lib/libprocesscore.so.6.1.4
+lrwxrwxrwx	root/root	opt/kf6/lib/libprocesscore.so.10 -> libprocesscore.so.6.2.4
+-rwxr-xr-x	root/root	opt/kf6/lib/libprocesscore.so.6.2.4
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/kf6/
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/kf6/packagestructure/
@@ -82,17 +83,30 @@ drwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/ksysguard/faces/
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/ksysguard/faces/CompactSensorFace.qml
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/ksysguard/faces/ExtendedLegend.qml
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/ksysguard/faces/SensorFace.qml
+-rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/ksysguard/faces/SensorFaces.qmltypes
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/ksysguard/faces/SensorRangeSpinBox.qml
--rwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/ksysguard/faces/libFacesPlugin.so
+-rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/ksysguard/faces/kde-qmlmodule.version
+-rwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/ksysguard/faces/libSensorFacesplugin.so
+drwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/ksysguard/faces/private/
+-rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/ksysguard/faces/private/SensorFacesPrivate.qmltypes
+-rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/ksysguard/faces/private/kde-qmlmodule.version
+-rwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/ksysguard/faces/private/libSensorFacesPrivate.so
+-rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/ksysguard/faces/private/qmldir
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/ksysguard/faces/qmldir
 drwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/ksysguard/formatter/
--rwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/ksysguard/formatter/libFormatterPlugin.so
+-rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/ksysguard/formatter/Formatter.qmltypes
+-rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/ksysguard/formatter/kde-qmlmodule.version
+-rwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/ksysguard/formatter/libFormatterplugin.so
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/ksysguard/formatter/qmldir
 drwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/ksysguard/process/
+-rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/ksysguard/process/ProcessPlugin.qmltypes
+-rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/ksysguard/process/kde-qmlmodule.version
 -rwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/ksysguard/process/libProcessPlugin.so
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/ksysguard/process/qmldir
 drwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/ksysguard/sensors/
--rwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/ksysguard/sensors/libSensorsPlugin.so
+-rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/ksysguard/sensors/Sensors.qmltypes
+-rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/ksysguard/sensors/kde-qmlmodule.version
+-rwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/ksysguard/sensors/libSensorsplugin.so
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/ksysguard/sensors/qmldir
 drwxr-xr-x	root/root	opt/kf6/libexec/
 drwxr-xr-x	root/root	opt/kf6/libexec/kf6/
@@ -196,14 +210,17 @@ drwxr-xr-x	root/root	opt/kf6/share/ksysguard/sensorfaces/org.kde.ksysguard.texto
 drwxr-xr-x	root/root	opt/kf6/share/locale/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ar/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ar/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/ar/LC_MESSAGES/KSysGuardFormatter.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/ar/LC_MESSAGES/KSysGuardSensorFaces.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/ar/LC_MESSAGES/ksysguard_face_org.kde.ksysguard.barchart.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/ar/LC_MESSAGES/ksysguard_face_org.kde.ksysguard.colorgrid.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/ar/LC_MESSAGES/ksysguard_face_org.kde.ksysguard.facegrid.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/ar/LC_MESSAGES/ksysguard_face_org.kde.ksysguard.horizontalbars.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/ar/LC_MESSAGES/ksysguard_face_org.kde.ksysguard.linechart.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/ar/LC_MESSAGES/ksysguard_face_org.kde.ksysguard.piechart.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/ar/LC_MESSAGES/ksysguard_face_org.kde.ksysguard.textonly.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/ar/LC_MESSAGES/ksysguard_sensors.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/ar/LC_MESSAGES/ksysguard_systemstats.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/ar/LC_MESSAGES/processcore.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/ast/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ast/LC_MESSAGES/
@@ -558,6 +575,7 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/ko/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/ko/LC_MESSAGES/ksysguard_face_org.kde.ksysguard.piechart.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/ko/LC_MESSAGES/ksysguard_face_org.kde.ksysguard.textonly.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/ko/LC_MESSAGES/ksysguard_sensors.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/ko/LC_MESSAGES/ksysguard_systemstats.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/ko/LC_MESSAGES/processcore.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/ku/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ku/LC_MESSAGES/
@@ -674,12 +692,17 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/pt/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/pt/LC_MESSAGES/processcore.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/pt_BR/
 drwxr-xr-x	root/root	opt/kf6/share/locale/pt_BR/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/pt_BR/LC_MESSAGES/KSysGuardFormatter.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/pt_BR/LC_MESSAGES/KSysGuardSensorFaces.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/pt_BR/LC_MESSAGES/ksysguard_face_org.kde.ksysguard.barchart.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/pt_BR/LC_MESSAGES/ksysguard_face_org.kde.ksysguard.colorgrid.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/pt_BR/LC_MESSAGES/ksysguard_face_org.kde.ksysguard.facegrid.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/pt_BR/LC_MESSAGES/ksysguard_face_org.kde.ksysguard.horizontalbars.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/pt_BR/LC_MESSAGES/ksysguard_face_org.kde.ksysguard.linechart.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/pt_BR/LC_MESSAGES/ksysguard_face_org.kde.ksysguard.piechart.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/pt_BR/LC_MESSAGES/ksysguard_face_org.kde.ksysguard.textonly.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/pt_BR/LC_MESSAGES/ksysguard_sensors.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/pt_BR/LC_MESSAGES/ksysguard_systemstats.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/pt_BR/LC_MESSAGES/processcore.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/ro/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ro/LC_MESSAGES/
@@ -716,10 +739,12 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/sk/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/sk/LC_MESSAGES/ksysguard_face_org.kde.ksysguard.barchart.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/sk/LC_MESSAGES/ksysguard_face_org.kde.ksysguard.colorgrid.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/sk/LC_MESSAGES/ksysguard_face_org.kde.ksysguard.facegrid.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/sk/LC_MESSAGES/ksysguard_face_org.kde.ksysguard.horizontalbars.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/sk/LC_MESSAGES/ksysguard_face_org.kde.ksysguard.linechart.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/sk/LC_MESSAGES/ksysguard_face_org.kde.ksysguard.piechart.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/sk/LC_MESSAGES/ksysguard_face_org.kde.ksysguard.textonly.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/sk/LC_MESSAGES/ksysguard_sensors.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/sk/LC_MESSAGES/ksysguard_systemstats.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/sk/LC_MESSAGES/processcore.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/sl/
 drwxr-xr-x	root/root	opt/kf6/share/locale/sl/LC_MESSAGES/

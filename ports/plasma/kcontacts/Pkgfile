@@ -1,7 +1,7 @@
 # Depends on: kcodecs kconfig kcoreaddons ki18n
 
 name=kcontacts
-version=6.5.0
+version=6.9.0
 release=1
 source=(https://download.kde.org/stable/frameworks/${version%.*}/$name-$version.tar.xz)
 build_opt="-D CMAKE_INSTALL_PREFIX=$KF6_PREFIX 

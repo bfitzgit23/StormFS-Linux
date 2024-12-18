@@ -84,8 +84,8 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/KF6CalendarCore/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6CalendarCore/KF6CalendarCoreTargets-release.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6CalendarCore/KF6CalendarCoreTargets.cmake
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6CalendarCore.so -> libKF6CalendarCore.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6CalendarCore.so.6 -> libKF6CalendarCore.so.6.5.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6CalendarCore.so.6.5.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6CalendarCore.so.6 -> libKF6CalendarCore.so.6.9.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6CalendarCore.so.6.9.0
 drwxr-xr-x	root/root	opt/kf6/lib/pkgconfig/
 -rw-r--r--	root/root	opt/kf6/lib/pkgconfig/KF6CalendarCore.pc
 drwxr-xr-x	root/root	opt/kf6/lib/qml/

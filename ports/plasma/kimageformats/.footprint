@@ -17,5 +17,6 @@ drwxr-xr-x	root/root	opt/kf6/lib/plugins/imageformats/
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/imageformats/kimg_ras.so
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/imageformats/kimg_raw.so
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/imageformats/kimg_rgb.so
+-rwxr-xr-x	root/root	opt/kf6/lib/plugins/imageformats/kimg_sct.so
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/imageformats/kimg_tga.so
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/imageformats/kimg_xcf.so

@@ -93,8 +93,8 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/KF6BluezQt/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6BluezQt/KF6BluezQtTargets-release.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6BluezQt/KF6BluezQtTargets.cmake
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6BluezQt.so -> libKF6BluezQt.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6BluezQt.so.6 -> libKF6BluezQt.so.6.5.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6BluezQt.so.6.5.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6BluezQt.so.6 -> libKF6BluezQt.so.6.9.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6BluezQt.so.6.9.0
 drwxr-xr-x	root/root	opt/kf6/lib/pkgconfig/
 -rw-r--r--	root/root	opt/kf6/lib/pkgconfig/KF6BluezQt.pc
 drwxr-xr-x	root/root	opt/kf6/lib/qml/

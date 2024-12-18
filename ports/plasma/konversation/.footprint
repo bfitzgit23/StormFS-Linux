@@ -103,6 +103,10 @@ drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/nl/
 drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/nl/konversation/
 -rw-r--r--	root/root	opt/kf6/share/doc/HTML/nl/konversation/index.cache.bz2
 -rw-r--r--	root/root	opt/kf6/share/doc/HTML/nl/konversation/index.docbook
+drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sl/
+drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sl/konversation/
+-rw-r--r--	root/root	opt/kf6/share/doc/HTML/sl/konversation/index.cache.bz2
+-rw-r--r--	root/root	opt/kf6/share/doc/HTML/sl/konversation/index.docbook
 drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sv/
 drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sv/konversation/
 -rw-r--r--	root/root	opt/kf6/share/doc/HTML/sv/konversation/addchannel.png

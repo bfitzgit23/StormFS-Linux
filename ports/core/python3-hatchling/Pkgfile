@@ -5,7 +5,8 @@ version=1.26.3
 release=1
 source=(https://github.com/ofek/hatch/archive/hatchling-v$version/hatchling-$version.tar.gz)
 pkg_build() {
-python3 -m build --wheel --no-isolation
-python3 -m installer --destdir="$PKG" dist/*.whl
+  /usr/bin/python3 -m build backend
+  PIP_CONFIG_FILE=/dev/null /usr/bin/pip3 install --isolated --root=$PKG \
+    --ignore-installed --no-deps backend/dist/*.whl
 }
 

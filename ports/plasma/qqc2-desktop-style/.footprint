@@ -51,6 +51,7 @@ drwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/desktop/
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/desktop/SpinBox.qml
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/desktop/SplitView.qml
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/desktop/StackView.qml
+-rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/desktop/SwipeDelegate.qml
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/desktop/Switch.qml
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/desktop/SwitchDelegate.qml
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/desktop/TabBar.qml
@@ -121,6 +122,9 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/es/LC_MESSAGES/
 drwxr-xr-x	root/root	opt/kf6/share/locale/eu/
 drwxr-xr-x	root/root	opt/kf6/share/locale/eu/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/eu/LC_MESSAGES/qqc2desktopstyle_qt.qm
+drwxr-xr-x	root/root	opt/kf6/share/locale/fi/
+drwxr-xr-x	root/root	opt/kf6/share/locale/fi/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/fi/LC_MESSAGES/qqc2desktopstyle_qt.qm
 drwxr-xr-x	root/root	opt/kf6/share/locale/fr/
 drwxr-xr-x	root/root	opt/kf6/share/locale/fr/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/fr/LC_MESSAGES/qqc2desktopstyle_qt.qm
@@ -142,12 +146,18 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/it/LC_MESSAGES/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ka/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ka/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/ka/LC_MESSAGES/qqc2desktopstyle_qt.qm
+drwxr-xr-x	root/root	opt/kf6/share/locale/ko/
+drwxr-xr-x	root/root	opt/kf6/share/locale/ko/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/ko/LC_MESSAGES/qqc2desktopstyle_qt.qm
 drwxr-xr-x	root/root	opt/kf6/share/locale/lv/
 drwxr-xr-x	root/root	opt/kf6/share/locale/lv/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/lv/LC_MESSAGES/qqc2desktopstyle_qt.qm
 drwxr-xr-x	root/root	opt/kf6/share/locale/nl/
 drwxr-xr-x	root/root	opt/kf6/share/locale/nl/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/nl/LC_MESSAGES/qqc2desktopstyle_qt.qm
+drwxr-xr-x	root/root	opt/kf6/share/locale/nn/
+drwxr-xr-x	root/root	opt/kf6/share/locale/nn/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/nn/LC_MESSAGES/qqc2desktopstyle_qt.qm
 drwxr-xr-x	root/root	opt/kf6/share/locale/pl/
 drwxr-xr-x	root/root	opt/kf6/share/locale/pl/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/pl/LC_MESSAGES/qqc2desktopstyle_qt.qm
@@ -157,6 +167,9 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/ro/LC_MESSAGES/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ru/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/qqc2desktopstyle_qt.qm
+drwxr-xr-x	root/root	opt/kf6/share/locale/sk/
+drwxr-xr-x	root/root	opt/kf6/share/locale/sk/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/sk/LC_MESSAGES/qqc2desktopstyle_qt.qm
 drwxr-xr-x	root/root	opt/kf6/share/locale/sl/
 drwxr-xr-x	root/root	opt/kf6/share/locale/sl/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/sl/LC_MESSAGES/qqc2desktopstyle_qt.qm

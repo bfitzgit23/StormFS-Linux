@@ -26,8 +26,8 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/KF6Su/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6Su/KF6SuTargets-release.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6Su/KF6SuTargets.cmake
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6Su.so -> libKF6Su.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6Su.so.6 -> libKF6Su.so.6.5.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6Su.so.6.5.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6Su.so.6 -> libKF6Su.so.6.9.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6Su.so.6.9.0
 drwxr-xr-x	root/root	opt/kf6/libexec/
 drwxr-xr-x	root/root	opt/kf6/libexec/kf6/
 -rwxr-xr-x	root/root	opt/kf6/libexec/kf6/kdesu_stub

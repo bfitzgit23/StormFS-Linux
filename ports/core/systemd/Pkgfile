@@ -5,10 +5,9 @@
 # Optional:	btrfs-progs curl cryptsetup git gnutls iptables libgcrypt libidn2 libpwquality libseccomp libxkbcommon make-cap11-kit pcre2 qemu qrencode rsync sphinx valgrind zsh (for the zsh AppArmor, audit-userspace jekyll kexec-tools libbpf libdw libfido2 libmicrohttpd lz4 pyelftools quota-tools rpm selinux systemtap tpm2-tss xen docbook-xml docbook-xsl-nons libxslt lxml
 
 name=systemd
-version=256.5
+version=257
 release=2
-source=(https://github.com/$name/$name/archive/v$version/$name-$version.tar.gz
-https://anduin.linuxfromscratch.org/LFS/$name-man-pages-$version.tar.xz)
+source=(https://github.com/$name/$name/archive/v$version/$name-$version.tar.gz)
 
 pkg_build() {
 
@@ -43,8 +42,8 @@ meson setup ..                 \
 ninja
 
       DESTDIR=$PKG ninja install
-mkdir -p $PKG/usr/share/man
-tar -xf $PKGMK_SOURCE_DIR/systemd-man-pages-$version.tar.xz \
-    --no-same-owner --strip-components=1   \
-    -C $PKG/usr/share/man
+#mkdir -p $PKG/usr/share/man
+#tar -xf $PKGMK_SOURCE_DIR/systemd-man-pages-$version.tar.xz \
+#    --no-same-owner --strip-components=1   \
+#    -C $PKG/usr/share/man
 }

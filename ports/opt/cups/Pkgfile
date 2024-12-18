@@ -1,8 +1,8 @@
 # Description: CUPS - Common UNIX Printing System
 # URL: https://openprinting.github.io/cups/
 # Maintainer: Juergen Daubert, jue at crux dot nu
-# Depends on: acl zlib linux-pam gnutls colord dbus libusb xdg-utils 
-
+# Depends on: acl zlib linux-pam gnutls dbus libusb xdg-utils colord 
+# Optional: 
 name=cups
 version=2.4.11
 release=1

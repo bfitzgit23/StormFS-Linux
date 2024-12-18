@@ -75,6 +75,10 @@ drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/ru/kmenuedit/
 -rw-r--r--	root/root	opt/kf6/share/doc/HTML/ru/kmenuedit/new.png
 -rw-r--r--	root/root	opt/kf6/share/doc/HTML/ru/kmenuedit/selecticon.png
 -rw-r--r--	root/root	opt/kf6/share/doc/HTML/ru/kmenuedit/selectinternet.png
+drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sl/
+drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sl/kmenuedit/
+-rw-r--r--	root/root	opt/kf6/share/doc/HTML/sl/kmenuedit/index.cache.bz2
+-rw-r--r--	root/root	opt/kf6/share/doc/HTML/sl/kmenuedit/index.docbook
 drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sv/
 drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sv/kmenuedit/
 -rw-r--r--	root/root	opt/kf6/share/doc/HTML/sv/kmenuedit/index.cache.bz2

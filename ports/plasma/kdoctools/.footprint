@@ -20,8 +20,8 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/KF6DocTools/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6DocTools/KF6DocToolsToolsTargets-release.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6DocTools/KF6DocToolsToolsTargets.cmake
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6DocTools.so -> libKF6DocTools.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6DocTools.so.6 -> libKF6DocTools.so.6.5.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6DocTools.so.6.5.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6DocTools.so.6 -> libKF6DocTools.so.6.9.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6DocTools.so.6.9.0
 drwxr-xr-x	root/root	opt/kf6/share/
 drwxr-xr-x	root/root	opt/kf6/share/doc/
 drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/
@@ -1150,6 +1150,7 @@ drwxr-xr-x	root/root	opt/kf6/share/kf6/kdoctools/customization/xsl/
 -rw-r--r--	root/root	opt/kf6/share/kf6/kdoctools/customization/xsl/pt_br.xml
 -rw-r--r--	root/root	opt/kf6/share/kf6/kdoctools/customization/xsl/ru.xml
 -rw-r--r--	root/root	opt/kf6/share/kf6/kdoctools/customization/xsl/sl.xml
+-rw-r--r--	root/root	opt/kf6/share/kf6/kdoctools/customization/xsl/sq.xml
 -rw-r--r--	root/root	opt/kf6/share/kf6/kdoctools/customization/xsl/sr.xml
 -rw-r--r--	root/root	opt/kf6/share/kf6/kdoctools/customization/xsl/sr_ijekavian.xml
 -rw-r--r--	root/root	opt/kf6/share/kf6/kdoctools/customization/xsl/sr_ijekavianlatin.xml
@@ -1488,6 +1489,7 @@ drwxr-xr-x	root/root	opt/kf6/share/man/es/man1/
 -rw-r--r--	root/root	opt/kf6/share/man/es/man1/checkXML6.1
 -rw-r--r--	root/root	opt/kf6/share/man/es/man1/meinproc6.1
 drwxr-xr-x	root/root	opt/kf6/share/man/es/man7/
+-rw-r--r--	root/root	opt/kf6/share/man/es/man7/kf6options.7
 -rw-r--r--	root/root	opt/kf6/share/man/es/man7/qt6options.7
 drwxr-xr-x	root/root	opt/kf6/share/man/it/
 drwxr-xr-x	root/root	opt/kf6/share/man/it/man1/
@@ -1509,6 +1511,13 @@ drwxr-xr-x	root/root	opt/kf6/share/man/nl/man1/
 drwxr-xr-x	root/root	opt/kf6/share/man/nl/man7/
 -rw-r--r--	root/root	opt/kf6/share/man/nl/man7/kf6options.7
 -rw-r--r--	root/root	opt/kf6/share/man/nl/man7/qt6options.7
+drwxr-xr-x	root/root	opt/kf6/share/man/sl/
+drwxr-xr-x	root/root	opt/kf6/share/man/sl/man1/
+-rw-r--r--	root/root	opt/kf6/share/man/sl/man1/checkXML6.1
+-rw-r--r--	root/root	opt/kf6/share/man/sl/man1/meinproc6.1
+drwxr-xr-x	root/root	opt/kf6/share/man/sl/man7/
+-rw-r--r--	root/root	opt/kf6/share/man/sl/man7/kf6options.7
+-rw-r--r--	root/root	opt/kf6/share/man/sl/man7/qt6options.7
 drwxr-xr-x	root/root	opt/kf6/share/man/tr/
 drwxr-xr-x	root/root	opt/kf6/share/man/tr/man1/
 -rw-r--r--	root/root	opt/kf6/share/man/tr/man1/checkXML6.1

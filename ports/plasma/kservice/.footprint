@@ -30,8 +30,8 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/KF6Service/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6Service/KF6ServiceTargets-release.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6Service/KF6ServiceTargets.cmake
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6Service.so -> libKF6Service.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6Service.so.6 -> libKF6Service.so.6.5.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6Service.so.6.5.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6Service.so.6 -> libKF6Service.so.6.9.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6Service.so.6.9.0
 drwxr-xr-x	root/root	opt/kf6/share/
 drwxr-xr-x	root/root	opt/kf6/share/locale/
 drwxr-xr-x	root/root	opt/kf6/share/locale/af/
@@ -361,6 +361,9 @@ drwxr-xr-x	root/root	opt/kf6/share/man/nl/man8/
 drwxr-xr-x	root/root	opt/kf6/share/man/pt_BR/
 drwxr-xr-x	root/root	opt/kf6/share/man/pt_BR/man8/
 -rw-r--r--	root/root	opt/kf6/share/man/pt_BR/man8/kbuildsycoca6.8
+drwxr-xr-x	root/root	opt/kf6/share/man/sl/
+drwxr-xr-x	root/root	opt/kf6/share/man/sl/man8/
+-rw-r--r--	root/root	opt/kf6/share/man/sl/man8/kbuildsycoca6.8
 drwxr-xr-x	root/root	opt/kf6/share/man/tr/
 drwxr-xr-x	root/root	opt/kf6/share/man/tr/man8/
 -rw-r--r--	root/root	opt/kf6/share/man/tr/man8/kbuildsycoca6.8

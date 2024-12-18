@@ -65,14 +65,14 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/KF6Config/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6Config/KF6ConfigTargets-release.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6Config/KF6ConfigTargets.cmake
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6ConfigCore.so -> libKF6ConfigCore.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6ConfigCore.so.6 -> libKF6ConfigCore.so.6.5.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6ConfigCore.so.6.5.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6ConfigCore.so.6 -> libKF6ConfigCore.so.6.9.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6ConfigCore.so.6.9.0
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6ConfigGui.so -> libKF6ConfigGui.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6ConfigGui.so.6 -> libKF6ConfigGui.so.6.5.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6ConfigGui.so.6.5.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6ConfigGui.so.6 -> libKF6ConfigGui.so.6.9.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6ConfigGui.so.6.9.0
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6ConfigQml.so -> libKF6ConfigQml.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6ConfigQml.so.6 -> libKF6ConfigQml.so.6.5.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6ConfigQml.so.6.5.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6ConfigQml.so.6 -> libKF6ConfigQml.so.6.9.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6ConfigQml.so.6.9.0
 drwxr-xr-x	root/root	opt/kf6/lib/qml/
 drwxr-xr-x	root/root	opt/kf6/lib/qml/org/
 drwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/

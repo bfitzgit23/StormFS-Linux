@@ -1,7 +1,7 @@
 # Depends on: doxygen python3-doxypypy python3-doxyqml python3-requests
 
 name=kapidox
-version=6.5.0
+version=6.9.0
 release=1
 source=(https://download.kde.org/stable/frameworks/${version%.*}/$name-$version.tar.xz)
 build() {

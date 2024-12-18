@@ -81,6 +81,9 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/ia/LC_MESSAGES/
 drwxr-xr-x	root/root	opt/kf6/share/locale/id/
 drwxr-xr-x	root/root	opt/kf6/share/locale/id/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/id/LC_MESSAGES/xdg-desktop-portal-kde.mo
+drwxr-xr-x	root/root	opt/kf6/share/locale/is/
+drwxr-xr-x	root/root	opt/kf6/share/locale/is/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/is/LC_MESSAGES/xdg-desktop-portal-kde.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/it/
 drwxr-xr-x	root/root	opt/kf6/share/locale/it/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/it/LC_MESSAGES/xdg-desktop-portal-kde.mo
@@ -165,6 +168,5 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/zh_TW/LC_MESSAGES/
 drwxr-xr-x	root/root	opt/kf6/share/qlogging-categories6/
 -rw-r--r--	root/root	opt/kf6/share/qlogging-categories6/xdp-kde.categories
 drwxr-xr-x	root/root	opt/kf6/share/xdg-desktop-portal/
--rw-r--r--	root/root	opt/kf6/share/xdg-desktop-portal/kde-portals.conf
 drwxr-xr-x	root/root	opt/kf6/share/xdg-desktop-portal/portals/
 -rw-r--r--	root/root	opt/kf6/share/xdg-desktop-portal/portals/kde.portal

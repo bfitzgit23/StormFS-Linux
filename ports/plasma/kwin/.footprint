@@ -13,8 +13,8 @@ drwxr-xr-x	root/root	opt/kf6/include/kwin/
 -rw-r--r--	root/root	opt/kf6/include/kwin/compositor.h
 -rw-r--r--	root/root	opt/kf6/include/kwin/config-kwin.h
 drwxr-xr-x	root/root	opt/kf6/include/kwin/core/
--rw-r--r--	root/root	opt/kf6/include/kwin/core/colorlut.h
 -rw-r--r--	root/root	opt/kf6/include/kwin/core/colorlut3d.h
+-rw-r--r--	root/root	opt/kf6/include/kwin/core/colorpipeline.h
 -rw-r--r--	root/root	opt/kf6/include/kwin/core/colorpipelinestage.h
 -rw-r--r--	root/root	opt/kf6/include/kwin/core/colorspace.h
 -rw-r--r--	root/root	opt/kf6/include/kwin/core/colortransformation.h
@@ -123,8 +123,29 @@ drwxr-xr-x	root/root	opt/kf6/include/kwin/opengl/
 -rw-r--r--	root/root	opt/kf6/include/kwin/rulebooksettings.h
 -rw-r--r--	root/root	opt/kf6/include/kwin/rules.h
 drwxr-xr-x	root/root	opt/kf6/include/kwin/scene/
+-rw-r--r--	root/root	opt/kf6/include/kwin/scene/cursordelegate_opengl.h
+-rw-r--r--	root/root	opt/kf6/include/kwin/scene/cursordelegate_qpainter.h
+-rw-r--r--	root/root	opt/kf6/include/kwin/scene/cursoritem.h
+-rw-r--r--	root/root	opt/kf6/include/kwin/scene/cursorscene.h
+-rw-r--r--	root/root	opt/kf6/include/kwin/scene/decorationitem.h
+-rw-r--r--	root/root	opt/kf6/include/kwin/scene/dndiconitem.h
+-rw-r--r--	root/root	opt/kf6/include/kwin/scene/imageitem.h
 -rw-r--r--	root/root	opt/kf6/include/kwin/scene/item.h
 -rw-r--r--	root/root	opt/kf6/include/kwin/scene/itemgeometry.h
+-rw-r--r--	root/root	opt/kf6/include/kwin/scene/itemrenderer.h
+-rw-r--r--	root/root	opt/kf6/include/kwin/scene/itemrenderer_opengl.h
+-rw-r--r--	root/root	opt/kf6/include/kwin/scene/itemrenderer_qpainter.h
+-rw-r--r--	root/root	opt/kf6/include/kwin/scene/rootitem.h
+-rw-r--r--	root/root	opt/kf6/include/kwin/scene/scene.h
+-rw-r--r--	root/root	opt/kf6/include/kwin/scene/shadowitem.h
+-rw-r--r--	root/root	opt/kf6/include/kwin/scene/surfaceitem.h
+-rw-r--r--	root/root	opt/kf6/include/kwin/scene/surfaceitem_internal.h
+-rw-r--r--	root/root	opt/kf6/include/kwin/scene/surfaceitem_wayland.h
+-rw-r--r--	root/root	opt/kf6/include/kwin/scene/surfaceitem_x11.h
+-rw-r--r--	root/root	opt/kf6/include/kwin/scene/windowitem.h
+-rw-r--r--	root/root	opt/kf6/include/kwin/scene/workspacescene.h
+-rw-r--r--	root/root	opt/kf6/include/kwin/scene/workspacescene_opengl.h
+-rw-r--r--	root/root	opt/kf6/include/kwin/scene/workspacescene_qpainter.h
 -rw-r--r--	root/root	opt/kf6/include/kwin/screenedge.h
 -rw-r--r--	root/root	opt/kf6/include/kwin/screenlockerwatcher.h
 -rw-r--r--	root/root	opt/kf6/include/kwin/shadow.h
@@ -136,6 +157,7 @@ drwxr-xr-x	root/root	opt/kf6/include/kwin/scene/
 drwxr-xr-x	root/root	opt/kf6/include/kwin/utils/
 -rw-r--r--	root/root	opt/kf6/include/kwin/utils/c_ptr.h
 -rw-r--r--	root/root	opt/kf6/include/kwin/utils/common.h
+-rw-r--r--	root/root	opt/kf6/include/kwin/utils/cursortheme.h
 -rw-r--r--	root/root	opt/kf6/include/kwin/utils/damagejournal.h
 -rw-r--r--	root/root	opt/kf6/include/kwin/utils/drm_format_helper.h
 -rw-r--r--	root/root	opt/kf6/include/kwin/utils/edid.h
@@ -154,11 +176,11 @@ drwxr-xr-x	root/root	opt/kf6/include/kwin/utils/
 -rw-r--r--	root/root	opt/kf6/include/kwin/utils/version.h
 -rw-r--r--	root/root	opt/kf6/include/kwin/utils/vsyncmonitor.h
 -rw-r--r--	root/root	opt/kf6/include/kwin/utils/xcbutils.h
--rw-r--r--	root/root	opt/kf6/include/kwin/utils/xcursortheme.h
 -rw-r--r--	root/root	opt/kf6/include/kwin/virtualdesktops.h
 -rw-r--r--	root/root	opt/kf6/include/kwin/virtualdesktopsdbustypes.h
 -rw-r--r--	root/root	opt/kf6/include/kwin/virtualkeyboard_dbus.h
 drwxr-xr-x	root/root	opt/kf6/include/kwin/wayland/
+-rw-r--r--	root/root	opt/kf6/include/kwin/wayland/alphamodifier_v1.h
 -rw-r--r--	root/root	opt/kf6/include/kwin/wayland/appmenu.h
 -rw-r--r--	root/root	opt/kf6/include/kwin/wayland/blur.h
 -rw-r--r--	root/root	opt/kf6/include/kwin/wayland/clientconnection.h
@@ -177,6 +199,7 @@ drwxr-xr-x	root/root	opt/kf6/include/kwin/wayland/
 -rw-r--r--	root/root	opt/kf6/include/kwin/wayland/display.h
 -rw-r--r--	root/root	opt/kf6/include/kwin/wayland/dpms.h
 -rw-r--r--	root/root	opt/kf6/include/kwin/wayland/drmlease_v1.h
+-rw-r--r--	root/root	opt/kf6/include/kwin/wayland/externalbrightness_v1.h
 -rw-r--r--	root/root	opt/kf6/include/kwin/wayland/fractionalscale_v1.h
 -rw-r--r--	root/root	opt/kf6/include/kwin/wayland/frog_colormanagement_v1.h
 -rw-r--r--	root/root	opt/kf6/include/kwin/wayland/idle.h
@@ -205,11 +228,13 @@ drwxr-xr-x	root/root	opt/kf6/include/kwin/wayland/
 -rw-r--r--	root/root	opt/kf6/include/kwin/wayland/primaryselectionoffer_v1.h
 -rw-r--r--	root/root	opt/kf6/include/kwin/wayland/primaryselectionsource_v1.h
 -rw-r--r--	root/root	opt/kf6/include/kwin/wayland/quirks.h
+-rw-r--r--	root/root	opt/kf6/include/kwin/wayland/qwayland-server-alpha-modifier-v1.h
 -rw-r--r--	root/root	opt/kf6/include/kwin/wayland/qwayland-server-content-type-v1.h
 -rw-r--r--	root/root	opt/kf6/include/kwin/wayland/qwayland-server-frog-color-management-v1.h
+-rw-r--r--	root/root	opt/kf6/include/kwin/wayland/qwayland-server-kde-external-brightness-v1.h
 -rw-r--r--	root/root	opt/kf6/include/kwin/wayland/qwayland-server-linux-drm-syncobj-v1.h
 -rw-r--r--	root/root	opt/kf6/include/kwin/wayland/qwayland-server-presentation-time.h
--rw-r--r--	root/root	opt/kf6/include/kwin/wayland/qwayland-server-xx-color-management-v2.h
+-rw-r--r--	root/root	opt/kf6/include/kwin/wayland/qwayland-server-xx-color-management-v4.h
 -rw-r--r--	root/root	opt/kf6/include/kwin/wayland/relativepointer_v1.h
 -rw-r--r--	root/root	opt/kf6/include/kwin/wayland/screencast_v1.h
 -rw-r--r--	root/root	opt/kf6/include/kwin/wayland/screenedge_v1.h
@@ -228,11 +253,13 @@ drwxr-xr-x	root/root	opt/kf6/include/kwin/wayland/
 -rw-r--r--	root/root	opt/kf6/include/kwin/wayland/textinput_v3.h
 -rw-r--r--	root/root	opt/kf6/include/kwin/wayland/touch.h
 -rw-r--r--	root/root	opt/kf6/include/kwin/wayland/viewporter.h
+-rw-r--r--	root/root	opt/kf6/include/kwin/wayland/wayland-alpha-modifier-v1-server-protocol.h
 -rw-r--r--	root/root	opt/kf6/include/kwin/wayland/wayland-content-type-v1-server-protocol.h
 -rw-r--r--	root/root	opt/kf6/include/kwin/wayland/wayland-frog-color-management-v1-server-protocol.h
+-rw-r--r--	root/root	opt/kf6/include/kwin/wayland/wayland-kde-external-brightness-v1-server-protocol.h
 -rw-r--r--	root/root	opt/kf6/include/kwin/wayland/wayland-linux-drm-syncobj-v1-server-protocol.h
 -rw-r--r--	root/root	opt/kf6/include/kwin/wayland/wayland-presentation-time-server-protocol.h
--rw-r--r--	root/root	opt/kf6/include/kwin/wayland/wayland-xx-color-management-v2-server-protocol.h
+-rw-r--r--	root/root	opt/kf6/include/kwin/wayland/wayland-xx-color-management-v4-server-protocol.h
 -rw-r--r--	root/root	opt/kf6/include/kwin/wayland/xdgactivation_v1.h
 -rw-r--r--	root/root	opt/kf6/include/kwin/wayland/xdgdecoration_v1.h
 -rw-r--r--	root/root	opt/kf6/include/kwin/wayland/xdgdialog_v1.h
@@ -241,7 +268,7 @@ drwxr-xr-x	root/root	opt/kf6/include/kwin/wayland/
 -rw-r--r--	root/root	opt/kf6/include/kwin/wayland/xdgshell.h
 -rw-r--r--	root/root	opt/kf6/include/kwin/wayland/xwaylandkeyboardgrab_v1.h
 -rw-r--r--	root/root	opt/kf6/include/kwin/wayland/xwaylandshell_v1.h
--rw-r--r--	root/root	opt/kf6/include/kwin/wayland/xx_colormanagement_v2.h
+-rw-r--r--	root/root	opt/kf6/include/kwin/wayland/xx_colormanagement_v4.h
 -rw-r--r--	root/root	opt/kf6/include/kwin/wayland_server.h
 -rw-r--r--	root/root	opt/kf6/include/kwin/waylandshellintegration.h
 -rw-r--r--	root/root	opt/kf6/include/kwin/waylandwindow.h
@@ -268,11 +295,11 @@ drwxr-xr-x	root/root	opt/kf6/lib/kconf_update_bin/
 -rwxr-xr-x	root/root	opt/kf6/lib/kconf_update_bin/kwin-6.0-reset-active-mouse-screen
 -rwxr-xr-x	root/root	opt/kf6/lib/kconf_update_bin/kwin-6.1-remove-gridview-expose-shortcuts
 -rwxr-xr-x	root/root	opt/kf6/lib/kconf_update_bin/kwin5_update_default_rules
-lrwxrwxrwx	root/root	opt/kf6/lib/libkcmkwincommon.so.6 -> libkcmkwincommon.so.6.1.4
--rwxr-xr-x	root/root	opt/kf6/lib/libkcmkwincommon.so.6.1.4
+lrwxrwxrwx	root/root	opt/kf6/lib/libkcmkwincommon.so.6 -> libkcmkwincommon.so.6.2.4
+-rwxr-xr-x	root/root	opt/kf6/lib/libkcmkwincommon.so.6.2.4
 lrwxrwxrwx	root/root	opt/kf6/lib/libkwin.so -> libkwin.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libkwin.so.6 -> libkwin.so.6.1.4
--rwxr-xr-x	root/root	opt/kf6/lib/libkwin.so.6.1.4
+lrwxrwxrwx	root/root	opt/kf6/lib/libkwin.so.6 -> libkwin.so.6.2.4
+-rwxr-xr-x	root/root	opt/kf6/lib/libkwin.so.6.2.4
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/kf6/
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/kf6/packagestructure/
@@ -286,7 +313,6 @@ drwxr-xr-x	root/root	opt/kf6/lib/plugins/kwin/effects/
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/kwin/effects/configs/
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/kwin/effects/configs/kcm_kwin4_genericscripted.so
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/kwin/effects/configs/kwin_blur_config.so
--rwxr-xr-x	root/root	opt/kf6/lib/plugins/kwin/effects/configs/kwin_colorblindnesscorrection_config.so
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/kwin/effects/configs/kwin_diminactive_config.so
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/kwin/effects/configs/kwin_glide_config.so
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/kwin/effects/configs/kwin_hidecursor_config.so
@@ -306,6 +332,7 @@ drwxr-xr-x	root/root	opt/kf6/lib/plugins/kwin/effects/configs/
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/kwin/effects/configs/kwin_zoom_config.so
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/kwin/plugins/
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/kwin/plugins/BounceKeysPlugin.so
+-rwxr-xr-x	root/root	opt/kf6/lib/plugins/kwin/plugins/KeyNotificationPlugin.so
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/kwin/plugins/StickyKeysPlugin.so
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/kwin/plugins/buttonsrebind.so
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/kwin/plugins/krunnerintegration.so
@@ -765,6 +792,32 @@ drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/ru/kcontrol/windowspecific/
 -rw-r--r--	root/root	opt/kf6/share/doc/HTML/ru/kcontrol/windowspecific/window-matching-tbird-compose.png
 -rw-r--r--	root/root	opt/kf6/share/doc/HTML/ru/kcontrol/windowspecific/window-matching-tbird-main.png
 -rw-r--r--	root/root	opt/kf6/share/doc/HTML/ru/kcontrol/windowspecific/window-matching-tbird-reminder.png
+drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sl/
+drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sl/kcontrol/
+drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sl/kcontrol/desktop/
+-rw-r--r--	root/root	opt/kf6/share/doc/HTML/sl/kcontrol/desktop/index.cache.bz2
+-rw-r--r--	root/root	opt/kf6/share/doc/HTML/sl/kcontrol/desktop/index.docbook
+drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sl/kcontrol/kwindecoration/
+-rw-r--r--	root/root	opt/kf6/share/doc/HTML/sl/kcontrol/kwindecoration/index.cache.bz2
+-rw-r--r--	root/root	opt/kf6/share/doc/HTML/sl/kcontrol/kwindecoration/index.docbook
+drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sl/kcontrol/kwineffects/
+-rw-r--r--	root/root	opt/kf6/share/doc/HTML/sl/kcontrol/kwineffects/index.cache.bz2
+-rw-r--r--	root/root	opt/kf6/share/doc/HTML/sl/kcontrol/kwineffects/index.docbook
+drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sl/kcontrol/kwinscreenedges/
+-rw-r--r--	root/root	opt/kf6/share/doc/HTML/sl/kcontrol/kwinscreenedges/index.cache.bz2
+-rw-r--r--	root/root	opt/kf6/share/doc/HTML/sl/kcontrol/kwinscreenedges/index.docbook
+drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sl/kcontrol/kwintabbox/
+-rw-r--r--	root/root	opt/kf6/share/doc/HTML/sl/kcontrol/kwintabbox/index.cache.bz2
+-rw-r--r--	root/root	opt/kf6/share/doc/HTML/sl/kcontrol/kwintabbox/index.docbook
+drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sl/kcontrol/kwintouchscreen/
+-rw-r--r--	root/root	opt/kf6/share/doc/HTML/sl/kcontrol/kwintouchscreen/index.cache.bz2
+-rw-r--r--	root/root	opt/kf6/share/doc/HTML/sl/kcontrol/kwintouchscreen/index.docbook
+drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sl/kcontrol/kwinvirtualkeyboard/
+-rw-r--r--	root/root	opt/kf6/share/doc/HTML/sl/kcontrol/kwinvirtualkeyboard/index.cache.bz2
+-rw-r--r--	root/root	opt/kf6/share/doc/HTML/sl/kcontrol/kwinvirtualkeyboard/index.docbook
+drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sl/kcontrol/windowbehaviour/
+-rw-r--r--	root/root	opt/kf6/share/doc/HTML/sl/kcontrol/windowbehaviour/index.cache.bz2
+-rw-r--r--	root/root	opt/kf6/share/doc/HTML/sl/kcontrol/windowbehaviour/index.docbook
 drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sr/
 drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sr/kcontrol/
 drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sr/kcontrol/desktop/
@@ -926,6 +979,7 @@ drwxr-xr-x	root/root	opt/kf6/share/kwin/builtin-effects/
 -rw-r--r--	root/root	opt/kf6/share/kwin/builtin-effects/screentransform.json
 -rw-r--r--	root/root	opt/kf6/share/kwin/builtin-effects/shakecursor.json
 -rw-r--r--	root/root	opt/kf6/share/kwin/builtin-effects/sheet.json
+-rw-r--r--	root/root	opt/kf6/share/kwin/builtin-effects/showcompositing.json
 -rw-r--r--	root/root	opt/kf6/share/kwin/builtin-effects/showfps.json
 -rw-r--r--	root/root	opt/kf6/share/kwin/builtin-effects/showpaint.json
 -rw-r--r--	root/root	opt/kf6/share/kwin/builtin-effects/slide.json
@@ -933,6 +987,7 @@ drwxr-xr-x	root/root	opt/kf6/share/kwin/builtin-effects/
 -rw-r--r--	root/root	opt/kf6/share/kwin/builtin-effects/slidingpopups.json
 -rw-r--r--	root/root	opt/kf6/share/kwin/builtin-effects/snaphelper.json
 -rw-r--r--	root/root	opt/kf6/share/kwin/builtin-effects/startupfeedback.json
+-rw-r--r--	root/root	opt/kf6/share/kwin/builtin-effects/systembell.json
 -rw-r--r--	root/root	opt/kf6/share/kwin/builtin-effects/thumbnailaside.json
 -rw-r--r--	root/root	opt/kf6/share/kwin/builtin-effects/tileseditor.json
 -rw-r--r--	root/root	opt/kf6/share/kwin/builtin-effects/touchpoints.json
@@ -1012,11 +1067,6 @@ drwxr-xr-x	root/root	opt/kf6/share/kwin/effects/maximize/contents/
 drwxr-xr-x	root/root	opt/kf6/share/kwin/effects/maximize/contents/code/
 -rw-r--r--	root/root	opt/kf6/share/kwin/effects/maximize/contents/code/main.js
 -rw-r--r--	root/root	opt/kf6/share/kwin/effects/maximize/metadata.json
-drwxr-xr-x	root/root	opt/kf6/share/kwin/effects/morphingpopups/
-drwxr-xr-x	root/root	opt/kf6/share/kwin/effects/morphingpopups/contents/
-drwxr-xr-x	root/root	opt/kf6/share/kwin/effects/morphingpopups/contents/code/
--rw-r--r--	root/root	opt/kf6/share/kwin/effects/morphingpopups/contents/code/main.js
--rw-r--r--	root/root	opt/kf6/share/kwin/effects/morphingpopups/metadata.json
 drwxr-xr-x	root/root	opt/kf6/share/kwin/effects/outputlocator/
 drwxr-xr-x	root/root	opt/kf6/share/kwin/effects/outputlocator/qml/
 -rw-r--r--	root/root	opt/kf6/share/kwin/effects/outputlocator/qml/OutputLabel.qml
@@ -1034,8 +1084,12 @@ drwxr-xr-x	root/root	opt/kf6/share/kwin/effects/sessionquit/contents/
 drwxr-xr-x	root/root	opt/kf6/share/kwin/effects/sessionquit/contents/code/
 -rw-r--r--	root/root	opt/kf6/share/kwin/effects/sessionquit/contents/code/main.js
 -rw-r--r--	root/root	opt/kf6/share/kwin/effects/sessionquit/metadata.json
+drwxr-xr-x	root/root	opt/kf6/share/kwin/effects/showcompositing/
+drwxr-xr-x	root/root	opt/kf6/share/kwin/effects/showcompositing/qml/
+-rw-r--r--	root/root	opt/kf6/share/kwin/effects/showcompositing/qml/main.qml
 drwxr-xr-x	root/root	opt/kf6/share/kwin/effects/showfps/
 drwxr-xr-x	root/root	opt/kf6/share/kwin/effects/showfps/qml/
+-rw-r--r--	root/root	opt/kf6/share/kwin/effects/showfps/qml/main-fallback.qml
 -rw-r--r--	root/root	opt/kf6/share/kwin/effects/showfps/qml/main.qml
 drwxr-xr-x	root/root	opt/kf6/share/kwin/effects/squash/
 drwxr-xr-x	root/root	opt/kf6/share/kwin/effects/squash/contents/
@@ -1297,6 +1351,8 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/da/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/da/LC_MESSAGES/kcm_kwindecoration.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/da/LC_MESSAGES/kcm_kwinrules.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/da/LC_MESSAGES/kcm_kwintabbox.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/da/LC_MESSAGES/kcm_kwinxwayland.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/da/LC_MESSAGES/kcm_virtualkeyboard.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/da/LC_MESSAGES/kcmkwincommon.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/da/LC_MESSAGES/kcmkwincompositing.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/da/LC_MESSAGES/kcmkwinscreenedges.mo
@@ -2106,6 +2162,9 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/th/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/th/LC_MESSAGES/kcmkwinscreenedges.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/th/LC_MESSAGES/kcmkwm.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/th/LC_MESSAGES/kwin.mo
+drwxr-xr-x	root/root	opt/kf6/share/locale/tok/
+drwxr-xr-x	root/root	opt/kf6/share/locale/tok/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/tok/LC_MESSAGES/kcm_kwinrules.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/tr/
 drwxr-xr-x	root/root	opt/kf6/share/locale/tr/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/tr/LC_MESSAGES/kcm_kwin_effects.mo

@@ -63,11 +63,11 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/KF6UserFeedback/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6UserFeedback/KF6UserFeedbackTarget-release.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6UserFeedback/KF6UserFeedbackTarget.cmake
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6UserFeedbackCore.so -> libKF6UserFeedbackCore.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6UserFeedbackCore.so.6 -> libKF6UserFeedbackCore.so.6.5.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6UserFeedbackCore.so.6.5.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6UserFeedbackCore.so.6 -> libKF6UserFeedbackCore.so.6.9.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6UserFeedbackCore.so.6.9.0
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6UserFeedbackWidgets.so -> libKF6UserFeedbackWidgets.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6UserFeedbackWidgets.so.6 -> libKF6UserFeedbackWidgets.so.6.5.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6UserFeedbackWidgets.so.6.5.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6UserFeedbackWidgets.so.6 -> libKF6UserFeedbackWidgets.so.6.9.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6UserFeedbackWidgets.so.6.9.0
 drwxr-xr-x	root/root	opt/kf6/lib/qml/
 drwxr-xr-x	root/root	opt/kf6/lib/qml/org/
 drwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/
@@ -81,6 +81,9 @@ drwxr-xr-x	root/root	opt/kf6/mkspecs/modules/
 -rw-r--r--	root/root	opt/kf6/mkspecs/modules/qt_KF6UserFeedbackCore.pri
 -rw-r--r--	root/root	opt/kf6/mkspecs/modules/qt_KF6UserFeedbackWidgets.pri
 drwxr-xr-x	root/root	opt/kf6/share/
+drwxr-xr-x	root/root	opt/kf6/share/KDE/
+drwxr-xr-x	root/root	opt/kf6/share/KDE/UserFeedbackConsole/
+-rw-r--r--	root/root	opt/kf6/share/KDE/UserFeedbackConsole/user-feedback-manual.qch
 drwxr-xr-x	root/root	opt/kf6/share/applications/
 -rw-r--r--	root/root	opt/kf6/share/applications/org.kde.kuserfeedback-console.desktop
 drwxr-xr-x	root/root	opt/kf6/share/locale/

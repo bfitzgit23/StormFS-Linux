@@ -94,6 +94,8 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/el/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/el/LC_MESSAGES/fileviewgitplugin.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/el/LC_MESSAGES/fileviewhgplugin.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/el/LC_MESSAGES/fileviewsvnplugin.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/el/LC_MESSAGES/makefileactions.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/el/LC_MESSAGES/mountisoaction.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/en_GB/
 drwxr-xr-x	root/root	opt/kf6/share/locale/en_GB/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/en_GB/LC_MESSAGES/fileviewbazaarplugin.mo

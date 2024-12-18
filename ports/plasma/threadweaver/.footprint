@@ -81,5 +81,5 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/KF6ThreadWeaver/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6ThreadWeaver/KF6ThreadWeaverTargets-release.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6ThreadWeaver/KF6ThreadWeaverTargets.cmake
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6ThreadWeaver.so -> libKF6ThreadWeaver.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6ThreadWeaver.so.6 -> libKF6ThreadWeaver.so.6.5.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6ThreadWeaver.so.6.5.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6ThreadWeaver.so.6 -> libKF6ThreadWeaver.so.6.9.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6ThreadWeaver.so.6.9.0

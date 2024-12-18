@@ -130,6 +130,14 @@ drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/ru/kcontrol6/filetypes/
 drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/ru/kdesu/
 -rw-r--r--	root/root	opt/kf6/share/doc/HTML/ru/kdesu/index.cache.bz2
 -rw-r--r--	root/root	opt/kf6/share/doc/HTML/ru/kdesu/index.docbook
+drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sl/
+drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sl/kcontrol6/
+drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sl/kcontrol6/filetypes/
+-rw-r--r--	root/root	opt/kf6/share/doc/HTML/sl/kcontrol6/filetypes/index.cache.bz2
+-rw-r--r--	root/root	opt/kf6/share/doc/HTML/sl/kcontrol6/filetypes/index.docbook
+drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sl/kdesu/
+-rw-r--r--	root/root	opt/kf6/share/doc/HTML/sl/kdesu/index.cache.bz2
+-rw-r--r--	root/root	opt/kf6/share/doc/HTML/sl/kdesu/index.docbook
 drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sr/
 drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sr/kcontrol6/
 drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sr/kcontrol6/filetypes/
@@ -959,6 +967,9 @@ drwxr-xr-x	root/root	opt/kf6/share/man/pt_BR/man1/
 drwxr-xr-x	root/root	opt/kf6/share/man/ru/
 drwxr-xr-x	root/root	opt/kf6/share/man/ru/man1/
 -rw-r--r--	root/root	opt/kf6/share/man/ru/man1/kdesu.1
+drwxr-xr-x	root/root	opt/kf6/share/man/sl/
+drwxr-xr-x	root/root	opt/kf6/share/man/sl/man1/
+-rw-r--r--	root/root	opt/kf6/share/man/sl/man1/kdesu.1
 drwxr-xr-x	root/root	opt/kf6/share/man/sr/
 drwxr-xr-x	root/root	opt/kf6/share/man/sr/man1/
 -rw-r--r--	root/root	opt/kf6/share/man/sr/man1/kdesu.1

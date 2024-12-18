@@ -6,8 +6,8 @@ drwxr-xr-x	root/root	opt/kf6/
 drwxr-xr-x	root/root	opt/kf6/bin/
 -rwxr-xr-x	root/root	opt/kf6/bin/ark
 drwxr-xr-x	root/root	opt/kf6/lib/
-lrwxrwxrwx	root/root	opt/kf6/lib/libkerfuffle.so.24 -> libkerfuffle.so.24.08.0
--rwxr-xr-x	root/root	opt/kf6/lib/libkerfuffle.so.24.08.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libkerfuffle.so.24 -> libkerfuffle.so.24.12.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libkerfuffle.so.24.12.0
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/kerfuffle/
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/kerfuffle/kerfuffle_cli7z.so
@@ -88,6 +88,10 @@ drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/ru/
 drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/ru/ark/
 -rw-r--r--	root/root	opt/kf6/share/doc/HTML/ru/ark/index.cache.bz2
 -rw-r--r--	root/root	opt/kf6/share/doc/HTML/ru/ark/index.docbook
+drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sl/
+drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sl/ark/
+-rw-r--r--	root/root	opt/kf6/share/doc/HTML/sl/ark/index.cache.bz2
+-rw-r--r--	root/root	opt/kf6/share/doc/HTML/sl/ark/index.docbook
 drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sr/
 drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sr/ark/
 -rw-r--r--	root/root	opt/kf6/share/doc/HTML/sr/ark/index.cache.bz2
@@ -392,6 +396,9 @@ drwxr-xr-x	root/root	opt/kf6/share/man/nl/man1/
 drwxr-xr-x	root/root	opt/kf6/share/man/pt_BR/
 drwxr-xr-x	root/root	opt/kf6/share/man/pt_BR/man1/
 -rw-r--r--	root/root	opt/kf6/share/man/pt_BR/man1/ark.1
+drwxr-xr-x	root/root	opt/kf6/share/man/sl/
+drwxr-xr-x	root/root	opt/kf6/share/man/sl/man1/
+-rw-r--r--	root/root	opt/kf6/share/man/sl/man1/ark.1
 drwxr-xr-x	root/root	opt/kf6/share/man/sr/
 drwxr-xr-x	root/root	opt/kf6/share/man/sr/man1/
 -rw-r--r--	root/root	opt/kf6/share/man/sr/man1/ark.1

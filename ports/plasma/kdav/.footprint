@@ -55,8 +55,8 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/KF6DAV/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6DAV/KF6DAVTargets-release.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6DAV/KF6DAVTargets.cmake
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6DAV.so -> libKF6DAV.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6DAV.so.6 -> libKF6DAV.so.6.5.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6DAV.so.6.5.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6DAV.so.6 -> libKF6DAV.so.6.9.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6DAV.so.6.9.0
 drwxr-xr-x	root/root	opt/kf6/share/
 drwxr-xr-x	root/root	opt/kf6/share/locale/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ar/

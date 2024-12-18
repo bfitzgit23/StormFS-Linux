@@ -31,8 +31,8 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/KF6DNSSD/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6DNSSD/KF6DNSSDTargets-release.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6DNSSD/KF6DNSSDTargets.cmake
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6DNSSD.so -> libKF6DNSSD.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6DNSSD.so.6 -> libKF6DNSSD.so.6.5.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6DNSSD.so.6.5.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6DNSSD.so.6 -> libKF6DNSSD.so.6.9.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6DNSSD.so.6.9.0
 drwxr-xr-x	root/root	opt/kf6/share/
 drwxr-xr-x	root/root	opt/kf6/share/locale/
 drwxr-xr-x	root/root	opt/kf6/share/locale/af/

@@ -5,12 +5,14 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/
 drwxr-xr-x	root/root	opt/kf6/lib/cmake/KF6QuickCharts/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6QuickCharts/KF6QuickChartsConfig.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6QuickCharts/KF6QuickChartsConfigVersion.cmake
+-rw-r--r--	root/root	opt/kf6/lib/cmake/KF6QuickCharts/KF6QuickChartsTargets-release.cmake
+-rw-r--r--	root/root	opt/kf6/lib/cmake/KF6QuickCharts/KF6QuickChartsTargets.cmake
 lrwxrwxrwx	root/root	opt/kf6/lib/libQuickCharts.so -> libQuickCharts.so.1
-lrwxrwxrwx	root/root	opt/kf6/lib/libQuickCharts.so.1 -> libQuickCharts.so.6.5.0
--rwxr-xr-x	root/root	opt/kf6/lib/libQuickCharts.so.6.5.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libQuickCharts.so.1 -> libQuickCharts.so.6.9.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libQuickCharts.so.6.9.0
 lrwxrwxrwx	root/root	opt/kf6/lib/libQuickChartsControls.so -> libQuickChartsControls.so.1
-lrwxrwxrwx	root/root	opt/kf6/lib/libQuickChartsControls.so.1 -> libQuickChartsControls.so.6.5.0
--rwxr-xr-x	root/root	opt/kf6/lib/libQuickChartsControls.so.6.5.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libQuickChartsControls.so.1 -> libQuickChartsControls.so.6.9.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libQuickChartsControls.so.6.9.0
 drwxr-xr-x	root/root	opt/kf6/lib/qml/
 drwxr-xr-x	root/root	opt/kf6/lib/qml/org/
 drwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/

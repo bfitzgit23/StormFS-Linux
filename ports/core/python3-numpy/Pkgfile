@@ -1,7 +1,7 @@
 # Description: Array processing for numbers, strings, records, and objects with Python
 # URL: https://numpy.org
 # Maintainer: Tim Biermann, tbier at posteo dot de
-# Depends on: lapack meson-python python3-cython
+# Depends on: lapack meson-python cython3 python3-meson_python
 
 name=python3-numpy
 version=2.1.3

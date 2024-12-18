@@ -29,11 +29,11 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/KF6Purpose/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6Purpose/KF6PurposeTargets-release.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6Purpose/KF6PurposeTargets.cmake
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6Purpose.so -> libKF6Purpose.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6Purpose.so.6 -> libKF6Purpose.so.6.5.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6Purpose.so.6.5.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6Purpose.so.6 -> libKF6Purpose.so.6.9.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6Purpose.so.6.9.0
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6PurposeWidgets.so -> libKF6PurposeWidgets.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6PurposeWidgets.so.6 -> libKF6PurposeWidgets.so.6.5.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6PurposeWidgets.so.6.5.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6PurposeWidgets.so.6 -> libKF6PurposeWidgets.so.6.9.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6PurposeWidgets.so.6.9.0
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/kf6/
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/kf6/kfileitemaction/
@@ -41,6 +41,7 @@ drwxr-xr-x	root/root	opt/kf6/lib/plugins/kf6/kfileitemaction/
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/kf6/purpose/
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/kf6/purpose/barcodeplugin.so
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/kf6/purpose/bluetoothplugin.so
+-rwxr-xr-x	root/root	opt/kf6/lib/plugins/kf6/purpose/clipboardplugin.so
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/kf6/purpose/emailplugin.so
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/kf6/purpose/imgurplugin.so
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/kf6/purpose/kdeconnectplugin.so

@@ -3,6 +3,8 @@ drwxr-xr-x	root/root	opt/kf6/
 drwxr-xr-x	root/root	opt/kf6/bin/
 -rwxr-xr-x	root/root	opt/kf6/bin/ksshaskpass
 drwxr-xr-x	root/root	opt/kf6/share/
+drwxr-xr-x	root/root	opt/kf6/share/applications/
+-rw-r--r--	root/root	opt/kf6/share/applications/org.kde.ksshaskpass.desktop
 drwxr-xr-x	root/root	opt/kf6/share/locale/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ar/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ar/LC_MESSAGES/

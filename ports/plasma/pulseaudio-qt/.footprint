@@ -52,7 +52,7 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/KF6PulseAudioQt/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6PulseAudioQt/KF6PulseAudioQtTargets-release.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6PulseAudioQt/KF6PulseAudioQtTargets.cmake
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6PulseAudioQt.so -> libKF6PulseAudioQt.so.5
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6PulseAudioQt.so.1.5.0
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6PulseAudioQt.so.5 -> libKF6PulseAudioQt.so.1.5.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6PulseAudioQt.so.1.6.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6PulseAudioQt.so.5 -> libKF6PulseAudioQt.so.1.6.0
 drwxr-xr-x	root/root	opt/kf6/lib/pkgconfig/
 -rw-r--r--	root/root	opt/kf6/lib/pkgconfig/KF6PulseAudioQt.pc

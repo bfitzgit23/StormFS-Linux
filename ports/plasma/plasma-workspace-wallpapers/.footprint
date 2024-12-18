@@ -319,6 +319,15 @@ drwxr-xr-x	root/root	opt/kf6/share/wallpapers/SafeLanding/contents/images/
 -rw-r--r--	root/root	opt/kf6/share/wallpapers/SafeLanding/contents/images/5120x2880.jpg
 -rw-r--r--	root/root	opt/kf6/share/wallpapers/SafeLanding/contents/screenshot.jpg
 -rw-r--r--	root/root	opt/kf6/share/wallpapers/SafeLanding/metadata.json
+drwxr-xr-x	root/root	opt/kf6/share/wallpapers/ScarletTree/
+drwxr-xr-x	root/root	opt/kf6/share/wallpapers/ScarletTree/contents/
+drwxr-xr-x	root/root	opt/kf6/share/wallpapers/ScarletTree/contents/images/
+-rw-r--r--	root/root	opt/kf6/share/wallpapers/ScarletTree/contents/images/1080x1920.png
+-rw-r--r--	root/root	opt/kf6/share/wallpapers/ScarletTree/contents/images/5120x2880.png
+drwxr-xr-x	root/root	opt/kf6/share/wallpapers/ScarletTree/contents/images_dark/
+-rw-r--r--	root/root	opt/kf6/share/wallpapers/ScarletTree/contents/images_dark/1080x1920.png
+-rw-r--r--	root/root	opt/kf6/share/wallpapers/ScarletTree/contents/images_dark/5120x2880.png
+-rw-r--r--	root/root	opt/kf6/share/wallpapers/ScarletTree/metadata.json
 drwxr-xr-x	root/root	opt/kf6/share/wallpapers/Shell/
 drwxr-xr-x	root/root	opt/kf6/share/wallpapers/Shell/contents/
 drwxr-xr-x	root/root	opt/kf6/share/wallpapers/Shell/contents/images/

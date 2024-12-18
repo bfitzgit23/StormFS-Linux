@@ -1,7 +1,7 @@
 # Description: Command line tools for desktop integration tasks.
 # URL: https://www.freedesktop.org/wiki/Software/xdg-utils/
 # Maintainer: Tim Biermann, tbier at posteo dot de
-# Depends on: xmlto links xorg-apps 
+# Depends on: xmlto links
 # Optional: lynx w3m dbus
 
 name=xdg-utils

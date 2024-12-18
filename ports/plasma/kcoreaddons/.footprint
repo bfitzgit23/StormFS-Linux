@@ -85,8 +85,8 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/KF6CoreAddons/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6CoreAddons/KF6CoreAddonsTargets-release.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6CoreAddons/KF6CoreAddonsTargets.cmake
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6CoreAddons.so -> libKF6CoreAddons.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6CoreAddons.so.6 -> libKF6CoreAddons.so.6.5.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6CoreAddons.so.6.5.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6CoreAddons.so.6 -> libKF6CoreAddons.so.6.9.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6CoreAddons.so.6.9.0
 drwxr-xr-x	root/root	opt/kf6/lib/qml/
 drwxr-xr-x	root/root	opt/kf6/lib/qml/org/
 drwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/

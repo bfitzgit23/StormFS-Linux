@@ -20,6 +20,8 @@ drwxr-xr-x	root/root	opt/kf6/share/kcm-gtk-module/
 drwxr-xr-x	root/root	opt/kf6/share/kconf_update/
 -rw-r--r--	root/root	opt/kf6/share/kconf_update/gtkconfig.upd
 -rwxr-xr-x	root/root	opt/kf6/share/kconf_update/remove_window_decorations_from_gtk_css.sh
+drwxr-xr-x	root/root	opt/kf6/share/qlogging-categories6/
+-rw-r--r--	root/root	opt/kf6/share/qlogging-categories6/kde-gtk-config.categories
 drwxr-xr-x	root/root	opt/kf6/share/themes/
 drwxr-xr-x	root/root	opt/kf6/share/themes/Breeze/
 -rw-r--r--	root/root	opt/kf6/share/themes/Breeze/window_decorations.css

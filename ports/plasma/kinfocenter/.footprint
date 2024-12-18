@@ -22,6 +22,7 @@ drwxr-xr-x	root/root	opt/kf6/lib/plugins/plasma/kcms/kinfocenter/
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/plasma/kcms/kinfocenter/kcm_glx.so
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/plasma/kcms/kinfocenter/kcm_interrupts.so
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/plasma/kcms/kinfocenter/kcm_kwinsupportinfo.so
+-rwxr-xr-x	root/root	opt/kf6/lib/plugins/plasma/kcms/kinfocenter/kcm_memory.so
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/plasma/kcms/kinfocenter/kcm_network.so
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/plasma/kcms/kinfocenter/kcm_opencl.so
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/plasma/kcms/kinfocenter/kcm_pci.so
@@ -99,6 +100,10 @@ drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/ru/
 drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/ru/kinfocenter/
 -rw-r--r--	root/root	opt/kf6/share/doc/HTML/ru/kinfocenter/index.cache.bz2
 -rw-r--r--	root/root	opt/kf6/share/doc/HTML/ru/kinfocenter/index.docbook
+drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sl/
+drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sl/kinfocenter/
+-rw-r--r--	root/root	opt/kf6/share/doc/HTML/sl/kinfocenter/index.cache.bz2
+-rw-r--r--	root/root	opt/kf6/share/doc/HTML/sl/kinfocenter/index.docbook
 drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sr/
 drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sr/kinfocenter/
 -rw-r--r--	root/root	opt/kf6/share/doc/HTML/sr/kinfocenter/index.cache.bz2
@@ -216,6 +221,7 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/da/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/da/LC_MESSAGES/kcm_energyinfo.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/da/LC_MESSAGES/kcm_samba.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/da/LC_MESSAGES/kcmusb.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/da/LC_MESSAGES/kinfocenter.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/de/
 drwxr-xr-x	root/root	opt/kf6/share/locale/de/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/de/LC_MESSAGES/kcm_about-distro.mo

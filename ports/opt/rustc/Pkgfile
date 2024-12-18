@@ -6,7 +6,7 @@
 
 
 name=rustc
-version=1.82.0
+version=1.83.0
 release=1
 source=(https://static.rust-lang.org/dist/$name-$version-src.tar.xz)
 build() {
@@ -30,6 +30,10 @@ targets = "X86"
 
 # When using system llvm prefer shared libraries
 link-shared = true
+# Do not download pre-built LLVM, instead either use the system
+# LLVM or build LLVM from the shipped source.
+download-ci-llvm = false
+
 
 [build]
 # omit docs to save time and space (default is to build them)
@@ -50,12 +54,12 @@ tools = ["cargo", "clippy", "rustdoc", "rustfmt"]
 vendor = true
 
 [install]
-prefix = "/opt/rustc-1.82.0"
-docdir = "share/doc/rustc-1.82.0"
+prefix = "/opt/rustc-1.83.0"
+docdir = "share/doc/rustc-1.83.0"
 
 [rust]
 channel = "stable"
-description = "for BLFS r12.2-352"
+description = "for BLFS r12.2-759"
 
 # Enable the same optimizations as the official upstream build.
 lto = "thin"

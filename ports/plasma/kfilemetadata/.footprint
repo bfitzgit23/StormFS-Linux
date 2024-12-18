@@ -47,8 +47,8 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/KF6FileMetaData/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6FileMetaData/KF6FileMetaDataTargets-release.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6FileMetaData/KF6FileMetaDataTargets.cmake
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6FileMetaData.so -> libKF6FileMetaData.so.3
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6FileMetaData.so.3 -> libKF6FileMetaData.so.6.5.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6FileMetaData.so.6.5.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6FileMetaData.so.3 -> libKF6FileMetaData.so.6.9.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6FileMetaData.so.6.9.0
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/kf6/
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/kf6/kfilemetadata/

@@ -41,9 +41,9 @@ drwxr-xr-x	root/root	lib/cmake/Okular6/
 -rw-r--r--	root/root	lib/cmake/Okular6/Okular6ConfigVersion.cmake
 -rw-r--r--	root/root	lib/cmake/Okular6/Okular6Targets-release.cmake
 -rw-r--r--	root/root	lib/cmake/Okular6/Okular6Targets.cmake
-lrwxrwxrwx	root/root	lib/libOkular6Core.so -> libOkular6Core.so.2
-lrwxrwxrwx	root/root	lib/libOkular6Core.so.2 -> libOkular6Core.so.2.0.0
--rwxr-xr-x	root/root	lib/libOkular6Core.so.2.0.0
+lrwxrwxrwx	root/root	lib/libOkular6Core.so -> libOkular6Core.so.3
+lrwxrwxrwx	root/root	lib/libOkular6Core.so.3 -> libOkular6Core.so.3.0.0
+-rwxr-xr-x	root/root	lib/libOkular6Core.so.3.0.0
 drwxr-xr-x	root/root	lib/plugins/
 drwxr-xr-x	root/root	lib/plugins/kf6/
 drwxr-xr-x	root/root	lib/plugins/kf6/parts/
@@ -278,6 +278,10 @@ drwxr-xr-x	root/root	share/doc/HTML/ru/okular/
 -rw-r--r--	root/root	share/doc/HTML/ru/okular/tool-polygon-okular.png
 -rw-r--r--	root/root	share/doc/HTML/ru/okular/tool-stamp-okular.png
 -rw-r--r--	root/root	share/doc/HTML/ru/okular/tool-underline-okular.png
+drwxr-xr-x	root/root	share/doc/HTML/sl/
+drwxr-xr-x	root/root	share/doc/HTML/sl/okular/
+-rw-r--r--	root/root	share/doc/HTML/sl/okular/index.cache.bz2
+-rw-r--r--	root/root	share/doc/HTML/sl/okular/index.docbook
 drwxr-xr-x	root/root	share/doc/HTML/sv/
 drwxr-xr-x	root/root	share/doc/HTML/sv/okular/
 -rw-r--r--	root/root	share/doc/HTML/sv/okular/configure.png
@@ -1568,6 +1572,9 @@ drwxr-xr-x	root/root	share/man/pt_BR/man1/
 drwxr-xr-x	root/root	share/man/ru/
 drwxr-xr-x	root/root	share/man/ru/man1/
 -rw-r--r--	root/root	share/man/ru/man1/okular.1
+drwxr-xr-x	root/root	share/man/sl/
+drwxr-xr-x	root/root	share/man/sl/man1/
+-rw-r--r--	root/root	share/man/sl/man1/okular.1
 drwxr-xr-x	root/root	share/man/sv/
 drwxr-xr-x	root/root	share/man/sv/man1/
 -rw-r--r--	root/root	share/man/sv/man1/okular.1

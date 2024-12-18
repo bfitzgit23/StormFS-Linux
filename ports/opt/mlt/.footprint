@@ -74,11 +74,11 @@ drwxr-xr-x	root/root	usr/lib/cmake/Mlt7/
 -rw-r--r--	root/root	usr/lib/cmake/Mlt7/Mlt7Targets-release.cmake
 -rw-r--r--	root/root	usr/lib/cmake/Mlt7/Mlt7Targets.cmake
 lrwxrwxrwx	root/root	usr/lib/libmlt++-7.so -> libmlt++-7.so.7
-lrwxrwxrwx	root/root	usr/lib/libmlt++-7.so.7 -> libmlt++-7.so.7.24.0
--rwxr-xr-x	root/root	usr/lib/libmlt++-7.so.7.24.0
+lrwxrwxrwx	root/root	usr/lib/libmlt++-7.so.7 -> libmlt++-7.so.7.28.0
+-rwxr-xr-x	root/root	usr/lib/libmlt++-7.so.7.28.0
 lrwxrwxrwx	root/root	usr/lib/libmlt-7.so -> libmlt-7.so.7
-lrwxrwxrwx	root/root	usr/lib/libmlt-7.so.7 -> libmlt-7.so.7.24.0
--rwxr-xr-x	root/root	usr/lib/libmlt-7.so.7.24.0
+lrwxrwxrwx	root/root	usr/lib/libmlt-7.so.7 -> libmlt-7.so.7.28.0
+-rwxr-xr-x	root/root	usr/lib/libmlt-7.so.7.28.0
 drwxr-xr-x	root/root	usr/lib/mlt-7/
 -rwxr-xr-x	root/root	usr/lib/mlt-7/libmltavformat.so
 -rwxr-xr-x	root/root	usr/lib/mlt-7/libmltcore.so
@@ -228,6 +228,8 @@ drwxr-xr-x	root/root	usr/share/mlt-7/plus/
 -rw-r--r--	root/root	usr/share/mlt-7/plus/filter_shape.yml
 -rw-r--r--	root/root	usr/share/mlt-7/plus/filter_spot_remover.yml
 -rw-r--r--	root/root	usr/share/mlt-7/plus/filter_strobe.yml
+-rw-r--r--	root/root	usr/share/mlt-7/plus/filter_subtitle.yml
+-rw-r--r--	root/root	usr/share/mlt-7/plus/filter_subtitle_feed.yml
 -rw-r--r--	root/root	usr/share/mlt-7/plus/filter_text.yml
 -rw-r--r--	root/root	usr/share/mlt-7/plus/filter_threshold.yml
 -rw-r--r--	root/root	usr/share/mlt-7/plus/filter_timer.yml
@@ -254,6 +256,7 @@ drwxr-xr-x	root/root	usr/share/mlt-7/presets/consumer/avformat/
 -rw-r--r--	root/root	usr/share/mlt-7/presets/consumer/avformat/MPEG-2
 -rw-r--r--	root/root	usr/share/mlt-7/presets/consumer/avformat/MPEG-4
 -rw-r--r--	root/root	usr/share/mlt-7/presets/consumer/avformat/MPEG-4-ASP
+-rw-r--r--	root/root	usr/share/mlt-7/presets/consumer/avformat/SVT-AV1
 -rw-r--r--	root/root	usr/share/mlt-7/presets/consumer/avformat/Slide-Deck-H264
 -rw-r--r--	root/root	usr/share/mlt-7/presets/consumer/avformat/Slide-Deck-HEVC
 -rw-r--r--	root/root	usr/share/mlt-7/presets/consumer/avformat/Sony-PSP
@@ -361,6 +364,7 @@ drwxr-xr-x	root/root	usr/share/mlt-7/presets/consumer/avformat/ten_bit/
 -rw-r--r--	root/root	usr/share/mlt-7/presets/consumer/avformat/ten_bit/ProRes 422
 -rw-r--r--	root/root	usr/share/mlt-7/presets/consumer/avformat/ten_bit/ProRes 444
 -rw-r--r--	root/root	usr/share/mlt-7/presets/consumer/avformat/ten_bit/ProRes HQ
+-rw-r--r--	root/root	usr/share/mlt-7/presets/consumer/avformat/ten_bit/SVT-AV1
 -rw-r--r--	root/root	usr/share/mlt-7/presets/consumer/avformat/ten_bit/x264-high10
 -rw-r--r--	root/root	usr/share/mlt-7/presets/consumer/avformat/ten_bit/x265-main10
 -rw-r--r--	root/root	usr/share/mlt-7/presets/consumer/avformat/vp9
@@ -469,6 +473,7 @@ drwxr-xr-x	root/root	usr/share/mlt-7/qt6/
 -rw-r--r--	root/root	usr/share/mlt-7/qt6/filter_audiolevelgraph.yml
 -rw-r--r--	root/root	usr/share/mlt-7/qt6/filter_audiospectrum.yml
 -rw-r--r--	root/root	usr/share/mlt-7/qt6/filter_audiowaveform.yml
+-rw-r--r--	root/root	usr/share/mlt-7/qt6/filter_dropshadow.yml
 -rw-r--r--	root/root	usr/share/mlt-7/qt6/filter_gpsgraphic.yml
 -rw-r--r--	root/root	usr/share/mlt-7/qt6/filter_gpstext.yml
 -rw-r--r--	root/root	usr/share/mlt-7/qt6/filter_qtblend.yml

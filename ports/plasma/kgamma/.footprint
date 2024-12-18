@@ -78,6 +78,11 @@ drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/ru/kcontrol/
 drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/ru/kcontrol/kgamma/
 -rw-r--r--	root/root	opt/kf6/share/doc/HTML/ru/kcontrol/kgamma/index.cache.bz2
 -rw-r--r--	root/root	opt/kf6/share/doc/HTML/ru/kcontrol/kgamma/index.docbook
+drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sl/
+drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sl/kcontrol/
+drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sl/kcontrol/kgamma/
+-rw-r--r--	root/root	opt/kf6/share/doc/HTML/sl/kcontrol/kgamma/index.cache.bz2
+-rw-r--r--	root/root	opt/kf6/share/doc/HTML/sl/kcontrol/kgamma/index.docbook
 drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sv/
 drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sv/kcontrol/
 drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sv/kcontrol/kgamma/

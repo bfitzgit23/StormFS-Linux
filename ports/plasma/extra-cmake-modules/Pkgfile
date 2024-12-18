@@ -5,14 +5,14 @@
 # Optional: sphinxx pyqt
 
 name=extra-cmake-modules
-version=6.5.0
+version=6.9.0
 release=1
-source=(https://download.kde.org/stable/frameworks/6.5/$name-$version.tar.xz)
+source=(https://download.kde.org/stable/frameworks/6.9/$name-$version.tar.xz)
 
-build() {
-	cd $name-$version
+pkg_build() {
 
-	sed -i '/"lib64"/s/64//' kde-modules/KDEInstallDirsCommon.cmake &&
+
+sed -i '/"lib64"/s/64//' kde-modules/KDEInstallDirsCommon.cmake &&
 
 sed -e '/PACKAGE_INIT/i set(SAVE_PACKAGE_PREFIX_DIR "${PACKAGE_PREFIX_DIR}")' \
     -e '/^include/a set(PACKAGE_PREFIX_DIR "${SAVE_PACKAGE_PREFIX_DIR}")' \
@@ -21,8 +21,7 @@ sed -e '/PACKAGE_INIT/i set(SAVE_PACKAGE_PREFIX_DIR "${PACKAGE_PREFIX_DIR}")' \
 mkdir build &&
 cd    build &&
 
-cmake -DCMAKE_INSTALL_PREFIX=/usr .. &&
+cmake -D CMAKE_INSTALL_PREFIX=/usr -D BUILD_WITH_QT6=ON .. &&
 make
-
-	make DESTDIR=$PKG install
+make install
 }

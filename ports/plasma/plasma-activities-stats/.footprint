@@ -27,8 +27,8 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/PlasmaActivitiesStats/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/PlasmaActivitiesStats/PlasmaActivitiesStatsLibraryTargets-release.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/PlasmaActivitiesStats/PlasmaActivitiesStatsLibraryTargets.cmake
 lrwxrwxrwx	root/root	opt/kf6/lib/libPlasmaActivitiesStats.so -> libPlasmaActivitiesStats.so.1
-lrwxrwxrwx	root/root	opt/kf6/lib/libPlasmaActivitiesStats.so.1 -> libPlasmaActivitiesStats.so.6.1.4
--rwxr-xr-x	root/root	opt/kf6/lib/libPlasmaActivitiesStats.so.6.1.4
+lrwxrwxrwx	root/root	opt/kf6/lib/libPlasmaActivitiesStats.so.1 -> libPlasmaActivitiesStats.so.6.2.4
+-rwxr-xr-x	root/root	opt/kf6/lib/libPlasmaActivitiesStats.so.6.2.4
 drwxr-xr-x	root/root	opt/kf6/lib/pkgconfig/
 -rw-r--r--	root/root	opt/kf6/lib/pkgconfig/PlasmaActivitiesStats.pc
 drwxr-xr-x	root/root	opt/kf6/share/

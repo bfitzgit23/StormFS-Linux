@@ -108,6 +108,9 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/ko/LC_MESSAGES/
 drwxr-xr-x	root/root	opt/kf6/share/locale/lt/
 drwxr-xr-x	root/root	opt/kf6/share/locale/lt/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/lt/LC_MESSAGES/kcm_firewall.mo
+drwxr-xr-x	root/root	opt/kf6/share/locale/lv/
+drwxr-xr-x	root/root	opt/kf6/share/locale/lv/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/lv/LC_MESSAGES/kcm_firewall.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/nl/
 drwxr-xr-x	root/root	opt/kf6/share/locale/nl/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/nl/LC_MESSAGES/kcm_firewall.mo

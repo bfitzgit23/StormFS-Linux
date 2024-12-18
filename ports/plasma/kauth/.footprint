@@ -27,8 +27,8 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/KF6Auth/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6Auth/KF6AuthToolsTargets-release.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6Auth/KF6AuthToolsTargets.cmake
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6AuthCore.so -> libKF6AuthCore.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6AuthCore.so.6 -> libKF6AuthCore.so.6.5.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6AuthCore.so.6.5.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6AuthCore.so.6 -> libKF6AuthCore.so.6.9.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6AuthCore.so.6.9.0
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/kf6/
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/kf6/kauth/

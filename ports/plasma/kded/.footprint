@@ -36,6 +36,9 @@ drwxr-xr-x	root/root	opt/kf6/share/man/man8/
 drwxr-xr-x	root/root	opt/kf6/share/man/nl/
 drwxr-xr-x	root/root	opt/kf6/share/man/nl/man8/
 -rw-r--r--	root/root	opt/kf6/share/man/nl/man8/kded6.8
+drwxr-xr-x	root/root	opt/kf6/share/man/sl/
+drwxr-xr-x	root/root	opt/kf6/share/man/sl/man8/
+-rw-r--r--	root/root	opt/kf6/share/man/sl/man8/kded6.8
 drwxr-xr-x	root/root	opt/kf6/share/man/tr/
 drwxr-xr-x	root/root	opt/kf6/share/man/tr/man8/
 -rw-r--r--	root/root	opt/kf6/share/man/tr/man8/kded6.8

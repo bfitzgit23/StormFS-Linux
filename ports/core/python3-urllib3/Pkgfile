@@ -1,4 +1,4 @@
-# Depends on: python3-hatchling
+# Depends on: python3-hatchling python3-hatch-vcs
 
 name=python3-urllib3
 version=2.2.3

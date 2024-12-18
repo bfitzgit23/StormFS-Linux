@@ -25,14 +25,14 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/KPipeWire/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KPipeWire/KPipeWireTargets-release.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KPipeWire/KPipeWireTargets.cmake
 lrwxrwxrwx	root/root	opt/kf6/lib/libKPipeWire.so -> libKPipeWire.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKPipeWire.so.6 -> libKPipeWire.so.6.1.4
--rwxr-xr-x	root/root	opt/kf6/lib/libKPipeWire.so.6.1.4
+lrwxrwxrwx	root/root	opt/kf6/lib/libKPipeWire.so.6 -> libKPipeWire.so.6.2.4
+-rwxr-xr-x	root/root	opt/kf6/lib/libKPipeWire.so.6.2.4
 lrwxrwxrwx	root/root	opt/kf6/lib/libKPipeWireDmaBuf.so -> libKPipeWireDmaBuf.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKPipeWireDmaBuf.so.6 -> libKPipeWireDmaBuf.so.6.1.4
--rwxr-xr-x	root/root	opt/kf6/lib/libKPipeWireDmaBuf.so.6.1.4
+lrwxrwxrwx	root/root	opt/kf6/lib/libKPipeWireDmaBuf.so.6 -> libKPipeWireDmaBuf.so.6.2.4
+-rwxr-xr-x	root/root	opt/kf6/lib/libKPipeWireDmaBuf.so.6.2.4
 lrwxrwxrwx	root/root	opt/kf6/lib/libKPipeWireRecord.so -> libKPipeWireRecord.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKPipeWireRecord.so.6 -> libKPipeWireRecord.so.6.1.4
--rwxr-xr-x	root/root	opt/kf6/lib/libKPipeWireRecord.so.6.1.4
+lrwxrwxrwx	root/root	opt/kf6/lib/libKPipeWireRecord.so.6 -> libKPipeWireRecord.so.6.2.4
+-rwxr-xr-x	root/root	opt/kf6/lib/libKPipeWireRecord.so.6.2.4
 drwxr-xr-x	root/root	opt/kf6/lib/qml/
 drwxr-xr-x	root/root	opt/kf6/lib/qml/org/
 drwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/

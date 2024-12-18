@@ -16,7 +16,6 @@ drwxr-xr-x	root/root	usr/include/colord-1/colord/
 -rw-r--r--	root/root	usr/include/colord-1/colord/cd-client-sync.h
 -rw-r--r--	root/root	usr/include/colord-1/colord/cd-client.h
 -rw-r--r--	root/root	usr/include/colord-1/colord/cd-color.h
--rw-r--r--	root/root	usr/include/colord-1/colord/cd-compat-edid.h
 -rw-r--r--	root/root	usr/include/colord-1/colord/cd-device-sync.h
 -rw-r--r--	root/root	usr/include/colord-1/colord/cd-device.h
 -rw-r--r--	root/root	usr/include/colord-1/colord/cd-dom.h
@@ -49,7 +48,6 @@ drwxr-xr-x	root/root	usr/include/colord-1/colorhug/
 -rw-r--r--	root/root	usr/include/colord-1/colorhug/ch-version.h
 -rw-r--r--	root/root	usr/include/colord-1/colorhug/colorhug.h
 drwxr-xr-x	root/root	usr/lib/
--rwxr-xr-x	root/root	usr/lib/colord
 drwxr-xr-x	root/root	usr/lib/colord-plugins/
 -rwxr-xr-x	root/root	usr/lib/colord-plugins/libcolord_sensor_camera.so
 -rwxr-xr-x	root/root	usr/lib/colord-plugins/libcolord_sensor_scanner.so
@@ -59,14 +57,12 @@ drwxr-xr-x	root/root	usr/lib/colord-sensors/
 -rwxr-xr-x	root/root	usr/lib/colord-sensors/libcolord_sensor_dtp94.so
 -rwxr-xr-x	root/root	usr/lib/colord-sensors/libcolord_sensor_dummy.so
 -rwxr-xr-x	root/root	usr/lib/colord-sensors/libcolord_sensor_huey.so
--rwxr-xr-x	root/root	usr/lib/colord-session
 drwxr-xr-x	root/root	usr/lib/girepository-1.0/
 -rw-r--r--	root/root	usr/lib/girepository-1.0/Colord-1.0.typelib
 -rw-r--r--	root/root	usr/lib/girepository-1.0/Colorhug-1.0.typelib
 lrwxrwxrwx	root/root	usr/lib/libcolord.so -> libcolord.so.2
 lrwxrwxrwx	root/root	usr/lib/libcolord.so.2 -> libcolord.so.2.0.5
 -rwxr-xr-x	root/root	usr/lib/libcolord.so.2.0.5
--rwxr-xr-x	root/root	usr/lib/libcolordcompat.so
 lrwxrwxrwx	root/root	usr/lib/libcolordprivate.so -> libcolordprivate.so.2
 lrwxrwxrwx	root/root	usr/lib/libcolordprivate.so.2 -> libcolordprivate.so.2.0.5
 -rwxr-xr-x	root/root	usr/lib/libcolordprivate.so.2.0.5
@@ -87,6 +83,9 @@ drwxr-xr-x	root/root	usr/lib/udev/
 drwxr-xr-x	root/root	usr/lib/udev/rules.d/
 -rw-r--r--	root/root	usr/lib/udev/rules.d/69-cd-sensors.rules
 -rw-r--r--	root/root	usr/lib/udev/rules.d/95-cd-devices.rules
+drwxr-xr-x	root/root	usr/libexec/
+-rwxr-xr-x	root/root	usr/libexec/colord
+-rwxr-xr-x	root/root	usr/libexec/colord-session
 drwxr-xr-x	root/root	usr/share/
 drwxr-xr-x	root/root	usr/share/color/
 drwxr-xr-x	root/root	usr/share/color/icc/

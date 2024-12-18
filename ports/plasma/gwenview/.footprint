@@ -81,6 +81,10 @@ drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/ru/
 drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/ru/gwenview/
 -rw-r--r--	root/root	opt/kf6/share/doc/HTML/ru/gwenview/index.cache.bz2
 -rw-r--r--	root/root	opt/kf6/share/doc/HTML/ru/gwenview/index.docbook
+drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sl/
+drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sl/gwenview/
+-rw-r--r--	root/root	opt/kf6/share/doc/HTML/sl/gwenview/index.cache.bz2
+-rw-r--r--	root/root	opt/kf6/share/doc/HTML/sl/gwenview/index.docbook
 drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sr/
 drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sr/gwenview/
 -rw-r--r--	root/root	opt/kf6/share/doc/HTML/sr/gwenview/index.cache.bz2

@@ -27,8 +27,8 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/KF6Holidays/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6Holidays/KF6HolidaysTargets-release.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6Holidays/KF6HolidaysTargets.cmake
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6Holidays.so -> libKF6Holidays.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6Holidays.so.6 -> libKF6Holidays.so.6.5.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6Holidays.so.6.5.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6Holidays.so.6 -> libKF6Holidays.so.6.9.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6Holidays.so.6.9.0
 drwxr-xr-x	root/root	opt/kf6/lib/qml/
 drwxr-xr-x	root/root	opt/kf6/lib/qml/org/
 drwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/

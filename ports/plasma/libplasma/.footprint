@@ -60,11 +60,11 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/PlasmaQuick/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/PlasmaQuick/PlasmaQuickTargets-release.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/PlasmaQuick/PlasmaQuickTargets.cmake
 lrwxrwxrwx	root/root	opt/kf6/lib/libPlasma.so -> libPlasma.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libPlasma.so.6 -> libPlasma.so.6.1.4
--rwxr-xr-x	root/root	opt/kf6/lib/libPlasma.so.6.1.4
+lrwxrwxrwx	root/root	opt/kf6/lib/libPlasma.so.6 -> libPlasma.so.6.2.4
+-rwxr-xr-x	root/root	opt/kf6/lib/libPlasma.so.6.2.4
 lrwxrwxrwx	root/root	opt/kf6/lib/libPlasmaQuick.so -> libPlasmaQuick.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libPlasmaQuick.so.6 -> libPlasmaQuick.so.6.1.4
--rwxr-xr-x	root/root	opt/kf6/lib/libPlasmaQuick.so.6.1.4
+lrwxrwxrwx	root/root	opt/kf6/lib/libPlasmaQuick.so.6 -> libPlasmaQuick.so.6.2.4
+-rwxr-xr-x	root/root	opt/kf6/lib/libPlasmaQuick.so.6.2.4
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/kf6/
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/kf6/kirigami/
@@ -84,7 +84,6 @@ drwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/kirigami/
 drwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/kirigami/styles/
 drwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/kirigami/styles/Plasma/
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kirigami/styles/Plasma/AbstractApplicationHeader.qml
--rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kirigami/styles/Plasma/Icon.qml
 drwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/plasma/
 drwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/plasma/components/
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/plasma/components/AbstractButton.qml
@@ -154,6 +153,8 @@ drwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/plasma/components/private/
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/plasma/components/private/TextFieldFocus.qml
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/plasma/components/qmldir
 drwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/plasma/core/
+-rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/plasma/core/DefaultToolTip.qml
+-rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/plasma/core/DialogBackground.qml
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/plasma/core/corebindingsplugin.qmltypes
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/plasma/core/kde-qmlmodule.version
 -rwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/plasma/core/libcorebindingsplugin.so
@@ -520,54 +521,6 @@ drwxr-xr-x	root/root	opt/kf6/share/plasma/desktoptheme/default/widgets/
 -rw-r--r--	root/root	opt/kf6/share/plasma/desktoptheme/default/widgets/tooltip.svgz
 -rw-r--r--	root/root	opt/kf6/share/plasma/desktoptheme/default/widgets/translucentbackground.svgz
 -rw-r--r--	root/root	opt/kf6/share/plasma/desktoptheme/default/widgets/viewitem.svgz
-drwxr-xr-x	root/root	opt/kf6/share/plasma/desktoptheme/oxygen/
--rw-r--r--	root/root	opt/kf6/share/plasma/desktoptheme/oxygen/colors
-drwxr-xr-x	root/root	opt/kf6/share/plasma/desktoptheme/oxygen/dialogs/
--rw-r--r--	root/root	opt/kf6/share/plasma/desktoptheme/oxygen/dialogs/background.svgz
--rw-r--r--	root/root	opt/kf6/share/plasma/desktoptheme/oxygen/metadata.json
-drwxr-xr-x	root/root	opt/kf6/share/plasma/desktoptheme/oxygen/opaque/
-drwxr-xr-x	root/root	opt/kf6/share/plasma/desktoptheme/oxygen/opaque/dialogs/
--rw-r--r--	root/root	opt/kf6/share/plasma/desktoptheme/oxygen/opaque/dialogs/background.svgz
--rw-r--r--	root/root	opt/kf6/share/plasma/desktoptheme/oxygen/opaque/dialogs/krunner.svgz
-drwxr-xr-x	root/root	opt/kf6/share/plasma/desktoptheme/oxygen/opaque/widgets/
--rw-r--r--	root/root	opt/kf6/share/plasma/desktoptheme/oxygen/opaque/widgets/extender-background.svgz
--rw-r--r--	root/root	opt/kf6/share/plasma/desktoptheme/oxygen/opaque/widgets/panel-background.svgz
--rw-r--r--	root/root	opt/kf6/share/plasma/desktoptheme/oxygen/opaque/widgets/tooltip.svgz
--rw-r--r--	root/root	opt/kf6/share/plasma/desktoptheme/oxygen/plasmarc
-drwxr-xr-x	root/root	opt/kf6/share/plasma/desktoptheme/oxygen/widgets/
--rw-r--r--	root/root	opt/kf6/share/plasma/desktoptheme/oxygen/widgets/action-overlays.svgz
--rw-r--r--	root/root	opt/kf6/share/plasma/desktoptheme/oxygen/widgets/actionbutton.svgz
--rw-r--r--	root/root	opt/kf6/share/plasma/desktoptheme/oxygen/widgets/analog_meter.svgz
--rw-r--r--	root/root	opt/kf6/share/plasma/desktoptheme/oxygen/widgets/arrows.svgz
--rw-r--r--	root/root	opt/kf6/share/plasma/desktoptheme/oxygen/widgets/background.svgz
--rw-r--r--	root/root	opt/kf6/share/plasma/desktoptheme/oxygen/widgets/bar_meter_horizontal.svgz
--rw-r--r--	root/root	opt/kf6/share/plasma/desktoptheme/oxygen/widgets/bar_meter_vertical.svgz
--rw-r--r--	root/root	opt/kf6/share/plasma/desktoptheme/oxygen/widgets/branding.svgz
--rw-r--r--	root/root	opt/kf6/share/plasma/desktoptheme/oxygen/widgets/busywidget.svgz
--rw-r--r--	root/root	opt/kf6/share/plasma/desktoptheme/oxygen/widgets/button.svgz
--rw-r--r--	root/root	opt/kf6/share/plasma/desktoptheme/oxygen/widgets/clock.svgz
--rw-r--r--	root/root	opt/kf6/share/plasma/desktoptheme/oxygen/widgets/containment-controls.svgz
--rw-r--r--	root/root	opt/kf6/share/plasma/desktoptheme/oxygen/widgets/dragger.svgz
--rw-r--r--	root/root	opt/kf6/share/plasma/desktoptheme/oxygen/widgets/extender-background.svgz
--rw-r--r--	root/root	opt/kf6/share/plasma/desktoptheme/oxygen/widgets/extender-dragger.svgz
--rw-r--r--	root/root	opt/kf6/share/plasma/desktoptheme/oxygen/widgets/frame.svgz
--rw-r--r--	root/root	opt/kf6/share/plasma/desktoptheme/oxygen/widgets/glowbar.svgz
--rw-r--r--	root/root	opt/kf6/share/plasma/desktoptheme/oxygen/widgets/line.svgz
--rw-r--r--	root/root	opt/kf6/share/plasma/desktoptheme/oxygen/widgets/lineedit.svgz
--rw-r--r--	root/root	opt/kf6/share/plasma/desktoptheme/oxygen/widgets/media-delegate.svgz
--rw-r--r--	root/root	opt/kf6/share/plasma/desktoptheme/oxygen/widgets/monitor.svgz
--rw-r--r--	root/root	opt/kf6/share/plasma/desktoptheme/oxygen/widgets/pager.svgz
--rw-r--r--	root/root	opt/kf6/share/plasma/desktoptheme/oxygen/widgets/panel-background.svgz
--rw-r--r--	root/root	opt/kf6/share/plasma/desktoptheme/oxygen/widgets/plot-background.svgz
--rw-r--r--	root/root	opt/kf6/share/plasma/desktoptheme/oxygen/widgets/scrollbar.svgz
--rw-r--r--	root/root	opt/kf6/share/plasma/desktoptheme/oxygen/widgets/scrollwidget.svgz
--rw-r--r--	root/root	opt/kf6/share/plasma/desktoptheme/oxygen/widgets/slider.svgz
--rw-r--r--	root/root	opt/kf6/share/plasma/desktoptheme/oxygen/widgets/tabbar.svgz
--rw-r--r--	root/root	opt/kf6/share/plasma/desktoptheme/oxygen/widgets/tasks.svgz
--rw-r--r--	root/root	opt/kf6/share/plasma/desktoptheme/oxygen/widgets/timer.svgz
--rw-r--r--	root/root	opt/kf6/share/plasma/desktoptheme/oxygen/widgets/tooltip.svgz
--rw-r--r--	root/root	opt/kf6/share/plasma/desktoptheme/oxygen/widgets/translucentbackground.svgz
--rw-r--r--	root/root	opt/kf6/share/plasma/desktoptheme/oxygen/widgets/viewitem.svgz
 drwxr-xr-x	root/root	opt/kf6/share/qlogging-categories6/
 -rw-r--r--	root/root	opt/kf6/share/qlogging-categories6/plasma-framework.categories
 -rw-r--r--	root/root	opt/kf6/share/qlogging-categories6/plasma-framework.renamecategories

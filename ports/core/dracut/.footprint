@@ -17,28 +17,28 @@ lrwxrwxrwx	root/root	usr/lib/dracut/dracut-functions -> dracut-functions.sh
 -rwxr-xr-x	root/root	usr/lib/dracut/dracut-logger.sh
 -rwxr-xr-x	root/root	usr/lib/dracut/dracut-util
 -rwxr-xr-x	root/root	usr/lib/dracut/dracut-version.sh
-drwxrwxr-x	root/root	usr/lib/dracut/dracut.conf.d/
--rw-rw-r--	root/root	usr/lib/dracut/dracut.conf.d/fedora.conf.example
-drwxrwxr-x	root/root	usr/lib/dracut/dracut.conf.d/fips/
--rw-rw-r--	root/root	usr/lib/dracut/dracut.conf.d/fips/50-fips.conf
-drwxrwxr-x	root/root	usr/lib/dracut/dracut.conf.d/generic/
--rw-rw-r--	root/root	usr/lib/dracut/dracut.conf.d/generic/50-generic.conf
-drwxrwxr-x	root/root	usr/lib/dracut/dracut.conf.d/hostonly/
--rw-rw-r--	root/root	usr/lib/dracut/dracut.conf.d/hostonly/50-hostonly.conf
-drwxrwxr-x	root/root	usr/lib/dracut/dracut.conf.d/ima/
--rw-rw-r--	root/root	usr/lib/dracut/dracut.conf.d/ima/50-ima.conf
-drwxrwxr-x	root/root	usr/lib/dracut/dracut.conf.d/no-network/
--rw-rw-r--	root/root	usr/lib/dracut/dracut.conf.d/no-network/50-no-network.conf
-drwxrwxr-x	root/root	usr/lib/dracut/dracut.conf.d/no-xattr/
--rw-rw-r--	root/root	usr/lib/dracut/dracut.conf.d/no-xattr/50-no-xattr.conf
-drwxrwxr-x	root/root	usr/lib/dracut/dracut.conf.d/rescue/
--rw-rw-r--	root/root	usr/lib/dracut/dracut.conf.d/rescue/50-rescue.conf
--rw-rw-r--	root/root	usr/lib/dracut/dracut.conf.d/suse.conf.example
+drwxr-xr-x	root/root	usr/lib/dracut/dracut.conf.d/
+-rw-r--r--	root/root	usr/lib/dracut/dracut.conf.d/fedora.conf.example
+drwxr-xr-x	root/root	usr/lib/dracut/dracut.conf.d/fips/
+-rw-r--r--	root/root	usr/lib/dracut/dracut.conf.d/fips/50-fips.conf
+drwxr-xr-x	root/root	usr/lib/dracut/dracut.conf.d/generic/
+-rw-r--r--	root/root	usr/lib/dracut/dracut.conf.d/generic/50-generic.conf
+drwxr-xr-x	root/root	usr/lib/dracut/dracut.conf.d/hostonly/
+-rw-r--r--	root/root	usr/lib/dracut/dracut.conf.d/hostonly/50-hostonly.conf
+drwxr-xr-x	root/root	usr/lib/dracut/dracut.conf.d/ima/
+-rw-r--r--	root/root	usr/lib/dracut/dracut.conf.d/ima/50-ima.conf
+drwxr-xr-x	root/root	usr/lib/dracut/dracut.conf.d/no-network/
+-rw-r--r--	root/root	usr/lib/dracut/dracut.conf.d/no-network/50-no-network.conf
+drwxr-xr-x	root/root	usr/lib/dracut/dracut.conf.d/no-xattr/
+-rw-r--r--	root/root	usr/lib/dracut/dracut.conf.d/no-xattr/50-no-xattr.conf
+drwxr-xr-x	root/root	usr/lib/dracut/dracut.conf.d/rescue/
+-rw-r--r--	root/root	usr/lib/dracut/dracut.conf.d/rescue/50-rescue.conf
+-rw-r--r--	root/root	usr/lib/dracut/dracut.conf.d/suse.conf.example
 lrwxrwxrwx	root/root	usr/lib/dracut/dracut.conf.d/test -> ../test/dracut.conf.d/test/
 lrwxrwxrwx	root/root	usr/lib/dracut/dracut.conf.d/test-makeroot -> ../test/dracut.conf.d/test-makeroot/
 lrwxrwxrwx	root/root	usr/lib/dracut/dracut.conf.d/test-root -> ../test/dracut.conf.d/test-root
-drwxrwxr-x	root/root	usr/lib/dracut/dracut.conf.d/uki-virt/
--rw-rw-r--	root/root	usr/lib/dracut/dracut.conf.d/uki-virt/50-uki-virt.conf
+drwxr-xr-x	root/root	usr/lib/dracut/dracut.conf.d/uki-virt/
+-rw-r--r--	root/root	usr/lib/dracut/dracut.conf.d/uki-virt/50-uki-virt.conf
 drwxr-xr-x	root/root	usr/lib/dracut/modules.d/
 drwxr-xr-x	root/root	usr/lib/dracut/modules.d/00bash/
 -rwxr-xr-x	root/root	usr/lib/dracut/modules.d/00bash/module-setup.sh

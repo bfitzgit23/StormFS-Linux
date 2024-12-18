@@ -3,7 +3,7 @@ drwxr-xr-x	root/root	opt/kf6/
 drwxr-xr-x	root/root	opt/kf6/bin/
 -rwxr-xr-x	root/root	opt/kf6/bin/khelpcenter
 drwxr-xr-x	root/root	opt/kf6/lib/
--rwxr-xr-x	root/root	opt/kf6/lib/khc_mansearch.pl
+-rwxr-xr-x	root/root	opt/kf6/lib/khc_mansearch.py
 -rwxr-xr-x	root/root	opt/kf6/lib/khc_xapianindexer
 -rwxr-xr-x	root/root	opt/kf6/lib/khc_xapiansearch
 drwxr-xr-x	root/root	opt/kf6/share/
@@ -260,6 +260,17 @@ drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/ru/khelpcenter/
 drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/ru/onlinehelp/
 -rw-r--r--	root/root	opt/kf6/share/doc/HTML/ru/onlinehelp/index.cache.bz2
 -rw-r--r--	root/root	opt/kf6/share/doc/HTML/ru/onlinehelp/index.docbook
+drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sl/
+drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sl/khelpcenter/
+drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sl/khelpcenter/glossary/
+-rw-r--r--	root/root	opt/kf6/share/doc/HTML/sl/khelpcenter/glossary/index.cache.bz2
+-rw-r--r--	root/root	opt/kf6/share/doc/HTML/sl/khelpcenter/glossary/index.docbook
+-rw-r--r--	root/root	opt/kf6/share/doc/HTML/sl/khelpcenter/glossary/kdeprintingglossary.docbook
+-rw-r--r--	root/root	opt/kf6/share/doc/HTML/sl/khelpcenter/index.cache.bz2
+-rw-r--r--	root/root	opt/kf6/share/doc/HTML/sl/khelpcenter/index.docbook
+drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sl/onlinehelp/
+-rw-r--r--	root/root	opt/kf6/share/doc/HTML/sl/onlinehelp/index.cache.bz2
+-rw-r--r--	root/root	opt/kf6/share/doc/HTML/sl/onlinehelp/index.docbook
 drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sr/
 drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sr/khelpcenter/
 -rw-r--r--	root/root	opt/kf6/share/doc/HTML/sr/khelpcenter/index.cache.bz2

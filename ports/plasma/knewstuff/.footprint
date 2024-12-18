@@ -10,31 +10,39 @@ drwxr-xr-x	root/root	opt/kf6/include/KF6/KNewStuffCore/
 drwxr-xr-x	root/root	opt/kf6/include/KF6/KNewStuffCore/KNSCore/
 -rw-r--r--	root/root	opt/kf6/include/KF6/KNewStuffCore/KNSCore/Author
 -rw-r--r--	root/root	opt/kf6/include/KF6/KNewStuffCore/KNSCore/Cache
+-rw-r--r--	root/root	opt/kf6/include/KF6/KNewStuffCore/KNSCore/CategoryMetadata
 -rw-r--r--	root/root	opt/kf6/include/KF6/KNewStuffCore/KNSCore/EngineBase
 -rw-r--r--	root/root	opt/kf6/include/KF6/KNewStuffCore/KNSCore/Entry
 -rw-r--r--	root/root	opt/kf6/include/KF6/KNewStuffCore/KNSCore/ErrorCode
 -rw-r--r--	root/root	opt/kf6/include/KF6/KNewStuffCore/KNSCore/ItemsModel
 -rw-r--r--	root/root	opt/kf6/include/KF6/KNewStuffCore/KNSCore/Provider
+-rw-r--r--	root/root	opt/kf6/include/KF6/KNewStuffCore/KNSCore/ProviderCore
 -rw-r--r--	root/root	opt/kf6/include/KF6/KNewStuffCore/KNSCore/ProvidersModel
 -rw-r--r--	root/root	opt/kf6/include/KF6/KNewStuffCore/KNSCore/Question
 -rw-r--r--	root/root	opt/kf6/include/KF6/KNewStuffCore/KNSCore/QuestionListener
 -rw-r--r--	root/root	opt/kf6/include/KF6/KNewStuffCore/KNSCore/QuestionManager
 -rw-r--r--	root/root	opt/kf6/include/KF6/KNewStuffCore/KNSCore/ResultsStream
+-rw-r--r--	root/root	opt/kf6/include/KF6/KNewStuffCore/KNSCore/SearchPreset
+-rw-r--r--	root/root	opt/kf6/include/KF6/KNewStuffCore/KNSCore/SearchRequest
 -rw-r--r--	root/root	opt/kf6/include/KF6/KNewStuffCore/KNSCore/TagsFilterChecker
 -rw-r--r--	root/root	opt/kf6/include/KF6/KNewStuffCore/KNSCore/Transaction
 -rw-r--r--	root/root	opt/kf6/include/KF6/KNewStuffCore/KNSCore/author.h
 -rw-r--r--	root/root	opt/kf6/include/KF6/KNewStuffCore/KNSCore/cache.h
+-rw-r--r--	root/root	opt/kf6/include/KF6/KNewStuffCore/KNSCore/categorymetadata.h
 -rw-r--r--	root/root	opt/kf6/include/KF6/KNewStuffCore/KNSCore/enginebase.h
 -rw-r--r--	root/root	opt/kf6/include/KF6/KNewStuffCore/KNSCore/entry.h
 -rw-r--r--	root/root	opt/kf6/include/KF6/KNewStuffCore/KNSCore/errorcode.h
 -rw-r--r--	root/root	opt/kf6/include/KF6/KNewStuffCore/KNSCore/itemsmodel.h
 -rw-r--r--	root/root	opt/kf6/include/KF6/KNewStuffCore/KNSCore/knewstuffcore_export.h
 -rw-r--r--	root/root	opt/kf6/include/KF6/KNewStuffCore/KNSCore/provider.h
+-rw-r--r--	root/root	opt/kf6/include/KF6/KNewStuffCore/KNSCore/providercore.h
 -rw-r--r--	root/root	opt/kf6/include/KF6/KNewStuffCore/KNSCore/providersmodel.h
 -rw-r--r--	root/root	opt/kf6/include/KF6/KNewStuffCore/KNSCore/question.h
 -rw-r--r--	root/root	opt/kf6/include/KF6/KNewStuffCore/KNSCore/questionlistener.h
 -rw-r--r--	root/root	opt/kf6/include/KF6/KNewStuffCore/KNSCore/questionmanager.h
 -rw-r--r--	root/root	opt/kf6/include/KF6/KNewStuffCore/KNSCore/resultsstream.h
+-rw-r--r--	root/root	opt/kf6/include/KF6/KNewStuffCore/KNSCore/searchpreset.h
+-rw-r--r--	root/root	opt/kf6/include/KF6/KNewStuffCore/KNSCore/searchrequest.h
 -rw-r--r--	root/root	opt/kf6/include/KF6/KNewStuffCore/KNSCore/tagsfilterchecker.h
 -rw-r--r--	root/root	opt/kf6/include/KF6/KNewStuffCore/KNSCore/transaction.h
 drwxr-xr-x	root/root	opt/kf6/include/KF6/KNewStuffWidgets/
@@ -59,11 +67,11 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/KF6NewStuffCore/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6NewStuffCore/KF6NewStuffCoreTargets-release.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6NewStuffCore/KF6NewStuffCoreTargets.cmake
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6NewStuffCore.so -> libKF6NewStuffCore.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6NewStuffCore.so.6 -> libKF6NewStuffCore.so.6.5.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6NewStuffCore.so.6.5.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6NewStuffCore.so.6 -> libKF6NewStuffCore.so.6.9.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6NewStuffCore.so.6.9.0
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6NewStuffWidgets.so -> libKF6NewStuffWidgets.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6NewStuffWidgets.so.6 -> libKF6NewStuffWidgets.so.6.5.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6NewStuffWidgets.so.6.5.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6NewStuffWidgets.so.6 -> libKF6NewStuffWidgets.so.6.9.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6NewStuffWidgets.so.6.9.0
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/designer/
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/designer/knewstuff6widgets.so
@@ -96,6 +104,10 @@ drwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/newstuff/private/entrygriddelegates
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/newstuff/private/entrygriddelegates/BigPreviewDelegate.qml
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/newstuff/private/entrygriddelegates/FeedbackOverlay.qml
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/newstuff/private/entrygriddelegates/TileDelegate.qml
+-rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/newstuff/private/kde-qmlmodule.version
+-rwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/newstuff/private/libnewstuffqmlpluginprivate.so
+-rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/newstuff/private/newstuffqmlpluginprivate.qmltypes
+-rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/newstuff/private/qmldir
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/newstuff/qmldir
 drwxr-xr-x	root/root	opt/kf6/share/
 drwxr-xr-x	root/root	opt/kf6/share/applications/

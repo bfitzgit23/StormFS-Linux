@@ -53,8 +53,8 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/KF6XmlGui/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6XmlGui/KF6XmlGuiTargets-release.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6XmlGui/KF6XmlGuiTargets.cmake
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6XmlGui.so -> libKF6XmlGui.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6XmlGui.so.6 -> libKF6XmlGui.so.6.5.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6XmlGui.so.6.5.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6XmlGui.so.6 -> libKF6XmlGui.so.6.9.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6XmlGui.so.6.9.0
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/designer/
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/designer/kxmlgui6widgets.so

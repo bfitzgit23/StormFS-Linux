@@ -402,6 +402,7 @@ drwxr-xr-x	root/root	opt/kf6/share/kdenlive/effects/
 -rw-r--r--	root/root	opt/kf6/share/kdenlive/effects/frei0r_hqdn3d.xml
 -rw-r--r--	root/root	opt/kf6/share/kdenlive/effects/frei0r_hueshift0r.xml
 -rw-r--r--	root/root	opt/kf6/share/kdenlive/effects/frei0r_iirblur.xml
+-rw-r--r--	root/root	opt/kf6/share/kdenlive/effects/frei0r_kaleid0sc0pe.xml
 -rw-r--r--	root/root	opt/kf6/share/kdenlive/effects/frei0r_keyspillm0pup.xml
 -rw-r--r--	root/root	opt/kf6/share/kdenlive/effects/frei0r_lenscorrection.xml
 -rw-r--r--	root/root	opt/kf6/share/kdenlive/effects/frei0r_letterb0xed.xml
@@ -413,6 +414,7 @@ drwxr-xr-x	root/root	opt/kf6/share/kdenlive/effects/
 -rw-r--r--	root/root	opt/kf6/share/kdenlive/effects/frei0r_nervous.xml
 -rw-r--r--	root/root	opt/kf6/share/kdenlive/effects/frei0r_nosync0r.xml
 -rw-r--r--	root/root	opt/kf6/share/kdenlive/effects/frei0r_pixeliz0r.xml
+-rw-r--r--	root/root	opt/kf6/share/kdenlive/effects/frei0r_pixs0r.xml
 -rw-r--r--	root/root	opt/kf6/share/kdenlive/effects/frei0r_pr0be.xml
 -rw-r--r--	root/root	opt/kf6/share/kdenlive/effects/frei0r_pr0file.xml
 -rw-r--r--	root/root	opt/kf6/share/kdenlive/effects/frei0r_primaries.xml
@@ -442,6 +444,7 @@ drwxr-xr-x	root/root	opt/kf6/share/kdenlive/effects/
 -rw-r--r--	root/root	opt/kf6/share/kdenlive/effects/frei0r_vignette.xml
 -rw-r--r--	root/root	opt/kf6/share/kdenlive/effects/gain.xml
 -rw-r--r--	root/root	opt/kf6/share/kdenlive/effects/gamma.xml
+-rw-r--r--	root/root	opt/kf6/share/kdenlive/effects/gpsgraphic.xml
 -rw-r--r--	root/root	opt/kf6/share/kdenlive/effects/gpstext.xml
 -rw-r--r--	root/root	opt/kf6/share/kdenlive/effects/grain.xml
 -rw-r--r--	root/root	opt/kf6/share/kdenlive/effects/greyscale.xml
@@ -600,6 +603,7 @@ drwxr-xr-x	root/root	opt/kf6/share/kdenlive/resourceproviders/
 -rw-r--r--	root/root	opt/kf6/share/kdenlive/resourceproviders/pexels_photo.json
 -rw-r--r--	root/root	opt/kf6/share/kdenlive/resourceproviders/pexels_video.json
 -rw-r--r--	root/root	opt/kf6/share/kdenlive/resourceproviders/pixabay_photo.json
+-rw-r--r--	root/root	opt/kf6/share/kdenlive/resourceproviders/pixabay_videos.json
 drwxr-xr-x	root/root	opt/kf6/share/kdenlive/scripts/
 -rw-r--r--	root/root	opt/kf6/share/kdenlive/scripts/checkgpu.py
 -rw-r--r--	root/root	opt/kf6/share/kdenlive/scripts/checkpackages.py
@@ -609,6 +613,17 @@ drwxr-xr-x	root/root	opt/kf6/share/kdenlive/scripts/
 -rw-r--r--	root/root	opt/kf6/share/kdenlive/scripts/requirements-whisper.txt
 -rw-r--r--	root/root	opt/kf6/share/kdenlive/scripts/speech.py
 -rw-r--r--	root/root	opt/kf6/share/kdenlive/scripts/speechtotext.py
+drwxr-xr-x	root/root	opt/kf6/share/kdenlive/scripts/vosk/
+-rw-r--r--	root/root	opt/kf6/share/kdenlive/scripts/vosk/speech.py
+-rw-r--r--	root/root	opt/kf6/share/kdenlive/scripts/vosk/speechtotext.py
+drwxr-xr-x	root/root	opt/kf6/share/kdenlive/scripts/whisper/
+-rw-r--r--	root/root	opt/kf6/share/kdenlive/scripts/whisper/requirements-seamless.txt
+-rw-r--r--	root/root	opt/kf6/share/kdenlive/scripts/whisper/requirements-whisper-windows.txt
+-rw-r--r--	root/root	opt/kf6/share/kdenlive/scripts/whisper/requirements-whisper.txt
+-rw-r--r--	root/root	opt/kf6/share/kdenlive/scripts/whisper/seamlessquery.py
+-rw-r--r--	root/root	opt/kf6/share/kdenlive/scripts/whisper/whisperquery.py
+-rw-r--r--	root/root	opt/kf6/share/kdenlive/scripts/whisper/whispertosrt.py
+-rw-r--r--	root/root	opt/kf6/share/kdenlive/scripts/whisper/whispertotext.py
 -rw-r--r--	root/root	opt/kf6/share/kdenlive/scripts/whispertosrt.py
 -rw-r--r--	root/root	opt/kf6/share/kdenlive/scripts/whispertotext.py
 drwxr-xr-x	root/root	opt/kf6/share/kdenlive/shortcuts/

@@ -13,9 +13,8 @@ https://www.linuxfromscratch.org/patches/blfs/svn/$name-$version-wayland-1.patch
 build() {
 	cd $name-$version
 patch -Np1 -i $PKGMK_SOURCE_DIR/$name-$version-wayland-1.patch
-autoreconf -fi
+#autoreconf -fi
 	./configure --prefix=/usr --disable-oss &&
-sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
 make
 	make DESTDIR=$PKG install
 }

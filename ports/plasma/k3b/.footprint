@@ -235,6 +235,10 @@ drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/ru/
 drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/ru/k3b/
 -rw-r--r--	root/root	opt/kf6/share/doc/HTML/ru/k3b/index.cache.bz2
 -rw-r--r--	root/root	opt/kf6/share/doc/HTML/ru/k3b/index.docbook
+drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sl/
+drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sl/k3b/
+-rw-r--r--	root/root	opt/kf6/share/doc/HTML/sl/k3b/index.cache.bz2
+-rw-r--r--	root/root	opt/kf6/share/doc/HTML/sl/k3b/index.docbook
 drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sv/
 drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/sv/k3b/
 -rw-r--r--	root/root	opt/kf6/share/doc/HTML/sv/k3b/burndialog_audio.png
@@ -316,7 +320,6 @@ drwxr-xr-x	root/root	opt/kf6/share/k3b/icons/hicolor/128x128/devices/
 -rw-r--r--	root/root	opt/kf6/share/k3b/icons/hicolor/128x128/devices/media-optical-video.png
 drwxr-xr-x	root/root	opt/kf6/share/k3b/icons/hicolor/16x16/
 drwxr-xr-x	root/root	opt/kf6/share/k3b/icons/hicolor/16x16/actions/
--rw-r--r--	root/root	opt/kf6/share/k3b/icons/hicolor/16x16/actions/musicbrainz.png
 -rw-r--r--	root/root	opt/kf6/share/k3b/icons/hicolor/16x16/actions/tools-rip-audio-cd.png
 -rw-r--r--	root/root	opt/kf6/share/k3b/icons/hicolor/16x16/actions/tools-rip-video-cd.png
 -rw-r--r--	root/root	opt/kf6/share/k3b/icons/hicolor/16x16/actions/tools-rip-video-dvd.png
@@ -363,7 +366,6 @@ drwxr-xr-x	root/root	opt/kf6/share/k3b/icons/hicolor/48x48/devices/
 -rw-r--r--	root/root	opt/kf6/share/k3b/icons/hicolor/48x48/devices/media-optical-video.png
 drwxr-xr-x	root/root	opt/kf6/share/k3b/icons/hicolor/64x64/
 drwxr-xr-x	root/root	opt/kf6/share/k3b/icons/hicolor/64x64/actions/
--rw-r--r--	root/root	opt/kf6/share/k3b/icons/hicolor/64x64/actions/musicbrainz.png
 -rw-r--r--	root/root	opt/kf6/share/k3b/icons/hicolor/64x64/actions/tools-rip-audio-cd.png
 -rw-r--r--	root/root	opt/kf6/share/k3b/icons/hicolor/64x64/actions/tools-rip-video-cd.png
 -rw-r--r--	root/root	opt/kf6/share/k3b/icons/hicolor/64x64/actions/tools-rip-video-dvd.png
