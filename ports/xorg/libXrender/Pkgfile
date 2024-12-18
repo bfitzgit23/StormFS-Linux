@@ -4,7 +4,7 @@
 # Depends on: libX11
 
 name=libXrender
-version=0.9.11
+version=0.9.12
 release=1
 source=(https://www.x.org/releases/individual/lib/libXrender-$version.tar.xz)
 

@@ -5,7 +5,7 @@
 # Optional: cbindgen directx-headers glslang libclc libunwind libva libvdpau lm_sensors lua python3-ply rust-bindgen spirv-llvm-translator vulkan-loader wayland-protocols
 
 name=mesa
-version=24.2.7
+version=24.3.1
 release=1
 source=(https://archive.mesa3d.org/$name-$version.tar.xz)
 
@@ -41,7 +41,6 @@ build() {
 		--buildtype=plain \
 		-D b_lto=false \
 		-D b_pie=true \
-		-D dri3=enabled \
 		-D egl=enabled \
 		-D llvm=enabled \
 		-D shared-llvm=enabled \

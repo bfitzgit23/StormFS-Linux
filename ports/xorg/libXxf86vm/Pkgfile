@@ -4,7 +4,7 @@
 # Depends on: libXext
 
 name=libXxf86vm
-version=1.1.5
+version=1.1.6
 release=1
 source=(https://www.x.org/releases/individual/lib/libXxf86vm-$version.tar.xz)
 

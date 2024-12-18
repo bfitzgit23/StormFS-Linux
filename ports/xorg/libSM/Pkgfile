@@ -4,7 +4,7 @@
 # Depends on: util-linux libICE
 
 name=libSM
-version=1.2.4
+version=1.2.5
 release=1
 source=(https://xorg.freedesktop.org/archive/individual/lib/libSM-$version.tar.xz)
 

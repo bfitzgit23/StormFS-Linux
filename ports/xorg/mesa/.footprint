@@ -14,6 +14,7 @@ drwxr-xr-x	root/root	usr/include/GL/internal/
 -rw-r--r--	root/root	usr/include/GL/osmesa.h
 drwxr-xr-x	root/root	usr/include/directx/
 -rw-r--r--	root/root	usr/include/directx/D3D12TokenizedProgramFormat.hpp
+-rw-r--r--	root/root	usr/include/directx/DirectML.h
 -rw-r--r--	root/root	usr/include/directx/d3d12.h
 -rw-r--r--	root/root	usr/include/directx/d3d12.idl
 -rw-r--r--	root/root	usr/include/directx/d3d12compatibility.h
@@ -45,6 +46,57 @@ drwxr-xr-x	root/root	usr/include/directx/
 drwxr-xr-x	root/root	usr/include/dxguids/
 -rw-r--r--	root/root	usr/include/dxguids/dxguids.h
 -rw-r--r--	root/root	usr/include/gbm.h
+drwxr-xr-x	root/root	usr/include/wayland-protocols/
+-rw-r--r--	root/root	usr/include/wayland-protocols/alpha-modifier-v1-enum.h
+-rw-r--r--	root/root	usr/include/wayland-protocols/commit-timing-v1-enum.h
+-rw-r--r--	root/root	usr/include/wayland-protocols/content-type-v1-enum.h
+-rw-r--r--	root/root	usr/include/wayland-protocols/cursor-shape-v1-enum.h
+-rw-r--r--	root/root	usr/include/wayland-protocols/drm-lease-v1-enum.h
+-rw-r--r--	root/root	usr/include/wayland-protocols/ext-foreign-toplevel-list-v1-enum.h
+-rw-r--r--	root/root	usr/include/wayland-protocols/ext-idle-notify-v1-enum.h
+-rw-r--r--	root/root	usr/include/wayland-protocols/ext-image-capture-source-v1-enum.h
+-rw-r--r--	root/root	usr/include/wayland-protocols/ext-image-copy-capture-v1-enum.h
+-rw-r--r--	root/root	usr/include/wayland-protocols/ext-session-lock-v1-enum.h
+-rw-r--r--	root/root	usr/include/wayland-protocols/ext-transient-seat-v1-enum.h
+-rw-r--r--	root/root	usr/include/wayland-protocols/fifo-v1-enum.h
+-rw-r--r--	root/root	usr/include/wayland-protocols/fractional-scale-v1-enum.h
+-rw-r--r--	root/root	usr/include/wayland-protocols/fullscreen-shell-unstable-v1-enum.h
+-rw-r--r--	root/root	usr/include/wayland-protocols/idle-inhibit-unstable-v1-enum.h
+-rw-r--r--	root/root	usr/include/wayland-protocols/input-method-unstable-v1-enum.h
+-rw-r--r--	root/root	usr/include/wayland-protocols/input-timestamps-unstable-v1-enum.h
+-rw-r--r--	root/root	usr/include/wayland-protocols/keyboard-shortcuts-inhibit-unstable-v1-enum.h
+-rw-r--r--	root/root	usr/include/wayland-protocols/linux-dmabuf-unstable-v1-enum.h
+-rw-r--r--	root/root	usr/include/wayland-protocols/linux-dmabuf-v1-enum.h
+-rw-r--r--	root/root	usr/include/wayland-protocols/linux-drm-syncobj-v1-enum.h
+-rw-r--r--	root/root	usr/include/wayland-protocols/linux-explicit-synchronization-unstable-v1-enum.h
+-rw-r--r--	root/root	usr/include/wayland-protocols/pointer-constraints-unstable-v1-enum.h
+-rw-r--r--	root/root	usr/include/wayland-protocols/pointer-gestures-unstable-v1-enum.h
+-rw-r--r--	root/root	usr/include/wayland-protocols/presentation-time-enum.h
+-rw-r--r--	root/root	usr/include/wayland-protocols/primary-selection-unstable-v1-enum.h
+-rw-r--r--	root/root	usr/include/wayland-protocols/relative-pointer-unstable-v1-enum.h
+-rw-r--r--	root/root	usr/include/wayland-protocols/security-context-v1-enum.h
+-rw-r--r--	root/root	usr/include/wayland-protocols/single-pixel-buffer-v1-enum.h
+-rw-r--r--	root/root	usr/include/wayland-protocols/tablet-unstable-v1-enum.h
+-rw-r--r--	root/root	usr/include/wayland-protocols/tablet-unstable-v2-enum.h
+-rw-r--r--	root/root	usr/include/wayland-protocols/tablet-v2-enum.h
+-rw-r--r--	root/root	usr/include/wayland-protocols/tearing-control-v1-enum.h
+-rw-r--r--	root/root	usr/include/wayland-protocols/text-input-unstable-v1-enum.h
+-rw-r--r--	root/root	usr/include/wayland-protocols/text-input-unstable-v3-enum.h
+-rw-r--r--	root/root	usr/include/wayland-protocols/viewporter-enum.h
+-rw-r--r--	root/root	usr/include/wayland-protocols/xdg-activation-v1-enum.h
+-rw-r--r--	root/root	usr/include/wayland-protocols/xdg-decoration-unstable-v1-enum.h
+-rw-r--r--	root/root	usr/include/wayland-protocols/xdg-dialog-v1-enum.h
+-rw-r--r--	root/root	usr/include/wayland-protocols/xdg-foreign-unstable-v1-enum.h
+-rw-r--r--	root/root	usr/include/wayland-protocols/xdg-foreign-unstable-v2-enum.h
+-rw-r--r--	root/root	usr/include/wayland-protocols/xdg-output-unstable-v1-enum.h
+-rw-r--r--	root/root	usr/include/wayland-protocols/xdg-shell-enum.h
+-rw-r--r--	root/root	usr/include/wayland-protocols/xdg-shell-unstable-v5-enum.h
+-rw-r--r--	root/root	usr/include/wayland-protocols/xdg-shell-unstable-v6-enum.h
+-rw-r--r--	root/root	usr/include/wayland-protocols/xdg-system-bell-v1-enum.h
+-rw-r--r--	root/root	usr/include/wayland-protocols/xdg-toplevel-drag-v1-enum.h
+-rw-r--r--	root/root	usr/include/wayland-protocols/xdg-toplevel-icon-v1-enum.h
+-rw-r--r--	root/root	usr/include/wayland-protocols/xwayland-keyboard-grab-unstable-v1-enum.h
+-rw-r--r--	root/root	usr/include/wayland-protocols/xwayland-shell-v1-enum.h
 drwxr-xr-x	root/root	usr/include/wsl/
 drwxr-xr-x	root/root	usr/include/wsl/stubs/
 -rw-r--r--	root/root	usr/include/wsl/stubs/basetsd.h
@@ -69,7 +121,7 @@ lrwxrwxrwx	root/root	usr/lib/dri/armada-drm_dri.so -> libdril_dri.so
 lrwxrwxrwx	root/root	usr/lib/dri/asahi_dri.so -> libdril_dri.so
 lrwxrwxrwx	root/root	usr/lib/dri/crocus_dri.so -> libdril_dri.so
 lrwxrwxrwx	root/root	usr/lib/dri/d3d12_dri.so -> libdril_dri.so
-lrwxrwxrwx	root/root	usr/lib/dri/d3d12_drv_video.so -> ../libgallium-24.2.7-1.so
+lrwxrwxrwx	root/root	usr/lib/dri/d3d12_drv_video.so -> ../libgallium-24.3.1-1.so
 lrwxrwxrwx	root/root	usr/lib/dri/etnaviv_dri.so -> libdril_dri.so
 lrwxrwxrwx	root/root	usr/lib/dri/exynos_dri.so -> libdril_dri.so
 lrwxrwxrwx	root/root	usr/lib/dri/gm12u320_dri.so -> libdril_dri.so
@@ -98,16 +150,16 @@ lrwxrwxrwx	root/root	usr/lib/dri/mi0283qt_dri.so -> libdril_dri.so
 lrwxrwxrwx	root/root	usr/lib/dri/msm_dri.so -> libdril_dri.so
 lrwxrwxrwx	root/root	usr/lib/dri/mxsfb-drm_dri.so -> libdril_dri.so
 lrwxrwxrwx	root/root	usr/lib/dri/nouveau_dri.so -> libdril_dri.so
-lrwxrwxrwx	root/root	usr/lib/dri/nouveau_drv_video.so -> ../libgallium-24.2.7-1.so
+lrwxrwxrwx	root/root	usr/lib/dri/nouveau_drv_video.so -> ../libgallium-24.3.1-1.so
 lrwxrwxrwx	root/root	usr/lib/dri/panel-mipi-dbi_dri.so -> libdril_dri.so
 lrwxrwxrwx	root/root	usr/lib/dri/panfrost_dri.so -> libdril_dri.so
 lrwxrwxrwx	root/root	usr/lib/dri/panthor_dri.so -> libdril_dri.so
 lrwxrwxrwx	root/root	usr/lib/dri/pl111_dri.so -> libdril_dri.so
 lrwxrwxrwx	root/root	usr/lib/dri/r300_dri.so -> libdril_dri.so
 lrwxrwxrwx	root/root	usr/lib/dri/r600_dri.so -> libdril_dri.so
-lrwxrwxrwx	root/root	usr/lib/dri/r600_drv_video.so -> ../libgallium-24.2.7-1.so
+lrwxrwxrwx	root/root	usr/lib/dri/r600_drv_video.so -> ../libgallium-24.3.1-1.so
 lrwxrwxrwx	root/root	usr/lib/dri/radeonsi_dri.so -> libdril_dri.so
-lrwxrwxrwx	root/root	usr/lib/dri/radeonsi_drv_video.so -> ../libgallium-24.2.7-1.so
+lrwxrwxrwx	root/root	usr/lib/dri/radeonsi_drv_video.so -> ../libgallium-24.3.1-1.so
 lrwxrwxrwx	root/root	usr/lib/dri/rcar-du_dri.so -> libdril_dri.so
 lrwxrwxrwx	root/root	usr/lib/dri/repaper_dri.so -> libdril_dri.so
 lrwxrwxrwx	root/root	usr/lib/dri/rockchip_dri.so -> libdril_dri.so
@@ -124,7 +176,7 @@ lrwxrwxrwx	root/root	usr/lib/dri/udl_dri.so -> libdril_dri.so
 lrwxrwxrwx	root/root	usr/lib/dri/v3d_dri.so -> libdril_dri.so
 lrwxrwxrwx	root/root	usr/lib/dri/vc4_dri.so -> libdril_dri.so
 lrwxrwxrwx	root/root	usr/lib/dri/virtio_gpu_dri.so -> libdril_dri.so
-lrwxrwxrwx	root/root	usr/lib/dri/virtio_gpu_drv_video.so -> ../libgallium-24.2.7-1.so
+lrwxrwxrwx	root/root	usr/lib/dri/virtio_gpu_drv_video.so -> ../libgallium-24.3.1-1.so
 lrwxrwxrwx	root/root	usr/lib/dri/vkms_dri.so -> libdril_dri.so
 lrwxrwxrwx	root/root	usr/lib/dri/vmwgfx_dri.so -> libdril_dri.so
 lrwxrwxrwx	root/root	usr/lib/dri/zink_dri.so -> libdril_dri.so
@@ -140,6 +192,8 @@ drwxr-xr-x	root/root	usr/lib/gallium-pipe/
 -rwxr-xr-x	root/root	usr/lib/gallium-pipe/pipe_radeonsi.so
 -rwxr-xr-x	root/root	usr/lib/gallium-pipe/pipe_swrast.so
 -rwxr-xr-x	root/root	usr/lib/gallium-pipe/pipe_vmwgfx.so
+drwxr-xr-x	root/root	usr/lib/gbm/
+-rwxr-xr-x	root/root	usr/lib/gbm/dri_gbm.so
 -rw-r--r--	root/root	usr/lib/libDirectX-Guids.a
 lrwxrwxrwx	root/root	usr/lib/libEGL_mesa.so -> libEGL_mesa.so.0
 lrwxrwxrwx	root/root	usr/lib/libEGL_mesa.so.0 -> libEGL_mesa.so.0.0.0
@@ -158,16 +212,13 @@ lrwxrwxrwx	root/root	usr/lib/libRusticlOpenCL.so -> libRusticlOpenCL.so.1
 lrwxrwxrwx	root/root	usr/lib/libRusticlOpenCL.so.1 -> libRusticlOpenCL.so.1.0.0
 -rwxr-xr-x	root/root	usr/lib/libRusticlOpenCL.so.1.0.0
 -rw-r--r--	root/root	usr/lib/libd3dx12-format-properties.a
--rwxr-xr-x	root/root	usr/lib/libgallium-24.2.7-1.so
+-rwxr-xr-x	root/root	usr/lib/libgallium-24.3.1-1.so
 lrwxrwxrwx	root/root	usr/lib/libgbm.so -> libgbm.so.1
 lrwxrwxrwx	root/root	usr/lib/libgbm.so.1 -> libgbm.so.1.0.0
 -rwxr-xr-x	root/root	usr/lib/libgbm.so.1.0.0
 lrwxrwxrwx	root/root	usr/lib/libglapi.so -> libglapi.so.0
 lrwxrwxrwx	root/root	usr/lib/libglapi.so.0 -> libglapi.so.0.0.0
 -rwxr-xr-x	root/root	usr/lib/libglapi.so.0.0.0
-lrwxrwxrwx	root/root	usr/lib/liblua.so -> liblua.so.5.4
-lrwxrwxrwx	root/root	usr/lib/liblua.so.5.4 -> liblua.so.5.4.6
--rwxr-xr-x	root/root	usr/lib/liblua.so.5.4.6
 -rwxr-xr-x	root/root	usr/lib/libvulkan_intel_hasvk.so
 -rwxr-xr-x	root/root	usr/lib/libvulkan_lvp.so
 -rwxr-xr-x	root/root	usr/lib/libvulkan_nouveau.so
@@ -186,23 +237,23 @@ drwxr-xr-x	root/root	usr/lib/vdpau/
 lrwxrwxrwx	root/root	usr/lib/vdpau/libvdpau_d3d12.so -> libvdpau_d3d12.so.1.0.0
 lrwxrwxrwx	root/root	usr/lib/vdpau/libvdpau_d3d12.so.1 -> libvdpau_d3d12.so.1.0.0
 lrwxrwxrwx	root/root	usr/lib/vdpau/libvdpau_d3d12.so.1.0 -> libvdpau_d3d12.so.1.0.0
-lrwxrwxrwx	root/root	usr/lib/vdpau/libvdpau_d3d12.so.1.0.0 -> ../libgallium-24.2.7-1.so
+lrwxrwxrwx	root/root	usr/lib/vdpau/libvdpau_d3d12.so.1.0.0 -> ../libgallium-24.3.1-1.so
 lrwxrwxrwx	root/root	usr/lib/vdpau/libvdpau_nouveau.so -> libvdpau_nouveau.so.1.0.0
 lrwxrwxrwx	root/root	usr/lib/vdpau/libvdpau_nouveau.so.1 -> libvdpau_nouveau.so.1.0.0
 lrwxrwxrwx	root/root	usr/lib/vdpau/libvdpau_nouveau.so.1.0 -> libvdpau_nouveau.so.1.0.0
-lrwxrwxrwx	root/root	usr/lib/vdpau/libvdpau_nouveau.so.1.0.0 -> ../libgallium-24.2.7-1.so
+lrwxrwxrwx	root/root	usr/lib/vdpau/libvdpau_nouveau.so.1.0.0 -> ../libgallium-24.3.1-1.so
 lrwxrwxrwx	root/root	usr/lib/vdpau/libvdpau_r600.so -> libvdpau_r600.so.1.0.0
 lrwxrwxrwx	root/root	usr/lib/vdpau/libvdpau_r600.so.1 -> libvdpau_r600.so.1.0.0
 lrwxrwxrwx	root/root	usr/lib/vdpau/libvdpau_r600.so.1.0 -> libvdpau_r600.so.1.0.0
-lrwxrwxrwx	root/root	usr/lib/vdpau/libvdpau_r600.so.1.0.0 -> ../libgallium-24.2.7-1.so
+lrwxrwxrwx	root/root	usr/lib/vdpau/libvdpau_r600.so.1.0.0 -> ../libgallium-24.3.1-1.so
 lrwxrwxrwx	root/root	usr/lib/vdpau/libvdpau_radeonsi.so -> libvdpau_radeonsi.so.1.0.0
 lrwxrwxrwx	root/root	usr/lib/vdpau/libvdpau_radeonsi.so.1 -> libvdpau_radeonsi.so.1.0.0
 lrwxrwxrwx	root/root	usr/lib/vdpau/libvdpau_radeonsi.so.1.0 -> libvdpau_radeonsi.so.1.0.0
-lrwxrwxrwx	root/root	usr/lib/vdpau/libvdpau_radeonsi.so.1.0.0 -> ../libgallium-24.2.7-1.so
+lrwxrwxrwx	root/root	usr/lib/vdpau/libvdpau_radeonsi.so.1.0.0 -> ../libgallium-24.3.1-1.so
 lrwxrwxrwx	root/root	usr/lib/vdpau/libvdpau_virtio_gpu.so -> libvdpau_virtio_gpu.so.1.0.0
 lrwxrwxrwx	root/root	usr/lib/vdpau/libvdpau_virtio_gpu.so.1 -> libvdpau_virtio_gpu.so.1.0.0
 lrwxrwxrwx	root/root	usr/lib/vdpau/libvdpau_virtio_gpu.so.1.0 -> libvdpau_virtio_gpu.so.1.0.0
-lrwxrwxrwx	root/root	usr/lib/vdpau/libvdpau_virtio_gpu.so.1.0.0 -> ../libgallium-24.2.7-1.so
+lrwxrwxrwx	root/root	usr/lib/vdpau/libvdpau_virtio_gpu.so.1.0.0 -> ../libgallium-24.3.1-1.so
 drwxr-xr-x	root/root	usr/share/
 drwxr-xr-x	root/root	usr/share/drirc.d/
 -rw-r--r--	root/root	usr/share/drirc.d/00-mesa-defaults.conf
@@ -210,6 +261,8 @@ drwxr-xr-x	root/root	usr/share/drirc.d/
 drwxr-xr-x	root/root	usr/share/glvnd/
 drwxr-xr-x	root/root	usr/share/glvnd/egl_vendor.d/
 -rw-r--r--	root/root	usr/share/glvnd/egl_vendor.d/50_mesa.json
+drwxr-xr-x	root/root	usr/share/pkgconfig/
+-rw-r--r--	root/root	usr/share/pkgconfig/wayland-protocols.pc
 drwxr-xr-x	root/root	usr/share/vulkan/
 drwxr-xr-x	root/root	usr/share/vulkan/icd.d/
 -rw-r--r--	root/root	usr/share/vulkan/icd.d/intel_hasvk_icd.x86_64.json
@@ -217,3 +270,103 @@ drwxr-xr-x	root/root	usr/share/vulkan/icd.d/
 -rw-r--r--	root/root	usr/share/vulkan/icd.d/nouveau_icd.x86_64.json
 -rw-r--r--	root/root	usr/share/vulkan/icd.d/radeon_icd.x86_64.json
 -rw-r--r--	root/root	usr/share/vulkan/icd.d/virtio_icd.x86_64.json
+drwxr-xr-x	root/root	usr/share/wayland-protocols/
+drwxr-xr-x	root/root	usr/share/wayland-protocols/stable/
+drwxr-xr-x	root/root	usr/share/wayland-protocols/stable/linux-dmabuf/
+-rw-r--r--	root/root	usr/share/wayland-protocols/stable/linux-dmabuf/linux-dmabuf-v1.xml
+drwxr-xr-x	root/root	usr/share/wayland-protocols/stable/presentation-time/
+-rw-r--r--	root/root	usr/share/wayland-protocols/stable/presentation-time/presentation-time.xml
+drwxr-xr-x	root/root	usr/share/wayland-protocols/stable/tablet/
+-rw-r--r--	root/root	usr/share/wayland-protocols/stable/tablet/tablet-v2.xml
+drwxr-xr-x	root/root	usr/share/wayland-protocols/stable/viewporter/
+-rw-r--r--	root/root	usr/share/wayland-protocols/stable/viewporter/viewporter.xml
+drwxr-xr-x	root/root	usr/share/wayland-protocols/stable/xdg-shell/
+-rw-r--r--	root/root	usr/share/wayland-protocols/stable/xdg-shell/xdg-shell.xml
+drwxr-xr-x	root/root	usr/share/wayland-protocols/staging/
+drwxr-xr-x	root/root	usr/share/wayland-protocols/staging/alpha-modifier/
+-rw-r--r--	root/root	usr/share/wayland-protocols/staging/alpha-modifier/alpha-modifier-v1.xml
+drwxr-xr-x	root/root	usr/share/wayland-protocols/staging/commit-timing/
+-rw-r--r--	root/root	usr/share/wayland-protocols/staging/commit-timing/commit-timing-v1.xml
+drwxr-xr-x	root/root	usr/share/wayland-protocols/staging/content-type/
+-rw-r--r--	root/root	usr/share/wayland-protocols/staging/content-type/content-type-v1.xml
+drwxr-xr-x	root/root	usr/share/wayland-protocols/staging/cursor-shape/
+-rw-r--r--	root/root	usr/share/wayland-protocols/staging/cursor-shape/cursor-shape-v1.xml
+drwxr-xr-x	root/root	usr/share/wayland-protocols/staging/drm-lease/
+-rw-r--r--	root/root	usr/share/wayland-protocols/staging/drm-lease/drm-lease-v1.xml
+drwxr-xr-x	root/root	usr/share/wayland-protocols/staging/ext-foreign-toplevel-list/
+-rw-r--r--	root/root	usr/share/wayland-protocols/staging/ext-foreign-toplevel-list/ext-foreign-toplevel-list-v1.xml
+drwxr-xr-x	root/root	usr/share/wayland-protocols/staging/ext-idle-notify/
+-rw-r--r--	root/root	usr/share/wayland-protocols/staging/ext-idle-notify/ext-idle-notify-v1.xml
+drwxr-xr-x	root/root	usr/share/wayland-protocols/staging/ext-image-capture-source/
+-rw-r--r--	root/root	usr/share/wayland-protocols/staging/ext-image-capture-source/ext-image-capture-source-v1.xml
+drwxr-xr-x	root/root	usr/share/wayland-protocols/staging/ext-image-copy-capture/
+-rw-r--r--	root/root	usr/share/wayland-protocols/staging/ext-image-copy-capture/ext-image-copy-capture-v1.xml
+drwxr-xr-x	root/root	usr/share/wayland-protocols/staging/ext-session-lock/
+-rw-r--r--	root/root	usr/share/wayland-protocols/staging/ext-session-lock/ext-session-lock-v1.xml
+drwxr-xr-x	root/root	usr/share/wayland-protocols/staging/ext-transient-seat/
+-rw-r--r--	root/root	usr/share/wayland-protocols/staging/ext-transient-seat/ext-transient-seat-v1.xml
+drwxr-xr-x	root/root	usr/share/wayland-protocols/staging/fifo/
+-rw-r--r--	root/root	usr/share/wayland-protocols/staging/fifo/fifo-v1.xml
+drwxr-xr-x	root/root	usr/share/wayland-protocols/staging/fractional-scale/
+-rw-r--r--	root/root	usr/share/wayland-protocols/staging/fractional-scale/fractional-scale-v1.xml
+drwxr-xr-x	root/root	usr/share/wayland-protocols/staging/linux-drm-syncobj/
+-rw-r--r--	root/root	usr/share/wayland-protocols/staging/linux-drm-syncobj/linux-drm-syncobj-v1.xml
+drwxr-xr-x	root/root	usr/share/wayland-protocols/staging/security-context/
+-rw-r--r--	root/root	usr/share/wayland-protocols/staging/security-context/security-context-v1.xml
+drwxr-xr-x	root/root	usr/share/wayland-protocols/staging/single-pixel-buffer/
+-rw-r--r--	root/root	usr/share/wayland-protocols/staging/single-pixel-buffer/single-pixel-buffer-v1.xml
+drwxr-xr-x	root/root	usr/share/wayland-protocols/staging/tearing-control/
+-rw-r--r--	root/root	usr/share/wayland-protocols/staging/tearing-control/tearing-control-v1.xml
+drwxr-xr-x	root/root	usr/share/wayland-protocols/staging/xdg-activation/
+-rw-r--r--	root/root	usr/share/wayland-protocols/staging/xdg-activation/xdg-activation-v1.xml
+drwxr-xr-x	root/root	usr/share/wayland-protocols/staging/xdg-dialog/
+-rw-r--r--	root/root	usr/share/wayland-protocols/staging/xdg-dialog/xdg-dialog-v1.xml
+drwxr-xr-x	root/root	usr/share/wayland-protocols/staging/xdg-system-bell/
+-rw-r--r--	root/root	usr/share/wayland-protocols/staging/xdg-system-bell/xdg-system-bell-v1.xml
+drwxr-xr-x	root/root	usr/share/wayland-protocols/staging/xdg-toplevel-drag/
+-rw-r--r--	root/root	usr/share/wayland-protocols/staging/xdg-toplevel-drag/xdg-toplevel-drag-v1.xml
+drwxr-xr-x	root/root	usr/share/wayland-protocols/staging/xdg-toplevel-icon/
+-rw-r--r--	root/root	usr/share/wayland-protocols/staging/xdg-toplevel-icon/xdg-toplevel-icon-v1.xml
+drwxr-xr-x	root/root	usr/share/wayland-protocols/staging/xwayland-shell/
+-rw-r--r--	root/root	usr/share/wayland-protocols/staging/xwayland-shell/xwayland-shell-v1.xml
+drwxr-xr-x	root/root	usr/share/wayland-protocols/unstable/
+drwxr-xr-x	root/root	usr/share/wayland-protocols/unstable/fullscreen-shell/
+-rw-r--r--	root/root	usr/share/wayland-protocols/unstable/fullscreen-shell/fullscreen-shell-unstable-v1.xml
+drwxr-xr-x	root/root	usr/share/wayland-protocols/unstable/idle-inhibit/
+-rw-r--r--	root/root	usr/share/wayland-protocols/unstable/idle-inhibit/idle-inhibit-unstable-v1.xml
+drwxr-xr-x	root/root	usr/share/wayland-protocols/unstable/input-method/
+-rw-r--r--	root/root	usr/share/wayland-protocols/unstable/input-method/input-method-unstable-v1.xml
+drwxr-xr-x	root/root	usr/share/wayland-protocols/unstable/input-timestamps/
+-rw-r--r--	root/root	usr/share/wayland-protocols/unstable/input-timestamps/input-timestamps-unstable-v1.xml
+drwxr-xr-x	root/root	usr/share/wayland-protocols/unstable/keyboard-shortcuts-inhibit/
+-rw-r--r--	root/root	usr/share/wayland-protocols/unstable/keyboard-shortcuts-inhibit/keyboard-shortcuts-inhibit-unstable-v1.xml
+drwxr-xr-x	root/root	usr/share/wayland-protocols/unstable/linux-dmabuf/
+-rw-r--r--	root/root	usr/share/wayland-protocols/unstable/linux-dmabuf/linux-dmabuf-unstable-v1.xml
+drwxr-xr-x	root/root	usr/share/wayland-protocols/unstable/linux-explicit-synchronization/
+-rw-r--r--	root/root	usr/share/wayland-protocols/unstable/linux-explicit-synchronization/linux-explicit-synchronization-unstable-v1.xml
+drwxr-xr-x	root/root	usr/share/wayland-protocols/unstable/pointer-constraints/
+-rw-r--r--	root/root	usr/share/wayland-protocols/unstable/pointer-constraints/pointer-constraints-unstable-v1.xml
+drwxr-xr-x	root/root	usr/share/wayland-protocols/unstable/pointer-gestures/
+-rw-r--r--	root/root	usr/share/wayland-protocols/unstable/pointer-gestures/pointer-gestures-unstable-v1.xml
+drwxr-xr-x	root/root	usr/share/wayland-protocols/unstable/primary-selection/
+-rw-r--r--	root/root	usr/share/wayland-protocols/unstable/primary-selection/primary-selection-unstable-v1.xml
+drwxr-xr-x	root/root	usr/share/wayland-protocols/unstable/relative-pointer/
+-rw-r--r--	root/root	usr/share/wayland-protocols/unstable/relative-pointer/relative-pointer-unstable-v1.xml
+drwxr-xr-x	root/root	usr/share/wayland-protocols/unstable/tablet/
+-rw-r--r--	root/root	usr/share/wayland-protocols/unstable/tablet/tablet-unstable-v1.xml
+-rw-r--r--	root/root	usr/share/wayland-protocols/unstable/tablet/tablet-unstable-v2.xml
+drwxr-xr-x	root/root	usr/share/wayland-protocols/unstable/text-input/
+-rw-r--r--	root/root	usr/share/wayland-protocols/unstable/text-input/text-input-unstable-v1.xml
+-rw-r--r--	root/root	usr/share/wayland-protocols/unstable/text-input/text-input-unstable-v3.xml
+drwxr-xr-x	root/root	usr/share/wayland-protocols/unstable/xdg-decoration/
+-rw-r--r--	root/root	usr/share/wayland-protocols/unstable/xdg-decoration/xdg-decoration-unstable-v1.xml
+drwxr-xr-x	root/root	usr/share/wayland-protocols/unstable/xdg-foreign/
+-rw-r--r--	root/root	usr/share/wayland-protocols/unstable/xdg-foreign/xdg-foreign-unstable-v1.xml
+-rw-r--r--	root/root	usr/share/wayland-protocols/unstable/xdg-foreign/xdg-foreign-unstable-v2.xml
+drwxr-xr-x	root/root	usr/share/wayland-protocols/unstable/xdg-output/
+-rw-r--r--	root/root	usr/share/wayland-protocols/unstable/xdg-output/xdg-output-unstable-v1.xml
+drwxr-xr-x	root/root	usr/share/wayland-protocols/unstable/xdg-shell/
+-rw-r--r--	root/root	usr/share/wayland-protocols/unstable/xdg-shell/xdg-shell-unstable-v5.xml
+-rw-r--r--	root/root	usr/share/wayland-protocols/unstable/xdg-shell/xdg-shell-unstable-v6.xml
+drwxr-xr-x	root/root	usr/share/wayland-protocols/unstable/xwayland-keyboard-grab/
+-rw-r--r--	root/root	usr/share/wayland-protocols/unstable/xwayland-keyboard-grab/xwayland-keyboard-grab-unstable-v1.xml
