@@ -3,7 +3,7 @@
 # Maintainer: CRUX Xorg Team, xorg-ports at crux dot nu
 
 name=pixman
-version=0.44.0
+version=0.44.2
 release=1
 source=(https://www.x.org/releases/individual/lib/$name-$version.tar.xz)
 

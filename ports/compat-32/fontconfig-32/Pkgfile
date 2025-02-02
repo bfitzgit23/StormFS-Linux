@@ -4,7 +4,7 @@
 # Depends on: expat-32 fontconfig freetype-32 util-linux-32
 
 name=fontconfig-32
-version=2.15.0
+version=2.16.0
 release=1
 source=(https://fontconfig.org/release/fontconfig-$version.tar.xz)
 

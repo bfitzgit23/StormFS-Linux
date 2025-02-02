@@ -566,8 +566,9 @@ f:ab2f2697cb440d140083aa2d8df31704:python3-tomli/Pkgfile
 f:97645d1dc1a7310057f0ecbc06545129:python3-ply/.md5sum
 f:d4e111a20f39499133b46083fbee8849:python3-ply/.footprint
 f:8c7d3a1e87aca71e7742e8b652f7569a:python3-ply/Pkgfile
-f:1d7eb50649522a300c06cca61f4ee10e:man-pages/.footprint
-f:9fd81fbb3dbd751e4da955e7b5ac8f37:man-pages/Pkgfile
+f:79bf6d30a09f37bb34f15340b96f2ada:man-pages/.md5sum
+f:ba8f15039e8508b78bb18b0a3308ac79:man-pages/.footprint
+f:5ccba5b299e3984f03a45f547eb11c24:man-pages/Pkgfile
 f:2293d466f88d050e4000d26f6e58a109:python3-urllib3/.md5sum
 f:30a604968446b33145d07defed93492c:python3-urllib3/.footprint
 f:46989a96ed386bab982c15ba4bd7aefc:python3-urllib3/Pkgfile

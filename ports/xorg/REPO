@@ -355,9 +355,9 @@ f:71b44094539078b593e34ac67bf9cfc7:xcb-proto/Pkgfile
 f:25497e5d828f13801b26608c57dbb2c3:xf86-video-siliconmotion/.md5sum
 f:70d579f0046be1eefcbc64b26c1dedcb:xf86-video-siliconmotion/.footprint
 f:8ab18fa4221bd95eacd97b177ffc24e8:xf86-video-siliconmotion/Pkgfile
-f:adaa15cd7871b082d33c9a5bfef0906b:fontconfig/.md5sum
-f:10953f886660a1c5ab1cf3fc04d613b1:fontconfig/.footprint
-f:203aee3fde8fd79adfa244f78c59010c:fontconfig/Pkgfile
+f:fae3e43caf2f32b35a6e23c77fda6fdb:fontconfig/.md5sum
+f:4dcb48478a041af3f9f4557afa2f6d5a:fontconfig/.footprint
+f:f7a0a113a3cb47dd52c1fb92d0a825cb:fontconfig/Pkgfile
 f:64bf69a19e132a0b6c2069b6bd7c8574:xf86-input-elographics/.md5sum
 f:eaaf1eff77ffe1691accf4c5db7c3ed6:xf86-input-elographics/.footprint
 f:c33ef43a01c1247e517f817d969635f1:xf86-input-elographics/Pkgfile
@@ -571,9 +571,9 @@ f:e4b95a58c67a5684c653e11fe53b9e91:libXpresent/Pkgfile
 f:f08911e314303239349f15a6f8ab928f:libepoxy/.md5sum
 f:355627de0939db078b6d02b584098c6d:libepoxy/.footprint
 f:12776438c48d346fba79084f23100145:libepoxy/Pkgfile
-f:14cf6d48010161f210e2ed5a8a1dd1bf:pixman/.md5sum
-f:4a3f0bc09c660bf470658fa6c87cf8db:pixman/.footprint
-f:b39ee1861773298f4d57de79c84b878a:pixman/Pkgfile
+f:ecad45a8fdbabba4c2994bed2a32c30c:pixman/.md5sum
+f:8856fdaae4cb8c43c88c3e094d0d9844:pixman/.footprint
+f:9280d8dcf11d067c8f5036d7941a2585:pixman/Pkgfile
 f:2104ca789c999126eb74425038f1617a:xorg-font-cronyx-cyrillic/.md5sum
 f:1809a7591c650c4fa934fad9ed29abd1:xorg-font-cronyx-cyrillic/.footprint
 f:426af16fc0ab898959f307065c8b3e90:xorg-font-cronyx-cyrillic/post-install

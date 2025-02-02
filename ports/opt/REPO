@@ -232,6 +232,7 @@ d:volk
 d:abseil-cpp
 d:gpgme
 d:libnvme
+d:potrace
 d:poppler
 d:vala
 d:pth
@@ -1078,9 +1079,9 @@ f:8ea05ec99863cbebe681db95f12f6be9:libjpeg-turbo/Pkgfile
 f:4c43fd77d650803c50d5023345d25bb8:faad2/.md5sum
 f:01158c4cc95da8553ba3134abd1660fd:faad2/.footprint
 f:5b9351f532f3c27bfe323bbd2f79a0bb:faad2/Pkgfile
-f:c68cb7657ff9f01a47452e0a7123f796:openjpeg2/.md5sum
-f:818ab5fd47dd4c2432c3bf4ec89c5f55:openjpeg2/.footprint
-f:420d43f643eabaf8206f46c9bbd72b37:openjpeg2/Pkgfile
+f:3db0dd98d2e1dc03bf1526e8d7cdee49:openjpeg2/.md5sum
+f:6bb571929f7fd580a0124781b603af41:openjpeg2/.footprint
+f:184ee8a900e3883db2b4760cc0115869:openjpeg2/Pkgfile
 f:404c0b50463b4e53fda18f798c867147:ghostscript/.md5sum
 f:0f846b54f8d141a741ee07100a252500:ghostscript/.footprint
 f:6f2f8072c0cc11254dc6985e92530452:ghostscript/Pkgfile
@@ -1129,9 +1130,12 @@ f:b0a54c83cb97b23f62c4aea923a0fea8:gpgme/Pkgfile
 f:f6b811baae31d6ba83173619592593e7:libnvme/.md5sum
 f:55d2379a15615759c2cb93575b33aef3:libnvme/.footprint
 f:735f4453953c32a233414b7454c3d48c:libnvme/Pkgfile
-f:feac9282f3de6652fca98ccb71b56117:poppler/.md5sum
-f:8a434517950f455b77058b5d62e084d5:poppler/.footprint
-f:9ad57c98b101bf1951ecd8f2bfb253be:poppler/Pkgfile
+f:b4304c7b278bbe1c96176dc7ce1f63a2:potrace/.md5sum
+f:a7d1fd3c79971deb83cc695da2a32927:potrace/.footprint
+f:21d9228c657b3b2e3430cbc5fcedaaf8:potrace/Pkgfile
+f:6bc6109df22ecf2878d59c7e970dd658:poppler/.md5sum
+f:8711e99e34bf9acceb0ec7846bf39add:poppler/.footprint
+f:79d6faf78a8c49f253fc49e830f6da6a:poppler/Pkgfile
 f:43306956232a20a315be3e7bf5ab2567:vala/.md5sum
 f:a56eef8a3b665dd5f1ee05ef413bdaea:vala/.footprint
 f:53c0d4aa663c4d1402a39ebdcf42ee0f:vala/Pkgfile

@@ -336,9 +336,9 @@ f:4b65966241a19cd2f834fecf1640e894:xcb-util-32/.md5sum
 f:a57c6ee04757521e943cf2c08a1abf94:xcb-util-32/.footprint
 f:d42fee5cef48e8de847a7981490e203d:xcb-util-32/Pkgfile
 f:d41d8cd98f00b204e9800998ecf8427e:libjpeg-turbo-32/.32bit
-f:0d0ef459fc07aaa3314ce8d3c6f04fc5:libjpeg-turbo-32/.md5sum
-f:7563a155e721b52d47ebd05c4e77ab6b:libjpeg-turbo-32/.footprint
-f:120c0b3073be2a741057b9a695b0a4bd:libjpeg-turbo-32/Pkgfile
+f:a728a70b4acf5df089e5d1acf2fe7613:libjpeg-turbo-32/.md5sum
+f:30a29946b9520e7faf0959fdb0671b52:libjpeg-turbo-32/.footprint
+f:9647f95e7d5a5e1855d66ac85d0b2fd8:libjpeg-turbo-32/Pkgfile
 f:d41d8cd98f00b204e9800998ecf8427e:glu-32/.32bit
 f:dc57e05eeaec33169c275904ef72cb06:glu-32/.md5sum
 f:89110bea98c62d1002fbc1f03cddeeca:glu-32/.footprint
@@ -864,9 +864,9 @@ f:59679b1b444ce9f36386bfc7a8e7acd7:libnewt-32/.md5sum
 f:7778eea6de7c89e0007314fcfefd4881:libnewt-32/.footprint
 f:e8d649e3535db77ef3ddc8c64e0432c0:libnewt-32/Pkgfile
 f:d41d8cd98f00b204e9800998ecf8427e:fontconfig-32/.32bit
-f:adaa15cd7871b082d33c9a5bfef0906b:fontconfig-32/.md5sum
-f:d524e68443c4a6b213ae67657e0c9f40:fontconfig-32/.footprint
-f:59f63febfe23ab11a61d919d9f4d4fa7:fontconfig-32/Pkgfile
+f:fae3e43caf2f32b35a6e23c77fda6fdb:fontconfig-32/.md5sum
+f:38e184baefe1117d738132aed5b1821b:fontconfig-32/.footprint
+f:f3f5ca433519cbfc7e4f7236ac36143b:fontconfig-32/Pkgfile
 f:d41d8cd98f00b204e9800998ecf8427e:jq-32/.32bit
 f:7935707b4a8d751d3490812a3df19f1b:jq-32/.md5sum
 f:3ed6147bf162f4129637336c464dcf9a:jq-32/.footprint
