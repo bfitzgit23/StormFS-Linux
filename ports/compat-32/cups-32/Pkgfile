@@ -5,7 +5,7 @@
 # Optional: dbus-32 gnutls-32
 
 name=cups-32
-version=2.4.10
+version=2.4.11
 release=1
 source=(https://github.com/OpenPrinting/cups/releases/download/v$version/${name%-*}-$version-source.tar.gz)
 
@@ -16,7 +16,7 @@ build() {
 	prt-get isinst gnutls-32 && PKGMK_CUPS=' --with-tls=gnutls'
 
 
-	CC=cc CXX=c++ \
+	CC=gcc CXX=g++ \
 	./configure \
 		--prefix=/usr $PKGMK_CUPS \
 		--sysconfdir=/etc \
@@ -29,6 +29,8 @@ build() {
 		--with-languages="" \
 		--without-{java,perl,php,python} \
 		--without-rcdir \
+		--without-pam  \
+		--without-crypt \
 		--with-optim="$CFLAGS" \
 		--enable-acl \
 		--disable-{pam,dbus,dnssd,systemd} \

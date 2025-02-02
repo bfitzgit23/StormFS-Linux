@@ -4,17 +4,21 @@
 # Depends on: attr-32
 
 name=libcap-32
-version=2.72
+version=2.73
 release=1
 source=(https://www.kernel.org/pub/linux/libs/security/linux-privs/libcap2/${name%-*}-$version.tar.xz)
 
 build() {
 	cd ${name%-*}-$version
 
-	sed -i "/^CFLAGS/s/-O2/$CFLAGS/" Make.Rules
+	sed -i '/install -m.*STA/d' libcap/Makefile
+#	make CC="gcc -m32 -march=i686"
+	make CC="gcc -m32 -march=i686" lib=lib32 prefix=$PWD/DESTDIR/usr -C libcap install
+	mkdir -p $PKG/usr/lib32/
+cp -Rv DESTDIR/usr/lib32/* $PKG/usr/lib32
+sed -e "s|^libdir=.*|libdir=/usr/lib32|" -i $PKG/usr/lib32/pkgconfig/lib{cap,psx}.pc
+chmod -v 755 $PKG/usr/lib32/libcap.so.2.73
+rm -rf DESTDIR
 
-	make -C libcap GOLANG=no RAISE_SETFCAP=no PKGCONFIGDIR=/usr/lib32/pkgconfig
-	make -C libcap GOLANG=no RAISE_SETFCAP=no DESTDIR=$PKG prefix=/usr lib=lib32 install
-
-	rm -r $PKG/usr/include
+	rm -rf $PKG/usr/include
 }

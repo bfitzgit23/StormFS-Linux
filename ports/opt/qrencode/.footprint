@@ -51,12 +51,14 @@ drwxr-xr-x	root/root	usr/share/doc/qrencode-4.1.1/
 -rw-r--r--	root/root	usr/share/doc/qrencode-4.1.1/nav_g.png
 -rw-r--r--	root/root	usr/share/doc/qrencode-4.1.1/nav_h.png
 -rw-r--r--	root/root	usr/share/doc/qrencode-4.1.1/nav_hd.png
+-rw-r--r--	root/root	usr/share/doc/qrencode-4.1.1/navtree.css
 -rw-r--r--	root/root	usr/share/doc/qrencode-4.1.1/open.png
 -rw-r--r--	root/root	usr/share/doc/qrencode-4.1.1/pages.html
 -rw-r--r--	root/root	usr/share/doc/qrencode-4.1.1/plus.svg
 -rw-r--r--	root/root	usr/share/doc/qrencode-4.1.1/plusd.svg
 -rw-r--r--	root/root	usr/share/doc/qrencode-4.1.1/qrencode_8h.html
 -rw-r--r--	root/root	usr/share/doc/qrencode-4.1.1/qrencode_8h_source.html
+-rw-r--r--	root/root	usr/share/doc/qrencode-4.1.1/resize.js
 drwxr-xr-x	root/root	usr/share/doc/qrencode-4.1.1/search/
 -rw-r--r--	root/root	usr/share/doc/qrencode-4.1.1/search/all_0.js
 -rw-r--r--	root/root	usr/share/doc/qrencode-4.1.1/search/all_1.js

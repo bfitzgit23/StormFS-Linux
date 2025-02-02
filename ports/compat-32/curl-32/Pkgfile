@@ -5,7 +5,7 @@
 # Optional: brotli-32
 
 name=curl-32
-version=8.10.1
+version=8.11.1
 release=1
 source=(https://curl.se/download/${name%-*}-$version.tar.xz)
 

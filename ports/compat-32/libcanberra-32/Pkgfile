@@ -25,6 +25,7 @@ build() {
 		--libdir=/usr/lib32 \
 		--enable-alsa \
 		--disable-oss \
+		--disable-systemd \
 		--with-builtin=dso \
 		--with-pic
 
@@ -32,4 +33,7 @@ build() {
 	make -j1 DESTDIR=$PKG install
 
 	rm -r $PKG/usr/{bin,share,include}
+	rm -r $PKG/usr/lib/systemd/system/canberra-system-bootup.service
+	rm -r $PKG/usr/lib/systemd/system/canberra-system-shutdown-reboot.service
+	rm -r $PKG/usr/lib/systemd/system/canberra-system-shutdown.service
 }

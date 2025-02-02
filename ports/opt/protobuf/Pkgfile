@@ -1,23 +1,21 @@
 # Depends on: cmake abseil-cpp
 
 name=protobuf
-version=27.2
+version=29.3
 release=1
 source=(https://github.com/protocolbuffers/${name}/releases/download/v${version}/${name}-${version}.tar.gz)
-pkg_build () {
-mkdir build &&
-cd    build &&
+build() {
+  cmake -S $name-$version -B build -G Ninja \
+    -D CMAKE_INSTALL_PREFIX=/usr \
+    -D CMAKE_INSTALL_LIBDIR=lib \
+    -D CMAKE_BUILD_TYPE=Release \
+    -D CMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
+    -D CMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+    -D protobuf_BUILD_SHARED_LIBS=ON \
+    -D protobuf_BUILD_TESTS=OFF \
+    -D protobuf_ABSL_PROVIDER=package \
+    -Wno-dev
 
-cmake -DCMAKE_INSTALL_PREFIX=/usr      \
-      -DCMAKE_BUILD_TYPE=Release       \
-      -DCMAKE_SKIP_INSTALL_RPATH=ON    \
-      -Dprotobuf_BUILD_TESTS=OFF       \
-      -Dprotobuf_ABSL_PROVIDER=package \
-      -Dprotobuf_BUILD_LIBUPB=OFF      \
-      -Dprotobuf_BUILD_SHARED_LIBS=ON  \
-      -Dutf8_range_ENABLE_INSTALL=OFF  \
-      -G Ninja ..                      &&
-ninja
-sed 's/utf8_range//' -i *.pc &&
-ninja install
+  cmake --build build
+  DESTDIR=$PKG cmake --install build
 }

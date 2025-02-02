@@ -4,7 +4,7 @@
 # Depends on: meson ninja
 
 name=libxcvt
-version=0.1.2
+version=0.1.3
 release=1
 source=(https://xorg.freedesktop.org/releases/individual/lib/libxcvt-$version.tar.xz)
 

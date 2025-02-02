@@ -1,6 +1,7 @@
 drwxr-xr-x	root/root	etc/
 -rw-r--r--	root/root	etc/dracut.conf
 drwxr-xr-x	root/root	etc/dracut.conf.d/
+-rw-r--r--	root/root	etc/dracut.conf.d/config.conf
 drwxr-xr-x	root/root	usr/
 drwxr-xr-x	root/root	usr/bin/
 -rwxr-xr-x	root/root	usr/bin/dracut

@@ -39,5 +39,9 @@ build() {
 	make
 	make DESTDIR=$PKG install
 
-	rm -r $PKG/usr/{bin,sbin,include,share} $PKG/{etc,var}
+	rm -rf $PKG/usr/{bin,sbin,include,share} $PKG/{etc,var}
+	rm -rf f$PKG/usr/lib/systemd/system/avahi-daemon.service
+	rm -rf $PKG/usr/lib/systemd/system/avahi-daemon.socket
+	rm -rf $PKG/usr/lib/systemd/system/avahi-daemon.service
+	rm -rf $PKG/usr/lib/systemd/system/avahi-dnsconfd.service
 }

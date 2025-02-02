@@ -1,0 +1,31 @@
+# Description: Utility libraries for Vulkan developers
+# URL: https://www.khronos.org/vulkan/
+# Maintainer: CRUX System Team, core-ports at crux dot nu
+# Depends on: vulkan-headers
+# Optional:
+
+name=vulkan-validation-layers
+_name=Vulkan-ValidationLayers
+version=1.4.304.0
+_version=vulkan-sdk-$version
+release=1
+source=(https://github.com/KhronosGroup/Vulkan-ValidationLayers/archive/$_version/$_name-$version.tar.gz)
+
+build() {
+	prt-get isinst wayland || PKGMK_VULKAN_VALIDATION_LAYERS+=' -D BUILD_WSI_WAYLAND_SUPPORT=OFF'
+
+	cmake -S $_name-$_version -B build -G Ninja $PKGMK_VULKAN_VALIDATION_LAYERS \
+		-D CMAKE_INSTALL_PREFIX=/usr \
+		-D CMAKE_INSTALL_LIBDIR=lib \
+		-D CMAKE_BUILD_TYPE=Release \
+		-D CMAKE_CXX_FLAGS_RELEASE="${CXXFLAGS}" \
+		-D CMAKE_SKIP_RPATH=ON \
+		-D SPIRV_HEADERS_INSTALL_DIR=/usr \
+		-D VULKAN_HEADERS_INSTALL_DIR=/usr \
+		-D USE_ROBIN_HOOD_HASHING=ON \
+		-D BUILD_TESTS=OFF \
+		-Wno-dev
+
+	cmake --build build
+	DESTDIR=$PKG cmake --install build
+}

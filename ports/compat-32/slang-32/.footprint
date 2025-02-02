@@ -17,7 +17,7 @@ drwxr-xr-x	root/root	usr/lib32/slang/v2/modules/
 -rwxr-xr-x	root/root	usr/lib32/slang/v2/modules/histogram-module.so
 -rwxr-xr-x	root/root	usr/lib32/slang/v2/modules/iconv-module.so
 -rwxr-xr-x	root/root	usr/lib32/slang/v2/modules/json-module.so
--rwxr-xr-x	root/root	usr/lib32/slang/v2/modules/pcre-module.so
+-rwxr-xr-x	root/root	usr/lib32/slang/v2/modules/onig-module.so
 -rwxr-xr-x	root/root	usr/lib32/slang/v2/modules/png-module.so
 -rwxr-xr-x	root/root	usr/lib32/slang/v2/modules/rand-module.so
 -rwxr-xr-x	root/root	usr/lib32/slang/v2/modules/select-module.so

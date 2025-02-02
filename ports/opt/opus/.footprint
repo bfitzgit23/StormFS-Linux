@@ -62,6 +62,7 @@ drwxr-xr-x	root/root	usr/share/doc/opus-1.4/html/
 -rw-r--r--	root/root	usr/share/doc/opus-1.4/html/nav_g.png
 -rw-r--r--	root/root	usr/share/doc/opus-1.4/html/nav_h.png
 -rw-r--r--	root/root	usr/share/doc/opus-1.4/html/nav_hd.png
+-rw-r--r--	root/root	usr/share/doc/opus-1.4/html/navtree.css
 -rw-r--r--	root/root	usr/share/doc/opus-1.4/html/open.png
 -rw-r--r--	root/root	usr/share/doc/opus-1.4/html/opus_8h.html
 -rw-r--r--	root/root	usr/share/doc/opus-1.4/html/opus_8h__dep__incl.dot
@@ -83,6 +84,7 @@ drwxr-xr-x	root/root	usr/share/doc/opus-1.4/html/
 -rw-r--r--	root/root	usr/share/doc/opus-1.4/html/opus_logo.svg
 -rw-r--r--	root/root	usr/share/doc/opus-1.4/html/plus.svg
 -rw-r--r--	root/root	usr/share/doc/opus-1.4/html/plusd.svg
+-rw-r--r--	root/root	usr/share/doc/opus-1.4/html/resize.js
 drwxr-xr-x	root/root	usr/share/doc/opus-1.4/html/search/
 -rw-r--r--	root/root	usr/share/doc/opus-1.4/html/search/all_0.js
 -rw-r--r--	root/root	usr/share/doc/opus-1.4/html/search/all_1.js

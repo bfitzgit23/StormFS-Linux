@@ -5,7 +5,7 @@
 # Optional: doxygen git Ggaphviz python3-pygments rsync recommonmark texlive install-tl-unx valgrind  pyyaml zip ocaml psutil Z3
 
 name=llvm
-version=19.1.6
+version=19.1.7
 release=1
 source=(https://github.com/llvm/llvm-project/releases/download/llvmorg-$version/$name-$version.src.tar.xz
 https://anduin.linuxfromscratch.org/BLFS/llvm/llvm-cmake-19.src.tar.xz

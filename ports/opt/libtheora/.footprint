@@ -88,9 +88,11 @@ drwxr-xr-x	root/root	usr/share/doc/libtheora-1.1.1/html/
 -rw-r--r--	root/root	usr/share/doc/libtheora-1.1.1/html/nav_g.png
 -rw-r--r--	root/root	usr/share/doc/libtheora-1.1.1/html/nav_h.png
 -rw-r--r--	root/root	usr/share/doc/libtheora-1.1.1/html/nav_hd.png
+-rw-r--r--	root/root	usr/share/doc/libtheora-1.1.1/html/navtree.css
 -rw-r--r--	root/root	usr/share/doc/libtheora-1.1.1/html/open.png
 -rw-r--r--	root/root	usr/share/doc/libtheora-1.1.1/html/plus.svg
 -rw-r--r--	root/root	usr/share/doc/libtheora-1.1.1/html/plusd.svg
+-rw-r--r--	root/root	usr/share/doc/libtheora-1.1.1/html/resize.js
 -rw-r--r--	root/root	usr/share/doc/libtheora-1.1.1/html/splitbar.png
 -rw-r--r--	root/root	usr/share/doc/libtheora-1.1.1/html/splitbard.png
 -rw-r--r--	root/root	usr/share/doc/libtheora-1.1.1/html/structth__comment.html

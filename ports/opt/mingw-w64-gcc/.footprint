@@ -13,7 +13,6 @@ drwxr-xr-x	root/root	usr/bin/
 -rwxr-xr-x	root/root	usr/bin/i686-w64-mingw32-gcov-tool
 -rwxr-xr-x	root/root	usr/bin/i686-w64-mingw32-gfortran
 -rwxr-xr-x	root/root	usr/bin/i686-w64-mingw32-lto-dump
--rw-------	root/root	usr/bin/stfLGoBV (EMPTY)
 -rwxr-xr-x	root/root	usr/bin/x86_64-w64-mingw32-c++
 -rwxr-xr-x	root/root	usr/bin/x86_64-w64-mingw32-cpp
 -rwxr-xr-x	root/root	usr/bin/x86_64-w64-mingw32-g++

@@ -1029,10 +1029,6 @@ drwxr-xr-x	root/root	usr/lib/python3.13/collections/__pycache__/
 -rw-r--r--	root/root	usr/lib/python3.13/collections/__pycache__/__init__.cpython-313.opt-1.pyc
 -rw-r--r--	root/root	usr/lib/python3.13/collections/__pycache__/__init__.cpython-313.opt-2.pyc
 -rw-r--r--	root/root	usr/lib/python3.13/collections/__pycache__/__init__.cpython-313.pyc
--rw-r--r--	root/root	usr/lib/python3.13/collections/__pycache__/abc.cpython-313.opt-1.pyc
--rw-r--r--	root/root	usr/lib/python3.13/collections/__pycache__/abc.cpython-313.opt-2.pyc
--rw-r--r--	root/root	usr/lib/python3.13/collections/__pycache__/abc.cpython-313.pyc
--rw-r--r--	root/root	usr/lib/python3.13/collections/abc.py
 -rw-r--r--	root/root	usr/lib/python3.13/colorsys.py
 -rw-r--r--	root/root	usr/lib/python3.13/compileall.py
 drwxr-xr-x	root/root	usr/lib/python3.13/concurrent/
@@ -1799,7 +1795,7 @@ drwxr-xr-x	root/root	usr/lib/python3.13/ensurepip/__pycache__/
 -rw-r--r--	root/root	usr/lib/python3.13/ensurepip/__pycache__/_uninstall.cpython-313.opt-2.pyc
 -rw-r--r--	root/root	usr/lib/python3.13/ensurepip/__pycache__/_uninstall.cpython-313.pyc
 drwxr-xr-x	root/root	usr/lib/python3.13/ensurepip/_bundled/
--rw-r--r--	root/root	usr/lib/python3.13/ensurepip/_bundled/pip-24.2-py3-none-any.whl
+-rw-r--r--	root/root	usr/lib/python3.13/ensurepip/_bundled/pip-24.3.1-py3-none-any.whl
 -rw-r--r--	root/root	usr/lib/python3.13/ensurepip/_uninstall.py
 -rw-r--r--	root/root	usr/lib/python3.13/enum.py
 -rw-r--r--	root/root	usr/lib/python3.13/filecmp.py

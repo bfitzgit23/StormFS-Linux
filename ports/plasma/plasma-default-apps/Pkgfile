@@ -1,0 +1,16 @@
+# Description: KDE Frameworks is a collection of libraries based on top of Qt6 and QML derived from the previous KDE libraries. They can be used independent of the KDE Display Environment (Plasma 6).
+# URL:         https://kde.org/
+# Maintainer:  B.r.i.a.n M.a.d.o.n.n.a b.m.a.d.o.n.n.a.s.t.e.r @ g.m.a.i.l.c.o.m
+# Depends on: ark dolphin dolphin-plugins kdenlive kmix khelpcenter konversation libkexiv2 plasma-activities plasma-activities-stats kio-extras okular libkdcraw gwenview libkcddb k3b konsole
+
+
+name=plasma-default-apps
+version=24.12.0
+release=1
+source=()
+
+build() {
+
+
+	mkdir $PKG/usr
+}

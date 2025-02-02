@@ -7,7 +7,7 @@
 # MONO_VERSION:  9.3.0
 
 name=wine-staging
-version=9.21
+version=9.22
 release=1
 source=(https://dl.winehq.org/wine/source/9.x/wine-$version.tar.xz \
     https://github.com/$name/$name/archive/v$version/$name-$version.tar.gz \

@@ -11,7 +11,8 @@ source=(https://www.alsa-project.org/files/pub/lib/alsa-lib-$version.tar.bz2)
 build() {
     cd alsa-lib-$version
 
-    ./configure      --prefix=/usr --libdir=/usr/lib32 --disable-python
+    ./configure      --prefix=/usr --libdir=/usr/lib32 --disable-python --host=i686-pc-linux-gnu
+
     make
     make DESTDIR=$PKG install
 

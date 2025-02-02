@@ -850,21 +850,6 @@ lrwxrwxrwx	root/root	usr/lib/libresolv.so -> ../../lib/libresolv.so.2
 -rw-r--r--	root/root	usr/lib/librt.a
 lrwxrwxrwx	root/root	usr/lib/libthread_db.so -> ../../lib/libthread_db.so.1
 -rw-r--r--	root/root	usr/lib/libutil.a
-drwxr-xr-x	root/root	usr/lib/locale/
-drwxr-xr-x	root/root	usr/lib/locale/C.UTF-8/
--rw-r--r--	root/root	usr/lib/locale/C.UTF-8/LC_ADDRESS
--rw-r--r--	root/root	usr/lib/locale/C.UTF-8/LC_COLLATE
--rw-r--r--	root/root	usr/lib/locale/C.UTF-8/LC_CTYPE
--rw-r--r--	root/root	usr/lib/locale/C.UTF-8/LC_IDENTIFICATION
--rw-r--r--	root/root	usr/lib/locale/C.UTF-8/LC_MEASUREMENT
-drwxr-xr-x	root/root	usr/lib/locale/C.UTF-8/LC_MESSAGES/
--rw-r--r--	root/root	usr/lib/locale/C.UTF-8/LC_MESSAGES/SYS_LC_MESSAGES
--rw-r--r--	root/root	usr/lib/locale/C.UTF-8/LC_MONETARY
--rw-r--r--	root/root	usr/lib/locale/C.UTF-8/LC_NAME
--rw-r--r--	root/root	usr/lib/locale/C.UTF-8/LC_NUMERIC
--rw-r--r--	root/root	usr/lib/locale/C.UTF-8/LC_PAPER
--rw-r--r--	root/root	usr/lib/locale/C.UTF-8/LC_TELEPHONE
--rw-r--r--	root/root	usr/lib/locale/C.UTF-8/LC_TIME
 -rw-r--r--	root/root	usr/lib/rcrt1.o
 drwxr-xr-x	root/root	usr/lib32/
 -rw-r--r--	root/root	usr/lib32/Mcrt1.o

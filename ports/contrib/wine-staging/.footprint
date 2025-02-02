@@ -501,6 +501,8 @@ drwxr-xr-x	root/root	usr/include/wine/windows/ddk/
 -rw-r--r--	root/root	usr/include/wine/windows/dxva.h
 -rw-r--r--	root/root	usr/include/wine/windows/dxva2api.h
 -rw-r--r--	root/root	usr/include/wine/windows/dxva2api.idl
+-rw-r--r--	root/root	usr/include/wine/windows/dxvahd.h
+-rw-r--r--	root/root	usr/include/wine/windows/dxvahd.idl
 -rw-r--r--	root/root	usr/include/wine/windows/dyngraph.idl
 -rw-r--r--	root/root	usr/include/wine/windows/endpointvolume.h
 -rw-r--r--	root/root	usr/include/wine/windows/endpointvolume.idl
@@ -1624,6 +1626,7 @@ drwxr-xr-x	root/root	usr/lib/wine/i386-windows/
 -rw-r--r--	root/root	usr/lib/wine/i386-windows/iccvid.dll
 -rw-r--r--	root/root	usr/lib/wine/i386-windows/icinfo.exe
 -rw-r--r--	root/root	usr/lib/wine/i386-windows/icmp.dll
+-rw-r--r--	root/root	usr/lib/wine/i386-windows/icmui.dll
 -rw-r--r--	root/root	usr/lib/wine/i386-windows/ieframe.dll
 -rw-r--r--	root/root	usr/lib/wine/i386-windows/ieproxy.dll
 -rw-r--r--	root/root	usr/lib/wine/i386-windows/iertutil.dll
@@ -1753,6 +1756,7 @@ drwxr-xr-x	root/root	usr/lib/wine/i386-windows/
 -rw-r--r--	root/root	usr/lib/wine/i386-windows/libhlink.a
 -rw-r--r--	root/root	usr/lib/wine/i386-windows/libhtmlhelp.a
 -rw-r--r--	root/root	usr/lib/wine/i386-windows/libhttpapi.a
+-rw-r--r--	root/root	usr/lib/wine/i386-windows/libicmui.a
 -rw-r--r--	root/root	usr/lib/wine/i386-windows/libieframe.a
 -rw-r--r--	root/root	usr/lib/wine/i386-windows/libimagehlp.a
 -rw-r--r--	root/root	usr/lib/wine/i386-windows/libimm32.a
@@ -2523,6 +2527,7 @@ drwxr-xr-x	root/root	usr/lib/wine/x86_64-unix/
 -rw-r--r--	root/root	usr/lib/wine/x86_64-unix/libhlink.a
 -rw-r--r--	root/root	usr/lib/wine/x86_64-unix/libhtmlhelp.a
 -rw-r--r--	root/root	usr/lib/wine/x86_64-unix/libhttpapi.a
+-rw-r--r--	root/root	usr/lib/wine/x86_64-unix/libicmui.a
 -rw-r--r--	root/root	usr/lib/wine/x86_64-unix/libieframe.a
 -rw-r--r--	root/root	usr/lib/wine/x86_64-unix/libimagehlp.a
 -rw-r--r--	root/root	usr/lib/wine/x86_64-unix/libimm32.a
@@ -2938,6 +2943,7 @@ drwxr-xr-x	root/root	usr/lib/wine/x86_64-windows/
 -rw-r--r--	root/root	usr/lib/wine/x86_64-windows/iccvid.dll
 -rw-r--r--	root/root	usr/lib/wine/x86_64-windows/icinfo.exe
 -rw-r--r--	root/root	usr/lib/wine/x86_64-windows/icmp.dll
+-rw-r--r--	root/root	usr/lib/wine/x86_64-windows/icmui.dll
 -rw-r--r--	root/root	usr/lib/wine/x86_64-windows/ieframe.dll
 -rw-r--r--	root/root	usr/lib/wine/x86_64-windows/ieproxy.dll
 -rw-r--r--	root/root	usr/lib/wine/x86_64-windows/iertutil.dll
@@ -3063,6 +3069,7 @@ drwxr-xr-x	root/root	usr/lib/wine/x86_64-windows/
 -rw-r--r--	root/root	usr/lib/wine/x86_64-windows/libhlink.a
 -rw-r--r--	root/root	usr/lib/wine/x86_64-windows/libhtmlhelp.a
 -rw-r--r--	root/root	usr/lib/wine/x86_64-windows/libhttpapi.a
+-rw-r--r--	root/root	usr/lib/wine/x86_64-windows/libicmui.a
 -rw-r--r--	root/root	usr/lib/wine/x86_64-windows/libieframe.a
 -rw-r--r--	root/root	usr/lib/wine/x86_64-windows/libimagehlp.a
 -rw-r--r--	root/root	usr/lib/wine/x86_64-windows/libimm32.a

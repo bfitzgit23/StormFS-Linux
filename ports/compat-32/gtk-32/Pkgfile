@@ -12,7 +12,9 @@ build() {
 	cd gtk+-$version
 
 	export PKG_CONFIG_PATH+=":/usr/share/pkgconfig"
-
+ CFLAGS+=" -Wno-error=implicit-int -Wno-error=incompatible-pointer-types"
+        sed -e 's#l \(gtk-.*\).sgml#& -o \1#' \
+    -i docs/{faq,tutorial}/Makefile.in      &&
 	./configure \
 		--prefix=/usr \
 		--libdir=/usr/lib32 \

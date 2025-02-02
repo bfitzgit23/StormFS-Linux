@@ -1,0 +1,7 @@
+drwxr-xr-x	root/root	usr/
+drwxr-xr-x	root/root	usr/lib/
+-rwxr-xr-x	root/root	usr/lib/libVkLayer_khronos_validation.so
+drwxr-xr-x	root/root	usr/share/
+drwxr-xr-x	root/root	usr/share/vulkan/
+drwxr-xr-x	root/root	usr/share/vulkan/explicit_layer.d/
+-rw-r--r--	root/root	usr/share/vulkan/explicit_layer.d/VkLayer_khronos_validation.json

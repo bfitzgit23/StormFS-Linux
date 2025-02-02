@@ -57,6 +57,7 @@ drwxr-xr-x	root/root	usr/share/doc/opus/html/
 -rw-r--r--	root/root	usr/share/doc/opus/html/nav_g.png
 -rw-r--r--	root/root	usr/share/doc/opus/html/nav_h.png
 -rw-r--r--	root/root	usr/share/doc/opus/html/nav_hd.png
+-rw-r--r--	root/root	usr/share/doc/opus/html/navtree.css
 -rw-r--r--	root/root	usr/share/doc/opus/html/open.png
 -rw-r--r--	root/root	usr/share/doc/opus/html/opus_8h.html
 -rw-r--r--	root/root	usr/share/doc/opus/html/opus_8h__dep__incl.dot
@@ -78,6 +79,7 @@ drwxr-xr-x	root/root	usr/share/doc/opus/html/
 -rw-r--r--	root/root	usr/share/doc/opus/html/opus_logo.svg
 -rw-r--r--	root/root	usr/share/doc/opus/html/plus.svg
 -rw-r--r--	root/root	usr/share/doc/opus/html/plusd.svg
+-rw-r--r--	root/root	usr/share/doc/opus/html/resize.js
 drwxr-xr-x	root/root	usr/share/doc/opus/html/search/
 -rw-r--r--	root/root	usr/share/doc/opus/html/search/all_0.js
 -rw-r--r--	root/root	usr/share/doc/opus/html/search/all_1.js

@@ -72,14 +72,14 @@ drwxr-xr-x	root/root	opt/kf6/share/drkonqi/gdb/python/certifi/__pycache__/
 drwxr-xr-x	root/root	opt/kf6/share/drkonqi/gdb/python/gdb_preamble/
 -rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/gdb_preamble/__init__.py
 -rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/gdb_preamble/preamble.py
-drwxr-xr-x	root/root	opt/kf6/share/drkonqi/gdb/python/psutil-6.1.0.dist-info/
--rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/psutil-6.1.0.dist-info/INSTALLER
--rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/psutil-6.1.0.dist-info/LICENSE
--rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/psutil-6.1.0.dist-info/METADATA
--rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/psutil-6.1.0.dist-info/RECORD
--rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/psutil-6.1.0.dist-info/REQUESTED (EMPTY)
--rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/psutil-6.1.0.dist-info/WHEEL
--rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/psutil-6.1.0.dist-info/top_level.txt
+drwxr-xr-x	root/root	opt/kf6/share/drkonqi/gdb/python/psutil-6.1.1.dist-info/
+-rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/psutil-6.1.1.dist-info/INSTALLER
+-rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/psutil-6.1.1.dist-info/LICENSE
+-rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/psutil-6.1.1.dist-info/METADATA
+-rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/psutil-6.1.1.dist-info/RECORD
+-rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/psutil-6.1.1.dist-info/REQUESTED (EMPTY)
+-rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/psutil-6.1.1.dist-info/WHEEL
+-rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/psutil-6.1.1.dist-info/top_level.txt
 drwxr-xr-x	root/root	opt/kf6/share/drkonqi/gdb/python/psutil/
 -rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/psutil/__init__.py
 drwxr-xr-x	root/root	opt/kf6/share/drkonqi/gdb/python/psutil/__pycache__/
@@ -169,15 +169,15 @@ drwxr-xr-x	root/root	opt/kf6/share/drkonqi/gdb/python/pygdbmi/__pycache__/
 -rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/pygdbmi/gdbmiparser.py
 -rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/pygdbmi/printcolor.py
 -rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/pygdbmi/py.typed
-drwxr-xr-x	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk-2.19.2.dist-info/
--rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk-2.19.2.dist-info/INSTALLER
--rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk-2.19.2.dist-info/LICENSE
--rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk-2.19.2.dist-info/METADATA
--rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk-2.19.2.dist-info/RECORD
--rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk-2.19.2.dist-info/REQUESTED (EMPTY)
--rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk-2.19.2.dist-info/WHEEL
--rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk-2.19.2.dist-info/entry_points.txt
--rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk-2.19.2.dist-info/top_level.txt
+drwxr-xr-x	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk-2.20.0.dist-info/
+-rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk-2.20.0.dist-info/INSTALLER
+-rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk-2.20.0.dist-info/LICENSE
+-rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk-2.20.0.dist-info/METADATA
+-rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk-2.20.0.dist-info/RECORD
+-rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk-2.20.0.dist-info/REQUESTED (EMPTY)
+-rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk-2.20.0.dist-info/WHEEL
+-rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk-2.20.0.dist-info/entry_points.txt
+-rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk-2.20.0.dist-info/top_level.txt
 drwxr-xr-x	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk/
 -rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk/__init__.py
 drwxr-xr-x	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk/__pycache__/
@@ -194,7 +194,7 @@ drwxr-xr-x	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk/__pycache__/
 -rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk/__pycache__/consts.cpython-313.pyc
 -rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk/__pycache__/debug.cpython-313.pyc
 -rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk/__pycache__/envelope.cpython-313.pyc
--rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk/__pycache__/flag_utils.cpython-313.pyc
+-rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk/__pycache__/feature_flags.cpython-313.pyc
 -rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk/__pycache__/hub.cpython-313.pyc
 -rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk/__pycache__/metrics.cpython-313.pyc
 -rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk/__pycache__/monitor.cpython-313.pyc
@@ -240,7 +240,7 @@ drwxr-xr-x	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk/crons/__pycache
 -rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk/crons/decorator.py
 -rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk/debug.py
 -rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk/envelope.py
--rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk/flag_utils.py
+-rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk/feature_flags.py
 -rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk/hub.py
 drwxr-xr-x	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk/integrations/
 -rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk/integrations/__init__.py
@@ -306,6 +306,8 @@ drwxr-xr-x	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk/integrations/__
 -rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk/integrations/__pycache__/threading.cpython-313.pyc
 -rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk/integrations/__pycache__/tornado.cpython-313.pyc
 -rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk/integrations/__pycache__/trytond.cpython-313.pyc
+-rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk/integrations/__pycache__/typer.cpython-313.pyc
+-rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk/integrations/__pycache__/unleash.cpython-313.pyc
 -rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk/integrations/__pycache__/wsgi.cpython-313.pyc
 -rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk/integrations/_asgi_common.py
 -rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk/integrations/_wsgi_common.py
@@ -459,6 +461,8 @@ drwxr-xr-x	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk/integrations/sp
 -rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk/integrations/threading.py
 -rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk/integrations/tornado.py
 -rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk/integrations/trytond.py
+-rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk/integrations/typer.py
+-rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk/integrations/unleash.py
 -rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk/integrations/wsgi.py
 -rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk/metrics.py
 -rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk/monitor.py
@@ -485,13 +489,13 @@ drwxr-xr-x	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk/profiler/__pyca
 -rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk/types.py
 -rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk/utils.py
 -rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/sentry_sdk/worker.py
-drwxr-xr-x	root/root	opt/kf6/share/drkonqi/gdb/python/urllib3-2.2.3.dist-info/
--rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/urllib3-2.2.3.dist-info/INSTALLER
--rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/urllib3-2.2.3.dist-info/METADATA
--rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/urllib3-2.2.3.dist-info/RECORD
--rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/urllib3-2.2.3.dist-info/WHEEL
-drwxr-xr-x	root/root	opt/kf6/share/drkonqi/gdb/python/urllib3-2.2.3.dist-info/licenses/
--rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/urllib3-2.2.3.dist-info/licenses/LICENSE.txt
+drwxr-xr-x	root/root	opt/kf6/share/drkonqi/gdb/python/urllib3-2.3.0.dist-info/
+-rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/urllib3-2.3.0.dist-info/INSTALLER
+-rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/urllib3-2.3.0.dist-info/METADATA
+-rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/urllib3-2.3.0.dist-info/RECORD
+-rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/urllib3-2.3.0.dist-info/WHEEL
+drwxr-xr-x	root/root	opt/kf6/share/drkonqi/gdb/python/urllib3-2.3.0.dist-info/licenses/
+-rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/urllib3-2.3.0.dist-info/licenses/LICENSE.txt
 drwxr-xr-x	root/root	opt/kf6/share/drkonqi/gdb/python/urllib3/
 -rw-r--r--	root/root	opt/kf6/share/drkonqi/gdb/python/urllib3/__init__.py
 drwxr-xr-x	root/root	opt/kf6/share/drkonqi/gdb/python/urllib3/__pycache__/

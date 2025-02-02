@@ -1,7 +1,7 @@
 # Depends on: python3-six expat mpfr readline texinfo xz zlib
 
 name=gdb
-version=15.1
+version=15.2
 release=1
 source=(https://ftp.gnu.org/gnu/${name}/${name}-${version}.tar.xz)
 

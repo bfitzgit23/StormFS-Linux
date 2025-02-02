@@ -20,7 +20,6 @@ drwxr-xr-x	root/root	usr/bin/
 -rwxr-xr-x	root/root	usr/bin/i686-w64-mingw32-strip
 -rwxr-xr-x	root/root	usr/bin/i686-w64-mingw32-windmc
 -rwxr-xr-x	root/root	usr/bin/i686-w64-mingw32-windres
--rw-------	root/root	usr/bin/st2yiEB6 (EMPTY)
 -rwxr-xr-x	root/root	usr/bin/x86_64-w64-mingw32-addr2line
 -rwxr-xr-x	root/root	usr/bin/x86_64-w64-mingw32-ar
 -rwxr-xr-x	root/root	usr/bin/x86_64-w64-mingw32-as

@@ -4,8 +4,8 @@ drwxr-xr-x	root/root	usr/lib32/alsa-lib/
 -rwxr-xr-x	root/root	usr/lib32/alsa-lib/libasound_module_ctl_pipewire.so
 -rwxr-xr-x	root/root	usr/lib32/alsa-lib/libasound_module_pcm_pipewire.so
 lrwxrwxrwx	root/root	usr/lib32/libpipewire-0.3.so -> libpipewire-0.3.so.0
-lrwxrwxrwx	root/root	usr/lib32/libpipewire-0.3.so.0 -> libpipewire-0.3.so.0.1204.0
--rwxr-xr-x	root/root	usr/lib32/libpipewire-0.3.so.0.1204.0
+lrwxrwxrwx	root/root	usr/lib32/libpipewire-0.3.so.0 -> libpipewire-0.3.so.0.1206.0
+-rwxr-xr-x	root/root	usr/lib32/libpipewire-0.3.so.0.1206.0
 drwxr-xr-x	root/root	usr/lib32/pipewire-0.3/
 -rwxr-xr-x	root/root	usr/lib32/pipewire-0.3/libpipewire-module-access.so
 -rwxr-xr-x	root/root	usr/lib32/pipewire-0.3/libpipewire-module-adapter.so
@@ -64,3 +64,5 @@ drwxr-xr-x	root/root	usr/lib32/spa-0.2/videoconvert/
 -rwxr-xr-x	root/root	usr/lib32/spa-0.2/videoconvert/libspa-videoconvert.so
 drwxr-xr-x	root/root	usr/lib32/spa-0.2/videotestsrc/
 -rwxr-xr-x	root/root	usr/lib32/spa-0.2/videotestsrc/libspa-videotestsrc.so
+drwxr-xr-x	root/root	usr/lib32/spa-0.2/vulkan/
+-rwxr-xr-x	root/root	usr/lib32/spa-0.2/vulkan/libspa-vulkan.so

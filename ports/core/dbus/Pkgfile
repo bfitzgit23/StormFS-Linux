@@ -4,26 +4,19 @@
 # Depends on: 
 
 name=dbus
-version=1.14.10
+version=1.16.0
 release=1
 source=(https://dbus.freedesktop.org/releases/$name/$name-$version.tar.xz)
 
 pkg_build() {
 
+	mkdir build
+cd    build
 
-	./configure --prefix=/usr                \
-            --sysconfdir=/etc                    \
-            --localstatedir=/var                 \
-            --runstatedir=/run                   \
-            --enable-user-session                \
-            --disable-static                     \
-            --disable-doxygen-docs               \
-            --disable-xml-docs                   \
-            --docdir=/usr/share/doc/$name-$version \
-            --with-system-socket=/run/dbus/system_bus_socket
+meson setup --prefix=/usr --buildtype=release --wrap-mode=nofallback ..
             
-	make
-	make DESTDIR=$PKG install
+	ninja
+	ninja install
 
 	mkdir -p $PKG/lib
 	ln -sfv $PKG/etc/machine-id $PKG/var/lib/dbus

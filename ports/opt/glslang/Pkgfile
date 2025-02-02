@@ -1,12 +1,12 @@
 # Depends on: cmake spirv-tools
 
 name=glslang
-version=14.3.0
+version=15.1.0
 release=1
-source=(https://github.com/KhronosGroup/${name}/archive/${version}/${name}-${version}.tar.gz)
-build_opt="	-DCMAKE_INSTALL_PREFIX=/usr     \
-        -DCMAKE_BUILD_TYPE=Release      \
-        -DALLOW_EXTERNAL_SPIRV_TOOLS=ON \
-        -DBUILD_SHARED_LIBS=ON          \
-        -DGLSLANG_TESTS=ON              \
-        -G Ninja .."
+source=(https://github.com/KhronosGroup/glslang/archive/$version/$name-sdk-$version.tar.gz)
+build_opt="-D CMAKE_INSTALL_PREFIX=/usr
+      -D CMAKE_BUILD_TYPE=Release      
+      -D ALLOW_EXTERNAL_SPIRV_TOOLS=ON 
+      -D BUILD_SHARED_LIBS=ON          
+      -D GLSLANG_TESTS=ON              
+      -G Ninja .."

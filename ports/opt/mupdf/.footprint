@@ -1,6 +1,6 @@
 drwxr-xr-x	root/root	usr/
 drwxr-xr-x	root/root	usr/bin/
-lrwxrwxrwx	root/root	usr/bin/mupdf -> mupdf-x11
+lrwxrwxrwx	root/root	usr/bin/mupdf -> mupdf-gl
 -rwxr-xr-x	root/root	usr/bin/mupdf-gl
 -rwxr-xr-x	root/root	usr/bin/mupdf-x11
 -rwxr-xr-x	root/root	usr/bin/mupdf-x11-curl
@@ -21,6 +21,7 @@ drwxr-xr-x	root/root	usr/include/mupdf/fitz/
 -rw-r--r--	root/root	usr/include/mupdf/fitz/config.h
 -rw-r--r--	root/root	usr/include/mupdf/fitz/context.h
 -rw-r--r--	root/root	usr/include/mupdf/fitz/crypt.h
+-rw-r--r--	root/root	usr/include/mupdf/fitz/deskew.h
 -rw-r--r--	root/root	usr/include/mupdf/fitz/device.h
 -rw-r--r--	root/root	usr/include/mupdf/fitz/display-list.h
 -rw-r--r--	root/root	usr/include/mupdf/fitz/document.h
@@ -81,44 +82,15 @@ drwxr-xr-x	root/root	usr/include/mupdf/pdf/
 -rw-r--r--	root/root	usr/include/mupdf/pdf/object.h
 -rw-r--r--	root/root	usr/include/mupdf/pdf/page.h
 -rw-r--r--	root/root	usr/include/mupdf/pdf/parse.h
+-rw-r--r--	root/root	usr/include/mupdf/pdf/recolor.h
 -rw-r--r--	root/root	usr/include/mupdf/pdf/resource.h
 -rw-r--r--	root/root	usr/include/mupdf/pdf/xref.h
+-rw-r--r--	root/root	usr/include/mupdf/pdf/zugferd.h
 -rw-r--r--	root/root	usr/include/mupdf/ucdn.h
 drwxr-xr-x	root/root	usr/lib/
-lrwxrwxrwx	root/root	usr/lib/libmupdf.so -> libmupdf.so.24.8
--rwxr-xr-x	root/root	usr/lib/libmupdf.so.24.8
-lrwxrwxrwx	root/root	usr/lib/libmupdf.so.8 -> libmupdf.so.24.8
+-rw-r--r--	root/root	usr/lib/libmupdf-third.a
+-rw-r--r--	root/root	usr/lib/libmupdf.a
 drwxr-xr-x	root/root	usr/share/
-drwxr-xr-x	root/root	usr/share/doc/
-drwxr-xr-x	root/root	usr/share/doc/mupdf-/
--rw-r--r--	root/root	usr/share/doc/mupdf-/CHANGES
--rw-r--r--	root/root	usr/share/doc/mupdf-/COPYING
--rw-r--r--	root/root	usr/share/doc/mupdf-/README
-drwxr-xr-x	root/root	usr/share/doc/mupdf-/examples/
--rw-r--r--	root/root	usr/share/doc/mupdf-/examples/SnarkFront.svg
--rw-r--r--	root/root	usr/share/doc/mupdf-/examples/bbox-device.js
--rw-r--r--	root/root	usr/share/doc/mupdf-/examples/copy-outline.js
--rw-r--r--	root/root	usr/share/doc/mupdf-/examples/create-thumbnail.js
--rw-r--r--	root/root	usr/share/doc/mupdf-/examples/draw-device.js
--rw-r--r--	root/root	usr/share/doc/mupdf-/examples/draw-document.js
--rw-r--r--	root/root	usr/share/doc/mupdf-/examples/example.c
--rw-r--r--	root/root	usr/share/doc/mupdf-/examples/fix-s22pdf.js
--rw-r--r--	root/root	usr/share/doc/mupdf-/examples/huntingofthesnark.png
--rw-r--r--	root/root	usr/share/doc/mupdf-/examples/import-fdf.js
--rw-r--r--	root/root	usr/share/doc/mupdf-/examples/jpx-to-pdf.js
--rw-r--r--	root/root	usr/share/doc/mupdf-/examples/multi-threaded.c
--rw-r--r--	root/root	usr/share/doc/mupdf-/examples/pdf-bake.js
--rw-r--r--	root/root	usr/share/doc/mupdf-/examples/pdf-create-lowlevel.js
--rw-r--r--	root/root	usr/share/doc/mupdf-/examples/pdf-create.js
--rw-r--r--	root/root	usr/share/doc/mupdf-/examples/pdf-dejpx.js
--rw-r--r--	root/root	usr/share/doc/mupdf-/examples/pdf-extract-rich-media.js
--rw-r--r--	root/root	usr/share/doc/mupdf-/examples/pdf-merge.js
--rw-r--r--	root/root	usr/share/doc/mupdf-/examples/pdf-portfolio.js
--rw-r--r--	root/root	usr/share/doc/mupdf-/examples/pdf-trace.js
--rw-r--r--	root/root	usr/share/doc/mupdf-/examples/reconvert-cmyk.js
--rw-r--r--	root/root	usr/share/doc/mupdf-/examples/storytest.c
--rw-r--r--	root/root	usr/share/doc/mupdf-/examples/storytest.js
--rw-r--r--	root/root	usr/share/doc/mupdf-/examples/trace-device.js
 drwxr-xr-x	root/root	usr/share/man/
 drwxr-xr-x	root/root	usr/share/man/man1/
 -rw-r--r--	root/root	usr/share/man/man1/mupdf.1.gz

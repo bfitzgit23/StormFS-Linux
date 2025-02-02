@@ -1,5 +1,5 @@
-50c470268f1672b06829e249fccc78ae  clang-19.1.6.src.tar.xz
-c67d16c924fbadf54314f332205ae7b6  compiler-rt-19.1.6.src.tar.xz
-fa5d0a7a30caabd654864765ef314dce  llvm-19.1.6.src.tar.xz
+8a29181acd27b9c03b0039b75f5fcaa0  clang-19.1.7.src.tar.xz
+0286b00ef3057362eb0636d3298999b1  compiler-rt-19.1.7.src.tar.xz
+45229744809103ad151e3757a0f21d3d  llvm-19.1.7.src.tar.xz
 d45f80d3a279d2fb77882c9b02a416c2  llvm-cmake-19.src.tar.xz
 49c615b257b38f92f387be6ed9a1cd5d  llvm-third-party-19.src.tar.xz

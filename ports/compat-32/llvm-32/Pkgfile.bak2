@@ -1,0 +1,47 @@
+# Description: LLVM compiler backend
+# URL: https://llvm.org/
+# Maintainer: B.r.i.a.n M.a.d.o.n.n.a b.m.a.d.o.n.n.a.s.t.e.r @ g.m.a.i.l.c.o.m
+# Depends on: cmake libffi libxml2 ninja python3-setuptools
+# Optional: doxygen git Ggaphviz python3-pygments rsync recommonmark texlive install-tl-unx valgrind  pyyaml zip ocaml psutil Z3
+
+name=llvm
+version=19.1.7
+release=1
+source=(https://github.com/llvm/llvm-project/releases/download/llvmorg-$version/llvm-$version.src.tar.xz
+	https://github.com/llvm/llvm-project/releases/download/llvmorg-$version/cmake-$version.src.tar.xz
+	https://github.com/llvm/llvm-project/releases/download/llvmorg-$version/third-party-$version.src.tar.xz)
+
+build() {
+	mv cmake-$version.src cmake
+	mv $SRC/third-party-$version.src/ $SRC/third-party
+	cd $SRC/$name-$version.src
+
+mkdir -v build &&
+cd       build &&
+
+CC=gcc CXX=g++                                          \
+cmake -D CMAKE_INSTALL_PREFIX=/usr                      \
+      -D CMAKE_C_FLAGS:STRING=-m32                      \
+      -D CMAKE_SKIP_INSTALL_RPATH=ON                    \
+      -D CMAKE_CXX_FLAGS:STRING=-m32                    \
+      -D LLVM_TARGET_ARCH:STRING=i686                   \
+      -D LLVM_LIBDIR_SUFFIX=32                          \
+      -D LLVM_ENABLE_FFI=ON                             \
+      -D CMAKE_BUILD_TYPE=Release                       \
+      -D LLVM_BUILD_LLVM_DYLIB=ON                       \
+      -D LLVM_LINK_LLVM_DYLIB=ON                        \
+      -D LLVM_ENABLE_RTTI=ON                            \
+      -D LLVM_DEFAULT_TARGET_TRIPLE="i686-pc-linux-gnu" \
+      -D LLVM_TARGETS_TO_BUILD="X86;host;AMDGPU"        \
+      -D LLVM_HOST_TRIPLE="x86_64-pc-linux-gnu"         \
+      -D LLVM_BINUTILS_INCDIR=/usr/include              \
+      -D LLVM_INCLUDE_BENCHMARKS=OFF                    \
+      -D CLANG_DEFAULT_PIE_ON_LINUX=ON                  \
+      -D CLANG_CONFIG_FILE_SYSTEM_DIR=/etc/clang        \
+      -W no-dev -G Ninja .. &&
+ninja
+DESTDIR=$PWD/DESTDIR ninja install    &&
+mkdir -p $PKG/usr/lib32               &&
+cp -vr DESTDIR/usr/lib32/* $PKG/usr/lib32 &&
+rm -rf DESTDIR                        
+}

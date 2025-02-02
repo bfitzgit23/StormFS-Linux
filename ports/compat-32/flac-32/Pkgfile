@@ -22,6 +22,6 @@ build() {
 	cmake --build build
 	DESTDIR=$PKG cmake --install build
 
-	rm -r $PKG/usr/{bin,include,share/man}
-	rmdir $PKG/usr/share
+	rm -rf $PKG/usr/{bin,include,share/man}
+	rm -rf $PKG/usr/share
 }

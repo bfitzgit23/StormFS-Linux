@@ -206,14 +206,16 @@ drwxr-xr-x	root/root	usr/libexec/git-core/mergetools/
 -rw-r--r--	root/root	usr/libexec/git-core/mergetools/tkdiff
 -rw-r--r--	root/root	usr/libexec/git-core/mergetools/tortoisemerge
 -rw-r--r--	root/root	usr/libexec/git-core/mergetools/vimdiff
+-rw-r--r--	root/root	usr/libexec/git-core/mergetools/vscode
 -rw-r--r--	root/root	usr/libexec/git-core/mergetools/winmerge
 -rw-r--r--	root/root	usr/libexec/git-core/mergetools/xxdiff
 -rwxr-xr-x	root/root	usr/libexec/git-core/scalar
--rw-------	root/root	usr/libexec/git-core/stGA3Nxj (EMPTY)
+-rw-------	root/root	usr/libexec/git-core/stRv9Uvk (EMPTY)
+-rw-------	root/root	usr/libexec/git-core/stge3a5o (EMPTY)
+-rw-------	root/root	usr/libexec/git-core/sttbLS1i (EMPTY)
 drwxr-xr-x	root/root	usr/share/
 drwxr-xr-x	root/root	usr/share/git-core/
 drwxr-xr-x	root/root	usr/share/git-core/templates/
-drwxr-xr-x	root/root	usr/share/git-core/templates/branches/
 -rw-r--r--	root/root	usr/share/git-core/templates/description
 drwxr-xr-x	root/root	usr/share/git-core/templates/hooks/
 -rwxr-xr-x	root/root	usr/share/git-core/templates/hooks/applypatch-msg.sample
