@@ -4,7 +4,7 @@
 # Depends on: alsa-lib avahi cups graphite2 gtk3 nss util-linux libXcomposite libXcursor libXinerama libXScrnSaver
 
 name=discord
-version=0.0.82
+version=0.0.85
 release=1
 source=(https://dl.discordapp.net/apps/linux/$version/$name-$version.tar.gz)
 

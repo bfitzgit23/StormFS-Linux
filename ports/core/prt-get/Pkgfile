@@ -1,6 +1,6 @@
 name=prt-get
 version=5.19.6
-release=1
+release=2
 source=(http://crux.nu/files/prt-get-$version.tar.xz
 	prt-get.conf 
 	prt-get.aliases
@@ -13,7 +13,9 @@ source=(http://crux.nu/files/prt-get-$version.tar.xz
 	core.httpup    
 	lxqt.httpup   
 	prt-get.aliases  
-	xorg.httpup)
+	xorg.httpup
+	compat-32.httpup
+	contrib.httpup)
 
 post_build() {
 	install -m 644 $SRC/prt-get.{conf,aliases} $PKG/etc/

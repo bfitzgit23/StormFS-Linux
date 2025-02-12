@@ -6,11 +6,10 @@
 name=p11-kit-32
 version=0.25.5
 release=1
-source=(https://github.com/p11-glue/${name%-*}/releases/download/$version/${name%-*}-$version.tar.xz
-cross-file.txt)
+source=(https://github.com/p11-glue/${name%-*}/releases/download/$version/${name%-*}-$version.tar.xz)
 
 build() {
-	meson setup p11-kit-$version build --cross-file cross-file.txt \
+	meson setup p11-kit-$version build --cross-file lib32 \
 		--prefix=/usr \
 		--libdir=/usr/lib32 \
 		--libexecdir=/usr/lib32 \

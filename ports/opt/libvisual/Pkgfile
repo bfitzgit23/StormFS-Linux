@@ -1,7 +1,7 @@
 # Description: Libvisual Audio Visualization
 # URL: http://libvisual.org/
 # Maintainer: Tim Biermann, tbier at posteo dot de
-# Depends on: libsdl
+# Depends on: libsdl sdl2
 
 name=libvisual
 version=0.4.2

@@ -1,7 +1,7 @@
 # Description: An event-driven initramfs infrastructure
 # URL: https://github.com/dracut-ng/dracut-ng
 # Maintainer: Matt Housh, jaeger at crux dot ninja
-# Depends on: cpio
+# Depends on: cpio cargo-c
 name=dracut
 version=105
 release=1

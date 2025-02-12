@@ -4,10 +4,10 @@
 # Depends on: libxcvt pixman xorg-fonts xkeyboard-config libepoxy libtirpc libinput systemd xorg-apps
 
 name=xorg-server
-version=21.1.14
+version=21.1.15
 release=1
 source=(https://www.x.org/releases/individual/xserver/$name-$version.tar.xz
-https://www.linuxfromscratch.org/patches/blfs/svn/xorg-server-21.1.14-tearfree_backport-2.patch)
+https://www.linuxfromscratch.org/patches/blfs/svn/$name-$version-tearfree_backport-2.patch)
 
 pkg_build() {
 	mkdir build &&

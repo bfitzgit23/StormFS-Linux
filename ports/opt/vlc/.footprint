@@ -267,6 +267,7 @@ drwxr-xr-x	root/root	usr/lib/vlc/plugins/codec/
 -rwxr-xr-x	root/root	usr/lib/vlc/plugins/codec/liblibass_plugin.so
 -rwxr-xr-x	root/root	usr/lib/vlc/plugins/codec/liblibmpeg2_plugin.so
 -rwxr-xr-x	root/root	usr/lib/vlc/plugins/codec/liblpcm_plugin.so
+-rwxr-xr-x	root/root	usr/lib/vlc/plugins/codec/libmpg123_plugin.so
 -rwxr-xr-x	root/root	usr/lib/vlc/plugins/codec/liboggspots_plugin.so
 -rwxr-xr-x	root/root	usr/lib/vlc/plugins/codec/libopus_plugin.so
 -rwxr-xr-x	root/root	usr/lib/vlc/plugins/codec/libpng_plugin.so
@@ -282,9 +283,11 @@ drwxr-xr-x	root/root	usr/lib/vlc/plugins/codec/
 -rwxr-xr-x	root/root	usr/lib/vlc/plugins/codec/libsubstx3g_plugin.so
 -rwxr-xr-x	root/root	usr/lib/vlc/plugins/codec/libsubsusf_plugin.so
 -rwxr-xr-x	root/root	usr/lib/vlc/plugins/codec/libsvcdsub_plugin.so
+-rwxr-xr-x	root/root	usr/lib/vlc/plugins/codec/libsvgdec_plugin.so
 -rwxr-xr-x	root/root	usr/lib/vlc/plugins/codec/libt140_plugin.so
 -rwxr-xr-x	root/root	usr/lib/vlc/plugins/codec/libtelx_plugin.so
 -rwxr-xr-x	root/root	usr/lib/vlc/plugins/codec/libtextst_plugin.so
+-rwxr-xr-x	root/root	usr/lib/vlc/plugins/codec/libtheora_plugin.so
 -rwxr-xr-x	root/root	usr/lib/vlc/plugins/codec/libttml_plugin.so
 -rwxr-xr-x	root/root	usr/lib/vlc/plugins/codec/libuleaddvaudio_plugin.so
 -rwxr-xr-x	root/root	usr/lib/vlc/plugins/codec/libvorbis_plugin.so
@@ -452,6 +455,7 @@ drwxr-xr-x	root/root	usr/lib/vlc/plugins/stream_out/
 -rwxr-xr-x	root/root	usr/lib/vlc/plugins/stream_out/libstream_out_transcode_plugin.so
 drwxr-xr-x	root/root	usr/lib/vlc/plugins/text_renderer/
 -rwxr-xr-x	root/root	usr/lib/vlc/plugins/text_renderer/libfreetype_plugin.so
+-rwxr-xr-x	root/root	usr/lib/vlc/plugins/text_renderer/libsvg_plugin.so
 -rwxr-xr-x	root/root	usr/lib/vlc/plugins/text_renderer/libtdummy_plugin.so
 drwxr-xr-x	root/root	usr/lib/vlc/plugins/vaapi/
 -rwxr-xr-x	root/root	usr/lib/vlc/plugins/vaapi/libvaapi_filters_plugin.so

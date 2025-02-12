@@ -3,7 +3,7 @@
 # Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
 
 name=libtool-32
-version=2.4.7
+version=2.5.4
 release=1
 source=(https://ftpmirror.gnu.org/gnu/${name%-*}/${name%-*}-$version.tar.xz)
 
@@ -11,6 +11,7 @@ build() {
 	cd ${name%-*}-$version
 
 	./configure \
+		--host=i686-pc-linux-gnu \
 		--prefix=/usr \
 		--libdir=/usr/lib32
 

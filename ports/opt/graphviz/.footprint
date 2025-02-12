@@ -35,6 +35,7 @@ lrwxrwxrwx	root/root	usr/bin/sfdp -> dot
 -rwxr-xr-x	root/root	usr/bin/tred
 lrwxrwxrwx	root/root	usr/bin/twopi -> dot
 -rwxr-xr-x	root/root	usr/bin/unflatten
+-rwxr-xr-x	root/root	usr/bin/vimdot
 drwxr-xr-x	root/root	usr/include/
 drwxr-xr-x	root/root	usr/include/graphviz/
 -rw-r--r--	root/root	usr/include/graphviz/arith.h
@@ -70,15 +71,27 @@ lrwxrwxrwx	root/root	usr/lib/graphviz/libgvplugin_core.so.6 -> libgvplugin_core.
 lrwxrwxrwx	root/root	usr/lib/graphviz/libgvplugin_dot_layout.so -> libgvplugin_dot_layout.so.6.0.0
 lrwxrwxrwx	root/root	usr/lib/graphviz/libgvplugin_dot_layout.so.6 -> libgvplugin_dot_layout.so.6.0.0
 -rwxr-xr-x	root/root	usr/lib/graphviz/libgvplugin_dot_layout.so.6.0.0
+lrwxrwxrwx	root/root	usr/lib/graphviz/libgvplugin_gdk.so -> libgvplugin_gdk.so.6.0.0
+lrwxrwxrwx	root/root	usr/lib/graphviz/libgvplugin_gdk.so.6 -> libgvplugin_gdk.so.6.0.0
+-rwxr-xr-x	root/root	usr/lib/graphviz/libgvplugin_gdk.so.6.0.0
 lrwxrwxrwx	root/root	usr/lib/graphviz/libgvplugin_kitty.so -> libgvplugin_kitty.so.6.0.0
 lrwxrwxrwx	root/root	usr/lib/graphviz/libgvplugin_kitty.so.6 -> libgvplugin_kitty.so.6.0.0
 -rwxr-xr-x	root/root	usr/lib/graphviz/libgvplugin_kitty.so.6.0.0
 lrwxrwxrwx	root/root	usr/lib/graphviz/libgvplugin_neato_layout.so -> libgvplugin_neato_layout.so.6.0.0
 lrwxrwxrwx	root/root	usr/lib/graphviz/libgvplugin_neato_layout.so.6 -> libgvplugin_neato_layout.so.6.0.0
 -rwxr-xr-x	root/root	usr/lib/graphviz/libgvplugin_neato_layout.so.6.0.0
+lrwxrwxrwx	root/root	usr/lib/graphviz/libgvplugin_pango.so -> libgvplugin_pango.so.6.0.0
+lrwxrwxrwx	root/root	usr/lib/graphviz/libgvplugin_pango.so.6 -> libgvplugin_pango.so.6.0.0
+-rwxr-xr-x	root/root	usr/lib/graphviz/libgvplugin_pango.so.6.0.0
 lrwxrwxrwx	root/root	usr/lib/graphviz/libgvplugin_vt.so -> libgvplugin_vt.so.6.0.0
 lrwxrwxrwx	root/root	usr/lib/graphviz/libgvplugin_vt.so.6 -> libgvplugin_vt.so.6.0.0
 -rwxr-xr-x	root/root	usr/lib/graphviz/libgvplugin_vt.so.6.0.0
+lrwxrwxrwx	root/root	usr/lib/graphviz/libgvplugin_webp.so -> libgvplugin_webp.so.6.0.0
+lrwxrwxrwx	root/root	usr/lib/graphviz/libgvplugin_webp.so.6 -> libgvplugin_webp.so.6.0.0
+-rwxr-xr-x	root/root	usr/lib/graphviz/libgvplugin_webp.so.6.0.0
+lrwxrwxrwx	root/root	usr/lib/graphviz/libgvplugin_xlib.so -> libgvplugin_xlib.so.6.0.0
+lrwxrwxrwx	root/root	usr/lib/graphviz/libgvplugin_xlib.so.6 -> libgvplugin_xlib.so.6.0.0
+-rwxr-xr-x	root/root	usr/lib/graphviz/libgvplugin_xlib.so.6.0.0
 lrwxrwxrwx	root/root	usr/lib/libcdt.so -> libcdt.so.5.0.0
 lrwxrwxrwx	root/root	usr/lib/libcdt.so.5 -> libcdt.so.5.0.0
 -rwxr-xr-x	root/root	usr/lib/libcdt.so.5.0.0
@@ -243,6 +256,7 @@ lrwxrwxrwx	root/root	usr/share/man/man1/sfdp.1.gz -> dot.1.gz
 -rw-r--r--	root/root	usr/share/man/man1/tred.1.gz
 lrwxrwxrwx	root/root	usr/share/man/man1/twopi.1.gz -> dot.1.gz
 -rw-r--r--	root/root	usr/share/man/man1/unflatten.1.gz
+-rw-r--r--	root/root	usr/share/man/man1/vimdot.1.gz
 drwxr-xr-x	root/root	usr/share/man/man3/
 -rw-r--r--	root/root	usr/share/man/man3/cdt.3.gz
 -rw-r--r--	root/root	usr/share/man/man3/cgraph.3.gz

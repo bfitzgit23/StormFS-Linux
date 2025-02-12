@@ -4,7 +4,7 @@
 # Depends on:  elfutils openssl linux-firmware dracut
 
 name=linux
-version=6.12.11
+version=6.12.13
 release=1
 source=(https://www.kernel.org/pub/linux/kernel/v6.x/$name-$version.tar.xz
         config)

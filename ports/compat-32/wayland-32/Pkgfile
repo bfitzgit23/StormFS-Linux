@@ -9,7 +9,7 @@ release=1
 source=(https://gitlab.freedesktop.org/wayland/wayland/-/releases/$version/downloads/wayland-$version.tar.xz)
 
 build() {
-	meson setup ${name%-*}-$version build \
+	meson setup ${name%-*}-$version build --cross-file lib32 \
 		--prefix=/usr \
 		--libdir=/usr/lib32 \
 		--buildtype=plain \

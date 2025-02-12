@@ -4,7 +4,8 @@ name=ffmpeg
 version=7.1
 release=1
 source=(https://$name.org/releases/$name-$version.tar.xz
-https://www.linuxfromscratch.org/patches/blfs/svn/ffmpeg-7.1-chromium_method-1.patch)
+https://www.linuxfromscratch.org/patches/blfs/svn/ffmpeg-7.1-chromium_method-1.patch
+https://www.linuxfromscratch.org/patches/blfs/svn/ffmpeg-7.1-texinfo_fix-1.patch)
 
 pkg_build() {
 	./configure --prefix=/usr        \

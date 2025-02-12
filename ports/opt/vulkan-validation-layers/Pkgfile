@@ -6,7 +6,7 @@
 
 name=vulkan-validation-layers
 _name=Vulkan-ValidationLayers
-version=1.4.304.0
+version=1.4.304.1
 _version=vulkan-sdk-$version
 release=1
 source=(https://github.com/KhronosGroup/Vulkan-ValidationLayers/archive/$_version/$_name-$version.tar.gz)

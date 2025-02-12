@@ -1,6 +1,9 @@
 drwxr-xr-x	root/root	usr/
 drwxr-xr-x	root/root	usr/include/
 -rw-r--r--	root/root	usr/include/gmp-32.h
+drwxr-xr-x	root/root	usr/include/m32/
+drwxr-xr-x	root/root	usr/include/m32/gmp/
+-rw-r--r--	root/root	usr/include/m32/gmp/gmpxx.h
 drwxr-xr-x	root/root	usr/lib32/
 -rw-r--r--	root/root	usr/lib32/libgmp.a
 -rwxr-xr-x	root/root	usr/lib32/libgmp.la
