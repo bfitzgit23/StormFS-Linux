@@ -11,8 +11,8 @@ source=(https://www.kernel.org/pub/linux/libs/security/linux-privs/libcap2/${nam
 build() {
 	cd ${name%-*}-$version
 
-#	sed -i '/install -m.*STA/d' libcap/Makefile
-	make CC="gcc -m32 -march=i686"
+	sed -i '/install -m.*STA/d' libcap/Makefile
+#	make CC="gcc -m32 -march=i686"
 	make CC="gcc -m32 -march=i686" lib=lib32 prefix=$PWD/DESTDIR/usr -C libcap install
 	mkdir -p $PKG/usr/lib32/
 cp -Rv DESTDIR/usr/lib32/* $PKG/usr/lib32

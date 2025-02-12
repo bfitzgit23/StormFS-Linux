@@ -453,6 +453,8 @@ drwxr-xr-x	root/root	usr/include/linux/media/
 drwxr-xr-x	root/root	usr/include/linux/media/raspberrypi/
 -rw-r--r--	root/root	usr/include/linux/media/raspberrypi/pisp_be_config.h
 -rw-r--r--	root/root	usr/include/linux/media/raspberrypi/pisp_common.h
+-rw-r--r--	root/root	usr/include/linux/media/raspberrypi/pisp_fe_config.h
+-rw-r--r--	root/root	usr/include/linux/media/raspberrypi/pisp_fe_statistics.h
 -rw-r--r--	root/root	usr/include/linux/mei.h
 -rw-r--r--	root/root	usr/include/linux/mei_uuid.h
 -rw-r--r--	root/root	usr/include/linux/membarrier.h
@@ -487,6 +489,7 @@ drwxr-xr-x	root/root	usr/include/linux/mmc/
 -rw-r--r--	root/root	usr/include/linux/net.h
 -rw-r--r--	root/root	usr/include/linux/net_dropmon.h
 -rw-r--r--	root/root	usr/include/linux/net_namespace.h
+-rw-r--r--	root/root	usr/include/linux/net_shaper.h
 -rw-r--r--	root/root	usr/include/linux/net_tstamp.h
 -rw-r--r--	root/root	usr/include/linux/netconf.h
 -rw-r--r--	root/root	usr/include/linux/netdev.h
@@ -723,8 +726,6 @@ drwxr-xr-x	root/root	usr/include/linux/raid/
 -rw-r--r--	root/root	usr/include/linux/random.h
 -rw-r--r--	root/root	usr/include/linux/rds.h
 -rw-r--r--	root/root	usr/include/linux/reboot.h
--rw-r--r--	root/root	usr/include/linux/reiserfs_fs.h
--rw-r--r--	root/root	usr/include/linux/reiserfs_xattr.h
 -rw-r--r--	root/root	usr/include/linux/remoteproc_cdev.h
 -rw-r--r--	root/root	usr/include/linux/resource.h
 -rw-r--r--	root/root	usr/include/linux/rfkill.h
@@ -934,6 +935,7 @@ drwxr-xr-x	root/root	usr/include/linux/usb/
 -rw-r--r--	root/root	usr/include/linux/virtio_vsock.h
 -rw-r--r--	root/root	usr/include/linux/vm_sockets.h
 -rw-r--r--	root/root	usr/include/linux/vm_sockets_diag.h
+-rw-r--r--	root/root	usr/include/linux/vmclock-abi.h
 -rw-r--r--	root/root	usr/include/linux/vmcore.h
 -rw-r--r--	root/root	usr/include/linux/vsockmon.h
 -rw-r--r--	root/root	usr/include/linux/vt.h

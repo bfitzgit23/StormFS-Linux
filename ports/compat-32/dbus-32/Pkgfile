@@ -17,7 +17,6 @@ before continuing with dbus-32.\033[0m\n" &&
 exit 1
 CFLAGS+=" -m32" CXXFLAGS+=" -m32" \
 	./configure --prefix=/usr \
-		--host=i686-pc-linux-gnu      \
 		--libdir=/usr/lib32 \
 		--with-dbus-daemondir=/usr/sbin \
 		--localstatedir=/var \

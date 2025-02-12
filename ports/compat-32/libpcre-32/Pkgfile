@@ -14,16 +14,15 @@ build() {
   export PKG_CONFIG="i686-pc-linux-gnu-pkg-config"
 autoreconf -fi 
       ./configure \
-             --host=i686-pc-linux-gnu      \
-	 --prefix=/usr \
-    	--libdir=/usr/lib32 \
-    	--enable-unicode-properties \
-    	--enable-pcre16 \
-    	--enable-pcre32 \
-    	--enable-jit \
-    	--disable-pcregrep-libz \
-    	--disable-pcregrep-libbz2 \
-    	--disable-pcretest-libreadline
+    --prefix=/usr \
+    --libdir=/usr/lib32 \
+    --enable-unicode-properties \
+    --enable-pcre16 \
+    --enable-pcre32 \
+    --enable-jit \
+    --disable-pcregrep-libz \
+    --disable-pcregrep-libbz2 \
+    --disable-pcretest-libreadline
 
 
     make

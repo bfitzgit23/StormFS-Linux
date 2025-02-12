@@ -4,11 +4,11 @@
 # Depends on: readline-32 sqlite3
 
 name=sqlite3-32
-version=3.49.0
+version=3.48.0
 release=1
 _version=$(printf "%i%.2i%.2i%.2i" ${version//./ })
 
-source=(https://www.sqlite.org/2025/sqlite-autoconf-${_version}.tar.gz)
+source=(https://www.sqlite.org/2024/sqlite-autoconf-${_version}.tar.gz)
 
 build() {
 	cd sqlite-autoconf-${_version}

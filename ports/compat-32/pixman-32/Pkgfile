@@ -9,7 +9,7 @@ release=1
 source=(https://www.x.org/releases/individual/lib/pixman-$version.tar.xz)
 
 build() {
-	meson setup pixman-$version build --cross-file lib32 \
+	meson setup pixman-$version build \
 		--prefix=/usr \
 		--libdir=/usr/lib32 \
 		--buildtype=plain \

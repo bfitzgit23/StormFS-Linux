@@ -1,8 +1,8 @@
 # Description: A tool for transfering files with URL syntax
 # Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
 # URL: https://curl.se/
-# Depends on: curl openssl-32 zstd-32 brotli-32
-# Optional:
+# Depends on: curl openssl-32 zstd-32
+# Optional: brotli-32
 
 name=curl-32
 version=8.11.1

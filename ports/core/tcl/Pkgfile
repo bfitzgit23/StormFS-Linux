@@ -3,7 +3,7 @@
 # Maintainer: Danny Rawlins, crux at romster dot me
 
 name=tcl
-version=8.6.15
+version=8.6.16
 release=1
 source=(https://downloads.sourceforge.net/project/$name/Tcl/$version/$name$version-src.tar.gz
 https://downloads.sourceforge.net/tcl/$name$version-html.tar.gz)

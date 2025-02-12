@@ -4,7 +4,7 @@
 # Depends on: libX11 libxcb-32 xtrans-32
 
 name=libX11-32
-version=1.8.11
+version=1.8.10
 release=1
 source=(https://www.x.org/releases/individual/lib/libX11-$version.tar.xz)
 
