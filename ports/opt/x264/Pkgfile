@@ -9,8 +9,7 @@ version=20250212
 release=1
 source=(https://anduin.linuxfromscratch.org/BLFS/x264/$name-$version.tar.xz)
 
-build() {
-  cd $name
+pkg_build() {
   ./configure --prefix=/usr \
             --enable-shared \
             --disable-cli &&
