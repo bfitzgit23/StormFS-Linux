@@ -4,7 +4,7 @@
 # Depends on: fontconfig freerype harfbuzz fribidi 
 # Optional: cairo gobject-introspection xorg-libs cantarell gi-docGen  help2man libthai sysprof
 name=pango
-version=1.55.5
+version=1.56.1
 release=1
 source=(https://download.gnome.org/sources/$name/${version:0:4}/$name-$version.tar.xz)
 

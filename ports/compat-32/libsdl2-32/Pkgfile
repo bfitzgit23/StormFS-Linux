@@ -5,7 +5,7 @@
 # Optional: alsa-lib-32 ibus-32 jack libxkbcommon-32 ninja pipewire pulseaudio wayland-protocols
 
 name=libsdl2-32
-version=2.30.7
+version=2.32.0
 release=1
 source=(https://www.libsdl.org/release/SDL2-$version.tar.gz)
 

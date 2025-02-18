@@ -6,17 +6,16 @@ name=unzip
 version=6.0
 release=8
 source=(https://downloads.sourceforge.net/sourceforge/infozip/${name}${version//./}.tar.gz
-  https://www.linuxfromscratch.org/patches/blfs/svn/$name-$version-consolidated_fixes-1.patch)
+  28-cve-2022-0529-and-cve-2022-0530.patch
+  cumulative.patch)
 
 build() {
-	cd ${name}${version//./}
-	patch -Np1 -i ../unzip-6.0-consolidated_fixes-1.patch
+    cd ${name}${version//./}
+    patch -Np1 -i $SRC/cumulative.patch
+    patch -p1 -F3 -i $SRC/28-cve-2022-0529-and-cve-2022-0530.patch
 
-
-		make -f unix/Makefile prefix=/usr \
-		D_USE_BZ2=-DUSE_BZIP2 L_BZ2=-lbz2 \
-		LF2="$LDFLAGS" CF="$CFLAGS $CPPFLAGS -I. $DEFINES" \
-		unzips
-	make -f unix/Makefile prefix="${PKG}"/usr install
-	ln -sf unzip $PKG/usr/bin/zipinfo
-	}
+    sed -i 's/-O3//' unix/configure
+    make -f unix/Makefile LOCAL_UNZIP="$CFLAGS" unzips
+    make -f unix/Makefile prefix=$PKG/usr MANDIR=$PKG/usr/share/man/man1 install
+    ln -sf unzip $PKG/usr/bin/zipinfo
+}

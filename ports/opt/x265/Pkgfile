@@ -1,7 +1,7 @@
 # Depends on: cmake nasm 
 
 name=x265
-version=3.6
+version=4.1
 release=1
 source=(https://bitbucket.org/multicoreware/x265_git/downloads/x265_3.6.tar.gz)
 pkg_build () {

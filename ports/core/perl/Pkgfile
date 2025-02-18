@@ -1,13 +1,12 @@
 name=perl
 version=5.40.1
 release=1
-source=(https://www.cpan.org/src/5.0/perl-$version.tar.xz
-perl-5.40.0-fix-compilation-in-eprefix-bug-939014.patch)
+source=(https://www.cpan.org/src/5.0/perl-$version.tar.xz)
 
 bootstrap_build() {
 #export LC_CTYPE=en_US.UTF-8
 #export LC_ALL=en_US.UTF-8
-	patch -Np1 -i ../perl-5.40.0-fix-compilation-in-eprefix-bug-939014.patch
+#	patch -Np1 -i ../perl-5.40.0-fix-compilation-in-eprefix-bug-939014.patch
 	sh Configure -des -Dprefix=$TOOLS -Dlibs=-lm
 	make
 	cp -v perl cpan/podlators/scripts/pod2man $TOOLS/bin

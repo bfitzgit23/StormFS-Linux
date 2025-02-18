@@ -4,7 +4,7 @@
 # Depends on: xorg-apps xorg-fonts 
 
 name=xterm
-version=395
+version=397
 release=1
 source=(https://invisible-mirror.net/archives/xterm/$name-$version.tgz)
 

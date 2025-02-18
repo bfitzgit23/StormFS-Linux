@@ -1,7 +1,7 @@
 # Depends on: nspr 
 
 name=nss
-version=3.107
+version=3.108
 release=1
 source=(https://archive.mozilla.org/pub/security/nss/releases/NSS_${version//./_}_RTM/src/nss-$version.tar.gz
 		nss-3.54-standalone-2.patch

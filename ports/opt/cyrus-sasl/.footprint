@@ -24,12 +24,6 @@ lrwxrwxrwx	root/root	usr/lib/sasl2/libcrammd5.so.3 -> libcrammd5.so.3.0.0
 lrwxrwxrwx	root/root	usr/lib/sasl2/libdigestmd5.so -> libdigestmd5.so.3.0.0
 lrwxrwxrwx	root/root	usr/lib/sasl2/libdigestmd5.so.3 -> libdigestmd5.so.3.0.0
 -rwxr-xr-x	root/root	usr/lib/sasl2/libdigestmd5.so.3.0.0
-lrwxrwxrwx	root/root	usr/lib/sasl2/libgs2.so -> libgs2.so.3.0.0
-lrwxrwxrwx	root/root	usr/lib/sasl2/libgs2.so.3 -> libgs2.so.3.0.0
--rwxr-xr-x	root/root	usr/lib/sasl2/libgs2.so.3.0.0
-lrwxrwxrwx	root/root	usr/lib/sasl2/libgssapiv2.so -> libgssapiv2.so.3.0.0
-lrwxrwxrwx	root/root	usr/lib/sasl2/libgssapiv2.so.3 -> libgssapiv2.so.3.0.0
--rwxr-xr-x	root/root	usr/lib/sasl2/libgssapiv2.so.3.0.0
 lrwxrwxrwx	root/root	usr/lib/sasl2/libotp.so -> libotp.so.3.0.0
 lrwxrwxrwx	root/root	usr/lib/sasl2/libotp.so.3 -> libotp.so.3.0.0
 -rwxr-xr-x	root/root	usr/lib/sasl2/libotp.so.3.0.0

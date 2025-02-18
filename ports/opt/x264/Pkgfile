@@ -5,7 +5,7 @@
 # Optional: ffms2 gpac liblsmash
 
 name=x264
-version=20240216
+version=20250212
 release=1
 source=(https://anduin.linuxfromscratch.org/BLFS/x264/$name-$version.tar.xz)
 

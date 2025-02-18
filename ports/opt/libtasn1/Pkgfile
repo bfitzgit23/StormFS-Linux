@@ -5,7 +5,7 @@
 # Optional: gtk-doc valgrind
 
 name=libtasn1
-version=4.19.0
+version=4.20.0
 release=1
 source=(https://ftp.gnu.org/gnu/libtasn1/libtasn1-$version.tar.gz)
 

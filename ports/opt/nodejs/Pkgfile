@@ -1,27 +1,31 @@
 # Description: Evented I/O for V8 javascript.
 # URL: https://nodejs.org/
 # Maintainer: Tim Biermann, tbier at posteo dot de
-# Depends on: libnghttp2 libuv openssl zlib brotli c-ares icu
-# Optional: 
+# Depends on: libnghttp2 libuv openssl zlib
+# Optional: brotli c-ares icu libnghttp3 libngtcp2 simdjson simdutf
 
 name=nodejs
-version=23.7.0
+version=23.8.0
 release=1
 source=(https://nodejs.org/dist/v$version/node-v$version.tar.xz
-  system-c-ares.patch)
+  unbundle-uv.patch)
 
 build() {
   cd node-v$version
-sed '/pkgicu/s/icu-i18n/& icu-uc/' -i configure.py
- # /usr/lib/libnode.so uses malloc_usable_size, which is incompatible with fortification level 3
-#  export CFLAGS="${CFLAGS/_FORTIFY_SOURCE=3/_FORTIFY_SOURCE=2}"
-#  export CXXFLAGS="${CXXFLAGS/_FORTIFY_SOURCE=3/_FORTIFY_SOURCE=2}"
+
+  patch -Np1 -i $SRC/unbundle-uv.patch
+  rm deps/uv/uv.gyp deps/zlib/zlib.gyp
 
   prt-get isinst brotli && PKGMK_NODEJS+=' --shared-brotli'
   prt-get isinst c-ares && PKGMK_NODEJS+=' --shared-cares'
-  prt-get isinst c-ares && patch -Rp1 -i $SRC/system-c-ares.patch
   prt-get isinst icu && PKGMK_NODEJS+=' --with-intl=system-icu'
+  prt-get isinst libnghttp3 && PKGMK_NODEJS+=' --shared-nghttp3'
+  prt-get isinst libngtcp2 && PKGMK_NODEJS+=' --shared-ngtcp2'
+  prt-get isinst simdjson && PKGMK_NODEJS+=' --shared-simdjson'
+  prt-get isinst simdutf && PKGMK_NODEJS+=' --shared-simdutf'
 
+  CFLAGS="$CFLAGS -g0 -Wl,--no-keep-memory -fuse-ld=gold -Wl,--no-map-whole-files -Wl,--no-keep-files-mapped" \
+  CXXFLAGS="$CFLAGS" \
   ./configure ${PKGMK_NODEJS} \
     --prefix=/usr \
     --ninja \
