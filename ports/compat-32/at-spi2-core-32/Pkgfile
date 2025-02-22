@@ -1,7 +1,7 @@
 # Description: Protocol definitions and daemon for D-Bus at-spi
 # URL: https://gitlab.gnome.org/GNOME/at-spi2-core
 # Maintainer: CRUX System Team, core-ports at crux dot nu
-# Depends on: at-spi2-core dbus-32 glib-32 libXtst-32
+# Depends on: at-spi2-core dbus-32 glib-32 libXtst-32 libXi-32
 
 name=at-spi2-core-32
 version=2.54.0

@@ -4,7 +4,7 @@
 # Depends on:  libnl openssl dbus libxml2
 
 name=wpa_supplicant
-version=2.10
+version=2.11
 release=1
 source=(https://w1.fi/releases/wpa_supplicant-$version.tar.gz
 	wpa_supplicant.conf)

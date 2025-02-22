@@ -1,7 +1,7 @@
 # Depends on: cairo cmake gst-plugins-base gst-plugins-bad gtk3 gtk4 icu lcms2 libgudev libsecret libsoup libtasn1 libwebp  mesa openjpeg ruby  sqlite unifdef which bubblewrap enchant geoclue glib gobject-introspection hicolor-icon-theme libavif libjxl libseccomp xdg-dbus-proxy
 
 name=webkitgtk-41
-version=2.46.2
+version=2.46.6
 release=1
 source=(https://webkitgtk.org/releases/webkitgtk-${version}.tar.xz)
 build() {
@@ -24,21 +24,21 @@ build() {
 
   cmake -S webkitgtk-$version -B build -G Ninja ${PKGMK_WEBKITGTK} \
     -D CMAKE_BUILD_TYPE=Release     \
-      -D CMAKE_INSTALL_PREFIX=/usr    \
-      -D CMAKE_SKIP_INSTALL_RPATH=ON  \
-      -D PORT=GTK                     \
-      -D LIB_INSTALL_DIR=/usr/lib     \
-      -D USE_LIBBACKTRACE=OFF         \
-      -D USE_LIBHYPHEN=OFF            \
-      -D ENABLE_GAMEPAD=OFF           \
-      -D ENABLE_MINIBROWSER=ON        \
-      -D ENABLE_DOCUMENTATION=OFF     \
-      -D ENABLE_WEBDRIVER=OFF         \
-      -D USE_WOFF2=OFF                \
-      -D USE_GTK4=OFF                 \
-      -D ENABLE_BUBBLEWRAP_SANDBOX=ON \
-      -D USE_SYSTEM_SYSPROF_CAPTURE=NO \
-      -W no-dev -G Ninja ..           &&
+      -D CMAKE_INSTALL_PREFIX=/usr     \
+      -D CMAKE_SKIP_INSTALL_RPATH=ON   \
+      -D PORT=GTK                      \
+      -D LIB_INSTALL_DIR=/usr/lib      \
+      -D USE_LIBBACKTRACE=OFF          \
+      -D USE_LIBHYPHEN=OFF             \
+      -D ENABLE_GAMEPAD=OFF            \
+      -D ENABLE_MINIBROWSER=ON         \
+      -D ENABLE_DOCUMENTATION=OFF      \
+      -D ENABLE_WEBDRIVER=OFF          \
+      -D USE_WOFF2=OFF                 \
+      -D USE_GTK4=OFF                  \
+      -D ENABLE_BUBBLEWRAP_SANDBOX=ON  \
+      -D USE_SYSPROF_CAPTURE=NO        \
+      -W no-dev -G Ninja ..                 &&
    
 
   cmake --build build

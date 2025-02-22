@@ -35,6 +35,7 @@ lrwxrwxrwx	root/root	opt/qt6/lib/libqca-qt6.so.2 -> libqca-qt6.so.2.3.8
 -rwxr-xr-x	root/root	opt/qt6/lib/libqca-qt6.so.2.3.8
 drwxr-xr-x	root/root	opt/qt6/lib/qca-qt6/
 drwxr-xr-x	root/root	opt/qt6/lib/qca-qt6/crypto/
+-rwxr-xr-x	root/root	opt/qt6/lib/qca-qt6/crypto/libqca-cyrus-sasl.so
 -rwxr-xr-x	root/root	opt/qt6/lib/qca-qt6/crypto/libqca-gnupg.so
 -rwxr-xr-x	root/root	opt/qt6/lib/qca-qt6/crypto/libqca-logger.so
 -rwxr-xr-x	root/root	opt/qt6/lib/qca-qt6/crypto/libqca-nss.so

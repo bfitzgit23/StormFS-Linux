@@ -1,9 +1,0 @@
-drwxr-xr-x	root/root	usr/
-drwxr-xr-x	root/root	usr/lib32/
--rw-r--r--	root/root	usr/lib32/libtirpc.a
--rwxr-xr-x	root/root	usr/lib32/libtirpc.la
-lrwxrwxrwx	root/root	usr/lib32/libtirpc.so -> libtirpc.so.3.0.0
-lrwxrwxrwx	root/root	usr/lib32/libtirpc.so.3 -> libtirpc.so.3.0.0
--rwxr-xr-x	root/root	usr/lib32/libtirpc.so.3.0.0
-drwxr-xr-x	root/root	usr/lib32/pkgconfig/
--rw-r--r--	root/root	usr/lib32/pkgconfig/libtirpc.pc

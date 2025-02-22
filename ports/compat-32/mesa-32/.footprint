@@ -6,15 +6,11 @@ lrwxrwxrwx	root/root	usr/lib32/dri/i915_dri.so -> libdril_dri.so
 lrwxrwxrwx	root/root	usr/lib32/dri/kms_swrast_dri.so -> libdril_dri.so
 -rwxr-xr-x	root/root	usr/lib32/dri/libdril_dri.so
 lrwxrwxrwx	root/root	usr/lib32/dri/nouveau_dri.so -> libdril_dri.so
-lrwxrwxrwx	root/root	usr/lib32/dri/nouveau_drv_video.so -> ../libgallium-24.3.4.so
 lrwxrwxrwx	root/root	usr/lib32/dri/r300_dri.so -> libdril_dri.so
 lrwxrwxrwx	root/root	usr/lib32/dri/r600_dri.so -> libdril_dri.so
-lrwxrwxrwx	root/root	usr/lib32/dri/r600_drv_video.so -> ../libgallium-24.3.4.so
 lrwxrwxrwx	root/root	usr/lib32/dri/radeonsi_dri.so -> libdril_dri.so
-lrwxrwxrwx	root/root	usr/lib32/dri/radeonsi_drv_video.so -> ../libgallium-24.3.4.so
 lrwxrwxrwx	root/root	usr/lib32/dri/swrast_dri.so -> libdril_dri.so
 lrwxrwxrwx	root/root	usr/lib32/dri/virtio_gpu_dri.so -> libdril_dri.so
-lrwxrwxrwx	root/root	usr/lib32/dri/virtio_gpu_drv_video.so -> ../libgallium-24.3.4.so
 lrwxrwxrwx	root/root	usr/lib32/dri/vmwgfx_dri.so -> libdril_dri.so
 lrwxrwxrwx	root/root	usr/lib32/dri/zink_dri.so -> libdril_dri.so
 drwxr-xr-x	root/root	usr/lib32/gbm/
@@ -38,7 +34,6 @@ lrwxrwxrwx	root/root	usr/lib32/libglapi.so.0 -> libglapi.so.0.0.0
 -rwxr-xr-x	root/root	usr/lib32/libglapi.so.0.0.0
 -rwxr-xr-x	root/root	usr/lib32/libvulkan_intel_hasvk.so
 -rwxr-xr-x	root/root	usr/lib32/libvulkan_lvp.so
--rwxr-xr-x	root/root	usr/lib32/libvulkan_nouveau.so
 -rwxr-xr-x	root/root	usr/lib32/libvulkan_radeon.so
 -rwxr-xr-x	root/root	usr/lib32/libvulkan_virtio.so
 lrwxrwxrwx	root/root	usr/lib32/libxatracker.so -> libxatracker.so.2
@@ -49,11 +44,27 @@ drwxr-xr-x	root/root	usr/lib32/pkgconfig/
 -rw-r--r--	root/root	usr/lib32/pkgconfig/gbm.pc
 -rw-r--r--	root/root	usr/lib32/pkgconfig/osmesa.pc
 -rw-r--r--	root/root	usr/lib32/pkgconfig/xatracker.pc
+drwxr-xr-x	root/root	usr/lib32/vdpau/
+lrwxrwxrwx	root/root	usr/lib32/vdpau/libvdpau_nouveau.so -> libvdpau_nouveau.so.1.0.0
+lrwxrwxrwx	root/root	usr/lib32/vdpau/libvdpau_nouveau.so.1 -> libvdpau_nouveau.so.1.0.0
+lrwxrwxrwx	root/root	usr/lib32/vdpau/libvdpau_nouveau.so.1.0 -> libvdpau_nouveau.so.1.0.0
+lrwxrwxrwx	root/root	usr/lib32/vdpau/libvdpau_nouveau.so.1.0.0 -> ../libgallium-24.3.4.so
+lrwxrwxrwx	root/root	usr/lib32/vdpau/libvdpau_r600.so -> libvdpau_r600.so.1.0.0
+lrwxrwxrwx	root/root	usr/lib32/vdpau/libvdpau_r600.so.1 -> libvdpau_r600.so.1.0.0
+lrwxrwxrwx	root/root	usr/lib32/vdpau/libvdpau_r600.so.1.0 -> libvdpau_r600.so.1.0.0
+lrwxrwxrwx	root/root	usr/lib32/vdpau/libvdpau_r600.so.1.0.0 -> ../libgallium-24.3.4.so
+lrwxrwxrwx	root/root	usr/lib32/vdpau/libvdpau_radeonsi.so -> libvdpau_radeonsi.so.1.0.0
+lrwxrwxrwx	root/root	usr/lib32/vdpau/libvdpau_radeonsi.so.1 -> libvdpau_radeonsi.so.1.0.0
+lrwxrwxrwx	root/root	usr/lib32/vdpau/libvdpau_radeonsi.so.1.0 -> libvdpau_radeonsi.so.1.0.0
+lrwxrwxrwx	root/root	usr/lib32/vdpau/libvdpau_radeonsi.so.1.0.0 -> ../libgallium-24.3.4.so
+lrwxrwxrwx	root/root	usr/lib32/vdpau/libvdpau_virtio_gpu.so -> libvdpau_virtio_gpu.so.1.0.0
+lrwxrwxrwx	root/root	usr/lib32/vdpau/libvdpau_virtio_gpu.so.1 -> libvdpau_virtio_gpu.so.1.0.0
+lrwxrwxrwx	root/root	usr/lib32/vdpau/libvdpau_virtio_gpu.so.1.0 -> libvdpau_virtio_gpu.so.1.0.0
+lrwxrwxrwx	root/root	usr/lib32/vdpau/libvdpau_virtio_gpu.so.1.0.0 -> ../libgallium-24.3.4.so
 drwxr-xr-x	root/root	usr/share/
 drwxr-xr-x	root/root	usr/share/vulkan/
 drwxr-xr-x	root/root	usr/share/vulkan/icd.d/
 -rw-r--r--	root/root	usr/share/vulkan/icd.d/intel_hasvk_icd.i686.json
 -rw-r--r--	root/root	usr/share/vulkan/icd.d/lvp_icd.i686.json
--rw-r--r--	root/root	usr/share/vulkan/icd.d/nouveau_icd.i686.json
 -rw-r--r--	root/root	usr/share/vulkan/icd.d/radeon_icd.i686.json
 -rw-r--r--	root/root	usr/share/vulkan/icd.d/virtio_icd.i686.json

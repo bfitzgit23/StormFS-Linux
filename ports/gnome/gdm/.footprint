@@ -11,7 +11,6 @@ drwxr-xr-x	root/root	etc/gdm/PostSession/
 -rwxr-xr-x	root/root	etc/gdm/PostSession/Default
 drwxr-xr-x	root/root	etc/gdm/PreSession/
 -rwxr-xr-x	root/root	etc/gdm/PreSession/Default
--rwxr-xr-x	root/root	etc/gdm/Xsession
 -rw-r--r--	root/root	etc/gdm/custom.conf
 drwxr-xr-x	root/root	etc/pam.d/
 -rw-r--r--	root/root	etc/pam.d/gdm-autologin
@@ -22,7 +21,6 @@ drwxr-xr-x	root/root	etc/pam.d/
 drwxr-xr-x	root/root	usr/
 drwxr-xr-x	root/root	usr/bin/
 -rwxr-xr-x	root/root	usr/bin/gdm-config
--rwxr-xr-x	root/root	usr/bin/gdm-screenshot
 -rwxr-xr-x	root/root	usr/bin/gdmflexiserver
 drwxr-xr-x	root/root	usr/include/
 drwxr-xr-x	root/root	usr/include/gdm/

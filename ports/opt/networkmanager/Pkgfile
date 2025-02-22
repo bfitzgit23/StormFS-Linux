@@ -4,20 +4,19 @@
 # Depends on:  jansson libndp curl dhcpcd gobject-introspection iptables newt nss polkit python3-gobject Systemd vala wpa_supplicant mobile-broadband-provider-info gtkdoc-scan glibmm
 # Optional: bluez dbus-python gnutls gtk-doc libpsl qt6 modemmanager upower valgrind dnsmasq firewalld libaudit libteam mobile-broadband-provider-info PPP RP-PPPoE
 name=networkmanager
-version=1.48.10
+version=1.50.0
 release=1
-source=(https://download.gnome.org/sources/NetworkManager/1.48/NetworkManager-$version.tar.xz)
-build_opt="
-      --prefix=/usr              
-      --buildtype=release        
-      -Dlibaudit=no              
-      -Dnmtui=true               
-      -Dovs=false                
-      -Dppp=false                
-      -Dselinux=false            
-      -Dqt=false                 
-      -Dsession_tracking=systemd 
-      -Dmodem_manager=false "
+source=(https://download.gnome.org/sources/NetworkManager/1.50/NetworkManager-$version.tar.xz)
+build_opt="  --prefix=/usr
+      --buildtype=release         
+      -D libaudit=no              
+      -D nmtui=true               
+      -D ovs=false                
+      -D ppp=false                
+      -D selinux=false            
+      -D qt=false                 
+      -D session_tracking=systemd
+      -D modem_manager=false"
 pre_build() {
 grep -rl '^#!.*python$' | xargs sed -i '1s/python/&3/'
 }

@@ -890,7 +890,7 @@ drwxr-xr-x	root/root	usr/share/icons/hicolor/symbolic/apps/
 -rw-r--r--	root/root	usr/share/icons/hicolor/symbolic/apps/org.gnome.Terminal.Preferences-symbolic.svg
 drwxr-xr-x	root/root	usr/share/man/
 drwxr-xr-x	root/root	usr/share/man/man1/
--rwxr-xr-x	root/root	usr/share/man/man1/gnome-terminal.1.gz
+-rw-r--r--	root/root	usr/share/man/man1/gnome-terminal.1.gz
 drwxr-xr-x	root/root	usr/share/metainfo/
 -rw-r--r--	root/root	usr/share/metainfo/org.gnome.Terminal.Nautilus.metainfo.xml
 -rw-r--r--	root/root	usr/share/metainfo/org.gnome.Terminal.metainfo.xml

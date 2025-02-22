@@ -3,7 +3,9 @@ version=14.2.0
 release=1
 source=(https://ftp.gnu.org/gnu/gcc/gcc-$version/gcc-$version.tar.xz
 	c89
-	c99)
+	c99
+	gcc-4.7.3-multilib-dirs.patch
+	gcc-nocheck-fixincludes.patch)
 keep_static=1
 keep_libtool=1
 bootstrap_build() {

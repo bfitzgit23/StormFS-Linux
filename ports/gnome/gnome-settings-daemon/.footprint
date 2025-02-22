@@ -22,12 +22,12 @@ drwxr-xr-x	root/root	etc/xdg/autostart/
 -rw-r--r--	root/root	etc/xdg/autostart/org.gnome.SettingsDaemon.XSettings.desktop
 drwxr-xr-x	root/root	usr/
 drwxr-xr-x	root/root	usr/include/
-drwxr-xr-x	root/root	usr/include/gnome-settings-daemon-46/
-drwxr-xr-x	root/root	usr/include/gnome-settings-daemon-46/gnome-settings-daemon/
--rw-r--r--	root/root	usr/include/gnome-settings-daemon-46/gnome-settings-daemon/gsd-enums.h
+drwxr-xr-x	root/root	usr/include/gnome-settings-daemon-47/
+drwxr-xr-x	root/root	usr/include/gnome-settings-daemon-47/gnome-settings-daemon/
+-rw-r--r--	root/root	usr/include/gnome-settings-daemon-47/gnome-settings-daemon/gsd-enums.h
 drwxr-xr-x	root/root	usr/lib/
-drwxr-xr-x	root/root	usr/lib/gnome-settings-daemon-46/
--rwxr-xr-x	root/root	usr/lib/gnome-settings-daemon-46/libgsd.so
+drwxr-xr-x	root/root	usr/lib/gnome-settings-daemon-47/
+-rwxr-xr-x	root/root	usr/lib/gnome-settings-daemon-47/libgsd.so
 -rwxr-xr-x	root/root	usr/lib/gsd-a11y-settings
 -rwxr-xr-x	root/root	usr/lib/gsd-backlight-helper
 -rwxr-xr-x	root/root	usr/lib/gsd-color

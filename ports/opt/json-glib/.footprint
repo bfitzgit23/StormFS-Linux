@@ -41,8 +41,8 @@ drwxr-xr-x	root/root	usr/lib/installed-tests/json-glib-1.0/
 -rw-r--r--	root/root	usr/lib/installed-tests/json-glib-1.0/skip-bom.json
 -rw-r--r--	root/root	usr/lib/installed-tests/json-glib-1.0/stream-load.json
 lrwxrwxrwx	root/root	usr/lib/libjson-glib-1.0.so -> libjson-glib-1.0.so.0
-lrwxrwxrwx	root/root	usr/lib/libjson-glib-1.0.so.0 -> libjson-glib-1.0.so.0.1000.0
--rwxr-xr-x	root/root	usr/lib/libjson-glib-1.0.so.0.1000.0
+lrwxrwxrwx	root/root	usr/lib/libjson-glib-1.0.so.0 -> libjson-glib-1.0.so.0.1000.6
+-rwxr-xr-x	root/root	usr/lib/libjson-glib-1.0.so.0.1000.6
 drwxr-xr-x	root/root	usr/lib/pkgconfig/
 -rw-r--r--	root/root	usr/lib/pkgconfig/json-glib-1.0.pc
 drwxr-xr-x	root/root	usr/share/

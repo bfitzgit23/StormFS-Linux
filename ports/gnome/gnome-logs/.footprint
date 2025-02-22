@@ -54,7 +54,7 @@ drwxr-xr-x	root/root	usr/share/help/de/gnome-logs/
 -rw-r--r--	root/root	usr/share/help/de/gnome-logs/introduction.page
 -rw-r--r--	root/root	usr/share/help/de/gnome-logs/legal.xml
 drwxr-xr-x	root/root	usr/share/help/de/gnome-logs/media/
-lrwxrwxrwx	root/root	usr/share/help/de/gnome-logs/media/gnome-logs-3-34.png -> ../../../C/gnome-logs/media/gnome-logs-3-34.png
+-rw-r--r--	root/root	usr/share/help/de/gnome-logs/media/gnome-logs-3-34.png
 lrwxrwxrwx	root/root	usr/share/help/de/gnome-logs/media/org.gnome.Logs.svg -> ../../../C/gnome-logs/media/org.gnome.Logs.svg
 -rw-r--r--	root/root	usr/share/help/de/gnome-logs/permissions.page
 drwxr-xr-x	root/root	usr/share/help/el/
@@ -99,7 +99,7 @@ drwxr-xr-x	root/root	usr/share/help/fr/gnome-logs/
 -rw-r--r--	root/root	usr/share/help/fr/gnome-logs/introduction.page
 -rw-r--r--	root/root	usr/share/help/fr/gnome-logs/legal.xml
 drwxr-xr-x	root/root	usr/share/help/fr/gnome-logs/media/
-lrwxrwxrwx	root/root	usr/share/help/fr/gnome-logs/media/gnome-logs-3-34.png -> ../../../C/gnome-logs/media/gnome-logs-3-34.png
+-rw-r--r--	root/root	usr/share/help/fr/gnome-logs/media/gnome-logs-3-34.png
 lrwxrwxrwx	root/root	usr/share/help/fr/gnome-logs/media/org.gnome.Logs.svg -> ../../../C/gnome-logs/media/org.gnome.Logs.svg
 -rw-r--r--	root/root	usr/share/help/fr/gnome-logs/permissions.page
 drwxr-xr-x	root/root	usr/share/help/gl/
@@ -135,7 +135,7 @@ drwxr-xr-x	root/root	usr/share/help/it/gnome-logs/
 -rw-r--r--	root/root	usr/share/help/it/gnome-logs/introduction.page
 -rw-r--r--	root/root	usr/share/help/it/gnome-logs/legal.xml
 drwxr-xr-x	root/root	usr/share/help/it/gnome-logs/media/
-lrwxrwxrwx	root/root	usr/share/help/it/gnome-logs/media/gnome-logs-3-34.png -> ../../../C/gnome-logs/media/gnome-logs-3-34.png
+-rw-r--r--	root/root	usr/share/help/it/gnome-logs/media/gnome-logs-3-34.png
 lrwxrwxrwx	root/root	usr/share/help/it/gnome-logs/media/org.gnome.Logs.svg -> ../../../C/gnome-logs/media/org.gnome.Logs.svg
 -rw-r--r--	root/root	usr/share/help/it/gnome-logs/permissions.page
 drwxr-xr-x	root/root	usr/share/help/ko/
@@ -144,7 +144,7 @@ drwxr-xr-x	root/root	usr/share/help/ko/gnome-logs/
 -rw-r--r--	root/root	usr/share/help/ko/gnome-logs/introduction.page
 -rw-r--r--	root/root	usr/share/help/ko/gnome-logs/legal.xml
 drwxr-xr-x	root/root	usr/share/help/ko/gnome-logs/media/
-lrwxrwxrwx	root/root	usr/share/help/ko/gnome-logs/media/gnome-logs-3-34.png -> ../../../C/gnome-logs/media/gnome-logs-3-34.png
+-rw-r--r--	root/root	usr/share/help/ko/gnome-logs/media/gnome-logs-3-34.png
 lrwxrwxrwx	root/root	usr/share/help/ko/gnome-logs/media/org.gnome.Logs.svg -> ../../../C/gnome-logs/media/org.gnome.Logs.svg
 -rw-r--r--	root/root	usr/share/help/ko/gnome-logs/permissions.page
 drwxr-xr-x	root/root	usr/share/help/nl/
@@ -162,7 +162,7 @@ drwxr-xr-x	root/root	usr/share/help/pl/gnome-logs/
 -rw-r--r--	root/root	usr/share/help/pl/gnome-logs/introduction.page
 -rw-r--r--	root/root	usr/share/help/pl/gnome-logs/legal.xml
 drwxr-xr-x	root/root	usr/share/help/pl/gnome-logs/media/
-lrwxrwxrwx	root/root	usr/share/help/pl/gnome-logs/media/gnome-logs-3-34.png -> ../../../C/gnome-logs/media/gnome-logs-3-34.png
+-rw-r--r--	root/root	usr/share/help/pl/gnome-logs/media/gnome-logs-3-34.png
 lrwxrwxrwx	root/root	usr/share/help/pl/gnome-logs/media/org.gnome.Logs.svg -> ../../../C/gnome-logs/media/org.gnome.Logs.svg
 -rw-r--r--	root/root	usr/share/help/pl/gnome-logs/permissions.page
 drwxr-xr-x	root/root	usr/share/help/pt/
@@ -198,7 +198,7 @@ drwxr-xr-x	root/root	usr/share/help/sv/gnome-logs/
 -rw-r--r--	root/root	usr/share/help/sv/gnome-logs/introduction.page
 -rw-r--r--	root/root	usr/share/help/sv/gnome-logs/legal.xml
 drwxr-xr-x	root/root	usr/share/help/sv/gnome-logs/media/
-lrwxrwxrwx	root/root	usr/share/help/sv/gnome-logs/media/gnome-logs-3-34.png -> ../../../C/gnome-logs/media/gnome-logs-3-34.png
+-rw-r--r--	root/root	usr/share/help/sv/gnome-logs/media/gnome-logs-3-34.png
 lrwxrwxrwx	root/root	usr/share/help/sv/gnome-logs/media/org.gnome.Logs.svg -> ../../../C/gnome-logs/media/org.gnome.Logs.svg
 -rw-r--r--	root/root	usr/share/help/sv/gnome-logs/permissions.page
 drwxr-xr-x	root/root	usr/share/help/tr/

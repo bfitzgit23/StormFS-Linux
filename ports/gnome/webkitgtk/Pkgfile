@@ -2,7 +2,7 @@
 
 
 name=webkitgtk
-version=2.46.2
+version=2.46.6
 release=1
 source=(https://webkitgtk.org/releases/webkitgtk-${version}.tar.xz)
 build() {
@@ -25,24 +25,20 @@ build() {
   prt-get isinst gst-plugins-bad || PKGMK_WEBKITGTK+=' -DUSE_GSTREAMER_TRANSCODER=OFF'
 
    cmake -S webkitgtk-$version -B build -G Ninja ${PKGMK_WEBKITGTK} \
-    -D CMAKE_INSTALL_PREFIX=/usr \
-    -D CMAKE_INSTALL_LIBDIR=/usr/lib \
-    -D CMAKE_INSTALL_LIBEXECDIR=/usr/lib \
-    -D CMAKE_BUILD_TYPE=Release \
-    -D CMAKE_CXX_FLAGS_RELEASE="${CXXFLAGS} -DNDEBUG -ffat-lto-objects" \
-    -D CMAKE_C_FLAGS_RELEASE="${CFLAGS} -DNDEBUG -ffat-lto-objects" \
-    -D CMAKE_EXE_LINKER_FLAGS="${LDFLAGS} -Wl,-fuse-ld=gold" \
-    -D CMAKE_SKIP_RPATH=ON \
-    -D PORT=GTK \
-    -D USE_GTK4=ON         \
-    -D ENABLE_MINIBROWSER=ON \
-    -D ENABLE_JOURNALD_LOG=OFF \
-    -D ENABLE_DOCUMENTATION=OFF \
-    -D USE_LIBBACKTRACE=OFF \
-    -D USE_JPEGXL=ON \
-    -D USE_WOFF2=ON \
-    -D USE_SYSTEM_SYSPROF_CAPTURE=NO \
-    -Wno-dev
+          -D CMAKE_INSTALL_PREFIX=/usr        \
+      -D CMAKE_SKIP_INSTALL_RPATH=ON      \
+      -D PORT=GTK                         \
+      -D LIB_INSTALL_DIR=/usr/lib         \
+      -D USE_LIBBACKTRACE=OFF             \
+      -D USE_LIBHYPHEN=OFF                \
+      -D ENABLE_GAMEPAD=OFF               \
+      -D ENABLE_MINIBROWSER=ON            \
+      -D ENABLE_DOCUMENTATION=OFF         \
+      -D USE_WOFF2=OFF                    \
+      -D USE_GTK4=ON                      \
+      -D ENABLE_BUBBLEWRAP_SANDBOX=ON     \
+      -D USE_SYSPROF_CAPTURE=NO           \
+      -W no-dev -G Ninja ..               
 
  CFLAGS+=' -fcf-protection=none'
  CXXFLAGS+=' -fcf-protection=none'

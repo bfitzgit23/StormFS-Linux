@@ -36,3 +36,4 @@ build() {
 
   rm -r $PKG/usr/{bin,include,share}
 }
+

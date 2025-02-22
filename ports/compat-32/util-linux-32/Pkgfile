@@ -4,12 +4,12 @@
 # Depends on: bzip2-32 eudev-32 sqlite3-32 xz-32 zlib-32
 
 name=util-linux-32
-version=2.40.2
+version=2.40.4
 release=1
 source=(https://www.kernel.org/pub/linux/utils/util-linux/v${version:0:4}/util-linux-$version.tar.xz)
 
 build() {
-	meson setup util-linux-$version build \
+	meson setup util-linux-$version build --cross-file lib32 \
 		--prefix=/usr \
 		--bindir=/usr/bin \
 		--sbindir=/sbin \

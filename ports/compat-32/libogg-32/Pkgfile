@@ -10,7 +10,7 @@ source=(https://downloads.xiph.org/releases/ogg/libogg-$version.tar.xz)
 
 build() {
     cd libogg-$version
-    ./configure     --host=i686-pc-linux-gnu --prefix=/usr --libdir=/usr/lib32
+    ./configure     --prefix=/usr --libdir=/usr/lib32
     make
     make DESTDIR=$PKG install
 

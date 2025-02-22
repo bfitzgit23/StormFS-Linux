@@ -21,6 +21,8 @@ drwxr-xr-x	root/root	usr/lib/installed-tests/gjs/
 -rw-r--r--	root/root	usr/lib/installed-tests/gjs/GIMarshallingTests-1.0.typelib
 -rw-r--r--	root/root	usr/lib/installed-tests/gjs/GjsTestTools-1.0.typelib
 -rw-r--r--	root/root	usr/lib/installed-tests/gjs/Regress-1.0.typelib
+-rw-r--r--	root/root	usr/lib/installed-tests/gjs/RegressUnix-1.0.typelib
+-rw-r--r--	root/root	usr/lib/installed-tests/gjs/Utility-1.0.typelib
 -rw-r--r--	root/root	usr/lib/installed-tests/gjs/WarnLib-1.0.typelib
 -rwxr-xr-x	root/root	usr/lib/installed-tests/gjs/debugger-test.sh
 drwxr-xr-x	root/root	usr/lib/installed-tests/gjs/debugger/
@@ -105,6 +107,7 @@ drwxr-xr-x	root/root	usr/lib/installed-tests/gjs/js/modules/badOverrides2/
 -rw-r--r--	root/root	usr/lib/installed-tests/gjs/js/modules/encodings.json
 -rw-r--r--	root/root	usr/lib/installed-tests/gjs/js/modules/exports.js
 -rw-r--r--	root/root	usr/lib/installed-tests/gjs/js/modules/foobar.js
+-rw-r--r--	root/root	usr/lib/installed-tests/gjs/js/modules/greet.js
 -rw-r--r--	root/root	usr/lib/installed-tests/gjs/js/modules/importmeta.js
 -rw-r--r--	root/root	usr/lib/installed-tests/gjs/js/modules/lexicalScope.js
 -rw-r--r--	root/root	usr/lib/installed-tests/gjs/js/modules/modunicode.js
@@ -117,6 +120,8 @@ drwxr-xr-x	root/root	usr/lib/installed-tests/gjs/js/modules/overrides/
 -rw-r--r--	root/root	usr/lib/installed-tests/gjs/js/modules/say.js
 -rw-r--r--	root/root	usr/lib/installed-tests/gjs/js/modules/sideEffect.js
 -rw-r--r--	root/root	usr/lib/installed-tests/gjs/js/modules/sideEffect2.js
+-rw-r--r--	root/root	usr/lib/installed-tests/gjs/js/modules/sideEffect3.js
+-rw-r--r--	root/root	usr/lib/installed-tests/gjs/js/modules/sideEffect4.js
 drwxr-xr-x	root/root	usr/lib/installed-tests/gjs/js/modules/subA/
 drwxr-xr-x	root/root	usr/lib/installed-tests/gjs/js/modules/subA/subB/
 -rw-r--r--	root/root	usr/lib/installed-tests/gjs/js/modules/subA/subB/__init__.js
@@ -128,7 +133,6 @@ drwxr-xr-x	root/root	usr/lib/installed-tests/gjs/js/modules/subErrorInit/
 -rw-r--r--	root/root	usr/lib/installed-tests/gjs/js/modules/subErrorInit/__init__.js
 -rw-r--r--	root/root	usr/lib/installed-tests/gjs/js/testAsync.js
 -rw-r--r--	root/root	usr/lib/installed-tests/gjs/js/testAsyncMainloop.js
--rw-r--r--	root/root	usr/lib/installed-tests/gjs/js/testByteArray.js
 -rw-r--r--	root/root	usr/lib/installed-tests/gjs/js/testCairo.js
 -rw-r--r--	root/root	usr/lib/installed-tests/gjs/js/testCairoModule.js
 -rw-r--r--	root/root	usr/lib/installed-tests/gjs/js/testConsole.js
@@ -177,6 +181,7 @@ drwxr-xr-x	root/root	usr/lib/installed-tests/gjs/js/modules/subErrorInit/
 -rwxr-xr-x	root/root	usr/lib/installed-tests/gjs/libgimarshallingtests.so
 -rwxr-xr-x	root/root	usr/lib/installed-tests/gjs/libgjstesttools.so
 -rwxr-xr-x	root/root	usr/lib/installed-tests/gjs/libregress.so
+-rwxr-xr-x	root/root	usr/lib/installed-tests/gjs/libutility.so
 -rwxr-xr-x	root/root	usr/lib/installed-tests/gjs/libwarnlib.so
 -rwxr-xr-x	root/root	usr/lib/installed-tests/gjs/minijasmine
 drwxr-xr-x	root/root	usr/lib/installed-tests/gjs/scripts/
@@ -218,7 +223,6 @@ drwxr-xr-x	root/root	usr/share/installed-tests/gjs/
 -rw-r--r--	root/root	usr/share/installed-tests/gjs/step.test
 -rw-r--r--	root/root	usr/share/installed-tests/gjs/testAsync.test
 -rw-r--r--	root/root	usr/share/installed-tests/gjs/testAsyncMainloop.test
--rw-r--r--	root/root	usr/share/installed-tests/gjs/testByteArray.test
 -rw-r--r--	root/root	usr/share/installed-tests/gjs/testCairo.test
 -rw-r--r--	root/root	usr/share/installed-tests/gjs/testCairoModule.test
 -rw-r--r--	root/root	usr/share/installed-tests/gjs/testCommandLine.sh.test

@@ -1,6 +1,6 @@
 # Depends on: gtksourceviewitstool libadwaita libgee libsoup3 vala
 
 name=gnome-calculator
-version=46.1
+version=47.1
 release=1
-source=(https://download.gnome.org/sources/${name}/46/${name}-${version}.tar.xz)
+source=(https://download.gnome.org/sources/${name}/47/${name}-${version}.tar.xz)

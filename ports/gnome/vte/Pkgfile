@@ -1,7 +1,7 @@
 # Depends on: gtk3 libxml2 pcre2 icu gnutls glib gobject-introspection gtk4 vala lz4
 
 name=vte
-version=0.78.1
+version=0.78.2
 release=1
 source=(https://gitlab.gnome.org/GNOME/${name}/-/archive/${version}/${name}-${version}.tar.gz)
 pkg_build () {

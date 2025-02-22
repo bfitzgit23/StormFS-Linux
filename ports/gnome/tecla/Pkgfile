@@ -1,6 +1,6 @@
 # Depends on: libadwaita libxkbcommon
 
 name=tecla
-version=46.0
+version=47.0
 release=1
-source=(https://download.gnome.org/sources/${name}/46/${name}-${version}.tar.xz)
+source=(https://download.gnome.org/sources/${name}/47/${name}-${version}.tar.xz)

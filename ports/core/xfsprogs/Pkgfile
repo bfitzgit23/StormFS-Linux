@@ -5,18 +5,30 @@
 # Optional: icu
 
 name=xfsprogs
-version=6.5.0
+version=6.13.0
 release=1
 source=(https://www.kernel.org/pub/linux/utils/fs/xfs/$name/$name-$version.tar.xz)
+
 
 build() {
 	cd $name-$version
 
-	make DEBUG=-DNDEBUG     \
-     INSTALL_USER=root  \
-     INSTALL_GROUP=root
+	make configure
 
-make PKG_DOC_DIR=/usr/share/doc/$name-$version DESTDIR=$PKG install     &&
-make PKG_DOC_DIR=/usr/share/doc/$name-$version DESTDIR=$PKG install-dev &&
-rm -rfv $PKGFILE/usr/lib/libhandle.{a,la}
+	export DEBUG=-DNDEBUG
+	export OPTIMIZER=$CFLAGS
+
+	./configure \
+		--prefix=/usr \
+		--localstatedir=/var \
+		--disable-gettext \
+		--disable-libicu
+	make
+	make -j1 DIST_ROOT=$PKG install install-dev
+
+	install -d $PKG/sbin
+	mv $PKG/usr/sbin/{fsck.xfs,xfs_repair} $PKG/sbin
+
+	rm -r $PKG/usr/share/doc
 }
+

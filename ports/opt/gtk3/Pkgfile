@@ -5,15 +5,15 @@
 # Optional: colord cups  wayland-protocols
 
 name=gtk3
-version=3.24.43
+version=3.24.48
 release=1
-source=(https://download.gnome.org/sources/gtk+/${version:0:4}/gtk+-$version.tar.xz)
+source=(https://download.gnome.org/sources/gtk/3.24/gtk-$version.tar.xz)
 
-build () {
+pkg_build () {
 	prt-get isinst colord || PKGMK_GTK3+=' -Dcolord=no'
 	prt-get isinst libxkbcommon wayland-protocols && PKGMK_GTK3+=' -D wayland_backend=true' || PKGMK_GTK3+=' -Dwayland_backend=false'
 
-	cd gtk+-$version
+
 	mkdir build &&
 cd    build &&
 meson setup --prefix=/usr           \

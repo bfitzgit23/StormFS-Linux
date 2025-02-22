@@ -1,9 +1,0 @@
-drwxr-xr-x	root/root	usr/
-drwxr-xr-x	root/root	usr/lib32/
-drwxr-xr-x	root/root	usr/lib32/cmake/
-drwxr-xr-x	root/root	usr/lib32/cmake/volk/
--rw-r--r--	root/root	usr/lib32/cmake/volk/volkConfig.cmake
--rw-r--r--	root/root	usr/lib32/cmake/volk/volkConfigVersion.cmake
--rw-r--r--	root/root	usr/lib32/cmake/volk/volkTargets-release.cmake
--rw-r--r--	root/root	usr/lib32/cmake/volk/volkTargets.cmake
--rw-r--r--	root/root	usr/lib32/libvolk.a

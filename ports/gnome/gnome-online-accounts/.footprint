@@ -60,6 +60,9 @@ drwxr-xr-x	root/root	usr/share/icons/hicolor/symbolic/apps/
 -rw-r--r--	root/root	usr/share/icons/hicolor/symbolic/apps/goa-account-msn-symbolic.svg
 -rw-r--r--	root/root	usr/share/icons/hicolor/symbolic/apps/goa-account-owncloud-symbolic.svg
 -rw-r--r--	root/root	usr/share/icons/hicolor/symbolic/apps/goa-account-symbolic.svg
+drwxr-xr-x	root/root	usr/share/man/
+drwxr-xr-x	root/root	usr/share/man/man8/
+-rw-r--r--	root/root	usr/share/man/man8/goa-daemon.8.gz
 drwxr-xr-x	root/root	usr/share/vala/
 drwxr-xr-x	root/root	usr/share/vala/vapi/
 -rw-r--r--	root/root	usr/share/vala/vapi/goa-1.0.deps

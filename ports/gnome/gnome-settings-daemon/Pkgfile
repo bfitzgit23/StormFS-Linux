@@ -1,6 +1,6 @@
 # Depends on: alsa-lib colord fontconfig gcr4 geoclue geocode-glib gnome-desktop lcms2 libcanberra libgweather libnotify libwacom pulseaudio upower cups networkmanager wayland
 
 name=gnome-settings-daemon
-version=46.0
+version=47.2
 release=1
-source=(https://download.gnome.org/sources/$name/46/$name-$version.tar.xz)
+source=(https://download.gnome.org/sources/$name/47/$name-$version.tar.xz)

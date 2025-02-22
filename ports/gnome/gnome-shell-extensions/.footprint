@@ -6,6 +6,7 @@ drwxr-xr-x	root/root	usr/share/glib-2.0/schemas/
 -rw-r--r--	root/root	usr/share/glib-2.0/schemas/org.gnome.shell.extensions.screenshot-window-sizer.gschema.xml
 -rw-r--r--	root/root	usr/share/glib-2.0/schemas/org.gnome.shell.extensions.system-monitor.gschema.xml
 -rw-r--r--	root/root	usr/share/glib-2.0/schemas/org.gnome.shell.extensions.window-list.gschema.xml
+-rw-r--r--	root/root	usr/share/glib-2.0/schemas/org.gnome.shell.extensions.workspace-indicator.gschema.xml
 drwxr-xr-x	root/root	usr/share/gnome-shell/
 drwxr-xr-x	root/root	usr/share/gnome-shell/extensions/
 drwxr-xr-x	root/root	usr/share/gnome-shell/extensions/apps-menu@gnome-shell-extensions.gcampax.github.com/
@@ -31,6 +32,9 @@ drwxr-xr-x	root/root	usr/share/gnome-shell/extensions/screenshot-window-sizer@gn
 -rw-r--r--	root/root	usr/share/gnome-shell/extensions/screenshot-window-sizer@gnome-shell-extensions.gcampax.github.com/extension.js
 -rw-r--r--	root/root	usr/share/gnome-shell/extensions/screenshot-window-sizer@gnome-shell-extensions.gcampax.github.com/metadata.json
 -rw-r--r--	root/root	usr/share/gnome-shell/extensions/screenshot-window-sizer@gnome-shell-extensions.gcampax.github.com/stylesheet.css
+drwxr-xr-x	root/root	usr/share/gnome-shell/extensions/status-icons@gnome-shell-extensions.gcampax.github.com/
+-rw-r--r--	root/root	usr/share/gnome-shell/extensions/status-icons@gnome-shell-extensions.gcampax.github.com/extension.js
+-rw-r--r--	root/root	usr/share/gnome-shell/extensions/status-icons@gnome-shell-extensions.gcampax.github.com/metadata.json
 drwxr-xr-x	root/root	usr/share/gnome-shell/extensions/system-monitor@gnome-shell-extensions.gcampax.github.com/
 -rw-r--r--	root/root	usr/share/gnome-shell/extensions/system-monitor@gnome-shell-extensions.gcampax.github.com/extension.js
 drwxr-xr-x	root/root	usr/share/gnome-shell/extensions/system-monitor@gnome-shell-extensions.gcampax.github.com/icons/
@@ -52,6 +56,8 @@ drwxr-xr-x	root/root	usr/share/gnome-shell/extensions/window-list@gnome-shell-ex
 -rw-r--r--	root/root	usr/share/gnome-shell/extensions/window-list@gnome-shell-extensions.gcampax.github.com/prefs.js
 -rw-r--r--	root/root	usr/share/gnome-shell/extensions/window-list@gnome-shell-extensions.gcampax.github.com/stylesheet-dark.css
 -rw-r--r--	root/root	usr/share/gnome-shell/extensions/window-list@gnome-shell-extensions.gcampax.github.com/stylesheet-light.css
+-rw-r--r--	root/root	usr/share/gnome-shell/extensions/window-list@gnome-shell-extensions.gcampax.github.com/stylesheet-workspace-switcher-dark.css
+-rw-r--r--	root/root	usr/share/gnome-shell/extensions/window-list@gnome-shell-extensions.gcampax.github.com/stylesheet-workspace-switcher-light.css
 -rw-r--r--	root/root	usr/share/gnome-shell/extensions/window-list@gnome-shell-extensions.gcampax.github.com/workspaceIndicator.js
 drwxr-xr-x	root/root	usr/share/gnome-shell/extensions/windowsNavigator@gnome-shell-extensions.gcampax.github.com/
 -rw-r--r--	root/root	usr/share/gnome-shell/extensions/windowsNavigator@gnome-shell-extensions.gcampax.github.com/extension.js
@@ -61,4 +67,6 @@ drwxr-xr-x	root/root	usr/share/gnome-shell/extensions/workspace-indicator@gnome-
 -rw-r--r--	root/root	usr/share/gnome-shell/extensions/workspace-indicator@gnome-shell-extensions.gcampax.github.com/extension.js
 -rw-r--r--	root/root	usr/share/gnome-shell/extensions/workspace-indicator@gnome-shell-extensions.gcampax.github.com/metadata.json
 -rw-r--r--	root/root	usr/share/gnome-shell/extensions/workspace-indicator@gnome-shell-extensions.gcampax.github.com/prefs.js
--rw-r--r--	root/root	usr/share/gnome-shell/extensions/workspace-indicator@gnome-shell-extensions.gcampax.github.com/stylesheet.css
+-rw-r--r--	root/root	usr/share/gnome-shell/extensions/workspace-indicator@gnome-shell-extensions.gcampax.github.com/stylesheet-dark.css
+-rw-r--r--	root/root	usr/share/gnome-shell/extensions/workspace-indicator@gnome-shell-extensions.gcampax.github.com/stylesheet-light.css
+-rw-r--r--	root/root	usr/share/gnome-shell/extensions/workspace-indicator@gnome-shell-extensions.gcampax.github.com/workspaceIndicator.js

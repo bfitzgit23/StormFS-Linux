@@ -1,4 +1,4 @@
-# Depends on: dbus gcr3 linux-pam libxslt openssh gnupg valgrind 
+# Depends on: dbus gcr linux-pam libxslt openssh gnupg valgrind 
 
 name=gnome-keyring
 version=46.2

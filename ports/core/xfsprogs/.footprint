@@ -1,10 +1,5 @@
-drwxr-xr-x	root/root	lib/
-lrwxrwxrwx	root/root	lib/libhandle.so -> libhandle.so.1
-lrwxrwxrwx	root/root	lib/libhandle.so.1 -> libhandle.so.1.0.3
--rwxr-xr-x	root/root	lib/libhandle.so.1.0.3
 drwxr-xr-x	root/root	sbin/
 -rwxr-xr-x	root/root	sbin/fsck.xfs
--rwxr-xr-x	root/root	sbin/mkfs.xfs
 -rwxr-xr-x	root/root	sbin/xfs_repair
 drwxr-xr-x	root/root	usr/
 drwxr-xr-x	root/root	usr/include/
@@ -24,19 +19,11 @@ drwxr-xr-x	root/root	usr/include/xfs/
 drwxr-xr-x	root/root	usr/lib/
 -rw-r--r--	root/root	usr/lib/libhandle.a
 -rw-r--r--	root/root	usr/lib/libhandle.la
-drwxr-xr-x	root/root	usr/lib/systemd/
-drwxr-xr-x	root/root	usr/lib/systemd/system/
--rw-r--r--	root/root	usr/lib/systemd/system/xfs_scrub@.service
--rw-r--r--	root/root	usr/lib/systemd/system/xfs_scrub_all.service
--rw-r--r--	root/root	usr/lib/systemd/system/xfs_scrub_all.timer
--rw-r--r--	root/root	usr/lib/systemd/system/xfs_scrub_fail@.service
-drwxr-xr-x	root/root	usr/lib/udev/
-drwxr-xr-x	root/root	usr/lib/udev/rules.d/
--rw-r--r--	root/root	usr/lib/udev/rules.d/64-xfs.rules
-drwxr-xr-x	root/root	usr/lib/xfsprogs/
--rw-r--r--	root/root	usr/lib/xfsprogs/xfs_scrub_all.cron
--rwxr-xr-x	root/root	usr/lib/xfsprogs/xfs_scrub_fail
+lrwxrwxrwx	root/root	usr/lib/libhandle.so -> libhandle.so.1
+lrwxrwxrwx	root/root	usr/lib/libhandle.so.1 -> libhandle.so.1.0.3
+-rwxr-xr-x	root/root	usr/lib/libhandle.so.1.0.3
 drwxr-xr-x	root/root	usr/sbin/
+-rwxr-xr-x	root/root	usr/sbin/mkfs.xfs
 -rwxr-xr-x	root/root	usr/sbin/xfs_admin
 -rwxr-xr-x	root/root	usr/sbin/xfs_bmap
 -rwxr-xr-x	root/root	usr/sbin/xfs_copy
@@ -52,28 +39,20 @@ drwxr-xr-x	root/root	usr/sbin/
 -rwxr-xr-x	root/root	usr/sbin/xfs_metadump
 -rwxr-xr-x	root/root	usr/sbin/xfs_mkfile
 -rwxr-xr-x	root/root	usr/sbin/xfs_ncheck
+-rwxr-xr-x	root/root	usr/sbin/xfs_property
+-rwxr-xr-x	root/root	usr/sbin/xfs_protofile
 -rwxr-xr-x	root/root	usr/sbin/xfs_quota
 -rwxr-xr-x	root/root	usr/sbin/xfs_rtcp
 -rwxr-xr-x	root/root	usr/sbin/xfs_scrub
 -rwxr-xr-x	root/root	usr/sbin/xfs_scrub_all
 -rwxr-xr-x	root/root	usr/sbin/xfs_spaceman
 drwxr-xr-x	root/root	usr/share/
-drwxr-xr-x	root/root	usr/share/doc/
-drwxr-xr-x	root/root	usr/share/doc/xfsprogs-6.5.0/
--rw-r--r--	root/root	usr/share/doc/xfsprogs-6.5.0/CHANGES.gz
--rw-r--r--	root/root	usr/share/doc/xfsprogs-6.5.0/CREDITS
--rw-r--r--	root/root	usr/share/doc/xfsprogs-6.5.0/README
-drwxr-xr-x	root/root	usr/share/locale/
-drwxr-xr-x	root/root	usr/share/locale/de/
-drwxr-xr-x	root/root	usr/share/locale/de/LC_MESSAGES/
--rw-r--r--	root/root	usr/share/locale/de/LC_MESSAGES/xfsprogs.mo
-drwxr-xr-x	root/root	usr/share/locale/pl/
-drwxr-xr-x	root/root	usr/share/locale/pl/LC_MESSAGES/
--rw-r--r--	root/root	usr/share/locale/pl/LC_MESSAGES/xfsprogs.mo
 drwxr-xr-x	root/root	usr/share/man/
 drwxr-xr-x	root/root	usr/share/man/man2/
 -rw-r--r--	root/root	usr/share/man/man2/ioctl_xfs_ag_geometry.2.gz
 -rw-r--r--	root/root	usr/share/man/man2/ioctl_xfs_bulkstat.2.gz
+-rw-r--r--	root/root	usr/share/man/man2/ioctl_xfs_commit_range.2.gz
+-rw-r--r--	root/root	usr/share/man/man2/ioctl_xfs_exchange_range.2.gz
 -rw-r--r--	root/root	usr/share/man/man2/ioctl_xfs_fsbulkstat.2.gz
 -rw-r--r--	root/root	usr/share/man/man2/ioctl_xfs_fscounts.2.gz
 -rw-r--r--	root/root	usr/share/man/man2/ioctl_xfs_fsgeometry.2.gz
@@ -84,11 +63,15 @@ drwxr-xr-x	root/root	usr/share/man/man2/
 -rw-r--r--	root/root	usr/share/man/man2/ioctl_xfs_getbmap.2.gz
 -rw-r--r--	root/root	usr/share/man/man2/ioctl_xfs_getbmapa.2.gz
 -rw-r--r--	root/root	usr/share/man/man2/ioctl_xfs_getbmapx.2.gz
+-rw-r--r--	root/root	usr/share/man/man2/ioctl_xfs_getparents.2.gz
 -rw-r--r--	root/root	usr/share/man/man2/ioctl_xfs_getresblks.2.gz
 -rw-r--r--	root/root	usr/share/man/man2/ioctl_xfs_goingdown.2.gz
 -rw-r--r--	root/root	usr/share/man/man2/ioctl_xfs_inumbers.2.gz
+-rw-r--r--	root/root	usr/share/man/man2/ioctl_xfs_rtgroup_geometry.2.gz
 -rw-r--r--	root/root	usr/share/man/man2/ioctl_xfs_scrub_metadata.2.gz
+-rw-r--r--	root/root	usr/share/man/man2/ioctl_xfs_scrubv_metadata.2.gz
 -rw-r--r--	root/root	usr/share/man/man2/ioctl_xfs_setresblks.2.gz
+-rw-r--r--	root/root	usr/share/man/man2/ioctl_xfs_start_commit.2.gz
 drwxr-xr-x	root/root	usr/share/man/man3/
 lrwxrwxrwx	root/root	usr/share/man/man3/attr_list_by_handle.3.gz -> path_to_handle.3.gz
 lrwxrwxrwx	root/root	usr/share/man/man3/attr_multi_by_handle.3.gz -> path_to_handle.3.gz
@@ -125,6 +108,8 @@ drwxr-xr-x	root/root	usr/share/man/man8/
 -rw-r--r--	root/root	usr/share/man/man8/xfs_metadump.8.gz
 -rw-r--r--	root/root	usr/share/man/man8/xfs_mkfile.8.gz
 -rw-r--r--	root/root	usr/share/man/man8/xfs_ncheck.8.gz
+-rw-r--r--	root/root	usr/share/man/man8/xfs_property.8.gz
+-rw-r--r--	root/root	usr/share/man/man8/xfs_protofile.8.gz
 -rw-r--r--	root/root	usr/share/man/man8/xfs_quota.8.gz
 -rw-r--r--	root/root	usr/share/man/man8/xfs_repair.8.gz
 -rw-r--r--	root/root	usr/share/man/man8/xfs_rtcp.8.gz
@@ -139,4 +124,9 @@ drwxr-xr-x	root/root	usr/share/xfsprogs/mkfs/
 -rw-r--r--	root/root	usr/share/xfsprogs/mkfs/lts_5.15.conf
 -rw-r--r--	root/root	usr/share/xfsprogs/mkfs/lts_5.4.conf
 -rw-r--r--	root/root	usr/share/xfsprogs/mkfs/lts_6.1.conf
+-rw-r--r--	root/root	usr/share/xfsprogs/mkfs/lts_6.12.conf
 -rw-r--r--	root/root	usr/share/xfsprogs/mkfs/lts_6.6.conf
+-rw-r--r--	root/root	usr/share/xfsprogs/xfs_scrub_all.cron
+drwxr-xr-x	root/root	var/
+drwxr-xr-x	root/root	var/lib/
+drwxr-xr-x	root/root	var/lib/xfsprogs/

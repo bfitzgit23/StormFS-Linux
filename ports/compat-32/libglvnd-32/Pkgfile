@@ -13,7 +13,6 @@ build() {
 	./autogen.sh
 	./configure --prefix=/usr \
 		--disable-headers \
-		--build=i686-unknown-linux-gnu \
 		--libdir=/usr/lib32
 	make
 	make DESTDIR=$PKG install

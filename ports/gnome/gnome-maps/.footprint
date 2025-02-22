@@ -43,6 +43,7 @@ drwxr-xr-x	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/
 -rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/build-alt-symbolic.svg
 -rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/building-symbolic.svg
 -rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/bus-symbolic.svg
+-rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/cablecar-symbolic.svg
 -rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/cafe-symbolic.svg
 -rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/cat-symbolic.svg
 -rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/circle-small-symbolic.svg
@@ -62,6 +63,7 @@ drwxr-xr-x	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/
 -rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/exit-symbolic.svg
 -rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/explore-symbolic copy.svg
 -rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/explore-symbolic.svg
+-rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/explore2-large-symbolic.svg
 -rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/eye-open-negative-filled-symbolic.svg
 -rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/fast-food-symbolic.svg
 -rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/ferry-symbolic.svg
@@ -80,6 +82,7 @@ drwxr-xr-x	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/
 -rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/graveyard-symbolic.svg
 -rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/headphones-symbolic.svg
 -rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/hockey-symbolic.svg
+-rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/horse-symbolic.svg
 -rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/hospital-sign-symbolic.svg
 -rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/hospital-symbolic.svg
 -rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/icecream-cone-symbolic.svg
@@ -94,6 +97,7 @@ drwxr-xr-x	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/
 -rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/maps-point-start-symbolic.svg
 -rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/maps-point-start.svg
 -rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/meeting-symbolic.svg
+-rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/monorail-symbolic.svg
 -rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/mountain-symbolic.svg
 -rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/museum-symbolic.svg
 -rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/music-note-symbolic.svg
@@ -110,27 +114,14 @@ drwxr-xr-x	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/
 -rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/phone-oldschool-symbolic.svg
 -rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/phonelink2-symbolic.svg
 -rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/photo-camera-symbolic.svg
+-rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/playground3-symbolic.svg
 -rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/police-badge2-symbolic.svg
 -rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/post-box-symbolic.svg
 -rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/pub-symbolic.svg
 -rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/recycling-bin-symbolic.svg
 -rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/restaurant-symbolic.svg
--rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/route-bike-symbolic.svg
 -rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/route-button-symbolic.svg
--rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/route-car-symbolic.svg
--rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/route-pedestrian-symbolic.svg
 -rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/route-reverse-symbolic.svg
--rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/route-transit-airplane-symbolic.svg
--rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/route-transit-bus-symbolic.svg
--rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/route-transit-cablecar-symbolic.svg
--rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/route-transit-ferry-symbolic.svg
--rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/route-transit-funicular-symbolic.svg
--rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/route-transit-gondolalift-symbolic.svg
--rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/route-transit-subway-symbolic.svg
--rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/route-transit-symbolic.svg
--rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/route-transit-tourist-train-symbolic.svg
--rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/route-transit-train-symbolic.svg
--rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/route-transit-tram-symbolic.svg
 -rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/salami-symbolic.svg
 -rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/school-symbolic.svg
 -rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/sentiment-satisfied-symbolic.svg
@@ -138,7 +129,10 @@ drwxr-xr-x	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/
 -rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/shop-symbolic.svg
 -rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/shopping-cart-symbolic.svg
 -rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/smartphone-symbolic.svg
+-rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/steam-train-symbolic.svg
 -rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/steps-symbolic.svg
+-rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/subway-symbolic.svg
+-rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/taxi-symbolic.svg
 -rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/tennis-symbolic.svg
 -rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/theater-symbolic.svg
 -rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/ticket-special-symbolic.svg
@@ -149,8 +143,10 @@ drwxr-xr-x	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/
 -rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/train-symbolic.svg
 -rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/tram-symbolic.svg
 -rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/tree-symbolic.svg
+-rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/trolley-bus-symbolic.svg
 -rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/user-trash-symbolic.svg
 -rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/video-camera-symbolic.svg
+-rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/walking-symbolic.svg
 -rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/weight2-symbolic.svg
 -rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/wheelchair-limited-symbolic.svg
 -rw-r--r--	root/root	usr/share/gnome-maps/icons/hicolor/16x16/apps/wheelchair-symbolic.svg
