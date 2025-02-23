@@ -2301,7 +2301,6 @@ drwxr-xr-x	root/root	usr/share/man/man5/
 -rw-r--r--	root/root	usr/share/man/man5/nscd.conf.5.gz
 -rw-r--r--	root/root	usr/share/man/man5/nss.5.gz
 -rw-r--r--	root/root	usr/share/man/man5/nsswitch.conf.5.gz
--rw-r--r--	root/root	usr/share/man/man5/passwd.5.gz
 -rw-r--r--	root/root	usr/share/man/man5/proc.5.gz
 -rw-r--r--	root/root	usr/share/man/man5/proc_apm.5.gz
 -rw-r--r--	root/root	usr/share/man/man5/proc_buddyinfo.5.gz
@@ -2432,6 +2431,7 @@ drwxr-xr-x	root/root	usr/share/man/man5/
 -rw-r--r--	root/root	usr/share/man/man5/termcap.5.gz
 -rw-r--r--	root/root	usr/share/man/man5/tmpfs.5.gz
 -rw-r--r--	root/root	usr/share/man/man5/ttytype.5.gz
+-rw-r--r--	root/root	usr/share/man/man5/tzfile.5.gz
 -rw-r--r--	root/root	usr/share/man/man5/utmp.5.gz
 -rw-r--r--	root/root	usr/share/man/man5/utmpx.5.gz
 -rw-r--r--	root/root	usr/share/man/man5/wtmp.5.gz
@@ -2551,6 +2551,7 @@ drwxr-xr-x	root/root	usr/share/man/man7/
 -rw-r--r--	root/root	usr/share/man/man7/operator.7.gz
 -rw-r--r--	root/root	usr/share/man/man7/packet.7.gz
 -rw-r--r--	root/root	usr/share/man/man7/path_resolution.7.gz
+-rw-r--r--	root/root	usr/share/man/man7/pathname.7.gz
 -rw-r--r--	root/root	usr/share/man/man7/persistent-keyring.7.gz
 -rw-r--r--	root/root	usr/share/man/man7/pid_namespaces.7.gz
 -rw-r--r--	root/root	usr/share/man/man7/pipe.7.gz
@@ -2616,3 +2617,6 @@ drwxr-xr-x	root/root	usr/share/man/man8/
 -rw-r--r--	root/root	usr/share/man/man8/ldconfig.8.gz
 -rw-r--r--	root/root	usr/share/man/man8/nscd.8.gz
 -rw-r--r--	root/root	usr/share/man/man8/sln.8.gz
+-rw-r--r--	root/root	usr/share/man/man8/tzselect.8.gz
+-rw-r--r--	root/root	usr/share/man/man8/zdump.8.gz
+-rw-r--r--	root/root	usr/share/man/man8/zic.8.gz

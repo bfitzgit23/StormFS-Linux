@@ -16,10 +16,10 @@ f:08bc173b8a2fd38b81e85e725390fba0:gcc-fortran/.md5sum
 f:a97c1ecfeff0168d4033ce9cadd5c37d:gcc-fortran/.footprint
 f:61a057afa31006764b957a483ba90b9d:gcc-fortran/gcc-4.7.3-multilib-dirs.patch
 f:34d0c9d31f7483e773f587159b44df5b:gcc-fortran/Pkgfile
-f:d86fe936fffd4004f44cbcfa542e309f:cargo-c/.md5sum
+f:61466bc1a1b0322148e4c244d3724b5b:cargo-c/.md5sum
 f:4331afedd2a19959ea496110c08e8c59:cargo-c/.footprint
 f:d1b9baf0ac35e1db94caec61218184a2:cargo-c/.signature
-f:9fa2cc73884606fc2363acff0f942ed5:cargo-c/Pkgfile
+f:45a97b49219b54524511f6820fb9c697:cargo-c/Pkgfile
 f:48242e2e03c53e45fd5def9ad8614931:libdbusmenu-gtk2/0003_port-tools-dbusmenu-bench-to-py3.patch
 f:7b482c0ad8f7f0935c078a1589184854:libdbusmenu-gtk2/0004_prevent-test-json-from-failing.patch
 f:4ef7a9590c4a1051ee19295c57edee00:libdbusmenu-gtk2/0001_no-deprecated-gnome-common-macros.patch

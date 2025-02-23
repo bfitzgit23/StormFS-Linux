@@ -2,13 +2,13 @@ drwxr-xr-x	root/root	usr/
 drwxr-xr-x	root/root	usr/lib/
 drwxr-xr-x	root/root	usr/lib/python3.13/
 drwxr-xr-x	root/root	usr/lib/python3.13/site-packages/
-drwxr-xr-x	root/root	usr/lib/python3.13/site-packages/setuptools_scm-8.0.4.dist-info/
--rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools_scm-8.0.4.dist-info/LICENSE
--rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools_scm-8.0.4.dist-info/METADATA
--rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools_scm-8.0.4.dist-info/RECORD
--rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools_scm-8.0.4.dist-info/WHEEL
--rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools_scm-8.0.4.dist-info/entry_points.txt
--rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools_scm-8.0.4.dist-info/top_level.txt
+drwxr-xr-x	root/root	usr/lib/python3.13/site-packages/setuptools_scm-8.2.0.dist-info/
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools_scm-8.2.0.dist-info/LICENSE
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools_scm-8.2.0.dist-info/METADATA
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools_scm-8.2.0.dist-info/RECORD
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools_scm-8.2.0.dist-info/WHEEL
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools_scm-8.2.0.dist-info/entry_points.txt
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools_scm-8.2.0.dist-info/top_level.txt
 drwxr-xr-x	root/root	usr/lib/python3.13/site-packages/setuptools_scm/
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools_scm/.git_archival.txt
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools_scm/__init__.py
@@ -66,8 +66,11 @@ drwxr-xr-x	root/root	usr/lib/python3.13/site-packages/setuptools_scm/_file_finde
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools_scm/_file_finders/__pycache__/git.cpython-313.pyc
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools_scm/_file_finders/__pycache__/hg.cpython-313.opt-1.pyc
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools_scm/_file_finders/__pycache__/hg.cpython-313.pyc
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools_scm/_file_finders/__pycache__/pathtools.cpython-313.opt-1.pyc
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools_scm/_file_finders/__pycache__/pathtools.cpython-313.pyc
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools_scm/_file_finders/git.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools_scm/_file_finders/hg.py
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools_scm/_file_finders/pathtools.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools_scm/_get_version_impl.py
 drwxr-xr-x	root/root	usr/lib/python3.13/site-packages/setuptools_scm/_integration/
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools_scm/_integration/__init__.py (EMPTY)

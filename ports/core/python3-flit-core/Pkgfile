@@ -3,7 +3,7 @@
 # Maintainer: Tim Biermann, tbier at posteo dot de
 # Depends on:
 name=python3-flit-core
-version=3.10.1
+version=3.11.0
 release=1
 source=(https://github.com/takluyver/flit/archive/$version/flit-$version.tar.gz)
 

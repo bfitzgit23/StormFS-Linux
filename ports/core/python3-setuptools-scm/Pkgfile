@@ -1,9 +1,9 @@
 # Depends on: python3-packaging python3-typing_extensions
 
 name=python3-setuptools-scm
-version=8.0.4
+version=8.2.0
 release=1
-source=(https://files.pythonhosted.org/packages/source/s/setuptools_scm/setuptools-scm-${version}.tar.gz)
+source=(https://pypi.io/packages/source/s/setuptools_scm/setuptools_scm-$version.tar.gz)
 pkg_build() {
 python3 -m build --wheel --skip-dependency-check --no-isolation
 python3 -m installer --destdir="$PKG" dist/*.whl

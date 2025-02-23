@@ -5,7 +5,7 @@
 # Optional: texlive install-tl-unx
 
 name=libassuan
-version=3.0.1
+version=3.0.2
 release=1
 source=(https://www.gnupg.org/ftp/gcrypt/$name/$name-$version.tar.bz2)
 

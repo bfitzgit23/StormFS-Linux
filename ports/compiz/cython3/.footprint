@@ -6,13 +6,13 @@ drwxr-xr-x	root/root	usr/bin/
 drwxr-xr-x	root/root	usr/lib/
 drwxr-xr-x	root/root	usr/lib/python3.13/
 drwxr-xr-x	root/root	usr/lib/python3.13/site-packages/
-drwxr-xr-x	root/root	usr/lib/python3.13/site-packages/Cython-3.0.7-py3.13.egg-info/
--rw-r--r--	root/root	usr/lib/python3.13/site-packages/Cython-3.0.7-py3.13.egg-info/PKG-INFO
--rw-r--r--	root/root	usr/lib/python3.13/site-packages/Cython-3.0.7-py3.13.egg-info/SOURCES.txt
--rw-r--r--	root/root	usr/lib/python3.13/site-packages/Cython-3.0.7-py3.13.egg-info/dependency_links.txt
--rw-r--r--	root/root	usr/lib/python3.13/site-packages/Cython-3.0.7-py3.13.egg-info/entry_points.txt
--rw-r--r--	root/root	usr/lib/python3.13/site-packages/Cython-3.0.7-py3.13.egg-info/not-zip-safe
--rw-r--r--	root/root	usr/lib/python3.13/site-packages/Cython-3.0.7-py3.13.egg-info/top_level.txt
+drwxr-xr-x	root/root	usr/lib/python3.13/site-packages/Cython-3.0.12-py3.13.egg-info/
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/Cython-3.0.12-py3.13.egg-info/PKG-INFO
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/Cython-3.0.12-py3.13.egg-info/SOURCES.txt
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/Cython-3.0.12-py3.13.egg-info/dependency_links.txt
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/Cython-3.0.12-py3.13.egg-info/entry_points.txt
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/Cython-3.0.12-py3.13.egg-info/not-zip-safe
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/Cython-3.0.12-py3.13.egg-info/top_level.txt
 drwxr-xr-x	root/root	usr/lib/python3.13/site-packages/Cython/
 drwxr-xr-x	root/root	usr/lib/python3.13/site-packages/Cython/Build/
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/Cython/Build/BuildExecutable.py
@@ -503,6 +503,7 @@ drwxr-xr-x	root/root	usr/lib/python3.13/site-packages/Cython/Tests/
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/Cython/Tests/TestCodeWriter.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/Cython/Tests/TestCythonUtils.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/Cython/Tests/TestJediTyper.py
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/Cython/Tests/TestShadow.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/Cython/Tests/TestStringIOTree.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/Cython/Tests/TestTestUtils.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/Cython/Tests/__init__.py
@@ -513,6 +514,8 @@ drwxr-xr-x	root/root	usr/lib/python3.13/site-packages/Cython/Tests/__pycache__/
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/Cython/Tests/__pycache__/TestCythonUtils.cpython-313.pyc
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/Cython/Tests/__pycache__/TestJediTyper.cpython-313.opt-1.pyc
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/Cython/Tests/__pycache__/TestJediTyper.cpython-313.pyc
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/Cython/Tests/__pycache__/TestShadow.cpython-313.opt-1.pyc
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/Cython/Tests/__pycache__/TestShadow.cpython-313.pyc
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/Cython/Tests/__pycache__/TestStringIOTree.cpython-313.opt-1.pyc
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/Cython/Tests/__pycache__/TestStringIOTree.cpython-313.pyc
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/Cython/Tests/__pycache__/TestTestUtils.cpython-313.opt-1.pyc
