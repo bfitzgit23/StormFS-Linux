@@ -4,7 +4,7 @@
 # Depends on: orc
 
 name=orc-32
-version=0.4.40
+version=0.4.41
 release=1
 source=(https://gstreamer.freedesktop.org/src/orc/orc-$version.tar.xz)
 

@@ -4,7 +4,7 @@
 # Depends on: zlib-32 xz-32 zstd
 
 name=zstd-32
-version=1.5.6
+version=1.5.7
 release=1
 source=(https://github.com/facebook/zstd/archive/v$version/zstd-v$version.tar.gz)
 

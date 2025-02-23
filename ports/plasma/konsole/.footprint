@@ -7,8 +7,8 @@ drwxr-xr-x	root/root	opt/kf6/lib/
 drwxr-xr-x	root/root	opt/kf6/lib/kconf_update_bin/
 -rwxr-xr-x	root/root	opt/kf6/lib/kconf_update_bin/konsole_globalaccel
 -rwxr-xr-x	root/root	opt/kf6/lib/kconf_update_bin/konsole_show_menubar
--rwxr-xr-x	root/root	opt/kf6/lib/libkonsoleapp.so.24.08.3
--rwxr-xr-x	root/root	opt/kf6/lib/libkonsoleprivate.so.24.08.3
+-rwxr-xr-x	root/root	opt/kf6/lib/libkonsoleapp.so.24.12.2
+-rwxr-xr-x	root/root	opt/kf6/lib/libkonsoleprivate.so.24.12.2
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/kf6/
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/kf6/parts/

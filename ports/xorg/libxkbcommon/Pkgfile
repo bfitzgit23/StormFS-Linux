@@ -5,15 +5,15 @@
 # Optional: libxcb wayland wayland-protocols doxygen
 
 name=libxkbcommon
-version=1.7.0
+version=1.8.0
 release=3
-source=(https://xkbcommon.org/download/$name-$version.tar.xz)
+source=(https://github.com/xkbcommon/libxkbcommon/archive/xkbcommon-$version.tar.gz)
 
-build() {
+pkg_build() {
 	prt-get isinst wayland-protocols || PKGMK_XKBCOMMON+=' -D enable-wayland=false'
 	prt-get isinst xkeyboard-config || PKGMK_XKBCOMMON+=' -D enable-x11=false'
 
-	cd $name-$version
+
 	mkdir build &&
 cd    build &&
 
