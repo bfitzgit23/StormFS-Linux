@@ -5,7 +5,7 @@
 # Optional: libevent  nasm curl doxygen ffmpeg liboauth pciutils valgrind wget wireless-tools yasm libproxy
 
 name=firefox
-version=135.0
+version=136.0
 release=1
 source=(https://ftp.mozilla.org/pub/$name/releases/$version/source/$name-$version.source.tar.xz
   firefox.desktop

@@ -4,7 +4,7 @@
 # Depends on: libxcvt pixman wayland-protocols xorg-apps xorg-fonts libepoxy libtirpc
 
 name=xwayland
-version=24.1.5
+version=24.1.6
 release=1
 source=(https://www.x.org/pub/individual/xserver/$name-$version.tar.xz)
 
@@ -19,5 +19,6 @@ pkg_build() {
             ..                            &&
 	ninja
 	DESTDIR=$PKG ninja install
-	rm -rf $PKG/usr/share/man/man1/Xserver.1.gz
+	rm -r $PKG/usr/lib/xorg/protocol.txt
+	rm -r $PKG/usr/share/man/man1/Xserver.1
 }

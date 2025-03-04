@@ -316,6 +316,9 @@ drwxr-xr-x	root/root	usr/lib/python3.13/__pycache__/
 -rw-r--r--	root/root	usr/lib/python3.13/__pycache__/_android_support.cpython-313.opt-1.pyc
 -rw-r--r--	root/root	usr/lib/python3.13/__pycache__/_android_support.cpython-313.opt-2.pyc
 -rw-r--r--	root/root	usr/lib/python3.13/__pycache__/_android_support.cpython-313.pyc
+-rw-r--r--	root/root	usr/lib/python3.13/__pycache__/_apple_support.cpython-313.opt-1.pyc
+-rw-r--r--	root/root	usr/lib/python3.13/__pycache__/_apple_support.cpython-313.opt-2.pyc
+-rw-r--r--	root/root	usr/lib/python3.13/__pycache__/_apple_support.cpython-313.pyc
 -rw-r--r--	root/root	usr/lib/python3.13/__pycache__/_collections_abc.cpython-313.opt-1.pyc
 -rw-r--r--	root/root	usr/lib/python3.13/__pycache__/_collections_abc.cpython-313.opt-2.pyc
 -rw-r--r--	root/root	usr/lib/python3.13/__pycache__/_collections_abc.cpython-313.pyc
@@ -762,6 +765,7 @@ drwxr-xr-x	root/root	usr/lib/python3.13/__pycache__/
 -rw-r--r--	root/root	usr/lib/python3.13/__pycache__/zipimport.cpython-313.pyc
 -rw-r--r--	root/root	usr/lib/python3.13/_aix_support.py
 -rw-r--r--	root/root	usr/lib/python3.13/_android_support.py
+-rw-r--r--	root/root	usr/lib/python3.13/_apple_support.py
 -rw-r--r--	root/root	usr/lib/python3.13/_collections_abc.py
 -rw-r--r--	root/root	usr/lib/python3.13/_colorize.py
 -rw-r--r--	root/root	usr/lib/python3.13/_compat_pickle.py

@@ -493,9 +493,9 @@ f:91986e943e6a565c587c52891edcc296:xcb-util-wm/Pkgfile
 f:b8223a9668acbafdb7b6bd285aeaa2bf:smproxy/.md5sum
 f:b14f4662ca9bd59632cf0439530293b4:smproxy/.footprint
 f:5e8388a42c4303828583ba7e4e0f2684:smproxy/Pkgfile
-f:cd053b2a837722d3261df84d293a92e2:xwayland/.md5sum
-f:df9770d2485502f35b7472f0fffb279b:xwayland/.footprint
-f:d948dd4dd0a6de60206819f073df737e:xwayland/Pkgfile
+f:8eb1af4903d391a8fa841a2ca50f5ab9:xwayland/.md5sum
+f:3b0e5f68b6d91d8c9eac5aa79ee21f62:xwayland/.footprint
+f:c2f2e8fcd4ae1a8bc98a6a04509b7511:xwayland/Pkgfile
 f:0043b939534c4569709902090fcf5bc8:xkbutils/.md5sum
 f:036263a9045abb5c8f44abf796e8c134:xkbutils/.footprint
 f:014be9354e01f3ddd63924e0ab63c987:xkbutils/Pkgfile
@@ -513,9 +513,9 @@ f:dfb815b55d4753417474bcc4b683842f:xf86-input-libinput/.md5sum
 f:b6f74bc97ccaeb77eb05c57b284555a1:xf86-input-libinput/.footprint
 f:98ba59db450fc2e489ccc153d8004817:xf86-input-libinput/Pkgfile
 f:6e00fb2dc3b49d6a49468f8e0352d07b:xorg-server/xorg-server-21.1.13-tearfree_backport-2.patch
-f:69caf10fde11c57c93be94d3bdf75785:xorg-server/.md5sum
+f:9f3c565b8b192ff1e57f97dabd5621c4:xorg-server/.md5sum
 f:ed000eae89d4a75785e15a87c9421a26:xorg-server/.footprint
-f:e4a2615a889224af8cfb7e4f383d5ae7:xorg-server/Pkgfile
+f:c882fb08cf909e6a8701feb34ebdfcc2:xorg-server/Pkgfile
 f:d41d8cd98f00b204e9800998ecf8427e:xorg-driver/.md5sum
 f:28dc48506c44f18fd7c4c249cd7da1c2:xorg-driver/.footprint
 f:1c4f61963fb01f271d7ca74f78ae95ba:xorg-driver/Pkgfile

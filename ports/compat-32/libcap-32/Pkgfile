@@ -4,7 +4,7 @@
 # Depends on: attr-32
 
 name=libcap-32
-version=2.73
+version=2.74
 release=1
 source=(https://www.kernel.org/pub/linux/libs/security/linux-privs/libcap2/${name%-*}-$version.tar.xz)
 
@@ -17,7 +17,7 @@ build() {
 	mkdir -p $PKG/usr/lib32/
 cp -Rv DESTDIR/usr/lib32/* $PKG/usr/lib32
 sed -e "s|^libdir=.*|libdir=/usr/lib32|" -i $PKG/usr/lib32/pkgconfig/lib{cap,psx}.pc
-chmod -v 755 $PKG/usr/lib32/libcap.so.2.73
+chmod -v 755 $PKG/usr/lib32/libcap.so.2.74
 rm -rf DESTDIR
 
 	rm -rf $PKG/usr/include
