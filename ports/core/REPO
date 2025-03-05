@@ -620,10 +620,10 @@ f:ccdf7266150cc737febf798f31d2f9ce:dialog/.footprint
 f:29688cc71453aaf7e9f9d376e230d32e:dialog/Pkgfile
 f:b5bee6aa847bfdcf84ef31229dba32a9:pkgconf/i686-pc-linux-gnu.personality
 f:6eff4500d0f759d9aa271fb6b294ca9d:pkgconf/.md5sum
-f:c6ae47fcfb985dca02037258b0b08e96:pkgconf/.footprint
+f:61035b34643c851ea263673282b9c0a3:pkgconf/.footprint
 f:c6d689e4e8bc7b2b3e13a911bab36e27:pkgconf/x86_64-pc-linux-gnu.personality
 f:6fec70b14f238ad94caf5dac367ee427:pkgconf/README
-f:fcb3776729d5101d2b1978ef36da2f8a:pkgconf/Pkgfile
+f:dec95dc556b50b08bde8f7c17d52a5c8:pkgconf/Pkgfile
 f:b48f69fceb50584ec17b005888d31565:mpc/.md5sum
 f:aa43d392b211d1db5ed5a9e6523fde7a:mpc/Pkgfile
 f:a2fb90879c66b0f3092da5dc754067bf:expat/.md5sum

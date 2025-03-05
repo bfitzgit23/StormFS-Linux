@@ -1,5 +1,6 @@
 drwxr-xr-x	root/root	usr/
 drwxr-xr-x	root/root	usr/bin/
+-rwxr-xr-x	root/root	usr/bin/bomtool
 lrwxrwxrwx	root/root	usr/bin/i686-pc-linux-gnu-pkg-config -> pkgconf
 lrwxrwxrwx	root/root	usr/bin/pkg-config -> pkgconf
 -rwxr-xr-x	root/root	usr/bin/pkgconf
@@ -13,7 +14,8 @@ drwxr-xr-x	root/root	usr/include/pkgconf/libpkgconf/
 -rw-r--r--	root/root	usr/include/pkgconf/libpkgconf/libpkgconf.h
 -rw-r--r--	root/root	usr/include/pkgconf/libpkgconf/stdinc.h
 drwxr-xr-x	root/root	usr/lib/
-lrwxrwxrwx	root/root	usr/lib/libpkgconf.so -> libpkgconf.so.5
+-rwxr-xr-x	root/root	usr/lib/libpkgconf.la
+lrwxrwxrwx	root/root	usr/lib/libpkgconf.so -> libpkgconf.so.5.0.0
 lrwxrwxrwx	root/root	usr/lib/libpkgconf.so.5 -> libpkgconf.so.5.0.0
 -rwxr-xr-x	root/root	usr/lib/libpkgconf.so.5.0.0
 drwxr-xr-x	root/root	usr/lib/pkgconfig/

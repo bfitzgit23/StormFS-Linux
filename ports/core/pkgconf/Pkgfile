@@ -9,19 +9,16 @@ source=(https://distfiles.ariadne.space/pkgconf/pkgconf-$version.tar.xz
   i686-pc-linux-gnu.personality x86_64-pc-linux-gnu.personality)
 
 build() {
-	meson setup build $name-$version \
-		--prefix=/usr \
-		--buildtype=plain \
-		--wrap-mode=nodownload \
-		-D b_lto=true \
-		-D b_pie=true \
-		-D tests=disabled
-	meson compile -C build -j ${JOBS:-1}
-	DESTDIR=$PKG meson install -C build
-
+	cd $name-$version
+	./configure --prefix=/usr              \
+            --disable-static           \
+            --docdir=/usr/share/doc/$name-$version
+            make
+	DESTDIR=$PKG make install
+	mkdir -p $PKG/usr/share/pkgconfig/
 	install -Dt $PKG/usr/share/pkgconfig/personality.d -m644 \
-		i686-pc-linux-gnu.personality \
-		x86_64-pc-linux-gnu.personality
+		$SRC/i686-pc-linux-gnu.personality \
+		$SRC/x86_64-pc-linux-gnu.personality
 	ln -s pkgconf $PKG/usr/bin/i686-pc-linux-gnu-pkg-config
 	ln -s pkgconf $PKG/usr/bin/x86_64-pc-linux-gnu-pkg-config
 	ln -s pkgconf $PKG/usr/bin/pkg-config
