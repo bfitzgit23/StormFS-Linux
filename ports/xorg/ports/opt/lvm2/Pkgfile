@@ -1,0 +1,20 @@
+# Description: The LVM2 package is a set of tools that manage logical partitions. It allows spanning of file systems across multiple physical disks and disk partitions and provides for dynamic growing or shrinking of logical partitions, mirroring and low storage footprint snapshots.
+# URL:          https://sourceware.org/
+# Maintainer:  B.r.i.a.n M.a.d.o.n.n.a b.m.a.d.o.n.n.a.s.t.e.r @ g.m.a.i.l.c.o.m
+# Depends on:  libaio mdadm
+# Optional:    valgrind which xfsprogs reiserfsprogs thin-provisioning-tools vdo
+
+name=lvm2
+version=2.03.28
+release=1
+source=(https://sourceware.org/ftp/$name/LVM2.$version.tgz)
+build_opt="--prefix=/usr
+            --enable-cmdlib 
+            --enable-pkgconfig
+            --enable-systemd
+            --enable-dmeventd
+            --enable-udev_sync"
+post_build() {
+	make DESTDIR=$PKG install
+	make DESTDIR=$PKG install_systemd_units
+}

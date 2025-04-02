@@ -1,0 +1,29 @@
+# Description: Vulkan loader, 32bit
+# URL: https://www.khronos.org/vulkan/
+# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Depends on: vulkan-loader libXrandr-32
+# Optional: wayland-32
+
+name=vulkan-loader-32
+version=1.4.304
+release=1
+source=(https://github.com/KhronosGroup/Vulkan-Loader/archive/v${version}/Vulkan-Loader-${version}.tar.gz)
+
+
+build() {
+	prt-get isinst wayland-32 || PKGMK_VULKAN_LOADER+=' -D BUILD_WSI_WAYLAND_SUPPORT=OFF'
+
+	export ASFLAGS='--32'
+
+	cmake -S Vulkan-Loader-$version -B build -G Ninja $PKGMK_VULKAN_LOADER \
+		-D CMAKE_INSTALL_PREFIX=/usr \
+		-D CMAKE_INSTALL_LIBDIR=lib32 \
+		-D CMAKE_BUILD_TYPE=Release \
+		-D CMAKE_C_FLAGS_RELEASE="${CFLAGS}" \
+		-D CMAKE_CXX_FLAGS_RELEASE="${CXXFLAGS}" \
+		-D CMAKE_SKIP_RPATH=ON \
+		-D BUILD_TESTS=OFF
+
+	cmake --build build
+	DESTDIR=$PKG cmake --build build --target install
+}

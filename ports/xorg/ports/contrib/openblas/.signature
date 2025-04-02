@@ -1,0 +1,5 @@
+untrusted comment: verify with /etc/ports/contrib.pub
+RWSagIOpLGJF3+h/A0Eus4MpqwHOEdWb0AdpBwFtvQPJcDmg0KBi/6415D40l2zltJ24kypvC2I28dym/R1MLg8xPExo6DTwxQU=
+SHA256 (Pkgfile) = ee668a54c67c52c68f44df8e6bde18f9b8278db95f33534983f85f08658c28e7
+SHA256 (.footprint) = 8eaf30a01b1207deea6361b41dc88692d677f436d6ceae41ec672d41856c434e
+SHA256 (OpenBLAS-0.3.28.tar.gz) = f1003466ad074e9b0c8d421a204121100b0751c96fc6fcf3d1456bd12f8a00a1

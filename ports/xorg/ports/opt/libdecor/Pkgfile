@@ -1,0 +1,6 @@
+# Depends on: wayland pango dbus
+
+name=libdecor
+version=0.2.2
+release=1
+source=(https://gitlab.freedesktop.org/$name/$name/-/archive/$version/$name-$version.tar.bz2)

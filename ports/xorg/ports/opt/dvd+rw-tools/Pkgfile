@@ -1,0 +1,21 @@
+# Description: The dvd+rw-tools package contains several utilities to master the DVD media, both +RW/+R and -R[W]. The principle tool is growisofs which provides a way to both lay down and grow an ISO9660 file system on (as well as to burn an arbitrary pre-mastered image to) all supported DVD media. This is useful for creating a new DVD or adding to an existing image on a partially burned DVD.
+# URL:         http://fy.chalmers.se/
+# Maintainer:  B.r.i.a.n M.a.d.o.n.n.a b.m.a.d.o.n.n.a.s.t.e.r @ g.m.a.i.l.c.o.m
+# Depends on:  cdrtools
+
+name=dvd+rw-tools
+version=7.1
+release=1
+source=(http://fy.chalmers.se/~appro/linux/DVD+RW/tools/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+sed -i '/stat.h/a #include <sys/sysmacros.h>' growisofs.c &&
+sed -i '/stdlib/a #include <limits.h>' transport.hxx &&
+make all rpl8 btcflash
+	
+	make DESTDIR=$PKG prefix=$PKG/usr install &&
+install -v -m644 -D index.html \
+    $PKG/usr/share/doc/$name-$version/index.html
+rm -rf $PKG/usr/bin/btcflash
+}

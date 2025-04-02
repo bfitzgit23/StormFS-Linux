@@ -1,0 +1,19 @@
+# Description: A library for CD-ROM and CD image access.
+# URL: http://www.gnu.org/software/libcdio/
+# Maintainer: John McQuah, jmcquah at disroot dot org
+# Depends on: ncurses
+# Optional: libcddb
+
+name=libcdio
+version=2.1.0
+release=1
+source=(https://ftp.gnu.org/gnu/$name/$name-$version.tar.bz2)
+
+build() {
+	cd $name-$version
+
+	./configure --prefix=/usr --disable-static &&
+make
+DESTDIR=$PKG make install
+rm -r $PKG/usr/share/info
+}

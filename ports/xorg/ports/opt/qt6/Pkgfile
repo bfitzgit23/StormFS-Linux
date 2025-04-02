@@ -1,0 +1,113 @@
+# Description: Qt Free Edition, version 5.x.
+# URL: http://www.qt.io/
+# Maintainer: CRUX System Team, core-ports at crux dot nu
+# Depends on: dbus gdk-pixbuf gst-plugins-base libepoxy libmng libwebp libxkbcommon libXcomposite libXcursor libXi libXinerama jasper alsa-lib make-ca cups double-conversion glib harfbuzz icu libjpeg-turbo libinput libpng libtiff mesa mtdev pcre2 wayland xcb-util-image xcb-util-cursor xcb-util-keysyms xcb-util-renderutil xcb-util-wm alsa-lib sqlite ffmpeg
+
+
+name=qt6
+version=6.8.2
+release=1
+source=(https://download.qt.io/archive/qt/6.8/$version/single/qt-everywhere-src-$version.tar.xz
+qt6-base-nostrip.patch
+qt6-base-cflags.patch)
+
+keep_static=1
+build() {
+#  patch -d qt-everywhere-src-$version -p1 -i $SRC/qt6-base-cflags.patch
+#  patch -d qt-everywhere-src-$version -p1 -i $SRC/qt6-base-nostrip.patch
+cd qt-everywhere-src-$version
+export QT6PREFIX=/opt/qt6
+if [ "$(uname -m)" == "i686" ]; then
+    sed -e "/^#elif defined(Q_CC_GNU_ONLY)/s/.*/& \&\& 0/" \
+        -i qtbase/src/corelib/global/qtypes.h
+fi
+  if prt-get isinst ccache; then
+    PKGMK_QT6+=' -D QT_USE_CCACHE=ON'
+    PATH="$(echo ${PATH} | awk -v RS=: -v ORS=: '/ccache/ {next} {print}' | sed 's/:*$//')"
+  fi
+ #sed -i '/if __cpp_lib_span/s/if/ifdef/' qtbase/src/corelib/tools/qspan.h
+./configure -prefix $QT6PREFIX      \
+            -sysconfdir /etc/xdg    \
+            -dbus-linked            \
+            -openssl-linked         \
+            -system-sqlite          \
+            -nomake examples        \
+            -no-rpath               \
+            -no-sbom		    \
+            -journald               \
+            -skip qt3d              \
+            -skip qtquick3dphysics  \
+            -skip qtwebengine       &&
+ninja
+DESTDIR=$PKG ninja install
+rm -rf $PKG/usr/share/doc
+
+find $PKG$QT6PREFIX/ -name \*.prl \
+   -exec sed -i -e '/^QMAKE_PRL_BUILD_DIR/d' {} \;
+pushd qttools/src &&
+
+
+install -v -dm755 $PKG/usr/share/pixmaps/                  &&
+
+install -v -Dm644 assistant/assistant/images/assistant-128.png \
+                  $PKG/usr/share/pixmaps/assistant-qt6.png &&
+
+install -v -Dm644 designer/src/designer/images/designer.png \
+                  $PKG/usr/share/pixmaps/designer-qt6.png  &&
+
+install -v -Dm644 linguist/linguist/images/icons/linguist-128-32.png \
+                  $PKG/usr/share/pixmaps/linguist-qt6.png  &&
+
+install -v -Dm644 qdbus/qdbusviewer/images/qdbusviewer-128.png \
+                  $PKG/usr/share/pixmaps/qdbusviewer-qt6.png &&
+popd &&
+	# And the .desktop files too:
+	install -d $PKG/usr/share/applications
+	cat <<EOF > $PKG/usr/share/applications/designer-qt6.desktop
+[Desktop Entry]
+Name=Qt6 Designer
+GenericName=Interface Designer
+Comment=Design GUIs for Qt6 applications
+Exec=$QT6PREFIX/bin/designer
+Icon=designer-qt6.png
+MimeType=application/x-designer;
+Terminal=false
+Encoding=UTF-8
+Type=Application
+Categories=Qt;Development;
+EOF
+	cat <<EOF > $PKG/usr/share/applications/assistant-qt6.desktop
+[Desktop Entry]
+Name=Qt6 Assistant
+Comment=Shows Qt6 documentation and examples
+Exec=$QT6PREFIX/bin/assistant
+Icon=assistant-qt6.pong
+Terminal=false
+Encoding=UTF-8
+Type=Application
+Categories=Qt;Development;Documentation;
+EOF
+	cat <<EOF > $PKG/usr/share/applications/linguist-qt6.desktop
+[Desktop Entry]
+Name=Qt5 Linguist
+Comment=Add translations to Qt6 applications
+Exec=$QT6PREFIX/bin/linguist
+Icon=linguist-qt6.png
+MimeType=text/vnd.trolltech.linguist;application/x-linguist;
+Terminal=false
+Encoding=UTF-8
+Type=Application
+Categories=Qt;Development;
+EOF
+	cat <<EOF > $PKG/usr/share/applications/qdbusviewer-qt6.desktop
+[Desktop Entry]
+Name=Qt5 QDbusViewer
+GenericName=D-Bus Debugger
+Comment=Debug D-Bus applications
+Exec=$QT6PREFIX/bin/qdbusviewer
+Icon=qdbusviewer-qt6.png
+Terminal=false
+Type=Application
+Categories=Qt;Development;Debugger;
+EOF
+}

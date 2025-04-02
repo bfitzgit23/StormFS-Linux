@@ -1,0 +1,23 @@
+# Description: GObject bindings for libudev
+# URL: https://wiki.gnome.org/Projects/libgudev
+# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Depends on: glib-32 libgudev
+
+name=libgudev-32
+version=238
+release=1
+source=(https://download.gnome.org/sources/${name%-*}/$version/${name%-*}-$version.tar.xz)
+
+build() {
+	meson setup ${name%-*}-$version build \
+		--prefix=/usr \
+		--libdir=lib32 \
+		--buildtype=plain \
+		-D introspection=disabled \
+		-D vapi=disabled
+
+	ninja -C build -j ${JOBS:-1}
+	DESTDIR=$PKG ninja -C build install
+
+	rm -r $PKG/usr/include
+}

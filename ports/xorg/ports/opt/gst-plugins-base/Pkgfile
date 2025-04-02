@@ -1,0 +1,26 @@
+# Description: An essential exemplary set of plugins for gstreamer
+# URL: https://gstreamer.freedesktop.org/modules/gst-plugins-base.html
+# Maintainer: Tim Biermann, tbier at posteo dot de
+# Depends on: gstreamer libvorbis opus
+# Optional: alsa-lib cdparanoia-iii gobject-introspection ISO codes libgudev libjpeg-turbo libogg libpng libtheora libvorbis mesa pango wayland-protocols xorg-libs graphene gtk3 opus qt5-alternate sdl2 valgrind hotdoc libvisual orc tremor
+
+name=gst-plugins-base
+version=1.24.12
+release=1
+source=(https://gstreamer.freedesktop.org/src/$name/$name-$version.tar.xz)
+
+build() {
+ cd $name-$version
+mkdir build &&
+cd    build &&
+
+meson  setup ..               \
+       --prefix=/usr          \
+       --buildtype=release    \
+       --wrap-mode=nodownload \
+       -Dpackage-origin=https://www.linuxfromscratch.org/blfs/view/systemd/ \
+       -Dpackage-name="GStreamer 1.22.6 BLFS"    &&
+ninja
+ 
+  DESTDIR=$PKG ninja install
+}

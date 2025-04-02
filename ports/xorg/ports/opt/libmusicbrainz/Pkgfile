@@ -1,0 +1,25 @@
+# Description: The libmusicbrainz package contains a library which allows you to access the data held on the MusicBrainz server. This is useful for adding MusicBrainz lookup capabilities to other applications. MusicBrainz is a community music metadatabase that attempts to create a comprehensive music information site. You can use the MusicBrainz data either by browsing the web site, or you can access the data from a client program — for example, a CD player program can use MusicBrainz to identify CDs and provide information about the CD, about the artist or other related information.
+# URL:         http://ftp.musicbrainz.org/
+# Maintainer:  B.r.i.a.n M.a.d.o.n.n.a b.m.a.d.o.n.n.a.s.t.e.r @ g.m.a.i.l.c.o.m
+# Depends on:  neon cmake libxml2 
+# Optional: python doxygen
+
+name=libmusicbrainz
+version=5.1.0
+release=1
+source=(https://github.com/metabrainz/$name/releases/download/release-$version/$name-$version.tar.gz
+https://www.linuxfromscratch.org/patches/blfs/svn/$name-$version-cmake_fixes-1.patch)
+
+pkg_build() {
+
+sed -e 's/xmlErrorPtr /const xmlError */'     \
+    -i src/xmlParser.cc
+
+mkdir build &&
+cd    build &&
+
+cmake -D CMAKE_INSTALL_PREFIX=/usr -D CMAKE_BUILD_TYPE=Release .. &&
+make
+
+	make DESTDIR=$PKG install
+}

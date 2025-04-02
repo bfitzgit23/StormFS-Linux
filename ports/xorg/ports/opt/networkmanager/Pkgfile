@@ -1,0 +1,22 @@
+# Description:  NetworkManager is a set of co-operative tools that make networking simple and straightforward. Whether you use WiFi, wired, 3G, or Bluetooth, NetworkManager allows you to quickly move from one network to another: Once a network has been configured and joined once, it can be detected and re-joined automatically the next time it's available.
+# URL:          https://download.gnome.org/sources/NetworkManager/
+# Maintainer:  B.r.i.a.n M.a.d.o.n.n.a b.m.a.d.o.n.n.a.s.t.e.r @ g.m.a.i.l.c.o.m
+# Depends on:  jansson libndp curl dhcpcd gobject-introspection iptables newt nss polkit python3-gobject Systemd vala wpa_supplicant mobile-broadband-provider-info gtkdoc-scan glibmm
+# Optional: bluez dbus-python gnutls gtk-doc libpsl qt6 modemmanager upower valgrind dnsmasq firewalld libaudit libteam mobile-broadband-provider-info PPP RP-PPPoE
+name=networkmanager
+version=1.50.0
+release=1
+source=(https://download.gnome.org/sources/NetworkManager/1.50/NetworkManager-$version.tar.xz)
+build_opt="  --prefix=/usr
+      --buildtype=release         
+      -D libaudit=no              
+      -D nmtui=true               
+      -D ovs=false                
+      -D ppp=false                
+      -D selinux=false            
+      -D qt=false                 
+      -D session_tracking=systemd
+      -D modem_manager=false"
+pre_build() {
+grep -rl '^#!.*python$' | xargs sed -i '1s/python/&3/'
+}

@@ -1,0 +1,28 @@
+# Description: Low-level data structure handling, portability wrappers, and interfaces for runtime functionality
+# URL: https://www.gtk.org/
+# Maintainer: CRUX System Team, core-ports at crux dot nu
+# Depends on: python3-docutils libxslt pcre2
+
+
+name=glib
+version=2.82.5
+release=1
+source=(https://download.gnome.org/sources/$name/${version:0:4}/$name-$version.tar.xz 
+https://www.linuxfromscratch.org/patches/blfs/svn/glib-skip_warnings-1.patch)
+
+pkg_build() {
+	
+
+mkdir build &&
+cd    build &&
+prt-get isinst gobject-introspection && PKGMK_INTROSPECTION=' -D introspection=enabled'
+meson setup ..                  \
+            --prefix=/usr             \
+      --buildtype=release       \
+      -D glib_debug=disabled    \
+      -D man-pages=enabled      \
+      -D sysprof=disabled       &&
+ninja
+DESTDIR=$PKG ninja install
+}
+

@@ -1,0 +1,23 @@
+# Description: Message bus system, a simple way for applications to talk to one another
+# URL:         
+# Maintainer:  Emmett1, emmett1 dot 2miligrams at gmail dot com
+# Depends on: 
+
+name=dbus
+version=1.16.2
+release=1
+source=(https://ftp2.osuosl.org/pub/blfs/conglomeration/$name/$name-$version.tar.xz)
+
+pkg_build() {
+
+	mkdir build
+cd    build
+
+meson setup --prefix=/usr --buildtype=release --wrap-mode=nofallback ..
+            
+	ninja
+	ninja install
+
+	mkdir -p $PKG/lib
+	ln -sfv $PKG/etc/machine-id $PKG/var/lib/dbus
+}

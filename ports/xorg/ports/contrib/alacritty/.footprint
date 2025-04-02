@@ -1,0 +1,10 @@
+drwxr-xr-x	root/root	usr/
+drwxr-xr-x	root/root	usr/bin/
+-rwxr-xr-x	root/root	usr/bin/alacritty
+drwxr-xr-x	root/root	usr/share/
+drwxr-xr-x	root/root	usr/share/appdata/
+-rw-r--r--	root/root	usr/share/appdata/io.alacritty.Alacritty.appdata.xml
+drwxr-xr-x	root/root	usr/share/applications/
+-rw-r--r--	root/root	usr/share/applications/Alacritty.desktop
+drwxr-xr-x	root/root	usr/share/pixmaps/
+-rw-r--r--	root/root	usr/share/pixmaps/Alacritty.svg

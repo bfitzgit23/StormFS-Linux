@@ -1,0 +1,9 @@
+drwxr-xr-x	root/root	usr/
+drwxr-xr-x	root/root	usr/lib32/
+-rw-r--r--	root/root	usr/lib32/libndp.a
+-rwxr-xr-x	root/root	usr/lib32/libndp.la
+lrwxrwxrwx	root/root	usr/lib32/libndp.so -> libndp.so.0.3.0
+lrwxrwxrwx	root/root	usr/lib32/libndp.so.0 -> libndp.so.0.3.0
+-rwxr-xr-x	root/root	usr/lib32/libndp.so.0.3.0
+drwxr-xr-x	root/root	usr/lib32/pkgconfig/
+-rw-r--r--	root/root	usr/lib32/pkgconfig/libndp.pc

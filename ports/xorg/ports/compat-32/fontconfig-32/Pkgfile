@@ -1,0 +1,28 @@
+# Description: A library for configuring and customizing font access
+# URL: https://www.freedesktop.org/wiki/Software/fontconfig/
+# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Depends on: expat-32 fontconfig freetype-32 util-linux-32
+
+name=fontconfig-32
+version=2.16.0
+release=1
+source=(https://fontconfig.org/release/fontconfig-$version.tar.xz)
+
+build() {
+	meson setup fontconfig-$version build \
+		--prefix=/usr \
+		--libdir=/usr/lib32 \
+		--buildtype=plain \
+		--wrap-mode=nodownload \
+		-D b_lto=true \
+		-D b_pie=true \
+		-D doc-man=enabled \
+		-D doc=disabled \
+		-D nls=disabled \
+		-D tests=disabled \
+		-D cache-build=disabled
+	meson compile -C build -j ${JOBS:-1}
+	DESTDIR=$PKG meson install -C build
+
+	rm -r $PKG/usr/{bin,include,share} $PKG/etc
+}

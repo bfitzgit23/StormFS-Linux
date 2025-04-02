@@ -1,0 +1,18 @@
+# Description: Utility to set a display's backlight level
+# URL: http://xorg.freedesktop.org
+# Maintainer: CRUX Xorg Team, xorg-ports at crux dot nu
+# Depends on: xcb-util
+
+name=xcmsdb
+version=1.0.6
+release=1
+source=(https://www.x.org/pub/individual/app/xcmsdb-$version.tar.xz)
+
+build() {
+	cd xcmsdb-$version
+
+	./configure $XORG_CONFIG
+
+	make
+	make DESTDIR=$PKG install
+}

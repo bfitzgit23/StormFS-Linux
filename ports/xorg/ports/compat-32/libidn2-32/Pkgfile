@@ -1,0 +1,29 @@
+# Description: Provides support for IETF Internationalized Domain Names (IDN).
+# URL: http://www.gnu.org/software/libidn/
+# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Depends on: libidn2 libunistring-32
+
+name=libidn2-32
+version=2.3.7
+release=1
+source=(https://ftp.gnu.org/gnu/libidn/${name%-*}-$version.tar.gz)
+
+build() {
+	cd ${name%-*}-$version
+
+	./configure \
+	    --host=i686-pc-linux-gnu      \
+		--prefix=/usr \
+		--libdir=/usr/lib32 \
+		--disable-nls
+
+	make
+	make DESTDIR=$PKG install
+
+	rm -r \
+		$PKG/usr/{bin,include,share/man} \
+		$PKG/usr/share/{gtk-doc,info}
+
+	# Remove empty directories
+	find $PKG -depth -empty -exec rm -r {} \;
+}

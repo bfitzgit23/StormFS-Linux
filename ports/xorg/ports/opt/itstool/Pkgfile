@@ -1,0 +1,24 @@
+# Description: XML to PO and back again
+# URL: https://itstool.org/
+# Maintainer: Tim Biermann, tbier at posteo dot de
+# Depends on: libxml2
+
+name=itstool
+version=2.0.7
+release=3
+source=(https://files.itstool.org/itstool/$name-$version.tar.bz2
+  fix_crash_918953.patch
+  fix_crash_912099.patch)
+
+build() {
+  cd $name-$version
+
+  patch -p1 -i $SRC/fix_crash_912099.patch
+  patch -p1 -i $SRC/fix_crash_918953.patch
+
+  PYTHON=/usr/bin/python3 \
+  ./configure --prefix=/usr
+
+  make
+  make DESTDIR=$PKG install
+}

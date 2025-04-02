@@ -1,0 +1,24 @@
+# Description: Sound sample rate conversion library
+# URL: https://libsndfile.github.io/libsamplerate/
+# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Depends on: cmake libsndfile-32
+
+name=libsamplerate-32
+version=0.2.2
+release=1
+source=(https://github.com/libsndfile/libsamplerate/releases/download/$version/libsamplerate-$version.tar.xz)
+
+build() {
+	cmake -S libsamplerate-$version -B build -G Ninja \
+		-D CMAKE_INSTALL_PREFIX=/usr \
+		-D CMAKE_INSTALL_LIBDIR=lib32 \
+		-D CMAKE_BUILD_TYPE=Release \
+		-D CMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+		-D BUILD_SHARED_LIBS=ON \
+		-Wno-dev
+	cmake --build build
+	DESTDIR=$PKG cmake --install build
+
+	rm -r $PKG/usr/share/doc $PKG/usr/include
+	rmdir $PKG/usr/share
+}

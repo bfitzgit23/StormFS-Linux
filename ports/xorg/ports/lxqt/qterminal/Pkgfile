@@ -1,0 +1,6 @@
+# Depends on: qtermwidget
+
+name=qterminal
+version=2.0.1
+release=1
+source=(https://github.com/lxqt/${name}/releases/download/${version}/${name}-${version}.tar.xz)

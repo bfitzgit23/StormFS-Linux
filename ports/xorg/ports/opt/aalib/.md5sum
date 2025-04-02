@@ -1,0 +1,8 @@
+9801095c42bba12edebd1902bcf0a990  aalib-1.4rc5.tar.gz
+517b2577b1062769769434c4fb97e245  aalib-aalinuxkbd-return.patch
+726fba4b9be81497d43873166933bb5f  aalib-c99.patch
+dc468370c9be266cfcd68b427f193f7c  aalib-fix-aarender.patch
+33596ea8e7e9f0c1f1343761afaa311b  aalib-free-offset-pointer.patch
+611ceed1d50740b764314f70ecf47c32  aalib-key-down-OOB.patch
+a0f5b0ef212e6a8e05ba8117c0c0e1f1  aalib-mouse.patch
+f22930a8da6338c92e97afc892f4a63b  aalib-opaque-ncurses-fix.patch

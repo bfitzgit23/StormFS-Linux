@@ -1,0 +1,5 @@
+untrusted comment: verify with /etc/ports/opt.pub
+RWSE3ohX2g5d/RIuYNsjNib2DGqcHtp9ZZ7KYdo419Qs1I3PEDdfNvcRJnWPTYXN/5Nf+8IMKhc3fKpOMNEnn18lX9UagZ6bNwQ=
+SHA256 (Pkgfile) = ef7a59788272b41bfd109f114b06746623a8fb79408ffe968b9547da9ae790ef
+SHA256 (.footprint) = cf050268a417fc82e4ddd9d3756cbde8d872505bdde0dc129903d46d3152278e
+SHA256 (installer-0.7.0.tar.gz) = a26d3e3116289bb08216e0d0f7d925fcef0b0194eedfa0c944bcaaa106c4b631

@@ -1,0 +1,107 @@
+# Description: Qt Free Edition, version 5.x.
+# URL: http://www.qt.io/
+# Maintainer: CRUX System Team, core-ports at crux dot nu
+# Depends on: dbus gdk-pixbuf gst-plugins-base libepoxy libmng libwebp libxkbcommon xorg-libxcomposite xorg-libxcursor xorg-libxi xorg-libxinerama xorg-xcb-util-image xorg-xcb-util-keysyms xorg-xcb-util-renderutil xorg-xcb-util-wm jaspere libmng
+# Optional: assimp bluez cups double-conversion gtk3 ibus icu krb5 libinput libsdl2 mariadb mtdev openal pulseaudio unixodbc vulkan-headers wayland-protocols xkeyboard-config
+
+name=qt5-alternate
+version=5.15.12
+release=1
+source=(https://download.qt.io/archive/qt/5.15/$version/single/qt-everywhere-opensource-src-$version.tar.xz
+	qt-everywhere-opensource-src-5.15.12-kf5-1.patch
+	qt-everywhere-opensource-src-5.15.12-security_fix-1.patch)
+
+build() {
+	cd qt-everywhere-src-$version
+export QT5PREFIX=/opt/qt5-alternate
+
+	patch -p1 -i $SRC/qt-everywhere-opensource-src-5.15.12-kf5-1.patch
+	mkdir -pv qtbase/.git
+	patch -Np1 -i $SRC/qt-everywhere-opensource-src-5.15.12-security_fix-1.patch
+
+ls -Fd qt* | grep / | sed 's/^/-skip /;s@/@@' > tempconf &&
+sed -i -r '/base|tools|x11extras|svg|declarative|wayland/d' tempconf
+	./configure -prefix $QT5PREFIX   \
+            -sysconfdir /etc/xdg \
+            -confirm-license     \
+            -opensource          \
+            -dbus-linked         \
+            -openssl-linked      \
+            -system-harfbuzz     \
+            -system-sqlite       \
+            -nomake examples     \
+            -no-rpath            \
+            -journald            \
+            $(cat tempconf)      \
+            &&
+make
+make -j1 INSTALL_ROOT=$PKG install
+rm -rf $PKG/usr/share/doc
+
+find $PKG$QT5PREFIX/ -name \*.prl \
+   -exec sed -i -e '/^QMAKE_PRL_BUILD_DIR/d' {} \;
+QT5BINDIR=$QT5PREFIX/bin
+
+install -v -dm755 $PKG/usr/share/pixmaps/                  &&
+
+install -v -Dm644 qttools/src/assistant/assistant/images/assistant-128.png \
+                  $PKG/usr/share/pixmaps/assistant-qt5-alternate.png &&
+
+install -v -Dm644 qttools/src/designer/src/designer/images/designer.png \
+                  $PKG/usr/share/pixmaps/designer-qt5-alternate.png  &&
+
+install -v -Dm644 qttools/src/linguist/linguist/images/icons/linguist-128-32.png \
+                  $PKG/usr/share/pixmaps/linguist-qt5-alternate.png  &&
+
+install -v -Dm644 qttools/src/qdbus/qdbusviewer/images/qdbusviewer-128.png \
+                  $PKG/usr/share/pixmaps/qdbusviewer-qt5-alternate.png &&
+	# And the .desktop files too:
+	install -d $PKG/usr/share/applications
+	cat <<EOF > $PKG/usr/share/applications/qt5-alternate-designer.desktop
+[Desktop Entry]
+Name=Qt5 Designer
+GenericName=Interface Designer
+Comment=Design GUIs for Qt5 applications
+Exec=designer-qt5-alternate -qt=5
+Icon=qt5-alternate-designer
+MimeType=application/x-designer;
+Terminal=false
+Encoding=UTF-8
+Type=Application
+Categories=Qt;Development;
+EOF
+	cat <<EOF > $PKG/usr/share/applications/qt5-alternate-assistant.desktop
+[Desktop Entry]
+Name=Qt5 Assistant
+Comment=Shows Qt5 documentation and examples
+Exec=assistant-qt5-alternate -qt=5
+Icon=qt5-alternate-assistant
+Terminal=false
+Encoding=UTF-8
+Type=Application
+Categories=Qt;Development;Documentation;
+EOF
+	cat <<EOF > $PKG/usr/share/applications/qt5-alternate-linguist.desktop
+[Desktop Entry]
+Name=Qt5 Linguist
+Comment=Add translations to Qt5 applications
+Exec=linguist-qt5-alternate -qt=5
+Icon=qt5-alternate-linguist
+MimeType=text/vnd.trolltech.linguist;application/x-linguist;
+Terminal=false
+Encoding=UTF-8
+Type=Application
+Categories=Qt;Development;
+EOF
+	cat <<EOF > $PKG/usr/share/applications/qt5-alternate-qdbusviewer.desktop
+[Desktop Entry]
+Name=Qt5 QDbusViewer
+GenericName=Qt5 D-Bus Debugger
+Comment=Debug D-Bus applications
+Exec=qdbusviewer-qt5-alternate
+Icon=qt5-alternate-qdbusviewer
+Terminal=false
+Type=Application
+Categories=Qt;Development;Debugger;
+EOF
+}

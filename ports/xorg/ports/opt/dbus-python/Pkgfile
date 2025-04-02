@@ -1,0 +1,7 @@
+# Depends on: dbus glib python3-meson_python patchelf
+
+name=dbus-python
+version=1.3.2
+release=1
+source=(https://dbus.freedesktop.org/releases/${name}/${name}-${version}.tar.gz)
+

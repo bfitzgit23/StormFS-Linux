@@ -1,0 +1,32 @@
+# Description: A message bus system
+# URL: https://freedesktop.org/wiki/Software/dbus
+# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Depends on: dbus expat-32
+
+name=dbus-32
+version=1.14.10
+release=1
+source=(https://dbus.freedesktop.org/releases/dbus/dbus-$version.tar.xz)
+
+build() {
+	cd ${name%-*}-$version
+
+[ -e '/usr/lib/pkgconfig/x11.pc' ] && [ ! -e '/usr/lib32/pkgconfig/x11.pc' ] && printf "\e[031mxorg-libx11 is detected on your system, please run:
+prt-get depinst libX11-32
+before continuing with dbus-32.\033[0m\n" &&
+exit 1
+CFLAGS+=" -m32" CXXFLAGS+=" -m32" \
+	./configure --prefix=/usr \
+		--libdir=/usr/lib32 \
+		--with-dbus-daemondir=/usr/sbin \
+		--localstatedir=/var \
+		--libexecdir=/usr/lib32/dbus \
+		--with-dbus-user=messagebus \
+		--with-init-scripts=none \
+		--with-system-pid-file=/var/run/dbus/dbus.pid
+
+	make
+	make DESTDIR=$PKG install
+
+	rm -r $PKG/var $PKG/usr/{bin,etc,include,sbin,share}
+}

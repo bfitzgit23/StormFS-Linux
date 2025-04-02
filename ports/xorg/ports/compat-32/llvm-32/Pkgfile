@@ -1,0 +1,59 @@
+# Description: LLVM compiler backend
+# URL: https://llvm.org
+# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Depends on: libffi-32 libxml2-32 llvm ncurses-32 zstd-32
+name=llvm-32
+version=19.1.7
+release=1
+source=(https://github.com/llvm/llvm-project/releases/download/llvmorg-$version/llvm-$version.src.tar.xz
+	https://github.com/llvm/llvm-project/releases/download/llvmorg-$version/cmake-$version.src.tar.xz
+	https://github.com/llvm/llvm-project/releases/download/llvmorg-$version/third-party-$version.src.tar.xz)
+build() {
+        mkdir -p $SRC/keep
+
+        #prt-get isinst ccache && PKGMK_LLVM+=' -D LLVM_CCACHE_BUILD=ON'
+
+        mv cmake-$version.src cmake
+        mv $SRC/third-party-$version.src/ $SRC/third-party
+
+        cmake -S llvm-$version.src -B build -G Ninja $PKGMK_LLVM \
+                -D CMAKE_INSTALL_PREFIX=/usr \
+                -D LLVM_LIBDIR_SUFFIX=32 \
+                -D CMAKE_BUILD_TYPE=Release \
+                -D CMAKE_C_FLAGS_RELEASE="-O2 -march=x86-64 -pipe -m32" \
+                -D CMAKE_CXX_FLAGS_RELEASE="-O2 -march=x86-64 -pipe -m32" \
+                -D LLVM_TARGET_ARCH=i686 \
+                -D LLVM_BINUTILS_INCDIR=/usr/include \
+                -D LLVM_BUILD_LLVM_DYLIB=ON \
+                -D LLVM_LINK_LLVM_DYLIB=ON \
+                -D LLVM_PARALLEL_COMPILE_JOBS="${JOBS:-1}" \
+                -D LLVM_INCLUDE_EXAMPLES=OFF \
+                -D LLVM_ENABLE_OCAMLDOC=OFF \
+                -D LLVM_INCLUDE_TESTS=OFF \
+                -D LLVM_ENABLE_FFI=ON \
+                -D LLVM_ENABLE_RTTI=ON \
+                -D LLVM_ENABLE_OCAMLDOC=OFF \
+                -D LLVM_INSTALL_UTILS=ON \
+                -D LLVM_ENABLE_LIBCXX=OFF \
+                -D LLVM_ENABLE_LLD="$(prt-get isinst lld >/dev/null && echo ON || echo OFF)" \
+                -D LLVM_DEFAULT_TARGET_TRIPLE="i686-pc-linux-gnu" \
+                -D LLVM_OPTIMIZED_TABLEGEN=ON \
+                -D LLVM_INCLUDE_BENCHMARKS=OFF \
+                -Wno-dev
+
+        NINJA_STATUS="[1/2][%f/%t %es] " \
+        cmake --build build --target LLVM
+        NINJA_STATUS="[2/2][%f/%t %es] " \
+        cmake --build build
+        DESTDIR=$PKG cmake --install build
+
+        # keep 32bit header and config
+        install -t $SRC/keep $PKG/usr/bin/llvm-config $PKG/usr/include/llvm/Config/llvm-config.h
+
+        # remove unneeded files
+        rm -r $PKG/usr/{bin,include,share/opt-viewer}
+
+        # install 32bit header and config
+        install -m 0755 -D $SRC/keep/llvm-config $PKG/usr/bin/llvm-config-32
+        install -m 0644 -D $SRC/keep/llvm-config.h $PKG/usr/include/llvm/Config/llvm-config-32.h
+}

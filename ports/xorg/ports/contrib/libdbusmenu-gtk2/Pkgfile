@@ -1,0 +1,40 @@
+# Description: Library for passing menus over DBus - gtk2 Files
+# URL: https://launchpad.net/libdbusmenu
+# Maintainer: Tim Biermann, tbier at posteo dot de
+# Depends on: gtk json-glib libdbusmenu-glib libXdamage
+
+name=libdbusmenu-gtk2
+version=18.10
+release=3
+source=(http://cdn-fastly.deb.debian.org/debian/pool/main/libd/libdbusmenu/libdbusmenu_18.10.20180917~bzr492+repack1.orig.tar.xz
+  0001_no-deprecated-gnome-common-macros.patch
+  0003_port-tools-dbusmenu-bench-to-py3.patch
+  0004_prevent-test-json-from-failing.patch)
+
+build() {
+  cd libdbusmenu-18.10.20180917~bzr492
+
+  export HAVE_VALGRIND_TRUE='#'
+  export HAVE_VALGRIND_FALSE=''
+
+  patch -Np1 -i $SRC/0001_no-deprecated-gnome-common-macros.patch
+  patch -Np1 -i $SRC/0003_port-tools-dbusmenu-bench-to-py3.patch
+  patch -Np1 -i $SRC/0004_prevent-test-json-from-failing.patch
+
+  sed -e 's/gtkdocize || exit 1//g' -i autogen.sh
+  sed -e 's/--disable-gtk-doc//g' -i autogen.sh
+  export CFLAGS+=" -O2 -Wno-error"
+
+  ./autogen.sh --prefix=/usr \
+    --sysconfdir=/etc \
+    --libexecdir=/usr/lib/$name \
+    --localstatedir=/var \
+    --with-gtk=2
+  make -j1
+  make DESTDIR=$PKG -C libdbusmenu-gtk install
+
+  rm -fr $PKG/usr/share/doc
+
+  find $PKG -print0 | xargs -0 file | grep -e "executable" -e "shared object" | grep ELF \
+  | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
+}

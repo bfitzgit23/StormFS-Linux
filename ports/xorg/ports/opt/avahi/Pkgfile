@@ -1,0 +1,32 @@
+# Description: The Avahi package is a system which facilitates service discovery on a local network.
+# URL:          https://github.com/lathiat/avahi/
+# Maintainer:  B.r.i.a.n M.a.d.o.n.n.a b.m.a.d.o.n.n.a.s.t.e.r @ g.m.a.i.l.c.o.m
+# Depends on:  glib gobject-introspection gtk gtk3 libdaemon libglade qt6
+# Optional:  D-Bus-Python libevent PyGTK doxygen xmltoman
+
+name=avahi
+version=0.8
+release=1
+source=(https://github.com/lathiat/$name/releases/download/v$version/$name-$version.tar.gz
+$name-$version-ipv6_race_condition_fix-1.patch)
+build_opt="    --prefix=/usr        
+    --sysconfdir=/etc    
+    --localstatedir=/var 
+    --disable-static     
+    --disable-libevent   
+    --disable-mono       
+    --disable-monodoc    
+    --disable-python     
+    --disable-qt3        
+    --disable-qt4
+    --disable-qt5
+    --enable-qt6        
+    --enable-core-docs   
+    --with-distro=none   
+    --with-dbus-system-address='unix:path=/run/dbus/system_bus_socket'"
+pre_build() {
+sed -i '426a if (events & AVAHI_WATCH_HUP) { \
+client_free(c); \
+return; \
+}' avahi-daemon/simple-protocol.c
+}

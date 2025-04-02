@@ -1,0 +1,5 @@
+untrusted comment: verify with /etc/ports/xorg.pub
+RWTSGWF5Q7TndPrf7umWXicGOnn6+5qyQ8zOtAP0CXicF4DKvmKOT2SdEoVeu+sB2wF5fV0E+gXqn98l5ehQfPzQdFttHdRcFA0=
+SHA256 (Pkgfile) = 4ab4006832db30d5f58e17807963eae7c2db76402464d34ea77f7d30af847ef9
+SHA256 (.footprint) = 73ed2dba96974a5aebd05aa2973bcc00186938538ff5accf9d29de7e502927c1
+SHA256 (libpthread-stubs-0.5.tar.xz) = 59da566decceba7c2a7970a4a03b48d9905f1262ff94410a649224e33d2442bc

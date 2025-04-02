@@ -1,0 +1,22 @@
+# Description: Video Acceleration API to enable hardware accelerated video decode/encode.
+# URL: https://github.com/intel/libva
+# Maintainer: CRUX Xorg Team, xorg-ports at crux dot nu
+# Depends on: libdrm libglvnd xorg-libxfixes
+# Optional: wayland-protocols
+
+name=libva
+version=2.22.0
+release=1
+source=(https://github.com/intel/libva/archive/$version/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+	mkdir builds &&
+	cd    builds &&
+
+meson setup --prefix=$XORG_PREFIX --buildtype=release &&
+ninja
+
+DESTDIR=$PKG ninja  install
+chmod -x $PKG/usr/include/va/va_vpp.h
+}

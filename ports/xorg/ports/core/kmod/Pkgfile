@@ -1,0 +1,14 @@
+name=kmod
+version=34
+release=1
+source=(https://www.kernel.org/pub/linux/utils/kernel/$name/$name-$version.tar.xz)
+build_opt="-D openssl=enabled -D xz=enabled -D zlib=enabled -D manpages=false"
+
+post_build() {
+	mkdir -p $PKG/sbin $PKG/bin
+	for target in depmod insmod modinfo modprobe rmmod; do
+	  ln -s /usr/bin/kmod $PKG/sbin/$target
+	done
+	
+#	ln -s kmod $PKG/usr/bin/lsmod
+}

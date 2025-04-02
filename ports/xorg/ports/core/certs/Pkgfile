@@ -1,0 +1,10 @@
+name=ca-certificates
+version=20230822
+_noyear=${version#????}
+_version=${version%????}-${_noyear%??}-${version#??????}
+release=1
+source="https://curl.se/ca/cacert-$_version.pem"
+
+build() {
+        install -Dm644 $SRC/cacert-$_version.pem $PKG/etc/ssl/cert.pem
+}

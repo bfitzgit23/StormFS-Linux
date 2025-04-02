@@ -1,0 +1,49 @@
+# Description: Low-latency audio/video router and processor - 32-bit client library
+# URL: https://pipewire.org
+# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Depends on: dbus-32 gst-plugins-base-32 pipewire
+# Optional: avahi-32 jack-32 libsdl2-32 libsndfile-32 pulseaudio-32 vulkan-loader-32 xorg-libxcb-32
+
+name=pipewire-32
+version=1.2.6
+release=1
+source=(https://gitlab.freedesktop.org/pipewire/pipewire/-/archive/$version/pipewire-$version.tar.bz2)
+
+build() {
+	prt-get isinst alsa-lib-32 && PKGMK_PW+=' -D alsa=enabled -D pipewire-alsa=enabled'
+	prt-get isinst avahi-32 && PKGMK_PW+=' -D avahi=enabled'
+	prt-get isinst dbus-32 && PKGMK_PW+=' -D dbus=enabled'
+	prt-get isinst libsdl2-32 && PKGMK_PW+=' -D sdl2=enabled'
+	prt-get isinst libsndfile-32 && PKGMK_PW+=' -D sndfile=enabled'
+	prt-get isinst pulseaudio-32 && PKGMK_PW+=' -D libpulse=enabled'
+	prt-get isinst vulkan-loader-32 && PKGMK_PW+=' -D vulkan=enabled'
+
+	meson setup pipewire-$version build $PKGMK_PW \
+		-D prefix=/usr \
+		--libdir=lib32 \
+		--buildtype=plain \
+		--auto-features=disabled \
+		-D man=disabled \
+		-D tests=disabled \
+		-D examples=disabled \
+		-D pw-cat=disabled \
+		-D libffado=disabled \
+		-D pipewire-jack=disabled \
+		-D jack=disabled \
+		-D opus=disabled \
+		-D bluez5-codec-opus=disabled \
+		-D session-managers='[]'
+
+	meson compile -C build
+	DESTDIR=$PKG meson install -C build
+
+	# remove leftovers
+	rm -r $PKG/etc
+	rm -r $PKG/usr/{bin,include,share/locale,share/pipewire}
+
+	prt-get isinst alsa-lib-32 && \
+		rm -r $PKG/usr/share/{alsa,alsa-card-profile} && \
+		rm $PKG/usr/lib/udev/rules.d/90-pipewire-alsa.rules
+
+	find $PKG -type d -empty -delete
+}

@@ -1,0 +1,19 @@
+# Description: CD paranoia libraries from libcdio
+# URL: https://github.com/rocky/libcdio-paranoia
+# Maintainer: John McQuah, jmcquah at disroot dot org
+# Depends on: libcdio
+
+name=libcdio-paranoia
+version=10.2+2.0.1
+release=1
+source=(https://ftp.gnu.org/gnu/libcdio/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+
+	./configure --prefix=/usr --disable-static &&
+make
+	make DESTDIR=$PKG install
+
+	rm -r $PKG/usr/share/man/jp
+}

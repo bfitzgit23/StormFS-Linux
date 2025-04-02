@@ -1,0 +1,3 @@
+#!/bin/sh
+mkdir -p /usr/share/doc/tcl-8.6.13/
+

@@ -1,0 +1,23 @@
+# Description: ALSA Plugins contains plugins for various audio libraries and sound servers.
+# URL: https://www.alsa-project.org/
+# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Depends on: alsa-lib-32 alsa-plugins
+
+name=alsa-plugins-32
+version=1.2.12
+release=1
+source=(ftp://ftp.alsa-project.org/pub/plugins/alsa-plugins-${version}.tar.bz2)
+
+build() {
+	cd alsa-plugins-${version}
+
+	./configure \
+		--prefix=/usr \
+		--libdir=/usr/lib32 \
+		--sysconfdir=/etc
+
+	make
+	make DESTDIR=$PKG install
+
+	rm -r $PKG/{etc,usr/share}
+}

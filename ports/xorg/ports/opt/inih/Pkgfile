@@ -1,0 +1,20 @@
+# Description: This package is a simple .INI file parser written in C.
+# URL:          https://github.com/benhoyt/inih/
+# Maintainer:  B.r.i.a.n M.a.d.o.n.n.a b.m.a.d.o.n.n.a.s.t.e.r @ g.m.a.i.l.c.o.m
+# Depends on:  
+
+name=inih
+version=58
+release=1
+source=(https://github.com/benhoyt/inih/archive/r$version/$name-r$version.tar.gz)
+
+build() {
+	cd $name-r$version
+
+	mkdir build &&
+	cd    build &&
+
+meson setup --prefix=/usr --buildtype=release .. &&
+ninja
+	DESTDIR=$PKG ninja install
+}

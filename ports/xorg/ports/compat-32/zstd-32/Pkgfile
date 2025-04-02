@@ -1,0 +1,18 @@
+# Description: Real-time compression with high compression ratios.
+# URL: https://facebook.github.io/zstd/
+# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Depends on: zlib-32 xz-32 zstd
+
+name=zstd-32
+version=1.5.7
+release=1
+source=(https://github.com/facebook/zstd/archive/v$version/zstd-v$version.tar.gz)
+
+build() {
+	cd zstd-$version
+
+	make HAVE_THREAD=1
+	PREFIX=/usr LIBDIR=/usr/lib32 PKGCONFIGDIR=/usr/lib32/pkgconfig make DESTDIR=$PKG install
+
+	rm -r $PKG/usr/{share,include,bin}
+}

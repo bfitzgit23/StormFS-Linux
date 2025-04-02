@@ -1,0 +1,8 @@
+untrusted comment: verify with /etc/ports/contrib.pub
+RWSagIOpLGJF30RqTLUnakUUQ8jXYtVSHO/EMpHx4RXfuyOyKrjvdUiM6Rd2B4F+Eq5XlP3c6S72166JvD47HCOOFnUPcxjWtgg=
+SHA256 (Pkgfile) = 376cab852f13bf1e74a8c91d77d857af8af53a7919c30b60505df661cf037d0f
+SHA256 (.footprint) = 7a5491bcdc38fe78f0de0ee105e5caeb13d6dfb9feb03f3eda6d0d11a3b96f56
+SHA256 (libdbusmenu_18.10.20180917~bzr492+repack1.orig.tar.xz) = 41298b926573419f21864205317461750b833c596af6ab0bd206e13336f8cee3
+SHA256 (0001_no-deprecated-gnome-common-macros.patch) = a65626ad3dd26a81037332d881736587929c7f8935cd34d2fc3e7f4a988d5a72
+SHA256 (0003_port-tools-dbusmenu-bench-to-py3.patch) = 5596fa1d311e80e780af9d2453e1b81f2b9604bb9894333c51a1361f41778919
+SHA256 (0004_prevent-test-json-from-failing.patch) = 42f61f6b2a9c3e355a21f3fc8f9583963704e8c299b0f12c07499e41ce99c992

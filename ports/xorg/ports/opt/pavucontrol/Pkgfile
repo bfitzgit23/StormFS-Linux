@@ -1,0 +1,15 @@
+# Depends on: gtkmm json-glib libsigc++ pulseaudio libcanberra 
+
+name=pavucontrol
+version=6.1
+release=1
+source=(https://www.freedesktop.org/software/pulseaudio/${name}/${name}-${version}.tar.xz)
+pkg_build () {
+mkdir build &&
+cd    build &&
+
+meson setup --prefix=/usr --buildtype=release -Dlynx=false .. &&
+ninja
+DESTDIR=$PKG ninja install &&
+mv $PKG/usr/share/doc/$name $PKG/usr/share/doc/$name-$version
+}

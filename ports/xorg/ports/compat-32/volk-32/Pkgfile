@@ -1,0 +1,25 @@
+# Description: Meta loader for Vulkan API
+# URL: https://github.com/zeux/volk
+# Maintainer: CRUX System Team, core-ports at crux dot nu
+# Depends on: vulkan-loader-32 volk
+
+name=volk-32
+version=1.3.296.0
+_version=vulkan-sdk-$version
+release=1
+source=(https://github.com/zeux/volk/archive/$_version/volk-$version.tar.gz)
+
+build() {
+  cmake -S volk-$_version -B build -G Ninja \
+    -D CMAKE_INSTALL_PREFIX=/usr \
+    -D CMAKE_INSTALL_LIBDIR=lib32 \
+    -D CMAKE_BUILD_TYPE=Release \
+    -D CMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
+    -D CMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+    -D VOLK_INSTALL=True \
+    -Wno-dev
+  cmake --build build
+  DESTDIR=$PKG cmake --install build
+
+  rm -r $PKG/usr/include
+}

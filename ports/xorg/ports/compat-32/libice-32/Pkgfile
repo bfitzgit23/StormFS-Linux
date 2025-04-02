@@ -1,0 +1,20 @@
+# Description: xorg lib libICE
+# URL: https://xorg.freedesktop.org
+# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Depends on: libice xorgproto-32 xtrans-32
+
+name=libice-32
+version=1.1.1
+release=1
+source=(https://www.x.org/releases/individual/lib/libICE-$version.tar.xz)
+
+build() {
+	cd libICE-$version
+
+	./configure --prefix=/usr --disable-docs --libdir=/usr/lib32
+
+	make
+	make DESTDIR=$PKG install
+
+	rm -r $PKG/usr/{include,share}
+}

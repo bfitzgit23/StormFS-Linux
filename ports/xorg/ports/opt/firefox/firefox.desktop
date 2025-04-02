@@ -1,0 +1,13 @@
+[Desktop Entry]
+Name=Firefox
+Name[en_US]=Firefox
+GenericName=Web Browser
+GenericName[en_US]=Web Browser
+Comment=Free web browser from Mozilla
+Exec=firefox %u
+Terminal=false
+Type=Application
+Icon=firefox
+Categories=GNOME;GTK;Network;WebBrowser;
+MimeType=text/xml;text/mml;text/html;application/xhtml+xml;application/vnd.mozilla.xul+xml;x-scheme-handler/http;x-scheme-handler/https
+StartupNotify=true

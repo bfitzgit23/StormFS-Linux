@@ -1,0 +1,17 @@
+# Description: The libbytesize package is a library which facilitates the common operations with sizes in bytes.
+# URL:         https://github.com/storaged-project/$name/
+# Maintainer:  B.r.i.a.n M.a.d.o.n.n.a b.m.a.d.o.n.n.a.s.t.e.r @ g.m.a.i.l.c.o.m
+# Depends on:  pcre2 python3-pygments
+# Optional:    python3-six gtk-doc polib
+
+name=libbytesize
+version=2.9
+release=1
+source=(https://github.com/storaged-project/$name/releases/download/$version/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+./configure --prefix=/usr &&
+make
+	make DESTDIR=$PKG install
+}

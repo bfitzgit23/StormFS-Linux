@@ -1,0 +1,25 @@
+# Description: A library that allows developers to access PolicyKit API with a nice Qt-style API
+# URL: https://www.kde.org/
+# Maintainer: Chris Farrell, timcowchip at gmail dot com
+# Depends on: cmake git polkit qt5-alternate-alternate
+
+name=polkit-qt5-alternate-alternate
+version=0.114.0
+release=3
+
+source=(https://download.kde.org/stable/polkit-qt-1/polkit-qt-1-0.114.0.tar.xz)
+
+
+build() {
+  cd  polkit-qt-1-0.114.0
+  mkdir build &&
+cd    build &&
+
+cmake -DCMAKE_INSTALL_PREFIX=/usr \
+      -DCMAKE_BUILD_TYPE=Release  \
+      -Wno-dev .. &&
+make
+
+  make DESTDIR="$PKG" install
+}
+build_opt="-DCMAKE_INSTALL_PREFIX=$KF5_PREFIX -DCMAKE_PREFIX_PATH=$QT5DIR -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF"

@@ -1,0 +1,13 @@
+# Depends on: bubblewrap gexiv2 gnome-autoar gnome-desktop libadwaita libnotify libportal libseccomp tracker desktop-file-utils exempi glib gobject-introspectiongst-plugins-base libcloudproviders libexif gvfs adwaita-icon-theme
+
+name=nautilus
+version=47.2
+release=1
+source=(https://download.gnome.org/sources/${name}/47/${name}-${version}.tar.xz)
+build_opt="--prefix=/usr       
+            --buildtype=release 
+            -Dselinux=false     
+            -Dpackagekit=false"
+post_build () {
+glib-compile-schemas /usr/share/glib-2.0/schemas
+}

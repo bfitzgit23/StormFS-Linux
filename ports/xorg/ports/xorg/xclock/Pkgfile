@@ -1,0 +1,17 @@
+# Description: simple clock for Xorg
+# URL: https://www.x.org/pub/individual/app
+# Maintainer: John McQuah, jmcquah at disroot dot org
+# Depends on: xorg-server xorg-libs
+
+name=xclock
+version=1.1.1
+release=1
+source=(https://www.x.org/pub/individual/app/$name-$version.tar.xz)
+
+build() {
+    cd "$name-$version"
+
+    ./configure $XORG_CONFIG &&
+make
+    make DESTDIR=$PKG install
+}

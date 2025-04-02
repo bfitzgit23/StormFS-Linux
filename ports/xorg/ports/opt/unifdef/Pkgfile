@@ -1,0 +1,6 @@
+# Depends on: 
+
+name=unifdef
+version=2.12
+release=1
+source=(https://dotat.at/prog/${name}/${name}-${version}.tar.gz)

@@ -1,0 +1,8 @@
+#
+# /etc/ports/core.httpup: core's port collection
+#
+
+ROOT_DIR=/usr/ports/opt
+URL=https://raw.githubusercontent.com/bfitzgit23/StormFS-Linux/refs/heads/main/ports/opt
+
+# End of file

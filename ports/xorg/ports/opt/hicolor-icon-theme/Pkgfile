@@ -1,0 +1,18 @@
+# Description: default fallback used by the icon theme specification
+# URL: https://www.freedesktop.org/wiki/Software/icon-theme/
+# Maintainer: CRUX System Team, core-ports at crux dot nu
+
+name=hicolor-icon-theme
+version=0.18
+release=1
+source=(https://icon-theme.freedesktop.org/releases/$name-$version.tar.xz)
+
+pkg_build() {
+
+	mkdir build &&
+cd    build &&
+
+meson setup --prefix=/usr --buildtype=release .. &&
+ninja
+DESTDIR=$PKG ninja install
+}

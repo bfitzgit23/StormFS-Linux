@@ -1,0 +1,19 @@
+# Description: XCB utilities library
+# URL: https://xcb.freedesktop.org/
+# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Depends on: libxcb-32 xcb-util
+
+name=xcb-util-32
+version=0.4.1
+release=1
+source=(https://www.x.org/releases/individual/xcb/xcb-util-$version.tar.xz)
+
+build() {
+	cd xcb-util-$version
+
+	./configure --prefix=/usr --libdir=/usr/lib32
+
+	make
+	make DESTDIR=$PKG install
+	rm -r $PKG/usr/include
+}

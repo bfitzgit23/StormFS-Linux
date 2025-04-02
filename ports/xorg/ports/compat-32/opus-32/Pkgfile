@@ -1,0 +1,26 @@
+# Description: a totally open, royalty-free, highly versatile audio codec
+# URL: https://www.opus-codec.org/
+# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Depends on: opus
+
+name=opus-32
+version=1.5.2
+release=1
+source=(https://downloads.xiph.org/releases/opus/opus-$version.tar.gz)
+
+build() {
+	meson setup opus-$version build \
+		--prefix=/usr \
+		--libdir=/usr/lib32 \
+		--buildtype=plain \
+		--wrap-mode nodownload \
+		-D b_lto=true \
+		-D b_pie=true \
+		-D custom-modes=true \
+		-D tests=disabled
+
+	meson compile -C build
+	DESTDIR=$PKG meson install -C build
+
+	rm -r $PKG/usr/include
+}

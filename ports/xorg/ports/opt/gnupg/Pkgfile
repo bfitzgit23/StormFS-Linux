@@ -1,0 +1,6 @@
+# Depends on: libassuan libgcrypt libksba npth openldap gnutls pinetry
+
+name=gnupg
+version=2.5.4
+release=1
+source=(https://www.${name}.org/ftp/gcrypt/${name}/${name}-${version}.tar.bz2)

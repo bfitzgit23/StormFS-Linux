@@ -1,0 +1,12 @@
+# Depends on: gnome-settings-daemon graphene libei libxcvt libxkbcommon pipewire desktop-file-utils glib gobject-introspection startup-notification libinput wayland wayland-protocols xwayland libdisplay-info
+
+name=mutter
+version=47.5
+release=1
+source=(https://download.gnome.org/sources/$name/47/$name-$version.tar.xz)
+build_opt="--prefix=/usr       
+            --buildtype=release 
+            -D tests=disabled   
+            -D profiler=false 
+            -D tests=enabled 
+            -D clutter_tests=false"

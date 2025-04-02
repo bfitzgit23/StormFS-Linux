@@ -1,0 +1,18 @@
+# Depends on: cracklib
+
+name=cracklib-words
+version=2.9.11.xz
+release=1
+source=(https://github.com/cracklib/cracklib/releases/download/v${version%.*}/${name}-${version})
+pkg_build() {
+install -v -m644 -D     $SRC/cracklib-words-2.9.11.xz \
+                         $PKG/usr/share/dict/cracklib-words.xz    &&
+
+unxz -v                  $PKG/usr/share/dict/cracklib-words.xz    &&
+ln -v -sf cracklib-words $PKG/usr/share/dict/words                &&
+echo $(hostname) >>      $PKG/usr/share/dict/cracklib-extra-words &&
+install -v -m755 -d      $PKG/usr/lib/cracklib                    &&
+
+create-cracklib-dict     $PKG/usr/share/dict/cracklib-words \
+                         $PKG/usr/share/dict/cracklib-extra-words
+}

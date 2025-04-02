@@ -1,0 +1,25 @@
+# Description: The K3b package contains a KF5-based graphical interface to the Cdrtools and dvd+rw-tools CD/DVD manipulation tools. It also combines the capabilities of many other multimedia packages into one central interface to provide a simple-to-operate application that can be used to handle many of your CD/DVD recording and formatting requirements. It is used for creating audio, data, video and mixed-mode CDs as well as copying, ripping and burning CDs and DVDs. Though k3b can be used to copy almost any DVD to similar medium, it does not provide a way to copy, or reproduce a double-layer DVD onto single-layer medium. Of course, there is not a program anywhere on any platform that can make an exact duplicate of a double-layer DVD onto a single-layer disk, there are programs on some platforms that can compress the data on a double-layer DVD to fit on a single-layer DVD producing a duplicate, but compressed, image. If you need to copy the contents of a double-layer DVD to single-layer medium, you may want to look at the RMLCopyDVD package.
+# URL:         https://kde.org/
+# Maintainer:  B.r.i.a.n M.a.d.o.n.n.a b.m.a.d.o.n.n.a.s.t.e.r @ g.m.a.i.l.c.o.m
+# Depends on:  kde-rameworks-6 libkcddb libsamplerate shared-mime-info udisks libburn libdvdread taglib dvd+rw-tools cdrdao cdrtools
+# Optional:	ffmpeg flac lame libmad libsndfile libvorbis libmusicbrainz musepack libmpcdec
+
+name=k3b
+version=24.12.0
+release=1
+source=(https://download.kde.org/stable/release-service/$version/src/$name-$version.tar.xz)
+
+build() {
+	cd $name-$version
+
+	mkdir build &&
+	cd    build &&
+
+cmake -D CMAKE_INSTALL_PREFIX=$KF6_PREFIX \
+      -D CMAKE_BUILD_TYPE=Release         \
+      -D BUILD_TESTING=OFF                \
+      -D QT_MAJOR_VERSION=6               \
+      -W no-dev ..                        &&
+make
+	make DESTDIR=$PKG install
+}

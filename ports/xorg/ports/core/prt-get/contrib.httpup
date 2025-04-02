@@ -1,0 +1,8 @@
+#
+# /etc/ports/contrib.httpup: core's port collection
+#
+
+ROOT_DIR=/usr/ports/contrib
+URL=https://raw.githubusercontent.com/bfitzgit23/StormFS-Linux/refs/heads/main/ports/contrib
+
+# End of file

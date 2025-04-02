@@ -1,0 +1,20 @@
+drwxr-xr-x	root/root	usr/
+drwxr-xr-x	root/root	usr/lib32/
+drwxr-xr-x	root/root	usr/lib32/cmake/
+drwxr-xr-x	root/root	usr/lib32/cmake/libxslt/
+-rw-r--r--	root/root	usr/lib32/cmake/libxslt/FindGcrypt.cmake
+-rw-r--r--	root/root	usr/lib32/cmake/libxslt/libxslt-config.cmake
+-rwxr-xr-x	root/root	usr/lib32/libexslt.la
+lrwxrwxrwx	root/root	usr/lib32/libexslt.so -> libexslt.so.0.8.23
+lrwxrwxrwx	root/root	usr/lib32/libexslt.so.0 -> libexslt.so.0.8.23
+-rwxr-xr-x	root/root	usr/lib32/libexslt.so.0.8.23
+drwxr-xr-x	root/root	usr/lib32/libxslt-plugins/
+-rwxr-xr-x	root/root	usr/lib32/libxslt.la
+lrwxrwxrwx	root/root	usr/lib32/libxslt.so -> libxslt.so.1.1.42
+lrwxrwxrwx	root/root	usr/lib32/libxslt.so.1 -> libxslt.so.1.1.42
+-rwxr-xr-x	root/root	usr/lib32/libxslt.so.1.1.42
+drwxr-xr-x	root/root	usr/lib32/pkgconfig/
+-rw-r--r--	root/root	usr/lib32/pkgconfig/libexslt.pc
+-rw-r--r--	root/root	usr/lib32/pkgconfig/libxslt.pc
+-rw-r--r--	root/root	usr/lib32/xsltConf.sh
+drwxr-xr-x	root/root	usr/share/

@@ -1,0 +1,11 @@
+# Depends on: python3-charset-normalizer python3-idna python3-urllib3 make-ca p11-kit
+
+name=python3-requests
+version=2.32.2
+release=1
+source=(https://files.pythonhosted.org/packages/source/r/requests/requests-${version}.tar.gz
+requests-2.32.2-use_system_certs-1.patch)
+pkg_build() {
+python3 -m build --wheel --no-isolation
+python3 -m installer --destdir="$PKG" dist/*.whl
+}

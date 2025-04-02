@@ -1,0 +1,7 @@
+drwxr-xr-x	root/root	usr/
+drwxr-xr-x	root/root	usr/lib32/
+lrwxrwxrwx	root/root	usr/lib32/libgudev-1.0.so -> libgudev-1.0.so.0
+lrwxrwxrwx	root/root	usr/lib32/libgudev-1.0.so.0 -> libgudev-1.0.so.0.3.0
+-rwxr-xr-x	root/root	usr/lib32/libgudev-1.0.so.0.3.0
+drwxr-xr-x	root/root	usr/lib32/pkgconfig/
+-rw-r--r--	root/root	usr/lib32/pkgconfig/gudev-1.0.pc

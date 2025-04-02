@@ -1,0 +1,116 @@
+# Description: The Rust language with Cargo included.
+# URL: https://www.rust-lang.org/
+# Maintainer: CRUX System Team, core-ports at crux dot nu
+# Depends on: cmake curl llvm
+# Optional: libssh gdb git
+
+
+name=rustc
+version=1.84.0
+release=1
+source=(https://static.rust-lang.org/dist/$name-$version-src.tar.xz)
+build() {
+        cd $name-$version-src
+
+        mkdir -pv $PKG/opt/$name-$version      &&
+ln -svfn $name-$version $PKG/opt/rustc
+
+cat <<- EOF > $SRC/config.toml
+
+
+	[llvm]
+	ninja = true
+	link-shared = true
+	download-ci-llvm = false
+	@POLLY@
+	@CCACHE@
+
+	[install]
+	prefix = "/opt/rustc-1.84.0"
+	docdir = "share/doc/rustc-1.84.0"
+
+	[rust]
+	# LLVM crashes when passing an object through ThinLTO twice.  This is triggered
+	# when using rust code in cross-language LTO if libstd was built using ThinLTO.
+	# http://blog.llvm.org/2019/09/closing-gap-cross-language-lto-between.html
+	# https://github.com/rust-lang/rust/issues/54872
+	lto = "thin"
+	codegen-units = 1
+	debuginfo-level = 1
+	debuginfo-level-std = 2
+	codegen-tests = false
+	backtrace-on-ice = true
+	jemalloc = true
+	remap-debuginfo = false
+	channel = "stable"
+	description = "for BFS Linux"
+	parallel-compiler = false
+	rpath = false
+	frame-pointers = true
+	deny-warnings = false
+	optimize = true
+	codegen-backends = ["llvm"]
+	@LLD@
+
+	[build]
+	target = ["x86_64-unknown-linux-gnu", "i686-unknown-linux-gnu"]
+	tools = ["cargo",
+		"clippy",
+		"rustfmt",
+		"analysis",
+		"src",
+		"rust-demangler",
+		"rust-analyzer",
+		"rust-analyzer-proc-macro-srv",
+		"rustdoc"]
+	docs = false
+	extended = true
+	sanitizers = true
+	profiler = true
+	vendor = true
+	locked-deps = true
+	python = "/usr/bin/python3"
+	optimized-compiler-builtins = true
+	@CARGO@
+	@RUST@
+	@RUSTFMT@
+
+	[target.x86_64-unknown-linux-gnu]
+	llvm-config = "/usr/bin/llvm-config"
+	llvm-filecheck = "/usr/bin/FileCheck"
+	cc = @TARGETCC@
+	cxx = @TARGETCXX@
+	ar = @TARGETAR@
+	ranlib = @TARGETRANLIB@
+
+	[target.i686-unknown-linux-gnu]
+	llvm-config = "/usr/bin/llvm-config"
+	llvm-filecheck = "/usr/bin/FileCheck"
+	cc = @TARGETCC@
+	cxx = @TARGETCXX@
+	ar = @TARGETAR@
+	ranlib = @TARGETRANLIB@
+EOF
+sed '/MirOpt/d' -i src/bootstrap/src/core/builder.rs &&
+
+sed 's/!path.ends_with("cargo")/true/' \
+    -i src/bootstrap/src/core/build_steps/tool.rs &&
+
+sed 's/^.*build_wasm.*$/#[allow(unreachable_code)]&return false;/' \
+    -i src/bootstrap/src/lib.rs
+sed '/CondBitmap/,/^}/s/LLVM_VERSION.*/& \&\& LLVM_VERSION_LT(19, 0)/' \
+        -i compiler/rustc_llvm/llvm-wrapper/RustWrapper.cpp &&
+
+rm -v tests/coverage/mcdc/{cond*,if,inline*,nest*,non_*}.rs
+
+[ ! -e /usr/include/libssh2.h ] || export LIBSSH2_SYS_USE_PKG_CONFIG=1
+[ ! -e /usr/include/sqlite3.h ] || export LIBSQLITE3_SYS_USE_PKG_CONFIG=1
+python3 x.py build
+DESTDIR=$PKG python3 x.py install
+find $PKG/opt/$name-$version -name "*.old" -delete
+install -vdm755 $PKG/usr/share/zsh/site-functions      &&
+ln -sfv $PKG/opt/rustc/share/zsh/site-functions/_cargo \
+        $PKG/usr/share/zsh/site-functions
+unset LIBSSH2_SYS_USE_PKG_CONFIG
+}
+

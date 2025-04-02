@@ -1,0 +1,18 @@
+# Depends on: curl itstool libxml2 libxmlb yaml
+
+name=appstream
+version=1.0.3
+release=1
+source=(https://www.freedesktop.org/software/${name}/releases/AppStream-${version}.tar.xz)
+pkg_build () {
+	cd $SRC/AppStream-$version
+  mkdir build &&
+cd    build &&
+
+meson setup --prefix=/usr       \
+            --buildtype=release \
+            -Dapidocs=false     \
+            -Dstemming=false    .. &&
+ninja
+DESTDIR=$PKG ninja install
+}

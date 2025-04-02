@@ -1,0 +1,14 @@
+# Depends on: gtk3 xorg-apps glu linux-pam ffmpeg kerberos
+
+name=xscreensaver
+version=6.09
+release=2
+source=(https://www.jwz.org/${name}/${name}-${version}.tar.gz)
+build () {
+cd $name-$version
+./configure --prefix=/usr &&
+make
+make install_prefix=$PKG install
+	chmod 755 $PKG/usr/bin/xscreensaver
+	install -d $PKG/usr/share/backgrounds
+}

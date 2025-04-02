@@ -1,0 +1,22 @@
+# Description: Protocol definitions and daemon for D-Bus at-spi
+# URL: https://gitlab.gnome.org/GNOME/at-spi2-core
+# Maintainer: CRUX System Team, core-ports at crux dot nu
+# Depends on: dbus gobject-introspection intltool libxml2 libxtst xorg-libs
+# Optional: gi-docgen sphinx
+
+name=at-spi2-core
+version=2.54.0
+release=1
+source=(https://download.gnome.org/sources/$name/${version:0:4}/$name-$version.tar.xz)
+
+build() {
+
+        cd $name-$version
+        mkdir build &&
+        cd    build &&
+
+meson setup --prefix=/usr --buildtype=release .. &&
+ninja
+
+	DESTDIR=$PKG ninja install
+}

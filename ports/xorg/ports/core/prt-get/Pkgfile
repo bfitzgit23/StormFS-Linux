@@ -1,0 +1,27 @@
+name=prt-get
+version=5.19.6
+release=2
+source=(http://crux.nu/files/prt-get-$version.tar.xz
+	prt-get.conf 
+	prt-get.aliases
+	compiz.httpup  
+	gnome.httpup  
+	opt.httpup  
+	plasma.httpup    
+	prt-get.conf  
+	xfce.httpup
+	core.httpup    
+	lxqt.httpup   
+	prt-get.aliases  
+	xorg.httpup
+	compat-32.httpup
+	contrib.httpup)
+
+post_build() {
+	install -m 644 $SRC/prt-get.{conf,aliases} $PKG/etc/
+	install -d $PKG/var/lib/pkg
+	install -d $PKG/etc/ports
+	cp	-rf $SRC/*.httpup $PKG/etc/ports
+	install -d /var/log/pkgbuild/
+	touch $PKG/var/lib/pkg/prt-get.locker
+}

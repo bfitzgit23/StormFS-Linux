@@ -1,0 +1,23 @@
+# Description: a lightweight C library that eases the writing of UNIX daemons
+# URL: http://0pointer.de/lennart/projects/libdaemon/
+# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Depends on: libdaemon
+
+name=libdaemon-32
+version=0.14
+release=1
+source=(http://0pointer.de/lennart/projects/${name%-*}/${name%-*}-$version.tar.gz)
+
+build() {
+	cd ${name%-*}-$version
+
+	./configure \
+		--prefix=/usr \
+		--libdir=/usr/lib32 \
+		--disable-lynx
+
+	make
+	make DESTDIR=$PKG install
+
+	rm -r $PKG/usr/{include,share}
+}

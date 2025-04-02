@@ -1,0 +1,7 @@
+[binaries]
+c = '/usr/bin/gcc'
+cpp = '/usr/bin/g++'
+
+[properties]
+c_args = ['-m32']
+cpp_args = ['-m32']

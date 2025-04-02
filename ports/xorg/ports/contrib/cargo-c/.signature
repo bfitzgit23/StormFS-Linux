@@ -1,0 +1,6 @@
+untrusted comment: verify with /etc/ports/opt.pub
+RWSE3ohX2g5d/SHh6QRLzLyP2sB1RgpDqkTBKvuPvaDvxnD4HcxiCOmp4wdj91jw5wh8LMd5ImxRe1mI6pWyu3UBqUIX08hiRAo=
+SHA256 (Pkgfile) = 7916097abff95da4ad153c6b056ef50ad29f21c58bb680537cb04f51a6eed3f1
+SHA256 (.footprint) = 120f05ca57fb0dbc82b26d55fe14f3719e1bf43681a430bb813e7310a9a6a1e0
+SHA256 (cargo-c-0.10.5.tar.gz) = 3f131a6a647851a617a87daaaf777a9e50817957be0af29806615613e98efc8a
+SHA256 (cargo-c-0.10.5-cargo.lock) = 2b5660aabd70f6a12390a19bcdeacc585c418d24aaa6855bd396a1c3a5684320

@@ -1,0 +1,25 @@
+# Description: Video Acceleration API to enable hardware accelerated video decode/encode.
+# URL: https://github.com/intel/libva
+# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Depends on: libdrm-32 libglvnd-32 libva xorg-libxfixes-32
+
+name=libva-32
+version=2.22.0
+release=1
+source=(https://github.com/intel/libva/archive/$version/libva-$version.tar.gz)
+
+build() {
+	CFLAGS+=" -DENABLE_VA_MESSAGING" \
+	meson setup build libva-$version \
+		--prefix=/usr \
+		--libdir=/usr/lib32 \
+		--buildtype=plain \
+		--wrap-mode nodownload \
+		-D b_lto=true \
+		-D b_pie=true
+
+	meson compile -C build -j ${JOBS:-1}
+	DESTDIR=$PKG meson install -C build
+
+	rm -r $PKG/usr/include
+}

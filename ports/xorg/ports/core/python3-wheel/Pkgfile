@@ -1,0 +1,31 @@
+# Description: A built-package format for Python
+# URL: https://pypi.python.org/pypi/wheel
+# Maintainer: Danny Rawlins, crux at romster dot me
+# Depends on: python3-setuptools
+
+name=python3-wheel
+version=0.45.1
+release=1
+source=(https://files.pythonhosted.org/packages/source/w/wheel/${name#*-}-$version.tar.gz)
+unpack_source() {
+          for file in ${source[@]}; do
+                   case ${file##*/} in
+                           ${name#*-}-$version.tar.gz)
+                                   tar xfvz $(get_filename $file) -C $SRC ;;
+                           *)
+                                   cp $(get_filename $file) $SRC ;;
+                   esac
+           done
+   }
+build() {
+	cd ${name#*-}-$version
+
+	export PYTHONHASHSEED=0
+
+	# https://github.com/pypa/wheel/pull/365
+#	rm -r src/wheel/vendored
+#	sed -i 's/from .vendored.packaging import tags/from packaging import tags/' src/wheel/bdist_wheel.py
+
+	/usr/bin/python3 setup.py build
+	/usr/bin/python3 setup.py install --prefix=/usr --root=$PKG --optimize=1 --skip-build
+}

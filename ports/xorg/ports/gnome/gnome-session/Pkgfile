@@ -1,0 +1,18 @@
+# Depends on: gnome-desktop json-glib mesa systemd upower
+
+name=gnome-session
+version=47.0.1
+release=1
+source=(https://download.gnome.org/sources/$name/47/$name-$version.tar.xz)
+pkg_build () {
+sed 's@/bin/sh@/bin/sh -l@' -i gnome-session/gnome-session.in
+mkdir build &&
+cd    build &&
+
+meson setup --prefix=/usr --buildtype=release .. &&
+ninja
+ninja install
+mv -v $PKG/usr/share/doc/gnome-session{,-46.0}
+rm -v $PKG/usr/share/xsessions/gnome.desktop &&
+rm -v $PKG/usr/share/wayland-sessions/gnome.desktop
+}

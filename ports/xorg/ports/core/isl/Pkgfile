@@ -1,0 +1,21 @@
+# Description: A stream oriented C library for parsing XML
+# URL:         
+# Maintainer:  Emmett1, emmett1 dot 2miligrams at gmail dot com
+# Depends on:  
+
+name=isl
+version=0.26
+release=1
+source=(https://libisl.sourceforge.io/$name-$version.tar.xz)
+
+pkg_build() {
+
+        ./configure --prefix=/usr    \
+            --disable-static \
+            --docdir=/usr/share/doc/$name-$version
+        make
+        make DESTDIR=$PKG install
+	install -vd $PKG/usr/share/doc/$name-$version
+install -m644 doc/{CodingStyle,manual.pdf,SubmittingPatches,user.pod} \
+        $PKG/usr/share/doc/$name-$version
+}
