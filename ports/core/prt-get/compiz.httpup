@@ -3,6 +3,6 @@
 #
 
 ROOT_DIR=/usr/ports/compiz
-URL=https://github.com/bfitzgit23/StormFS-Linux/raw/tree/main/ports/compiz
+URL=https://raw.githubusercontent.com/bfitzgit23/StormFS-Linux/refs/heads/main/ports/compiz
 
 # End of file
