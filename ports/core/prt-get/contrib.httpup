@@ -3,6 +3,6 @@
 #
 
 ROOT_DIR=/usr/ports/contrib
-URL=https://codeberg.org/bmadonnaster/BFS-Linux/raw/branch/main/ports/contrib
+URL=https://github.com/bfitzgit23/StormFS-Linux/raw/branch/main/ports/contrib
 
 # End of file
