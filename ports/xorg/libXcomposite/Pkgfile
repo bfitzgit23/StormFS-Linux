@@ -6,7 +6,7 @@
 name=libXcomposite
 version=0.4.6
 release=1
-source=(https://www.x.org/releases/individual/lib/libXcomposite-$version.tar.xz)
+source=(https://ftp2.osuosl.org/pub/blfs/conglomeration/Xorg/libXcomposite-$version.tar.xz)
 
 build() {
 	cd libXcomposite-$version
