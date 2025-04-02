@@ -3,6 +3,6 @@
 #
 
 ROOT_DIR=/usr/ports/gnome
-URL=https://codeberg.org/bmadonnaster/BFS-Linux/raw/branch/main/ports/gnome
+URL=https://github.com/bfitzgit23/StormFS-Linux/raw/branch/main/ports/gnome
 
 # End of file
