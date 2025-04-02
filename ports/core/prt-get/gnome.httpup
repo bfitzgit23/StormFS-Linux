@@ -3,6 +3,6 @@
 #
 
 ROOT_DIR=/usr/ports/gnome
-URL=https://github.org/bfitzgit23/StormFS-Linux/raw/tree/main/ports/gnome
+URL=https://raw.githubusercontent.com/bfitzgit23/StormFS-Linux/refs/heads/main/ports/gnome
 
 # End of file
