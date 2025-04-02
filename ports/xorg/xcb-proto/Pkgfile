@@ -6,7 +6,7 @@
 name=xcb-proto
 version=1.17.0
 release=1
-source=(https://xorg.freedesktop.org/archive/individual/proto/xcb-proto-$version.tar.xz)
+source=(https://ftp2.osuosl.org/pub/blfs/conglomeration/Xorg/xcb-proto-$version.tar.xz)
 
 build() {
 	cd xcb-proto-$version
