@@ -18,7 +18,7 @@ So there, my rules. If you encounter error or bugs when using `lfs-scripts`, ope
 #Getting started
 I recommend using the Gentoo live GUI iso located at https://www.gentoo.org/downloads/
 After writing to media and booting perfom the below setps.
-git clone https://codeberg.org/bmadonnaster/StormFS-Linux-install
+git clone https://codeberg.org/gitfitz1/StormFS-Linux-install
 cd StormFS-Linux-install
 
 # bunch of scripts
