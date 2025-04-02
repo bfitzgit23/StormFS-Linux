@@ -3,6 +3,6 @@
 #
 
 ROOT_DIR=/usr/ports/lxqt
-URL=https://codeberg.org/bmadonnaster/BFS-Linux/raw/branch/main/ports/lxqt
+URL=https://github.com/bfitzgit23/StormFS-Linux/raw/branch/main/ports/lxqt
 
 # End of file
