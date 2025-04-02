@@ -3,6 +3,6 @@
 #
 
 ROOT_DIR=/usr/ports/plasma
-URL=https://codeberg.org/bmadonnaster/BFS-Linux/raw/branch/main/ports/plasma
+URL=https://github.com/bfitzgit23/StormFS-Linux/raw/branch/main/ports/plasma
 
 # End of file
