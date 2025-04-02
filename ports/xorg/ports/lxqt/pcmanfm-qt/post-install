@@ -1,4 +1,0 @@
-#!/bin/sh
-sed -e '/Categories=/s/=/=System;FileTools;/' \
-    -e '/Name=/s/=.*/=File Manager PCManFM-Qt'/ \
-    -i /usr/share/applications/pcmanfm-qt.desktop

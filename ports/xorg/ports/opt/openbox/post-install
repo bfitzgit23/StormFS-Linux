@@ -1,2 +1,0 @@
-#!/bin/sh
-rm -v /usr/share/xsessions/openbox-{gnome,kde}.desktop

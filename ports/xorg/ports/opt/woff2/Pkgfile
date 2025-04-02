@@ -1,6 +1,0 @@
-# Depends on: brotli cmake
-
-name=woff2
-version=1.0.2
-release=1
-source=(https://github.com/google/${name}/archive/v${version}/${name}-${version}.tar.gz)

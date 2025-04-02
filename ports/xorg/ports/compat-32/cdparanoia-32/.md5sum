@@ -1,8 +1,0 @@
-d783dc8fb51c04a48a70987d6fa224f2  cdparanoia-10.2-463009.patch
-4c96c43c54d1d826d850cc186801c0e1  cdparanoia-10.2-add-pkgconfig.patch
-8c53b79c85cb35c02905140a1a431986  cdparanoia-10.2-endian.patch
-de036033ae0597333ac1b942b3d14cdc  cdparanoia-10.2-format-security.patch
-7e28225df20b4c1af1f6518261560bc8  cdparanoia-10.2-install.patch
-5eaf3965bd0c360976b81c093553a08b  cdparanoia-10.2-ldflags.patch
-b304bbe8ab63373924a744eac9ebc652  cdparanoia-III-10.2.src.tgz
-306cc237d271c55d976e77d521a2234b  cdparanoia-use-proper-gnu-config-files.patch

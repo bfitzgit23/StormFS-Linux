@@ -1,9 +1,0 @@
-# Depends on: evolution-data-server gcr4 gjs gnome-desktop ibus mutter polkit sassc startup-notification desktop-file-utils gnome-autoar gnome-bluetooth gst-plugins-base networkmanager power-profiles-daemon
-
-name=gnome-shell
-version=47.4
-release=1
-source=(https://download.gnome.org/sources/$name/47/$name-$version.tar.xz)
-build_opt="--prefix=/usr  
-            --buildtype=release 
-            -D tests=false "

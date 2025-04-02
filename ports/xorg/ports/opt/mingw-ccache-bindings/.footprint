@@ -1,9 +1,0 @@
-drwxr-xr-x	root/root	usr/
-drwxr-xr-x	root/root	usr/lib/
-drwxr-xr-x	root/root	usr/lib/ccache/
-lrwxrwxrwx	root/root	usr/lib/ccache/i686-w64-mingw32-c++ -> ../../bin/ccache
-lrwxrwxrwx	root/root	usr/lib/ccache/i686-w64-mingw32-g++ -> ../../bin/ccache
-lrwxrwxrwx	root/root	usr/lib/ccache/i686-w64-mingw32-gcc -> ../../bin/ccache
-lrwxrwxrwx	root/root	usr/lib/ccache/x86_64-w64-mingw32-c++ -> ../../bin/ccache
-lrwxrwxrwx	root/root	usr/lib/ccache/x86_64-w64-mingw32-g++ -> ../../bin/ccache
-lrwxrwxrwx	root/root	usr/lib/ccache/x86_64-w64-mingw32-gcc -> ../../bin/ccache

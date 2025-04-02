@@ -1,6 +1,0 @@
-# Depends on: glib gObject-introspection gtk-doc
-
-name=libxmlb
-version=0.3.19
-release=1
-source=(https://github.com/hughsie/${name}/releases/download/${version}/${name}-${version}.tar.xz)

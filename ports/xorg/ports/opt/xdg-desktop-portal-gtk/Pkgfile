@@ -1,6 +1,0 @@
-# Depends on: gtk3 xdg-desktop-portal gnome-desktop
-
-name=xdg-desktop-portal-gtk
-version=1.15.2
-release=1
-source=(https://github.com/flatpak/${name}/releases/download/${version}/${name}-${version}.tar.xz)

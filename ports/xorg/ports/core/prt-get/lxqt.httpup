@@ -1,8 +1,0 @@
-#
-# /etc/ports/core.httpup: core's port collection
-#
-
-ROOT_DIR=/usr/ports/lxqt
-URL=https://raw.githubusercontent.com/bfitzgit23/StormFS-Linux/refs/heads/main/ports/lxqt
-
-# End of file

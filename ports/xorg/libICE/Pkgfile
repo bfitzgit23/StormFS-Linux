@@ -6,7 +6,7 @@
 name=libICE
 version=1.1.2
 release=1
-source=(https://ftp2.osuosl.org/pub/blfs/conglomeration/Xorg/libICE-$version.tar.xz)
+source=(http://www.linuxfromscratch.org/blfs/downloads/conglomeration/Xorg/libICE-$version.tar.xz)
 
 build() {
 	cd libICE-$version

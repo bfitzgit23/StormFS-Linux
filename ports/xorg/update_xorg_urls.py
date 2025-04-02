@@ -50,7 +50,7 @@ def update_file_urls(file_path, nvidia_version):
         
         # Update Xorg URLs
         xorg_pattern = re.compile(r'(https?://|ftp://)[^\s/]*\.(.*?)/pub/blfs/conglomeration/Xorg/')
-        new_xorg_url = 'https://ftp2.osuosl.org/pub/blfs/conglomeration/Xorg/'
+        new_xorg_url = 'http://www.linuxfromscratch.org/blfs/downloads/conglomeration/Xorg/'
         new_content = xorg_pattern.sub(new_xorg_url, content)
         
         # Update NVIDIA URL if version is available

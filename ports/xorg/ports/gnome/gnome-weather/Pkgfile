@@ -1,6 +1,0 @@
-# Depends on: geoclue gjs libadwaita libgweather 
-
-name=gnome-weather
-version=47.0
-release=1
-source=(https://download.gnome.org/sources/${name}/47/${name}-${version}.tar.xz)

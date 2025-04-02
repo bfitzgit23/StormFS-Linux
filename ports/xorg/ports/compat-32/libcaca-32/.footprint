@@ -1,9 +1,0 @@
-drwxr-xr-x	root/root	usr/
-drwxr-xr-x	root/root	usr/lib32/
--rw-r--r--	root/root	usr/lib32/libcaca.a
--rwxr-xr-x	root/root	usr/lib32/libcaca.la
-lrwxrwxrwx	root/root	usr/lib32/libcaca.so -> libcaca.so.0.99.20
-lrwxrwxrwx	root/root	usr/lib32/libcaca.so.0 -> libcaca.so.0.99.20
--rwxr-xr-x	root/root	usr/lib32/libcaca.so.0.99.20
-drwxr-xr-x	root/root	usr/lib32/pkgconfig/
--rw-r--r--	root/root	usr/lib32/pkgconfig/caca.pc

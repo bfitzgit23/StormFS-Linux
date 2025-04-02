@@ -6,7 +6,7 @@
 name=libFS
 version=1.0.9
 release=1
-source=(https://ftp2.osuosl.org/pub/blfs/conglomeration/Xorg/libFS-$version.tar.xz)
+source=(http://www.linuxfromscratch.org/blfs/downloads/conglomeration/Xorg/libFS-$version.tar.xz)
 
 build() {
 	cd libFS-$version

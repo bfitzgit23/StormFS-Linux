@@ -6,7 +6,7 @@
 name=libXaw
 version=1.0.16
 release=1
-source=(https://ftp2.osuosl.org/pub/blfs/conglomeration/Xorg/libXaw-$version.tar.xz)
+source=(http://www.linuxfromscratch.org/blfs/downloads/conglomeration/Xorg/libXaw-$version.tar.xz)
 
 build() {
 	cd libXaw-$version
