@@ -6,7 +6,7 @@
 name=libXau
 version=1.0.12
 release=1
-source=(https://www.x.org/releases/individual/lib/libXau-$version.tar.xz)
+source=(https://ftp2.osuosl.org/pub/blfs/conglomeration/Xorg/libXau-$version.tar.xz)
 
 build() {
 	cd libXau-$version
