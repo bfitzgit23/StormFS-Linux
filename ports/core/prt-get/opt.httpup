@@ -3,6 +3,6 @@
 #
 
 ROOT_DIR=/usr/ports/opt
-URL=https://github.com/bfitzgit23/StormFS-Linux/raw/branch/main/ports/opt
+URL=https://github.com/bfitzgit23/StormFS-Linux/raw/tree/main/ports/opt
 
 # End of file

@@ -3,6 +3,6 @@
 #
 
 ROOT_DIR=/usr/ports/xorg
-URL=https://github.com/bfitzgit23/StormFS-Linux/raw/branch/main/ports/xorg
+URL=https://github.com/bfitzgit23/StormFS-Linux/raw/tree/main/ports/xorg
 
 # End of file

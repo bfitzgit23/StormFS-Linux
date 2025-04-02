@@ -3,6 +3,6 @@
 #
 
 ROOT_DIR=/usr/ports/compat-32
-URL=https://github.com/bfitzgit23/StormFS-Linux/raw/branch/main/ports/compat-32
+URL=https://codeberg.org/bmadonnaster/BFS-Linux/raw/tree/main/ports/compat-32
 
 # End of file

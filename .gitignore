@@ -9,3 +9,10 @@ target/
 # binary file in the source control, because we want the .wasm file to appear
 # in Github Pages.
 ##-- docs/*.wasm
+
+**lfs-rootfs.tar.xz**
+**toolchain.tar.xz**
+stormfs-grub-theme/.git*
+stormfs-grub-theme
+packages
+sources
