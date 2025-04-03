@@ -6,7 +6,7 @@
 name=iceauth
 version=1.0.9
 release=1
-source=(http://www.linuxfromscratch.org/blfs/downloads/conglomeration/Xorg/iceauth-$version.tar.xz)
+source=(https://www.x.org/releases/individual/app/iceauth-$version.tar.xz)
 
 build() {
 	cd iceauth-$version

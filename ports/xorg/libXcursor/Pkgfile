@@ -6,7 +6,7 @@
 name=libXcursor
 version=1.2.3
 release=1
-source=(http://www.linuxfromscratch.org/blfs/downloads/conglomeration/Xorg/libXcursor-$version.tar.xz)
+source=(https://www.x.org/releases/individual/lib/libXcursor-$version.tar.xz)
 
 pkg_build() {
 	./configure $XORG_CONFIG $docdir
