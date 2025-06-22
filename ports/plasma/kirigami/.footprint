@@ -35,26 +35,26 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/KF6KirigamiPlatform/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6KirigamiPlatform/KF6KirigamiPlatformTargets-release.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6KirigamiPlatform/KF6KirigamiPlatformTargets.cmake
 lrwxrwxrwx	root/root	opt/kf6/lib/libKirigami.so -> libKirigami.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKirigami.so.6 -> libKirigami.so.6.9.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKirigami.so.6.9.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKirigami.so.6 -> libKirigami.so.6.13.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKirigami.so.6.13.0
 lrwxrwxrwx	root/root	opt/kf6/lib/libKirigamiDelegates.so -> libKirigamiDelegates.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKirigamiDelegates.so.6 -> libKirigamiDelegates.so.6.9.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKirigamiDelegates.so.6.9.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKirigamiDelegates.so.6 -> libKirigamiDelegates.so.6.13.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKirigamiDelegates.so.6.13.0
 lrwxrwxrwx	root/root	opt/kf6/lib/libKirigamiDialogs.so -> libKirigamiDialogs.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKirigamiDialogs.so.6 -> libKirigamiDialogs.so.6.9.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKirigamiDialogs.so.6.9.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKirigamiDialogs.so.6 -> libKirigamiDialogs.so.6.13.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKirigamiDialogs.so.6.13.0
 lrwxrwxrwx	root/root	opt/kf6/lib/libKirigamiLayouts.so -> libKirigamiLayouts.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKirigamiLayouts.so.6 -> libKirigamiLayouts.so.6.9.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKirigamiLayouts.so.6.9.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKirigamiLayouts.so.6 -> libKirigamiLayouts.so.6.13.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKirigamiLayouts.so.6.13.0
 lrwxrwxrwx	root/root	opt/kf6/lib/libKirigamiPlatform.so -> libKirigamiPlatform.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKirigamiPlatform.so.6 -> libKirigamiPlatform.so.6.9.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKirigamiPlatform.so.6.9.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKirigamiPlatform.so.6 -> libKirigamiPlatform.so.6.13.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKirigamiPlatform.so.6.13.0
 lrwxrwxrwx	root/root	opt/kf6/lib/libKirigamiPrimitives.so -> libKirigamiPrimitives.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKirigamiPrimitives.so.6 -> libKirigamiPrimitives.so.6.9.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKirigamiPrimitives.so.6.9.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKirigamiPrimitives.so.6 -> libKirigamiPrimitives.so.6.13.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKirigamiPrimitives.so.6.13.0
 lrwxrwxrwx	root/root	opt/kf6/lib/libKirigamiPrivate.so -> libKirigamiPrivate.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKirigamiPrivate.so.6 -> libKirigamiPrivate.so.6.9.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKirigamiPrivate.so.6.9.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKirigamiPrivate.so.6 -> libKirigamiPrivate.so.6.13.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKirigamiPrivate.so.6.13.0
 drwxr-xr-x	root/root	opt/kf6/lib/qml/
 drwxr-xr-x	root/root	opt/kf6/lib/qml/org/
 drwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/
@@ -113,6 +113,8 @@ drwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/kirigami/delegates/
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kirigami/delegates/qmldir
 drwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/kirigami/dialogs/
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kirigami/dialogs/Dialog.qml
+-rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kirigami/dialogs/DialogHeader.qml
+-rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kirigami/dialogs/DialogHeaderTopContent.qml
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kirigami/dialogs/KirigamiDialogs.qmltypes
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kirigami/dialogs/MenuDialog.qml
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kirigami/dialogs/PromptDialog.qml
@@ -293,6 +295,9 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/lv/LC_MESSAGES/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ml/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ml/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/ml/LC_MESSAGES/libkirigami6_qt.qm
+drwxr-xr-x	root/root	opt/kf6/share/locale/nb/
+drwxr-xr-x	root/root	opt/kf6/share/locale/nb/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/nb/LC_MESSAGES/libkirigami6_qt.qm
 drwxr-xr-x	root/root	opt/kf6/share/locale/nl/
 drwxr-xr-x	root/root	opt/kf6/share/locale/nl/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/nl/LC_MESSAGES/libkirigami6_qt.qm
@@ -317,6 +322,9 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/ro/LC_MESSAGES/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ru/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/libkirigami6_qt.qm
+drwxr-xr-x	root/root	opt/kf6/share/locale/sa/
+drwxr-xr-x	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/libkirigami6_qt.qm
 drwxr-xr-x	root/root	opt/kf6/share/locale/sk/
 drwxr-xr-x	root/root	opt/kf6/share/locale/sk/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/sk/LC_MESSAGES/libkirigami6_qt.qm

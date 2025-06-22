@@ -1,6 +1,6 @@
 name=libffi
-version=3.4.7
+version=3.5.1
 release=1
-source=(https://github.com/$name/$name/releases/download/v$version/$name-$version.tar.gz)
+source=(https://github.com/libffi/libffi/releases/download/v$version/$name-$version.tar.gz)
 build_opt="--with-gcc-arch=x86-64"
 bootstrap_opt=""

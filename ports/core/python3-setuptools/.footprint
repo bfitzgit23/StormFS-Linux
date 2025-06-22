@@ -34,16 +34,17 @@ drwxr-xr-x	root/root	usr/lib/python3.13/site-packages/pkg_resources/tests/data/m
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/pkg_resources/tests/test_pkg_resources.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/pkg_resources/tests/test_resources.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/pkg_resources/tests/test_working_set.py
-drwxr-xr-x	root/root	usr/lib/python3.13/site-packages/setuptools-75.8.1-py3.13.egg-info/
--rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools-75.8.1-py3.13.egg-info/PKG-INFO
--rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools-75.8.1-py3.13.egg-info/SOURCES.txt
--rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools-75.8.1-py3.13.egg-info/dependency_links.txt
--rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools-75.8.1-py3.13.egg-info/entry_points.txt
--rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools-75.8.1-py3.13.egg-info/requires.txt
--rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools-75.8.1-py3.13.egg-info/top_level.txt
+drwxr-xr-x	root/root	usr/lib/python3.13/site-packages/setuptools-80.9.0-py3.13.egg-info/
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools-80.9.0-py3.13.egg-info/PKG-INFO
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools-80.9.0-py3.13.egg-info/SOURCES.txt
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools-80.9.0-py3.13.egg-info/dependency_links.txt
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools-80.9.0-py3.13.egg-info/entry_points.txt
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools-80.9.0-py3.13.egg-info/requires.txt
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools-80.9.0-py3.13.egg-info/top_level.txt
 drwxr-xr-x	root/root	usr/lib/python3.13/site-packages/setuptools/
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/__init__.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_core_metadata.py
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_discovery.py
 drwxr-xr-x	root/root	usr/lib/python3.13/site-packages/setuptools/_distutils/
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_distutils/__init__.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_distutils/_log.py
@@ -76,7 +77,22 @@ drwxr-xr-x	root/root	usr/lib/python3.13/site-packages/setuptools/_distutils/comm
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_distutils/command/sdist.py
 drwxr-xr-x	root/root	usr/lib/python3.13/site-packages/setuptools/_distutils/compat/
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_distutils/compat/__init__.py
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_distutils/compat/numpy.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_distutils/compat/py39.py
+drwxr-xr-x	root/root	usr/lib/python3.13/site-packages/setuptools/_distutils/compilers/
+drwxr-xr-x	root/root	usr/lib/python3.13/site-packages/setuptools/_distutils/compilers/C/
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_distutils/compilers/C/base.py
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_distutils/compilers/C/cygwin.py
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_distutils/compilers/C/errors.py
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_distutils/compilers/C/msvc.py
+drwxr-xr-x	root/root	usr/lib/python3.13/site-packages/setuptools/_distutils/compilers/C/tests/
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_distutils/compilers/C/tests/test_base.py
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_distutils/compilers/C/tests/test_cygwin.py
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_distutils/compilers/C/tests/test_mingw.py
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_distutils/compilers/C/tests/test_msvc.py
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_distutils/compilers/C/tests/test_unix.py
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_distutils/compilers/C/unix.py
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_distutils/compilers/C/zos.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_distutils/core.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_distutils/cygwinccompiler.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_distutils/debug.py
@@ -106,13 +122,11 @@ drwxr-xr-x	root/root	usr/lib/python3.13/site-packages/setuptools/_distutils/test
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_distutils/tests/test_build_ext.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_distutils/tests/test_build_py.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_distutils/tests/test_build_scripts.py
--rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_distutils/tests/test_ccompiler.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_distutils/tests/test_check.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_distutils/tests/test_clean.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_distutils/tests/test_cmd.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_distutils/tests/test_config_cmd.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_distutils/tests/test_core.py
--rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_distutils/tests/test_cygwinccompiler.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_distutils/tests/test_dir_util.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_distutils/tests/test_dist.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_distutils/tests/test_extension.py
@@ -124,14 +138,11 @@ drwxr-xr-x	root/root	usr/lib/python3.13/site-packages/setuptools/_distutils/test
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_distutils/tests/test_install_lib.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_distutils/tests/test_install_scripts.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_distutils/tests/test_log.py
--rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_distutils/tests/test_mingwccompiler.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_distutils/tests/test_modified.py
--rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_distutils/tests/test_msvccompiler.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_distutils/tests/test_sdist.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_distutils/tests/test_spawn.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_distutils/tests/test_sysconfig.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_distutils/tests/test_text_file.py
--rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_distutils/tests/test_unixccompiler.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_distutils/tests/test_util.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_distutils/tests/test_version.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_distutils/tests/test_versionpredicate.py (EMPTY)
@@ -149,6 +160,7 @@ drwxr-xr-x	root/root	usr/lib/python3.13/site-packages/setuptools/_distutils/test
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_normalization.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_path.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_reqs.py
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_scripts.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_shutil.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_static.py
 drwxr-xr-x	root/root	usr/lib/python3.13/site-packages/setuptools/_vendor/
@@ -369,17 +381,18 @@ drwxr-xr-x	root/root	usr/lib/python3.13/site-packages/setuptools/_vendor/typing_
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_vendor/typing_extensions-4.12.2.dist-info/RECORD
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_vendor/typing_extensions-4.12.2.dist-info/WHEEL
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_vendor/typing_extensions.py
-drwxr-xr-x	root/root	usr/lib/python3.13/site-packages/setuptools/_vendor/wheel-0.43.0.dist-info/
--rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_vendor/wheel-0.43.0.dist-info/INSTALLER
--rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_vendor/wheel-0.43.0.dist-info/LICENSE.txt
--rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_vendor/wheel-0.43.0.dist-info/METADATA
--rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_vendor/wheel-0.43.0.dist-info/RECORD
--rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_vendor/wheel-0.43.0.dist-info/REQUESTED (EMPTY)
--rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_vendor/wheel-0.43.0.dist-info/WHEEL
--rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_vendor/wheel-0.43.0.dist-info/entry_points.txt
+drwxr-xr-x	root/root	usr/lib/python3.13/site-packages/setuptools/_vendor/wheel-0.45.1.dist-info/
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_vendor/wheel-0.45.1.dist-info/INSTALLER
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_vendor/wheel-0.45.1.dist-info/LICENSE.txt
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_vendor/wheel-0.45.1.dist-info/METADATA
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_vendor/wheel-0.45.1.dist-info/RECORD
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_vendor/wheel-0.45.1.dist-info/REQUESTED (EMPTY)
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_vendor/wheel-0.45.1.dist-info/WHEEL
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_vendor/wheel-0.45.1.dist-info/entry_points.txt
 drwxr-xr-x	root/root	usr/lib/python3.13/site-packages/setuptools/_vendor/wheel/
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_vendor/wheel/__init__.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_vendor/wheel/__main__.py
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_vendor/wheel/_bdist_wheel.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_vendor/wheel/_setuptools_logging.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_vendor/wheel/bdist_wheel.py
 drwxr-xr-x	root/root	usr/lib/python3.13/site-packages/setuptools/_vendor/wheel/cli/
@@ -394,6 +407,9 @@ drwxr-xr-x	root/root	usr/lib/python3.13/site-packages/setuptools/_vendor/wheel/c
 drwxr-xr-x	root/root	usr/lib/python3.13/site-packages/setuptools/_vendor/wheel/vendored/
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_vendor/wheel/vendored/__init__.py (EMPTY)
 drwxr-xr-x	root/root	usr/lib/python3.13/site-packages/setuptools/_vendor/wheel/vendored/packaging/
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_vendor/wheel/vendored/packaging/LICENSE
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_vendor/wheel/vendored/packaging/LICENSE.APACHE
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_vendor/wheel/vendored/packaging/LICENSE.BSD
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_vendor/wheel/vendored/packaging/__init__.py (EMPTY)
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_vendor/wheel/vendored/packaging/_elffile.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/_vendor/wheel/vendored/packaging/_manylinux.py
@@ -495,8 +511,6 @@ drwxr-xr-x	root/root	usr/lib/python3.13/site-packages/setuptools/config/_validat
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/monkey.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/msvc.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/namespaces.py
--rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/package_index.py
--rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/sandbox.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/script (dev).tmpl
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/script.tmpl
 drwxr-xr-x	root/root	usr/lib/python3.13/site-packages/setuptools/tests/
@@ -527,11 +541,11 @@ drwxr-xr-x	root/root	usr/lib/python3.13/site-packages/setuptools/tests/indexes/t
 drwxr-xr-x	root/root	usr/lib/python3.13/site-packages/setuptools/tests/integration/
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/tests/integration/__init__.py (EMPTY)
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/tests/integration/helpers.py
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/tests/integration/test_pbr.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/tests/integration/test_pip_install_sdist.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/tests/mod_with_constant.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/tests/namespaces.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/tests/script-with-bom.py
--rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/tests/server.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/tests/test_archive_util.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/tests/test_bdist_deprecations.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/tests/test_bdist_egg.py
@@ -548,7 +562,6 @@ drwxr-xr-x	root/root	usr/lib/python3.13/site-packages/setuptools/tests/integrati
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/tests/test_dist.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/tests/test_dist_info.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/tests/test_distutils_adoption.py
--rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/tests/test_easy_install.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/tests/test_editable_install.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/tests/test_egg_info.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/tests/test_extern.py
@@ -559,8 +572,7 @@ drwxr-xr-x	root/root	usr/lib/python3.13/site-packages/setuptools/tests/integrati
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/tests/test_logging.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/tests/test_manifest.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/tests/test_namespaces.py
--rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/tests/test_packageindex.py
--rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/tests/test_sandbox.py
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/tests/test_scripts.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/tests/test_sdist.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/tests/test_setopt.py
 -rw-r--r--	root/root	usr/lib/python3.13/site-packages/setuptools/tests/test_setuptools.py

@@ -1,5 +1,5 @@
 name=kmod
-version=34
+version=34.2
 release=1
 source=(https://www.kernel.org/pub/linux/utils/kernel/$name/$name-$version.tar.xz)
 build_opt="-D openssl=enabled -D xz=enabled -D zlib=enabled -D manpages=false"

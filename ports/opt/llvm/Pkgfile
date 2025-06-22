@@ -5,33 +5,30 @@
 # Optional: doxygen git Ggaphviz python3-pygments rsync recommonmark texlive install-tl-unx valgrind  pyyaml zip ocaml psutil Z3
 
 name=llvm
-version=19.1.7
+version=20.1.1
 release=1
 source=(https://github.com/llvm/llvm-project/releases/download/llvmorg-$version/$name-$version.src.tar.xz
-https://anduin.linuxfromscratch.org/BLFS/llvm/llvm-cmake-19.src.tar.xz
-https://anduin.linuxfromscratch.org/BLFS/llvm/llvm-third-party-19.src.tar.xz
+https://anduin.linuxfromscratch.org/BLFS/llvm/llvm-cmake-$version.src.tar.xz
+https://anduin.linuxfromscratch.org/BLFS/llvm/llvm-third-party-$version.src.tar.xz
 https://github.com/llvm/llvm-project/releases/download/llvmorg-$version/clang-$version.src.tar.xz
 https://github.com/llvm/llvm-project/releases/download/llvmorg-$version/compiler-rt-$version.src.tar.xz)
 unpack_source() {
 tar -xf $PKGMK_SOURCE_DIR/$name-$version.src.tar.xz   -C $SRC
 cd $SRC/$name-$version.src
-tar xf $PKGMK_SOURCE_DIR/llvm-cmake-19.src.tar.xz   
-tar xf $PKGMK_SOURCE_DIR//llvm-third-party-19.src.tar.xz       		      
+tar xf $PKGMK_SOURCE_DIR/llvm-cmake-$version.src.tar.xz   
+tar xf $PKGMK_SOURCE_DIR//llvm-third-party-$version.src.tar.xz       		      
 tar xf $PKGMK_SOURCE_DIR/compiler-rt-$version.src.tar.xz -C projects               
-sed '/LLVM_COMMON_CMAKE_UTILS/s@../cmake@llvm-cmake-19.src@'          \
-    -i CMakeLists.txt                                                 &&
-sed '/LLVM_THIRD_PARTY_DIR/s@../third-party@llvm-third-party-19.src@' \
+sed '/LLVM_COMMON_CMAKE_UTILS/s@../cmake@cmake-20.1.1.src@'          \
+    -i CMakeLists.txt                                                &&
+sed '/LLVM_THIRD_PARTY_DIR/s@../third-party@third-party-20.1.1.src@' \
     -i cmake/modules/HandleLLVMOptions.cmake
 tar xf $PKGMK_SOURCE_DIR/clang-$version.src.tar.xz -C tools &&
 mv tools/clang-$version.src tools/clang
 tar -xf $PKGMK_SOURCE_DIR/compiler-rt-$version.src.tar.xz -C projects    &&
 mv projects/compiler-rt-$version.src projects/compiler-rt &&
-sed '/^set(LLVM_COMMON_CMAKE_UTILS/d'                   \
-    -i projects/compiler-rt/CMakeLists.txt
     grep -rl '#!.*python' | xargs sed -i '1s/python$/python3/'
+sed 's/utility/tool/' -i utils/FileCheck/CMakeLists.txt
 #    patch -Np2 -d tools/clang <$PKGMK_SOURCE_DIR/clang-18-enable_default_ssp-1.patch
-sed 's/clang_dfsan/& -fno-stack-protector/' \
-    -i projects/compiler-rt/test/dfsan/origin_unaligned_memtrans.c
 }
 
 build() {

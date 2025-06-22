@@ -1,0 +1,29 @@
+drwxr-xr-x	root/root	usr/
+drwxr-xr-x	root/root	usr/include/
+drwxr-xr-x	root/root	usr/include/traceevent/
+-rw-r--r--	root/root	usr/include/traceevent/event-parse.h
+-rw-r--r--	root/root	usr/include/traceevent/event-utils.h
+-rw-r--r--	root/root	usr/include/traceevent/kbuffer.h
+-rw-r--r--	root/root	usr/include/traceevent/trace-seq.h
+drwxr-xr-x	root/root	usr/lib/
+-rw-r--r--	root/root	usr/lib/libtraceevent.a
+lrwxrwxrwx	root/root	usr/lib/libtraceevent.so -> libtraceevent.so.1
+lrwxrwxrwx	root/root	usr/lib/libtraceevent.so.1 -> libtraceevent.so.1.8.4
+-rwxr-xr-x	root/root	usr/lib/libtraceevent.so.1.8.4
+drwxr-xr-x	root/root	usr/lib/pkgconfig/
+-rw-r--r--	root/root	usr/lib/pkgconfig/libtraceevent.pc
+drwxr-xr-x	root/root	usr/lib/traceevent/
+drwxr-xr-x	root/root	usr/lib/traceevent/plugins/
+-rw-r--r--	root/root	usr/lib/traceevent/plugins/libtraceevent-dynamic-list
+-rwxr-xr-x	root/root	usr/lib/traceevent/plugins/plugin_cfg80211.so
+-rwxr-xr-x	root/root	usr/lib/traceevent/plugins/plugin_function.so
+-rwxr-xr-x	root/root	usr/lib/traceevent/plugins/plugin_futex.so
+-rwxr-xr-x	root/root	usr/lib/traceevent/plugins/plugin_hrtimer.so
+-rwxr-xr-x	root/root	usr/lib/traceevent/plugins/plugin_jbd2.so
+-rwxr-xr-x	root/root	usr/lib/traceevent/plugins/plugin_kmem.so
+-rwxr-xr-x	root/root	usr/lib/traceevent/plugins/plugin_kvm.so
+-rwxr-xr-x	root/root	usr/lib/traceevent/plugins/plugin_mac80211.so
+-rwxr-xr-x	root/root	usr/lib/traceevent/plugins/plugin_sched_switch.so
+-rwxr-xr-x	root/root	usr/lib/traceevent/plugins/plugin_scsi.so
+-rwxr-xr-x	root/root	usr/lib/traceevent/plugins/plugin_tlb.so
+-rwxr-xr-x	root/root	usr/lib/traceevent/plugins/plugin_xen.so

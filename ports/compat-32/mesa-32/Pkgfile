@@ -5,7 +5,7 @@
 # Optional: clang-32 glslang libclc libva-32 libvdpau-32 spirv-llvm-translator-32 vulkan-loader-32 wayland-protocols
 
 name=mesa-32
-version=24.3.4
+version=25.1.3
 release=1
 source=(https://archive.mesa3d.org/mesa-$version.tar.xz
 	x86-linux-gnu x86-linux-gnu-ccache)
@@ -27,7 +27,7 @@ build() {
 		prt-get isinst directx-headers-32 && PKGMK_MESA_VULKAN_DRIVERS+='microsoft-experimental,'
 		prt-get isinst glslang && PKGMK_MESA_VULKAN_DRIVERS+='amd,' PKGMK_MESA_VULKAN_LAYERS+='overlay,'
 		prt-get isinst clang-32 glslang libclc lua python3-ply spirv-llvm-translator-32 && PKGMK_MESA_VULKAN_DRIVERS+='intel,' PKGMK_MESA_VULKAN_LAYERS+='intel-nullhw,'
-		VULKAN_DRIVERS=${PKGMK_MESA_VULKAN_DRIVERS#,}intel_hasvk,swrast,virtio
+		VULKAN_DRIVERS=${PKGMK_MESA_VULKAN_DRIVERS#,}intel_hasvk,virtio,swrast
 		PKGMK_MESA_GALLIUM+='zink,'
 	else
 		VULKAN_DRIVERS=""
@@ -55,7 +55,7 @@ build() {
 		-D glx=dri \
 		-D osmesa=true \
 		-D gallium-xa=enabled \
-		-D gallium-drivers=${PKGMK_MESA_GALLIUM}crocus,nouveau,r300,r600,radeonsi,svga,swrast,virgl,i915 \
+		-D gallium-drivers=${PKGMK_MESA_GALLIUM}crocus,nouveau,r300,r600,radeonsi,svga,virgl,i915 \
 		-D platforms=${PKGMK_MESA_PLATFORMS#,} \
 		-D shared-glapi=enabled \
 		-D video-codecs=all \

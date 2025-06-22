@@ -53,8 +53,8 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/KF6XmlGui/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6XmlGui/KF6XmlGuiTargets-release.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6XmlGui/KF6XmlGuiTargets.cmake
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6XmlGui.so -> libKF6XmlGui.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6XmlGui.so.6 -> libKF6XmlGui.so.6.9.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6XmlGui.so.6.9.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6XmlGui.so.6 -> libKF6XmlGui.so.6.13.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6XmlGui.so.6.13.0
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/designer/
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/designer/kxmlgui6widgets.so
@@ -207,6 +207,9 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/ja/LC_MESSAGES/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ka/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ka/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/ka/LC_MESSAGES/kxmlgui6.mo
+drwxr-xr-x	root/root	opt/kf6/share/locale/kab/
+drwxr-xr-x	root/root	opt/kf6/share/locale/kab/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/kab/LC_MESSAGES/kxmlgui6.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/kk/
 drwxr-xr-x	root/root	opt/kf6/share/locale/kk/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/kk/LC_MESSAGES/kxmlgui6.mo
@@ -225,6 +228,9 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/ku/LC_MESSAGES/
 drwxr-xr-x	root/root	opt/kf6/share/locale/lb/
 drwxr-xr-x	root/root	opt/kf6/share/locale/lb/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/lb/LC_MESSAGES/kxmlgui6.mo
+drwxr-xr-x	root/root	opt/kf6/share/locale/lg/
+drwxr-xr-x	root/root	opt/kf6/share/locale/lg/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/lg/LC_MESSAGES/kxmlgui6.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/lt/
 drwxr-xr-x	root/root	opt/kf6/share/locale/lt/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/lt/LC_MESSAGES/kxmlgui6.mo

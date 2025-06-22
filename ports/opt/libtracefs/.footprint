@@ -1,0 +1,17 @@
+drwxr-xr-x	root/root	usr/
+drwxr-xr-x	root/root	usr/bin/
+-rwxr-xr-x	root/root	usr/bin/sqlhist
+drwxr-xr-x	root/root	usr/include/
+drwxr-xr-x	root/root	usr/include/libtracefs/
+-rw-r--r--	root/root	usr/include/libtracefs/tracefs.h
+drwxr-xr-x	root/root	usr/lib/
+-rw-r--r--	root/root	usr/lib/libtracefs.a
+lrwxrwxrwx	root/root	usr/lib/libtracefs.so -> libtracefs.so.1
+lrwxrwxrwx	root/root	usr/lib/libtracefs.so.1 -> libtracefs.so.1.8.2
+-rwxr-xr-x	root/root	usr/lib/libtracefs.so.1.8.2
+drwxr-xr-x	root/root	usr/lib/pkgconfig/
+-rw-r--r--	root/root	usr/lib/pkgconfig/libtracefs.pc
+drwxr-xr-x	root/root	usr/share/
+drwxr-xr-x	root/root	usr/share/bash-completion/
+drwxr-xr-x	root/root	usr/share/bash-completion/completions/
+-rw-r--r--	root/root	usr/share/bash-completion/completions/tracefs_sql.bash

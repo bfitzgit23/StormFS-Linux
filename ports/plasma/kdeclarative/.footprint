@@ -17,8 +17,10 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/KF6Declarative/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6Declarative/KF6DeclarativeTargets-release.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6Declarative/KF6DeclarativeTargets.cmake
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6CalendarEvents.so -> libKF6CalendarEvents.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6CalendarEvents.so.6 -> libKF6CalendarEvents.so.6.9.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6CalendarEvents.so.6.9.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6CalendarEvents.so.6 -> libKF6CalendarEvents.so.6.13.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6CalendarEvents.so.6.13.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libkquickcontrolsprivate.so.0 -> libkquickcontrolsprivate.so.6.13.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libkquickcontrolsprivate.so.6.13.0
 drwxr-xr-x	root/root	opt/kf6/lib/qml/
 drwxr-xr-x	root/root	opt/kf6/lib/qml/org/
 drwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/
@@ -37,6 +39,9 @@ drwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/graphicaleffects/
 drwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/kquickcontrols/
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kquickcontrols/ColorButton.qml
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kquickcontrols/KeySequenceItem.qml
+-rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kquickcontrols/kde-qmlmodule.version
+-rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kquickcontrols/kquickcontrols.qmltypes
+-rwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/kquickcontrols/libkquickcontrols.so
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kquickcontrols/qmldir
 drwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/kquickcontrolsaddons/
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kquickcontrolsaddons/kde-qmlmodule.version
@@ -45,6 +50,8 @@ drwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/kquickcontrolsaddons/
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kquickcontrolsaddons/qmldir
 drwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/private/
 drwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/private/kquickcontrols/
+-rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/private/kquickcontrols/kde-qmlmodule.version
+-rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/private/kquickcontrols/kquickcontrolsprivate.qmltypes
 -rwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/private/kquickcontrols/libkquickcontrolsprivateplugin.so
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/private/kquickcontrols/qmldir
 drwxr-xr-x	root/root	opt/kf6/share/

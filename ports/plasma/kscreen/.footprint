@@ -125,6 +125,11 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/he/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/he/LC_MESSAGES/kcm_kscreen.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/he/LC_MESSAGES/kscreen_common.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/he/LC_MESSAGES/plasma_applet_org.kde.kscreen.mo
+drwxr-xr-x	root/root	opt/kf6/share/locale/hi/
+drwxr-xr-x	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/kcm_kscreen.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/kscreen_common.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/plasma_applet_org.kde.kscreen.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/hsb/
 drwxr-xr-x	root/root	opt/kf6/share/locale/hsb/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/hsb/LC_MESSAGES/kcm_kscreen.mo
@@ -188,6 +193,7 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/nb/
 drwxr-xr-x	root/root	opt/kf6/share/locale/nb/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/nb/LC_MESSAGES/kcm_kscreen.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/nb/LC_MESSAGES/kscreen_common.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/nb/LC_MESSAGES/plasma_applet_org.kde.kscreen.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/nl/
 drwxr-xr-x	root/root	opt/kf6/share/locale/nl/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/nl/LC_MESSAGES/kcm_kscreen.mo
@@ -228,6 +234,11 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/kcm_kscreen.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/kscreen_common.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/plasma_applet_org.kde.kscreen.mo
+drwxr-xr-x	root/root	opt/kf6/share/locale/sa/
+drwxr-xr-x	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/kcm_kscreen.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/kscreen_common.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/plasma_applet_org.kde.kscreen.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/sk/
 drwxr-xr-x	root/root	opt/kf6/share/locale/sk/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/sk/LC_MESSAGES/kcm_kscreen.mo

@@ -1,6 +1,0 @@
-# Depends on: 
-
-name=fastfetch-linux
-version=amd64
-release=1
-source=(https://github.com/fastfetch-cli/fastfetch/releases/download/2.39.1/${name}-${version}.tar.gz)

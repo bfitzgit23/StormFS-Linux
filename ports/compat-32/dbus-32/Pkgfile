@@ -4,29 +4,34 @@
 # Depends on: dbus expat-32
 
 name=dbus-32
-version=1.14.10
+version=1.16.2
 release=1
 source=(https://dbus.freedesktop.org/releases/dbus/dbus-$version.tar.xz)
 
 build() {
-	cd ${name%-*}-$version
+	[ -e '/usr/lib/pkgconfig/x11.pc' ] && [ ! -e '/usr/lib32/pkgconfig/x11.pc' ] && printf "\e[031mxorg-libx11 is detected on your system, please run:
+	prt-get depinst xorg-libx11-32
+	before continuing with dbus-32.\033[0m\n" &&
+	exit 1
 
-[ -e '/usr/lib/pkgconfig/x11.pc' ] && [ ! -e '/usr/lib32/pkgconfig/x11.pc' ] && printf "\e[031mxorg-libx11 is detected on your system, please run:
-prt-get depinst libX11-32
-before continuing with dbus-32.\033[0m\n" &&
-exit 1
-CFLAGS+=" -m32" CXXFLAGS+=" -m32" \
-	./configure --prefix=/usr \
-		--libdir=/usr/lib32 \
-		--with-dbus-daemondir=/usr/sbin \
+	meson setup dbus-$version build \
+		--prefix=/usr \
 		--localstatedir=/var \
-		--libexecdir=/usr/lib32/dbus \
-		--with-dbus-user=messagebus \
-		--with-init-scripts=none \
-		--with-system-pid-file=/var/run/dbus/dbus.pid
+		--sysconfdir=/etc \
+		--libdir=/usr/lib32 \
+		--libexecdir=lib32/dbus \
+		--buildtype=plain \
+		--wrap-mode nodownload \
+		-D b_lto=true \
+		-D b_pie=true \
+		-D dbus_daemondir=/usr/sbin \
+		-D dbus_user=messagebus \
+		-D runtime_dir=/run \
+		-D system_pid_file=/run/dbus/pid \
+		-D system_socket=/run/dbus/system_bus_socket
 
-	make
-	make DESTDIR=$PKG install
+	meson compile -C build
+	DESTDIR=$PKG meson install -C build
 
-	rm -r $PKG/var $PKG/usr/{bin,etc,include,sbin,share}
+	rm -r $PKG/var $PKG/run $PKG/usr/{bin,include,share} $PKG/etc
 }

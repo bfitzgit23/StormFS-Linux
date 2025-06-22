@@ -12,14 +12,14 @@ drwxr-xr-x	root/root	usr/include/xkbcommon/
 -rw-r--r--	root/root	usr/include/xkbcommon/xkbregistry.h
 drwxr-xr-x	root/root	usr/lib/
 lrwxrwxrwx	root/root	usr/lib/libxkbcommon-x11.so -> libxkbcommon-x11.so.0
-lrwxrwxrwx	root/root	usr/lib/libxkbcommon-x11.so.0 -> libxkbcommon-x11.so.0.8.0
--rwxr-xr-x	root/root	usr/lib/libxkbcommon-x11.so.0.8.0
+lrwxrwxrwx	root/root	usr/lib/libxkbcommon-x11.so.0 -> libxkbcommon-x11.so.0.10.0
+-rwxr-xr-x	root/root	usr/lib/libxkbcommon-x11.so.0.10.0
 lrwxrwxrwx	root/root	usr/lib/libxkbcommon.so -> libxkbcommon.so.0
-lrwxrwxrwx	root/root	usr/lib/libxkbcommon.so.0 -> libxkbcommon.so.0.8.0
--rwxr-xr-x	root/root	usr/lib/libxkbcommon.so.0.8.0
+lrwxrwxrwx	root/root	usr/lib/libxkbcommon.so.0 -> libxkbcommon.so.0.10.0
+-rwxr-xr-x	root/root	usr/lib/libxkbcommon.so.0.10.0
 lrwxrwxrwx	root/root	usr/lib/libxkbregistry.so -> libxkbregistry.so.0
-lrwxrwxrwx	root/root	usr/lib/libxkbregistry.so.0 -> libxkbregistry.so.0.8.0
--rwxr-xr-x	root/root	usr/lib/libxkbregistry.so.0.8.0
+lrwxrwxrwx	root/root	usr/lib/libxkbregistry.so.0 -> libxkbregistry.so.0.10.0
+-rwxr-xr-x	root/root	usr/lib/libxkbregistry.so.0.10.0
 drwxr-xr-x	root/root	usr/lib/pkgconfig/
 -rw-r--r--	root/root	usr/lib/pkgconfig/xkbcommon-x11.pc
 -rw-r--r--	root/root	usr/lib/pkgconfig/xkbcommon.pc

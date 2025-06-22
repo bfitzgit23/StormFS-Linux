@@ -5,7 +5,7 @@
 # Optional: dbus libxslt  help2man jing weasyprint
 
 name=vala
-version=0.56.17
+version=0.56.18
 release=1
 source=(https://download.gnome.org/sources/vala/${version%.*}/vala-$version.tar.xz)
 

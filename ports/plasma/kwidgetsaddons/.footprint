@@ -180,8 +180,8 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/KF6WidgetsAddons/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6WidgetsAddons/KF6WidgetsAddonsTargets-release.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6WidgetsAddons/KF6WidgetsAddonsTargets.cmake
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6WidgetsAddons.so -> libKF6WidgetsAddons.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6WidgetsAddons.so.6 -> libKF6WidgetsAddons.so.6.9.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6WidgetsAddons.so.6.9.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6WidgetsAddons.so.6 -> libKF6WidgetsAddons.so.6.13.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6WidgetsAddons.so.6.13.0
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/designer/
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/designer/kwidgetsaddons6widgets.so
@@ -412,6 +412,9 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/ro/LC_MESSAGES/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ru/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/kwidgetsaddons6_qt.qm
+drwxr-xr-x	root/root	opt/kf6/share/locale/sa/
+drwxr-xr-x	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/kwidgetsaddons6_qt.qm
 drwxr-xr-x	root/root	opt/kf6/share/locale/se/
 drwxr-xr-x	root/root	opt/kf6/share/locale/se/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/se/LC_MESSAGES/kwidgetsaddons6_qt.qm

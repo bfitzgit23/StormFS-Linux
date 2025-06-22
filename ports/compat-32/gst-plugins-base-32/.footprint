@@ -21,6 +21,7 @@ drwxr-xr-x	root/root	usr/lib32/gstreamer-1.0/include/gst/gl/
 -rwxr-xr-x	root/root	usr/lib32/gstreamer-1.0/libgstlibvisual.so
 -rwxr-xr-x	root/root	usr/lib32/gstreamer-1.0/libgstogg.so
 -rwxr-xr-x	root/root	usr/lib32/gstreamer-1.0/libgstopengl.so
+-rwxr-xr-x	root/root	usr/lib32/gstreamer-1.0/libgstopus.so
 -rwxr-xr-x	root/root	usr/lib32/gstreamer-1.0/libgstoverlaycomposition.so
 -rwxr-xr-x	root/root	usr/lib32/gstreamer-1.0/libgstpango.so
 -rwxr-xr-x	root/root	usr/lib32/gstreamer-1.0/libgstpbtypes.so

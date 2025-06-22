@@ -20,6 +20,7 @@ drwxr-xr-x	root/root	opt/kf6/lib/mozilla/native-messaging-hosts/
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/kf6/
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/kf6/kded/
+-rwxr-xr-x	root/root	opt/kf6/lib/plugins/kf6/kded/browserintegrationflatpakintegrator.so
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/kf6/kded/browserintegrationreminder.so
 drwxr-xr-x	root/root	opt/kf6/share/
 drwxr-xr-x	root/root	opt/kf6/share/applications/
@@ -105,6 +106,10 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/he/
 drwxr-xr-x	root/root	opt/kf6/share/locale/he/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/he/LC_MESSAGES/plasma-browser-integration-host.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/he/LC_MESSAGES/plasma-browser-integration-reminder.mo
+drwxr-xr-x	root/root	opt/kf6/share/locale/hi/
+drwxr-xr-x	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/plasma-browser-integration-host.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/plasma-browser-integration-reminder.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/hu/
 drwxr-xr-x	root/root	opt/kf6/share/locale/hu/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/hu/LC_MESSAGES/plasma-browser-integration-host.mo
@@ -181,6 +186,10 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/ru/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/plasma-browser-integration-host.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/plasma-browser-integration-reminder.mo
+drwxr-xr-x	root/root	opt/kf6/share/locale/sa/
+drwxr-xr-x	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/plasma-browser-integration-host.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/plasma-browser-integration-reminder.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/sk/
 drwxr-xr-x	root/root	opt/kf6/share/locale/sk/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/sk/LC_MESSAGES/plasma-browser-integration-host.mo

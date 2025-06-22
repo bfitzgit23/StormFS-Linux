@@ -5,7 +5,7 @@
 # Optional: db doxygen graphviz gtk-doc icu pygobject
 
 name=libical
-version=3.0.18
+version=3.0.20
 release=1
 source=(https://github.com/$name/$name/releases/download/v$version/$name-$version.tar.gz)
 
@@ -15,13 +15,13 @@ build() {
 	mkdir build &&
 	cd    build &&
 
-cmake -DCMAKE_INSTALL_PREFIX=/usr  \
-      -DCMAKE_BUILD_TYPE=Release   \
-      -DSHARED_ONLY=yes            \
-      -DICAL_BUILD_DOCS=false      \
-      -DGOBJECT_INTROSPECTION=true \
-      -DICAL_GLIB_VAPI=true        \
-      .. &&
+cmake -D CMAKE_INSTALL_PREFIX=/usr  \
+      -D CMAKE_BUILD_TYPE=Release   \
+      -D SHARED_ONLY=yes            \
+      -D ICAL_BUILD_DOCS=false      \
+      -D GOBJECT_INTROSPECTION=true \
+      -D ICAL_GLIB_VAPI=true        \
+      ..  &&
 make -j1
 #make docs
 	make DESTDIR=$PKG install

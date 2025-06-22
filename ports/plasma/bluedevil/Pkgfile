@@ -1,7 +1,7 @@
 # Depends on: bluez-qt libplasma
 
 name=bluedevil
-version=6.2.4.1
+version=6.3.4.1
 release=1
 ource=(https://download.kde.org/stable/plasma/${version%.1}/$name-$version.tar.xz)
 build_opt="-D CMAKE_INSTALL_PREFIX=$KF6_PREFIX 

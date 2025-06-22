@@ -51,8 +51,8 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/KF6Solid/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6Solid/KF6SolidTargets-release.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6Solid/KF6SolidTargets.cmake
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6Solid.so -> libKF6Solid.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6Solid.so.6 -> libKF6Solid.so.6.9.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6Solid.so.6.9.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6Solid.so.6 -> libKF6Solid.so.6.13.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6Solid.so.6.13.0
 drwxr-xr-x	root/root	opt/kf6/share/
 drwxr-xr-x	root/root	opt/kf6/share/locale/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ar/
@@ -121,6 +121,9 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/gl/LC_MESSAGES/
 drwxr-xr-x	root/root	opt/kf6/share/locale/he/
 drwxr-xr-x	root/root	opt/kf6/share/locale/he/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/he/LC_MESSAGES/solid6_qt.qm
+drwxr-xr-x	root/root	opt/kf6/share/locale/hi/
+drwxr-xr-x	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/solid6_qt.qm
 drwxr-xr-x	root/root	opt/kf6/share/locale/hr/
 drwxr-xr-x	root/root	opt/kf6/share/locale/hr/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/hr/LC_MESSAGES/solid6_qt.qm
@@ -199,6 +202,9 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/ro/LC_MESSAGES/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ru/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/solid6_qt.qm
+drwxr-xr-x	root/root	opt/kf6/share/locale/sa/
+drwxr-xr-x	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/solid6_qt.qm
 drwxr-xr-x	root/root	opt/kf6/share/locale/se/
 drwxr-xr-x	root/root	opt/kf6/share/locale/se/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/se/LC_MESSAGES/solid6_qt.qm

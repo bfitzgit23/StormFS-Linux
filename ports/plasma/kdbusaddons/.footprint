@@ -23,8 +23,8 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/KF6DBusAddons/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6DBusAddons/KF6DBusAddonsTargets.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6DBusAddons/KF6dbus.service.in
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6DBusAddons.so -> libKF6DBusAddons.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6DBusAddons.so.6 -> libKF6DBusAddons.so.6.9.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6DBusAddons.so.6.9.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6DBusAddons.so.6 -> libKF6DBusAddons.so.6.13.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6DBusAddons.so.6.13.0
 drwxr-xr-x	root/root	opt/kf6/share/
 drwxr-xr-x	root/root	opt/kf6/share/locale/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ar/

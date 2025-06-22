@@ -198,6 +198,7 @@ drwxr-xr-x	root/root	usr/lib/vlc/plugins/access/
 -rwxr-xr-x	root/root	usr/lib/vlc/plugins/access/libsdp_plugin.so
 -rwxr-xr-x	root/root	usr/lib/vlc/plugins/access/libsftp_plugin.so
 -rwxr-xr-x	root/root	usr/lib/vlc/plugins/access/libshm_plugin.so
+-rwxr-xr-x	root/root	usr/lib/vlc/plugins/access/libsmb_plugin.so
 -rwxr-xr-x	root/root	usr/lib/vlc/plugins/access/libtcp_plugin.so
 -rwxr-xr-x	root/root	usr/lib/vlc/plugins/access/libtimecode_plugin.so
 -rwxr-xr-x	root/root	usr/lib/vlc/plugins/access/libudp_plugin.so
@@ -406,6 +407,7 @@ drwxr-xr-x	root/root	usr/lib/vlc/plugins/packetizer/
 -rwxr-xr-x	root/root	usr/lib/vlc/plugins/packetizer/libpacketizer_vc1_plugin.so
 -rw-r--r--	root/root	usr/lib/vlc/plugins/plugins.dat
 drwxr-xr-x	root/root	usr/lib/vlc/plugins/services_discovery/
+-rwxr-xr-x	root/root	usr/lib/vlc/plugins/services_discovery/libavahi_plugin.so
 -rwxr-xr-x	root/root	usr/lib/vlc/plugins/services_discovery/libmediadirs_plugin.so
 -rwxr-xr-x	root/root	usr/lib/vlc/plugins/services_discovery/libpodcast_plugin.so
 -rwxr-xr-x	root/root	usr/lib/vlc/plugins/services_discovery/libpulselist_plugin.so

@@ -107,6 +107,7 @@ drwxr-xr-x	root/root	usr/include/asm/
 -rw-r--r--	root/root	usr/include/asm/vsyscall.h
 drwxr-xr-x	root/root	usr/include/drm/
 -rw-r--r--	root/root	usr/include/drm/amdgpu_drm.h
+-rw-r--r--	root/root	usr/include/drm/amdxdna_accel.h
 -rw-r--r--	root/root	usr/include/drm/armada_drm.h
 -rw-r--r--	root/root	usr/include/drm/drm.h
 -rw-r--r--	root/root	usr/include/drm/drm_fourcc.h
@@ -280,6 +281,7 @@ drwxr-xr-x	root/root	usr/include/linux/dvb/
 -rw-r--r--	root/root	usr/include/linux/erspan.h
 -rw-r--r--	root/root	usr/include/linux/ethtool.h
 -rw-r--r--	root/root	usr/include/linux/ethtool_netlink.h
+-rw-r--r--	root/root	usr/include/linux/ethtool_netlink_generated.h
 -rw-r--r--	root/root	usr/include/linux/eventfd.h
 -rw-r--r--	root/root	usr/include/linux/eventpoll.h
 -rw-r--r--	root/root	usr/include/linux/exfat.h
@@ -706,6 +708,7 @@ drwxr-xr-x	root/root	usr/include/linux/nfsd/
 -rw-r--r--	root/root	usr/include/linux/ppp-ioctl.h
 -rw-r--r--	root/root	usr/include/linux/ppp_defs.h
 -rw-r--r--	root/root	usr/include/linux/pps.h
+-rw-r--r--	root/root	usr/include/linux/pps_gen.h
 -rw-r--r--	root/root	usr/include/linux/pr.h
 -rw-r--r--	root/root	usr/include/linux/prctl.h
 -rw-r--r--	root/root	usr/include/linux/psample.h
@@ -1023,6 +1026,7 @@ drwxr-xr-x	root/root	usr/include/sound/
 -rw-r--r--	root/root	usr/include/sound/compress_offload.h
 -rw-r--r--	root/root	usr/include/sound/compress_params.h
 -rw-r--r--	root/root	usr/include/sound/emu10k1.h
+-rw-r--r--	root/root	usr/include/sound/fcp.h
 -rw-r--r--	root/root	usr/include/sound/firewire.h
 -rw-r--r--	root/root	usr/include/sound/hdsp.h
 -rw-r--r--	root/root	usr/include/sound/hdspm.h

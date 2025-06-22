@@ -55,8 +55,8 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/KF6DAV/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6DAV/KF6DAVTargets-release.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6DAV/KF6DAVTargets.cmake
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6DAV.so -> libKF6DAV.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6DAV.so.6 -> libKF6DAV.so.6.9.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6DAV.so.6.9.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6DAV.so.6 -> libKF6DAV.so.6.13.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6DAV.so.6.13.0
 drwxr-xr-x	root/root	opt/kf6/share/
 drwxr-xr-x	root/root	opt/kf6/share/locale/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ar/
@@ -137,6 +137,9 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/ko/LC_MESSAGES/
 drwxr-xr-x	root/root	opt/kf6/share/locale/lt/
 drwxr-xr-x	root/root	opt/kf6/share/locale/lt/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/lt/LC_MESSAGES/libkdav6.mo
+drwxr-xr-x	root/root	opt/kf6/share/locale/lv/
+drwxr-xr-x	root/root	opt/kf6/share/locale/lv/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/lv/LC_MESSAGES/libkdav6.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/nb/
 drwxr-xr-x	root/root	opt/kf6/share/locale/nb/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/nb/LC_MESSAGES/libkdav6.mo
@@ -161,6 +164,9 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/ro/LC_MESSAGES/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ru/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/libkdav6.mo
+drwxr-xr-x	root/root	opt/kf6/share/locale/sa/
+drwxr-xr-x	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/libkdav6.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/sk/
 drwxr-xr-x	root/root	opt/kf6/share/locale/sk/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/sk/LC_MESSAGES/libkdav6.mo

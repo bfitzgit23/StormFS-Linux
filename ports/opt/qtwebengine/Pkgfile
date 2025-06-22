@@ -5,16 +5,17 @@
 # Optional: dav1d fdk-aac gnutls graphite2 keyutils krb5 lame lcms2 libpcre2 libvdpau numactl pipewire x264 x265
 
 name=qtwebengine
-version=6.8.2
+version=6.9.1
 release=1
 source=(https://download.qt.io/official_releases/qt/${version%.*}/$version/submodules/qtwebengine-everywhere-src-$version.tar.xz
-  ninja-1.12-2.patch
+    ninja-1.12-2.patch
   no-h264.patch
-  03-gn-bootstrap.patch)
+  03-gn-bootstrap.patch
+  gperf.patch
+)
 
 build() {
-  # WARNING: QtWebEngine won't be built. Could not find all necessary libraries for qpa-xcb support. X11:YES LIBDRM:YES XCOMPOSITE:YES XCURSOR:YES XRANDR:YES XI:YES XPROTO:YES XSHMFENCE:YES XTST:YES
-  
+  SYSLIBS="freetype harfbuzz-ng libdrm libevent libpng libxml libxslt"
 
   prt-get isinst alsa-lib && PKGMK_QT6+=' -D QT_FEATURE_webengine_system_alsa=ON'
   prt-get isinst krb5 && PKGMK_QT6+=' -D QT_FEATURE_webengine_kerberos=ON'
@@ -34,18 +35,17 @@ build() {
   sed -e 's/^#define BA_LB_COUNT.*$/#define BA_LB_COUNT 40/' \
     -i qtwebengine-everywhere-src-$version/src/3rdparty/chromium/third_party/blink/renderer/platform/text/text_break_iterator.cc
 
-   patch -Np1 -d qtwebengine-everywhere-src-$version -i $SRC/ninja-1.12-2.patch
+    patch -Np1 -d qtwebengine-everywhere-src-$version -i $SRC/ninja-1.12-2.patch
   patch -Np1 -d qtwebengine-everywhere-src-$version -i $SRC/no-h264.patch
   patch -Np1 -d qtwebengine-everywhere-src-$version -i $SRC/03-gn-bootstrap.patch
-
+  patch -Np1 -d qtwebengine-everywhere-src-$version -i $SRC/gperf.patch
 
   cd $SRC/qtwebengine-everywhere-src-$version/src/3rdparty/chromium
   ./build/linux/unbundle/replace_gn_files.py --system-libraries $SYSLIBS
+   cd $SRC
+  export NINJAFLAGS="-j $(( $(awk '/^MemAvailable:/ {print $2}' /proc/meminfo) / 3000000))"
 
-cd $SRC
-#  export NINJAFLAGS="-j $(( $(awk '/^MemAvailable:/ {print $2}' /proc/meminfo) / 3000000))"
-
-  PYTHON=/usr/bin/python3 \
+    PYTHON=/usr/bin/python3 \
   cmake -S qtwebengine-everywhere-src-$version -B build -G Ninja $PKGMK_QT6 \
     -D CMAKE_BUILD_TYPE=Release \
     -D CMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
@@ -63,6 +63,8 @@ cd $SRC
     -D QT_BUILD_EXAMPLES_BY_DEFAULT=OFF \
     -D WARNINGS_ARE_ERRORS=OFF \
     -Wno-dev
+   NINJA_STATUS="[%f/%t %es] " \
+  EXTRA_GN="symbol_level=0" \
   cmake --build build
   DESTDIR=$PKG cmake --install build
 }

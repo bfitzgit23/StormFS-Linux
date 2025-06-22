@@ -17,8 +17,8 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/KF6GlobalAccel/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6GlobalAccel/KF6GlobalAccelTargets-release.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6GlobalAccel/KF6GlobalAccelTargets.cmake
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6GlobalAccel.so -> libKF6GlobalAccel.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6GlobalAccel.so.6 -> libKF6GlobalAccel.so.6.9.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6GlobalAccel.so.6.9.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6GlobalAccel.so.6 -> libKF6GlobalAccel.so.6.13.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6GlobalAccel.so.6.13.0
 drwxr-xr-x	root/root	opt/kf6/share/
 drwxr-xr-x	root/root	opt/kf6/share/dbus-1/
 drwxr-xr-x	root/root	opt/kf6/share/dbus-1/interfaces/

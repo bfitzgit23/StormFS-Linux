@@ -5,7 +5,7 @@
 # Optional:   cairo cmake docbook-xml docbook-xsl-nons docutils libxslt libatomic_ops valgrind cunit
 
 name=libdrm
-version=2.4.123
+version=2.4.125
 release=1
 source=(https://dri.freedesktop.org/libdrm/libdrm-$version.tar.xz)
 

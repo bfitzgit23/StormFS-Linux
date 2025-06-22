@@ -44,14 +44,14 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/KF6KCMUtils/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6KCMUtils/kcmutilsgeneratemoduledata.cpp.in
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6KCMUtils/kcmutilsgeneratemoduledata.h.in
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6KCMUtils.so -> libKF6KCMUtils.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6KCMUtils.so.6 -> libKF6KCMUtils.so.6.9.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6KCMUtils.so.6.9.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6KCMUtils.so.6 -> libKF6KCMUtils.so.6.13.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6KCMUtils.so.6.13.0
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6KCMUtilsCore.so -> libKF6KCMUtilsCore.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6KCMUtilsCore.so.6 -> libKF6KCMUtilsCore.so.6.9.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6KCMUtilsCore.so.6.9.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6KCMUtilsCore.so.6 -> libKF6KCMUtilsCore.so.6.13.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6KCMUtilsCore.so.6.13.0
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6KCMUtilsQuick.so -> libKF6KCMUtilsQuick.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6KCMUtilsQuick.so.6 -> libKF6KCMUtilsQuick.so.6.9.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6KCMUtilsQuick.so.6.9.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6KCMUtilsQuick.so.6 -> libKF6KCMUtilsQuick.so.6.13.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6KCMUtilsQuick.so.6.13.0
 drwxr-xr-x	root/root	opt/kf6/lib/qml/
 drwxr-xr-x	root/root	opt/kf6/lib/qml/org/
 drwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/
@@ -211,6 +211,7 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/he/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/he/LC_MESSAGES/kcmutils6.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/hi/
 drwxr-xr-x	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/kcmshell6.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/kcmutils6.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/hne/
 drwxr-xr-x	root/root	opt/kf6/share/locale/hne/LC_MESSAGES/
@@ -295,6 +296,7 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/ms/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/ms/LC_MESSAGES/kcmutils6.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/nb/
 drwxr-xr-x	root/root	opt/kf6/share/locale/nb/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/nb/LC_MESSAGES/kcmshell6.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/nb/LC_MESSAGES/kcmutils6.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/nds/
 drwxr-xr-x	root/root	opt/kf6/share/locale/nds/LC_MESSAGES/
@@ -341,6 +343,10 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/ru/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/kcmshell6.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/kcmutils6.mo
+drwxr-xr-x	root/root	opt/kf6/share/locale/sa/
+drwxr-xr-x	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/kcmshell6.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/kcmutils6.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/se/
 drwxr-xr-x	root/root	opt/kf6/share/locale/se/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/se/LC_MESSAGES/kcmutils6.mo

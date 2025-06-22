@@ -1,0 +1,27 @@
+# Description: Cross-platform 3D audio
+# URL: https://github.com/kcat/openal-soft
+# Maintainer: Tim Biermann, tbier at posteo dot de
+# Depends on: alsa-lib
+# Optional: dbus ffmpeg fluidsynth libsdl2 libsndfile pipewire portaudio pulseaudio qt5
+
+name=openal
+version=1.24.3
+release=1
+source=(https://github.com/kcat/openal-soft/archive/$version/openal-soft-$version.tar.gz)
+
+build() {
+  cmake -S openal-soft-$version -B build -G Ninja \
+    -D CMAKE_INSTALL_PREFIX=/usr \
+    -D CMAKE_INSTALL_LIBDIR=lib \
+    -D CMAKE_BUILD_TYPE=Release \
+    -D CMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
+    -D CMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+    -D ALSOFT_UTILS=ON \
+    -D ALSOFT_INSTALL_CONFIG=ON \
+    -D ALSOFT_INSTALL_HRTF_DATA=ON \
+    -D ALSOFT_INSTALL_UTILS=ON \
+    -D ALSOFT_EXAMPLES=OFF
+
+  cmake --build build
+  DESTDIR=$PKG cmake --install build
+}

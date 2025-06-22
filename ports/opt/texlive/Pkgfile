@@ -4,7 +4,7 @@
 # Depends on: cairo fontconfig freetype gc, graphite2 harfbuzz icu libpaper libpng
 
 name=texlive
-version=20230313
+version=20250308 
 release=2
 source=(https://ftp.math.utah.edu/pub/tex/historic/systems/$name/2023/$name-$version-source.tar.xz
 https://www.linuxfromscratch.org/patches/blfs/svn/$name-$version-source-security_fix-1.patch)

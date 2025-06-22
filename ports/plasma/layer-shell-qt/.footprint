@@ -15,8 +15,8 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/LayerShellQt/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/LayerShellQt/LayerShellQtTargets-release.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/LayerShellQt/LayerShellQtTargets.cmake
 lrwxrwxrwx	root/root	opt/kf6/lib/libLayerShellQtInterface.so -> libLayerShellQtInterface.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libLayerShellQtInterface.so.6 -> libLayerShellQtInterface.so.6.2.4
--rwxr-xr-x	root/root	opt/kf6/lib/libLayerShellQtInterface.so.6.2.4
+lrwxrwxrwx	root/root	opt/kf6/lib/libLayerShellQtInterface.so.6 -> libLayerShellQtInterface.so.6.3.4
+-rwxr-xr-x	root/root	opt/kf6/lib/libLayerShellQtInterface.so.6.3.4
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/wayland-shell-integration/
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/wayland-shell-integration/liblayer-shell.so

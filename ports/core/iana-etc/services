@@ -1,13 +1,9 @@
 # See also services(5) and IANA offical page :
 # https://www.iana.org/assignments/service-names-port-numbers
 #
-# (last updated 2025-01-23)
+# (last updated 2025-05-19)
 tcpmux           1/tcp      # TCP Port Service Multiplexer
 tcpmux           1/udp      # TCP Port Service Multiplexer
-compressnet      2/tcp      # Management Utility
-compressnet      2/udp      # Management Utility
-compressnet      3/tcp      # Compression Process
-compressnet      3/udp      # Compression Process
 rje              5/tcp      # Remote Job Entry
 rje              5/udp      # Remote Job Entry
 echo             7/tcp      # Echo
@@ -7895,6 +7891,7 @@ awacs-ice        4488/udp   # Apple Wide Area Connectivity Service ICE Bootstrap
 ipsec-nat-t      4500/tcp   # IPsec NAT-Traversal
 ipsec-nat-t      4500/udp   # IPsec NAT-Traversal
 a25-fap-fgw      4502/sctp  # A25 (FAP-FGW)
+m-bus-oms        4503/udp   # M-Bus-OMS over UDP
 armagetronad     4534/udp   # Armagetron Advanced Game Server
 ehs              4535/tcp   # Event Heap Server
 ehs              4535/udp   # Event Heap Server
@@ -9691,6 +9688,7 @@ cuseeme          7648/tcp   # bonjour-cuseeme
 cuseeme          7648/udp   # bonjour-cuseeme
 rome             7663/tcp   # Proprietary immutable distributed data storage
 rome             7663/udp   # Proprietary immutable distributed data storage
+authoritygate    7668/tcp  
 imqstomp         7672/tcp   # iMQ STOMP Server
 imqstomps        7673/tcp   # iMQ STOMP Server over SSL
 imqtunnels       7674/tcp   # iMQ SSL tunnel
@@ -11484,6 +11482,8 @@ rs-status        45002/tcp  # Redspeed Status Monitor
 synctest         45045/tcp  # Remote application control protocol
 invision-ag      45054/tcp  # InVision AG
 invision-ag      45054/udp  # InVision AG
+witsnet          45185/tcp  # Wire and Wireless transfer on synchroniz
+witsnet          45185/udp  # Wire and Wireless transfer on synchroniz
 cloudcheck       45514/tcp  # ASSIA CloudCheck WiFi Management System
 cloudcheck-ping  45514/udp  # ASSIA CloudCheck WiFi Management keepalive
 eba              45678/tcp  # EBA PRISE

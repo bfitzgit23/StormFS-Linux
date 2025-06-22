@@ -5,7 +5,6 @@ drwxr-xr-x	root/root	usr/bin/
 -rwxr-xr-x	root/root	usr/bin/gtk4-demo
 -rwxr-xr-x	root/root	usr/bin/gtk4-demo-application
 -rwxr-xr-x	root/root	usr/bin/gtk4-encode-symbolic-svg
--rwxr-xr-x	root/root	usr/bin/gtk4-icon-browser
 -rwxr-xr-x	root/root	usr/bin/gtk4-image-tool
 -rwxr-xr-x	root/root	usr/bin/gtk4-launch
 -rwxr-xr-x	root/root	usr/bin/gtk4-node-editor
@@ -118,6 +117,7 @@ drwxr-xr-x	root/root	usr/include/gtk-4.0/gsk/broadway/
 drwxr-xr-x	root/root	usr/include/gtk-4.0/gsk/gl/
 -rw-r--r--	root/root	usr/include/gtk-4.0/gsk/gl/gskglrenderer.h
 drwxr-xr-x	root/root	usr/include/gtk-4.0/gsk/gpu/
+-rw-r--r--	root/root	usr/include/gtk-4.0/gsk/gpu/gskglrenderer.h
 -rw-r--r--	root/root	usr/include/gtk-4.0/gsk/gpu/gskvulkanrenderer.h
 -rw-r--r--	root/root	usr/include/gtk-4.0/gsk/gsk.h
 -rw-r--r--	root/root	usr/include/gtk-4.0/gsk/gskcairorenderer.h
@@ -188,6 +188,11 @@ drwxr-xr-x	root/root	usr/include/gtk-4.0/gtk/deprecated/
 -rw-r--r--	root/root	usr/include/gtk-4.0/gtk/deprecated/gtklockbutton.h
 -rw-r--r--	root/root	usr/include/gtk-4.0/gtk/deprecated/gtkmessagedialog.h
 -rw-r--r--	root/root	usr/include/gtk-4.0/gtk/deprecated/gtkrender.h
+-rw-r--r--	root/root	usr/include/gtk-4.0/gtk/deprecated/gtkshortcutlabel.h
+-rw-r--r--	root/root	usr/include/gtk-4.0/gtk/deprecated/gtkshortcutsgroup.h
+-rw-r--r--	root/root	usr/include/gtk-4.0/gtk/deprecated/gtkshortcutssection.h
+-rw-r--r--	root/root	usr/include/gtk-4.0/gtk/deprecated/gtkshortcutsshortcut.h
+-rw-r--r--	root/root	usr/include/gtk-4.0/gtk/deprecated/gtkshortcutswindow.h
 -rw-r--r--	root/root	usr/include/gtk-4.0/gtk/deprecated/gtkshow.h
 -rw-r--r--	root/root	usr/include/gtk-4.0/gtk/deprecated/gtkstatusbar.h
 -rw-r--r--	root/root	usr/include/gtk-4.0/gtk/deprecated/gtkstylecontext.h
@@ -365,12 +370,7 @@ drwxr-xr-x	root/root	usr/include/gtk-4.0/gtk/deprecated/
 -rw-r--r--	root/root	usr/include/gtk-4.0/gtk/gtkshortcut.h
 -rw-r--r--	root/root	usr/include/gtk-4.0/gtk/gtkshortcutaction.h
 -rw-r--r--	root/root	usr/include/gtk-4.0/gtk/gtkshortcutcontroller.h
--rw-r--r--	root/root	usr/include/gtk-4.0/gtk/gtkshortcutlabel.h
 -rw-r--r--	root/root	usr/include/gtk-4.0/gtk/gtkshortcutmanager.h
--rw-r--r--	root/root	usr/include/gtk-4.0/gtk/gtkshortcutsgroup.h
--rw-r--r--	root/root	usr/include/gtk-4.0/gtk/gtkshortcutssection.h
--rw-r--r--	root/root	usr/include/gtk-4.0/gtk/gtkshortcutsshortcut.h
--rw-r--r--	root/root	usr/include/gtk-4.0/gtk/gtkshortcutswindow.h
 -rw-r--r--	root/root	usr/include/gtk-4.0/gtk/gtkshortcuttrigger.h
 -rw-r--r--	root/root	usr/include/gtk-4.0/gtk/gtksignallistitemfactory.h
 -rw-r--r--	root/root	usr/include/gtk-4.0/gtk/gtksingleselection.h
@@ -448,8 +448,8 @@ drwxr-xr-x	root/root	usr/lib/gtk-4.0/4.0.0/printbackends/
 -rwxr-xr-x	root/root	usr/lib/gtk-4.0/4.0.0/printbackends/libprintbackend-cups.so
 -rwxr-xr-x	root/root	usr/lib/gtk-4.0/4.0.0/printbackends/libprintbackend-file.so
 lrwxrwxrwx	root/root	usr/lib/libgtk-4.so -> libgtk-4.so.1
-lrwxrwxrwx	root/root	usr/lib/libgtk-4.so.1 -> libgtk-4.so.1.1600.12
--rwxr-xr-x	root/root	usr/lib/libgtk-4.so.1.1600.12
+lrwxrwxrwx	root/root	usr/lib/libgtk-4.so.1 -> libgtk-4.so.1.1800.5
+-rwxr-xr-x	root/root	usr/lib/libgtk-4.so.1.1800.5
 drwxr-xr-x	root/root	usr/lib/pkgconfig/
 -rw-r--r--	root/root	usr/lib/pkgconfig/gtk4-atspi.pc
 -rw-r--r--	root/root	usr/lib/pkgconfig/gtk4-broadway.pc
@@ -460,7 +460,6 @@ drwxr-xr-x	root/root	usr/lib/pkgconfig/
 drwxr-xr-x	root/root	usr/share/
 drwxr-xr-x	root/root	usr/share/applications/
 -rw-r--r--	root/root	usr/share/applications/org.gtk.Demo4.desktop
--rw-r--r--	root/root	usr/share/applications/org.gtk.IconBrowser4.desktop
 -rw-r--r--	root/root	usr/share/applications/org.gtk.PrintEditor4.desktop
 -rw-r--r--	root/root	usr/share/applications/org.gtk.WidgetFactory4.desktop
 -rw-r--r--	root/root	usr/share/applications/org.gtk.gtk4.NodeEditor.desktop
@@ -477,6 +476,7 @@ drwxr-xr-x	root/root	usr/share/gir-1.0/
 drwxr-xr-x	root/root	usr/share/glib-2.0/
 drwxr-xr-x	root/root	usr/share/glib-2.0/schemas/
 -rw-r--r--	root/root	usr/share/glib-2.0/schemas/org.gtk.Demo4.gschema.xml
+-rw-r--r--	root/root	usr/share/glib-2.0/schemas/org.gtk.gtk4.Inspector.gschema.xml
 -rw-r--r--	root/root	usr/share/glib-2.0/schemas/org.gtk.gtk4.Settings.ColorChooser.gschema.xml
 -rw-r--r--	root/root	usr/share/glib-2.0/schemas/org.gtk.gtk4.Settings.Debug.gschema.xml
 -rw-r--r--	root/root	usr/share/glib-2.0/schemas/org.gtk.gtk4.Settings.EmojiChooser.gschema.xml
@@ -514,7 +514,6 @@ drwxr-xr-x	root/root	usr/share/icons/hicolor/
 drwxr-xr-x	root/root	usr/share/icons/hicolor/scalable/
 drwxr-xr-x	root/root	usr/share/icons/hicolor/scalable/apps/
 -rw-r--r--	root/root	usr/share/icons/hicolor/scalable/apps/org.gtk.Demo4.svg
--rw-r--r--	root/root	usr/share/icons/hicolor/scalable/apps/org.gtk.IconBrowser4.svg
 -rw-r--r--	root/root	usr/share/icons/hicolor/scalable/apps/org.gtk.PrintEditor4.Devel.svg
 -rw-r--r--	root/root	usr/share/icons/hicolor/scalable/apps/org.gtk.PrintEditor4.svg
 -rw-r--r--	root/root	usr/share/icons/hicolor/scalable/apps/org.gtk.WidgetFactory4.svg
@@ -523,13 +522,11 @@ drwxr-xr-x	root/root	usr/share/icons/hicolor/scalable/apps/
 drwxr-xr-x	root/root	usr/share/icons/hicolor/symbolic/
 drwxr-xr-x	root/root	usr/share/icons/hicolor/symbolic/apps/
 -rw-r--r--	root/root	usr/share/icons/hicolor/symbolic/apps/org.gtk.Demo4-symbolic.svg
--rw-r--r--	root/root	usr/share/icons/hicolor/symbolic/apps/org.gtk.IconBrowser4-symbolic.svg
 -rw-r--r--	root/root	usr/share/icons/hicolor/symbolic/apps/org.gtk.PrintEditor4-symbolic.svg
 -rw-r--r--	root/root	usr/share/icons/hicolor/symbolic/apps/org.gtk.WidgetFactory4-symbolic.svg
 -rw-r--r--	root/root	usr/share/icons/hicolor/symbolic/apps/org.gtk.gtk4.NodeEditor-symbolic.svg
 drwxr-xr-x	root/root	usr/share/metainfo/
 -rw-r--r--	root/root	usr/share/metainfo/org.gtk.Demo4.appdata.xml
--rw-r--r--	root/root	usr/share/metainfo/org.gtk.IconBrowser4.appdata.xml
 -rw-r--r--	root/root	usr/share/metainfo/org.gtk.PrintEditor4.appdata.xml
 -rw-r--r--	root/root	usr/share/metainfo/org.gtk.WidgetFactory4.appdata.xml
 -rw-r--r--	root/root	usr/share/metainfo/org.gtk.gtk4.NodeEditor.appdata.xml

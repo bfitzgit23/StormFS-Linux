@@ -45,11 +45,11 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/KF6Screen/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6Screen/KF6ScreenTargets-release.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6Screen/KF6ScreenTargets.cmake
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6Screen.so -> libKF6Screen.so.8
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6Screen.so.6.2.4
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6Screen.so.8 -> libKF6Screen.so.6.2.4
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6Screen.so.6.3.4
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6Screen.so.8 -> libKF6Screen.so.6.3.4
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6ScreenDpms.so -> libKF6ScreenDpms.so.8
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6ScreenDpms.so.6.2.4
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6ScreenDpms.so.8 -> libKF6ScreenDpms.so.6.2.4
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6ScreenDpms.so.6.3.4
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6ScreenDpms.so.8 -> libKF6ScreenDpms.so.6.3.4
 drwxr-xr-x	root/root	opt/kf6/lib/pkgconfig/
 -rw-r--r--	root/root	opt/kf6/lib/pkgconfig/KF6Screen.pc
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/
@@ -115,6 +115,9 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/gl/LC_MESSAGES/
 drwxr-xr-x	root/root	opt/kf6/share/locale/he/
 drwxr-xr-x	root/root	opt/kf6/share/locale/he/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/he/LC_MESSAGES/libkscreen6_qt.qm
+drwxr-xr-x	root/root	opt/kf6/share/locale/hi/
+drwxr-xr-x	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/libkscreen6_qt.qm
 drwxr-xr-x	root/root	opt/kf6/share/locale/hu/
 drwxr-xr-x	root/root	opt/kf6/share/locale/hu/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/hu/LC_MESSAGES/libkscreen6_qt.qm
@@ -145,6 +148,9 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/lt/LC_MESSAGES/
 drwxr-xr-x	root/root	opt/kf6/share/locale/lv/
 drwxr-xr-x	root/root	opt/kf6/share/locale/lv/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/lv/LC_MESSAGES/libkscreen6_qt.qm
+drwxr-xr-x	root/root	opt/kf6/share/locale/nb/
+drwxr-xr-x	root/root	opt/kf6/share/locale/nb/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/nb/LC_MESSAGES/libkscreen6_qt.qm
 drwxr-xr-x	root/root	opt/kf6/share/locale/nl/
 drwxr-xr-x	root/root	opt/kf6/share/locale/nl/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/nl/LC_MESSAGES/libkscreen6_qt.qm

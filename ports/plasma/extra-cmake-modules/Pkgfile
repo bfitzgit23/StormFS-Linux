@@ -5,9 +5,9 @@
 # Optional: sphinxx pyqt
 
 name=extra-cmake-modules
-version=6.9.0
+version=6.13.0
 release=1
-source=(https://download.kde.org/stable/frameworks/6.9/$name-$version.tar.xz)
+source=(https://download.kde.org/stable/frameworks/6.13/$name-$version.tar.xz)
 
 pkg_build() {
 

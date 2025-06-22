@@ -5,7 +5,7 @@
 # Optional:   json-c keyutils swig
 
 name=libnvme
-version=1.11
+version=1.14
 release=1
 source=(https://github.com/linux-nvme/$name/archive/refs/tags/v$version/$name-$version.tar.gz)
 

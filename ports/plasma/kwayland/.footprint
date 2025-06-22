@@ -54,8 +54,8 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/KWayland/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KWayland/KWaylandTargets-release.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KWayland/KWaylandTargets.cmake
 lrwxrwxrwx	root/root	opt/kf6/lib/libKWaylandClient.so -> libKWaylandClient.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKWaylandClient.so.6 -> libKWaylandClient.so.6.2.4
--rwxr-xr-x	root/root	opt/kf6/lib/libKWaylandClient.so.6.2.4
+lrwxrwxrwx	root/root	opt/kf6/lib/libKWaylandClient.so.6 -> libKWaylandClient.so.6.3.4
+-rwxr-xr-x	root/root	opt/kf6/lib/libKWaylandClient.so.6.3.4
 drwxr-xr-x	root/root	opt/kf6/lib/pkgconfig/
 -rw-r--r--	root/root	opt/kf6/lib/pkgconfig/KWaylandClient.pc
 drwxr-xr-x	root/root	opt/kf6/share/

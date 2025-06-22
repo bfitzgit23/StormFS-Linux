@@ -12,11 +12,12 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/
 drwxr-xr-x	root/root	opt/kf6/lib/cmake/KF6KirigamiAddons/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6KirigamiAddons/KF6KirigamiAddonsConfig.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6KirigamiAddons/KF6KirigamiAddonsConfigVersion.cmake
+-rw-r--r--	root/root	opt/kf6/lib/cmake/KF6KirigamiAddons/KirigamiAddonsMacros.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6KirigamiAddons/KirigamiAddonsTargets-release.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6KirigamiAddons/KirigamiAddonsTargets.cmake
 lrwxrwxrwx	root/root	opt/kf6/lib/libKirigamiAddonsStatefulApp.so -> libKirigamiAddonsStatefulApp.so.6
--rwxr-xr-x	root/root	opt/kf6/lib/libKirigamiAddonsStatefulApp.so.1.4.0
-lrwxrwxrwx	root/root	opt/kf6/lib/libKirigamiAddonsStatefulApp.so.6 -> libKirigamiAddonsStatefulApp.so.1.4.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKirigamiAddonsStatefulApp.so.1.7.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKirigamiAddonsStatefulApp.so.6 -> libKirigamiAddonsStatefulApp.so.1.7.0
 drwxr-xr-x	root/root	opt/kf6/lib/qml/
 drwxr-xr-x	root/root	opt/kf6/lib/qml/org/
 drwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/
@@ -26,16 +27,22 @@ drwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/components/
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/components/AvatarButton.qml
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/components/Banner.qml
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/components/BottomDrawer.qml
+-rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/components/ConvergentContextMenu.qml
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/components/DialogRoundedBackground.qml
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/components/DoubleFloatingButton.qml
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/components/FloatingButton.qml
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/components/FloatingToolBar.qml
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/components/MessageDialog.qml
+-rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/components/RadioSelector.qml
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/components/SearchPopupField.qml
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/components/SegmentedButton.qml
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/components/componentsplugin.qmltypes
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/components/kde-qmlmodule.version
 -rwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/components/libcomponentsplugin.so
+drwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/components/private/
+-rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/components/private/ActionMenuItem.qml
+-rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/components/private/ActionsMenu.qml
+-rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/components/private/ContextMenuPage.qml
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/components/qmldir
 drwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/dateandtime/
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/dateandtime/DatePopup.qml
@@ -61,6 +68,7 @@ drwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/delegates/
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/delegates/qmldir
 drwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/formcard/
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/formcard/AboutKDE.qml
+-rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/formcard/AboutKDEPage.qml
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/formcard/AboutPage.qml
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/formcard/AbstractFormDelegate.qml
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/formcard/FormArrow.qml
@@ -77,7 +85,9 @@ drwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/formcard/
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/formcard/FormGridContainer.qml
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/formcard/FormHeader.qml
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/formcard/FormPasswordFieldDelegate.qml
+-rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/formcard/FormPlaceholderMessageDelegate.qml
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/formcard/FormRadioDelegate.qml
+-rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/formcard/FormRadioSelectorDelegate.qml
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/formcard/FormSectionText.qml
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/formcard/FormSpinBoxDelegate.qml
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/formcard/FormSwitchDelegate.qml
@@ -89,6 +99,7 @@ drwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/formcard/
 -rwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/formcard/libformcardplugin.so
 drwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/formcard/private/
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/formcard/private/ContentItemLoader.qml
+-rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/formcard/private/FormCardUnits.qml
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/formcard/private/SpinButton.qml
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/formcard/qmldir
 drwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/labs/
@@ -112,6 +123,7 @@ drwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/settings/
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/settings/ConfigurationModule.qml
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/settings/ConfigurationView.qml
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/settings/SettingAction.qml
+-rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/settings/ShortcutsConfigurationModule.qml
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/settings/SpellcheckingConfigurationModule.qml
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/settings/kde-qmlmodule.version
 -rwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/kirigamiaddons/settings/libsettingsplugin.so
@@ -180,6 +192,7 @@ drwxr-xr-x	root/root	opt/kf6/share/
 drwxr-xr-x	root/root	opt/kf6/share/kdevappwizard/
 drwxr-xr-x	root/root	opt/kf6/share/kdevappwizard/templates/
 -rw-r--r--	root/root	opt/kf6/share/kdevappwizard/templates/kirigamiaddons6.tar.bz2
+-rw-r--r--	root/root	opt/kf6/share/kdevappwizard/templates/librarymanager6.tar.bz2
 drwxr-xr-x	root/root	opt/kf6/share/locale/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ar/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ar/LC_MESSAGES/
@@ -187,6 +200,9 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/ar/LC_MESSAGES/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ast/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ast/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/ast/LC_MESSAGES/kirigami-addons6.mo
+drwxr-xr-x	root/root	opt/kf6/share/locale/az/
+drwxr-xr-x	root/root	opt/kf6/share/locale/az/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/az/LC_MESSAGES/kirigami-addons6.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/bg/
 drwxr-xr-x	root/root	opt/kf6/share/locale/bg/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/bg/LC_MESSAGES/kirigami-addons6.mo
@@ -229,6 +245,9 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/gl/LC_MESSAGES/
 drwxr-xr-x	root/root	opt/kf6/share/locale/he/
 drwxr-xr-x	root/root	opt/kf6/share/locale/he/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/he/LC_MESSAGES/kirigami-addons6.mo
+drwxr-xr-x	root/root	opt/kf6/share/locale/hi/
+drwxr-xr-x	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/kirigami-addons6.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/hu/
 drwxr-xr-x	root/root	opt/kf6/share/locale/hu/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/hu/LC_MESSAGES/kirigami-addons6.mo
@@ -277,6 +296,9 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/ro/LC_MESSAGES/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ru/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/kirigami-addons6.mo
+drwxr-xr-x	root/root	opt/kf6/share/locale/sa/
+drwxr-xr-x	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/kirigami-addons6.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/sk/
 drwxr-xr-x	root/root	opt/kf6/share/locale/sk/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/sk/LC_MESSAGES/kirigami-addons6.mo

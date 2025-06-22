@@ -2,7 +2,7 @@
 # Optional: gtk-doc dbusmock umockdev
 
 name=power-profiles-daemon
-version=0.23
+version=0.30
 release=1
 source=(https://gitlab.freedesktop.org/upower/${name}/-/archive/${version}/${name}-${version}.tar.gz)
 build_opt="--prefix=/usr       

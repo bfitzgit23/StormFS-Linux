@@ -1,6 +1,6 @@
 # Depends on: xorg-libs giflib librsvg libpng libjpeg-turbo libtiff libjxl libwebp x265
 
 name=imlib2
-version=1.12.3
+version=1.12.4
 release=1
 source=(https://downloads.sourceforge.net/enlightenment/${name}-${version}.tar.xz)

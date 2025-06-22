@@ -1,5 +1,5 @@
 name=fuse
-version=3.16.2
+version=3.17.1
 release=1
 source=(https://github.com/lib$name/lib$name/releases/download/$name-$version/$name-$version.tar.gz)
 

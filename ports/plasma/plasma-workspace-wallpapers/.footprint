@@ -246,6 +246,15 @@ drwxr-xr-x	root/root	opt/kf6/share/wallpapers/Mountain/contents/images_dark/
 -rw-r--r--	root/root	opt/kf6/share/wallpapers/Mountain/contents/images_dark/1080x1920.png
 -rw-r--r--	root/root	opt/kf6/share/wallpapers/Mountain/contents/images_dark/5120x2880.png
 -rw-r--r--	root/root	opt/kf6/share/wallpapers/Mountain/metadata.json
+drwxr-xr-x	root/root	opt/kf6/share/wallpapers/Nexus/
+drwxr-xr-x	root/root	opt/kf6/share/wallpapers/Nexus/contents/
+drwxr-xr-x	root/root	opt/kf6/share/wallpapers/Nexus/contents/images/
+-rw-r--r--	root/root	opt/kf6/share/wallpapers/Nexus/contents/images/1080x1920.png
+-rw-r--r--	root/root	opt/kf6/share/wallpapers/Nexus/contents/images/5120x2880.png
+drwxr-xr-x	root/root	opt/kf6/share/wallpapers/Nexus/contents/images_dark/
+-rw-r--r--	root/root	opt/kf6/share/wallpapers/Nexus/contents/images_dark/1080x1920.png
+-rw-r--r--	root/root	opt/kf6/share/wallpapers/Nexus/contents/images_dark/5120x2880.png
+-rw-r--r--	root/root	opt/kf6/share/wallpapers/Nexus/metadata.json
 drwxr-xr-x	root/root	opt/kf6/share/wallpapers/OneStandsOut/
 drwxr-xr-x	root/root	opt/kf6/share/wallpapers/OneStandsOut/contents/
 drwxr-xr-x	root/root	opt/kf6/share/wallpapers/OneStandsOut/contents/images/

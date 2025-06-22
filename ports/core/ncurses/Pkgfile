@@ -1,16 +1,16 @@
 name=ncurses
-version=6.5
+version=6.5-20250531
 release=1
-source=(https://invisible-mirror.net/archives/ncurses/$name-$version.tar.gz)
-build_opt="--without-debug
-	--with-shared
-	--without-normal
-	--without-debug
-	--with-cxx-shared
-	--enable-pc-files
-	--enable-widec
-	--with-pkg-config-libdir=/usr/lib/pkgconfig"
-
+source=(https://invisible-mirror.net/archives/$name/current/$name-$version.tgz)
+build_opt="--prefix=/usr           
+            --mandir=/usr/share/man 
+            --with-shared           
+            --without-debug         
+            --without-normal        
+            --with-cxx-shared       
+            --enable-pc-files       
+            --with-pkg-config-libdir=/usr/lib/pkgconfig"
+CFLAGS+=' -std=gnu17'
 bootstrap_build() {
 mkdir build
 pushd build
@@ -32,8 +32,8 @@ pushd build
 post_build() {
 	mkdir -p $PKG/lib
 	mv $PKG/usr/lib/libncursesw.so.* $PKG/lib
-	ln -sf ../../lib/libncursesw.so.$version $PKG/usr/lib/libncursesw.so
-	ln -s libncursesw.so.$version $PKG/lib/libncurses.so.${version%%.*}
+	ln -sf ../../lib/libncursesw.so.6.5 $PKG/usr/lib/libncursesw.so
+	ln -s libncursesw.so.6.5 $PKG/lib/libncurses.so.${version%%.*}
 	
 	# Create libtinfo symlinks.
 	ln -sfr $PKG/usr/lib/libncursesw.so \

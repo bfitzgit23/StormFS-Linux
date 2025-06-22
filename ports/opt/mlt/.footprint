@@ -74,11 +74,11 @@ drwxr-xr-x	root/root	usr/lib/cmake/Mlt7/
 -rw-r--r--	root/root	usr/lib/cmake/Mlt7/Mlt7Targets-release.cmake
 -rw-r--r--	root/root	usr/lib/cmake/Mlt7/Mlt7Targets.cmake
 lrwxrwxrwx	root/root	usr/lib/libmlt++-7.so -> libmlt++-7.so.7
-lrwxrwxrwx	root/root	usr/lib/libmlt++-7.so.7 -> libmlt++-7.so.7.28.0
--rwxr-xr-x	root/root	usr/lib/libmlt++-7.so.7.28.0
+lrwxrwxrwx	root/root	usr/lib/libmlt++-7.so.7 -> libmlt++-7.so.7.32.0
+-rwxr-xr-x	root/root	usr/lib/libmlt++-7.so.7.32.0
 lrwxrwxrwx	root/root	usr/lib/libmlt-7.so -> libmlt-7.so.7
-lrwxrwxrwx	root/root	usr/lib/libmlt-7.so.7 -> libmlt-7.so.7.28.0
--rwxr-xr-x	root/root	usr/lib/libmlt-7.so.7.28.0
+lrwxrwxrwx	root/root	usr/lib/libmlt-7.so.7 -> libmlt-7.so.7.32.0
+-rwxr-xr-x	root/root	usr/lib/libmlt-7.so.7.32.0
 drwxr-xr-x	root/root	usr/lib/mlt-7/
 -rwxr-xr-x	root/root	usr/lib/mlt-7/libmltavformat.so
 -rwxr-xr-x	root/root	usr/lib/mlt-7/libmltcore.so
@@ -216,8 +216,13 @@ drwxr-xr-x	root/root	usr/share/mlt-7/plus/
 -rw-r--r--	root/root	usr/share/mlt-7/plus/filter_charcoal.yml
 -rw-r--r--	root/root	usr/share/mlt-7/plus/filter_chroma.yml
 -rw-r--r--	root/root	usr/share/mlt-7/plus/filter_chroma_hold.yml
+-rw-r--r--	root/root	usr/share/mlt-7/plus/filter_dance.yml
 -rw-r--r--	root/root	usr/share/mlt-7/plus/filter_dynamic_loudness.yml
 -rw-r--r--	root/root	usr/share/mlt-7/plus/filter_dynamictext.yml
+-rw-r--r--	root/root	usr/share/mlt-7/plus/filter_fft.yml
+-rw-r--r--	root/root	usr/share/mlt-7/plus/filter_gradientmap.yml
+-rw-r--r--	root/root	usr/share/mlt-7/plus/filter_hslprimaries.yml
+-rw-r--r--	root/root	usr/share/mlt-7/plus/filter_hslrange.yml
 -rw-r--r--	root/root	usr/share/mlt-7/plus/filter_invert.yml
 -rw-r--r--	root/root	usr/share/mlt-7/plus/filter_lift_gamma_gain.yml
 -rw-r--r--	root/root	usr/share/mlt-7/plus/filter_loudness.yml
@@ -476,6 +481,7 @@ drwxr-xr-x	root/root	usr/share/mlt-7/qt6/
 -rw-r--r--	root/root	usr/share/mlt-7/qt6/filter_dropshadow.yml
 -rw-r--r--	root/root	usr/share/mlt-7/qt6/filter_gpsgraphic.yml
 -rw-r--r--	root/root	usr/share/mlt-7/qt6/filter_gpstext.yml
+-rw-r--r--	root/root	usr/share/mlt-7/qt6/filter_lightshow.yml
 -rw-r--r--	root/root	usr/share/mlt-7/qt6/filter_qtblend.yml
 -rw-r--r--	root/root	usr/share/mlt-7/qt6/filter_qtcrop.yml
 -rw-r--r--	root/root	usr/share/mlt-7/qt6/filter_qtext.yml
@@ -506,6 +512,7 @@ drwxr-xr-x	root/root	usr/share/mlt-7/xine/
 drwxr-xr-x	root/root	usr/share/mlt-7/xml/
 -rw-r--r--	root/root	usr/share/mlt-7/xml/consumer_xml.yml
 -rw-r--r--	root/root	usr/share/mlt-7/xml/mlt-xml.dtd
+-rw-r--r--	root/root	usr/share/mlt-7/xml/producer_xml-clip.yml
 -rw-r--r--	root/root	usr/share/mlt-7/xml/producer_xml-nogl.yml
 -rw-r--r--	root/root	usr/share/mlt-7/xml/producer_xml-string.yml
 -rw-r--r--	root/root	usr/share/mlt-7/xml/producer_xml.yml

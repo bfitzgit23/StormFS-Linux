@@ -63,11 +63,11 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/KF6UserFeedback/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6UserFeedback/KF6UserFeedbackTarget-release.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6UserFeedback/KF6UserFeedbackTarget.cmake
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6UserFeedbackCore.so -> libKF6UserFeedbackCore.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6UserFeedbackCore.so.6 -> libKF6UserFeedbackCore.so.6.9.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6UserFeedbackCore.so.6.9.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6UserFeedbackCore.so.6 -> libKF6UserFeedbackCore.so.6.13.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6UserFeedbackCore.so.6.13.0
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6UserFeedbackWidgets.so -> libKF6UserFeedbackWidgets.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6UserFeedbackWidgets.so.6 -> libKF6UserFeedbackWidgets.so.6.9.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6UserFeedbackWidgets.so.6.9.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6UserFeedbackWidgets.so.6 -> libKF6UserFeedbackWidgets.so.6.13.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6UserFeedbackWidgets.so.6.13.0
 drwxr-xr-x	root/root	opt/kf6/lib/qml/
 drwxr-xr-x	root/root	opt/kf6/lib/qml/org/
 drwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/
@@ -159,6 +159,10 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/he/
 drwxr-xr-x	root/root	opt/kf6/share/locale/he/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/he/LC_MESSAGES/userfeedbackconsole6_qt.qm
 -rw-r--r--	root/root	opt/kf6/share/locale/he/LC_MESSAGES/userfeedbackprovider6_qt.qm
+drwxr-xr-x	root/root	opt/kf6/share/locale/hi/
+drwxr-xr-x	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/userfeedbackconsole6_qt.qm
+-rw-r--r--	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/userfeedbackprovider6_qt.qm
 drwxr-xr-x	root/root	opt/kf6/share/locale/hu/
 drwxr-xr-x	root/root	opt/kf6/share/locale/hu/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/hu/LC_MESSAGES/userfeedbackconsole6_qt.qm
@@ -222,6 +226,10 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/ru/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/userfeedbackconsole6_qt.qm
 -rw-r--r--	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/userfeedbackprovider6_qt.qm
+drwxr-xr-x	root/root	opt/kf6/share/locale/sa/
+drwxr-xr-x	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/userfeedbackconsole6_qt.qm
+-rw-r--r--	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/userfeedbackprovider6_qt.qm
 drwxr-xr-x	root/root	opt/kf6/share/locale/sk/
 drwxr-xr-x	root/root	opt/kf6/share/locale/sk/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/sk/LC_MESSAGES/userfeedbackconsole6_qt.qm

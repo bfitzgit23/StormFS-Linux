@@ -1,6 +1,6 @@
 # Depends on: libwnck libxfce4ui startup-notification
 
-name=libxfce4windowing
-version=4.20.2
+name=xfwm4
+version=4.18.0
 release=1
 source=(https://archive.xfce.org/src/xfce/${name}/${version%.*}/${name}-${version}.tar.bz2)

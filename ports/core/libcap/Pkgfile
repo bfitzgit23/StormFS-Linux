@@ -1,6 +1,6 @@
 # Depends on:
 name=libcap
-version=2.74
+version=2.76
 release=1
 source=(https://www.kernel.org/pub/linux/libs/security/linux-privs/${name}2/$name-$version.tar.xz)
 

@@ -38,10 +38,10 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/KF6Baloo/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6Baloo/KF6BalooTargets-release.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6Baloo/KF6BalooTargets.cmake
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6Baloo.so -> libKF6Baloo.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6Baloo.so.6 -> libKF6Baloo.so.6.9.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6Baloo.so.6.9.0
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6BalooEngine.so.6 -> libKF6BalooEngine.so.6.9.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6BalooEngine.so.6.9.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6Baloo.so.6 -> libKF6Baloo.so.6.13.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6Baloo.so.6.13.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6BalooEngine.so.6 -> libKF6BalooEngine.so.6.13.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6BalooEngine.so.6.13.0
 drwxr-xr-x	root/root	opt/kf6/lib/pkgconfig/
 -rw-r--r--	root/root	opt/kf6/lib/pkgconfig/KF6Baloo.pc
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/
@@ -321,6 +321,18 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/he/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/he/LC_MESSAGES/kio6_baloosearch.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/he/LC_MESSAGES/kio6_tags.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/he/LC_MESSAGES/kio6_timeline.mo
+drwxr-xr-x	root/root	opt/kf6/share/locale/hi/
+drwxr-xr-x	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/baloo_file6.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/baloo_file_extractor6.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/balooctl6.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/baloodb6.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/balooengine6.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/baloosearch6.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/balooshow6.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/kio6_baloosearch.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/kio6_tags.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/kio6_timeline.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/hu/
 drwxr-xr-x	root/root	opt/kf6/share/locale/hu/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/hu/LC_MESSAGES/baloo_file6.mo
@@ -551,6 +563,18 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/kio6_baloosearch.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/kio6_tags.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/kio6_timeline.mo
+drwxr-xr-x	root/root	opt/kf6/share/locale/sa/
+drwxr-xr-x	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/baloo_file6.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/baloo_file_extractor6.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/balooctl6.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/baloodb6.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/balooengine6.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/baloosearch6.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/balooshow6.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/kio6_baloosearch.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/kio6_tags.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/kio6_timeline.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/sk/
 drwxr-xr-x	root/root	opt/kf6/share/locale/sk/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/sk/LC_MESSAGES/baloo_file6.mo

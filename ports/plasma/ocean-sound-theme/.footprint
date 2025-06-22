@@ -18,6 +18,10 @@ lrwxrwxrwx	root/root	opt/kf6/share/sounds/ocean/stereo/battery-full.oga -> outco
 -rw-r--r--	root/root	opt/kf6/share/sounds/ocean/stereo/bell-window-system.oga
 -rw-r--r--	root/root	opt/kf6/share/sounds/ocean/stereo/bell-window-system.oga.license
 lrwxrwxrwx	root/root	opt/kf6/share/sounds/ocean/stereo/bell.oga -> bell-window-system.oga
+-rw-r--r--	root/root	opt/kf6/share/sounds/ocean/stereo/button-pressed-modifier.oga
+-rw-r--r--	root/root	opt/kf6/share/sounds/ocean/stereo/button-pressed-modifier.oga.license
+-rw-r--r--	root/root	opt/kf6/share/sounds/ocean/stereo/button-pressed.oga
+-rw-r--r--	root/root	opt/kf6/share/sounds/ocean/stereo/button-pressed.oga.license
 lrwxrwxrwx	root/root	opt/kf6/share/sounds/ocean/stereo/complete-media-burn.oga -> outcome-success.oga
 lrwxrwxrwx	root/root	opt/kf6/share/sounds/ocean/stereo/complete-media-error.oga -> completion-partial.oga
 -rw-r--r--	root/root	opt/kf6/share/sounds/ocean/stereo/completion-fail.oga

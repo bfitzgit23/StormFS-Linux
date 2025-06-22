@@ -4,9 +4,9 @@
 # Depends on:  rdfind
 
 name=linux-firmware
-version=20250211
+version=20250613
 release=1
-source=(https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/snapshot/linux-firmware-$version.tar.gz)
+source=(https://www.kernel.org/pub/linux/kernel/firmware/$name-$version.tar.xz)
 
 pkg_build() {
 		prt-get isinst parallel || MAKEFLAGS="-j 1"

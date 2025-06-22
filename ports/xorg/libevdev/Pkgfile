@@ -4,7 +4,7 @@
 # Depends on: meson ninja
 
 name=libevdev
-version=1.13.3
+version=1.13.4
 release=1
 source=(https://www.freedesktop.org/software/libevdev/libevdev-$version.tar.xz)
 

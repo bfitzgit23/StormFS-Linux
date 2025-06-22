@@ -795,6 +795,9 @@ drwxr-xr-x	root/root	usr/lib/python3.13/_pyrepl/__pycache__/
 -rw-r--r--	root/root	usr/lib/python3.13/_pyrepl/__pycache__/_threading_handler.cpython-313.opt-1.pyc
 -rw-r--r--	root/root	usr/lib/python3.13/_pyrepl/__pycache__/_threading_handler.cpython-313.opt-2.pyc
 -rw-r--r--	root/root	usr/lib/python3.13/_pyrepl/__pycache__/_threading_handler.cpython-313.pyc
+-rw-r--r--	root/root	usr/lib/python3.13/_pyrepl/__pycache__/base_eventqueue.cpython-313.opt-1.pyc
+-rw-r--r--	root/root	usr/lib/python3.13/_pyrepl/__pycache__/base_eventqueue.cpython-313.opt-2.pyc
+-rw-r--r--	root/root	usr/lib/python3.13/_pyrepl/__pycache__/base_eventqueue.cpython-313.pyc
 -rw-r--r--	root/root	usr/lib/python3.13/_pyrepl/__pycache__/commands.cpython-313.opt-1.pyc
 -rw-r--r--	root/root	usr/lib/python3.13/_pyrepl/__pycache__/commands.cpython-313.opt-2.pyc
 -rw-r--r--	root/root	usr/lib/python3.13/_pyrepl/__pycache__/commands.cpython-313.pyc
@@ -852,8 +855,12 @@ drwxr-xr-x	root/root	usr/lib/python3.13/_pyrepl/__pycache__/
 -rw-r--r--	root/root	usr/lib/python3.13/_pyrepl/__pycache__/windows_console.cpython-313.opt-1.pyc
 -rw-r--r--	root/root	usr/lib/python3.13/_pyrepl/__pycache__/windows_console.cpython-313.opt-2.pyc
 -rw-r--r--	root/root	usr/lib/python3.13/_pyrepl/__pycache__/windows_console.cpython-313.pyc
+-rw-r--r--	root/root	usr/lib/python3.13/_pyrepl/__pycache__/windows_eventqueue.cpython-313.opt-1.pyc
+-rw-r--r--	root/root	usr/lib/python3.13/_pyrepl/__pycache__/windows_eventqueue.cpython-313.opt-2.pyc
+-rw-r--r--	root/root	usr/lib/python3.13/_pyrepl/__pycache__/windows_eventqueue.cpython-313.pyc
 -rw-r--r--	root/root	usr/lib/python3.13/_pyrepl/_minimal_curses.py
 -rw-r--r--	root/root	usr/lib/python3.13/_pyrepl/_threading_handler.py
+-rw-r--r--	root/root	usr/lib/python3.13/_pyrepl/base_eventqueue.py
 -rw-r--r--	root/root	usr/lib/python3.13/_pyrepl/commands.py
 -rw-r--r--	root/root	usr/lib/python3.13/_pyrepl/completing_reader.py
 -rw-r--r--	root/root	usr/lib/python3.13/_pyrepl/console.py
@@ -874,6 +881,7 @@ drwxr-xr-x	root/root	usr/lib/python3.13/_pyrepl/__pycache__/
 -rw-r--r--	root/root	usr/lib/python3.13/_pyrepl/unix_eventqueue.py
 -rw-r--r--	root/root	usr/lib/python3.13/_pyrepl/utils.py
 -rw-r--r--	root/root	usr/lib/python3.13/_pyrepl/windows_console.py
+-rw-r--r--	root/root	usr/lib/python3.13/_pyrepl/windows_eventqueue.py
 -rw-r--r--	root/root	usr/lib/python3.13/_sitebuiltins.py
 -rw-r--r--	root/root	usr/lib/python3.13/_strptime.py
 -rw-r--r--	root/root	usr/lib/python3.13/_sysconfigdata__linux_x86_64-linux-gnu.py
@@ -1799,7 +1807,7 @@ drwxr-xr-x	root/root	usr/lib/python3.13/ensurepip/__pycache__/
 -rw-r--r--	root/root	usr/lib/python3.13/ensurepip/__pycache__/_uninstall.cpython-313.opt-2.pyc
 -rw-r--r--	root/root	usr/lib/python3.13/ensurepip/__pycache__/_uninstall.cpython-313.pyc
 drwxr-xr-x	root/root	usr/lib/python3.13/ensurepip/_bundled/
--rw-r--r--	root/root	usr/lib/python3.13/ensurepip/_bundled/pip-24.3.1-py3-none-any.whl
+-rw-r--r--	root/root	usr/lib/python3.13/ensurepip/_bundled/pip-25.1.1-py3-none-any.whl
 -rw-r--r--	root/root	usr/lib/python3.13/ensurepip/_uninstall.py
 -rw-r--r--	root/root	usr/lib/python3.13/enum.py
 -rw-r--r--	root/root	usr/lib/python3.13/filecmp.py
@@ -2648,6 +2656,7 @@ drwxr-xr-x	root/root	usr/lib/python3.13/tomllib/__pycache__/
 -rw-r--r--	root/root	usr/lib/python3.13/tomllib/_parser.py
 -rw-r--r--	root/root	usr/lib/python3.13/tomllib/_re.py
 -rw-r--r--	root/root	usr/lib/python3.13/tomllib/_types.py
+-rw-r--r--	root/root	usr/lib/python3.13/tomllib/mypy.ini
 -rwxr-xr-x	root/root	usr/lib/python3.13/trace.py
 -rw-r--r--	root/root	usr/lib/python3.13/traceback.py
 -rw-r--r--	root/root	usr/lib/python3.13/tracemalloc.py

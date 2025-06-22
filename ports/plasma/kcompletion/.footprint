@@ -31,8 +31,8 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/KF6Completion/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6Completion/KF6CompletionTargets-release.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6Completion/KF6CompletionTargets.cmake
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6Completion.so -> libKF6Completion.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6Completion.so.6 -> libKF6Completion.so.6.9.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6Completion.so.6.9.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6Completion.so.6 -> libKF6Completion.so.6.13.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6Completion.so.6.13.0
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/designer/
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/designer/kcompletion6widgets.so

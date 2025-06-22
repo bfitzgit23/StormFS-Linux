@@ -1,7 +1,7 @@
 # Depends on: unicode-character-database dconf iso-codes vala glib gobject-introspection gtk3 libnotify
 
 name=ibus
-version=1.5.30
+version=1.5.32
 release=1
 source=(https://github.com/${name}/${name}/archive/${version}/${name}-${version}.tar.gz)
 pkg_build () {

@@ -29,8 +29,8 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/KF6ItemViews/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6ItemViews/KF6ItemViewsTargets-release.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6ItemViews/KF6ItemViewsTargets.cmake
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6ItemViews.so -> libKF6ItemViews.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6ItemViews.so.6 -> libKF6ItemViews.so.6.9.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6ItemViews.so.6.9.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6ItemViews.so.6 -> libKF6ItemViews.so.6.13.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6ItemViews.so.6.13.0
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/designer/
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/designer/kitemviews6widgets.so

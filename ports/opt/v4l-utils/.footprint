@@ -14,6 +14,7 @@ drwxr-xr-x	root/root	usr/bin/
 -rwxr-xr-x	root/root	usr/bin/dvbv5-daemon
 -rwxr-xr-x	root/root	usr/bin/dvbv5-scan
 -rwxr-xr-x	root/root	usr/bin/dvbv5-zap
+-rwxr-xr-x	root/root	usr/bin/edid-decode
 -rwxr-xr-x	root/root	usr/bin/ir-ctl
 -rwxr-xr-x	root/root	usr/bin/ir-keytable
 -rwxr-xr-x	root/root	usr/bin/ivtv-ctl
@@ -24,6 +25,7 @@ drwxr-xr-x	root/root	usr/bin/
 -rwxr-xr-x	root/root	usr/bin/v4l2-compliance
 -rwxr-xr-x	root/root	usr/bin/v4l2-ctl
 -rwxr-xr-x	root/root	usr/bin/v4l2-sysfs-path
+-rwxr-xr-x	root/root	usr/bin/v4l2-tracer
 drwxr-xr-x	root/root	usr/include/
 drwxr-xr-x	root/root	usr/include/libdvbv5/
 -rw-r--r--	root/root	usr/include/libdvbv5/atsc_eit.h
@@ -99,6 +101,7 @@ lrwxrwxrwx	root/root	usr/lib/libv4l2.so.0 -> libv4l2.so.0.0.0
 lrwxrwxrwx	root/root	usr/lib/libv4l2rds.so -> libv4l2rds.so.0
 lrwxrwxrwx	root/root	usr/lib/libv4l2rds.so.0 -> libv4l2rds.so.0.0.0
 -rwxr-xr-x	root/root	usr/lib/libv4l2rds.so.0.0.0
+-rwxr-xr-x	root/root	usr/lib/libv4l2tracer.so
 lrwxrwxrwx	root/root	usr/lib/libv4lconvert.so -> libv4lconvert.so.0
 lrwxrwxrwx	root/root	usr/lib/libv4lconvert.so.0 -> libv4lconvert.so.0.0.0
 -rwxr-xr-x	root/root	usr/lib/libv4lconvert.so.0.0.0
@@ -230,6 +233,7 @@ drwxr-xr-x	root/root	usr/lib/udev/rc_keymaps/
 -rw-r--r--	root/root	usr/lib/udev/rc_keymaps/real_audio_220_32_keys.toml
 -rw-r--r--	root/root	usr/lib/udev/rc_keymaps/reddo.toml
 -rw-r--r--	root/root	usr/lib/udev/rc_keymaps/samsung_ak59_00125a.toml
+-rw-r--r--	root/root	usr/lib/udev/rc_keymaps/siemens_gigaset_rc20.toml
 -rw-r--r--	root/root	usr/lib/udev/rc_keymaps/snapstream_firefly.toml
 -rw-r--r--	root/root	usr/lib/udev/rc_keymaps/streamzap.toml
 -rw-r--r--	root/root	usr/lib/udev/rc_keymaps/su3000.toml
@@ -304,11 +308,13 @@ drwxr-xr-x	root/root	usr/share/man/man1/
 -rw-r--r--	root/root	usr/share/man/man1/dvb-format-convert.1.gz
 -rw-r--r--	root/root	usr/share/man/man1/dvbv5-scan.1.gz
 -rw-r--r--	root/root	usr/share/man/man1/dvbv5-zap.1.gz
+-rw-r--r--	root/root	usr/share/man/man1/edid-decode.1.gz
 -rw-r--r--	root/root	usr/share/man/man1/ir-ctl.1.gz
 -rw-r--r--	root/root	usr/share/man/man1/ir-keytable.1.gz
 -rw-r--r--	root/root	usr/share/man/man1/qv4l2.1.gz
 -rw-r--r--	root/root	usr/share/man/man1/qvidcap.1.gz
 -rw-r--r--	root/root	usr/share/man/man1/v4l2-compliance.1.gz
 -rw-r--r--	root/root	usr/share/man/man1/v4l2-ctl.1.gz
+-rw-r--r--	root/root	usr/share/man/man1/v4l2-tracer.1.gz
 drwxr-xr-x	root/root	usr/share/man/man5/
 -rw-r--r--	root/root	usr/share/man/man5/rc_keymap.5.gz

@@ -20,8 +20,8 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/KF6Prison/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6Prison/KF6PrisonTargets-release.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6Prison/KF6PrisonTargets.cmake
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6Prison.so -> libKF6Prison.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6Prison.so.6 -> libKF6Prison.so.6.9.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6Prison.so.6.9.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6Prison.so.6 -> libKF6Prison.so.6.13.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6Prison.so.6.13.0
 drwxr-xr-x	root/root	opt/kf6/lib/qml/
 drwxr-xr-x	root/root	opt/kf6/lib/qml/org/
 drwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/

@@ -6,8 +6,8 @@ drwxr-xr-x	root/root	opt/kf6/
 drwxr-xr-x	root/root	opt/kf6/bin/
 -rwxr-xr-x	root/root	opt/kf6/bin/ark
 drwxr-xr-x	root/root	opt/kf6/lib/
-lrwxrwxrwx	root/root	opt/kf6/lib/libkerfuffle.so.24 -> libkerfuffle.so.24.12.0
--rwxr-xr-x	root/root	opt/kf6/lib/libkerfuffle.so.24.12.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libkerfuffle.so.25 -> libkerfuffle.so.25.04.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libkerfuffle.so.25.04.0
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/kerfuffle/
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/kerfuffle/kerfuffle_cli7z.so
@@ -309,6 +309,9 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/ro/LC_MESSAGES/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ru/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/ark.mo
+drwxr-xr-x	root/root	opt/kf6/share/locale/sa/
+drwxr-xr-x	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/ark.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/se/
 drwxr-xr-x	root/root	opt/kf6/share/locale/se/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/se/LC_MESSAGES/ark.mo

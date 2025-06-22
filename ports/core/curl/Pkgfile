@@ -1,7 +1,8 @@
 name=curl
-version=8.12.1
+version=8.14.1
 release=1
-source=(https://$name.se/download/$name-$version.tar.xz)
+source=(https://$name.se/download/$name-$version.tar.xz
+17545.patch  17554.patch)
 build_opt="
 	--with-openssl
 	--enable-threaded-resolver

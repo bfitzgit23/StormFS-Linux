@@ -79,6 +79,9 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/gl/LC_MESSAGES/
 drwxr-xr-x	root/root	opt/kf6/share/locale/he/
 drwxr-xr-x	root/root	opt/kf6/share/locale/he/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/he/LC_MESSAGES/polkit-kde-authentication-agent-1.mo
+drwxr-xr-x	root/root	opt/kf6/share/locale/hi/
+drwxr-xr-x	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/polkit-kde-authentication-agent-1.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/hr/
 drwxr-xr-x	root/root	opt/kf6/share/locale/hr/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/hr/LC_MESSAGES/polkit-kde-authentication-agent-1.mo
@@ -121,6 +124,9 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/ko/LC_MESSAGES/
 drwxr-xr-x	root/root	opt/kf6/share/locale/lt/
 drwxr-xr-x	root/root	opt/kf6/share/locale/lt/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/lt/LC_MESSAGES/polkit-kde-authentication-agent-1.mo
+drwxr-xr-x	root/root	opt/kf6/share/locale/lv/
+drwxr-xr-x	root/root	opt/kf6/share/locale/lv/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/lv/LC_MESSAGES/polkit-kde-authentication-agent-1.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/mai/
 drwxr-xr-x	root/root	opt/kf6/share/locale/mai/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/mai/LC_MESSAGES/polkit-kde-authentication-agent-1.mo

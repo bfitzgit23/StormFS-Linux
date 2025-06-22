@@ -1,7 +1,8 @@
 name=perl
-version=5.40.1
+version=5.40.2
 release=1
-source=(https://www.cpan.org/src/5.0/perl-$version.tar.xz)
+source=(https://www.cpan.org/src/5.0/perl-$version.tar.xz
+$name-$version-upstream_fix-1.patch)
 
 bootstrap_build() {
 #export LC_CTYPE=en_US.UTF-8

@@ -11,7 +11,6 @@ drwxr-xr-x	root/root	opt/kf6/lib/plugins/kactivitymanagerd1/
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/kactivitymanagerd1/org.kde.ActivityManager.RecentlyUsedEventSpy.so
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/kactivitymanagerd1/org.kde.ActivityManager.ResourceScoring.so
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/kactivitymanagerd1/org.kde.ActivityManager.RunApplication.so
--rwxr-xr-x	root/root	opt/kf6/lib/plugins/kactivitymanagerd1/org.kde.ActivityManager.VirtualDesktopSwitch.so
 drwxr-xr-x	root/root	opt/kf6/lib/systemd/
 drwxr-xr-x	root/root	opt/kf6/lib/systemd/user/
 -rw-r--r--	root/root	opt/kf6/lib/systemd/user/plasma-kactivitymanagerd.service

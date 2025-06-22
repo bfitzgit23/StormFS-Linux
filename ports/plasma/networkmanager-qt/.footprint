@@ -151,8 +151,8 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/KF6NetworkManagerQt/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6NetworkManagerQt/KF6NetworkManagerQtTargets-release.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6NetworkManagerQt/KF6NetworkManagerQtTargets.cmake
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6NetworkManagerQt.so -> libKF6NetworkManagerQt.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6NetworkManagerQt.so.6 -> libKF6NetworkManagerQt.so.6.9.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6NetworkManagerQt.so.6.9.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6NetworkManagerQt.so.6 -> libKF6NetworkManagerQt.so.6.13.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6NetworkManagerQt.so.6.13.0
 drwxr-xr-x	root/root	opt/kf6/lib/qml/
 drwxr-xr-x	root/root	opt/kf6/lib/qml/org/
 drwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/

@@ -21,8 +21,8 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/KF6Notifications/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6Notifications/KF6NotificationsTargets-release.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6Notifications/KF6NotificationsTargets.cmake
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6Notifications.so -> libKF6Notifications.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6Notifications.so.6 -> libKF6Notifications.so.6.9.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6Notifications.so.6.9.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6Notifications.so.6 -> libKF6Notifications.so.6.13.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6Notifications.so.6.13.0
 drwxr-xr-x	root/root	opt/kf6/lib/qml/
 drwxr-xr-x	root/root	opt/kf6/lib/qml/org/
 drwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/
@@ -258,6 +258,9 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/ro/LC_MESSAGES/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ru/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/knotifications6_qt.qm
+drwxr-xr-x	root/root	opt/kf6/share/locale/sa/
+drwxr-xr-x	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/knotifications6_qt.qm
 drwxr-xr-x	root/root	opt/kf6/share/locale/se/
 drwxr-xr-x	root/root	opt/kf6/share/locale/se/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/se/LC_MESSAGES/knotifications6_qt.qm

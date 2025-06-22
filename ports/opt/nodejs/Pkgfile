@@ -5,7 +5,7 @@
 # Optional: brotli c-ares icu libnghttp3 libngtcp2 simdjson simdutf
 
 name=nodejs
-version=23.8.0
+version=24.2.0
 release=1
 source=(https://nodejs.org/dist/v$version/node-v$version.tar.xz
   unbundle-uv.patch)

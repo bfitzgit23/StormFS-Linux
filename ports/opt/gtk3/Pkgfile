@@ -5,7 +5,7 @@
 # Optional: colord cups  wayland-protocols
 
 name=gtk3
-version=3.24.48
+version=3.24.49
 release=1
 source=(https://download.gnome.org/sources/gtk/3.24/gtk-$version.tar.xz)
 

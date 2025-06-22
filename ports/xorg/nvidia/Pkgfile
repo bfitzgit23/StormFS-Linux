@@ -4,10 +4,10 @@
 # Depends on: gtk gtk3 xorg-libs
 
 name=nvidia
-version=570.133.07
+version=535.113.01
 release=1
 source=(https://us.download.nvidia.com/XFree86/Linux-x86_64/$version/NVIDIA-Linux-x86_64-$version.run \
-	90-nvidia-uvm.rules 10-nvidia-drm-outputclass.conf nvidia-powerd.rc prime-run buildmodules-nvidia.sh)
+	90-nvidia-uvm.rules 10-nvidia-drm-outputclass.conf nvidia-powerd.rc)
 
 build() {
 	sh NVIDIA-Linux-x86_64-$version.run --extract-only
@@ -173,34 +173,4 @@ build() {
 	IGNORE_CC_MISMATCH=1 make module
 	install -d $PKG/lib/modules/$(uname -r)/extra
 	install -m 0644 *.ko $PKG/lib/modules/$(uname -r)/extra/
-
-	# prime-run script
-	install -Dm744 $SRC/prime-run $PKG/usr/bin/prime-run
-
-	
-	# blacklist conflict module
-	install -d $PKG/etc/modprobe.d
-	echo "blacklist nouveau" > $PKG/etc/modprobe.d/nvidia.conf
-
-		# dkms build modules script
-	mkdir -p $PKG/var/lib/dkms
-	sed -e "s/@name@/$name/g" \
-	    -e "s/@version@/$version/g" \
-	$SRC/buildmodules-$name.sh > $PKG/var/lib/dkms/buildmodules-$name.sh
-
-	
-	#optical flow
-	install_lib libnvidia-opticalflow.so.$version
-	symlink_lib /usr/lib/libnvidia-opticalflow.so.1
-	symlink_lib /usr/lib/libnvidia-opticalflow.so
-
-	#firmware
-	#(firmware/nvidia/$version/gsp_*.bin)
-	install_file firmware/gsp_ga10x.bin lib/firmware/nvidia/$version/
-	install_file firmware/gsp_tu10x.bin lib/firmware/nvidia/$version/
-
-	#nvvm
-	install_lib libnvidia-nvvm.so.$version
-	symlink_lib /usr/lib/libnvidia-nvvm.so.1
-	symlink_lib /usr/lib/libnvidia-nvvm.so
 }

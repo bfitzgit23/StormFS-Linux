@@ -1,8 +1,8 @@
 drwxr-xr-x	root/root	opt/
 drwxr-xr-x	root/root	opt/kf6/
 drwxr-xr-x	root/root	opt/kf6/lib/
-lrwxrwxrwx	root/root	opt/kf6/lib/libplasma-volume.so.6 -> libplasma-volume.so.6.2.4
--rwxr-xr-x	root/root	opt/kf6/lib/libplasma-volume.so.6.2.4
+lrwxrwxrwx	root/root	opt/kf6/lib/libplasma-volume.so.6 -> libplasma-volume.so.6.3.4
+-rwxr-xr-x	root/root	opt/kf6/lib/libplasma-volume.so.6.3.4
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/kf6/
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/kf6/kded/
@@ -174,6 +174,10 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/he/
 drwxr-xr-x	root/root	opt/kf6/share/locale/he/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/he/LC_MESSAGES/kcm_pulseaudio.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/he/LC_MESSAGES/plasma_applet_org.kde.plasma.volume.mo
+drwxr-xr-x	root/root	opt/kf6/share/locale/hi/
+drwxr-xr-x	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/kcm_pulseaudio.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/plasma_applet_org.kde.plasma.volume.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/hsb/
 drwxr-xr-x	root/root	opt/kf6/share/locale/hsb/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/hsb/LC_MESSAGES/plasma_applet_org.kde.plasma.volume.mo
@@ -256,6 +260,10 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/ru/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/kcm_pulseaudio.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/plasma_applet_org.kde.plasma.volume.mo
+drwxr-xr-x	root/root	opt/kf6/share/locale/sa/
+drwxr-xr-x	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/kcm_pulseaudio.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/plasma_applet_org.kde.plasma.volume.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/sk/
 drwxr-xr-x	root/root	opt/kf6/share/locale/sk/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/sk/LC_MESSAGES/kcm_pulseaudio.mo
@@ -321,3 +329,5 @@ drwxr-xr-x	root/root	opt/kf6/share/plasma/plasmoids/org.kde.plasma.volume/conten
 -rw-r--r--	root/root	opt/kf6/share/plasma/plasmoids/org.kde.plasma.volume/contents/ui/VolumeSlider.qml
 -rw-r--r--	root/root	opt/kf6/share/plasma/plasmoids/org.kde.plasma.volume/contents/ui/main.qml
 -rw-r--r--	root/root	opt/kf6/share/plasma/plasmoids/org.kde.plasma.volume/metadata.json
+drwxr-xr-x	root/root	opt/kf6/share/qlogging-categories6/
+-rw-r--r--	root/root	opt/kf6/share/qlogging-categories6/plasmapa.categories

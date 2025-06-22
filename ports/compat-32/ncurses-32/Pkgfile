@@ -3,9 +3,9 @@
 # Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
 
 name=ncurses-32
-version=6.5
+version=6.5-20250531
 release=1
-source=(https://invisible-mirror.net/archives/ncurses/ncurses-$version.tar.gz)
+source=(https://invisible-mirror.net/archives/ncurses/current/ncurses-$version.tgz)
 
 build() {
     cd ncurses-$version
@@ -27,5 +27,5 @@ build() {
 	make
 	make DESTDIR=$PKG install
 
-	rm -r $PKG/usr/{bin,include,share}
+	rm -r $PKG/usr/{bin,include,share,lib}
 }

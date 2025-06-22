@@ -52,6 +52,9 @@ drwxr-xr-x	root/root	opt/kf6/share/applications/
 -rwxr-xr-x	root/root	opt/kf6/share/applications/org.kde.plasma-systemmonitor.desktop
 drwxr-xr-x	root/root	opt/kf6/share/config.kcfg/
 -rw-r--r--	root/root	opt/kf6/share/config.kcfg/systemmonitor.kcfg
+drwxr-xr-x	root/root	opt/kf6/share/kconf_update/
+-rwxr-xr-x	root/root	opt/kf6/share/kconf_update/plasma-systemmonitor-replace-vmpss.py
+-rw-r--r--	root/root	opt/kf6/share/kconf_update/plasma-systemmonitor.upd
 drwxr-xr-x	root/root	opt/kf6/share/kglobalaccel/
 -rwxr-xr-x	root/root	opt/kf6/share/kglobalaccel/org.kde.plasma-systemmonitor.desktop
 drwxr-xr-x	root/root	opt/kf6/share/knsrcfiles/
@@ -174,6 +177,11 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/he/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/he/LC_MESSAGES/ksysguard_face_org.kde.ksysguard.applicationstable.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/he/LC_MESSAGES/ksysguard_face_org.kde.ksysguard.processtable.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/he/LC_MESSAGES/plasma-systemmonitor.mo
+drwxr-xr-x	root/root	opt/kf6/share/locale/hi/
+drwxr-xr-x	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/ksysguard_face_org.kde.ksysguard.applicationstable.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/ksysguard_face_org.kde.ksysguard.processtable.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/plasma-systemmonitor.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/hu/
 drwxr-xr-x	root/root	opt/kf6/share/locale/hu/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/hu/LC_MESSAGES/ksysguard_face_org.kde.ksysguard.applicationstable.mo

@@ -1,11 +1,11 @@
 drwxr-xr-x	root/root	usr/
 drwxr-xr-x	root/root	usr/lib32/
 lrwxrwxrwx	root/root	usr/lib32/libcap.so -> libcap.so.2
-lrwxrwxrwx	root/root	usr/lib32/libcap.so.2 -> libcap.so.2.74
--rwxr-xr-x	root/root	usr/lib32/libcap.so.2.74
+lrwxrwxrwx	root/root	usr/lib32/libcap.so.2 -> libcap.so.2.76
+-rwxr-xr-x	root/root	usr/lib32/libcap.so.2.76
 lrwxrwxrwx	root/root	usr/lib32/libpsx.so -> libpsx.so.2
-lrwxrwxrwx	root/root	usr/lib32/libpsx.so.2 -> libpsx.so.2.74
--rwxr-xr-x	root/root	usr/lib32/libpsx.so.2.74
+lrwxrwxrwx	root/root	usr/lib32/libpsx.so.2 -> libpsx.so.2.76
+-rwxr-xr-x	root/root	usr/lib32/libpsx.so.2.76
 drwxr-xr-x	root/root	usr/lib32/pkgconfig/
 -rw-r--r--	root/root	usr/lib32/pkgconfig/libcap.pc
 -rw-r--r--	root/root	usr/lib32/pkgconfig/libpsx.pc

@@ -1,5 +1,7 @@
 drwxr-xr-x	root/root	opt/
 drwxr-xr-x	root/root	opt/kf6/
+drwxr-xr-x	root/root	opt/kf6/bin/
+-rwxr-xr-x	root/root	opt/kf6/bin/kfilemetadata_dump6
 drwxr-xr-x	root/root	opt/kf6/include/
 drwxr-xr-x	root/root	opt/kf6/include/KF6/
 drwxr-xr-x	root/root	opt/kf6/include/KF6/KFileMetaData/
@@ -47,8 +49,8 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/KF6FileMetaData/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6FileMetaData/KF6FileMetaDataTargets-release.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6FileMetaData/KF6FileMetaDataTargets.cmake
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6FileMetaData.so -> libKF6FileMetaData.so.3
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6FileMetaData.so.3 -> libKF6FileMetaData.so.6.9.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6FileMetaData.so.6.9.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6FileMetaData.so.3 -> libKF6FileMetaData.so.6.13.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6FileMetaData.so.6.13.0
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/kf6/
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/kf6/kfilemetadata/
@@ -133,6 +135,9 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/gl/LC_MESSAGES/
 drwxr-xr-x	root/root	opt/kf6/share/locale/he/
 drwxr-xr-x	root/root	opt/kf6/share/locale/he/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/he/LC_MESSAGES/kfilemetadata6.mo
+drwxr-xr-x	root/root	opt/kf6/share/locale/hi/
+drwxr-xr-x	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/kfilemetadata6.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/hu/
 drwxr-xr-x	root/root	opt/kf6/share/locale/hu/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/hu/LC_MESSAGES/kfilemetadata6.mo
@@ -196,6 +201,9 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/ro/LC_MESSAGES/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ru/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/kfilemetadata6.mo
+drwxr-xr-x	root/root	opt/kf6/share/locale/sa/
+drwxr-xr-x	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/kfilemetadata6.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/sk/
 drwxr-xr-x	root/root	opt/kf6/share/locale/sk/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/sk/LC_MESSAGES/kfilemetadata6.mo

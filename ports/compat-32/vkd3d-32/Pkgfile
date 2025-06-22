@@ -4,7 +4,7 @@
 # Depends on: spirv-tools-32 vulkan-loader-32 xcb-util-keysyms-32 vkd3d
 
 name=vkd3d-32
-version=1.13
+version=1.15
 release=1
 source=(https://dl.winehq.org/vkd3d/source/${name%-*}-$version.tar.xz)
 

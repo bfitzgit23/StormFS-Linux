@@ -1,0 +1,46 @@
+diff -Naur rustc-1.84.0-src.orig/compiler/rustc_session/src/config.rs rustc-1.84.0-src/compiler/rustc_session/src/config.rs
+--- rustc-1.84.0-src.orig/compiler/rustc_session/src/config.rs	2025-01-09 19:59:03.364265958 +0100
++++ rustc-1.84.0-src/compiler/rustc_session/src/config.rs	2025-01-09 20:01:22.787163438 +0100
+@@ -2063,6 +2063,10 @@
+                 early_dcx.early_fatal(format!("target file {path:?} does not exist"))
+             })
+         }
++        Some(s) if &s == "x86_64-pc-linux-gnu" => {
++            TargetTuple::from_tuple("x86_64-unknown-linux-gnu")
++        }
++        Some(s) if &s == "i686-pc-linux-gnu" => TargetTuple::from_tuple("i686-unknown-linux-gnu"),
+         Some(target) => TargetTuple::TargetTuple(target),
+         _ => TargetTuple::from_tuple(host_tuple()),
+     }
+@@ -2174,6 +2178,7 @@
+                     "consider replacing the dashes with underscores: `{adjusted_name}`"
+                 ));
+             }
++
+             error.emit();
+         }
+ 
+diff -Naur rustc-1.84.0-src.orig/compiler/rustc_target/src/spec/targets/i686_unknown_linux_gnu.rs rustc-1.84.0-src/compiler/rustc_target/src/spec/targets/i686_unknown_linux_gnu.rs
+--- rustc-1.84.0-src.orig/compiler/rustc_target/src/spec/targets/i686_unknown_linux_gnu.rs	2025-01-09 19:59:03.370012902 +0100
++++ rustc-1.84.0-src/compiler/rustc_target/src/spec/targets/i686_unknown_linux_gnu.rs	2025-01-09 20:01:44.368369716 +0100
+@@ -9,7 +9,7 @@
+     base.stack_probes = StackProbeType::Inline;
+ 
+     Target {
+-        llvm_target: "i686-unknown-linux-gnu".into(),
++        llvm_target: "i686-pc-linux-gnu".into(),
+         metadata: crate::spec::TargetMetadata {
+             description: Some("32-bit Linux (kernel 3.2, glibc 2.17+)".into()),
+             tier: Some(1),
+diff -Naur rustc-1.84.0-src.orig/compiler/rustc_target/src/spec/targets/x86_64_unknown_linux_gnu.rs rustc-1.84.0-src/compiler/rustc_target/src/spec/targets/x86_64_unknown_linux_gnu.rs
+--- rustc-1.84.0-src.orig/compiler/rustc_target/src/spec/targets/x86_64_unknown_linux_gnu.rs	2025-01-09 19:59:03.369937702 +0100
++++ rustc-1.84.0-src/compiler/rustc_target/src/spec/targets/x86_64_unknown_linux_gnu.rs	2025-01-09 20:02:00.181639298 +0100
+@@ -26,7 +26,7 @@
+     }
+ 
+     Target {
+-        llvm_target: "x86_64-unknown-linux-gnu".into(),
++        llvm_target: "x86_64-pc-linux-gnu".into(),
+         metadata: crate::spec::TargetMetadata {
+             description: Some("64-bit Linux (kernel 3.2+, glibc 2.17+)".into()),
+             tier: Some(1),

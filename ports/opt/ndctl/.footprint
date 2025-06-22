@@ -24,18 +24,26 @@ drwxr-xr-x	root/root	usr/include/ndctl/
 -rw-r--r--	root/root	usr/include/ndctl/ndctl.h
 drwxr-xr-x	root/root	usr/lib/
 lrwxrwxrwx	root/root	usr/lib/libcxl.so -> libcxl.so.1
-lrwxrwxrwx	root/root	usr/lib/libcxl.so.1 -> libcxl.so.1.0.5
--rwxr-xr-x	root/root	usr/lib/libcxl.so.1.0.5
+lrwxrwxrwx	root/root	usr/lib/libcxl.so.1 -> libcxl.so.1.0.9
+-rwxr-xr-x	root/root	usr/lib/libcxl.so.1.0.9
 lrwxrwxrwx	root/root	usr/lib/libdaxctl.so -> libdaxctl.so.1
-lrwxrwxrwx	root/root	usr/lib/libdaxctl.so.1 -> libdaxctl.so.1.2.5
--rwxr-xr-x	root/root	usr/lib/libdaxctl.so.1.2.5
+lrwxrwxrwx	root/root	usr/lib/libdaxctl.so.1 -> libdaxctl.so.1.1.6
+-rwxr-xr-x	root/root	usr/lib/libdaxctl.so.1.1.6
 lrwxrwxrwx	root/root	usr/lib/libndctl.so -> libndctl.so.6
-lrwxrwxrwx	root/root	usr/lib/libndctl.so.6 -> libndctl.so.6.2.21
--rwxr-xr-x	root/root	usr/lib/libndctl.so.6.2.21
+lrwxrwxrwx	root/root	usr/lib/libndctl.so.6 -> libndctl.so.6.4.21
+-rwxr-xr-x	root/root	usr/lib/libndctl.so.6.4.21
 drwxr-xr-x	root/root	usr/lib/pkgconfig/
 -rw-r--r--	root/root	usr/lib/pkgconfig/libcxl.pc
 -rw-r--r--	root/root	usr/lib/pkgconfig/libdaxctl.pc
 -rw-r--r--	root/root	usr/lib/pkgconfig/libndctl.pc
+drwxr-xr-x	root/root	usr/lib/systemd/
+drwxr-xr-x	root/root	usr/lib/systemd/system/
+-rw-r--r--	root/root	usr/lib/systemd/system/cxl-monitor.service
+-rw-r--r--	root/root	usr/lib/systemd/system/daxdev-reconfigure@.service
+-rw-r--r--	root/root	usr/lib/systemd/system/ndctl-monitor.service
+drwxr-xr-x	root/root	usr/lib/udev/
+drwxr-xr-x	root/root	usr/lib/udev/rules.d/
+-rw-r--r--	root/root	usr/lib/udev/rules.d/90-daxctl-device.rules
 drwxr-xr-x	root/root	usr/share/
 drwxr-xr-x	root/root	usr/share/daxctl/
 -rw-r--r--	root/root	usr/share/daxctl/daxctl.conf

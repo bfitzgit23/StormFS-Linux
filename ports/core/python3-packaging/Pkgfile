@@ -1,7 +1,7 @@
 # Depends on: python3-flit-core
 
 name=python3-packaging
-version=24.2
+version=25.0
 release=1
 source=(https://files.pythonhosted.org/packages/source/p/packaging/packaging-${version}.tar.gz)
 pkg_build() {

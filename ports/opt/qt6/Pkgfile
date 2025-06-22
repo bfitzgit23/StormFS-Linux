@@ -5,9 +5,9 @@
 
 
 name=qt6
-version=6.8.2
+version=6.9.1
 release=1
-source=(https://download.qt.io/archive/qt/6.8/$version/single/qt-everywhere-src-$version.tar.xz
+source=(https://download.qt.io/archive/qt/6.9/$version/single/qt-everywhere-src-$version.tar.xz
 qt6-base-nostrip.patch
 qt6-base-cflags.patch)
 

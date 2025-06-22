@@ -49,8 +49,8 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/KF6GuiAddons/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6GuiAddons/KF6GuiAddonsTargets-release.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6GuiAddons/KF6GuiAddonsTargets.cmake
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6GuiAddons.so -> libKF6GuiAddons.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6GuiAddons.so.6 -> libKF6GuiAddons.so.6.9.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6GuiAddons.so.6.9.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6GuiAddons.so.6 -> libKF6GuiAddons.so.6.13.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6GuiAddons.so.6.13.0
 drwxr-xr-x	root/root	opt/kf6/lib/pkgconfig/
 -rw-r--r--	root/root	opt/kf6/lib/pkgconfig/KF6GuiAddons.pc
 drwxr-xr-x	root/root	opt/kf6/lib/qml/
@@ -65,7 +65,6 @@ drwxr-xr-x	root/root	opt/kf6/share/
 drwxr-xr-x	root/root	opt/kf6/share/applications/
 -rw-r--r--	root/root	opt/kf6/share/applications/google-maps-geo-handler.desktop
 -rw-r--r--	root/root	opt/kf6/share/applications/openstreetmap-geo-handler.desktop
--rw-r--r--	root/root	opt/kf6/share/applications/qwant-maps-geo-handler.desktop
 -rw-r--r--	root/root	opt/kf6/share/applications/wheelmap-geo-handler.desktop
 drwxr-xr-x	root/root	opt/kf6/share/qlogging-categories6/
 -rw-r--r--	root/root	opt/kf6/share/qlogging-categories6/kguiaddons.categories

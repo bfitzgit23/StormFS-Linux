@@ -1,49 +1,51 @@
 drwxr-xr-x	root/root	opt/
 drwxr-xr-x	root/root	opt/kf6/
 drwxr-xr-x	root/root	opt/kf6/include/
-drwxr-xr-x	root/root	opt/kf6/include/KDecoration2/
-drwxr-xr-x	root/root	opt/kf6/include/KDecoration2/KDecoration2/
--rw-r--r--	root/root	opt/kf6/include/KDecoration2/KDecoration2/DecoratedClient
--rw-r--r--	root/root	opt/kf6/include/KDecoration2/KDecoration2/Decoration
--rw-r--r--	root/root	opt/kf6/include/KDecoration2/KDecoration2/DecorationButton
--rw-r--r--	root/root	opt/kf6/include/KDecoration2/KDecoration2/DecorationButtonGroup
--rw-r--r--	root/root	opt/kf6/include/KDecoration2/KDecoration2/DecorationSettings
--rw-r--r--	root/root	opt/kf6/include/KDecoration2/KDecoration2/DecorationShadow
--rw-r--r--	root/root	opt/kf6/include/KDecoration2/KDecoration2/DecorationThemeProvider
-drwxr-xr-x	root/root	opt/kf6/include/KDecoration2/KDecoration2/Private/
--rw-r--r--	root/root	opt/kf6/include/KDecoration2/KDecoration2/Private/DecoratedClientPrivate
--rw-r--r--	root/root	opt/kf6/include/KDecoration2/KDecoration2/Private/DecorationBridge
--rw-r--r--	root/root	opt/kf6/include/KDecoration2/KDecoration2/Private/DecorationSettingsPrivate
-drwxr-xr-x	root/root	opt/kf6/include/KDecoration2/kdecoration2/
--rw-r--r--	root/root	opt/kf6/include/KDecoration2/kdecoration2/decoratedclient.h
--rw-r--r--	root/root	opt/kf6/include/KDecoration2/kdecoration2/decoration.h
--rw-r--r--	root/root	opt/kf6/include/KDecoration2/kdecoration2/decorationbutton.h
--rw-r--r--	root/root	opt/kf6/include/KDecoration2/kdecoration2/decorationbuttongroup.h
--rw-r--r--	root/root	opt/kf6/include/KDecoration2/kdecoration2/decorationdefines.h
--rw-r--r--	root/root	opt/kf6/include/KDecoration2/kdecoration2/decorationsettings.h
--rw-r--r--	root/root	opt/kf6/include/KDecoration2/kdecoration2/decorationshadow.h
--rw-r--r--	root/root	opt/kf6/include/KDecoration2/kdecoration2/decorationthemeprovider.h
--rw-r--r--	root/root	opt/kf6/include/KDecoration2/kdecoration2/kdecoration2_export.h
-drwxr-xr-x	root/root	opt/kf6/include/KDecoration2/kdecoration2/private/
--rw-r--r--	root/root	opt/kf6/include/KDecoration2/kdecoration2/private/decoratedclientprivate.h
--rw-r--r--	root/root	opt/kf6/include/KDecoration2/kdecoration2/private/decorationbridge.h
--rw-r--r--	root/root	opt/kf6/include/KDecoration2/kdecoration2/private/decorationsettingsprivate.h
--rw-r--r--	root/root	opt/kf6/include/KDecoration2/kdecoration2/private/kdecoration2_private_export.h
+drwxr-xr-x	root/root	opt/kf6/include/KDecoration3/
+drwxr-xr-x	root/root	opt/kf6/include/KDecoration3/KDecoration3/
+-rw-r--r--	root/root	opt/kf6/include/KDecoration3/KDecoration3/DecoratedWindow
+-rw-r--r--	root/root	opt/kf6/include/KDecoration3/KDecoration3/Decoration
+-rw-r--r--	root/root	opt/kf6/include/KDecoration3/KDecoration3/DecorationButton
+-rw-r--r--	root/root	opt/kf6/include/KDecoration3/KDecoration3/DecorationButtonGroup
+-rw-r--r--	root/root	opt/kf6/include/KDecoration3/KDecoration3/DecorationSettings
+-rw-r--r--	root/root	opt/kf6/include/KDecoration3/KDecoration3/DecorationShadow
+-rw-r--r--	root/root	opt/kf6/include/KDecoration3/KDecoration3/DecorationThemeProvider
+drwxr-xr-x	root/root	opt/kf6/include/KDecoration3/KDecoration3/Private/
+-rw-r--r--	root/root	opt/kf6/include/KDecoration3/KDecoration3/Private/DecoratedWindowPrivate
+-rw-r--r--	root/root	opt/kf6/include/KDecoration3/KDecoration3/Private/DecorationBridge
+-rw-r--r--	root/root	opt/kf6/include/KDecoration3/KDecoration3/Private/DecorationSettingsPrivate
+-rw-r--r--	root/root	opt/kf6/include/KDecoration3/KDecoration3/ScaleHelpers
+drwxr-xr-x	root/root	opt/kf6/include/KDecoration3/kdecoration3/
+-rw-r--r--	root/root	opt/kf6/include/KDecoration3/kdecoration3/decoratedwindow.h
+-rw-r--r--	root/root	opt/kf6/include/KDecoration3/kdecoration3/decoration.h
+-rw-r--r--	root/root	opt/kf6/include/KDecoration3/kdecoration3/decorationbutton.h
+-rw-r--r--	root/root	opt/kf6/include/KDecoration3/kdecoration3/decorationbuttongroup.h
+-rw-r--r--	root/root	opt/kf6/include/KDecoration3/kdecoration3/decorationdefines.h
+-rw-r--r--	root/root	opt/kf6/include/KDecoration3/kdecoration3/decorationsettings.h
+-rw-r--r--	root/root	opt/kf6/include/KDecoration3/kdecoration3/decorationshadow.h
+-rw-r--r--	root/root	opt/kf6/include/KDecoration3/kdecoration3/decorationthemeprovider.h
+-rw-r--r--	root/root	opt/kf6/include/KDecoration3/kdecoration3/kdecoration3_export.h
+drwxr-xr-x	root/root	opt/kf6/include/KDecoration3/kdecoration3/private/
+-rw-r--r--	root/root	opt/kf6/include/KDecoration3/kdecoration3/private/decoratedwindowprivate.h
+-rw-r--r--	root/root	opt/kf6/include/KDecoration3/kdecoration3/private/decorationbridge.h
+-rw-r--r--	root/root	opt/kf6/include/KDecoration3/kdecoration3/private/decorationsettingsprivate.h
+-rw-r--r--	root/root	opt/kf6/include/KDecoration3/kdecoration3/private/kdecoration3_private_export.h
+-rw-r--r--	root/root	opt/kf6/include/KDecoration3/kdecoration3/scalehelpers.h
 drwxr-xr-x	root/root	opt/kf6/include/KF6/
--rw-r--r--	root/root	opt/kf6/include/KF6/kdecoration2_version.h
+-rw-r--r--	root/root	opt/kf6/include/KF6/kdecoration3_version.h
 drwxr-xr-x	root/root	opt/kf6/lib/
 drwxr-xr-x	root/root	opt/kf6/lib/cmake/
-drwxr-xr-x	root/root	opt/kf6/lib/cmake/KDecoration2/
--rw-r--r--	root/root	opt/kf6/lib/cmake/KDecoration2/KDecoration2Config.cmake
--rw-r--r--	root/root	opt/kf6/lib/cmake/KDecoration2/KDecoration2ConfigVersion.cmake
--rw-r--r--	root/root	opt/kf6/lib/cmake/KDecoration2/KDecoration2Targets-release.cmake
--rw-r--r--	root/root	opt/kf6/lib/cmake/KDecoration2/KDecoration2Targets.cmake
-lrwxrwxrwx	root/root	opt/kf6/lib/libkdecorations2.so -> libkdecorations2.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libkdecorations2.so.6 -> libkdecorations2.so.6.2.4
--rwxr-xr-x	root/root	opt/kf6/lib/libkdecorations2.so.6.2.4
-lrwxrwxrwx	root/root	opt/kf6/lib/libkdecorations2private.so -> libkdecorations2private.so.11
-lrwxrwxrwx	root/root	opt/kf6/lib/libkdecorations2private.so.11 -> libkdecorations2private.so.6.2.4
--rwxr-xr-x	root/root	opt/kf6/lib/libkdecorations2private.so.6.2.4
+drwxr-xr-x	root/root	opt/kf6/lib/cmake/KDecoration3/
+-rw-r--r--	root/root	opt/kf6/lib/cmake/KDecoration3/KDecoration3Config.cmake
+-rw-r--r--	root/root	opt/kf6/lib/cmake/KDecoration3/KDecoration3ConfigVersion.cmake
+-rw-r--r--	root/root	opt/kf6/lib/cmake/KDecoration3/KDecoration3Targets-release.cmake
+-rw-r--r--	root/root	opt/kf6/lib/cmake/KDecoration3/KDecoration3Targets.cmake
+lrwxrwxrwx	root/root	opt/kf6/lib/libkdecorations3.so -> libkdecorations3.so.6
+lrwxrwxrwx	root/root	opt/kf6/lib/libkdecorations3.so.6 -> libkdecorations3.so.6.3.4
+-rwxr-xr-x	root/root	opt/kf6/lib/libkdecorations3.so.6.3.4
+lrwxrwxrwx	root/root	opt/kf6/lib/libkdecorations3private.so -> libkdecorations3private.so.2
+lrwxrwxrwx	root/root	opt/kf6/lib/libkdecorations3private.so.2 -> libkdecorations3private.so.6.3.4
+-rwxr-xr-x	root/root	opt/kf6/lib/libkdecorations3private.so.6.3.4
 drwxr-xr-x	root/root	opt/kf6/share/
 drwxr-xr-x	root/root	opt/kf6/share/locale/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ar/
@@ -139,6 +141,9 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/lv/LC_MESSAGES/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ml/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ml/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/ml/LC_MESSAGES/kdecoration.mo
+drwxr-xr-x	root/root	opt/kf6/share/locale/nb/
+drwxr-xr-x	root/root	opt/kf6/share/locale/nb/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/nb/LC_MESSAGES/kdecoration.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/nl/
 drwxr-xr-x	root/root	opt/kf6/share/locale/nl/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/nl/LC_MESSAGES/kdecoration.mo

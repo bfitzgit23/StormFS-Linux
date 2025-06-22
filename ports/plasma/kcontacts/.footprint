@@ -77,8 +77,8 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/KF6Contacts/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6Contacts/KF6ContactsTargets-release.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6Contacts/KF6ContactsTargets.cmake
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6Contacts.so -> libKF6Contacts.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6Contacts.so.6 -> libKF6Contacts.so.6.9.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6Contacts.so.6.9.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6Contacts.so.6 -> libKF6Contacts.so.6.13.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6Contacts.so.6.13.0
 drwxr-xr-x	root/root	opt/kf6/lib/qml/
 drwxr-xr-x	root/root	opt/kf6/lib/qml/org/
 drwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/
@@ -233,6 +233,9 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/ro/LC_MESSAGES/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ru/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/kcontacts6.mo
+drwxr-xr-x	root/root	opt/kf6/share/locale/sa/
+drwxr-xr-x	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/kcontacts6.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/se/
 drwxr-xr-x	root/root	opt/kf6/share/locale/se/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/se/LC_MESSAGES/kcontacts6.mo

@@ -788,6 +788,12 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/kio_videodvd.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/libk3b.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/libk3bdevice.mo
+drwxr-xr-x	root/root	opt/kf6/share/locale/sa/
+drwxr-xr-x	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/k3b.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/kio_videodvd.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/libk3b.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/libk3bdevice.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/se/
 drwxr-xr-x	root/root	opt/kf6/share/locale/se/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/se/LC_MESSAGES/k3b.mo

@@ -5,11 +5,12 @@
 # Optional: libevent  nasm curl doxygen ffmpeg liboauth pciutils valgrind wget wireless-tools yasm libproxy
 
 name=firefox
-version=137.0
+version=139.0.4
 release=1
 source=(https://ftp.mozilla.org/pub/$name/releases/$version/source/$name-$version.source.tar.xz
-  firefox.desktop
+    firefox.desktop
   fix-target-detection.patch
+  sqlite-typedefs.patch
   node-stdout-nonblocking-wrapper)
 
 build() {
@@ -129,12 +130,14 @@ sed -i 's/icu-i18n/icu-uc &/' js/moz.configure
   # python/mach/mach/mixin/process.py fails to detect SHELL
   export SHELL='/bin/bash'
 
-  ./mach build
+  export MACH_BUILD_PYTHON_NATIVE_PACKAGE_SOURCE=none &&
+export MOZBUILD_STATE_PATH=${PWD}/mozbuild          &&
+./mach build
   DESTDIR=$PKG ./mach install
 
   # Remove crap
-  rm -r $PKG/usr/lib/firefox/browser/features
-  rm $PKG/usr/lib/firefox/removed-files
+  rm -rf $PKG/usr/lib/firefox/browser/features
+  rm -rf $PKG/usr/lib/firefox/removed-files
 
   install -D -m 0644 $SRC/firefox.desktop $PKG/usr/share/applications/firefox.desktop
 

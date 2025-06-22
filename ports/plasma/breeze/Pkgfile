@@ -1,7 +1,7 @@
 # Depends on: breeze-icons frameworkintegration kcmutils kdecoration kirigami
 
 name=breeze
-version=6.2.4
+version=6.3.4
 release=1
 source=(https://download.kde.org/stable/plasma/$version/$name-$version.tar.xz)
 build_opt="-D CMAKE_INSTALL_PREFIX=$KF6_PREFIX 
@@ -11,3 +11,8 @@ build_opt="-D CMAKE_INSTALL_PREFIX=$KF6_PREFIX
              -D BUILD_QT5=OFF                    
              -D BUILD_TESTING=OFF                
              -W no-dev .."
+pre_build() {
+           sed -e '/QList/i #include <QDebug>' \
+               -i cursors/src/kcursorgen/kcursorgen.h
+}
+

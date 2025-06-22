@@ -20,8 +20,8 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/KF6DocTools/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6DocTools/KF6DocToolsToolsTargets-release.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6DocTools/KF6DocToolsToolsTargets.cmake
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6DocTools.so -> libKF6DocTools.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6DocTools.so.6 -> libKF6DocTools.so.6.9.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6DocTools.so.6.9.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6DocTools.so.6 -> libKF6DocTools.so.6.13.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6DocTools.so.6.13.0
 drwxr-xr-x	root/root	opt/kf6/share/
 drwxr-xr-x	root/root	opt/kf6/share/doc/
 drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/

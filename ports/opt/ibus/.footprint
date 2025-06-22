@@ -66,9 +66,9 @@ drwxr-xr-x	root/root	usr/lib/gtk-4.0/
 drwxr-xr-x	root/root	usr/lib/gtk-4.0/4.0.0/
 drwxr-xr-x	root/root	usr/lib/gtk-4.0/4.0.0/immodules/
 -rwxr-xr-x	root/root	usr/lib/gtk-4.0/4.0.0/immodules/libim-ibus.so
-lrwxrwxrwx	root/root	usr/lib/libibus-1.0.so -> libibus-1.0.so.5.0.530
-lrwxrwxrwx	root/root	usr/lib/libibus-1.0.so.5 -> libibus-1.0.so.5.0.530
--rwxr-xr-x	root/root	usr/lib/libibus-1.0.so.5.0.530
+lrwxrwxrwx	root/root	usr/lib/libibus-1.0.so -> libibus-1.0.so.5.0.532
+lrwxrwxrwx	root/root	usr/lib/libibus-1.0.so.5 -> libibus-1.0.so.5.0.532
+-rwxr-xr-x	root/root	usr/lib/libibus-1.0.so.5.0.532
 drwxr-xr-x	root/root	usr/lib/pkgconfig/
 -rw-r--r--	root/root	usr/lib/pkgconfig/ibus-1.0.pc
 drwxr-xr-x	root/root	usr/lib/python3.13/

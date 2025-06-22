@@ -16,8 +16,8 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/KScreenLocker/
 drwxr-xr-x	root/root	opt/kf6/lib/cmake/ScreenSaverDBusInterface/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/ScreenSaverDBusInterface/ScreenSaverDBusInterfaceConfig.cmake
 lrwxrwxrwx	root/root	opt/kf6/lib/libKScreenLocker.so -> libKScreenLocker.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKScreenLocker.so.6 -> libKScreenLocker.so.6.2.4
--rwxr-xr-x	root/root	opt/kf6/lib/libKScreenLocker.so.6.2.4
+lrwxrwxrwx	root/root	opt/kf6/lib/libKScreenLocker.so.6 -> libKScreenLocker.so.6.3.4
+-rwxr-xr-x	root/root	opt/kf6/lib/libKScreenLocker.so.6.3.4
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/plasma/
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/plasma/kcms/
@@ -144,6 +144,8 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/he/LC_MESSAGES/
 drwxr-xr-x	root/root	opt/kf6/share/locale/hi/
 drwxr-xr-x	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/kcm_screenlocker.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/kscreenlocker.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/kscreenlocker_greet.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/hu/
 drwxr-xr-x	root/root	opt/kf6/share/locale/hu/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/hu/LC_MESSAGES/kcm_screenlocker.mo
@@ -257,6 +259,11 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/kcm_screenlocker.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/kscreenlocker.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/kscreenlocker_greet.mo
+drwxr-xr-x	root/root	opt/kf6/share/locale/sa/
+drwxr-xr-x	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/kcm_screenlocker.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/kscreenlocker.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/kscreenlocker_greet.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/sk/
 drwxr-xr-x	root/root	opt/kf6/share/locale/sk/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/sk/LC_MESSAGES/kcm_screenlocker.mo

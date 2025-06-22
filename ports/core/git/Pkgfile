@@ -5,7 +5,7 @@
 # Optional: tk
 
 name=git
-version=2.48.1
+version=2.49.0
 release=1
 source=(https://www.kernel.org/pub/software/scm/$name/$name-$version.tar.xz)
 

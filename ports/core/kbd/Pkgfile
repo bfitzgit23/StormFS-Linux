@@ -4,10 +4,10 @@
 # Depends on:  
 
 name=kbd
-version=2.7.1
+version=2.8.0
 release=1
 source=(https://www.kernel.org/pub/linux/utils/$name/$name-$version.tar.xz
-kbd-2.7.1-backspace-1.patch)
+kbd-2.8.0-backspace-1.patch)
 
 pkg_build() {
 

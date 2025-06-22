@@ -1,0 +1,22 @@
+# Depends on: 
+
+name=opentimelineio
+version=0.17.0
+release=1
+source=(https://github.com/AcademySoftwareFoundation/OpenTimelineIO/archive/refs/tags/v0.17.0.zip)
+
+pkg_build() {
+  
+
+  sed -e '/cmake/d' -i pyproject.toml
+
+  cmake -B build -S . \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DOTIO_FIND_IMATH=ON \
+    -DOTIO_AUTOMATIC_SUBMODULES=OFF \
+    -DOTIO_DEPENDENCIES_INSTALL=OFF
+  cmake --build build
+export CXXFLAGS+=" -I/usr/include/Imath"
+ python -m build --wheel --no-isolation
+ }
+ 

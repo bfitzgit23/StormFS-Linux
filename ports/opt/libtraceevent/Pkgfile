@@ -1,0 +1,36 @@
+# Description: Linux kernel trace event library
+# URL: https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/about/
+# Maintainer: Tim Biermann, tbier at posteo dot de
+# Optional: asciidoc asciidoctor xmlto
+
+name=libtraceevent
+version=1.8.4
+release=2
+source=(https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/snapshot/$name-$version.tar.gz)
+
+build() {
+  if prt-get isinst asciidoc xmlto; then
+    BUILD_DOCS=1
+    PKGMK_LIBTRACEEVENT+=' -D doc=true'
+  # needs some asciidoctor extension
+  #elif prt-get isinst asciidoctor xmlto; then
+  #  BUILD_DOCS=1
+  #  PKGMK_LIBTRACEEVENT+=' -D asciidoctor=true'
+  else
+    BUILD_DOCS=0
+    PKGMK_LIBTRACEEVENT+=' -D doc=false'
+  fi
+
+  meson setup $name-$version build $PKGMK_LIBTRACEEVENT \
+    --prefix=/usr \
+    --buildtype=plain \
+    --wrap-mode nodownload \
+    -D b_lto=true \
+    -D b_pie=true
+
+  meson compile -C build
+  [[ $BUILD_DOCS -eq 1 ]] && meson compile -C build docs
+
+  DESTDIR=$PKG meson install -C build
+  rm -rf $PKG/usr/share/doc
+}

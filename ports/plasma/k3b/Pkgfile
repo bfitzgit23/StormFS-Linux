@@ -5,7 +5,7 @@
 # Optional:	ffmpeg flac lame libmad libsndfile libvorbis libmusicbrainz musepack libmpcdec
 
 name=k3b
-version=24.12.0
+version=25.04.0
 release=1
 source=(https://download.kde.org/stable/release-service/$version/src/$name-$version.tar.xz)
 

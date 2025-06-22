@@ -18,9 +18,9 @@ drwxr-xr-x	root/root	usr/include/libqalculate/
 -rw-r--r--	root/root	usr/include/libqalculate/qalculate.h
 -rw-r--r--	root/root	usr/include/libqalculate/util.h
 drwxr-xr-x	root/root	usr/lib/
-lrwxrwxrwx	root/root	usr/lib/libqalculate.so -> libqalculate.so.23.1.0
-lrwxrwxrwx	root/root	usr/lib/libqalculate.so.23 -> libqalculate.so.23.1.0
--rwxr-xr-x	root/root	usr/lib/libqalculate.so.23.1.0
+lrwxrwxrwx	root/root	usr/lib/libqalculate.so -> libqalculate.so.23.3.4
+lrwxrwxrwx	root/root	usr/lib/libqalculate.so.23 -> libqalculate.so.23.3.4
+-rwxr-xr-x	root/root	usr/lib/libqalculate.so.23.3.4
 drwxr-xr-x	root/root	usr/lib/pkgconfig/
 -rw-r--r--	root/root	usr/lib/pkgconfig/libqalculate.pc
 drwxr-xr-x	root/root	usr/share/

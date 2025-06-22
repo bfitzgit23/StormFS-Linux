@@ -4,7 +4,7 @@
 # Depends on: at-spi2-core dbus-32 glib-32 libXtst-32 libXi-32
 
 name=at-spi2-core-32
-version=2.54.0
+version=2.56.1
 release=1
 source=(https://download.gnome.org/sources/at-spi2-core/${version:0:4}/at-spi2-core-$version.tar.xz)
 

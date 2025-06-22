@@ -6,7 +6,7 @@ drwxr-xr-x	root/root	usr/
 drwxr-xr-x	root/root	usr/bin/
 lrwxrwxrwx	root/root	usr/bin/awk -> gawk
 -rwxr-xr-x	root/root	usr/bin/gawk
--rwxr-xr-x	root/root	usr/bin/gawk-5.3.1
+-rwxr-xr-x	root/root	usr/bin/gawk-5.3.2
 -rwxr-xr-x	root/root	usr/bin/gawkbug
 drwxr-xr-x	root/root	usr/include/
 -rw-r--r--	root/root	usr/include/gawkapi.h

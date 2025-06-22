@@ -432,6 +432,9 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/
 drwxr-xr-x	root/root	opt/kf6/share/locale/rw/
 drwxr-xr-x	root/root	opt/kf6/share/locale/rw/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/rw/LC_MESSAGES/konversation.mo
+drwxr-xr-x	root/root	opt/kf6/share/locale/sa/
+drwxr-xr-x	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/konversation.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/si/
 drwxr-xr-x	root/root	opt/kf6/share/locale/si/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/si/LC_MESSAGES/konversation.mo

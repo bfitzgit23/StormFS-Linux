@@ -15,8 +15,8 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/KF6NotifyConfig/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6NotifyConfig/KF6NotifyConfigTargets-release.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6NotifyConfig/KF6NotifyConfigTargets.cmake
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6NotifyConfig.so -> libKF6NotifyConfig.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6NotifyConfig.so.6 -> libKF6NotifyConfig.so.6.9.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6NotifyConfig.so.6.9.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6NotifyConfig.so.6 -> libKF6NotifyConfig.so.6.13.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6NotifyConfig.so.6.13.0
 drwxr-xr-x	root/root	opt/kf6/share/
 drwxr-xr-x	root/root	opt/kf6/share/locale/
 drwxr-xr-x	root/root	opt/kf6/share/locale/af/

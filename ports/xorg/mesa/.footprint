@@ -2,7 +2,10 @@ drwxr-xr-x	root/root	etc/
 drwxr-xr-x	root/root	etc/OpenCL/
 drwxr-xr-x	root/root	etc/OpenCL/vendors/
 -rw-r--r--	root/root	etc/OpenCL/vendors/mesa.icd
+-rw-r--r--	root/root	etc/OpenCL/vendors/rusticl.icd
 drwxr-xr-x	root/root	usr/
+drwxr-xr-x	root/root	usr/bin/
+-rwxr-xr-x	root/root	usr/bin/spirv2dxil
 drwxr-xr-x	root/root	usr/include/
 drwxr-xr-x	root/root	usr/include/EGL/
 -rw-r--r--	root/root	usr/include/EGL/eglext_angle.h
@@ -10,22 +13,25 @@ drwxr-xr-x	root/root	usr/include/EGL/
 drwxr-xr-x	root/root	usr/include/GL/
 drwxr-xr-x	root/root	usr/include/GL/internal/
 -rw-r--r--	root/root	usr/include/GL/internal/dri_interface.h
--rw-r--r--	root/root	usr/include/GL/osmesa.h
 -rw-r--r--	root/root	usr/include/gbm.h
+-rw-r--r--	root/root	usr/include/gbm_backend_abi.h
 -rw-r--r--	root/root	usr/include/xa_composite.h
 -rw-r--r--	root/root	usr/include/xa_context.h
 -rw-r--r--	root/root	usr/include/xa_tracker.h
 drwxr-xr-x	root/root	usr/lib/
 drwxr-xr-x	root/root	usr/lib/dri/
+lrwxrwxrwx	root/root	usr/lib/dri/apple_dri.so -> libdril_dri.so
 lrwxrwxrwx	root/root	usr/lib/dri/armada-drm_dri.so -> libdril_dri.so
 lrwxrwxrwx	root/root	usr/lib/dri/asahi_dri.so -> libdril_dri.so
 lrwxrwxrwx	root/root	usr/lib/dri/crocus_dri.so -> libdril_dri.so
 lrwxrwxrwx	root/root	usr/lib/dri/d3d12_dri.so -> libdril_dri.so
+lrwxrwxrwx	root/root	usr/lib/dri/d3d12_drv_video.so -> ../libgallium-25.1.3-1.so
 lrwxrwxrwx	root/root	usr/lib/dri/etnaviv_dri.so -> libdril_dri.so
 lrwxrwxrwx	root/root	usr/lib/dri/exynos_dri.so -> libdril_dri.so
 lrwxrwxrwx	root/root	usr/lib/dri/gm12u320_dri.so -> libdril_dri.so
 lrwxrwxrwx	root/root	usr/lib/dri/hdlcd_dri.so -> libdril_dri.so
 lrwxrwxrwx	root/root	usr/lib/dri/hx8357d_dri.so -> libdril_dri.so
+lrwxrwxrwx	root/root	usr/lib/dri/i915_dri.so -> libdril_dri.so
 lrwxrwxrwx	root/root	usr/lib/dri/ili9163_dri.so -> libdril_dri.so
 lrwxrwxrwx	root/root	usr/lib/dri/ili9225_dri.so -> libdril_dri.so
 lrwxrwxrwx	root/root	usr/lib/dri/ili9341_dri.so -> libdril_dri.so
@@ -49,13 +55,16 @@ lrwxrwxrwx	root/root	usr/lib/dri/mi0283qt_dri.so -> libdril_dri.so
 lrwxrwxrwx	root/root	usr/lib/dri/msm_dri.so -> libdril_dri.so
 lrwxrwxrwx	root/root	usr/lib/dri/mxsfb-drm_dri.so -> libdril_dri.so
 lrwxrwxrwx	root/root	usr/lib/dri/nouveau_dri.so -> libdril_dri.so
+lrwxrwxrwx	root/root	usr/lib/dri/nouveau_drv_video.so -> ../libgallium-25.1.3-1.so
 lrwxrwxrwx	root/root	usr/lib/dri/panel-mipi-dbi_dri.so -> libdril_dri.so
 lrwxrwxrwx	root/root	usr/lib/dri/panfrost_dri.so -> libdril_dri.so
 lrwxrwxrwx	root/root	usr/lib/dri/panthor_dri.so -> libdril_dri.so
 lrwxrwxrwx	root/root	usr/lib/dri/pl111_dri.so -> libdril_dri.so
 lrwxrwxrwx	root/root	usr/lib/dri/r300_dri.so -> libdril_dri.so
 lrwxrwxrwx	root/root	usr/lib/dri/r600_dri.so -> libdril_dri.so
+lrwxrwxrwx	root/root	usr/lib/dri/r600_drv_video.so -> ../libgallium-25.1.3-1.so
 lrwxrwxrwx	root/root	usr/lib/dri/radeonsi_dri.so -> libdril_dri.so
+lrwxrwxrwx	root/root	usr/lib/dri/radeonsi_drv_video.so -> ../libgallium-25.1.3-1.so
 lrwxrwxrwx	root/root	usr/lib/dri/rcar-du_dri.so -> libdril_dri.so
 lrwxrwxrwx	root/root	usr/lib/dri/repaper_dri.so -> libdril_dri.so
 lrwxrwxrwx	root/root	usr/lib/dri/rockchip_dri.so -> libdril_dri.so
@@ -72,12 +81,14 @@ lrwxrwxrwx	root/root	usr/lib/dri/udl_dri.so -> libdril_dri.so
 lrwxrwxrwx	root/root	usr/lib/dri/v3d_dri.so -> libdril_dri.so
 lrwxrwxrwx	root/root	usr/lib/dri/vc4_dri.so -> libdril_dri.so
 lrwxrwxrwx	root/root	usr/lib/dri/virtio_gpu_dri.so -> libdril_dri.so
+lrwxrwxrwx	root/root	usr/lib/dri/virtio_gpu_drv_video.so -> ../libgallium-25.1.3-1.so
 lrwxrwxrwx	root/root	usr/lib/dri/vkms_dri.so -> libdril_dri.so
 lrwxrwxrwx	root/root	usr/lib/dri/vmwgfx_dri.so -> libdril_dri.so
 lrwxrwxrwx	root/root	usr/lib/dri/zink_dri.so -> libdril_dri.so
 lrwxrwxrwx	root/root	usr/lib/dri/zynqmp-dpsub_dri.so -> libdril_dri.so
 drwxr-xr-x	root/root	usr/lib/gallium-pipe/
 -rwxr-xr-x	root/root	usr/lib/gallium-pipe/pipe_crocus.so
+-rwxr-xr-x	root/root	usr/lib/gallium-pipe/pipe_i915.so
 -rwxr-xr-x	root/root	usr/lib/gallium-pipe/pipe_iris.so
 -rwxr-xr-x	root/root	usr/lib/gallium-pipe/pipe_kmsro.so
 -rwxr-xr-x	root/root	usr/lib/gallium-pipe/pipe_msm.so
@@ -99,18 +110,20 @@ lrwxrwxrwx	root/root	usr/lib/libGLX_mesa.so.0 -> libGLX_mesa.so.0.0.0
 lrwxrwxrwx	root/root	usr/lib/libMesaOpenCL.so -> libMesaOpenCL.so.1
 lrwxrwxrwx	root/root	usr/lib/libMesaOpenCL.so.1 -> libMesaOpenCL.so.1.0.0
 -rwxr-xr-x	root/root	usr/lib/libMesaOpenCL.so.1.0.0
-lrwxrwxrwx	root/root	usr/lib/libOSMesa.so -> libOSMesa.so.8
-lrwxrwxrwx	root/root	usr/lib/libOSMesa.so.8 -> libOSMesa.so.8.0.0
--rwxr-xr-x	root/root	usr/lib/libOSMesa.so.8.0.0
--rwxr-xr-x	root/root	usr/lib/libgallium-24.3.4-1.so
+lrwxrwxrwx	root/root	usr/lib/libRusticlOpenCL.so -> libRusticlOpenCL.so.1
+lrwxrwxrwx	root/root	usr/lib/libRusticlOpenCL.so.1 -> libRusticlOpenCL.so.1.0.0
+-rwxr-xr-x	root/root	usr/lib/libRusticlOpenCL.so.1.0.0
+-rwxr-xr-x	root/root	usr/lib/libgallium-25.1.3-1.so
 lrwxrwxrwx	root/root	usr/lib/libgbm.so -> libgbm.so.1
 lrwxrwxrwx	root/root	usr/lib/libgbm.so.1 -> libgbm.so.1.0.0
 -rwxr-xr-x	root/root	usr/lib/libgbm.so.1.0.0
-lrwxrwxrwx	root/root	usr/lib/libglapi.so -> libglapi.so.0
-lrwxrwxrwx	root/root	usr/lib/libglapi.so.0 -> libglapi.so.0.0.0
--rwxr-xr-x	root/root	usr/lib/libglapi.so.0.0.0
+-rw-r--r--	root/root	usr/lib/libspirv_to_dxil.a
+-rwxr-xr-x	root/root	usr/lib/libspirv_to_dxil.so
+-rwxr-xr-x	root/root	usr/lib/libvulkan_dzn.so
+-rwxr-xr-x	root/root	usr/lib/libvulkan_intel.so
 -rwxr-xr-x	root/root	usr/lib/libvulkan_intel_hasvk.so
 -rwxr-xr-x	root/root	usr/lib/libvulkan_lvp.so
+-rwxr-xr-x	root/root	usr/lib/libvulkan_nouveau.so
 -rwxr-xr-x	root/root	usr/lib/libvulkan_radeon.so
 -rwxr-xr-x	root/root	usr/lib/libvulkan_virtio.so
 lrwxrwxrwx	root/root	usr/lib/libxatracker.so -> libxatracker.so.2
@@ -119,29 +132,28 @@ lrwxrwxrwx	root/root	usr/lib/libxatracker.so.2 -> libxatracker.so.2.5.0
 drwxr-xr-x	root/root	usr/lib/pkgconfig/
 -rw-r--r--	root/root	usr/lib/pkgconfig/dri.pc
 -rw-r--r--	root/root	usr/lib/pkgconfig/gbm.pc
--rw-r--r--	root/root	usr/lib/pkgconfig/osmesa.pc
 -rw-r--r--	root/root	usr/lib/pkgconfig/xatracker.pc
 drwxr-xr-x	root/root	usr/lib/vdpau/
 lrwxrwxrwx	root/root	usr/lib/vdpau/libvdpau_d3d12.so -> libvdpau_d3d12.so.1.0.0
 lrwxrwxrwx	root/root	usr/lib/vdpau/libvdpau_d3d12.so.1 -> libvdpau_d3d12.so.1.0.0
 lrwxrwxrwx	root/root	usr/lib/vdpau/libvdpau_d3d12.so.1.0 -> libvdpau_d3d12.so.1.0.0
-lrwxrwxrwx	root/root	usr/lib/vdpau/libvdpau_d3d12.so.1.0.0 -> ../libgallium-24.3.4-1.so
+lrwxrwxrwx	root/root	usr/lib/vdpau/libvdpau_d3d12.so.1.0.0 -> ../libgallium-25.1.3-1.so
 lrwxrwxrwx	root/root	usr/lib/vdpau/libvdpau_nouveau.so -> libvdpau_nouveau.so.1.0.0
 lrwxrwxrwx	root/root	usr/lib/vdpau/libvdpau_nouveau.so.1 -> libvdpau_nouveau.so.1.0.0
 lrwxrwxrwx	root/root	usr/lib/vdpau/libvdpau_nouveau.so.1.0 -> libvdpau_nouveau.so.1.0.0
-lrwxrwxrwx	root/root	usr/lib/vdpau/libvdpau_nouveau.so.1.0.0 -> ../libgallium-24.3.4-1.so
+lrwxrwxrwx	root/root	usr/lib/vdpau/libvdpau_nouveau.so.1.0.0 -> ../libgallium-25.1.3-1.so
 lrwxrwxrwx	root/root	usr/lib/vdpau/libvdpau_r600.so -> libvdpau_r600.so.1.0.0
 lrwxrwxrwx	root/root	usr/lib/vdpau/libvdpau_r600.so.1 -> libvdpau_r600.so.1.0.0
 lrwxrwxrwx	root/root	usr/lib/vdpau/libvdpau_r600.so.1.0 -> libvdpau_r600.so.1.0.0
-lrwxrwxrwx	root/root	usr/lib/vdpau/libvdpau_r600.so.1.0.0 -> ../libgallium-24.3.4-1.so
+lrwxrwxrwx	root/root	usr/lib/vdpau/libvdpau_r600.so.1.0.0 -> ../libgallium-25.1.3-1.so
 lrwxrwxrwx	root/root	usr/lib/vdpau/libvdpau_radeonsi.so -> libvdpau_radeonsi.so.1.0.0
 lrwxrwxrwx	root/root	usr/lib/vdpau/libvdpau_radeonsi.so.1 -> libvdpau_radeonsi.so.1.0.0
 lrwxrwxrwx	root/root	usr/lib/vdpau/libvdpau_radeonsi.so.1.0 -> libvdpau_radeonsi.so.1.0.0
-lrwxrwxrwx	root/root	usr/lib/vdpau/libvdpau_radeonsi.so.1.0.0 -> ../libgallium-24.3.4-1.so
+lrwxrwxrwx	root/root	usr/lib/vdpau/libvdpau_radeonsi.so.1.0.0 -> ../libgallium-25.1.3-1.so
 lrwxrwxrwx	root/root	usr/lib/vdpau/libvdpau_virtio_gpu.so -> libvdpau_virtio_gpu.so.1.0.0
 lrwxrwxrwx	root/root	usr/lib/vdpau/libvdpau_virtio_gpu.so.1 -> libvdpau_virtio_gpu.so.1.0.0
 lrwxrwxrwx	root/root	usr/lib/vdpau/libvdpau_virtio_gpu.so.1.0 -> libvdpau_virtio_gpu.so.1.0.0
-lrwxrwxrwx	root/root	usr/lib/vdpau/libvdpau_virtio_gpu.so.1.0.0 -> ../libgallium-24.3.4-1.so
+lrwxrwxrwx	root/root	usr/lib/vdpau/libvdpau_virtio_gpu.so.1.0.0 -> ../libgallium-25.1.3-1.so
 drwxr-xr-x	root/root	usr/share/
 drwxr-xr-x	root/root	usr/share/drirc.d/
 -rw-r--r--	root/root	usr/share/drirc.d/00-mesa-defaults.conf
@@ -151,7 +163,10 @@ drwxr-xr-x	root/root	usr/share/glvnd/egl_vendor.d/
 -rw-r--r--	root/root	usr/share/glvnd/egl_vendor.d/50_mesa.json
 drwxr-xr-x	root/root	usr/share/vulkan/
 drwxr-xr-x	root/root	usr/share/vulkan/icd.d/
+-rw-r--r--	root/root	usr/share/vulkan/icd.d/dzn_icd.x86_64.json
 -rw-r--r--	root/root	usr/share/vulkan/icd.d/intel_hasvk_icd.x86_64.json
+-rw-r--r--	root/root	usr/share/vulkan/icd.d/intel_icd.x86_64.json
 -rw-r--r--	root/root	usr/share/vulkan/icd.d/lvp_icd.x86_64.json
+-rw-r--r--	root/root	usr/share/vulkan/icd.d/nouveau_icd.x86_64.json
 -rw-r--r--	root/root	usr/share/vulkan/icd.d/radeon_icd.x86_64.json
 -rw-r--r--	root/root	usr/share/vulkan/icd.d/virtio_icd.x86_64.json

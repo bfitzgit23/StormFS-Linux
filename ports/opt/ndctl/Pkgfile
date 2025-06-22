@@ -1,26 +1,27 @@
 # Description: Utility library for managing the libnvdimm (non-volatile memory device) sub-system in the Linux kernel
 # URL: https://github.com/pmem/ndctl
 # Maintainer: Tim Biermann, tbier at posteo dot de
-# Depends on: iniparser json-c keyutils meson ninja
+# Depends on: iniparser json-c keyutils meson ninja libtraceevent libtracefs
 
 name=ndctl
-version=78
+version=82
 release=1
 source=(https://github.com/pmem/ndctl/archive/v$version/$name-$version-$release.tar.gz)
 
 build() {
-  meson setup $name-$version build \
+  meson setup $name-$version build $PKGMK_NDCTL \
     --prefix=/usr \
     --buildtype=plain \
     --wrap-mode nodownload \
     -D b_lto=false \
     -D b_pie=true \
+    -D version-tag="$version" \
     -D asciidoctor=disabled \
     -D docs=disabled \
-    -D systemd=disabled \
-    -D libtracefs=disabled
+    -D systemd=enabled
   meson compile -C build
   DESTDIR=$PKG meson install -C build
 
   prt-get isinst bash-completion || rm -rf $PKG/usr/share/bash-completion
 }
+

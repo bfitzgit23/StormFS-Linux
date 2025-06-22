@@ -1,0 +1,13 @@
+# Description: Integration library and QML module for Accounts-SSO and SignOn-SSO
+# URL: https://www.kde.org/
+# Maintainer: CRUX KDE Ports, kde-ports at crux dot nu
+# Depends on: kcmutils kirigami kwallet libaccounts-qt qcoro signond
+
+name=kaccounts-integration
+version=25.04.0
+release=1
+source=(http://download.kde.org/stable/release-service/$version/src/$name-$version.tar.xz)
+build_opt="-DCMAKE_INSTALL_PREFIX=$KF6_PREFIX
+      -DCMAKE_BUILD_TYPE=Release
+      -DBUILD_TESTING=OFF
+      -Wno-dev .."

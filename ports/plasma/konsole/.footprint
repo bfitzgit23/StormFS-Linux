@@ -7,8 +7,8 @@ drwxr-xr-x	root/root	opt/kf6/lib/
 drwxr-xr-x	root/root	opt/kf6/lib/kconf_update_bin/
 -rwxr-xr-x	root/root	opt/kf6/lib/kconf_update_bin/konsole_globalaccel
 -rwxr-xr-x	root/root	opt/kf6/lib/kconf_update_bin/konsole_show_menubar
--rwxr-xr-x	root/root	opt/kf6/lib/libkonsoleapp.so.24.12.2
--rwxr-xr-x	root/root	opt/kf6/lib/libkonsoleprivate.so.24.12.2
+-rwxr-xr-x	root/root	opt/kf6/lib/libkonsoleapp.so.25.04.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libkonsoleprivate.so.25.04.0
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/kf6/
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/kf6/parts/
@@ -308,6 +308,9 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/ro/LC_MESSAGES/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ru/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/konsole.mo
+drwxr-xr-x	root/root	opt/kf6/share/locale/sa/
+drwxr-xr-x	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/konsole.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/se/
 drwxr-xr-x	root/root	opt/kf6/share/locale/se/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/se/LC_MESSAGES/konsole.mo

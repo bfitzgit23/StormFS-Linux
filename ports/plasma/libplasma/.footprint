@@ -60,11 +60,11 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/PlasmaQuick/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/PlasmaQuick/PlasmaQuickTargets-release.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/PlasmaQuick/PlasmaQuickTargets.cmake
 lrwxrwxrwx	root/root	opt/kf6/lib/libPlasma.so -> libPlasma.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libPlasma.so.6 -> libPlasma.so.6.2.4
--rwxr-xr-x	root/root	opt/kf6/lib/libPlasma.so.6.2.4
+lrwxrwxrwx	root/root	opt/kf6/lib/libPlasma.so.6 -> libPlasma.so.6.3.4
+-rwxr-xr-x	root/root	opt/kf6/lib/libPlasma.so.6.3.4
 lrwxrwxrwx	root/root	opt/kf6/lib/libPlasmaQuick.so -> libPlasmaQuick.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libPlasmaQuick.so.6 -> libPlasmaQuick.so.6.2.4
--rwxr-xr-x	root/root	opt/kf6/lib/libPlasmaQuick.so.6.2.4
+lrwxrwxrwx	root/root	opt/kf6/lib/libPlasmaQuick.so.6 -> libPlasmaQuick.so.6.3.4
+-rwxr-xr-x	root/root	opt/kf6/lib/libPlasmaQuick.so.6.3.4
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/kf6/
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/kf6/kirigami/
@@ -120,6 +120,7 @@ drwxr-xr-x	root/root	opt/kf6/lib/qml/org/kde/plasma/components/
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/plasma/components/ScrollView.qml
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/plasma/components/Slider.qml
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/plasma/components/SpinBox.qml
+-rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/plasma/components/StackView.qml
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/plasma/components/SwipeView.qml
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/plasma/components/Switch.qml
 -rw-r--r--	root/root	opt/kf6/lib/qml/org/kde/plasma/components/SwitchDelegate.qml
@@ -262,6 +263,9 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/gl/LC_MESSAGES/
 drwxr-xr-x	root/root	opt/kf6/share/locale/he/
 drwxr-xr-x	root/root	opt/kf6/share/locale/he/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/he/LC_MESSAGES/libplasma6.mo
+drwxr-xr-x	root/root	opt/kf6/share/locale/hi/
+drwxr-xr-x	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/libplasma6.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/hu/
 drwxr-xr-x	root/root	opt/kf6/share/locale/hu/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/hu/LC_MESSAGES/libplasma6.mo

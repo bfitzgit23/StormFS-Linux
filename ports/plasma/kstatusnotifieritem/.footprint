@@ -15,8 +15,8 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/KF6StatusNotifierItem/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6StatusNotifierItem/KF6StatusNotifierItemTargets-release.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6StatusNotifierItem/KF6StatusNotifierItemTargets.cmake
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6StatusNotifierItem.so -> libKF6StatusNotifierItem.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6StatusNotifierItem.so.6 -> libKF6StatusNotifierItem.so.6.9.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6StatusNotifierItem.so.6.9.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6StatusNotifierItem.so.6 -> libKF6StatusNotifierItem.so.6.13.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6StatusNotifierItem.so.6.13.0
 drwxr-xr-x	root/root	opt/kf6/share/
 drwxr-xr-x	root/root	opt/kf6/share/dbus-1/
 drwxr-xr-x	root/root	opt/kf6/share/dbus-1/interfaces/
@@ -68,6 +68,9 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/gl/LC_MESSAGES/
 drwxr-xr-x	root/root	opt/kf6/share/locale/he/
 drwxr-xr-x	root/root	opt/kf6/share/locale/he/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/he/LC_MESSAGES/kstatusnotifieritem6_qt.qm
+drwxr-xr-x	root/root	opt/kf6/share/locale/hi/
+drwxr-xr-x	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/kstatusnotifieritem6_qt.qm
 drwxr-xr-x	root/root	opt/kf6/share/locale/hu/
 drwxr-xr-x	root/root	opt/kf6/share/locale/hu/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/hu/LC_MESSAGES/kstatusnotifieritem6_qt.qm

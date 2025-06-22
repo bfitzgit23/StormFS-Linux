@@ -15,8 +15,8 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/KF6Crash/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6Crash/KF6CrashTargets-release.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6Crash/KF6CrashTargets.cmake
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6Crash.so -> libKF6Crash.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6Crash.so.6 -> libKF6Crash.so.6.9.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6Crash.so.6.9.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6Crash.so.6 -> libKF6Crash.so.6.13.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6Crash.so.6.13.0
 drwxr-xr-x	root/root	opt/kf6/share/
 drwxr-xr-x	root/root	opt/kf6/share/qlogging-categories6/
 -rw-r--r--	root/root	opt/kf6/share/qlogging-categories6/kcrash.categories

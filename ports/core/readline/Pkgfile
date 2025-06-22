@@ -1,8 +1,7 @@
 name=readline
-version=8.2.13
+version=8.3-rc2
 release=1
-source=(http://ftpmirror.gnu.org/gnu/$name/$name-${version:0:3}.tar.gz
-https://linuxfromscratch.org/patches/downloads/readline/readline-8.2-upstream_fixes-3.patch)
+source=(https://ftp.gnu.org/gnu/$name/$name-$version.tar.gz)
 bootstrap_build() {
        sed -i '/MV.*old/d' Makefile.in
 sed -i '/{OLDSUFF}/c:' support/shlib-install

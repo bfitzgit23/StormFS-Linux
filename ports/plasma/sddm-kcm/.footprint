@@ -113,6 +113,9 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/ko/LC_MESSAGES/
 drwxr-xr-x	root/root	opt/kf6/share/locale/lt/
 drwxr-xr-x	root/root	opt/kf6/share/locale/lt/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/lt/LC_MESSAGES/kcm_sddm.mo
+drwxr-xr-x	root/root	opt/kf6/share/locale/lv/
+drwxr-xr-x	root/root	opt/kf6/share/locale/lv/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/lv/LC_MESSAGES/kcm_sddm.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/ml/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ml/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/ml/LC_MESSAGES/kcm_sddm.mo
@@ -143,6 +146,9 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/ro/LC_MESSAGES/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ru/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/kcm_sddm.mo
+drwxr-xr-x	root/root	opt/kf6/share/locale/sa/
+drwxr-xr-x	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/kcm_sddm.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/sk/
 drwxr-xr-x	root/root	opt/kf6/share/locale/sk/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/sk/LC_MESSAGES/kcm_sddm.mo

@@ -5,6 +5,8 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/
 drwxr-xr-x	root/root	opt/kf6/lib/cmake/QQC2BreezeStyle/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/QQC2BreezeStyle/QQC2BreezeStyleConfig.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/QQC2BreezeStyle/QQC2BreezeStyleConfigVersion.cmake
+-rw-r--r--	root/root	opt/kf6/lib/cmake/QQC2BreezeStyle/QQC2BreezeStyleTargets-release.cmake
+-rw-r--r--	root/root	opt/kf6/lib/cmake/QQC2BreezeStyle/QQC2BreezeStyleTargets.cmake
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/kf6/
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/kf6/kirigami/

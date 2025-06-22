@@ -1,0 +1,15 @@
+drwxr-xr-x	root/root	usr/
+drwxr-xr-x	root/root	usr/lib/
+drwxr-xr-x	root/root	usr/lib/python3.13/
+drwxr-xr-x	root/root	usr/lib/python3.13/site-packages/
+drwxr-xr-x	root/root	usr/lib/python3.13/site-packages/OpenTimelineIO_Plugins-0.17.0-py3.13.egg-info/
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/OpenTimelineIO_Plugins-0.17.0-py3.13.egg-info/PKG-INFO
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/OpenTimelineIO_Plugins-0.17.0-py3.13.egg-info/SOURCES.txt
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/OpenTimelineIO_Plugins-0.17.0-py3.13.egg-info/dependency_links.txt
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/OpenTimelineIO_Plugins-0.17.0-py3.13.egg-info/requires.txt
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/OpenTimelineIO_Plugins-0.17.0-py3.13.egg-info/top_level.txt
+drwxr-xr-x	root/root	usr/lib/python3.13/site-packages/opentimelineio_plugins/
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/opentimelineio_plugins/__init__.py
+drwxr-xr-x	root/root	usr/lib/python3.13/site-packages/opentimelineio_plugins/__pycache__/
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/opentimelineio_plugins/__pycache__/__init__.cpython-313.opt-1.pyc
+-rw-r--r--	root/root	usr/lib/python3.13/site-packages/opentimelineio_plugins/__pycache__/__init__.cpython-313.pyc

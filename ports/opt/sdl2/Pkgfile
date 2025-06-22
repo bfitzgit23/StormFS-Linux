@@ -5,7 +5,7 @@
 # Optional: libxkbcommon wayland-protocols xorg-libs alsa ibus libsamplerate nasm pipewire pulseaudio directfb fcitx jack sndio
 
 name=sdl2
-version=2.32.0
+version=2.32.8
 release=1
 source=(https://www.libsdl.org/release/SDL2-$version.tar.gz)
 

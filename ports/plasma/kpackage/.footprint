@@ -30,8 +30,8 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/KF6Package/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6Package/KF6PackageToolsTargets-release.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6Package/KF6PackageToolsTargets.cmake
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6Package.so -> libKF6Package.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6Package.so.6 -> libKF6Package.so.6.9.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6Package.so.6.9.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6Package.so.6 -> libKF6Package.so.6.13.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6Package.so.6.13.0
 drwxr-xr-x	root/root	opt/kf6/share/
 drwxr-xr-x	root/root	opt/kf6/share/locale/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ar/
@@ -97,6 +97,9 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/gl/LC_MESSAGES/
 drwxr-xr-x	root/root	opt/kf6/share/locale/he/
 drwxr-xr-x	root/root	opt/kf6/share/locale/he/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/he/LC_MESSAGES/libkpackage6.mo
+drwxr-xr-x	root/root	opt/kf6/share/locale/hi/
+drwxr-xr-x	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/libkpackage6.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/hu/
 drwxr-xr-x	root/root	opt/kf6/share/locale/hu/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/hu/LC_MESSAGES/libkpackage6.mo
@@ -160,6 +163,9 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/ro/LC_MESSAGES/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ru/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/libkpackage6.mo
+drwxr-xr-x	root/root	opt/kf6/share/locale/sa/
+drwxr-xr-x	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/libkpackage6.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/sk/
 drwxr-xr-x	root/root	opt/kf6/share/locale/sk/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/sk/LC_MESSAGES/libkpackage6.mo

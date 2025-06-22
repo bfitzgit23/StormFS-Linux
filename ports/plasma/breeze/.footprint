@@ -2,6 +2,7 @@ drwxr-xr-x	root/root	opt/
 drwxr-xr-x	root/root	opt/kf6/
 drwxr-xr-x	root/root	opt/kf6/bin/
 -rwxr-xr-x	root/root	opt/kf6/bin/breeze-settings6
+-rwxr-xr-x	root/root	opt/kf6/bin/kcursorgen
 drwxr-xr-x	root/root	opt/kf6/lib/
 drwxr-xr-x	root/root	opt/kf6/lib/cmake/
 drwxr-xr-x	root/root	opt/kf6/lib/cmake/Breeze/
@@ -10,10 +11,10 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/Breeze/
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/kstyle_config/
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/kstyle_config/breezestyleconfig.so
-drwxr-xr-x	root/root	opt/kf6/lib/plugins/org.kde.kdecoration2.kcm/
--rwxr-xr-x	root/root	opt/kf6/lib/plugins/org.kde.kdecoration2.kcm/kcm_breezedecoration.so
-drwxr-xr-x	root/root	opt/kf6/lib/plugins/org.kde.kdecoration2/
--rwxr-xr-x	root/root	opt/kf6/lib/plugins/org.kde.kdecoration2/org.kde.breeze.so
+drwxr-xr-x	root/root	opt/kf6/lib/plugins/org.kde.kdecoration3.kcm/
+-rwxr-xr-x	root/root	opt/kf6/lib/plugins/org.kde.kdecoration3.kcm/kcm_breezedecoration.so
+drwxr-xr-x	root/root	opt/kf6/lib/plugins/org.kde.kdecoration3/
+-rwxr-xr-x	root/root	opt/kf6/lib/plugins/org.kde.kdecoration3/org.kde.breeze.so
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/styles/
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/styles/breeze6.so
 drwxr-xr-x	root/root	opt/kf6/share/
@@ -947,6 +948,10 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/ru/
 drwxr-xr-x	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/breeze_kwin_deco.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/breeze_style_config.mo
+drwxr-xr-x	root/root	opt/kf6/share/locale/sa/
+drwxr-xr-x	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/breeze_kwin_deco.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/breeze_style_config.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/se/
 drwxr-xr-x	root/root	opt/kf6/share/locale/se/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/se/LC_MESSAGES/breeze_kwin_deco.mo

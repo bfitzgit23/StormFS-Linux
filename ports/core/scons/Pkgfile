@@ -1,0 +1,6 @@
+# Depends on: 
+
+name=scons
+version=4.9.1
+release=1
+source=(https://downloads.sourceforge.net/${name}/SCons-${version}.tar.gz)

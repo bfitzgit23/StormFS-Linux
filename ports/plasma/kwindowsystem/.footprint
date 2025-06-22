@@ -48,8 +48,8 @@ drwxr-xr-x	root/root	opt/kf6/lib/cmake/KF6WindowSystem/
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6WindowSystem/KF6WindowSystemTargets-release.cmake
 -rw-r--r--	root/root	opt/kf6/lib/cmake/KF6WindowSystem/KF6WindowSystemTargets.cmake
 lrwxrwxrwx	root/root	opt/kf6/lib/libKF6WindowSystem.so -> libKF6WindowSystem.so.6
-lrwxrwxrwx	root/root	opt/kf6/lib/libKF6WindowSystem.so.6 -> libKF6WindowSystem.so.6.9.0
--rwxr-xr-x	root/root	opt/kf6/lib/libKF6WindowSystem.so.6.9.0
+lrwxrwxrwx	root/root	opt/kf6/lib/libKF6WindowSystem.so.6 -> libKF6WindowSystem.so.6.13.0
+-rwxr-xr-x	root/root	opt/kf6/lib/libKF6WindowSystem.so.6.13.0
 drwxr-xr-x	root/root	opt/kf6/lib/pkgconfig/
 -rw-r--r--	root/root	opt/kf6/lib/pkgconfig/KF6WindowSystem.pc
 drwxr-xr-x	root/root	opt/kf6/lib/plugins/

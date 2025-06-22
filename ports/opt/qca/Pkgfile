@@ -4,7 +4,7 @@
 # Depends on:  make-ca cmake  qt5-alternate which1
 # Optional: cyrus sasl gnupg libgcryptlibgpg-error nss nspr p11-kit doxygen  which  botan
 name=qca
-version=2.3.8
+version=2.3.10
 release=1
 source=(https://download.kde.org/stable/$name/$version/$name-$version.tar.xz)
 build_opt="-DCMAKE_INSTALL_PREFIX=$QT6DIR            

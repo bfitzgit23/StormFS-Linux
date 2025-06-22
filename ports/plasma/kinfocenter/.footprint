@@ -1,7 +1,3 @@
-drwxr-xr-x	root/root	etc/
-drwxr-xr-x	root/root	etc/xdg/
-drwxr-xr-x	root/root	etc/xdg/menus/
--rw-r--r--	root/root	etc/xdg/menus/kinfocenter.menu
 drwxr-xr-x	root/root	opt/
 drwxr-xr-x	root/root	opt/kf6/
 drwxr-xr-x	root/root	opt/kf6/bin/
@@ -17,6 +13,7 @@ drwxr-xr-x	root/root	opt/kf6/lib/plugins/plasma/kcms/kinfocenter/
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/plasma/kcms/kinfocenter/kcm_audio_information.so
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/plasma/kcms/kinfocenter/kcm_block_devices.so
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/plasma/kcms/kinfocenter/kcm_cpu.so
+-rwxr-xr-x	root/root	opt/kf6/lib/plugins/plasma/kcms/kinfocenter/kcm_edid.so
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/plasma/kcms/kinfocenter/kcm_egl.so
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/plasma/kcms/kinfocenter/kcm_firmware_security.so
 -rwxr-xr-x	root/root	opt/kf6/lib/plugins/plasma/kcms/kinfocenter/kcm_glx.so
@@ -42,6 +39,7 @@ drwxr-xr-x	root/root	opt/kf6/libexec/
 drwxr-xr-x	root/root	opt/kf6/libexec/kf6/
 drwxr-xr-x	root/root	opt/kf6/libexec/kf6/kauth/
 -rwxr-xr-x	root/root	opt/kf6/libexec/kf6/kauth/kinfocenter-dmidecode-helper
+-rwxr-xr-x	root/root	opt/kf6/libexec/kinfocenter-opengl-helper
 drwxr-xr-x	root/root	opt/kf6/share/
 drwxr-xr-x	root/root	opt/kf6/share/applications/
 -rw-r--r--	root/root	opt/kf6/share/applications/kcm_about-distro.desktop
@@ -52,8 +50,6 @@ drwxr-xr-x	root/root	opt/kf6/share/dbus-1/system-services/
 -rw-r--r--	root/root	opt/kf6/share/dbus-1/system-services/org.kde.kinfocenter.dmidecode.service
 drwxr-xr-x	root/root	opt/kf6/share/dbus-1/system.d/
 -rw-r--r--	root/root	opt/kf6/share/dbus-1/system.d/org.kde.kinfocenter.dmidecode.conf
-drwxr-xr-x	root/root	opt/kf6/share/desktop-directories/
--rw-r--r--	root/root	opt/kf6/share/desktop-directories/kinfocenter.directory
 drwxr-xr-x	root/root	opt/kf6/share/doc/
 drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/
 drwxr-xr-x	root/root	opt/kf6/share/doc/HTML/ca/
@@ -132,6 +128,8 @@ drwxr-xr-x	root/root	opt/kf6/share/kinfocenter/categories/
 -rw-r--r--	root/root	opt/kf6/share/kinfocenter/categories/graphicalinfocategory.desktop
 -rw-r--r--	root/root	opt/kf6/share/kinfocenter/categories/lostfoundcategory.desktop
 -rw-r--r--	root/root	opt/kf6/share/kinfocenter/categories/networkinfocategory.desktop
+drwxr-xr-x	root/root	opt/kf6/share/kinfocenter/edid/
+-rw-r--r--	root/root	opt/kf6/share/kinfocenter/edid/edid.sh
 drwxr-xr-x	root/root	opt/kf6/share/kinfocenter/firmware_security/
 -rw-r--r--	root/root	opt/kf6/share/kinfocenter/firmware_security/fwupdmgr.sh
 drwxr-xr-x	root/root	opt/kf6/share/locale/
@@ -315,8 +313,11 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/he/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/he/LC_MESSAGES/kinfocenter.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/hi/
 drwxr-xr-x	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/kcm_about-distro.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/kcm_energyinfo.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/kcm_samba.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/kcmusb.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/hi/LC_MESSAGES/kinfocenter.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/hne/
 drwxr-xr-x	root/root	opt/kf6/share/locale/hne/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/hne/LC_MESSAGES/kcm_samba.mo
@@ -406,8 +407,11 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/lt/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/lt/LC_MESSAGES/kinfocenter.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/lv/
 drwxr-xr-x	root/root	opt/kf6/share/locale/lv/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/lv/LC_MESSAGES/kcm_about-distro.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/lv/LC_MESSAGES/kcm_energyinfo.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/lv/LC_MESSAGES/kcm_samba.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/lv/LC_MESSAGES/kcmusb.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/lv/LC_MESSAGES/kinfocenter.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/mai/
 drwxr-xr-x	root/root	opt/kf6/share/locale/mai/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/mai/LC_MESSAGES/kcm_samba.mo
@@ -436,6 +440,7 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/nb/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/nb/LC_MESSAGES/kcm_energyinfo.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/nb/LC_MESSAGES/kcm_samba.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/nb/LC_MESSAGES/kcmusb.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/nb/LC_MESSAGES/kinfocenter.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/nds/
 drwxr-xr-x	root/root	opt/kf6/share/locale/nds/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/nds/LC_MESSAGES/kcm_samba.mo
@@ -507,6 +512,13 @@ drwxr-xr-x	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/kcm_samba.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/kcmusb.mo
 -rw-r--r--	root/root	opt/kf6/share/locale/ru/LC_MESSAGES/kinfocenter.mo
+drwxr-xr-x	root/root	opt/kf6/share/locale/sa/
+drwxr-xr-x	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/
+-rw-r--r--	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/kcm_about-distro.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/kcm_energyinfo.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/kcm_samba.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/kcmusb.mo
+-rw-r--r--	root/root	opt/kf6/share/locale/sa/LC_MESSAGES/kinfocenter.mo
 drwxr-xr-x	root/root	opt/kf6/share/locale/se/
 drwxr-xr-x	root/root	opt/kf6/share/locale/se/LC_MESSAGES/
 -rw-r--r--	root/root	opt/kf6/share/locale/se/LC_MESSAGES/kcm_samba.mo

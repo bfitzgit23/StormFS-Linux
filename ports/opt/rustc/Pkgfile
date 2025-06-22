@@ -6,7 +6,7 @@
 
 
 name=rustc
-version=1.85.0
+version=1.87.0
 release=1
 source=(https://static.rust-lang.org/dist/$name-$version-src.tar.xz)
 build() {
@@ -67,8 +67,8 @@ tools = ["cargo", "clippy", "rustdoc", "rustfmt"]
 vendor = true
 
 [install]
-prefix = "/opt/rustc-1.85.0"
-docdir = "share/doc/rustc-1.85.0"
+prefix = "/opt/rustc-1.87.0"
+docdir = "share/doc/rustc-1.87.0"
 
 [rust]
 channel = "stable"
@@ -110,7 +110,8 @@ llvm-config = "/usr/bin/llvm-config"
 llvm-config = "/usr/bin/llvm-config"
 EOF
 fi
-
+sed '/MirOpt/d' -i src/bootstrap/src/core/builder/mod.rs
+#patch -Np1 -i ../$name-$version-llvm_20-1.patch
 python3 x.py build
 DESTDIR=$PKG python3 x.py install
 find $PKG/opt/$name-$version -name "*.old" -delete
@@ -118,4 +119,3 @@ install -vdm755 $PKG/usr/share/zsh/site-functions      &&
 ln -sfv $PKG/opt/rustc/share/zsh/site-functions/_cargo \
         $PKG/usr/share/zsh/site-functions
 }
-
