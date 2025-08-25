@@ -1,5 +1,5 @@
 name=util-linux
-version=2.41
+version=2.41.1
 release=1
 source=(https://www.kernel.org/pub/linux/utils/$name/v2.41/$name-$version.tar.xz)
 build_opt="--bindir=/usr/bin  

@@ -4,7 +4,7 @@
 # Depends on:  rdfind
 
 name=linux-firmware
-version=20250613
+version=20250708
 release=1
 source=(https://www.kernel.org/pub/linux/kernel/firmware/$name-$version.tar.xz)
 

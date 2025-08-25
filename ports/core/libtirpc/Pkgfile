@@ -1,26 +1,13 @@
 name=libtirpc
 version=1.3.6
 release=1
-source=(https://downloads.sourceforge.net/$name/$name-$version.tar.bz2)
+source=(https://downloads.sourceforge.net/$name/$name-$version.tar.bz2
+https://www.linuxfromscratch.org/patches/blfs/svn/libtirpc-1.3.6-gcc15_fixes-1.patch)
 build_opt="--disable-gssapi"
 bootstrap_opt="--disable-gssapi"
-
-build() {
-
-	# fix build with GCC 15
-	export CFLAGS="$CFLAGS -std=gnu17"	
-
-	./configure \
-		--prefix=/usr \
-		--sysconfdir=/etc \
-		--disable-static \
-		--disable-gssapi
-	make
-	make DESTDIR=$PKG install
-
-	install -d $PKG/lib
-	mv -v $PKG/usr/lib/libtirpc.so.* $PKG/lib
-	ln -sfv ../../lib/libtirpc.so.3.0.0 $PKG/usr/lib/libtirpc.so
+bootstrap_build() {
+  patch -Np1 -i ../libtirpc-1.3.6-gcc15_fixes-1.patch
+ ./configure --prefix=$TOOLS --disable-gssapi
+ make
+ make install
 }
-
-

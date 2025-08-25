@@ -18,17 +18,8 @@ unpack_source() {
            done
    }
 build() {
-	cd ${name#*-}-$version
-
-	export PYTHONHASHSEED=0
-
-	# https://github.com/pypa/wheel/pull/365
-#	rm -r src/wheel/vendored
-#	sed -i 's/from .vendored.packaging import tags/from packaging import tags/' src/wheel/bdist_wheel.py
-
-	
+  cd wheel-$version
 
   /usr/bin/python3 -m build --wheel --skip-dependency-check --no-isolation
   /usr/bin/python3 -m installer --destdir=$PKG dist/*.whl
 }
-

@@ -1,8 +1,7 @@
 name=curl
-version=8.14.1
+version=8.15.0
 release=1
-source=(https://$name.se/download/$name-$version.tar.xz
-17545.patch  17554.patch)
+source=(https://$name.se/download/$name-$version.tar.xz)
 build_opt="
 	--with-openssl
 	--enable-threaded-resolver
@@ -13,13 +12,28 @@ build_opt="
 	--without-librtmp
 	--without-nghttp2"
 
-bootstrap_opt="
-	--disable-static \
-	--enable-threaded-resolver \
-	--with-openssl \
-	--without-libpsl \
-	--without-brotli \
-	--without-librtmp \
-	--without-nghttp2 \
-	--without-libidn2 \
-	--with-ca-bundle=$TOOLS/etc/ssl/cert.pem"
+#bootstrap_opt="
+#	--disable-static \
+#	--enable-threaded-resolver \
+#	--with-openssl \
+#	--without-libpsl \
+#	--without-brotli \
+#	--without-librtmp \
+#	--without-nghttp2 \
+#	--without-libidn2 \
+#	--with-ca-bundle=$TOOLS/etc/ssl/cert.pem"
+bootstrap_build() {
+autoreconf 
+./configure --prefix=$TOOLS \
+        --disable-static \
+        --enable-threaded-resolver \
+        --with-openssl \
+        --without-libpsl \
+        --without-brotli \
+        --without-librtmp \
+        --without-nghttp2 \
+        --without-libidn2 \
+        --with-ca-bundle=$TOOLS/etc/ssl/cert.pem
+ make
+ make install
+}

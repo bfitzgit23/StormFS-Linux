@@ -6,54 +6,54 @@
 
 
 name=rustc
-version=1.87.0
+version=1.88.0
 release=1
 source=(https://static.rust-lang.org/dist/$name-$version-src.tar.xz)
 build() {
         cd $name-$version-src
         mkdir -pv $PKG/opt/$name-$version      &&
-ln -svfn $name-$version $PKG/opt/rustc
+ln -svfn $name-$version $PKG/opt/$name
 
-cat > config.toml << "EOF" &&
-# see config.toml.example for more possible options.
+cat > bootstrap.toml << "EOF" &&
+# See bootstrap.toml.example for more possible options,
+# and see src/bootstrap/defaults/bootstrap.dist.toml for a few options
+# automatically set when building from a release tarball.
+# We have to override a decent number of them.
+
 # Tell x.py the editors have reviewed the content of this file
 # and updated it to follow the major changes of the building system,
 # so x.py will not warn us to do such a review.
-change-id = 133207
+change-id = 140732
 
 [llvm]
 # When using system llvm prefer shared libraries
 link-shared = true
 
-# Do not download pre-built LLVM, instead either use the system
-# LLVM or build LLVM from the shipped source.
-download-ci-llvm = false
-
 EOF
 if [ ! -f /usr/lib32/libc.so.6 ]; then
-cat >> config.toml << "EOF"
+cat >> bootstrap.toml << "EOF"
 # If building the shipped LLVM source, only enable the x86 target
 # instead of all the targets supported by LLVM.
 targets = "X86"
 
 EOF
 fi
-if [ -f /usr/lib32/libc.so.6 ]; then
-cat >> config.toml << "EOF"
+cat >> bootstrap.toml << "EOF"
 [build]
+description = "for GLFS #e640"
+EOF
+if [ -f /usr/lib32/libc.so.6 ]; then
+cat >> bootstrap.toml << "EOF"
 target = [
   "x86_64-unknown-linux-gnu",
   "i686-unknown-linux-gnu",
 ]
-
 EOF
 fi &&
-cat >> config.toml << "EOF" &&
+cat >> bootstrap.toml << "EOF" &&
+
 # omit docs to save time and space (default is to build them)
 docs = false
-
-# install extended tools: cargo, clippy, etc
-extended = true
 
 # Do not query new versions of dependencies online.
 locked-deps = true
@@ -61,25 +61,21 @@ locked-deps = true
 # Specify which extended tools (those from the default install).
 tools = ["cargo", "clippy", "rustdoc", "rustfmt"]
 
-# Use the source code shipped in the tarball for the dependencies.
-# The combination of this and the "locked-deps" entry avoids downloading
-# many crates from Internet, and makes the Rustc build more stable.
-vendor = true
-
 [install]
-prefix = "/opt/rustc-1.87.0"
-docdir = "share/doc/rustc-1.87.0"
+prefix = "/opt/rustc-1.88.0"
+docdir = "share/doc/rustc-1.88.0"
 
 [rust]
 channel = "stable"
-description = "for GLFS #70ac"
-
-# Disable downloading from the CI build if any components are hacked on for the
-# purposes of GLFS, we want to build everything from source.
-download-rustc = false
 
 # Uncomment if FileCheck has been installed.
 #codegen-tests = false
+
+# Disable the need for lld.
+lld = false
+
+# If you didn't build in NVPTX support, you can uncomment this.
+#llvm-bitcode-linker = false
 
 # Enable the same optimizations as the official upstream build.
 lto = "thin"
@@ -87,7 +83,7 @@ codegen-units = 1
 
 EOF
 if [ -f /usr/lib32/libc.so.6 ]; then
-cat >> config.toml << "EOF"
+cat >> bootstrap.toml << "EOF"
 [target.x86_64-unknown-linux-gnu]
 cc = "/usr/bin/gcc"
 cxx = "/usr/bin/g++"
@@ -102,7 +98,7 @@ ar = "/usr/bin/gcc-ar"
 ranlib = "/usr/bin/gcc-ranlib"
 EOF
 else
-cat >> config.toml << "EOF"
+cat >> bootstrap.toml << "EOF"
 [target.x86_64-unknown-linux-gnu]
 llvm-config = "/usr/bin/llvm-config"
 
@@ -110,8 +106,10 @@ llvm-config = "/usr/bin/llvm-config"
 llvm-config = "/usr/bin/llvm-config"
 EOF
 fi
-sed '/MirOpt/d' -i src/bootstrap/src/core/builder/mod.rs
+#sed '/MirOpt/d' -i src/bootstrap/src/core/builder/mod.rs
 #patch -Np1 -i ../$name-$version-llvm_20-1.patch
+#[ ! -e /usr/include/libssh2.h ] || export LIBSSH2_SYS_USE_PKG_CONFIG=1
+#[ ! -e /usr/include/sqlite3.h ] || export LIBSQLITE3_SYS_USE_PKG_CONFIG=1
 python3 x.py build
 DESTDIR=$PKG python3 x.py install
 find $PKG/opt/$name-$version -name "*.old" -delete

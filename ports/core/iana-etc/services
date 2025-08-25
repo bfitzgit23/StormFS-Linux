@@ -1,7 +1,7 @@
 # See also services(5) and IANA offical page :
 # https://www.iana.org/assignments/service-names-port-numbers
 #
-# (last updated 2025-05-19)
+# (last updated 2025-06-18)
 tcpmux           1/tcp      # TCP Port Service Multiplexer
 tcpmux           1/udp      # TCP Port Service Multiplexer
 rje              5/tcp      # Remote Job Entry
@@ -8111,6 +8111,7 @@ vxlan-gpe        4790/udp
 roce             4791/udp   # IP Routable RocE
 unified-bus      4792/tcp   # IP Routable Unified Bus
 unified-bus      4792/udp   # IP Routable Unified Bus
+uet              4793/udp   # Ultra Ethernet Transport
 iims             4800/tcp   # Icona Instant Messenging System
 iims             4800/udp   # Icona Instant Messenging System
 iwec             4801/tcp   # Icona Web Embedded Chat

@@ -3,7 +3,7 @@
 # Maintainer: CRUX System Team, core-ports at crux dot nu
 
 name=pkgconf
-version=2.4.3
+version=2.5.1
 release=1
 source=(https://distfiles.ariadne.space/pkgconf/pkgconf-$version.tar.xz
   i686-pc-linux-gnu.personality x86_64-pc-linux-gnu.personality)

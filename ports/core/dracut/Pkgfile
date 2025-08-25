@@ -1,9 +1,9 @@
 # Description: An event-driven initramfs infrastructure
 # URL: https://github.com/dracut-ng/dracut-ng
 # Maintainer: Matt Housh, jaeger at crux dot ninja
-# Depends on: cpio cargo-c
+# Depends on: cpio
 name=dracut
-version=105
+version=107
 release=1
 source=(https://github.com/dracut-ng/dracut-ng/archive/$version/$name-$version.tar.gz
     https://crux.nu/files/$name-man-pages-$version.tar.xz
@@ -11,11 +11,9 @@ source=(https://github.com/dracut-ng/dracut-ng/archive/$version/$name-$version.t
 
 pkg_build() {
 
-    ./configure --prefix=/usr \
+       ./configure --prefix=/usr \
         --sysconfdir=/etc \
-        --disable-documentation \
-         --enable-dracut-cpio    \
-         --systemdsystemunitdir=/usr/lib/systemd/system
+        --disable-documentation
     sed -i -e 's,-arx modules,-rx modules,' Makefile
     make
     make DESTDIR=$PKG install

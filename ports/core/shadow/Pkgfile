@@ -1,5 +1,5 @@
 name=shadow
-version=4.17.4
+version=4.18.0
 release=1
 source=(https://github.com/$name-maint/$name/releases/download/$version/$name-$version.tar.xz
 post-install)

@@ -7,7 +7,7 @@ name=expect
 version=5.45.4
 release=1
 source=(https://prdownloads.sourceforge.net/$name/$name$version.tar.gz
-expect-5.45.4-gcc14-1.patch)
+expect-5.45.4-gcc15-1.patch)
 
 pkg_build() {
 	local tkflags=''

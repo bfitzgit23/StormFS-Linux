@@ -1,7 +1,7 @@
 name=readline
-version=8.3-rc2
+version=8.3.1
 release=1
-source=(https://ftp.gnu.org/gnu/$name/$name-$version.tar.gz)
+source=(http://ftpmirror.gnu.org/gnu/$name/$name-${version:0:3}.tar.gz)
 bootstrap_build() {
        sed -i '/MV.*old/d' Makefile.in
 sed -i '/{OLDSUFF}/c:' support/shlib-install
