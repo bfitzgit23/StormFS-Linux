@@ -1,11 +1,11 @@
 name=glibc
-version=2.41
+version=2.42
 release=2
 source=(https://ftp.gnu.org/gnu/$name/$name-$version.tar.xz
 	genlocales
 	ld.so.conf
 	nsswitch.conf
-	glibc-2.41-fhs-1.patch)
+	glibc-2.42-fhs-1.patch)
 #	reenable_DT_HASH.patch)
 keep_static=1
 

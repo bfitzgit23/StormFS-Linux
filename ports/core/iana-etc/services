@@ -1,7 +1,7 @@
 # See also services(5) and IANA offical page :
 # https://www.iana.org/assignments/service-names-port-numbers
 #
-# (last updated 2025-06-18)
+# (last updated 2025-08-07)
 tcpmux           1/tcp      # TCP Port Service Multiplexer
 tcpmux           1/udp      # TCP Port Service Multiplexer
 rje              5/tcp      # Remote Job Entry
@@ -467,6 +467,7 @@ fxp              286/tcp    # FXP Communication
 fxp              286/udp    # FXP Communication
 k-block          287/tcp    # K-BLOCK
 k-block          287/udp    # K-BLOCK
+tacacss          300/tcp    # TLS Secure Login Host Protocol (TACACSS)
 novastorbakcup   308/tcp    # Novastor Backup
 novastorbakcup   308/udp    # Novastor Backup
 entrusttime      309/tcp    # EntrustTime

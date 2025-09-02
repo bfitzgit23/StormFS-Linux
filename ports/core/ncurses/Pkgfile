@@ -1,5 +1,5 @@
 name=ncurses
-version=6.5-20250531
+version=6.5-20250809
 release=1
 source=(https://invisible-mirror.net/archives/$name/current/$name-$version.tgz)
 build_opt="--prefix=/usr           
