@@ -1,8 +1,8 @@
-# StormFS-Linux
+# BFS-Linux
 
-This repo contain scripts to automate StormFS-Linux  (Linux From Scratch) build, manage, updates, rolling and etc. Yeah its bunch of scripts. Its basically almost whole tools to maintain a Linux distribution. These what I use on my main system as daily use on my main computer. If you want to use StormFS as main OS and be able to maintain it, you can use it. But keep in mind, these scripts do not 100% follow LFS, because thats the main point of StormFS, you build it yourself and customize it as you want. Your distro your rules, but this one follow my rules.
+This repo contain scripts to automate BFS-Linux  (Linux From Scratch) build, manage, updates, rolling and etc. Yeah its bunch of scripts. Its basically almost whole tools to maintain a Linux distribution. These what I use on my main system as daily use on my main computer. If you want to use BFS as main OS and be able to maintain it, you can use it. But keep in mind, these scripts do not 100% follow LFS, because thats the main point of BFS, you build it yourself and customize it as you want. Your distro your rules, but this one follow my rules.
 
-Heres is important point of `StormFS Linux` that follow my rules;
+Heres is important point of `BFS Linux` that follow my rules;
 
 - bootstrap using [LFS v9.1](https://linuxfromscratch.org/lfs/view/9.1/) way.
 - multilib. all 32bit libraries is thrown into `/lib32` directory.
@@ -18,14 +18,14 @@ So there, my rules. If you encounter error or bugs when using `lfs-scripts`, ope
 #Getting started
 I recommend using the Gentoo live GUI iso located at https://www.gentoo.org/downloads/
 After writing to media and booting perfom the below setps.
-git clone https://github.com/bfitzgit23/StormFS-Linux
-cd StormFS-Linux-install
+git clone https://codeberg.org/bmadonnaster/BFS-Linux-install
+cd BFS-Linux-install
 
 # bunch of scripts
 So i will explain most of these scripts does, else you have to read on top of each script of what it does and how to use it.
 
 ## bootstrap.sh
-Like its name, this script is to bootstrap main system of StormFS. Theres a few stages to bootsrap base system:
+Like its name, this script is to bootstrap main system of BFS. Theres a few stages to bootsrap base system:
 ```
 1 - build temporary toolchain
 2 - build base system (using temporary toolchain)
@@ -53,7 +53,7 @@ Stage 4 is for compressing your base system into `lfs-rootfs.tar.xz` file, tempo
 $ ./bootstrap.sh 4
 ```
 
-Okay thats all for bootstrapping StormFS  base. Just keep `lfs-rootfs.tar.xz` to reuse in the future or share with your friends.
+Okay thats all for bootstrapping BFS  base. Just keep `lfs-rootfs.tar.xz` to reuse in the future or share with your friends.
 ```
 # install to disk
 First thing to do is making partition and mount it but i will not teach it here, i assume you already know if you come for LFS stuff. I assume you mount the partition into `/mnt/lfs` directory.
@@ -62,37 +62,37 @@ mkfs.vfat -F 32 /dev/nvme0n1p1 /boot/efi
 mkfs.ext2  /dev/nvme0n1p2 /boot
 mkswap /dev/nvme0n1p3 swap
 mkfs.ext4  /dev/nvme0n1p4 / (root filesystem)
-mkdir /mnt/StormFS
-mount /dev/nvme0n1p4 /mnt/StormFS (root)
-mkdir -p /mnt/StormFS/boot/
-mount /dev/nvme0n1p2 /mnt/StormFS/boot (boot)
-mkdir -p /mnt/StormFS/boot/efi
-mount /dev/nvme0n1p1 /mnt/StormFS/boot/efi/ (EFI)
+mkdir /mnt/bfs
+mount /dev/nvme0n1p4 /mnt/bfs (root)
+mkdir -p /mnt/bfs/boot/
+mount /dev/nvme0n1p2 /mnt/bfs/boot (boot)
+mkdir -p /mnt/bfs/boot/efi
+mount /dev/nvme0n1p1 /mnt/bfs/boot/efi/ (EFI)
 # mount other partitions
-mkdir /mnt/StormFS/home
-mount /dev/md127 /mnt/StormFS/home/
+mkdir /mnt/bfs/home
+mount /dev/md127 /mnt/bfs/home/
 ```
 Extract compressed base file system into `/mnt/lfs`
 ```
-# tar -xvf lfs-rootfs.tar.xz -C /mnt/StormFS
+# tar -xvf lfs-rootfs.tar.xz -C /mnt/bfs
 ```
 
 Chroot into new extracted system
 ```
-# mount --bind /dev /mnt/StormFS/dev
-# mount -t devpts devpts /mnt/StormFS/dev/pts -o gid=5,mode=620
-# mount -t proc proc /mnt/StormFS/proc
-# mount -t sysfs sysfs /mnt/StormFS/sys
-# mount -t tmpfs tmpfs /mnt/StormFS/run
-# test -h /mnt/StormFS/dev/shm && mkdir -p /mnt/StormFS/$(readlink /mnt/StormFS/dev/shm)
+# mount --bind /dev /mnt/bfs/dev
+# mount -t devpts devpts /mnt/bfs/dev/pts -o gid=5,mode=620
+# mount -t proc proc /mnt/bfs/proc
+# mount -t sysfs sysfs /mnt/bfs/sys
+# mount -t tmpfs tmpfs /mnt/bfs/run
+# test -h /mnt/bfs/dev/shm && mkdir -p /mnt/bfs/$(readlink /mnt/bfs/dev/shm)
 (UEFI)
-# mkdir -p /mnt/StormFS/boot/efi
-# mount /dev/<efi partition> /mnt/StormFS/boot/efi
-# mount --bind /sys/firmware/efi/efivars /mnt/StormFS/sys/firmware/efi/efivars
+# mkdir -p /mnt/bfs/boot/efi
+# mount /dev/<efi partition> /mnt/bfs/boot/efi
+# mount --bind /sys/firmware/efi/efivars /mnt/bfs/sys/firmware/efi/efivars
 (GENFSTAB Before chroot)
-genfstab -U /mnt/StormFS >> /mnt/StormFS/etc/fstab
+genfstab -U /mnt/bfs >> /mnt/bfs/etc/fstab
 
-# chroot /mnt/StormFS env PS1="(chroot)# " /bin/bash
+# chroot /mnt/bfs env PS1="(chroot)# " /bin/bash
 ```
 
 Setting hostname
@@ -145,7 +145,7 @@ Install grub
 
 (UEFI)
 # prt-get depinst grub-efi (installed already)
-# grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=StormFS-GRUB
+# grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=BFS-GRUB
 
 # grub-mkconfig -o /boot/grub/grub.cfg
 ```

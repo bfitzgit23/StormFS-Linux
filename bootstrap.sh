@@ -1,5 +1,5 @@
 #!/bin/bash -e	
-
+export LANG=en_US.UTF-8
 _buildtoolchain() {
 	if [ "$(id -u)" = 0 ]; then
 		echo "temporary toolchain need to build as regular user"

@@ -16,3 +16,4 @@ stormfs-grub-theme/.git*
 stormfs-grub-theme
 packages
 sources
+**.oh-my-bash**
