@@ -1,0 +1,14 @@
+# Description: Gives more easily access to internet services which says be 'RESTful'
+# URL: http://www.gnome.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=librest
+version=0.10.2
+release=1
+source=(https://gitlab.gnome.org/GNOME/librest/-/archive/$version/$name-$version.tar.gz)
+
+build() {
+	meson setup $name-$version build -Dgtk_doc=false -Dvapi=true
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build 
+}

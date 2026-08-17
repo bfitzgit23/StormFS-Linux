@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: A 2D graphics library with support for multiple output devices
 # URL: https://www.cairographics.org/
-# Maintainer: CRUX System Team, core-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: fontconfig glib pixman libxext libxrender xcb-util libpng
 # Optional: ghostscript gtk+-3 gtk+-2 gtk-doc libdrm librsvg libxml2 lzo mesa poppler valgrind jbig2dec libspectre Skia
 name=cairo

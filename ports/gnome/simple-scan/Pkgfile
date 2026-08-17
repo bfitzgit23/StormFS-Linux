@@ -1,0 +1,15 @@
+# Description: Simple Scanning Utility
+# URL: https://github.com/GNOME/simple-scan
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: colord libhandy sane yelp-tools libadwaita hicolor-icon-theme
+
+name=simple-scan
+version=50.0
+release=1
+source=(https://gitlab.gnome.org/GNOME/$name/-/archive/$version/$name-$version.tar.gz)
+
+build() {
+	meson setup $name-$version build 
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build 
+}

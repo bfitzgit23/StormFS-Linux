@@ -1,19 +1,21 @@
-# Description: A small library defining error values for GnuPG components
-# URL: https://www.gnupg.org
-# Maintainer: CRUX System Team, core-ports at crux dot nu
+# Description: Common error codes and messages used by GnuPG and related software.
+# URL: https://www.gnupg.org/software/libgpg-error/
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 
 name=libgpg-error
-version=1.51
-release=1
-source=(https://www.gnupg.org/ftp/gcrypt/$name/$name-$version.tar.bz2)
+version=1.56
+release=2
 
-build() {
-	cd $name-$version
+source=(
+    https://distfiles.icmpv6.org/distfiles/$name-$version.tar.bz2
+)
 
-	./configure --prefix=/usr &&
-make
-	make DESTDIR=$PKG install &&
-	install -v -m644 -D README $PKG/usr/share/doc/libgpg-error-1.47/README
+build_opt="--prefix=/usr"
 
-	rm -r $PKG/usr/share/info/
+post_build() {
+    install -Dm644 README \
+        "$PKG/usr/share/doc/$name-$version/README"
+
+    # BFSOS does not package GNU info pages.
+    rm -rf "$PKG/usr/share/info"
 }

@@ -1,0 +1,29 @@
+# Description: GNU Image Manipulation Program
+# URL: https://www.gimp.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: gegl appstream-glib gtk2 mypaint-brushes1 gexiv2 libgudev libexif libjxl libtiff
+
+name=gimp2
+version=2.10.38
+release=2
+source=(https://download.gimp.org/pub/${name%2*}/v${version%.*}/${name%2*}-$version.tar.bz2)
+
+build() {
+	cd ${name%2*}-$version
+
+	# fix build gcc 14	
+	export CFLAGS="${CFLAGS} -Wno-incompatible-pointer-types -Wno-int-conversion"
+
+	./configure \
+		--prefix=/usr \
+		--sysconfdir=/etc \
+		--libexecdir=/usr/lib/$name \
+		--disable-nls \
+		--disable-python \
+		--enable-mp \
+		--disable-check-update \
+		--without-aa 
+	make
+	make DESTDIR=$PKG install
+
+}

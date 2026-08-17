@@ -1,0 +1,6 @@
+#!/bin/sh
+
+getent group lightdm >/dev/null || groupadd -g 65 lightdm
+
+getent passwd lightdm >/dev/null || \
+useradd -r -M -g lightdm -G lightdm -c "Lightdm Daemon" -d /var/lib/lightdm -s /sbin/nologin -u 65 lightdm

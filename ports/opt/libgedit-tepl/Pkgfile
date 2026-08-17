@@ -1,0 +1,15 @@
+# Description: Library that eases the development of GtkSourceView-based text editors and IDEs
+# URL: https://github.com/gedit-technology/libgedit-tepl
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: gsettings-desktop-schemas libgedit-amtk libgedit-gfls libgedit-gtksourceview libhandy meson
+
+name=libgedit-tepl
+version=6.14.0
+release=1
+source=(https://gitlab.gnome.org/World/gedit/libgedit-tepl/-/archive/$version/$name-$version.tar.gz)
+
+build() {
+	meson setup $name-$version build -Db_lto=false -Dgtk_doc=false
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

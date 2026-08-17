@@ -1,3 +1,5 @@
+# Add your top line text here
+# Your line to add at the top here
 # Depends on: exo garcon gnome-icon-theme libcanberra libnotify libxklavier colord libinput upower
 
 name=xfce4-settings

@@ -1,0 +1,19 @@
+# Description: A file manager that emulates Norton Commander
+# URL: https://midnight-commander.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: e2fsprogs glib libssh2 perl slang
+
+name=mc
+version=4.8.33
+release=1
+source=(http://ftp.midnight-commander.org/$name-$version.tar.xz)
+
+build() {
+	cd $name-$version
+	./configure --prefix=/usr \
+	            --sysconfdir=/etc \
+	            --libexecdir=/usr/lib \
+	            --enable-charset
+	make
+	make DESTDIR=$PKG install
+}

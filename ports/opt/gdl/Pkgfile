@@ -1,0 +1,27 @@
+# Description: GNOME Docking Library
+# URL: https://gitlab.gnome.org/GNOME/gdl
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libxml2 gtk3
+
+name=gdl
+version=3.40.0
+release=3
+source=(https://download.gnome.org/sources/gdl/${version%.*}/$name-$version.tar.xz 0001-fix-missing-include.patch)
+
+build() {
+	cd $name-$version
+
+	# fix build with GCC 14
+	export CFLAGS="$CFLAGS -Wno-deprecated-declarations -Wno-incompatible-pointer-types"
+
+	patch -Np1 -i $SRC/0001-fix-missing-include.patch
+
+	./configure \
+		--prefix=/usr \
+		--sysconfdir=/etc \
+		--localstatedir=/var \
+		--disable-static
+	make
+	make DESTDIR=$PKG install
+
+}

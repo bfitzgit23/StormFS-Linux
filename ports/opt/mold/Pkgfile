@@ -1,0 +1,22 @@
+# Description: A Modern Linker
+# URL: https://github.com/rui314/mold
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: tbb
+
+name=mold
+version=2.41.0
+release=1
+source=($name-$version.tar.gz::https://github.com/rui314/mold/archive/v$version.tar.gz)
+
+build() {
+	cmake -S $name-$version -B build -G Ninja \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=/usr/lib \
+	        -DCMAKE_INSTALL_LIBEXECDIR=/usr/lib \
+		-DMOLD_USE_SYSTEM_MIMALLOC=OFF \
+		-DMOLD_USE_SYSTEM_TBB=ON \
+		-DMOLD_LTO=ON \
+		-DMOLD_USE_MOLD=$(prt-get isinst mold && printf "ON" || printf "OFF")
+	cmake --build build
+	DESTDIR=$PKG cmake --install build
+}

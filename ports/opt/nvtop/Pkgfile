@@ -1,0 +1,24 @@
+# Description: GPUs process monitoring for AMD, Intel and NVIDIA
+# URL: https://github.com/Syllo/nvtop
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: cmake libdrm ninja
+
+name=nvtop
+version=3.3.2
+release=1
+source=(https://github.com/Syllo/nvtop/archive/$version/nvtop-$version.tar.gz)
+
+build() {
+         cd $name-$version
+	CFLAGS="$CFLAGS -flto=auto -DNDEBUG" \
+	cmake -B build -G Ninja \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_BUILD_TYPE=None \
+		-DAMDGPU_SUPPORT=ON \
+		-DINTEL_SUPPORT=ON \
+		-DMSM_SUPPORT=OFF \
+		-DNVIDIA_SUPPORT=ON \
+		-Wno-dev
+	cmake --build build
+        DESTDIR=$PKG cmake --install build
+}

@@ -1,0 +1,18 @@
+# Description: A library for the arithmetic of complex numbers with arbitrarily high precision and correct rounding of the result
+# URL: http://www.multiprecision.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libmpfr
+
+name=libmpc
+version=1.4.1
+release=1
+source=(https://ftp.gnu.org/gnu/mpc/mpc-$version.tar.xz)
+
+build() {
+	cd mpc-$version
+
+	./configure --prefix=/usr    \
+	            --disable-static
+	make
+	make DESTDIR=$PKG install
+}

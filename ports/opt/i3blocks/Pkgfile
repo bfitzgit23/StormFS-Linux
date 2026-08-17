@@ -1,0 +1,19 @@
+# Description: Define blocks for your i3bar status line
+# URL: https://github.com/vivien/i3blocks
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=i3blocks
+version=1.5
+release=1
+source=($name-$version.tar.gz::https://github.com/vivien/i3blocks/archive/$version.tar.gz)
+
+build() {
+	cd $name-$version
+
+	./autogen.sh
+	./configure \
+		--prefix=/usr \
+		--sysconfdir=/etc
+	make
+	make -j1 DESTDIR=$PKG install
+}

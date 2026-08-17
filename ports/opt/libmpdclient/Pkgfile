@@ -1,0 +1,17 @@
+# Description: Asynchronous API library for interfacing MPD in the C, C++ & Objective C languages
+# URL: https://www.musicpd.org/libs/libmpdclient/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: meson
+
+name=libmpdclient
+version=2.25
+release=1
+source=(name-$version.tar.gz::https://github.com/MusicPlayerDaemon/libmpdclient/archive/v$version.tar.gz)
+
+build() {
+	cd $name-$version
+	venom-meson build
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+
+}

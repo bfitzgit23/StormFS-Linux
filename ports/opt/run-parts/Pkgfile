@@ -1,0 +1,17 @@
+# Description: run-parts from the debianutils package
+# URL: https://packages.qa.debian.org/d/debianutils.html
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=run-parts
+version=5.23.2
+release=1
+source=(http://deb.debian.org/debian/pool/main/d/debianutils/debianutils_${version}.tar.xz)
+
+build() {
+	cd work
+	autoreconf -fi
+	./configure --prefix=/usr
+	make run-parts
+	install -D -m755 run-parts $PKG/bin/run-parts
+	install -D -m644 run-parts.8 $PKG/usr/share/man/man8/run-parts.8
+}

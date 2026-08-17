@@ -1,0 +1,31 @@
+# Description: Classes for QML and JavaScript languages
+# URL: https://www.qt.io/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: at-spi2-core qt6-shadertools qt6-svg qt6-imageformats
+
+name=qt6-declarative
+version=6.11.1
+release=1
+source=($name-$version.tar.xz::https://download.qt.io/official_releases/qt/${version%.*}/$version/submodules/qtdeclarative-everywhere-src-$version.tar.xz)
+
+build() {
+	cmake -S qtdeclarative-everywhere-src-$version -B build -G Ninja \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DCMAKE_INSTALL_LIBEXECDIR=lib \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+		-DCMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
+		-D QT_USE_CCACHE=$(prt-get isinst ccache && printf "ON" || printf "OFF") \
+		-D INSTALL_PUBLICBINDIR=usr/bin
+	cmake --build build
+	DESTDIR=$PKG cmake --install build
+
+	# Add symlinks
+	cd $PKG
+	sed 's!../!!' -i $SRC/build/user_facing_tool_links.txt
+	mkdir -p usr/bin
+	while read _line; do
+		ln -s $_line
+	done < $SRC/build/user_facing_tool_links.txt
+}

@@ -1,0 +1,17 @@
+# Description: Iconic font designed for Bootstrap
+# URL: https://fontawesome.com/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: fontconfig
+
+name=ttf-awesome
+version=7.3.0
+release=1
+source=(https://github.com/FortAwesome/Font-Awesome/archive/$version/$_name-$version.tar.gz)
+
+build() {
+	cd Font-Awesome-$version
+
+	install -d $PKG/usr/share/fonts/WOFF2 $PKG/usr/share/fonts/OTF
+	install -m644 webfonts/*.woff2 $PKG/usr/share/fonts/WOFF2/
+	install -m644 otfs/*.otf $PKG/usr/share/fonts/OTF/
+}

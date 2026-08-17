@@ -1,0 +1,23 @@
+# Description: Crypto and TLS for Modern C++
+# URL: https://botan.randombit.net/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: sqlite xz
+
+name=botan
+version=3.12.0
+release=1
+source=($name-$version.tar.xz::https://botan.randombit.net/releases/Botan-$version.tar.xz)
+
+build() {
+	cd Botan-$version
+
+	/usr/bin/python3 ./configure.py --prefix=/usr \
+		--with-bzip \
+		--with-zlib \
+		--with-sqlite3 \
+		--with-os-feature=getrandom
+	make
+	make DESTDIR=$PKG install
+
+	rm -r $PKG/usr/share
+}

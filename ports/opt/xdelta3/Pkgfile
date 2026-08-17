@@ -1,0 +1,22 @@
+# Description: Diff utility for binary files
+# URL: http://xdelta.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=xdelta3
+version=3.1.0
+release=1
+source=(https://github.com/jmacd/xdelta/archive/v$version/$name-$version.tar.gz)
+
+build() {
+	cd xdelta-$version/xdelta3
+	aclocal
+	autoreconf --install
+	libtoolize
+	autoconf
+	autoheader
+	automake --add-missing
+	automake
+	./configure -disable-dependency-tracking --prefix=/usr --with-liblzma
+	make
+	make DESTDIR=$PKG install
+}

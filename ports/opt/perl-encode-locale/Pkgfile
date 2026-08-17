@@ -1,0 +1,16 @@
+# Description: Determine the locale encoding
+# URL: https://search.cpan.org/dist/Encode-Locale
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: perl
+
+name=perl-encode-locale
+version=1.05
+release=1
+source=($name-$version.tar.gz::https://cpan.metacpan.org/authors/id/G/GA/GAAS/Encode-Locale-$version.tar.gz)
+
+build() {
+        cd Encode-Locale-$version
+	perl -I. Makefile.PL INSTALLDIRS=vendor
+        make
+        make DESTDIR=$PKG install
+}

@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: Kernel multi-touch transformation library
 # URL: https://bitmath.org/code/mtdev/
-# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: mtdev
 
 name=mtdev-32

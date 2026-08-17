@@ -1,0 +1,17 @@
+# Description: A program for identifying or deleting duplicate files residing within specified directories
+# URL: https://github.com/adrianlopezroche/fdupes
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: pcre2 ncurses
+
+name=fdupes
+version=2.4.0
+release=1
+source=(https://github.com/adrianlopezroche/fdupes/releases/download/v$version/fdupes-$version.tar.gz)
+
+build() {
+	cd $name-$version
+
+	./configure --prefix=/usr
+	make
+	make DESTDIR=$PKG install
+}

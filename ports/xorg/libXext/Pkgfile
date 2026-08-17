@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: Common X extensions client library
 # URL: http://xorg.freedesktop.org
-# Maintainer: CRUX Xorg Team, xorg-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: libX11
 
 name=libXext

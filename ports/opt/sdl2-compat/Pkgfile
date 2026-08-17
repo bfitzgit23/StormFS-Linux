@@ -1,0 +1,21 @@
+# Description: Compatibility layer between SDL2 and SDL3
+# URL: https://www.libsdl.org
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: sdl3
+
+name=sdl2-compat
+version=2.32.70
+release=1
+source=(https://github.com/libsdl-org/sdl2-compat/releases/download/release-$version/$name-$version.tar.gz)
+
+build() {
+	cmake -S $name-$version -B build \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DCMAKE_INSTALL_LIBEXECDIR=lib \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+		-Wno-dev
+	cmake --build build
+	DESTDIR=$PKG cmake --install build
+}

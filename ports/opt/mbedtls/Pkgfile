@@ -1,0 +1,27 @@
+# Description: Cryptographic library for embedded systems
+# URL: https://tls.mbed.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: cmake ninja python3
+
+name=mbedtls
+version=3.6.6
+release=1
+source=(https://github.com/ARMmbed/mbedtls/archive/v$version/$name-$version.tar.gz https://github.com/Mbed-TLS/mbedtls-framework/archive/$_framework/mbedtls-framework-$_framework.tar.gz)
+
+build() {
+	rm -rf $name-$version/framework
+	mv mbedtls-framework-$_framework $name-$version/framework
+
+	cmake -S $name-$version -B build -G Ninja \
+		-D CMAKE_INSTALL_PREFIX=/usr \
+		-D CMAKE_BUILD_TYPE=Release \
+		-D CMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+		-D USE_SHARED_MBEDTLS_LIBRARY=ON \
+		-D USE_STATIC_MBEDTLS_LIBRARY=ON \
+		-D INSTALL_MBEDTLS_HEADERS=ON \
+		-D MBEDTLS_FATAL_WARNINGS=OFF \
+		-D ENABLE_TESTING=OFF \
+		-Wno-dev
+	cmake --build build
+	DESTDIR=$PKG cmake --install build
+}

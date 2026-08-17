@@ -1,0 +1,10 @@
+# Description: Library for the dynamic creation of images
+# URL: https://github.com/libgd/libgd
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libxpm libjpeg-turbo freetype2
+
+name=libgd
+version=2.3.3
+release=1
+source=()
+

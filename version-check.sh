@@ -41,7 +41,11 @@ ver_kernel()
 }
 
 # Coreutils first because --version-sort needs Coreutils >= 7.0
-ver_check Coreutils      sort     8.1 || bail "Coreutils too old, stop"
+if sort --version |& grep -q uutils; then
+    ver_check Coreutils  sort     0.8 || bail "Uutils Coreutils too old, stop"
+else
+    ver_check Coreutils  sort     8.1 || bail "GNU Coreutils too old, stop"
+fi
 ver_check Bash           bash     3.2
 ver_check Binutils       ld       2.13.1
 ver_check Bison          bison    2.7
@@ -61,7 +65,80 @@ ver_check Sed            sed      4.1.5
 ver_check Tar            tar      1.22
 ver_check Texinfo        texi2any 5.0
 ver_check Xz             xz       5.0.0
-ver_kernel 5.4
+ver_kernel 5.10
+
+
+echo "BFS host dependency checks:"
+
+if ! type -p pkg-config &>/dev/null
+then
+   bail "pkg-config is required for BFS bootstrap"
+else
+   echo "OK:    pkg-config found ($(pkg-config --version 2>/dev/null | head -n1))"
+fi
+
+if pkg-config --exists libarchive 2>/dev/null
+then
+   archive_version=$(pkg-config --modversion libarchive 2>/dev/null)
+   echo "OK:    libarchive development files found (${archive_version})"
+else
+   bail "libarchive development files not found (Debian/Ubuntu: install libarchive-dev)"
+fi
+
+if ! type -p bsdtar &>/dev/null
+then
+   bail "bsdtar is required for BFS bootstrap (Debian/Ubuntu: install libarchive-tools)"
+else
+   bsdtar_version=$(bsdtar --version 2>/dev/null | head -n1)
+   echo "OK:    bsdtar found (${bsdtar_version})"
+fi
+
+if ! printf '#include <gmp.h>\nint main(void){return 0;}\n' | gcc -x c - -lgmp -o /tmp/bfs-gmp-check 2>/dev/null
+then
+   rm -f /tmp/bfs-gmp-check
+   bail "GMP development files not found or unusable (Debian/Ubuntu: install libgmp-dev)"
+else
+   rm -f /tmp/bfs-gmp-check
+   echo "OK:    GMP development files found and link correctly"
+fi
+
+if ! printf '#include <mpfr.h>\nint main(void){mpfr_t x; mpfr_init(x); mpfr_clear(x); return 0;}\n' | gcc -x c - -lmpfr -lgmp -o /tmp/bfs-mpfr-check 2>/dev/null
+then
+   rm -f /tmp/bfs-mpfr-check
+   bail "MPFR development files not found or unusable (Debian/Ubuntu: install libmpfr-dev)"
+else
+   rm -f /tmp/bfs-mpfr-check
+   echo "OK:    MPFR development files found and link correctly"
+fi
+
+
+if ! pkg-config --exists libtirpc 2>/dev/null
+then
+   bail "libtirpc development files not found (Debian/Ubuntu: install libtirpc-dev)"
+else
+   tirpc_version=$(pkg-config --modversion libtirpc 2>/dev/null)
+   echo "OK:    libtirpc development files found (${tirpc_version})"
+fi
+
+if ! printf '#include <rpc/rpc.h>\nint main(void){return 0;}\n' | \
+     gcc -x c - $(pkg-config --cflags --libs libtirpc 2>/dev/null) \
+     -o /tmp/bfs-tirpc-check 2>/dev/null
+then
+   rm -f /tmp/bfs-tirpc-check
+   bail "libtirpc headers/libraries are present but cannot be compiled and linked"
+else
+   rm -f /tmp/bfs-tirpc-check
+   echo "OK:    libtirpc headers and libraries compile/link correctly"
+fi
+
+
+if ! type -p autoreconf &>/dev/null
+then
+   bail "autoreconf is required for BFS bootstrap (Debian/Ubuntu: install autoconf)"
+else
+   autoreconf_version=$(autoreconf --version 2>/dev/null | head -n1)
+   echo "OK:    autoreconf found (${autoreconf_version})"
+fi
 
 if mount | grep -q 'devpts on /dev/pts' && [ -e /dev/ptmx ]
 then echo "OK:    Linux Kernel supports UNIX 98 PTY";

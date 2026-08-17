@@ -1,4 +1,6 @@
+# Add your top line text here
+# Your line to add at the top here
 name=file
-version=5.46
+version=5.48
 release=1
-source=(https://astron.com/pub/$name/$name-$version.tar.gz)
+source=(https://astron.com/pub/file/file-$version.tar.gz)

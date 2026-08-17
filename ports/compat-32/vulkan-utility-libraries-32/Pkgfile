@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: Utility libraries for Vulkan developers, 32-bit
 # URL: https://www.khronos.org/vulkan/
-# Maintainer: CRUX System Team, core-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: vulkan-utility-libraries
 # Optional:
 

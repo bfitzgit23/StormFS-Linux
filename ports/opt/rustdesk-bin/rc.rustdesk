@@ -1,0 +1,34 @@
+#!/bin/sh
+#
+# /etc/rc.d/rustdesk: start/stop rustdesk service
+#
+. /etc/rc.subr
+
+NAME=rustdesk
+PROG=/usr/bin/rustdesk
+PID=/run/rustdesk/pid
+OPTS="--service"
+
+case $1 in
+	start)
+		msg "Starting $NAME..."
+		start_daemon -p $PID $PROG $OPTS &
+		;;
+	stop)
+		msg "Stopping $NAME..."
+		stop_daemon -p $PID "$PROG --"
+		;;
+	restart)
+		$0 stop
+		sleep 1
+		$0 start
+		;;
+	status)
+		status_daemon $PROG
+		;;
+	*)
+		echo "Usage: $0 [start|stop|restart|status]"
+		;;
+esac
+
+# End of file

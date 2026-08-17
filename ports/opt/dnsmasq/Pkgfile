@@ -1,0 +1,29 @@
+# Description: Lightweight, easy to configure DNS forwarder and DHCP server
+# URL: http://www.thekelleys.org.uk/dnsmasq/doc.html
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: nettle
+
+name=dnsmasq
+version=2.93
+release=1
+source=(http://www.thekelleys.org.uk/$name/$name-$version.tar.xz run.$name rc.$name)
+
+build() {
+	cd $name-$version
+
+	# need to pass COPTS here to avoid rebuilding the binary.
+	make COPTS="$_build_copts" PREFIX=/usr BINDIR=/usr/bin DESTDIR=$PKG install-i18n
+
+	install -Dm 644 dnsmasq.conf.example $PKG/etc/dnsmasq.conf
+	install -Dm 644 trust-anchors.conf $PKG/usr/share/dnsmasq/trust-anchors.conf
+
+	# runit service
+	prt-get isinst runit && {
+		install -Dm755 $SRC/run.$name $PKG/etc/sv/$name/run
+		ln -s /run/runit/supervise.$name $PKG/etc/sv/$name/supervise
+	} || continue
+
+	# rc service
+	prt-get isinst sysvinit && \
+		install -Dm755 $SRC/rc.$name $PKG/etc/rc.d/$name || continue
+}

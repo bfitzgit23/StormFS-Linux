@@ -1,0 +1,19 @@
+# Description: A full-featured and high-performance event loop
+# URL: https://software.schmorp.de/pkg/libev.html
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=libev
+version=4.33
+release=1
+source=(http://dist.schmorp.de/$name/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+
+	./configure --prefix=/usr
+	make
+	make DESTDIR=$PKG install
+
+	# fix conflict with libevent
+	rm $PKG/usr/include/event.h
+}

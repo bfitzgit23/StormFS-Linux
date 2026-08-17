@@ -1,0 +1,16 @@
+# Description: Super Nintendo Entertainment System cores
+# URL: https://github.com/libretro/bsnes-libretro
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=libretro-mesen
+version=d25d60f
+release=1
+source=($name-$version.tar.gz::https://github.com/libretro/mesen/tarball/d25d60fc190f3f7603a1113ef1e11d9da65b7583)
+
+build(){
+
+	cd libretro-Mesen-$version/Libretro
+
+	make DESTDIR=$PKG
+	install -Dm 644 mesen_libretro.so -t $PKG/usr/lib/libretro/
+}

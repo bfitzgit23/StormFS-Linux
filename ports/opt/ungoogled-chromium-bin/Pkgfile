@@ -1,0 +1,20 @@
+# Description: Google Chromium, sans integration with Google (portable ungoogled binary version)
+# URL: https://github.com/ungoogled-software/ungoogled-chromium
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: alsa-lib cups desktop-file-utils gtk3 hicolor-icon-theme libxkbcommon nss pciutils minizip openh264
+
+name=ungoogled-chromium-bin
+version=149.0.7827.196
+release=1
+source=($name-$version-${build}.tar.zst::$_source2 chromium.desktop)
+
+build() {
+	cp -R "${SRC}/usr/" "${PKG}/usr"
+
+	chown root "$PKG/usr/lib/chromium/chrome-sandbox"
+	chmod 4755 "$PKG/usr/lib/chromium/chrome-sandbox"
+
+	# desktop
+	install -d $PKG/usr/share/applications
+	install -m644 $SRC/chromium.desktop $PKG/usr/share/applications/chromium
+}

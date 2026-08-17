@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: at-spi2-core cairo fontconfig freetype2 gdk-pixbuf2 glib2 gtk2 harfbuzz libx11 libXres pango startup-notification
 # URL:         
-# Maintainer:  
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on:  
 
 name=libwnck2

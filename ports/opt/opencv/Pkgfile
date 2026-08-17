@@ -1,3 +1,5 @@
+# Add your top line text here
+# Your line to add at the top here
 # Depends on: cmake unzip ffmpeg gst-plugins-base gtk3 python3-jasper libexif libjpeg-turbo libpng libtiff libwebp openjpeg2 v4l-utils xine-lib
 
 name=opencv

@@ -1,0 +1,19 @@
+# Description: A helper for screenshots within sway
+# URL: https://github.com/OctopusET/sway-contrib
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: grim jq slurp wl-clipboard
+
+name=grimshot
+version=1.11
+release=1
+source=($name-$version.tar.gz::https://github.com/OctopusET/sway-contrib/archive/$version.tar.gz)
+
+build() {
+	cd sway-contrib-$version/$name
+	
+	install -dm755 "$PKG/usr/bin"
+	install -Dm755 grimshot -t "$PKG/usr/bin"
+
+	install -dm755 "$PKG/usr/share/man/man1"
+	install -Dm644 grimshot.1 -t "$PKG/usr/share/man/man1"
+}

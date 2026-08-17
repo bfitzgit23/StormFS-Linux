@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: Functions for manipulating Unicode strings and C strings.
 # URL: https://www.gnu.org/software/libunistring/
-# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: libunistring
 
 name=libunistring-32

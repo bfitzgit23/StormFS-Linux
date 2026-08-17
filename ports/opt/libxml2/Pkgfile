@@ -1,22 +1,35 @@
-# Description: Libraries and utilities used for parsing XML files
-# URL:         
-# Maintainer:  Emmett1, emmett1 dot 2miligrams at gmail dot com
-# Depends on:  
+# Description: Libraries and utilities used for parsing XML files.
+# URL: https://gitlab.gnome.org/GNOME/libxml2
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Depends on:
 
 name=libxml2
-version=2.13.7
+version=2.15.3
 release=1
-source=(https://download.gnome.org/sources/libxml2/2.13/$name-$version.tar.xz)
 
-build() {
-	cd $name-$version
+source=(
+    https://download.gnome.org/sources/libxml2/${version%.*}/$name-$version.tar.xz
+)
 
-	./configure --prefix=/usr           \
-            --sysconfdir=/etc       \
-            --enable-static        \
-            --with-history          \
-            PYTHON=/usr/bin/python3 \
-            --docdir=/usr/share/doc/$name-$version &&
-	make
-	make DESTDIR=$PKG install
+build_opt=(
+    --prefix=/usr
+    --sysconfdir=/etc
+    --with-history
+    --without-python
+    --without-docbook
+    --disable-static
+)
+
+pkg_build() {
+    ./configure "${build_opt[@]}"
+    make
+    make DESTDIR="$PKG" install
+}
+
+post_build() {
+    find "$PKG" -type f -name '*.la' -delete
+
+    rm -rf \
+        "$PKG/usr/share/doc" \
+        "$PKG/usr/share/info"
 }

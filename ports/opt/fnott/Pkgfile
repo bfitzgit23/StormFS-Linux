@@ -1,0 +1,15 @@
+# Description: Keyboard driven and lightweight Wayland notification daemon
+# URL: https://codeberg.org/dnkl/fnott
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: dbus fcft wlroots meson tllist scdoc
+
+name=fnott
+version=1.8.0
+release=1
+source=($name-$version.tar.gz::https://codeberg.org/dnkl/fnott/archive/$version.tar.gz)
+
+build() {
+	meson setup $name-$version build 
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

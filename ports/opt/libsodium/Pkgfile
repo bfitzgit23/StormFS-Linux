@@ -1,0 +1,15 @@
+# Description: P(ortable|ackageable) NaCl-based crypto library
+# URL: https://github.com/jedisct1/libsodium
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=libsodium
+version=1.0.22
+release=1
+source=(https://download.libsodium.org/libsodium/releases/libsodium-$version.tar.gz)
+
+build() {
+	cd $name-$version
+	./configure --prefix=/usr
+	make
+	make DESTDIR=$PKG install
+}

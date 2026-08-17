@@ -1,0 +1,16 @@
+# Description: An extremely fast and small background setter for X.
+# URL: http://github.com/Gottox/bgs
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: imlib2 libxinerama
+
+name=bgs
+version=0.8
+release=1
+source=(http://github.com/Gottox/bgs/archive/v$version/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+
+	make PREFIX=/usr
+        make PREFIX=/usr DESTDIR=$PKG install
+}

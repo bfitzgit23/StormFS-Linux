@@ -1,0 +1,15 @@
+# Description: Python bindings for libvirt
+# URL: https://libvirt.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: python3 libvirt
+
+name=libvirt-python
+version=12.4.0
+release=1
+source=($name-$version.tar.gz::https://gitlab.com/libvirt/libvirt-python/-/archive/v$version/$name-v$version.tar.gz)
+
+build() {
+	cd $name-v$version
+	/usr/bin/python3 setup.py build
+	/usr/bin/python3 setup.py install --root $PKG
+}

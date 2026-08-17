@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: Regular expressions library
 # URL: https://github.com/kkos/oniguruma
-# Maintainer: Juergen Daubert, jue at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 
 name=oniguruma
 version=6.9.9

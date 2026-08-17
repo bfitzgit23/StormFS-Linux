@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: The Pth package contains a very portable POSIX/ANSI-C based library for Unix platforms which provides non-preemptive priority-based scheduling for multiple threads of execution (multithreading) inside event-driven applications. All threads run in the same address space of the server application, but each thread has its own individual program-counter, run-time stack, signal mask and errno variable.
 # URL:         https://ftp.gnu.org/gnu/pth/
-# Maintainer:  B.r.i.a.n M.a.d.o.n.n.a b.m.a.d.o.n.n.a.s.t.e.r @ g.m.a.i.l.c.o.m
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on:  
 # Optional: gcc libnsl
 

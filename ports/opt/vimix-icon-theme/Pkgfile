@@ -1,0 +1,17 @@
+# Description: Fresh and simple personality icon theme
+# URL: https://github.com/vinceliuice/vimix-icon-theme
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=vimix-icon-theme
+version=2025.08.26
+release=2
+source=(https://github.com/vinceliuice/$name/archive/$_version/$name-$version.tar.gz)
+
+build() {
+	cd Vimix-icon-theme-$_version
+	sed '/gtk-update-icon-cache/d' -i install.sh
+	install -dm755 "$PKG/usr/share/icons"
+	./install.sh -a -d "$PKG/usr/share/icons"
+
+	rm -f $PKG/usr/share/icons/Vimi*/symbolic/mimetypes/text-x-systemd-unit-symbolic.svg
+}

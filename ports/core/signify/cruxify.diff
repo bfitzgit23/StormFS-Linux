@@ -1,0 +1,35 @@
+diff -Naur outils-0.14.orig/src/usr.bin/signify/signify.c outils-0.14/src/usr.bin/signify/signify.c
+--- outils-0.14.orig/src/usr.bin/signify/signify.c	2025-06-06 18:01:28.245710973 +0200
++++ outils-0.14/src/usr.bin/signify/signify.c	2025-06-06 18:05:24.018125846 +0200
+@@ -405,7 +405,7 @@
+ 		const char *keyname = check_keyname_compliance(NULL, 
+ 		    seckeyfile);
+ 		nr = snprintf(sigcomment, sizeof(sigcomment),
+-		    VERIFYWITH "%.*s.pub", (int)strlen(keyname) - 4, keyname);
++		    VERIFYWITH "%s/%.*s.pub", SIGNIFYROOT, (int)strlen(keyname) - 4, keyname);
+ 	}
+ 	if (nr < 0 || nr >= sizeof(sigcomment))
+ 		errx(1, "comment too long");
+@@ -507,13 +507,19 @@
+ readpubkey(const char *pubkeyfile, struct pubkey *pubkey,
+     const char *sigcomment, const char *keytype)
+ {
+-	const char *safepath = "/etc/signify";
++	const char *safepath = SIGNIFYROOT "/";
+ 	char keypath[PATH_MAX];
+ 
+ 	if (!pubkeyfile) {
++		size_t spl;
+ 		pubkeyfile = strstr(sigcomment, VERIFYWITH);
+-		if (pubkeyfile && strchr(pubkeyfile, '/') == NULL) {
+-			pubkeyfile += strlen(VERIFYWITH);
++		if (!pubkeyfile)
++			usage("must specify pubkey");
++		pubkeyfile += strlen(VERIFYWITH);
++		spl = strlen(safepath);
++		if (strncmp(pubkeyfile, safepath, spl) == 0)
++			pubkeyfile += spl;
++		if (*pubkeyfile != '\0' && strchr(pubkeyfile, '/') == NULL) {
+ 			if (keytype)
+ 				check_keytype(pubkeyfile, keytype);
+ 			if (snprintf(keypath, sizeof(keypath), "%s/%s",

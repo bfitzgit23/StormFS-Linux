@@ -1,0 +1,17 @@
+# Description: Simple XML parser made for easy integration
+# URL: http://www.grinninglizard.com/tinyxml2
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: cmake ninja setconf
+
+name=tinyxml2
+version=11.0.0
+release=1
+source=(https://github.com/leethomason/$name/archive/$version/$name-$version.tar.gz)
+
+build() {
+	cmake -B build -S $name-$version -G Ninja \
+    		-DCMAKE_INSTALL_PREFIX=/usr \
+    		-Dtinyxml2_SHARED_LIBS=ON
+  	cmake --build build	
+	DESTDIR=$PKG cmake --install build
+}

@@ -1,10 +1,12 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: Font rasterization library
 # URL:         https://www.freetype.org/
-# Maintainer:  Emmett1, emmett1 dot 2miligrams at gmail dot com
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on:  libpng which
 
 name=freetype
-version=2.13.3
+version=2.14.3
 release=1
 source=(https://downloads.sourceforge.net/freetype/freetype-$version.tar.xz
 https://downloads.sourceforge.net/freetype/freetype-doc-$version.tar.xz)

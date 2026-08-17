@@ -1,0 +1,17 @@
+# Description: Portable bandwidth monitor and rate estimator
+# URL: https://github.com/tgraf/bmon/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: confuse ncurses
+
+name=bmon
+version=4.0
+release=1
+source=(https://github.com/tgraf/$name/archive/v$version/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+	./autogen.sh
+	./configure --prefix=/usr --sysconfdir=/etc --disable-asound
+	make
+	make DESTDIR=$PKG install
+}

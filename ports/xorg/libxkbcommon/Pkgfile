@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: A library to handle keyboard descriptions.
 # URL: https://xkbcommon.org/
-# Maintainer: CRUX System Team, core-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: xkeyboard-config
 # Optional: libxcb wayland wayland-protocols doxygen
 

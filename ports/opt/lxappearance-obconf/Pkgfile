@@ -1,0 +1,17 @@
+# Description: Plugin for LXAppearance to configure OpenBox
+# URL: https://lxde.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: lxappearance openbox
+
+name=lxappearance-obconf
+version=0.2.4
+release=1
+source=($name-$version.tar.gz::https://github.com/lxde/lxappearance-obconf/archive/refs/tags/$version.tar.gz)
+
+build() {
+	cd $name-$version
+	autoreconf -fvi
+	./configure --prefix=/usr --disable-static 
+	make
+	make DESTDIR=$PKG install
+}

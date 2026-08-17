@@ -1,0 +1,20 @@
+# Description: A general-purpose programming language and toolchain for maintaining robust, optimal, and reusable software
+# URL: https://ziglang.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=zig-bin
+version=0.16.0
+release=1
+source=(https://ziglang.org/download/$version/${name%-*}-x86_64-linux-$version.tar.xz)
+
+build() {
+	cd ${name%-*}-x86_64-linux-$version
+
+	install -Dm755 -t "$PKG/usr/bin/" zig
+
+	install -d "$PKG/usr/lib/zig/"
+	cp -r -t "$PKG/usr/lib/zig/" lib/*
+
+	install -d "$PKG/usr/include/"
+	ln -srf -t "$PKG/usr/include/" "$PKG/usr/lib/zig/zig.h"
+}

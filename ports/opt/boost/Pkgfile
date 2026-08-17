@@ -1,59 +1,84 @@
 # Description: Free peer-reviewed portable C++ source libraries.
 # URL: https://www.boost.org/
-# Maintainer: John McQuah, jmcquah at disroot dot org
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: bzip2 zstd
 # Optional: icu openmpi python3-numpy
 
 name=boost
-version=1.88.0
+version=1.91.0
 release=1
-source=(https://github.com/boostorg/boost/releases/download/boost-1.87.0/boost-1.87.0-b2-nodocs.tar.xz)
+
+source=(
+    https://archives.boost.io/release/$version/source/boost_1_91_0.tar.bz2
+)
 
 pkg_build() {
+    local -a b2_options=()
 
+    # Prevent Boost.Python from automatically enabling NumPy support when
+    # python3-numpy is not installed.
+    if ! prt-get isinst python3-numpy >/dev/null 2>&1; then
+        sed -i \
+            's/\[ unless \[ python\.numpy \] : <build>no \]/<build>no/g' \
+            libs/python/build/Jamfile
+    fi
 
-  # https://github.com/boostorg/ublas/pull/97
-#  patch -p2 -i $SRC/boost-ublas-c++20-iterator.patch
-#  prt-get isinst python3-numpy && patch -p1 -i $SRC/boost-1.85.0-python-numpy-2.patch
+    # Enable MPI support only when OpenMPI is installed.
+    if prt-get isinst openmpi >/dev/null 2>&1; then
+        printf '%s\n' 'using mpi ;' >> project-config.jam
+    else
+        b2_options+=(
+            --without-mpi
+            --without-graph_parallel
+        )
+    fi
 
-  # https://github.com/boostorg/phoenix/issues/111
-  sed -e '/^\s*auto uarg/s/auto/const auto/' \
-      -i boost/phoenix/stl/tuple.hpp
+    # Disable ICU-backed Boost.Locale support when ICU is unavailable.
+    if ! prt-get isinst icu >/dev/null 2>&1; then
+        b2_options+=(
+            --disable-icu
+            boost.locale.icu=off
+        )
+    fi
 
-  # Boost.Build does not allow for disabling of numpy
-  # extensions, thereby leading to automagic numpy
-  # https://github.com/boostorg/python/issues/111#issuecomment-280447482
-  prt-get isinst python3-numpy || sed \
-    -e 's/\[ unless \[ python\.numpy \] : <build>no \]/<build>no/g' \
-    -i libs/python/build/Jamfile
+    ./bootstrap.sh \
+        --with-toolset=gcc \
+        --with-python=/usr/bin/python3
 
-  pushd tools/build
-  ./bootstrap.sh --cxxflags="$CXXFLAGS $LDFLAGS"
-  ./b2 install --prefix=$PKG/usr
-  ln -s b2 $PKG/usr/bin/bjam
-  popd
+    ./b2 install \
+        "${b2_options[@]}" \
+        --prefix="$PKG/usr" \
+        --layout=system \
+        -j "${JOBS:-1}" \
+        variant=release \
+        debug-symbols=off \
+        threading=multi \
+        runtime-link=shared \
+        link=shared \
+        toolset=gcc \
+        "python=$(
+            /usr/bin/python3 -c \
+                'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")'
+        )" \
+        "cflags=$CPPFLAGS $CFLAGS -fPIC" \
+        "cxxflags=$CPPFLAGS $CXXFLAGS -fPIC" \
+        "linkflags=$LDFLAGS"
+}
 
-  ./bootstrap.sh --with-toolset=gcc --with-python=/usr/bin/python3
+post_build() {
+    if ! prt-get isinst python3-numpy >/dev/null 2>&1; then
+        rm -rf "$PKG/usr/include/boost/python/numpy"
+        rm -f "$PKG/usr/include/boost/python/numpy.hpp"
+        rm -rf "$PKG/usr/lib/cmake/boost_numpy-"*
+    fi
 
-  # support for OpenMPI
-  prt-get isinst openmpi && echo "using mpi ;" >>project-config.jam || PKGMK_BOOST+=' --without-mpi --without-graph_parallel'
-  prt-get isinst icu || PKGMK_BOOST+=' --disable-icu boost.locale.icu=off'
+    if ! prt-get isinst openmpi >/dev/null 2>&1; then
+        rm -rf "$PKG/usr/include/boost/mpi/python"
+    fi
 
-  ./b2 install ${PKGMK_BOOST} \
-    --prefix=$PKG/usr \
-    --layout=system \
-    -j ${JOBS-1} \
-    variant=release \
-    debug-symbols=off \
-    threading=multi \
-    runtime-link=shared \
-    link=shared,static \
-    toolset=gcc \
-    python=$(/usr/bin/python3 -c 'import sys; print("%s.%s" % sys.version_info[:2])') \
-    cflags="$CPPFLAGS $CFLAGS -fPIC -O3 -ffat-lto-objects" \
-    cxxflags="$CPPFLAGS $CXXFLAGS -fPIC -O3 -ffat-lto-objects" \
-    linkflags="$LDFLAGS"
+    find "$PKG" -type f -name '*.la' -delete
 
-  prt-get isinst python3-numpy || rm -r $PKG/usr/include/boost/python/numpy*
-  prt-get isinst openmpi || rm -r $PKG/usr/include/boost/mpi/python*
+    rm -rf \
+        "$PKG/usr/share/doc" \
+        "$PKG/usr/share/info"
 }

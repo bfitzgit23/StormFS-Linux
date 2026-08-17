@@ -1,0 +1,24 @@
+# Description: A library that implements the EBU R 128 standard for loudness normalisation
+# URL: https://github.com/jiixyj/libebur128
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: cmake ninja
+
+name=libebur128
+version=1.2.6
+release=2
+source=(https://github.com/jiixyj/libebur128/archive/v$version/$name-$version.tar.gz)
+
+build() {
+	cmake -S $name-$version -B build -G Ninja \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DCMAKE_INSTALL_LIBEXECDIR=lib \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+		-DCMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
+		-DBUILD_STATIC_LIBS=OFF \
+                -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+		-Wno-dev 
+	cmake --build build
+	DESTDIR=$PKG cmake --install build
+}

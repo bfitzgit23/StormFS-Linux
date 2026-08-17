@@ -1,36 +1,89 @@
+# Description: CRUX package management utilities with BFSOS pkgmk extensions
+# URL: https://crux.nu/
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+
 name=pkgutils
-version=5.40.11
-release=4
+version=5.40.12
+release=8
+
 source=(https://crux.nu/files/$name-$version.tar.xz
-	pkgadd.conf
-	pkgmk.conf
-	extension)
+        pkgadd.conf
+        pkgmk.conf
+        extension
+        bfs-pkgmk)
 
 bootstrap_build() {
-	sed -i -e 's/ --static//' \
-	       -e 's/ -static//' Makefile
-	make BINDIR=$TOOLS/bin MANDIR=$TOOLS/man ETCDIR=$TOOLS/etc install
+        # Select a UTF-8 C locale when the current environment provides one
+        # (needed by libarchive for archives such as GCC), but retain a plain-C
+        # fallback for early chroot phases where no UTF-8 locale exists yet.
+        sed -i '/^export LC_ALL=C\.UTF-8$/c\
+_bfs_utf8_locale=""\
+for _bfs_locale in C.UTF-8 C.utf8; do\
+    if locale -a 2>/dev/null | grep -Fxiq "$_bfs_locale"; then\
+        _bfs_utf8_locale="$_bfs_locale"\
+        break\
+    fi\
+done\
+if [ -n "$_bfs_utf8_locale" ]; then\
+    export LC_ALL="$_bfs_utf8_locale"\
+else\
+    export LC_ALL=C\
+fi\
+unset _bfs_utf8_locale _bfs_locale' pkgmk.in
+
+        sed -i -e 's/ --static//' \
+               -e 's/ -static//' Makefile
+
+        make BINDIR=$TOOLS/bin MANDIR=$TOOLS/man ETCDIR=$TOOLS/etc install
 }
 
 post_build() {
-	# change some defaults
-	# store sources and packages in /var/cache/pkg
-	sed -i 's,^PKGMK_SOURCE_DIR=.*,PKGMK_SOURCE_DIR="/var/cache/pkg/sources",' $PKG/usr/bin/pkgmk
-	sed -i 's,^PKGMK_PACKAGE_DIR=.*,PKGMK_PACKAGE_DIR="/var/cache/pkg/packages",' $PKG/usr/bin/pkgmk
-	sed -i 's,^PKGMK_WORK_DIR=.*,PKGMK_WORK_DIR="/var/cache/pkg/work",' $PKG/usr/bin/pkgmk
-	install -dm777 $PKG/var/cache/pkg/{sources,packages,work}
-	chmod 777 $PKG/var/cache/pkg
+        # Final/installed pkgmk needs a UTF-8-capable C locale for archives
+        # containing non-ASCII pathnames (notably GCC). Support both common
+        # spellings and fall back to plain C only if neither exists.
+        sed -i '/^export LC_ALL=C\.UTF-8$/c\
+_bfs_utf8_locale=""\
+for _bfs_locale in C.UTF-8 C.utf8; do\
+    if locale -a 2>/dev/null | grep -Fxiq "$_bfs_locale"; then\
+        _bfs_utf8_locale="$_bfs_locale"\
+        break\
+    fi\
+done\
+if [ -n "$_bfs_utf8_locale" ]; then\
+    export LC_ALL="$_bfs_utf8_locale"\
+else\
+    export LC_ALL=C\
+fi\
+unset _bfs_utf8_locale _bfs_locale' "$PKG/usr/bin/pkgmk"
 
-	# make xz as default compression mode
-	sed -i 's,^PKGMK_COMPRESSION_MODE=.*,PKGMK_COMPRESSION_MODE="xz",' $PKG/usr/bin/pkgmk
+        # Store sources, packages, and normal pkgmk work in /var/cache/pkg.
+        sed -i 's,^PKGMK_SOURCE_DIR=.*,PKGMK_SOURCE_DIR="/var/cache/pkg/sources",' "$PKG/usr/bin/pkgmk"
+        sed -i 's,^PKGMK_PACKAGE_DIR=.*,PKGMK_PACKAGE_DIR="/var/cache/pkg/packages",' "$PKG/usr/bin/pkgmk"
+        sed -i 's,^PKGMK_WORK_DIR=.*,PKGMK_WORK_DIR="/var/cache/pkg/build-work",' "$PKG/usr/bin/pkgmk"
 
-	# ignore signature by default
-	sed -i 's,^PKGMK_IGNORE_SIGNATURE=.*,PKGMK_IGNORE_SIGNATURE="yes",' $PKG/usr/bin/pkgmk
+        # Keep the cache parent root-owned; only build-data directories
+        # are writable by the dedicated pkgmk account (UID/GID 82).
+        install -dm755 -o 0 -g 0 "$PKG/var/cache/pkg"
 
-	# my custom extension script
-	install -Dm644 $SRC/extension $PKG/var/lib/pkgmk/extension
+        install -dm775 -o 82 -g 82 \
+                "$PKG/var/cache/pkg/sources" \
+                "$PKG/var/cache/pkg/packages" \
+                "$PKG/var/cache/pkg/build-work"
 
-	# configs
-	install -m644 $SRC/pkgadd.conf $PKG/etc/pkgadd.conf
-	install -m644 $SRC/pkgmk.conf $PKG/etc/pkgmk.conf
+        install -dm775 -o 82 -g 82 "$PKG/var/cache/ccache"
+
+        # Use xz as the default package compression mode.
+        sed -i 's,^PKGMK_COMPRESSION_MODE=.*,PKGMK_COMPRESSION_MODE="xz",' "$PKG/usr/bin/pkgmk"
+
+        # BFSOS currently ignores source signatures by default.
+        sed -i 's,^PKGMK_IGNORE_SIGNATURE=.*,PKGMK_IGNORE_SIGNATURE="yes",' "$PKG/usr/bin/pkgmk"
+
+        # BFSOS pkgmk extension.
+        install -Dm644 "$SRC/extension" "$PKG/var/lib/pkgmk/extension"
+        install -Dm755 "$SRC/bfs-pkgmk" "$PKG/usr/bin/bfs-pkgmk"
+        install -dm755 -o 82 -g 82 "$PKG/var/lib/pkgmk"
+
+        # Configuration.
+        install -m644 "$SRC/pkgadd.conf" "$PKG/etc/pkgadd.conf"
+        install -m644 "$SRC/pkgmk.conf" "$PKG/etc/pkgmk.conf"
 }

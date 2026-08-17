@@ -1,0 +1,4 @@
+#!/bin/sh
+
+# The port 'wlroots-19' conflicts with 'wlroots', remove 'wlroots-19' before installing 'wlroots'
+scratch isinstalled wlroots-19 && scratch remove -y wlroots-19

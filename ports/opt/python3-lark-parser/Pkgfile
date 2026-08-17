@@ -1,0 +1,20 @@
+# Description: Modern parsing library for Python, implementing Earley & LALR(1) and an easy interface
+# URL: https://github.com/lark-parser/lark
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: python3-setuptools python3-gpep517 python3-wheel
+
+name=python3-lark-parser
+version=1.3.1
+release=1
+source=($name-$version.tar.gz::https://github.com/lark-parser/lark/archive/$version.tar.gz)
+
+build() {
+	cd lark-$version
+	
+	gpep517 build-wheel \
+		--wheel-dir .dist \
+		--output-fd 3 3>&1 >&2
+	python3 -m installer -d "$PKG" \
+		.dist/*.whl
+
+}

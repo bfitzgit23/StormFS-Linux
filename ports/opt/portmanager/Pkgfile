@@ -1,0 +1,17 @@
+# Description: PyQt5 GUI frontend for prt-get package management
+# URL: https://github.com/bfitzgit23/StormFS-Linux
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Depends on: python3 python3-pip python3-pyyaml qt5-alternate prt-get
+
+name=portmanager
+version=1.0
+release=1
+source=(portmanager.py
+    stormfs-portmanager.desktop)
+
+build() {
+    install -Dm755 $SRC/portmanager.py $PKG/usr/bin/stormfs-portmanager
+    install -Dm644 $SRC/stormfs-portmanager.desktop $PKG/usr/share/applications/stormfs-portmanager.desktop
+    mkdir -p $PKG/usr/share/pixmaps
+    ln -s /usr/share/icons/hicolor/128x128/apps/system-software-install.png $PKG/usr/share/pixmaps/stormfs-portmanager.png
+}

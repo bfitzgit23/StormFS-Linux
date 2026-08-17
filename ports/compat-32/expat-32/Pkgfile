@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: A fast, non-validating, stream-oriented XML parsing library
 # URL: https://libexpat.github.io/
-# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: expat
 
 name=expat-32

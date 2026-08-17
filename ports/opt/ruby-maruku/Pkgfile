@@ -1,0 +1,23 @@
+# Description: Pure-Ruby Markdown-superset interpreter
+# URL: https://github.com/bhollis/maruku
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: ruby
+
+name=ruby-maruku
+version=0.7.3
+release=3
+source=(https://rubygems.org/downloads/${name#*-}-$version.gem)
+
+build() {
+	_gemdir="$(gem env gemdir)"
+
+	gem install \
+		--ignore-dependencies \
+		--no-user-install \
+		--no-document \
+		-i "$PKG/$_gemdir" \
+		-n "$PKG"/usr/bin \
+		${name#*-}-$version.gem
+
+	rm "$PKG/$_gemdir/cache/${name#*-}-$version.gem"
+}

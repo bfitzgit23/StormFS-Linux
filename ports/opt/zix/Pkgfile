@@ -1,0 +1,19 @@
+# Description: A lightweight C library of portability wrappers and data structures
+# URL: https://github.com/drobilla/zix
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: meson ninja
+
+name=zix
+version=0.8.2
+release=1
+source=($name-$version.tar.gz::https://github.com/drobilla/zix/archive/refs/tags/v$version.tar.gz)
+
+build() {
+	meson setup $name-$version build \
+		-Ddocs=disabled \
+		-Dhtml=disabled \
+		-Dtests=disabled \
+		-Dtests_cpp=disabled 
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

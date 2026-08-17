@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: Portable and efficient API to determine the call-chain of a program
 # URL: https://savannah.nongnu.org/projects/libunwind
-# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: libunwind
 
 name=libunwind-32

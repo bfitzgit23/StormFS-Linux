@@ -1,0 +1,51 @@
+# Description: Music playback daemon
+# URL: https://www.musicpd.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: boost fmt pcre2 meson ninja alsa-lib libsndfile ffmpeg
+
+name=mpd
+version=0.24.12
+release=1
+source=($name-$version.tar.gz::https://github.com/MusicPlayerDaemon/MPD/archive/v$version.tar.gz rc.mpd)
+
+build() {
+	meson setup $name-$version build  \
+		--auto-features disabled \
+		-Dadplug=disabled \
+		-Dcurl=enabled \
+		-Dbzip2=enabled \
+		-Diconv=enabled \
+		-Dipv6=enabled \
+		-Dpcre=enabled \
+		-Dsqlite=enabled \
+		-Dalsa=enabled \
+		-Dsndfile=enabled \
+		-Daudiofile=$(prt-get isinst audiofile && printf "enabled" || printf "disabled") \
+		-Ddbus=$(prt-get isinst dbus && printf "enabled" || printf "disabled") \
+		-Dflac=$(prt-get isinst flac && printf "enabled" || printf "disabled") \
+		-Dfluidsynth=$(prt-get isinst fluidsynth && printf "enabled" || printf "disabled") \
+		-Dicu=$(prt-get isinst icu && printf "enabled" || printf "disabled") \
+		-Djack=$(prt-get isinst jack && printf "enabled" || printf "disabled") \
+		-Dlame=$(prt-get isinst lame && printf "enabled" || printf "disabled") \
+		-Dcdio_paranoia=$(prt-get isinst libcdio-paranoia  && printf "enabled" || printf "disabled") \
+		-Did3tag=$(prt-get isinst libid3tag && printf "enabled" || printf "disabled") \
+		-Diso9660=$(prt-get isinst libisofs && printf "enabled" || printf "disabled") \
+		-Dmad=$(prt-get isinst libmad && printf "enabled" || printf "disabled") \
+		-Dlibsamplerate=$(prt-get isinst libsamplerate && printf "enabled" || printf "disabled") \
+		-Dsoxr=$(prt-get isinst libsoxr && printf "enabled" || printf "disabled") \
+		-Dmpcdec=disabled \
+		-Dmpg123=$(prt-get isinst mpg123 && printf "enabled" || printf "disabled") \
+		-Dpulse=$(prt-get isinst pulseaudio && printf "enabled" || printf "disabled") \
+		-Dpipewire=$(prt-get isinst pipewire && printf "enabled" || printf "disabled") \
+		-Dsmbclient=$(prt-get isinst samba && printf "enabled" || printf "disabled") \
+		-Dtwolame=$(prt-get isinst twolame && printf "enabled" || printf "disabled") \
+		-Dvorbis=$(prt-get isinst libvorbis && printf "enabled" || printf "disabled") \
+		-Dwavpack=$(prt-get isinst wavpack && printf "enabled" || printf "disabled") \
+		-Dhtml_manual=false
+	meson compile -C build 
+	DESTDIR=$PKG meson install --no-rebuild -C build
+
+	install -D $SRC/rc.mpd $PKG/etc/rc.d/mpd
+
+	rm -r $PKG/usr/share/doc
+}

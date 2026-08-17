@@ -1,0 +1,23 @@
+# Description: Xwayland outside your Wayland
+# URL: https://github.com/Supreeeme/xwayland-satellite
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: clang rust xwayland xcb-util-cursor
+
+name=xwayland-satellite
+version=0.8.1
+release=1
+source=(https://github.com/Supreeeme/$name/archive/v${version}/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+	mkdir "$SRC/rust" 
+	export CARGO_HOME="$SRC/rust"
+
+	cargo fetch --locked --target "$(rustc --print host-tuple)"
+	cargo build --frozen --release --all-features
+
+	install -vDm 755 target/release/$name -t $PKG/usr/bin/
+	install -dm755 $PKG/usr/share/man/man1
+	cp $name.man $PKG/usr/share/man/man1/$name.1
+
+}

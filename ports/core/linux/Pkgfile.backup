@@ -1,0 +1,157 @@
+# Description: Linux kernel, sources and modules
+# URL: https://www.kernel.org/
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Depends on: bc bison cpio dracut elfutils flex linux-firmware openssl
+# Optional: pahole
+
+name=linux
+version=7.1.5
+release=1
+source=(
+    https://www.kernel.org/pub/linux/kernel/v7.x/$name-$version.tar.xz
+    config
+)
+
+pkg_build() {
+    local kernver=""
+
+    make mrproper
+
+    cp "$SRC/config" .config
+    make olddefconfig
+
+    # BFS kernel identity.
+    scripts/config --set-str LOCALVERSION "-BFS-Linux"
+    scripts/config --disable LOCALVERSION_AUTO
+
+    # LFS-required and recommended settings.
+    scripts/config --disable WERROR
+    scripts/config --enable PSI
+    scripts/config --disable PSI_DEFAULT_DISABLED
+    scripts/config --disable IKHEADERS
+
+    scripts/config --enable CGROUPS
+    scripts/config --enable MEMCG
+    scripts/config --enable CGROUP_SCHED
+    scripts/config --disable RT_GROUP_SCHED
+    scripts/config --disable EXPERT
+
+    scripts/config --enable RELOCATABLE
+    scripts/config --enable RANDOMIZE_BASE
+
+    scripts/config --enable STACKPROTECTOR
+    scripts/config --enable STACKPROTECTOR_STRONG
+
+    scripts/config --enable NET
+    scripts/config --enable INET
+    scripts/config --enable IPV6
+
+    scripts/config --disable UEVENT_HELPER
+    scripts/config --enable DEVTMPFS
+    scripts/config --enable DEVTMPFS_MOUNT
+    scripts/config --disable FW_LOADER_USER_HELPER
+
+    scripts/config --enable DMIID
+    scripts/config --enable SYSFB_SIMPLEFB
+
+    scripts/config --enable DRM
+    scripts/config --enable DRM_PANIC
+    scripts/config --enable DRM_FBDEV_EMULATION
+    scripts/config --enable DRM_SIMPLEDRM
+    scripts/config --enable FRAMEBUFFER_CONSOLE
+
+    scripts/config --enable INOTIFY_USER
+    scripts/config --enable TMPFS
+    scripts/config --enable TMPFS_POSIX_ACL
+
+    scripts/config --enable PCI
+    scripts/config --enable PCI_MSI
+    scripts/config --enable IOMMU_SUPPORT
+    scripts/config --enable IRQ_REMAP
+    scripts/config --enable X86_X2APIC
+
+    scripts/config --enable IA32_EMULATION
+    scripts/config --disable IA32_EMULATION_DEFAULT_DISABLED
+
+    # Boot and storage support.
+    scripts/config --enable BLK_DEV_INITRD
+    scripts/config --enable BLK_DEV_NVME
+    scripts/config --enable SCSI
+    scripts/config --enable BLK_DEV_SD
+    scripts/config --enable ATA
+    scripts/config --enable SATA_AHCI
+
+    scripts/config --enable EXT4_FS
+    scripts/config --enable XFS_FS
+    scripts/config --enable BTRFS_FS
+    scripts/config --enable F2FS_FS
+
+    # UEFI support.
+    scripts/config --enable EFI
+    scripts/config --enable EFI_STUB
+    scripts/config --enable EFI_PARTITION
+    scripts/config --enable VFAT_FS
+    scripts/config --enable EFIVAR_FS
+    scripts/config --enable NLS
+    scripts/config --enable NLS_CODEPAGE_437
+    scripts/config --enable NLS_ISO8859_1
+
+    # Future storage support as modules.
+    scripts/config --module BLK_DEV_DM
+    scripts/config --module DM_CRYPT
+    scripts/config --module MD
+    scripts/config --module BLK_DEV_MD
+
+    make olddefconfig
+
+    kernver="$(make -s kernelrelease)"
+
+    case "$kernver" in
+        *-BFS-Linux) ;;
+        *)
+            echo "Unexpected kernel release: $kernver" >&2
+            return 1
+            ;;
+    esac
+
+    echo "Building kernel release: $kernver"
+
+    make bzImage modules
+    make INSTALL_MOD_PATH="$PKG" modules_install
+
+    install -Dm644 arch/x86/boot/bzImage \
+        "$PKG/boot/vmlinuz-$kernver"
+
+    install -Dm644 System.map \
+        "$PKG/boot/System.map-$kernver"
+
+    install -Dm644 .config \
+        "$PKG/boot/config-$kernver"
+
+    install -d "$PKG/lib/modules"
+    printf '%s\n' "$kernver" \
+        > "$PKG/lib/modules/KERNELVERSION"
+
+    rm -rf "$PKG/lib/firmware"
+
+    make clean
+    make prepare scripts
+
+    install -d "$PKG/usr/src"
+    mv "$SRC/$name-$version" \
+        "$PKG/usr/src/linux-$kernver"
+
+    rm -f \
+        "$PKG/lib/modules/$kernver/build" \
+        "$PKG/lib/modules/$kernver/source"
+
+    ln -s "/usr/src/linux-$kernver" \
+        "$PKG/lib/modules/$kernver/build"
+
+    ln -s "/usr/src/linux-$kernver" \
+        "$PKG/lib/modules/$kernver/source"
+
+    find -L "$PKG/usr/src/linux-$kernver" \
+        -type l \
+        -delete 2>/dev/null || true
+}

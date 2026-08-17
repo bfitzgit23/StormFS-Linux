@@ -1,0 +1,30 @@
+description="Custom fork of Quickshell powering Noctalia Shell"
+homepage="https://github.com/noctalia-dev/noctalia-qs"
+maintainer="Venom Linux Team, venomlinux at disroot dot org"
+
+name=noctalia-qs
+version=0.0.9
+release=1
+source="$name-$version.tar.gz::https://github.com/noctalia-dev/noctalia-qs/archive/v$version.tar.gz"
+
+build() {
+	cmake -S $name-$version -B build -G Ninja \
+	        -DCMAKE_INSTALL_PREFIX=/usr \
+	        -DCMAKE_INSTALL_LIBDIR=lib \
+	        -DCMAKE_INSTALL_LIBEXECDIR=lib \
+	        -DCMAKE_BUILD_TYPE=Release \
+	        -DCMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
+	        -DCMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+	        -DINSTALL_QML_PREFIX=lib/qt6/qml \
+		-DDISTRIBUTOR="Venom Linux" \
+		-DSERVICE_GREETD=OFF \
+		-DDWL=$(scratch isinstalled dwl && printf "ON" || printf "OFF") \
+		-DHYPRLAND=$(scratch isinstalled hyprland && printf "ON" || printf "OFF") \
+		-DNIRI=$(scratch isinstalled niri && printf "ON" || printf "OFF") \
+		-DI3=$(scratch isinstalled sway && printf "ON" || printf "OFF") \
+		-DX11=$(scratch isinstalled xorg-server && printf "ON" || printf "OFF") \
+		-DBLUETOOTH=$(scratch isinstalled bluez && printf "ON" || printf "OFF") \
+	        -Wno-dev
+	cmake --build build
+	DESTDIR=$PKG cmake --install build
+}

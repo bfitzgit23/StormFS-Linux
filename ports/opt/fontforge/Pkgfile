@@ -1,0 +1,26 @@
+# Description: Outline and bitmap font editor
+# URL: https://fontforge.github.io/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: freetype2 glib libxml2 cairo gtk3 harfbuzz pango desktop-file-utils shared-mime-info libuninameslist libspiro
+
+name=fontforge
+version=20251009
+release=1
+source=(https://github.com/fontforge/fontforge/releases/download/$version/fontforge-$version.tar.xz)
+
+build() {
+	cmake -S $name-$version -B build \
+	        -DCMAKE_INSTALL_PREFIX=/usr \
+	        -DCMAKE_INSTALL_LIBDIR=lib \
+		-DCMAKE_INSTALL_LIBEXECDIR=lib \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+		-DCMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
+		-DENABLE_MAINTAINER_TOOLS=TRUE \
+		-DENABLE_FONTFORGE_EXTRAS=TRUE \
+		-DUNIX=TRUE \
+		-Wno-dev
+	cmake --build build
+	DESTDIR=$PKG cmake --install build
+
+}

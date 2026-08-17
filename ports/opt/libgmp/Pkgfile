@@ -1,0 +1,23 @@
+# Description: Contains math libraries that useful functions for arbitrary precision arithmetic
+# URL: https://gmplib.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=libgmp
+version=6.3.0
+release=2
+source=(https://ftp.gnu.org/gnu/gmp/gmp-$version.tar.xz)
+
+build() {
+	cd gmp-$version
+
+	# fix build with GCC 15
+	export CFLAGS="$CFLAGS -std=gnu17"	
+
+	./configure --prefix=/usr \
+	            --enable-cxx \
+	            --build=${XHOST:-x86_64-unknown-linux-gnu} \
+	            --disable-static
+	make
+	make DESTDIR=$PKG install
+
+}

@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: Python bindings for GLib/GObject/GIO/GTK+/GStreamer
 # URL: https://wiki.gnome.org/Projects/PyGObject
-# Maintainer: CRUX System Team, core-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: gobject-introspection python3-cairo
 
 name=python3-gobject

@@ -1,0 +1,15 @@
+# Description: Inotify based directory watcher
+# URL: http://git.z3bra.org/wendy/log.html
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=wendy
+version=2.1
+release=2
+source=(http://dl.z3bra.org/releases/$name-$version.tar.bz2)
+
+build() {
+
+	cd $name-$version
+	make PREFIX='/usr' MANPREFIX='/usr/share/man'
+	make PREFIX='/usr' MANPREFIX='/usr/share/man' DESTDIR=$PKG install
+}

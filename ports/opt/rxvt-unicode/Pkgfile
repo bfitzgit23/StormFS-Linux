@@ -1,0 +1,51 @@
+# Description: Unicode enabled rxvt-clone terminal emulator (urxvt)
+# URL: http://software.schmorp.de/pkg/rxvt-unicode.html
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libx11 libxt libptytty
+
+name=rxvt-unicode
+version=9.31
+release=4
+source=(http://dist.schmorp.de/$name/Attic/$name-$version.tar.bz2 fix-for-tmux-34.patch perl.5.38.patch URxvt)
+
+build() {
+	cd $name-$version
+
+	patch -Np1 -i $SRC/perl.5.38.patch
+	patch -Np1 -i $SRC/fix-for-tmux-34.patch
+    
+  	./configure \
+		--prefix=/usr \
+		--enable-utmp \
+		--enable-wtmp \
+		--enable-transparency \
+		--enable-fading \
+		--enable-mousewheel \
+		--enable-256-color \
+		--enable-xft \
+		--enable-font-styles \
+		--enable-unicode3
+	make
+	mkdir -p $PKG/usr/share/terminfo
+	TERMINFO=$PKG/usr/share/terminfo make DESTDIR=$PKG install
+
+	install -Dm 644 $SRC/URxvt $PKG/etc/X11/app-defaults/URxvt
+
+	install -d $PKG/usr/share/applications
+
+cat > $PKG/usr/share/applications/urxvt.desktop << "EOF"
+[Desktop Entry]
+Encoding=UTF-8
+Name=Rxvt-Unicode Terminal
+Comment=Use the command line
+GenericName=Terminal
+Exec=urxvt
+Terminal=false
+Type=Application
+Icon=utilities-terminal
+Categories=GTK;Utility;TerminalEmulator;
+#StartupNotify=true
+Keywords=console;command line;execute;
+EOF
+
+}

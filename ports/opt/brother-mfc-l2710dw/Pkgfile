@@ -1,0 +1,10 @@
+# Description: LPR and CUPS driver for the Brother MFC-L2710DW
+# URL: http://solutions.brother.com/linux/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: cups
+
+name=brother-mfc-l2710dw
+version=4.0.0
+release=1
+source=($name-$version.rpm::http://download.brother.com/welcome/dlf103525/mfcl2710dwpdrv-$version-$release.i386.rpm)
+

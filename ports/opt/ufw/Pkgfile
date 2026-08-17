@@ -1,0 +1,21 @@
+# Description: Uncomplicated and easy to use CLI tool for managing a netfilter firewall
+# URL: https://launchpad.net/ufw
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: iptables python3-setuptools
+
+name=ufw
+version=0.36.2
+release=1
+source=(https://launchpad.net/$name/0.36/$version/+download/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+	python3 ./setup.py build
+	python3 ./setup.py install --root=$PKG
+
+	# rc service
+	prt-get isinst sysvinit && {
+        	mkdir -p $PKG/etc/rc.d 
+        	install -Dm755 /lib/ufw/ufw-init $PKG/etc/rc.d/ufw 
+	} || continue
+}

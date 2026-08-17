@@ -1,0 +1,16 @@
+# Description: An improved dynamic tiling window manager
+# URL: https://i3wm.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: xcb-util-cursor xcb-util-keysyms xcb-util-wm xcb-util-xrm libev yajl startup-notification pango libxkbcommon bison flex meson
+
+name=i3
+version=4.25.1
+release=1
+source=(http://i3wm.org/downloads/$name-$version.tar.xz)
+
+build() {
+	cd $name-$version
+	venom-meson build
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

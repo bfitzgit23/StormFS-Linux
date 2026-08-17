@@ -1,0 +1,26 @@
+# Description: Strawberry is a music player and music collection organizer.
+# URL: https://www.strawberrymusicplayer.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: boost protobuf qt6-tools taglib fftw pulseaudio libcdio libmtp chromaprint kdsingleapplication sparsehash
+
+name=strawberry
+version=1.2.20
+release=1
+source=(https://files.strawberrymusicplayer.org/$name-$version.tar.xz)
+
+build() {
+	cmake -S $name-$version -B build \
+	        -DCMAKE_INSTALL_PREFIX=/usr \
+	        -DCMAKE_INSTALL_LIBDIR=lib \
+		-DCMAKE_INSTALL_LIBEXECDIR=lib \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+		-DCMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS -DQT_NO_DEBUG_OUTPUT" \
+		-DBUILD_WITH_QT6=on \
+		-DENABLE_GPOD=OFF \
+		-DENABLE_EBUR128=OFF \
+		-DENABLE_VLC=off \
+		-Wno-dev 
+	cmake --build build
+	DESTDIR=$PKG cmake --install build
+}

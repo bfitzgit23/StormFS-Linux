@@ -1,0 +1,22 @@
+# Description: C library for processing UTF-8 encoded Unicode strings
+# URL: https://github.com/JuliaStrings
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=utf8proc
+version=2.11.3
+release=1
+source=($name-$version.tar.gz::https://github.com/JuliaStrings/$name/archive/refs/tags/v$version.tar.gz)
+
+build() {
+	cmake -S $name-$version -B build \
+	        -DCMAKE_INSTALL_PREFIX=/usr \
+	        -DCMAKE_INSTALL_LIBDIR=lib \
+		-DCMAKE_INSTALL_LIBEXECDIR=lib \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+		-DCMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
+		-D BUILD_SHARED_LIBS=ON \
+		-Wno-dev 
+	cmake --build build
+	DESTDIR=$PKG cmake --install build
+}

@@ -1,25 +1,51 @@
-# Description: An event-driven initramfs infrastructure
+# Description: Generates an initramfs image for booting Linux systems
 # URL: https://github.com/dracut-ng/dracut-ng
-# Maintainer: Matt Housh, jaeger at crux dot ninja
-# Depends on: cpio
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Depends on: bash cpio kmod util-linux
+# Optional: cryptsetup lvm2 mdadm
+
 name=dracut
-version=107
-release=1
-source=(https://github.com/dracut-ng/dracut-ng/archive/$version/$name-$version.tar.gz
-    https://crux.nu/files/$name-man-pages-$version.tar.xz
-    config.conf)
+version=111
+release=3
+
+source=(
+    https://github.com/dracut-ng/dracut-ng/archive/refs/tags/$version.tar.gz
+    bfs.conf
+    bfsos-storage.conf
+)
+
+build_opt=(
+    --prefix=/usr
+    --sysconfdir=/etc
+    --disable-documentation
+)
 
 pkg_build() {
+    ./configure "${build_opt[@]}"
 
-       ./configure --prefix=/usr \
-        --sysconfdir=/etc \
-        --disable-documentation
-    sed -i -e 's,-arx modules,-rx modules,' Makefile
+    sed -i \
+        's,-arx modules,-rx modules,' \
+        Makefile
+
     make
-    make DESTDIR=$PKG install
-    rm $PKG/usr/lib/$name/modules.d/*/README*
-    cp -r $SRC/usr $PKG/
-    chmod -R g-w $PKG/usr/lib/$name/modules.d
-    cp -r $SRC/config.conf $PKG/etc/dracut.conf.d/
-}
+    make DESTDIR="$PKG" install
 
+    find "$PKG/usr/lib/dracut/modules.d" \
+        -type f \
+        -name 'README*' \
+        -delete
+
+    chmod -R g-w \
+        "$PKG/usr/lib/dracut/modules.d"
+
+    install -Dm644 \
+        "$SRC/bfs.conf" \
+        "$PKG/etc/dracut.conf.d/bfs.conf"
+
+    # Distribution-wide storage policy.  Keep this in the Dracut package so
+    # the current and LTS kernel packages can coexist without file ownership
+    # conflicts while every manual/kernel/installer Dracut invocation sees it.
+    install -Dm644 \
+        "$SRC/bfsos-storage.conf" \
+        "$PKG/usr/lib/dracut/dracut.conf.d/40-bfsos-md-drivers.conf"
+}

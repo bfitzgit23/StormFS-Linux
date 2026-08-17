@@ -1,0 +1,24 @@
+# Description: Zafiro Nord icon theme
+# URL: https://github.com/zayronxio/Zafiro-Nord-Dark
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=zafiro-nord-icon-theme
+version=240213
+release=1
+source=(https://github.com/zayronxio/Zafiro-Nord-Dark/archive/$commit.tar.gz)
+
+build() {
+	cd Zafiro-Nord-Dark-$commit
+	local icondir=/usr/share/icons/$name
+	mkdir -p $PKG/$icondir
+        cp --reflink=auto -r * $PKG/$icondir
+	for i in README.md LICENSE.md CREDITS ; do
+	    rm $PKG/$icondir/$i
+	done
+        mv $PKG/$icondir/actions/16-Dark $PKG/$icondir/actions/16
+        mv $PKG/$icondir/actions/22-Dark $PKG/$icondir/actions/22
+	rm -r $PKG/$icondir/categories/22
+	mv $PKG/$icondir/categories/22-Dark  $PKG/$icondir/categories/22
+	rm -r $PKG/$icondir/panel/*-light
+	rm -r $PKG/$icondir/preview
+}

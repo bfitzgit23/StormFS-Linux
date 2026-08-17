@@ -1,0 +1,72 @@
+# Description: Network Time Protocol reference implementation
+# URL: https://www.ntp.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libcap libedit openssl perl
+
+name=ntp
+version=4.2.8p18
+release=3
+source=(https://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-${version%.*}/$name-$version.tar.gz fix.build.patch run.ntpd rc.ntpd)
+
+build() {
+	cd $name-$version
+
+	export CFLAGS="$CFLAGS -Wno-discarded-qualifiers -Wno-incompatible-pointer-types"
+
+	patch -Np1 -i $SRC/fix.build.patch
+
+	# l_stdlib.h re-declares memchr, which conflicts with glibc's _Generic macro
+	sed -i '/extern void \*memchr/d' include/l_stdlib.h
+
+	autoreconf -fiv
+	./configure \
+	            --prefix=/usr \
+	            --bindir=/usr/sbin \
+	            --sysconfdir=/etc \
+	            --libexecdir=/usr/lib/$name \
+	            --enable-linuxcaps \
+	            --with-lineeditlibs=readline
+	make
+	make DESTDIR=$PKG install
+	install -g ntp -o ntp -d $PKG/var/lib/ntp
+
+mkdir -p $PKG/etc
+cat > $PKG/etc/ntp.conf << "EOF"
+# Asia
+server 0.asia.pool.ntp.org
+
+# Australia
+server 0.oceania.pool.ntp.org
+
+# Europe
+server 0.europe.pool.ntp.org
+
+# North America
+server 0.north-america.pool.ntp.org
+
+# South America
+server 2.south-america.pool.ntp.org
+
+driftfile /var/lib/ntp/ntp.drift
+pidfile   /var/run/ntpd.pid
+
+leapfile  /etc/ntp.leapseconds
+
+# Security session
+restrict    default limited kod nomodify notrap nopeer noquery
+restrict -6 default limited kod nomodify notrap nopeer noquery
+
+restrict 127.0.0.1
+restrict ::1
+EOF
+
+	# runit service
+	prt-get isinst runit && {
+		install -Dm755 $SRC/run.ntpd $PKG/etc/sv/ntpd/run
+		ln -s /run/runit/supervise.ntpd $PKG/etc/sv/ntpd/supervise
+	} || continue
+
+	# rc service
+	prt-get isinst sysvinit && \
+		install -Dm755 $SRC/rc.ntpd $PKG/etc/rc.d/ntpd || continue
+}

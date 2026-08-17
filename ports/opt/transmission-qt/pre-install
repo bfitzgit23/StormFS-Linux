@@ -1,0 +1,3 @@
+#!/bin/sh
+groupadd -g 169 transmission 2>/dev/null
+useradd -r -M -g transmission -G transmission -c "Transmission BitTorrent Daemon" -d /var/lib/transmission -s /sbin/nologin -u 169 transmission 2>/dev/null

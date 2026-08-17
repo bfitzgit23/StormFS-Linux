@@ -1,0 +1,16 @@
+# Description: Official C++ interface for the ATK accessibility toolkit library
+# URL: https://www.gtkmm.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: at-spi2-core glibmm-gtk4 meson
+
+name=atkmm-gtk4
+version=2.36.4
+release=1
+source=($name-$version.tar.xz::https://gitlab.gnome.org/GNOME/${name%-*}/-/archive/$version/${name%-*}-$version.tar.bz2)
+
+build() {
+	meson setup $name-$version build \
+	    -D maintainer-mode=true
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

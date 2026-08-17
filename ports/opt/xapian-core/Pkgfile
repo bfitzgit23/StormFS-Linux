@@ -1,0 +1,17 @@
+# Description: Open source search engine library
+# URL: https://oligarchy.co.uk/xapian.html
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: util-linux
+
+name=xapian-core
+version=1.5.0
+release=1
+source=(https://oligarchy.co.uk/xapian/$version/$name-$version.tar.xz)
+
+build() {
+	cd $name-$version
+	./configure --prefix=/usr --disable-static
+	make
+	make DESTDIR=$PKG install
+
+}

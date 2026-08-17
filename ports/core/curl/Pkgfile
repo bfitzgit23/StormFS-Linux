@@ -1,5 +1,7 @@
+# Add your top line text here
+# Your line to add at the top here
 name=curl
-version=8.15.0
+version=8.21.0
 release=1
 source=(https://$name.se/download/$name-$version.tar.xz)
 build_opt="

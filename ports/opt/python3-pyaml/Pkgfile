@@ -1,0 +1,19 @@
+# Description: PyYAML-based module to produce pretty and readable YAML-serialized data
+# URL: https://github.com/mk-fg/pretty-yaml
+# Maintainer: CELESTIFYX Team <celestifyx@gmail.com>
+# Depends on: python3-wheel python3-yaml
+
+name=python3-pyaml
+version=26.2.1
+release=1
+source=(${name}-${version}.tar.gz::https://github.com/mk-fg/pretty-yaml/archive/refs/tags/${version}.tar.gz)
+
+build() {
+    cd pretty-yaml-${version}
+
+    python3 -m build --wheel --no-isolation
+    python3 -m installer --destdir="${PKG}" dist/*.whl
+
+    python_version=$(python3 -c 'import sys; print(".".join(map(str, sys.version_info[:2])))')
+    rm -r "${PKG}/usr/lib/python${python_version}/site-packages/pyaml/tests"
+}

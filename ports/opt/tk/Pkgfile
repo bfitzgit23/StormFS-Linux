@@ -1,0 +1,37 @@
+# Description: GUI toolkit for the Tcl scripting language
+# URL: http://tcl.sourceforge.net/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: tcl
+
+name=tk
+version=8.6.18
+release=1
+source=($name-$version.tar.gz::https://downloads.sourceforge.net/tcl/tk$version-src.tar.gz)
+
+build() {
+	cd $name$version/unix
+
+	./configure \
+		--prefix=/usr \
+		--mandir=/usr/share/man \
+		--without-tzdata
+	make
+	make INSTALL_ROOT=$PKG install install-private-headers
+
+	ln -sv wish${version%.*} $PKG/usr/bin/wish
+
+	# move demos to -doc directory
+	mkdir -p $PKG/usr/share/doc/$name/examples/
+	mv $PKG/usr/lib/tk${version%.*}/demos/ \
+		$PKG/usr/share/doc/$name/examples/
+
+	# remove buildroot traces
+	sed -e "s#${SRC}/tk${version}/unix#/usr/lib#" \
+	    -e "s#${SRC}/tk${version}#/usr/include#" \
+	    -i "${PKG}/usr/lib/tkConfig.sh"
+
+	# remove unrequired execute permissions (FS#75042)
+	#chmod -x $PKG/usr/lib/libtkstub.a
+
+
+}

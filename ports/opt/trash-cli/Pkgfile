@@ -1,0 +1,31 @@
+# Description: Command line interface to the freedesktop.org trashcan.
+# URL: https://github.com/andreafrancia/trash-cli
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: python3-six python3-psutil python3-setuptools
+
+name=trash-cli
+version=0.24.5.26
+release=2
+source=($name-$version.tar.gz::https://github.com/andreafrancia/trash-cli/archive/${version}.tar.gz)
+
+build() {
+	cd $name-$version
+
+	find tests -type f -name "*.py" -exec \
+        sed -i 's/^import mock$/from unittest import mock/;s/from mock /from unittest.mock /;s/from mock.mock /from unittest.mock /' {} +
+
+	python3 setup.py build
+	    for cmd in trash-empty trash-list trash-restore trash-put trash; do
+		sed -i 's|python|python3|' $cmd
+		./$cmd --print-completion bash > ./$cmd-completion
+		./$cmd --print-completion zsh > ./_$cmd-completion
+	    done
+
+	python3 setup.py install --root=$PKG --optimize=1 --skip-build
+
+	    for cmd in trash-empty trash-list trash-restore trash-put trash; do
+		install -vDm 644 ./$cmd-completion $PKG/usr/share/bash-completion/completions/$cmd
+		install -vDm 644 ./_$cmd-completion $PKG/usr/share/zsh/site-functions/_$cmd
+	    done
+
+}

@@ -1,34 +1,41 @@
 name=gettext
-version=0.26
+version=1.0
 release=1
-source=(https://ftpmirror.gnu.org/gnu/$name/$name-$version.tar.xz)
-build_opt="
-	--prefix=/usr \
-        --libexecdir=/usr/lib 
-        --enable-{shared,static} 
-        --disable-{csharp,java,nls} 
-        --without-{emacs,git} 
-        --with-included-{glib,libcroco,libxml,libunistring
-"
+
+source=(
+    https://ftpmirror.gnu.org/gettext/gettext-$version.tar.xz)
 
 pkg_build() {
-	autoreconf -fi
-	./configure \
-		--prefix=/usr \
-		--enable-{shared,static} \
-		--disable-{csharp,java,nls} \
-		--without-{emacs,git} \
-		--with-included-{glib,libcroco,libxml,libunistring}
-	make
-	make DESTDIR=$PKG install
+    ./configure \
+        --prefix=/usr \
+        --libexecdir=/usr/lib \
+        --enable-shared \
+        --enable-static \
+        --disable-csharp \
+        --disable-java \
+        --disable-nls \
+        --without-emacs \
+        --without-git \
+        --with-included-glib \
+        --with-included-libcroco \
+        --with-included-libxml \
+        --with-included-libunistring
+
+    make
+    make DESTDIR="$PKG" install
 }
 
-
 bootstrap_build() {
-	./configure --disable-shared  --without-{emacs,git} 
-	make -j1
-	cp -v gettext-tools/src/msgfmt \
-	      gettext-tools/src/msgmerge \
-	      gettext-tools/src/xgettext \
-	      $TOOLS/bin
+    ./configure \
+        --disable-shared \
+        --without-emacs \
+        --without-git
+
+    make -j1
+
+    cp -v \
+        gettext-tools/src/msgfmt \
+        gettext-tools/src/msgmerge \
+        gettext-tools/src/xgettext \
+        "$TOOLS/bin"
 }

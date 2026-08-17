@@ -1,0 +1,21 @@
+# Description: Private messaging from your desktop
+# URL: https://signal.org
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libvips desktop-file-utils hicolor-icon-theme libnotify nss xdg-utils libxss pulseaudio
+
+name=signal-desktop-bin
+version=8.16.0
+release=1
+source=(https://updates.signal.org/desktop/apt/pool/s/signal-desktop/${name%-*}_${version}_amd64.deb signal-desktop-wayland)
+
+build() {
+	bsdtar -xf ${name%-*}_${version}_amd64.deb
+        bsdtar -xf data.tar.xz -C $PKG/
+
+	install -d $PKG/usr/bin
+	ln -s /opt/Signal/signal-desktop $PKG/usr/bin/signal-desktop
+
+	# wayland launcher
+	prt-get isinst wayland && \
+	install -Dm755 $SRC/signal-desktop-wayland $PKG/usr/bin/signal-desktop-wayland
+ }

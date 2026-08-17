@@ -1,0 +1,27 @@
+#!/bin/sh
+
+_xmlcatalog() {
+    xmlcatalog --noout "$@" /etc/xml/catalog
+}
+
+version=1.79.2
+
+[ -f /etc/xml/catalog ] || _xmlcatalog --create
+
+for ver in "$version" current; do
+    for rw in rewriteSystem rewriteURI; do
+        for proto in http https; do
+            _xmlcatalog --add "$rw" \
+                "$proto://cdn.docbook.org/release/xsl-nons/$ver" \
+                "/usr/share/xml/docbook/xsl-stylesheets-nons-$version"
+        done
+    done
+done
+
+for ver in current "$version"; do
+    for rw in rewriteSystem rewriteURI; do
+        _xmlcatalog --add "$rw" \
+            "http://docbook.sourceforge.net/release/xsl/$ver" \
+            "/usr/share/xml/docbook/xsl-stylesheets-nons-$version"
+    done
+done

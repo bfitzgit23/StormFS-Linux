@@ -1,0 +1,18 @@
+# Description: Temurin 21 (OpenJDK 21 Java binaries by Adoptium, formerly AdoptOpenJDK)
+# URL: https://github.com/adoptium/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: venom-java-manager
+
+name=openjdk-21-bin
+version=21.0.11+10
+release=1
+source=($name-$version.tar.gz::https://github.com/adoptium/temurin${version%%.*}-binaries/releases/download/jdk-$version/OpenJDK${version%%.*}U-jdk_x64_linux_hotspot_$vrsn.tar.gz)
+
+build() {
+	install -dm 755 "${PKG}/usr/lib/jvm/java-${version%%.*}-openjdk"
+	cp --reflink=auto -a "${SRC}/jdk-$version"/* "${PKG}/usr/lib/jvm/java-${version%%.*}-openjdk"
+
+	# Exclude for revdep
+	install -d $PKG/etc/revdep.d
+	echo "/usr/lib/jvm/java-${version%%.*}-openjdk/" > $PKG/etc/revdep.d/$name.conf
+}

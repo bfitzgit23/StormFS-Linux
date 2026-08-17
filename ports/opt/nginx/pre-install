@@ -1,0 +1,6 @@
+#!/bin/sh
+
+getent group nginx >/dev/null || groupadd -g 26 nginx
+
+getent passwd nginx >/dev/null || \
+useradd -r -M -g nginx -G nginx -c "Nginx Server" -d /var/www -s /sbin/nologin -u 26 nginx

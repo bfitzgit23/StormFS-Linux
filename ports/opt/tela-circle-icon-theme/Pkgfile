@@ -1,0 +1,19 @@
+# Description: A flat colorful design icon theme
+# URL: https://github.com/vinceliuice/Tela-circle-icon-theme
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: hicolor-icon-theme
+
+name=tela-circle-icon-theme
+version=25.02.10
+release=1
+source=($name-$version.tar.gz::https://github.com/vinceliuice/Tela-circle-icon-theme/archive/refs/tags/$ver.tar.gz no-cache-files.patch)
+
+build() {
+	cd Tela-circle-icon-theme-${ver}
+
+	patch -Np1 -i $SRC/no-cache-files.patch
+	install -dm 755 $PKG/usr/share/icons
+	for i in standard black blue brown green grey orange pink purple red yellow dracula nord; do
+	./install.sh -d $PKG/usr/share/icons $i
+	done
+}

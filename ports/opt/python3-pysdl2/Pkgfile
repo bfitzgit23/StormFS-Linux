@@ -1,0 +1,16 @@
+# Description: Python ctypes wrapper around SDL2
+# URL: https://github.com/py-sdl/py-sdl2
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: sdl2-compat python3-setuptools
+
+name=python3-pysdl2
+version=0.9.17
+release=2
+source=($name-$version.tar.gz::https://github.com/py-sdl/py-sdl2/archive/refs/tags/$version.tar.gz)
+
+build() {
+	cd py-sdl2-$version
+
+	python3 setup.py build
+	python3 setup.py install --root=$PKG --optimize=1 --skip-build
+}

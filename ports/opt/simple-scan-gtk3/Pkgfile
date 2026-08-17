@@ -1,0 +1,15 @@
+# Description: Simple Scanning Utility (GTK3 version)
+# URL: https://github.com/GNOME/simple-scan
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: colord hicolor-icon-theme libhandy sane yelp-tools
+
+name=simple-scan-gtk3
+version=44.0
+release=1
+source=(http://packages.linuxmint.com/pool/upstream/s/${name%-*}/${name%-*}_${version}-${release}+wilma.tar.xz)
+
+build() {
+	meson setup $name-$version build 
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build 
+}

@@ -1,0 +1,17 @@
+# Description: A simple program which provides a run program window
+# URL: https://github.com/wdlkmpx/gmrun
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: gtk3 glib popt
+
+name=gmrun
+version=1.4w
+release=1
+source=(https://github.com/wdlkmpx/gmrun/archive/$version/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+
+	./configure --prefix=/usr --sysconfdir=/etc
+	make
+	make DESTDIR=$PKG install
+}

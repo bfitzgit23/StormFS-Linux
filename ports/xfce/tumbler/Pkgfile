@@ -1,3 +1,5 @@
+# Add your top line text here
+# Your line to add at the top here
 # Depends on: glib curl freetype gdk-pixbuf gst-plugins-base libjpeg-turbo libgsf libpng poppler
 
 name=tumbler

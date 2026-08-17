@@ -1,0 +1,16 @@
+# Description: A flat theme with transparent elements for GTK 3, GTK 2 and Gnome-Shell. Latest commit from the master branch on Github
+# URL: https://github.com/jnsh/arc-gtk-theme
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: gtk3 gtk-engine-murrine inkscape optipng sassc meson
+
+name=arc-gtk-theme
+version=20221218
+release=1
+source=(https://github.com/jnsh/$_name/archive/$version/$name-$version.tar.gz)
+
+build() {
+	cd $_name-$version
+	meson setup $name-$version build
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

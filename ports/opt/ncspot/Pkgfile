@@ -1,0 +1,17 @@
+# Description: Cross-platform ncurses Spotify client written in Rust, inspired by ncmpc and the likes
+# URL: https://github.com/hrkfdn/ncspot
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: rust pulseaudio
+
+name=ncspot
+version=1.3.4
+release=1
+source=(https://github.com/hrkfdn/ncspot/archive/v$version/$name-$version.zip)
+
+build() {
+	cd $name-$version
+
+	cargo fetch --locked
+	cargo build --release --locked
+	install -Dm 755 "target/release/$name" "$PKG/usr/bin/$name"
+}

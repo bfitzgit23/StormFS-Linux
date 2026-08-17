@@ -1,0 +1,16 @@
+# Description: Integer to Roman numerals converter
+# URL: https://pypi.org/project/roman-numerals
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: python3-gpep517 python3-setuptools python3-wheel python3-flit-core
+
+name=python3-roman-numerals
+version=4.1.0
+release=1
+source=($name-$version.tar.gz::https://github.com/AA-Turner/roman-numerals/archive/v$version.tar.gz)
+
+build() {
+	cd ${name#*-}-$version/python
+	cp ../LICENCE* ./
+	gpep517 build-wheel --wheel-dir .dist --output-fd 3 3>&1 >&2
+	/usr/bin/python3 -m installer -d $PKG .dist/*.whl
+}

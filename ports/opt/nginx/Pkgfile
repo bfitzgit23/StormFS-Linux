@@ -1,0 +1,45 @@
+# Description: Lightweight HTTP server and IMAP/POP3 proxy server
+# URL: http://nginx.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: pcre2 openssl
+
+name=nginx
+version=1.31.2
+release=1
+source=(http://nginx.org/download/$name-$version.tar.gz nginx.conf rc.nginx run.nginx)
+
+build() {
+	cd $name-$version
+	./configure --prefix=/etc/nginx \
+		--sbin-path=/usr/sbin/nginx \
+		--conf-path=/etc/nginx/nginx.conf \
+		--error-log-path=/var/log/nginx/error.log \
+		--http-log-path=/var/log/nginx/access.log \
+		--pid-path=/run/nginx.pid \
+		--lock-path=/var/lock/nginx.pid \
+		--with-http_ssl_module \
+		--with-pcre \
+		--user=nginx \
+		--group=nginx
+	make
+	make DESTDIR=$PKG install
+
+	install -d -m 0755 $PKG/var/log/nginx
+	install -D -m 0644 -o root -g root $SRC/nginx.conf $PKG/etc/nginx/nginx.conf
+
+	chown nginx:nginx $PKG/var/log/nginx
+
+	# runit service
+	prt-get isinst runit && {
+		install -Dm755 -o root -g root $SRC/run.nginx $PKG/etc/sv/nginx/run
+		ln -s /run/runit/supervise.nginx $PKG/etc/sv/nginx/supervise
+	} || continue
+
+	# rc service
+	prt-get isinst sysvinit && \
+		install -Dm755 -o root -g root $SRC/rc.nginx $PKG/etc/rc.d/nginx || continue
+
+	find $PKG/etc/nginx -name "*.default" -delete
+
+	rm -fr $PKG/run 
+}

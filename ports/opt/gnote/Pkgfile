@@ -1,0 +1,15 @@
+# Description: A note taking application
+# URL: https://wiki.gnome.org/Apps/Gnote
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: desktop-file-utils gtkmm4 gspell libsecret yelp-tools meson
+
+name=gnote
+version=50.1
+release=1
+source=(https://gitlab.gnome.org/GNOME/gnote/-/archive/$version/$name-$version.tar.gz)
+
+build() {
+	meson setup $name-$version build
+	meson compile -C build
+	meson install --no-rebuild -C build --destdir $PKG
+}

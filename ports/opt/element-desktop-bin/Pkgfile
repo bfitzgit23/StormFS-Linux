@@ -1,0 +1,16 @@
+# Description: All-in-one secure chat app for teams, friends and organisations
+# URL: https://element.io
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: sqlcipher
+
+name=element-desktop-bin
+version=1.12.22
+release=1
+source=(https://packages.element.io/debian/pool/main/e/element-desktop/element-desktop_"${version}"_amd64.deb element-desktop-stable-bin.sh)
+
+build() {
+   		bsdtar -xf $SRC/element-desktop_${version}_amd64.deb
+	        bsdtar -xf data.tar.xz -C $PKG/
+                install -Dm755 "${SRC}"/element-desktop-stable-bin.sh "${PKG}"/usr/bin/element-desktop-stable-bin
+                sed -i 's|^Exec=.*|Exec=/usr/bin/element-desktop-stable-bin %U|' "${PKG}"/usr/share/applications/element-desktop.desktop
+}

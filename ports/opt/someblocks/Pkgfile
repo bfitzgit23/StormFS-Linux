@@ -1,0 +1,15 @@
+# Description: Modular status bar for somebar, based on dwmblocks.
+# URL: https://git.sr.ht/~raphi/someblocks/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: somebar
+
+name=someblocks
+version=1.0.1
+release=1
+source=($name-$version.tar.gz::https://git.sr.ht/~raphi/someblocks/archive/$version.tar.gz blocks.h)
+
+build() {
+	cd $name-$version
+	make
+	make DESTDIR=$PKG PREFIX=/usr install
+}

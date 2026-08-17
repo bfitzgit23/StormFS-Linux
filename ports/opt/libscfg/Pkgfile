@@ -1,0 +1,15 @@
+# Description: A C library for scfg
+# URL: https://git.sr.ht/~emersion/libscfg
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: meson
+
+name=libscfg
+version=0.2.0
+release=1
+source=($name-$version.tar.gz::https://codeberg.org/emersion/libscfg/archive/v$version.tar.gz)
+
+build() {
+	meson setup $name-$version build
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

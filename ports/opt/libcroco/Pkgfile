@@ -1,0 +1,18 @@
+# Description: Standalone CSS2 parsing and manipulation library
+# URL: https://gitlab.gnome.org/GNOME/libcroco
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: glib libxml2
+
+name=libcroco
+version=0.6.13
+release=1
+source=(https://gitlab.gnome.org/Archive/libcroco/-/archive/$version/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+	autoreconf -fvi
+	./configure --prefix=/usr --disable-static
+	make
+	make DESTDIR=$PKG install
+
+}

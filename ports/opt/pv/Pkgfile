@@ -1,0 +1,15 @@
+# Description: A terminal-based tool for monitoring the progress of data through a pipeline
+# URL: https://www.ivarch.com/programs/pv.shtml
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=pv
+version=1.11.0
+release=1
+source=(https://www.ivarch.com/programs/sources/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+	./configure --prefix=/usr --mandir=/usr/share/man --disable-nls
+	make
+	make DESTDIR=$PKG install
+}

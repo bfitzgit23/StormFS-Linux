@@ -1,0 +1,22 @@
+# Description: LIBNFS is a client library for accessing NFS shares over a network.
+# URL: https://github.com/sahlberg/libnfs
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: cmake ninja
+
+name=libnfs
+version=6.0.2
+release=2
+source=(https://github.com/sahlberg/libnfs/archive/$name-$version.tar.gz)
+
+build() {
+	cmake -S $name-$name-$version -B build -G Ninja \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+        	-DENABLE_DOCUMENTATION=ON \
+	        -DENABLE_UTILS=ON \
+	        -DENABLE_MULTITHREADING=ON \
+		-Wno-dev
+	cmake --build build
+	DESTDIR=$PKG cmake --install build
+}

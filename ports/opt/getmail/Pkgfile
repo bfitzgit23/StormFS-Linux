@@ -1,0 +1,14 @@
+# Description: IMAP and POP3 mail retriever with reliable Maildir and command delivery
+# URL: http://pyropus.ca/software/getmail
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: python3-setuptools
+
+name=getmail
+version=6.19.12
+release=1
+source=(https://github.com/getmail6/getmail6/archive/v$version/$name-$version.tar.gz)
+
+build() {
+	cd ${name}6-$version
+	/usr/bin/python3 setup.py install --prefix=/usr --root=$PKG
+}

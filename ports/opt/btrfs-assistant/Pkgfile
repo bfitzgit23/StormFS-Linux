@@ -1,0 +1,22 @@
+# Description: An application for managing BTRFS subvolumes and Snapper snapshots
+# URL: https://gitlab.com/btrfs-assistant/btrfs-assistant
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: cmake ninja qt6-base qt6-svg polkit util-linux btrfs-progs diffutils
+
+name=btrfs-assistant
+version=2.2
+release=1
+source=(https://gitlab.com/$name/$name/-/archive/$version/$name-$version.tar.gz)
+
+build() {
+
+	cmake -S $name-$version -B build -G Ninja \
+	        -DCMAKE_INSTALL_PREFIX=/usr \
+	        -DCMAKE_INSTALL_LIBDIR=lib \
+	        -DCMAKE_INSTALL_LIBEXECDIR=lib \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
+		-Wno-dev 
+	cmake --build build
+	DESTDIR=$PKG cmake --install build
+}

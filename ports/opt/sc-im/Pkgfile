@@ -1,0 +1,16 @@
+# Description: A spreadsheet program based on SC
+# URL: https://github.com/andmarti1424/sc-im
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: lua libxml2 libzip
+
+name=sc-im
+version=0.8.5
+release=1
+source=($name-$version.tar.gz::https://github.com/andmarti1424/sc-im/archive/refs/tags/v$version.tar.gz)
+
+build() {
+	cd $name-$version/src
+	sed -i 's|prefix  = /usr/local|prefix  = /usr|g' Makefile
+	make
+	make PREFIX=$PKG/usr DESTDIR=$PKG install
+}

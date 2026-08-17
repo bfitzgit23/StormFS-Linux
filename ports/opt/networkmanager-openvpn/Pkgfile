@@ -1,0 +1,20 @@
+# Description: NetworkManager VPN plugin for OpenVPN
+# URL: https://gitlab.gnome.org/GNOME/NetworkManager-openvpn
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: dbus openvpn glib gtk3 intltool libnma libsecret
+
+name=networkmanager-openvpn
+version=1.12.5
+release=1
+source=(https://download.gnome.org/sources/NetworkManager-openvpn/${version%.*}/NetworkManager-openvpn-$version.tar.xz)
+
+build() {
+	cd NetworkManager-${name#*-}-$version
+	./configure --prefix=/usr \
+		--sysconfdir=/etc \
+		--localstatedir=/var \
+		--libexecdir=/usr/lib \
+		--disable-static
+	make
+	make DESTDIR=$PKG install
+}

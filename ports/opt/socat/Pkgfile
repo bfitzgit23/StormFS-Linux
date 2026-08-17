@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: SOcket CAT - netcat-like utility with many enhancements
 # URL: http://www.dest-unreach.org/socat
-# Maintainer: Juergen Daubert, jue at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: openssl readline
 
 name=socat

@@ -1,0 +1,30 @@
+# Description: Perl interface to the SHA-1 algorithm
+# URL: https://metacpan.org/release/Digest-SHA1/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: perl
+
+name=perl-digest-sha1
+version=2.13
+release=1
+source=(https://www.cpan.org/modules/by-module/Digest/Digest-SHA1-$version.tar.gz)
+
+build() {
+	cd Digest-SHA1-$version
+
+	perl Makefile.PL
+	make OPTIMIZE="$CFLAGS"
+
+	make install DESTDIR=$PKG
+
+	# Remove perlcrap
+	find $PKG -type f \( \
+		-name '.packlist' -or \
+		-name '*.bs' -or \
+		-name 'autosplit.ix' -or \
+		-name 'perllocal.pod' \) -delete
+
+	# Remove empty directories
+	find $PKG -depth -empty -delete
+	# Fix perms
+	find $PKG -type f -a ! -perm -u+w -exec chmod u+w '{}' +
+}

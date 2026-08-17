@@ -1,12 +1,14 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: A small library defining error values for GnuPG components
 # URL: https://www.gnupg.org/
-# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: libgpg-error
 
 name=libgpg-error-32
 version=1.50
 release=1
-source=(https://www.gnupg.org/ftp/gcrypt/${name%-*}/${name%-*}-$version.tar.bz2)
+source=(https://mirrors.dotsrc.org/gcrypt/${name%-*}/${name%-*}-$version.tar.bz2)
 
 build() {
 	cd ${name%-*}-$version

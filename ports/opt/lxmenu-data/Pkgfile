@@ -1,0 +1,17 @@
+# Description: Freedesktop.org menu spec-compliant desktop menus for LXDE
+# URL: https://lxde.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: intltool
+
+name=lxmenu-data
+version=0.1.7
+release=1
+source=(https://github.com/lxde/lxmenu-data/archive/$version/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+	autoreconf -fvi
+	./configure --prefix=/usr --sysconfdir=/etc
+	make
+	make DESTDIR=$PKG install
+}

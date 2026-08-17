@@ -1,0 +1,15 @@
+# Description: Lightweight, high-performance Wayland compositor built on dwl
+# URL: https://mangowm.github.io/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: scenefx pcre2
+
+name=mangowc
+version=0.14.0
+release=1
+source=($name-$version.tar.gz::https://github.com/DreamMaoMao/mangowc/archive/refs/tags/$version.tar.gz)
+
+build() {
+	meson setup $name-$version build 
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

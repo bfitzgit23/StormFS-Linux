@@ -1,0 +1,16 @@
+# Description: Pure python module for (de)serialization to and from VDF that works just like json
+# URL: https://github.com/ValvePython/vdf
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: python3-setuptools
+
+name=python3-vdf
+version=3.4
+release=1
+source=($name-$version.tar.gz::https://pypi.python.org/packages/source/v/vdf/vdf-$version.tar.gz)
+
+build() {
+	cd vdf-$version
+	python3 setup.py build
+	python3 setup.py install -O2 --root=$PKG --skip-build
+	chmod 644 $PKG/usr/lib/python3.*/site-packages/vdf-$version-*/*
+}

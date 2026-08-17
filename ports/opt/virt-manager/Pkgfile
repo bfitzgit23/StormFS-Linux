@@ -1,0 +1,15 @@
+# Description: A desktop user interface for managing virtual machines through libvirt
+# URL: https://virt-manager.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: dmidecode dnsmasq gtksourceview4 gtk-vnc iptables libosinfo libvirt-glib libvirt-python python3-gobject3 python3-requests spice-gtk vte3
+
+name=virt-manager
+version=5.1.0
+release=1
+source=(https://releases.pagure.org/virt-manager/$name-$version.tar.xz)
+
+build() {
+	meson setup $name-$version build 
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

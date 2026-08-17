@@ -1,0 +1,35 @@
+#!/bin/sh	
+#	
+# /etc/rc.d/slim: start/stop Slim Display Manager	
+#	
+
+. /etc/rc.subr
+
+NAME="Sim DM service"
+PROG=/usr/bin/slim
+PID=/run/slim/pid
+OPTS="-d"
+	
+case $1 in	
+	start)	
+		msg "Starting $NAME..."	
+		start_daemon -p $PID $PROG $OPTS
+		;;	
+	stop)	
+		msg "Stopping $NAME..."	
+		stop_daemon -p $PID $PROG
+		;;	
+	restart)	
+		$0 stop	
+		sleep 1	
+		$0 start	
+		;;	
+	status)	
+		status_daemon $PROG
+		;;	
+	*)	
+		echo "Usage: $0 [start|stop|restart|status]"	
+		;;	
+esac
+
+# End of file

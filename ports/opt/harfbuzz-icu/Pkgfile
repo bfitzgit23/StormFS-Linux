@@ -1,0 +1,24 @@
+# Description: OpenType text shaping engine (ICU integration)
+# URL: https://harfbuzz.github.io/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: harfbuzz icu
+
+name=harfbuzz-icu
+version=14.2.1
+release=1
+source=(https://github.com/harfbuzz/harfbuzz/releases/download/$version/harfbuzz-$version.tar.xz)
+
+build() {
+        meson setup $name-$version build \
+                -Ddocs=disabled \
+		-Dgraphite=auto \
+		-Dbenchmark=disabled \
+		-Dcpp_std=c++17
+        meson compile -C build
+        DESTDIR=$PWD/PKG meson install --no-rebuild -C build
+
+	mkdir -p $PKG/usr/lib/pkgconfig $PKG/usr/include/harfbuzz
+	mv PKG/usr/include/harfbuzz/hb-icu.h $PKG/usr/include/harfbuzz/
+	mv PKG/usr/lib/libharfbuzz-icu* $PKG/usr/lib/
+	mv PKG/usr/lib/pkgconfig/harfbuzz-icu.pc $PKG/usr/lib/pkgconfig/
+}

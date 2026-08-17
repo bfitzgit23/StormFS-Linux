@@ -1,0 +1,57 @@
+# Description: An open platform for distributed applications for developers and sysadmins
+# URL: https://www.docker.com/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: containerd runc cgroupfs-mount nftables tini
+
+name=docker
+version=29.6.1
+release=1
+source=(https://github.com/moby/moby/archive/docker-v${version}/moby-${version}.tar.gz https://github.com/docker/cli/archive/v${version}/cli-${version}.tar.gz rc.$name $name.conf)
+
+build() {
+	export GO111MODULE=auto
+	export GOPATH=$SRC
+	export DOCKER_GITCOMMIT=fbf3ed2
+	export DOCKER_BUILDTAGS='seccomp'
+	export DISABLE_WARN_OUTSIDE_CONTAINER=1
+	export CGO_CFLAGS="${CFLAGS}"
+	export CGO_CPPFLAGS="${CPPFLAGS}"
+	export CGO_CXXFLAGS="${CXXFLAGS}"
+	export CGO_LDFLAGS="${LDFLAGS}"
+	export GOFLAGS="-buildmode=pie -trimpath -mod=readonly -modcacherw -ldflags=-linkmode=external"
+  
+	mkdir -p src/github.com/docker
+
+	cd src/github.com/docker
+	ln -s $SRC/cli-$version cli
+	cd cli
+	make VERSION=$version GITCOMMIT=${DOCKER_GITCOMMIT} dynbinary
+
+	cd $SRC/src/github.com/docker
+	ln -s $SRC/moby-$name-v$version docker
+	cd docker
+	VERSION=$version hack/make.sh dynbinary
+    
+	install -D -m 0755 $SRC/cli-$version/build/$name $PKG/usr/bin/$name
+	install -D -m 0755 $SRC/moby-$name-v$version/bundles/dynbinary-daemon/dockerd \
+		$PKG/usr/bin/dockerd
+	install -D -m 0755 $SRC/moby-$name-v$version/bundles/dynbinary-daemon/dockerd \
+		$PKG/usr/bin/dockerd-proxy
+	install -D -m 0755 $SRC/rc.$name $PKG/etc/rc.d/$name
+	install -D -m 0644 $SRC/$name.conf $PKG/etc/$name.conf
+
+	# symlink externally provided tini-static binary
+	ln -sf /sbin/tini "$PKG"/usr/bin/docker-init
+
+
+
+	ln -s containerd $PKG/usr/bin/docker-containerd
+	ln -s containerd-shim $PKG/usr/bin/docker-containerd-shim
+	ln -s ctr $PKG/usr/bin/docker-containerd-ctr
+	ln -s runc $PKG/usr/bin/docker-runc
+
+	install -D -m 0755 $SRC/moby-$name-v$version/contrib/check-config.sh \
+		$PKG/usr/share/$name/check-config.sh
+	install -D -m 0644 $SRC/cli-$version/contrib/completion/bash/docker \
+		$PKG/etc/bash_completion.d/docker
+}

@@ -1,0 +1,31 @@
+# Description: Tiling Wayland compositor and replacement for the i3 window manager
+# URL: https://github.com/swaywm/sway
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: wlroots20 json-c pango polkit pcre2 swaybg ttf-dejavu
+
+name=sway
+version=1.12
+release=1
+source=(https://github.com/swaywm/sway/releases/download/$version/$name-$version.tar.gz sway-portals.conf sway.desktop)
+
+build() {
+	# CBUILD: enable or disable options, source CBUILD_SWAY_OPTS from "sway.opt" file
+	CBUILD_SWAY_OPTS="-Ddefault-wallpaper=true 
+	-Dzsh-completions=true 
+	-Dbash-completions=true 
+	-Dfish-completions=true 
+	-Dswaybar=true 
+	-Dswaynag=true 
+	-Dtray=auto
+	-Dgdk-pixbuf=auto
+	-Dman-pages=auto
+	"
+
+	meson setup $name-$version build -Dsd-bus-provider=basu \
+		-Dwerror=false $CBUILD_SWAY_OPTS
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+
+	install -Dm644 $SRC/sway.desktop $PKG/usr/share/wayland-sessions/sway.desktop
+	install -Dm644 $SRC/sway-portals.conf -t $PKG/usr/share/xdg-desktop-portal/portals/
+}

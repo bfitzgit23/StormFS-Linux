@@ -1,0 +1,25 @@
+# Description: An easy-to-use, robust and highly configurable VPN (Virtual Private Network)
+# URL: https://openvpn.net/index.php/open-source.html
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: lzo iproute2 pkcs11-helper linux-pam python3-docutils libcap-ng
+
+name=openvpn
+version=2.7.4
+release=1
+source=(https://github.com/OpenVPN/openvpn/archive/v$version/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+
+	sed -i '/^CONFIGURE_DEFINES=/s/set/env/g' configure.ac
+
+	autoreconf -fi
+	./configure \
+		--prefix=/usr \
+		--enable-iproute2 \
+		--enable-plugins \
+		--enable-pkcs11 \
+		--disable-systemd
+	make
+	make DESTDIR=$PKG install
+}

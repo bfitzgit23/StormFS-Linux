@@ -1,0 +1,21 @@
+# Description: Multi-panel tabbed file manager (GTK3 version)
+# URL: https://ignorantguru.github.io/spacefm/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: gettext gtk3 ffmpegthumbnailer
+
+name=zzzfm
+version=1.0.7
+release=5
+source=(https://gitlab.com/antix-contribs/zzzfm/-/archive/$version-$release/$name-$version-$release.tar.gz zzzfm-fix-wayland.patch)
+
+build() {
+	export CFLAGS="$CFLAGS -Wno-incompatible-pointer-types"
+
+	cd $name-$version-$release
+
+	patch -Np1 -i $SRC/zzzfm-fix-wayland.patch
+	
+	CONFIG_SHELL=/bin/bash ./autogen.sh --prefix=/usr
+	make
+	make DESTDIR=$PKG install
+}

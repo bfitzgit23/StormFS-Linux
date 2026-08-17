@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 name=libffi
-version=3.5.2
+version=3.8.0
 release=1
-source=(https://github.com/libffi/libffi/releases/download/v$version/$name-$version.tar.gz)
+source=(https://github.com/libffi/libffi/releases/download/v$version/libffi-$version.tar.gz)
 build_opt="--with-gcc-arch=x86-64"
 bootstrap_opt=""

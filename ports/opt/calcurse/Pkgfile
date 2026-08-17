@@ -1,0 +1,16 @@
+# Description: A text-based personal organizer
+# URL: https://calcurse.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: ncurses
+
+name=calcurse
+version=4.8.2
+release=1
+source=(https://calcurse.org/files/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+	./configure --prefix=/usr --enable-docs --without-asciidoc 
+  	make
+	make DESTDIR=$PKG install
+}

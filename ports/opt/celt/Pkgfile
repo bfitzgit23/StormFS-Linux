@@ -1,0 +1,17 @@
+# Description: Low-latency audio communication codec
+# URL: https://gitlab.xiph.org/xiph/celt/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libogg
+
+name=celt
+version=0.11.3
+release=1
+source=(https://gitlab.xiph.org/xiph/celt/-/archive/v$version/$name-$version.tar.bz2)
+
+build() {
+	cd $name-v$version-$commit
+	NOCONFIGURE=1 ./autogen.sh
+	./configure --prefix=/usr --enable-custom-modes --disable-static
+	make
+	make DESTDIR=$PKG install
+}

@@ -1,0 +1,15 @@
+# Description: Set of C++ classes that provide a common API for realtime audio input/output
+# URL: http://www.music.mcgill.ca/~gary/rtaudio/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: alsa-lib doxygen
+
+name=rtaudio
+version=6.0.1
+release=1
+source=($name-$version.tar.gz::https://github.com/thestk/rtaudio/archive/$version.tar.gz)
+
+build() {
+	meson setup $name-$version build
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

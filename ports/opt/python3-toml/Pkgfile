@@ -1,0 +1,18 @@
+# Description: A Python library for parsing and creating TOML
+# URL: https://github.com/uiri/toml
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: python3-setuptools
+
+name=python3-toml
+version=0.10.2
+release=1
+source=($name-$version.tar.gz::https://files.pythonhosted.org/packages/source/t/toml/toml-$version.tar.gz)
+
+build() {
+	cd toml-$version
+	python3 setup.py build
+	python3 setup.py install --skip-build \
+		--optimize=1 \
+		--prefix=/usr \
+		--root="$PKG"
+}

@@ -1,0 +1,24 @@
+# Description: Free universal SQL Client for developers and database administrators (CE with bundled JRE)
+# URL: https://dbeaver.io/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: gtk3 libsecret
+
+name=dbeaver-ce-jre-bin
+version=26.1.1
+release=1
+source=($name-$version.tar.gz::https://github.com/dbeaver/dbeaver/releases/download/$version/dbeaver-ce-$version-linux-x86_64.tar.gz dbeaver-ce.desktop)
+
+build() {
+	cd ${name%%-*}
+
+	install -m 755 -d "${PKG}/opt"
+	cp -r "$SRC/${name%%-*}" "${PKG}/opt/${name%%-*}"
+
+	install -m 755 -d "${PKG}/usr/bin"
+	install -m 755 -d "${PKG}/usr/share/applications"
+	install -m 755 -d "${PKG}/usr/share/pixmaps"
+
+	ln -sfv "/opt/${name%%-*}/${name%%-*}" "${PKG}/usr/bin/${name%%-*}"
+	install -m 755 -t "${PKG}/usr/share/applications" "${SRC}/dbeaver-ce.desktop"
+	install -m 755 -t "${PKG}/usr/share/pixmaps" "${SRC}/${name%%-*}/dbeaver.png"
+}

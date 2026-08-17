@@ -1,0 +1,35 @@
+# Description: Cliente de firma electrÃ³nica ofrecido por la AdministraciÃ³n PÃºblica
+# URL: https://firmaelectronica.gob.es/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: openjdk-17-bin nss shared-mime-info xdg-utils
+
+name=autofirma-bin
+version=1.9
+release=4
+source=(${name}-${version}.zip::https://firmaelectronica.gob.es/content/dam/firmaelectronica/descargas-software/autofirma${vrsn}/Autofirma_Linux_Debian.zip)
+
+build() {
+	# Extract debian package
+	bsdtar -O -xf *.deb data.tar.gz | bsdtar -C "${SRC}" -xJf -
+	cp --reflink=auto -a $SRC/usr $PKG
+
+	# Rename files
+	mv $PKG/usr/lib/Autofirma/ $PKG/usr/lib/autofirma/
+	mv $PKG/usr/lib/autofirma/Autofirma.png $PKG/usr/lib/autofirma/autofirma.png
+	mv $PKG/usr/share/Autofirma $PKG/usr/share/autofirma
+	mv $PKG/usr/share/autofirma/Autofirma.svg $PKG/usr/share/autofirma/autofirma.svg
+
+	# Clean files
+	rm $PKG/usr/lib/autofirma/autofirmaConfigurador.jar $PKG/usr/bin/autofirmacl
+	rm -r $PKG/usr/share/common-licenses
+
+	# Fix desktop file
+	sed 's/^Icon=.*/Icon=\/usr\/lib\/autofirma\/autofirma.png/' -i $PKG/usr/share/applications/afirma.desktop
+
+# autofirma with openjdk version prefix
+cat <<- EOF > $PKG/usr/bin/autofirma
+#!/bin/sh
+/usr/lib/jvm/java-${vjdk}-openjdk/bin/java -jar /usr/lib/autofirma/autofirma.jar "\$@"
+EOF
+
+}

@@ -1,0 +1,22 @@
+# Description: gedit is the GNOME text editor
+# URL: 
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: gspell gtksourceview4 itstool libgd libpeas1 libgedit-tepl
+
+name=gedit
+version=50.0
+release=1
+source=(https://gitlab.gnome.org/World/gedit/gedit/-/archive/$version/$name-$version.tar.gz https://gitlab.gnome.org/GNOME/libgd/-/archive/$libgd_commit/libgd-$libgd_commit.tar.gz)
+
+build() {
+	rm -r $name-$version/subprojects/libgd
+	mv $SRC/libgd-$libgd_commit $name-$version/subprojects/libgd
+
+	meson setup $name-$version build -Dgtk_doc=false
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+
+	# Exclude library for revdep.
+	install -d $PKG/etc/revdep.d
+	echo "/usr/lib/gedit/plugins/" > $PKG/etc/revdep.d/$name.conf
+}

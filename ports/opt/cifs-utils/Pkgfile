@@ -1,0 +1,18 @@
+# Description: CIFS filesystem user-space tools
+# URL: https://wiki.samba.org/index.php/LinuxCIFS_utils
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libcap linux-pam samba keyutils krb5
+
+name=cifs-utils
+version=7.6
+release=1
+source=(https://download.samba.org/pub/linux-cifs/$name/$name-$version.tar.bz2)
+
+build() {
+	cd $name-$version
+	autoreconf -fvi
+	./configure --prefix=/usr --disable-systemd
+	make
+	make DESTDIR=$PKG install
+	chmod +s $PKG/sbin/mount.cifs
+}

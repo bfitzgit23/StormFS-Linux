@@ -1,0 +1,18 @@
+# Description: Basic interface to PipeWire volume controls
+# URL: https://github.com/smasher164/pw-volume
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: pipewire rust
+
+name=pw-volume
+version=0.5.0
+release=1
+source=($name-$version.tar.gz::https://github.com/smasher164/pw-volume/archive/refs/tags/v$version.tar.gz)
+
+build() {
+	cd $name-$version
+	cargo fetch --locked 
+	export RUSTUP_TOOLCHAIN=stable
+	export CARGO_TARGET_DIR=target
+	cargo build --frozen --release --all-features
+	install -Dm0755 -t $PKG/usr/bin/ target/release/$name
+}

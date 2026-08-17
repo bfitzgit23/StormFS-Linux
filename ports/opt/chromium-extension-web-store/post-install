@@ -1,0 +1,7 @@
+#!/bin/sh
+
+printf '%s\n' "If you are using ungoogled-chromium:
+You must change the flag 
+chrome://flags/#extension-mime-request-handling 
+to Always prompt for install.
+For some extensions you need to refresh the page to be able to install them."

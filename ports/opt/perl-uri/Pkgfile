@@ -1,0 +1,19 @@
+# Description: Uniform Resource Identifiers (absolute and relative)
+# URL: https://search.cpan.org/dist/URI/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: perl
+
+name=perl-uri
+version=5.35
+release=1
+source=($name-$version.tar.gz::https://cpan.metacpan.org/authors/id/O/OA/OALDERS/URI-$version.tar.gz)
+
+build() {
+	cd URI-$version
+
+	perl Makefile.PL
+	make
+	make DESTDIR=$PKG install
+
+	find $PKG -name perllocal.pod -delete
+}

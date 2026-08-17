@@ -1,0 +1,15 @@
+# Description: Collection of plugins for the gedit Text Editor
+# URL: https://wiki.gnome.org/Apps/Gedit/ShippedPlugins
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: appstream-glib gedit python3-dbus vte3 yelp-tools
+
+name=gedit-plugins
+version=50.0
+release=1
+source=(https://gitlab.gnome.org/GNOME/gedit-plugins/-/archive/$version/${name}-$version.tar.bz2)
+
+build() {
+  meson setup $name-$version build
+  meson compile -C build
+  DESTDIR=$PKG meson install --no-rebuild -C build
+}

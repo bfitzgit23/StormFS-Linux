@@ -1,0 +1,18 @@
+# Description: Utilities for rescue and embedded systems
+# URL: https://www.busybox.net/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: ncurses
+
+name=busybox
+version=1.37.0
+release=1
+source=(https://www.busybox.net/downloads/$name-$version.tar.bz2 config busybox-kernel-6.8-CBQ.patch)
+
+build() {
+	cd $name-$version
+	patch -Np1 -i $SRC/busybox-kernel-6.8-CBQ.patch
+	#cp $SRC/config .config
+	make defconfig
+	make
+	install -Dm0755 busybox $PKG/bin/busybox
+}

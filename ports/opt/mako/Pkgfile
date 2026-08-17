@@ -1,0 +1,15 @@
+# Description: Notification daemon for wayland
+# URL: https://github.com/emersion/mako
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: basu pango wayland-protocols
+
+name=mako
+version=1.11.0
+release=1
+source=(https://github.com/emersion/mako/archive/v$version/$name-$version.tar.gz)
+
+build() {
+	meson setup $name-$version build
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

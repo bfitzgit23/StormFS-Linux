@@ -1,0 +1,18 @@
+# Description: A cross-platform benchmark that measures processor and memory performance
+# URL: https://www.geekbench.com/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=geekbench
+version=6.7.1
+release=1
+source=(http://cdn.geekbench.com/Geekbench-${version}-Linux.tar.gz)
+
+build() {
+	install -D -m755 $SRC/Geekbench-${version}-Linux/${name}_x86_64 $PKG/opt/${name}/${name}_x86_64
+	install -D -m755 $SRC/Geekbench-${version}-Linux/${name}_avx2 $PKG/opt/${name}/${name}_avx2
+	install -D -m644 $SRC/Geekbench-${version}-Linux/geekbench.plar $PKG/opt/${name}/geekbench.plar
+	install -D -m644 $SRC/Geekbench-${version}-Linux/geekbench-workload.plar $PKG/opt/${name}/geekbench-workload.plar
+	install -D -m755 $SRC/Geekbench-${version}-Linux/${name}6 $PKG/opt/${name}/
+	install -d $PKG/usr/bin
+	ln -s /opt/${name}/${name}6 $PKG/usr/bin/${name}
+}

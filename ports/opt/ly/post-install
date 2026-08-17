@@ -1,0 +1,24 @@
+printf "\nLy display manager X11 setup\n\n"
+
+printf "Open /etc/ly/custom-sessions and create a .desktop file for the X11 session you want to use.\n"
+printf "Example: create plasmax11.desktop\n"
+printf "[Desktop Entry]\n"
+printf "Name=Plasma-x11\n"
+printf "Exec=/usr/bin/startx\n"
+printf "DesktopNames=null\n"
+printf "Terminal=true\n\n"
+
+printf "Create an executable .xinitrc file with:\n"
+printf "#!/bin/sh\n"
+printf "exec startplasma-x11\n\n"
+
+printf "Then make it executable:\n"
+printf "chmod +x ~/.xinitrc\n\n"
+
+printf "Create .Xauthority:\n"
+printf "touch ~/.Xauthority\n"
+printf "chmod 600 ~/.Xauthority\n\n"
+
+printf "You can now launch Plasma or your chosen desktop from custom-sessions.\n\n"
+
+printf "For Wayland, no setup is required.\n\n"

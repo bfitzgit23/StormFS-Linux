@@ -1,0 +1,17 @@
+# Description: Wayland stacking compositor
+# URL: https://github.com/labwc/labwc
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libliftoff libsfdo man-pages pango wlroots20 xwayland
+
+name=labwc
+version=0.20.1
+release=1
+source=($name-$version.tar.gz::https://github.com/labwc/labwc/archive/$version.tar.gz labwc.desktop)
+
+build() {
+	meson setup $name-$version build 
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+
+	install -Dm644 $SRC/labwc.desktop -t $PKG/usr/share/wayland-sessions/
+}

@@ -1,13 +1,15 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: Services and protocols files for /etc
 # URL: https://www.iana.org/
-# Maintainer: CRUX System Team, core-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 
 name=iana-etc
-version=20250807
+version=20260805
 release=1
-source=(services protocols update.sh)
+source=(https://github.com/Mic92/iana-etc/releases/download/$version/iana-etc-$version.tar.gz)
 
-build() {
-	install -d -m 755 $PKG/etc
-	install -m 644 {services,protocols} $PKG/etc
+pkg_build() {
+    install -d -m 0755 "$PKG/etc"
+    install -m 0644 services protocols "$PKG/etc/"
 }

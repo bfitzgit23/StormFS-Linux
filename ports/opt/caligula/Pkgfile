@@ -1,0 +1,16 @@
+# Description: A user-friendly, lightweight TUI for disk imaging
+# URL: https://github.com/ifd3f/caligula
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: rust
+
+name=caligula
+version=0.4.11
+release=1
+source=(https://github.com/ifd3f/$name/archive/v$version/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+
+    cargo build --release --manifest-path Cargo.toml
+    install -Dt $PKG/usr/bin target/release/$name
+}

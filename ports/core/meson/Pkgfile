@@ -1,27 +1,23 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: High productivity build system.
 # URL: https://mesonbuild.com/
-# Maintainer: CRUX System Team, core-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: python3-setuptools
 
 name=meson
-version=1.8.3
+version=1.12.0
 release=1
 source=(https://github.com/mesonbuild/meson/releases/download/$version/$name-$version.tar.gz)
 
-build() {
-	cd $name-$version
+pkg_build() {
+    PIP_CONFIG_FILE=/dev/null /usr/bin/pip3 wheel \
+        -w dist --no-cache-dir --no-build-isolation --no-deps .
+    PIP_CONFIG_FILE=/dev/null /usr/bin/pip3 install \
+        --no-index --find-links dist --root="$PKG" --ignore-installed --no-deps meson
 
-
-	/usr/bin/python3 setup.py build
-
-	/usr/bin/python3 setup.py install \
-		--prefix=/usr --root=$PKG --optimize=1 --skip-build
-
-	chmod -R g-w $PKG
-
-	prt-get isinst bash-completion && install -m 0644 -Dt $PKG/usr/share/bash-completion/completions data/shell-completions/bash/*
-	prt-get isinst zsh && install -m 0644 -Dt $PKG/usr/share/zsh/site-functions data/shell-completions/zsh/*
-
-	install -d $PKG/usr/share/vim/vimfiles
-	cp -rt $PKG/usr/share/vim/vimfiles data/syntax-highlighting/vim/*/
+    install -Dm644 data/shell-completions/bash/meson \
+        "$PKG/usr/share/bash-completion/completions/meson"
+    install -Dm644 data/shell-completions/zsh/_meson \
+        "$PKG/usr/share/zsh/site-functions/_meson"
 }

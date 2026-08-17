@@ -1,0 +1,36 @@
+# Description: Manage your dotfiles across multiple machines
+# URL: https://www.chezmoi.io/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: go git
+
+name=chezmoi
+version=2.70.5
+release=1
+source=($name-$version.tar.gz::https://github.com/twpayne/chezmoi/archive/v$version.tar.gz)
+
+build() {
+	cd $name-$version
+
+		export CGO_LDFLAGS="$LDFLAGS"
+		export CGO_CFLAGS="$CFLAGS"
+		export CGO_CPPFLAGS="$CPPFLAGS"
+		export CGO_CXXFLAGS="$CXXFLAGS"
+		go build \
+		  -buildmode=pie \
+		  -mod=readonly \
+		  -tags noupgrade \
+		  -ldflags "-compressdwarf=false \
+					-X github.com/twpayne/chezmoi/cmd.DocsDir=/usr/share/doc/$name \
+					-X main.version=$version \
+					-X main.date=$(date -u +'%Y-%m-%dT%H:%M:%SZ' --date=@$SOURCE_DATE_EPOCH) \
+					-extldflags \"$LDFLAGS\"" \
+		  .
+
+		  install -D "$name" "$PKG/usr/bin/$name"
+
+		  install -Dm644 completions/chezmoi-completion.bash "$PKG/usr/share/bash-completion/completions/chezmoi"
+		  install -Dm644 completions/chezmoi.fish "$PKG/usr/share/fish/vendor_completions.d/chezmoi.fish"
+		  install -Dm644 completions/chezmoi.zsh "$PKG/usr/share/zsh/site-functions/_chezmoi"
+
+		  install -Dm644 LICENSE "$PKG/usr/share/licenses/$name/LICENSE"
+}

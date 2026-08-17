@@ -1,0 +1,16 @@
+# Description: Free Pascal Qt5 binding library updated by lazarus IDE
+# URL: https://gitlab.com/freepascal.org/lazarus
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: qt5
+
+name=qt5pas
+version=4.4
+release=1
+source=(lazarus-$lz_version.tar.bz2::https://gitlab.com/freepascal.org/lazarus/lazarus/-/archive/lazarus_${lz_tag}/lazarus-lazarus_${lz_tag}.tar.bz2)
+
+build() {
+    cd lazarus-lazarus_${lz_tag}/lcl/interfaces/qt5/cbindings
+    qmake-qt5 
+    make 
+    make  INSTALL_ROOT=$PKG install
+}

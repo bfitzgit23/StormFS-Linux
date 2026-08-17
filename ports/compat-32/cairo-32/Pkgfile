@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: A 2D graphics library with support for multiple output devices
 # URL: https://www.cairographics.org/
-# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: cairo fontconfig-32 glib-32 pixman-32 libXext-32 libXrender-32 xcb-util-32
 
 name=cairo-32

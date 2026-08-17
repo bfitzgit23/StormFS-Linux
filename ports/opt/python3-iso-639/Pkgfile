@@ -1,0 +1,15 @@
+# Description: Python library for ISO 639 standard
+# URL: https://github.com/noumar/iso639
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: python3-setuptools
+
+name=python3-iso-639
+version=0.4.5
+release=1
+source=($name-$version.tar.gz::https://files.pythonhosted.org/packages/source/$_n/${name#*-}/${name#*-}-$version.tar.gz)
+
+build() {
+	cd ${name#*-}-$version
+	python3 setup.py build
+	python3 setup.py install --root=$PKG --optimize=1 --skip-build
+}

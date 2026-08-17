@@ -1,0 +1,13 @@
+# Description: Monospaced font family for user interface and coding environments
+# URL: https://github.com/adobe-fonts/source-code-pro
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=adobe-source-code-pro-fonts
+version=2.042u+1.062i+1.026vf
+release=1
+source=($name-$version.tar.gz::https://github.com/adobe-fonts/source-code-pro/archive/$_relver.tar.gz)
+
+build() {
+	cd source-code-pro-$_name
+	install -Dt "$PKG/usr/share/fonts/${name%-fonts}" -m644 OTF/*.otf VF/*.otf
+}

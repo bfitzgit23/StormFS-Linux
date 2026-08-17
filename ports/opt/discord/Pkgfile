@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: All-in-one voice and text chat for gamers
 # URL: https://discordapp.com/
-# Maintainer: Christopher Cavanaugh, christopher at chrcav dot dev
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: alsa-lib avahi cups graphite2 gtk3 nss util-linux libXcomposite libXcursor libXinerama libXScrnSaver
 
 name=discord

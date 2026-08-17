@@ -1,0 +1,88 @@
+# Description: A GUI to help manage Vulkan/OpenGL overlays
+# URL: https://github.com/benjamimgois/goverlay
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: glu mesa qt6-base qt6pas sdl2-compat clang fpc fpc-src lazarus
+
+name=pascube
+version=1.7.0
+release=4
+source=($name-$version.tar.gz::https://github.com/benjamimgois/pascube/archive/$version.tar.gz)
+
+build() {
+    cd "${name}-${version}"
+    mkdir -p build
+
+  # Compile missing PasVulkan LZMA object file
+  msg "Compiling lzmadec_linux_x86_64.o..."
+  clang -c -target x86_64-linux -g -gdwarf-2 -masm=intel -O3 -D linux -fverbose-asm -fno-builtin \
+        "pasvulkan/src/lzma_c/LzmaDec.c" -o "pasvulkan/src/lzma_c/lzmadec_linux_x86_64.o"
+
+  # Build using LCL Qt6
+  lazbuild --lazarusdir=/usr/lib/lazarus --widgetset=qt6 --primary-config-path=build "${name}.lpi"
+
+ # Detect the resulting binary location
+  BIN_CANDIDATE=""
+  # Common release locations
+  if [ -f "$SRC/pascube/bin/pascube" ]; then
+     BIN_CANDIDATE="$SRC/pascube/bin/pascube"
+  elif [ -f "pascube" ]; then
+     BIN_CANDIDATE="pascube"
+  elif [ -f "bin/pascube" ]; then
+     BIN_CANDIDATE="bin/pascube"
+  fi
+
+  if [ -z "${BIN_CANDIDATE}" ]; then
+    echo "Error: Could not find compiled binary 'pascube'."
+    find . -type f -executable -print
+    exit 1
+  fi
+
+  echo "Found compiled binary at: ${BIN_CANDIDATE}"
+  # Store the path for package()
+  printf '%s' "${BIN_CANDIDATE}" > .built_binary_path
+
+  # Install the real binary under /usr/lib/pascube/bin
+  install -Dm755 "${BIN_CANDIDATE}" "${PKG}/usr/lib/${name}/bin/${name}"
+
+  # Install assets into /usr/lib/pascube/assets
+  # We assume 'assets' is a directory in the build root
+  install -dm755 "${PKG}/usr/lib/${name}/share/${name}"
+  cp -a assets "${PKG}/usr/lib/${name}/share/${name}"
+
+  # Wrapper: force X11 via xcb
+  install -Dm755 /dev/stdin "${PKG}/usr/bin/${name}" <<'EOF'
+#!/bin/sh
+export QT_QPA_PLATFORM=xcb
+exec /usr/lib/pascube/bin/pascube "$@"
+EOF
+
+  # Create and install desktop file
+  cat <<EOF2 > pascube.desktop
+[Desktop Entry]
+Name=pasCube
+Comment=A simple vulkan spinning cube in pascal
+Exec=pascube
+Icon=pascube
+StartupWMClass=pascube
+Terminal=false
+Type=Application
+Categories=Game;
+Keywords=pascube;cube;test;vulkan;
+EOF2
+  install -Dm644 pascube.desktop "${PKG}/usr/share/applications/pascube.desktop"
+
+  # Install license
+  install -Dm644 LICENSE "${PKG}/usr/share/licenses/${name}/LICENSE"
+
+  # ---- Icons (from data/icons/{128x128,256x256,512x512}/pascube.png) ----
+  for sz in 128x128 256x256 512x512; do
+    if [ -f "data/icons/${sz}/pascube.png" ]; then
+      install -Dm644 "data/icons/${sz}/pascube.png" \
+        "${PKG}/usr/share/icons/hicolor/${sz}/apps/pascube.png"
+    fi
+  done
+  # Fallback to pixmaps
+  if [ -f "data/icons/512x512/pascube.png" ]; then
+      install -Dm644 "data/icons/512x512/pascube.png" "${PKG}/usr/share/pixmaps/pascube.png"
+  fi
+}

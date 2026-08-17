@@ -1,0 +1,15 @@
+# Description: twolame mpeg audio layer 2 encoder
+# URL: http://downloads.sourceforge.net/twolame
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=twolame
+version=0.4.0
+release=1
+source=(http://downloads.sourceforge.net/$name/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+    ./configure --prefix=/usr
+    make
+	make PREFIX=$PKG/usr DESTDIR=$PKG install
+}

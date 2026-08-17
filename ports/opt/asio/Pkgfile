@@ -1,0 +1,21 @@
+# Description: cross-platform c++ library for asynchronous network i/o
+# URL: https://think-async.com/asio/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: openssl boost
+
+name=asio
+version=1.36.0
+release=1
+source=(https://downloads.sourceforge.net/project/$name/$name/$version%20%28Stable%29/$name-$version.zip)
+
+build() {
+	cd $name-$version
+
+	./configure \
+		--prefix=/usr \
+		--sysconfdir=/etc \
+		--localstatedir=/var \
+		--with-openssl
+	make
+	make DESTDIR=$PKG install
+}

@@ -1,0 +1,27 @@
+# Description: A scrollable-tiling Wayland compositor
+# URL: https://github.com/niri-wm/niri
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libdisplay-info libinput pipewire pango seatd clang rust
+
+name=niri
+version=26.04
+release=1
+source=(https://github.com/niri-wm/$name/archive/v${version}/$name-$version.tar.gz niri.desktop)
+
+build() {
+	cd $name-$version
+
+	mkdir "$SRC/rust"
+	export CARGO_HOME="$SRC/rust"
+	export NIRI_BUILD_COMMIT="b35bcae"
+
+
+	cargo build --manifest-path Cargo.toml --release --no-default-features \
+		--features dbus,xdp-gnome-screencast
+
+	install -vDm 755 target/release/$name -t "$PKG/usr/bin/"
+	install -vDm 755 resources/$name-session -t "$PKG/usr/bin/"
+	install -vDm 644 $SRC/$name.desktop -t "$PKG/usr/share/wayland-sessions/"
+	install -vDm 644 resources/$name-portals.conf -t "$PKG/usr/share/xdg-desktop-portal/"
+	install -vDm 644 resources/default-config.kdl -t "$PKG/etc/skel/$name/"
+}

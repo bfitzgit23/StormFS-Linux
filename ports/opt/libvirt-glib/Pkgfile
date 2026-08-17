@@ -1,0 +1,22 @@
+# Description: Glib bindings for libvirt
+# URL: https://libvirt.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: meson glib libvirt
+
+name=libvirt-glib
+version=5.0.0
+release=1
+source=(https://libvirt.org/sources/glib/$name-$version.tar.xz)
+
+build() {
+	meson setup $name-$version build \
+		--prefix=/usr \
+		--buildtype=plain \
+		-Ddocs=disabled \
+		-Dtests=disabled \
+		-Dvapi=disabled
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+
+	rm -r $PKG/usr/share/locale
+}

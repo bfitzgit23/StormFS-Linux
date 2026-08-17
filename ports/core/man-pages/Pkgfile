@@ -1,7 +1,9 @@
+# Add your top line text here
+# Your line to add at the top here
 name=man-pages
-version=6.15
+version=6.18
 release=1
-source=(https://www.kernel.org/pub/linux/docs/$name/$name-$version.tar.xz
+source=(https://www.kernel.org/pub/linux/docs/man-pages/man-pages-$version.tar.xz
     https://www.kernel.org/pub/linux/docs/$name/$name-posix/$name-posix-2017-a.tar.xz)
 
 pkg_build() {

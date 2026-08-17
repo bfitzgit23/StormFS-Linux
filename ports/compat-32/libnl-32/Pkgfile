@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: Library providing APIs to netlink protocol based Linux kernel interfaces
 # URL: http://www.infradead.org/~tgr/libnl/
-# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: libnl
 
 name=libnl-32

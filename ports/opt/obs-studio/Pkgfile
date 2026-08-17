@@ -1,0 +1,51 @@
+# Description: Open Broadcaster Software Studio
+# URL: https://obsproject.com/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: extra-cmake-modules jansson luajit mbedtls nlohmann-json pciutils pipewire qt6-svg speexdsp swig uthash v4l-utils simde
+
+name=obs-studio
+version=32.1.2
+release=1
+source=(https://github.com/obsproject/$name/archive/$version/$name-$version.tar.gz nv-codec-headers-$nvcdhd.tar.gz::https://github.com/FFmpeg/nv-codec-headers/releases/download/n$nvcdhd/nv-codec-headers-$nvcdhd.tar.gz)
+
+build() {
+	export CFLAGS="${CFLAGS} -Wno-error=deprecated-declarations"	
+	export QT_QPA_PLATFORMTHEME="qt6ct"
+
+	prt-get isinst ccache && PATH="$(echo ${PATH} | awk -v RS=: \
+		-v ORS=: '/ccache/ {next} {print}' | sed 's/:*$//')"
+
+	# It's not eought to use -D ENABLE_BROSER...
+	touch $name-$version/plugins/obs-browser/CMakeLists.txt
+	touch $name-$version/plugins/obs-websocket/CMakeLists.txt
+
+	cmake -S $name-$version -B build -G Ninja \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DCMAKE_INSTALL_LIBEXECDIR=lib \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
+		-DCMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+		-DENABLE_AJA=OFF \
+		-DENABLE_DECKLINK=OFF \
+		-DENABLE_LIBFDK=ON \
+		-DENABLE_NEW_MPEGTS_OUTPUT=OFF \
+		-DENABLE_PIPEWIRE=ON \
+		-DENABLE_PULSEAUDIO=ON \
+		-DENABLE_QSV11=OFF \
+		-DENABLE_SCRIPTING_LUA=$(prt-get isinst luajit && printf "ON" || printf "OFF") \
+		-DENABLE_VLC=OFF \
+		-DENABLE_VST=OFF \
+		-DENABLE_WAYLAND=$(prt-get isinst wayland && printf "ON" || printf "OFF") \
+		-DENABLE_WEBRTC=OFF \
+		-DFFnvcodec_INCLUDE_DIR="nv-codec-headers-$nvcdhd/include/" \
+		-DOBS_VERSION_OVERRIDE="$version" \
+		-Wno-dev
+	cmake --build build
+	DESTDIR=$PKG cmake --install build
+
+	find $PKG -type d -exec chmod g-w '{}' \;
+
+	rm $PKG/usr/share/obs/obs-studio/authors/AUTHORS
+
+}

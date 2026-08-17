@@ -1,0 +1,26 @@
+# Description: Extremely fast and lightweight file manager
+# URL: https://lxde.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libfm adwaita-icon-theme lxmenu-data
+
+name=pcmanfm
+version=1.4.0
+release=2
+source=(https://github.com/lxde/$name/archive/refs/tags/$version.tar.gz pcmanfm-desktop-onlyshowin.patch  pcmanfm-transient-dialog.patch)
+
+build() {
+	cd $name-$version
+
+	patch -Np1 -i $SRC/pcmanfm-desktop-onlyshowin.patch  
+	patch -Np1 -i $SRC/pcmanfm-transient-dialog.patch
+
+	autoreconf -fiv
+	./configure \
+		--prefix=/usr \
+		--sysconfdir=/etc \
+		--localstatedir=/var \
+		--with-gtk=3
+	make
+	make DESTDIR=$PKG install
+
+}

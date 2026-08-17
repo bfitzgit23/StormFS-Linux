@@ -1,13 +1,15 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: Small build system with a focus on speed
 # URL: https://ninja-build.org/
-# Maintainer: CRUX System Team, core-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on:
 # Optional: bash-completion zsh
 
 name=ninja
-version=1.13.1
+version=1.13.2
 release=1
-source=(https://github.com/$name-build/$name/archive/v$version/$name-v$version.tar.gz)
+source=(https://github.com/ninja-build/ninja/archive/v$version/ninja-$version.tar.gz)
 
 pkg_build() {
 	

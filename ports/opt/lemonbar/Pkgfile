@@ -1,0 +1,16 @@
+# Description: A featherweight, lemon-scented, bar based on xcb
+# URL: https://github.com/LemonBoy/bar
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libxcb
+
+name=lemonbar
+version=1.5
+release=1
+source=(https://github.com/LemonBoy/bar/archive/v$version/$name-$version.tar.gz)
+
+build() {
+	cd bar-$version
+
+	make VERSION=${version}
+	make VERSION=${version} DESTDIR=$PKG install
+}

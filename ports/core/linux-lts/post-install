@@ -1,0 +1,59 @@
+#!/bin/sh
+set -eu
+
+kver="$(find /boot -maxdepth 1 -type f -name 'vmlinuz-*-BFS-LTS' -printf '%T@ %f\n' 2>/dev/null |
+    sort -nr | head -n1 | sed 's/^[^ ]* vmlinuz-//')"
+
+if [ -z "$kver" ] || [ ! -d "/lib/modules/$kver" ]; then
+    echo "linux-lts post-install: unable to determine newly installed kernel release" >&2
+    exit 1
+fi
+
+kernel_image="/boot/vmlinuz-$kver"
+initramfs_image="/boot/initramfs-$kver.img"
+kernel_config="/boot/config-$kver"
+
+depmod -a "$kver"
+
+# Root-on-MD is a supported BFSOS boot topology.  The LTS kernel therefore
+# carries the MD core and supported RAID personalities built in rather than
+# depending on initramfs module inclusion/load ordering.
+for md_option in MD BLK_DEV_MD MD_LINEAR MD_RAID0 MD_RAID1 MD_RAID10 MD_RAID456; do
+    grep -q "^CONFIG_${md_option}=y$" "$kernel_config" || {
+        echo "ERROR: $kernel_config does not have CONFIG_${md_option}=y" >&2
+        exit 1
+    }
+done
+
+if [ "${BFS_INSTALLER_RUNNING:-no}" = yes ]; then
+    echo "BFSOS installer detected; deferring LTS initramfs/bootloader regeneration."
+    exit 0
+fi
+
+command -v dracut >/dev/null 2>&1 || {
+    echo "ERROR: dracut is required to finalize $kver" >&2
+    exit 1
+}
+
+echo "Generating $initramfs_image"
+dracut --force "$initramfs_image" "$kver"
+
+running_kver="$(uname -r 2>/dev/null || true)"
+for image in /boot/initramfs-*-BFS-LTS.img; do
+    [ -e "$image" ] || continue
+    old_kver=${image#/boot/initramfs-}
+    old_kver=${old_kver%.img}
+    [ "$old_kver" = "$kver" ] && continue
+    [ "$old_kver" = "$running_kver" ] && continue
+    [ -d "/lib/modules/$old_kver" ] || rm -f -- "$image"
+done
+
+# Remove generic kernel aliases: grub-mkconfig can enumerate them as
+# separate kernels without pairing the matching initramfs.
+rm -f /boot/vmlinuz-BFS-LTS /boot/initramfs-BFS-LTS.img
+
+if command -v grub-mkconfig >/dev/null 2>&1 && [ -d /boot/grub ]; then
+    grub-mkconfig -o /boot/grub/grub.cfg
+fi
+
+echo "Linux LTS $kver post-install completed."

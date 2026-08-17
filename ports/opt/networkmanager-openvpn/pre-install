@@ -1,0 +1,6 @@
+#!/bin/sh
+
+getent group nm-openvpn >/dev/null || groupadd nm-openvpn
+
+getent passwd nm-openvpn >/dev/null || \
+useradd -r -M -g nm-openvpn -G nm-openvpn -c "NM-openvpn Daemon" -d /dev/null -s /sbin/nologin nm-openvpn

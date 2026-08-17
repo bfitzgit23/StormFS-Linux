@@ -1,0 +1,4 @@
+#!/bin/sh
+
+# libgedit-amtk is amtk replacement
+scratch isinstalled amtk && scratch remove -y amtk

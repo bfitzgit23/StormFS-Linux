@@ -1,0 +1,12 @@
+name=libaio
+version=0.3.113
+release=1
+
+source=(https://pagure.io/$name/archive/$name-$version/$name-$version.tar.gz)
+
+pkg_build() {
+        sed -i '/install.*libaio.a/s/^/#/' src/Makefile
+
+        make
+        make DESTDIR=$PKG install
+}

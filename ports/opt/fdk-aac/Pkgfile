@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: Fraunhofer Advanced Audio Coding, extracted from the Android Open Source Project
 # URL: https://sourceforge.net/projects/opencore-amr/
-# Maintainer: John McQuah, jmcquah at disroot dot org
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 
 name=fdk-aac
 version=2.0.3

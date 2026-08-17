@@ -1,0 +1,27 @@
+# Description: Library for manipulating storage volume encryption keys and storing them separately from volumes to handle forgotten passphrases
+# URL: https://pagure.io/volume_key
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: cryptsetup glib gpgme swig
+
+name=volume_key
+version=0.3.12
+release=3
+source=(https://releases.pagure.org/volume_key/$name-$version.tar.xz)
+
+build() {
+	cd $name-$version
+
+	autoreconf -fiv
+	find . -name ".pyc" -delete
+
+
+	./configure --prefix=/usr \
+	--disable-nls \
+	--with-python3
+
+	sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
+
+	make
+	make DESTDIR=$PKG install
+	rm -rf $PKG/usr/lib/python2*
+}

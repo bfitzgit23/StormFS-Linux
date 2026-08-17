@@ -1,0 +1,15 @@
+# Description: nwg-shell wallpapers package
+# URL: https://github.com/nwg-piotr/nwg-shell-wallpapers
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=nwg-shell-wallpapers
+version=1.5
+release=1
+source=($name-$version.tar.gz::https://github.com/nwg-piotr/nwg-shell-wallpapers/archive/v$version.tar.gz)
+
+build() {
+	cd $SRC
+	install -d $PKG/usr/share/backgrounds/nwg-shell
+	install -Dm644 $name-$version/wallpapers/* $PKG/usr/share/backgrounds/nwg-shell/
+	rm -rf $PKG/usr/share/licenses
+}

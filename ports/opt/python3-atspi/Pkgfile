@@ -1,0 +1,15 @@
+# Description: Python3 bindings for the core components of the GNOME Accessibility
+# URL: https://gitlab.gnome.org/GNOME/pyatspi2
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: at-spi2-core python3-gobject3
+
+name=python3-atspi
+version=2.58.2
+release=1
+source=($name-$version.tar.gz::https://download.gnome.org/sources/pyatspi/${version%.*}/pyatspi-$version.tar.xz)
+
+build() {
+	meson setup $name-$version build
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

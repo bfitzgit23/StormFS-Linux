@@ -1,0 +1,15 @@
+# Description: Script to get system information
+# URL: https://smxi.org/docs/inxi.htm
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: coreutils gawk grep pciutils procps-ng sed
+
+name=inxi
+version=3.3.40.1
+release=1
+source=($name-$version.tar.gz::https://codeberg.org/smxi/inxi/archive/${_ver}-${_sion}.tar.gz)
+
+build() {
+	cd $name
+	install -D -m755 inxi $PKG/usr/bin/inxi
+	install -D -m755 inxi.1 $PKG/usr/share/man/man1/inxi.1
+}

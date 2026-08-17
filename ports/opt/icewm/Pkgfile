@@ -1,0 +1,17 @@
+# Description: Window manager with the goals of speed, simplicity, and not getting in the user's way
+# URL: https://ice-wm.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libxrandr libxft libxinerama mkfontscale libxcomposite libxdamage libxpm fribidi imlib2
+
+name=icewm
+version=4.0.0
+release=1
+source=(https://github.com/ice-wm/icewm/archive/$version/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+	./autogen.sh
+	./configure --prefix=/usr
+	make
+	make DESTDIR=$PKG install
+}

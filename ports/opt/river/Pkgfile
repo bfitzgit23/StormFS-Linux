@@ -1,0 +1,27 @@
+# Description: A dynamic tiling wayland compositor
+# URL: https://codeberg.org/river/river
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: wlroots20 zig-bin seat xwayland scdoc
+
+name=river
+version=0.4.5
+release=1
+source=(https://codeberg.org/river/river/releases/download/v$version/river-$version.tar.gz)
+
+build() {
+  cd $name-$version
+
+  DESTDIR="build" zig build \
+    --prefix /usr \
+    -Dcpu=baseline \
+    -Dstrip \
+    -Dpie \
+    -Dxwayland \
+    -Doptimize=ReleaseSafe 
+
+  cp -a build/* $PKG
+
+  install -Dm644 contrib/river.desktop -t $PKG/usr/share/wayland-sessions
+  install -d $PKG/usr/share/$name
+
+}

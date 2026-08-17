@@ -1,0 +1,26 @@
+# Description: An advanced and well-established feature-rich text mode web browser
+# URL: https://github.com/rkd77/elinks
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: expat openssl zlib libidn gpm
+
+name=elinks
+version=0.19.1
+release=1
+source=(https://github.com/rkd77/elinks/archive/v$version/$name-$version.tar.gz)
+
+build() {
+
+	export XML_CATALOG_FILES=/etc/xml/catalog
+
+	meson setup $name-$version build \
+		-Dgettext=true \
+		-Dhtml-highlight=true \
+		-Dbacktrace=false \
+		-D256-colors=true \
+		-Dtrue-color=true \
+		-Dtre=false \
+		-Dlibcss=false
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+
+}

@@ -1,0 +1,39 @@
+# Description: Provides support for web applications using the Chromium browser project
+# URL: https://www.qt.io/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: ffmpeg libevent libva libwebp minizip nodejs nss pciutils python3-html5lib python3-six qt6-tools qt6-webchannel pcre2 libxcomposite libxcursor brotli snappy
+
+name=qt6-webengine
+version=6.11.1
+release=1
+source=($name-$version.tar.xz::https://download.qt.io/official_releases/qt/${version%.*}/$version/submodules/qtwebengine-everywhere-src-$version.tar.xz)
+
+build() {
+	cd qtwebengine-everywhere-src-$version
+
+	#export PYTHON=/usr/bin/python3 
+
+	# fix a build of ffmpeg does not use OpenH264
+#sed -e '189 s/=/& false/' -e '190 d' -i.orig src/3rdparty/chromium/third_party/webrtc/webrtc.gni
+
+	cmake -B build -G Ninja \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DCMAKE_INSTALL_LIBEXECDIR=lib \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+		-DCMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
+		-DQT_USE_CCACHE=$(prt-get isinst ccache && printf "ON" || printf "OFF") \
+		-DCMAKE_MESSAGE_LOG_LEVEL=STATUS \
+		-DCMAKE_TOOLCHAIN_FILE=/usr/lib/cmake/Qt6/qt.toolchain.cmake \
+		-DQT_FEATURE_webengine_system_ffmpeg=ON \
+		-DQT_FEATURE_webengine_system_icu=ON \
+		-DQT_FEATURE_webengine_system_libevent=ON \
+		-DQT_FEATURE_webengine_proprietary_codecs=ON \
+		-DQT_FEATURE_webengine_ozone_x11=ON \
+		-DQT_FEATURE_webengine_system_re2=OFF \
+                -DQT_FEATURE_webengine_webrtc_pipewire=$(prt-get isinst pipewire && printf "ON" || printf "OFF") \
+		-DQT_FEATURE_webengine_kerberos=$(prt-get isinst krb5 && printf "ON" || printf "OFF") 
+	cmake --build build
+	DESTDIR=$PKG cmake --install build
+}

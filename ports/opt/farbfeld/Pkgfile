@@ -1,0 +1,14 @@
+# Description: A lossless image format
+# URL: https://tools.suckless.org/farbfeld/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libpng libjpeg-turbo
+
+name=farbfeld
+version=4
+release=1
+source=(https://dl.suckless.org/farbfeld/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+	make PREFIX=/usr DESTDIR=$PKG install
+}

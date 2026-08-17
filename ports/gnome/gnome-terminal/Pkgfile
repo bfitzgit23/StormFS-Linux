@@ -1,3 +1,5 @@
+# Add your top line text here
+# Your line to add at the top here
 # Depends on: dconf gnome-shell gsettings-desktop-schemas itstool libhandy pcre vte nautilus
 
 name=gnome-terminal

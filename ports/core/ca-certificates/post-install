@@ -1,0 +1,6 @@
+#!/bin/sh
+set -eu
+install -d -m 0755 /etc/ssl/certs
+[ -f /etc/ssl/cert.pem ] || { echo "ca-certificates: missing /etc/ssl/cert.pem" >&2; exit 1; }
+ln -sfn ../cert.pem /etc/ssl/certs/ca-certificates.crt
+ln -sfn /etc/ssl/cert.pem /etc/ssl/ca-bundle.crt

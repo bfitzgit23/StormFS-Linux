@@ -1,0 +1,12 @@
+#! /bin/sh  
+
+printf "
+==> Create groups: 
+groupadd plugdev 
+groupadd android 
+groupadd adbusers \n
+==> Add 'user' to groups: 
+gpasswd -a 'user' plugdev 
+gpasswd -a 'user' android
+gpasswd -a 'user' adbusers\n\n"
+

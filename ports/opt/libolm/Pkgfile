@@ -1,0 +1,21 @@
+# Description: Implementation of the olm and megolm cryptographic ratchets
+# URL: https://gitlab.matrix.org/matrix-org/olm
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=libolm
+version=3.2.16
+release=2
+source=($name-$version.tar.bz2::https://gitlab.matrix.org/matrix-org/olm/-/archive/$version/olm-$version.tar.bz2)
+
+build() {
+  cmake -S olm-$version -B build -G Ninja \
+    -D CMAKE_INSTALL_PREFIX=/usr \
+    -D CMAKE_INSTALL_LIBDIR=lib \
+    -D CMAKE_BUILD_TYPE=Release \
+    -D CMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
+    -D CMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+    -D CMAKE_POLICY_VERSION_MINIMUM=3.5 \
+    -Wno-dev
+  cmake --build build
+  DESTDIR=$PKG cmake --install build
+}

@@ -1,0 +1,19 @@
+# Description: A shell parser, formatter, and interpreter with bash support
+# URL: https://github.com/mvdan/sh
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: go
+
+name=shfmt
+version=3.13.1
+release=1
+source=(https://github.com/mvdan/sh/archive/v$version/$name-v$version.tar.gz)
+
+build() {
+	cd sh-$version
+
+	go mod tidy
+
+	go build -ldflags "-X main.version=$version" -v ./cmd/shfmt
+
+	install -Dt $PKG/usr/bin shfmt
+}

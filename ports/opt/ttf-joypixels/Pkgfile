@@ -1,0 +1,12 @@
+# Description: Emoji as a Service (formerly EmojiOne)
+# URL: https://www.joypixels.com/download
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=ttf-joypixels
+version=10.0.0
+release=1
+source=(https://cdn.joypixels.com/distributions/gentoo-linux/font/${version}/joypixels-android.ttf)
+
+build() {
+	install -Dm644 "joypixels-android.ttf" "${PKG}/usr/share/fonts/${name#ttf-}/JoyPixels.ttf"
+}

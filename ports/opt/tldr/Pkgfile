@@ -1,0 +1,15 @@
+# Description: C command-line client for tldr pages
+# URL: https://github.com/tldr-pages/tldr-c-client
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libzip
+
+name=tldr
+version=1.6.1
+release=1
+source=(https://github.com/tldr-pages/tldr-c-client/archive/v$version/$name-$version.tar.gz)
+
+build() {
+	cd $name-c-client-$version
+	make
+	make PREFIX=$PKG/usr DESTDIR=$PKG install
+}

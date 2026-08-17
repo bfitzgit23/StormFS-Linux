@@ -1,0 +1,60 @@
+# Description: A cross-platform application and UI framework
+# URL: https://www.qt.io/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: ccache cups double-conversion gst-plugins-base libinput libxkbcommon shared-mime-info vulkan-headers libxi xcb-util-cursor xcb-util-keysyms xcb-util-wm
+
+name=qt6-base
+version=6.11.1
+release=1
+source=($name-$version.tar.xz::https://download.qt.io/official_releases/qt/${version%.*}/$version/submodules/qtbase-everywhere-src-$version.tar.xz qt6-base-cflags.patch qt6-base-nostrip.patch)
+
+build() {
+	patch -d qtbase-everywhere-src-$version -p1 -i $SRC/qt6-base-cflags.patch
+	patch -d qtbase-everywhere-src-$version -p1 -i $SRC/qt6-base-nostrip.patch
+
+	cmake -S qtbase-everywhere-src-$version -B build -G Ninja \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+		-DCMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
+                -DCMAKE_CXX_FLAGS="-mno-rdseed" \
+		-DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON \
+		-DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON \
+		-DBUILD_WITH_PCH=OFF \
+		-DINSTALL_BINDIR=lib/qt6/bin \
+		-DINSTALL_PUBLICBINDIR=usr/bin \
+		-DINSTALL_LIBEXECDIR=lib/qt6 \
+		-DINSTALL_DOCDIR=share/doc/qt6 \
+		-DINSTALL_ARCHDATADIR=lib/qt6 \
+		-DINSTALL_DATADIR=share/qt6 \
+		-DINSTALL_INCLUDEDIR=include/qt6 \
+		-DINSTALL_MKSPECSDIR=lib/qt6/mkspecs \
+		-DINSTALL_TRANSLATIONSDIR=share/qt6/translations \
+		-DINSTALL_EXAMPLESDIR=share/doc/qt6/examples \
+		-DQT_FEATURE_openssl_linked=ON \
+		-DQT_FEATURE_system_sqlite=ON \
+		-DQT_FEATURE_no_direct_extern_access=ON \
+		-DQT_FEATURE_vulkan=ON \
+		-DQT_FEATURE_xcb=ON \
+		-DQT_FEATURE_xkbcommon_x11=ON \
+		-DQT_BUILD_TESTS_BY_DEFAULT=OFF \
+		-DQT_FEATURE_reduce_relocations=OFF \
+		-DQT_FEATURE_androiddeployqt=OFF \
+		-DQT_FEATURE_rpath=OFF \
+		-DQT_USE_CCACHE=$(prt-get isinst ccache && printf "ON" || printf "OFF") \
+		-DQT_AVOID_CMAKE_ARCHIVING_API=ON \
+		-Wno-dev
+	cmake --build build
+	DESTDIR=$PKG cmake --install build
+
+	rm -r $PKG/usr/share/doc
+
+	# Add symlinks
+	cd $PKG
+	sed 's!../!!' -i $SRC/build/user_facing_tool_links.txt
+	mkdir -p usr/bin
+	while read _line; do
+		ln -s $_line
+	done < $SRC/build/user_facing_tool_links.txt
+}

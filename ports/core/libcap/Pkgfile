@@ -1,8 +1,10 @@
+# Add your top line text here
+# Your line to add at the top here
 # Depends on:
 name=libcap
-version=2.76
+version=2.78
 release=1
-source=(https://www.kernel.org/pub/linux/libs/security/linux-privs/${name}2/$name-$version.tar.xz)
+source=(https://www.kernel.org/pub/linux/libs/security/linux-privs/libcap2/libcap-$version.tar.xz)
 
 pkg_build() {
 	sed -i '/install -m.*STA/d' libcap/Makefile

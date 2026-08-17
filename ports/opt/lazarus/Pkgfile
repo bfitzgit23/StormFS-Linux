@@ -1,0 +1,49 @@
+# Description: Delphi-like IDE for fpc
+# URL: http://www.lazarus.freepascal.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: fpc fpc-src gdb rsync qt6pas
+
+name=lazarus
+version=4.8
+release=1
+source=($name-$version.tar.bz2::https://gitlab.com/freepascal.org/lazarus/lazarus/-/archive/lazarus_${lz_tag}/lazarus-lazarus_${lz_tag}.tar.bz2)
+
+build() {
+	cd lazarus-lazarus_${lz_tag}
+
+	mkdir -p $PKG/usr/lib/lazarus $PKG/usr/bin $PKG/usr/share/man/man1 
+
+	# Build limited to one thread (-j1) at the moment, breaks with multithread
+	make -j1 LCL_PLATFORM=qt6 bigide
+
+	rsync -a \
+		--exclude="CVS"     --exclude=".cvsignore" \
+		--exclude="*.ppw"   --exclude="*.ppl" \
+		--exclude="*.ow"    --exclude="*.a"\
+		 --exclude="*.rst"   --exclude=".#*" \
+		--exclude="*.~*"    --exclude="*.bak" \
+		--exclude="*.orig"  --exclude="*.rej" \
+		--exclude=".xvpics" \
+		--exclude="killme*" --exclude=".gdb_hist*" \
+		--exclude="debian"  --exclude="COPYING*" \
+		--exclude="*.app"   --exclude="tools/install" \
+		. $PKG/usr/lib/lazarus
+
+	for s in $PKG/usr/lib/lazarus/*laz*; do
+		[ ! -d "$s" ] || continue
+		[ -x "$s" ] || continue
+		ln -s "../lib/lazarus/${s##*/}" "${PKG}/usr/bin/${s##*/}"
+	done
+
+	cp -R install/man/man1/* $PKG/usr/share/man/man1/
+
+	mkdir -p $PKG/usr/lib/lazarus/components/lazdebuggergdbmi/test/gdb
+	
+	mkdir -p $PKG/usr/share/lazarus/docs 
+	mv $PKG/usr/lib/lazarus/docs/* $PKG/usr/share/lazarus/docs
+	ln -s /usr/share/lazarus/docs/chm $PKG/usr/lib/lazarus/docs/html
+	ln -s /usr/share/lazarus/docs/lazdoc.css $PKG/usr/lib/lazarus/docs/lazdoc.css
+
+	rm -r $PKG/usr/lib/lazarus/install
+	rm -f $PKG/usr/lib/lazarus/examples/TDaemon/daemonsystemdinstallerunit.pas
+}

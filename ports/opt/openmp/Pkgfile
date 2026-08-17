@@ -1,0 +1,10 @@
+# Description: LLVM OpenMP Runtime Library
+# URL: https://openmp.llvm.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: clang elfutils perl
+
+name=openmp
+version=22.1.8
+release=1
+source=(https://github.com/llvm/llvm-project/releases/download/llvmorg-$version/llvm-project-$version.src.tar.xz)
+

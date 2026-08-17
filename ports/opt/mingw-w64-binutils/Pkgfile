@@ -1,11 +1,13 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: GNU binutils for mingw-w64 toolchain
 # URL: https://www.gnu.org/software/binutils/
-# Maintainer: Matt Housh, jaeger at crux dot ninja
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 
 name=mingw-w64-binutils
 version=2.39
 release=1
-source=(http://ftpmirror.gnu.org/gnu/binutils/binutils-$version.tar.xz)
+source=(https://ftp.gnu.org/gnu/binutils/binutils-$version.tar.xz)
 
 build() {
 	for T in {i686,x86_64}-w64-mingw32; do

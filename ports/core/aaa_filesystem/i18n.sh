@@ -4,7 +4,7 @@ for i in $(locale); do
 done
 
 if [[ "$TERM" = linux ]]; then
-  export LANG=C.UTF-8
+  export LANG=C
 else
   source /etc/locale.conf
 

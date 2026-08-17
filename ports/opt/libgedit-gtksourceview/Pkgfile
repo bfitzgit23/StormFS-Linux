@@ -1,0 +1,15 @@
+# Description: Library that extends GtkTextView
+# URL: https://gedit-technology.net
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: gtk3 libxml2
+
+name=libgedit-gtksourceview
+version=299.7.1
+release=1
+source=(https://gitlab.gnome.org/World/gedit/libgedit-gtksourceview/-/archive/$version/$name-$version.tar.gz)
+
+build() {
+	meson setup $name-$version build -Dgtk_doc=false
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

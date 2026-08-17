@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: X Authorization routines
 # URL: https://xorg.freedesktop.org
-# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: xorg-libxau xorg-xorgproto-32
 
 name=libXau-32

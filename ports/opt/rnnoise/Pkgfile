@@ -1,0 +1,17 @@
+# Description: A noise suppression library based on a recurrent neural network
+# URL: https://jmvalin.ca/demo/rnnoise
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=rnnoise
+version=0.2
+release=1
+source=($name-$version.tar.gz::https://gitlab.xiph.org/xiph/rnnoise/-/archive/v$version/$name-v$version.tar.gz https://media.xiph.org/rnnoise/models/rnnoise_data-$_model_version.tar.gz)
+
+build() {
+	cd $name-v$version
+	mv $SRC/src/* src
+	autoreconf -isf
+	./configure --prefix=/usr
+	make
+	make DESTDIR=$PKG install
+}

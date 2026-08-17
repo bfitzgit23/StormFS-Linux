@@ -1,0 +1,21 @@
+# Description: Screen locker for Wayland
+# URL: https://github.com/swaywm/swaylock
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: cairo libxkbcommon wayland-protocols gdk-pixbuf scdoc linux-pam
+
+name=swaylock
+version=1.8.5
+release=1
+source=(https://github.com/swaywm/swaylock/archive/v$version/$name-$version.tar.gz)
+
+build() {
+	meson setup $name-$version build \
+		-D pam=enabled \
+		-Dbash-completions=$(prt-get isinst bash-completions && printf "true" || printf "false") \
+		-Dfish-completions=$(prt-get isinst fish-completions && printf "true" || printf "false") \
+		-Dzsh-completions=$(prt-get isinst zsh-completions && printf "true" || printf "false") 
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+	# Adapt pam file to venom
+	sed -i 's|login|system-auth|' $PKG/etc/pam.d/swaylock
+}

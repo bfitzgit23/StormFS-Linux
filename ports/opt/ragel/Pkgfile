@@ -1,0 +1,15 @@
+# Description: Compiles finite state machines from regular languages into executable C, C++, Objective-C, or D code
+# URL: http://www.complang.org/ragel/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=ragel
+version=6.10
+release=1
+source=(https://fossies.org/linux/misc/"$name"-"$version".tar.gz)
+
+build() {
+	cd $name-$version
+	./configure --prefix=/usr
+	make
+	make DESTDIR=$PKG install
+}

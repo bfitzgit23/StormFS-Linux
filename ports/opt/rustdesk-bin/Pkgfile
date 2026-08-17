@@ -1,0 +1,28 @@
+# Description: Yet another remote desktop software, written in Rust. Works out of the box, no configuration required.
+# URL: https://github.com/rustdesk/rustdesk
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: gtk3 xdotool libxcb libxfixes alsa-lib libva linux-pam gst-plugins-base libayatana-appindicator
+
+name=rustdesk-bin
+version=1.4.8
+release=1
+source=($name-$version.tar.zst::https://github.com/rustdesk/rustdesk/releases/download/$version/${name%-*}-$version-0-x86_64.pkg.tar.zst rc.rustdesk)
+
+build() {
+
+    install -d "$PKG/usr/share/" "$PKG/usr/bin/" "$PKG/rc.d"
+    cp -r "$SRC/usr/share/rustdesk/" "$PKG/usr/share/"
+    cp -r "$SRC/usr/share/icons/" "$PKG/usr/share/"
+
+    ln -s "/usr/share/rustdesk/rustdesk" "$PKG/usr/bin/rustdesk"
+
+    install -Dm 644 "$SRC/usr/share/rustdesk/files/rustdesk.desktop" "$PKG/usr/share/applications/rustdesk.desktop"
+    install -Dm 644 "$SRC/usr/share/rustdesk/files/rustdesk-link.desktop" "$PKG/usr/share/applications/rustdesk-link.desktop"
+
+    # rc service
+	prt-get isinst sysvinit && \
+		install -Dm755 $SRC/rc.rustdesk $PKG/etc/rc.d/rustdesk || continue
+
+    # Remove useless files
+    rm -r "$PKG/usr/share/rustdesk/files/"
+}

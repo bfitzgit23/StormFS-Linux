@@ -1,0 +1,15 @@
+# Description: Python client for Neovim
+# URL: https://github.com/neovim/pynvim
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: python3-greenlet python3-msgpack
+
+name=pynvim
+version=0.6.0
+release=1
+source=(https://pypi.io/packages/source/p/$name/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+	python3 setup.py build
+	python3 setup.py install --root="$PKG" --optimize=1
+}

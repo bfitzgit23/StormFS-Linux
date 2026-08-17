@@ -1,0 +1,18 @@
+# Description: WebSocket client library for Python
+# URL: https://github.com/websocket-client/websocket-client
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: python3-six python3-setuptools
+
+name=python3-websocket-client
+version=1.9.0
+release=1
+source=($name-$version.tar.gz::https://pypi.io/packages/source/w/websocket-client/websocket_client-$version.tar.gz)
+
+build() {
+	cd websocket_client-$version
+
+	sed -i "s/'backports.ssl_match_hostname'//" setup.py
+	
+	python3 setup.py build
+	python3 setup.py install --root=$PKG --optimize=1 --skip-build
+}

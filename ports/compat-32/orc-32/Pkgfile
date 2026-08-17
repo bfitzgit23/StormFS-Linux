@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: The Oil Runtime Compiler.
 # URL: https://gstreamer.freedesktop.org/projects/orc.html
-# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: orc
 
 name=orc-32

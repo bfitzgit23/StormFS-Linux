@@ -1,0 +1,23 @@
+# Description: Lightweight image viewer
+# URL: https://www.lxde.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: gtk3
+
+name=gpicview
+version=0.3.1
+release=1
+source=($name-$version.tar.gz::https://github.com/lxde/gpicview/archive/refs/tags/$version.tar.gz gpicview.appdata.xml)
+
+build() {
+	cd $name-$version
+
+	# Apply only one main category
+	sed -i '/^Categories=/ s/Utility;//' gpicview.desktop.in
+
+	autoreconf -fvi
+	./configure --prefix=/usr --disable-nls --enable-gtk3
+	make
+	make DESTDIR=$PKG install
+
+	install -Dm644 $SRC/$name.appdata.xml "$PKG/usr/share/metainfo/$name.appdata.xml"
+}

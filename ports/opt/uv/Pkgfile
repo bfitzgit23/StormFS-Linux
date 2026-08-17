@@ -1,0 +1,24 @@
+# Description: An extremely fast Python package installer and resolver written in Rust
+# URL: https://github.com/astral-sh/uv
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: maturin
+
+name=uv
+version=0.11.25
+release=1
+source=($name-$version.tar.gz::https://github.com/astral-sh/uv/archive/refs/tags/$version.tar.gz)
+
+build() {
+	cd $name-$version
+
+	cargo fetch --locked --target "$(rustc --print host-tuple)"
+	local tripple="$(rustc --print host-tuple)"
+
+	# Note: do not use --all-features as in enables a self-updater
+	maturin build --locked --release --target "$tripple" --strip --compatibility linux
+	maturin build --locked --release --target "$tripple" --strip --compatibility linux -m crates/uv-build/Cargo.toml
+
+	local _target="target/$(rustc --print host-tuple)/release/uv"
+	install -Dm0755 -t "$PKG/usr/bin/" "$_target"
+	install -Dm0755 -t "$PKG/usr/bin/" "${_target}x"
+}

@@ -1,0 +1,15 @@
+# Description: Lightweight KMS plane library
+# URL: https://gitlab.freedesktop.org/emersion/libliftoff
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: meson libdrm
+
+name=libliftoff
+version=0.5.0
+release=1
+source=($name-$version.tar.gz::https://gitlab.freedesktop.org/emersion/libliftoff/-/archive/v$version/$name-v$version.tar.bz2)
+
+build() {
+	meson setup $name-$version build
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

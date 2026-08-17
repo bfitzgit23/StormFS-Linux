@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: Library for passing menus over DBus - Common Files (32bit)
 # URL: https://launchpad.net/libdbusmenu
-# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: glib-32 libdbusmenu-glib
 
 name=libdbusmenu-glib-32

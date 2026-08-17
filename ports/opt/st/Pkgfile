@@ -1,0 +1,22 @@
+# Description: A simple (suckless) terminal
+# URL: https://st.suckless.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libx11 libxft libxrender fontconfig
+
+name=st
+version=0.9.2
+release=1
+source=(https://dl.suckless.org/st/st-$version.tar.gz)
+
+build() {
+	cd $name-$version
+
+
+	for p in $_portdir/*.patch $_portdir/*.diff; do
+		[ -f $p ] || continue
+		patch -Np1 -i $p
+	done
+
+	make PREFIX=/usr
+	make PREFIX=/usr DESTDIR=$PKG install
+}

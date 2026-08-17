@@ -1,0 +1,17 @@
+# Description: A mini smtp client
+# URL: https://marlam.de/msmtp/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: openssl
+
+name=msmtp
+version=1.8.32
+release=1
+source=(https://marlam.de/$name/releases/$name-$version.tar.xz)
+
+build() {
+    cd $name-$version
+    ./configure --prefix=/usr \
+                --with-tls=openssl
+    make
+    make DESTDIR=$PKG install
+}

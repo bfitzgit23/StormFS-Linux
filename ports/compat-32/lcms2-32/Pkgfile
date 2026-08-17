@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: Little CMS intends to be an small-footprint color management engine
 # URL: https://www.littlecms.com/
-# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: lcms2 libtiff-32
 
 name=lcms2-32

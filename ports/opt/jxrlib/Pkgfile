@@ -1,0 +1,24 @@
+# Description: Open source implementation of jpegxr
+# URL: https://archive.codeplex.com/?p=jxrlib
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: cmake
+
+name=jxrlib
+version=0.2.4
+release=2
+source=(https://github.com/glencoesoftware/jxrlib/archive/v$version/$name-$version.tar.gz CMakeLists.txt)
+
+build() {
+	export CFLAGS="$CFLAGS -Wno-implicit-function-declaration -Wno-incompatible-pointer-types"
+	cp $SRC/CMakeLists.txt $name-$version
+	cmake -B build -S $name-$version \
+		-DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
+		-DCMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+		-Wno-dev
+	cmake --build build
+	DESTDIR=$PKG cmake --install build
+}

@@ -1,0 +1,24 @@
+# Description: Simple powerful testing with Python
+# URL: https://pytest.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: python3-setuptools python3-gpep517 python3-wheel python3-packaging
+
+name=python3-pytest
+version=9.1.1
+release=1
+source=($name-$version.tar.gz::https://files.pythonhosted.org/packages/source/p/pytest/pytest-$version.tar.gz)
+
+build() {
+	cd pytest-$version
+	sed -e "/^\[metadata\]/a version = $version" -i setup.cfg
+		gpep517 build-wheel \
+			--wheel-dir .dist \
+			--output-fd 3 3>&1 >&2
+
+		python3 -m installer -d "$PKG" \
+			.dist/pytest*.whl
+
+
+
+
+}

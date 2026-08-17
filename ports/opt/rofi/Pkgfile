@@ -1,0 +1,16 @@
+# Description: A window switcher, Application launcher and dmenu replacement
+# URL: https://github.com/davatorium/rofi
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: meson pango gdk-pixbuf startup-notification libxkbcommon xcb-util-wm xcb-util-cursor
+
+name=rofi
+version=2.0.0
+release=1
+source=(https://github.com/davatorium/$name/releases/download/$version/$name-$version.tar.xz)
+
+build() {
+
+	meson setup $name-$version build
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

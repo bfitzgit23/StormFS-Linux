@@ -1,0 +1,19 @@
+# Description: Command line util which allows to display images in combination with X11
+# URL: https://github.com/seebye/ueberzug
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libxext python3-attrs python3-docopt python3-pillow meson-python python3-gpep517
+
+name=ueberzug
+version=18.3.1
+release=1
+source=($name-$version.tar.gz::https://github.com/ueber-devel/ueberzug/archive/$version.tar.gz)
+
+build() {
+	cd $name-$version
+
+	 gpep517 build-wheel \
+		   --wheel-dir .dist \
+		   --output-fd 3 3>&1 >&2
+	   python3 -m installer -d $PKG \
+			.dist/*.whl
+}

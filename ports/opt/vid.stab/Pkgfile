@@ -1,0 +1,23 @@
+# Description: Video stabilization library
+# URL: http://public.hronopik.de/vid.stab
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: cmake ninja
+
+name=vid.stab
+version=1.1.1
+release=1
+source=($name-$version.tar.gz::https://github.com/georgmartius/vid.stab/archive/refs/tags/v$version.tar.gz)
+
+build() {
+	cmake -S $name-$version -B build \
+		-DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DCMAKE_INSTALL_LIBEXECDIR=lib \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+		-DCMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
+		-Wno-dev
+	cmake --build build
+	DESTDIR=$PKG cmake --install build
+}

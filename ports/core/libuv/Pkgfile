@@ -1,17 +1,31 @@
 # Description: Support library with a focus on asynchronous I/O
 # URL: https://libuv.org/
-# Maintainer: CRUX System Team, core-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Depends on: autoconf automake libtool
 
 name=libuv
 version=1.51.0
 release=1
-source=(https://dist.libuv.org/dist/v$version/$name-v$version.tar.gz)
 
-build() {
-	cd $name-v$version
+source=(
+    https://dist.libuv.org/dist/v$version/$name-v$version.tar.gz
+)
 
-	sh autogen.sh                              &&
-./configure --prefix=/usr --disable-static &&
-make 
-	make DESTDIR=$PKG install
+pkg_build() {
+    sh autogen.sh
+
+    ./configure \
+        --prefix=/usr \
+        --disable-static
+
+    make
+    make DESTDIR="$PKG" install
+}
+
+post_build() {
+    find "$PKG" -type f -name '*.la' -delete
+
+    rm -rf \
+        "$PKG/usr/share/doc" \
+        "$PKG/usr/share/info"
 }

@@ -1,0 +1,19 @@
+# Description: MJWM can create JWM's menu from (freedesktop) desktop files and the generated file can be include in the rootmenu section of your jwm config file.
+# URL: https://github.com/chiku/mjwm
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=mjwm
+version=5.1.0
+release=1
+source=($name-$version.tar.gz::https://github.com/chiku/$name/archive/refs/tags/v$version.tar.gz)
+
+build() {
+	cd $name-$version
+
+	./configure \
+		--prefix=/usr \
+		--sysconfdir=/etc \
+		--localstatedir=/var
+	make
+	make DESTDIR=$PKG install
+}

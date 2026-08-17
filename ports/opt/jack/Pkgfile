@@ -1,0 +1,32 @@
+# Description: A low-latency audio server
+# URL: https://github.com/jackaudio/jack2
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: alsa-lib dbus libsamplerate libsndfile python3
+
+name=jack
+version=1.9.22
+release=2
+source=(https://github.com/jackaudio/jack2/archive/v$version/$name-$version.tar.gz 99-audio.conf 40-hpet-permissions.rules waf-escape-seq.patch waf-imp.patch)
+
+build() {
+	cd ${name}2-$version
+
+	patch -Np1 -i $SRC/waf-escape-seq.patch
+	patch -Np1 -i $SRC/waf-imp.patch
+
+	./waf configure \
+		--prefix=/usr \
+		--mandir=/usr/share/man/man1 \
+		--libdir=/usr/lib \
+		--dbus \
+		--alsa \
+		--classic
+	./waf build -v
+	./waf --destdir=$PKG install
+
+	install -Dm644 $SRC/99-audio.conf \
+	    $PKG/etc/security/limits.d/99-audio.conf
+
+	install -Dm644 $SRC/40-hpet-permissions.rules \
+	    $PKG/lib/udev/rules.d/40-hpet-permissions.rules
+}

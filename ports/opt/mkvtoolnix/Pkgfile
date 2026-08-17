@@ -1,0 +1,27 @@
+# Description: Tools to create, alter and inspect Matroska files.
+# URL: https://mkvtoolnix.download/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: boost cmark flac libmatroska pcre2 libvorbis qt6-multimedia ruby
+
+name=mkvtoolnix
+version=99.0
+release=1
+source=(https://mkvtoolnix.download/sources/$name-$version.tar.xz)
+
+build() {
+	cd $name-$version
+
+	./configure  \
+		--prefix=/usr \
+		--disable-precompiled-headers \
+		--disable-update-check \
+		--enable-gui \
+		--disable-qt5 \
+		--enable-qt6
+
+	rake --multitask --jobs=${MAKEFLAGS}
+	rake DESTDIR=$PKG install
+
+	rm -r $PKG/usr/share/locale
+	rm -rf $PKG/usr/share/doc
+}

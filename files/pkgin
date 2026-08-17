@@ -1,51 +1,118 @@
 #!/bin/sh -e
 #
-# - a simple wrapper script for pkgmk
-# - will build, install, upgrade and other operation without 'cd' into each port directory
-# - port will be search automatically follow REPO order, port found first will be selected
-# - does not solve dependency
+# Simple wrapper around pkgmk.
 #
-# usage:
-#    pkgin [port names] [pkgmk options]
+# - Builds, installs, upgrades, and performs other pkgmk operations without
+#   requiring the caller to change into each port directory.
+# - Automatically discovers every collection directly below /usr/ports.
+# - Refuses to continue when the same port exists in multiple collections.
+# - Does not resolve dependencies.
+#
+# Usage:
+#   pkgin [port names] [pkgmk options]
 #
 
-trap "exit 1" 1 2 3 15
+trap 'exit 1' HUP INT QUIT TERM
 
-REPO="/usr/ports/core /usr/ports/extra /usr/ports/multilib"
+PORTS_ROOT="${PORTS_ROOT:-/usr/ports}"
+PKGMK_CMD=""
+PKG=""
 
-while [ $1 ]; do
-	case $1 in
-		-cf) PKGMK_CMD="$PKGMK_CMD $1 $2"; shift;;
-		-*) PKGMK_CMD="$PKGMK_CMD $1";;
-		*) PKG="$PKG $1";;
-	esac
-	shift
+while [ "$#" -gt 0 ]; do
+    case "$1" in
+        -cf)
+            [ "$#" -ge 2 ] || {
+                echo "ERROR: -cf requires a configuration-file argument." >&2
+                exit 1
+            }
+
+            PKGMK_CMD="$PKGMK_CMD $1 $2"
+            shift 2
+            ;;
+        -*)
+            PKGMK_CMD="$PKGMK_CMD $1"
+            shift
+            ;;
+        *)
+            PKG="$PKG $1"
+            shift
+            ;;
+    esac
 done
 
-if [ ! "$PKG" ]; then
-	echo "Please provide port name to install."
-	exit 1
-fi
+[ -n "$PKG" ] || {
+    echo "Please provide a port name to install." >&2
+    exit 1
+}
+
+[ -d "$PORTS_ROOT" ] || {
+    echo "ERROR: Ports root does not exist: $PORTS_ROOT" >&2
+    exit 1
+}
+
+find_port_matches() {
+    port_name="$1"
+
+    find "$PORTS_ROOT" \
+        -mindepth 2 \
+        -maxdepth 2 \
+        -type d \
+        -name "$port_name" \
+        -exec test -f '{}/Pkgfile' ';' \
+        -print 2>/dev/null |
+        sort
+}
 
 for p in $PKG; do
-	PKGFOUND=no
-	for r in $REPO; do
-		if [ -f $r/$p/Pkgfile ]; then
-			PKGFOUND=yes
-			cd $r/$p >/dev/null 2>&1
-			echo "$r/$p"
-			pkgmk $PKGMK_CMD || exit $?
-			#[ -e bootstrap-post-install ] && sh bootstrap-post-install
-			if [ -x post-install ]; then
-				./post-install || true
-			fi
-			cd - >/dev/null 2>&1
-		fi
-	done
-	if [ "$PKGFOUND" = "no" ]; then
-		echo "Port '$p' not found."
-		exit 1
-	fi
+    matches="$(find_port_matches "$p")"
+    match_count="$(
+        printf '%s\n' "$matches" |
+            sed '/^$/d' |
+            wc -l |
+            tr -d '[:space:]'
+    )"
+
+    case "$match_count" in
+        0)
+            echo "ERROR: Port '$p' was not found below $PORTS_ROOT." >&2
+            exit 1
+            ;;
+        1)
+            port_dir="$matches"
+            ;;
+        *)
+            echo "ERROR: Port '$p' exists in multiple collections:" >&2
+
+            printf '%s\n' "$matches" |
+                while IFS= read -r duplicate; do
+                    [ -n "$duplicate" ] &&
+                        printf '  %s\n' "$duplicate" >&2
+                done
+
+            echo "Remove the duplicate before continuing." >&2
+            exit 1
+            ;;
+    esac
+
+    collection="$(basename "$(dirname "$port_dir")")"
+
+    echo "=======> Port: $p"
+    echo "         Collection: $collection"
+    echo "         Path: $port_dir"
+
+    old_pwd="$PWD"
+    cd "$port_dir"
+
+    # PKGMK_CMD intentionally undergoes normal shell word splitting because it
+    # contains pkgmk options assembled above.
+    # shellcheck disable=SC2086
+    pkgmk $PKGMK_CMD || exit $?
+
+    if [ -x post-install ]; then
+        ./post-install || true
+    fi
+
+    cd "$old_pwd"
 done
 
 exit 0

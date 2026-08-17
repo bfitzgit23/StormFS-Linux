@@ -1,13 +1,15 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: firewalling, NAT, and packet mangling for linux
 # URL: https://netfilter.org/projects/nftables/
-# Maintainer: CRUX System Team, core-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: jansson libedit python3 libmnl libnftnl
 
 name=nftables
-version=1.0.8
+version=1.1.6
 release=1
 source=(https://www.netfilter.org/pub/nftables/nftables-$version.tar.xz
-	nftables.nft nftables.init)
+	nftables.nft nftables.service)
 
 build() {
 	cd $name-$version
@@ -31,7 +33,7 @@ build() {
 	/usr/bin/python3 -m compileall -d / $PKG/usr/lib
 	/usr/bin/python3 -O -m compileall -d / $PKG/usr/lib
 
-	install -D -m 755 $SRC/nftables.init $PKG/etc/rc.d/nftables
+	install -Dm644 $SRC/nftables.service $PKG/usr/lib/systemd/system/nftables.service
 	install -D -m 600 $SRC/nftables.nft $PKG/etc/nftables.nft
 
 

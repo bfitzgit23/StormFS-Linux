@@ -1,0 +1,15 @@
+# Description: Utility to manage outputs of a Wayland compositor
+# URL: https://sr.ht/~emersion/wlr-randr/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: wayland meson
+
+name=wlr-randr
+version=0.5.0
+release=1
+source=($name-$version.tar.gz::https://gitlab.freedesktop.org/emersion/$name/-/releases/v$version/downloads/$name-$version.tar.gz)
+
+build() {
+	  meson setup $name-$version build
+          meson compile -C build
+          DESTDIR=$PKG meson install --no-rebuild -C build
+}

@@ -1,0 +1,18 @@
+# Description: Perl HTML parser class
+# URL: https://metacpan.org/dist/HTML-Parser
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: perl-html-tagset
+
+name=perl-html-parser
+version=3.85
+release=1
+source=($name-$version.tar.gz::https://www.cpan.org/authors/id/O/OA/OALDERS/HTML-Parser-$version.tar.gz)
+
+build() {
+	cd HTML-Parser-$version
+	perl Makefile.PL INSTALLDIRS=vendor
+	make OPTIMIZE="$CFLAGS"
+	make DESTDIR=$PKG install
+	find $PKG -name *.pod -delete
+	rm -rf $PKG/usr/share
+}

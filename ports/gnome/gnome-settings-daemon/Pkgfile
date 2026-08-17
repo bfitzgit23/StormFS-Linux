@@ -1,3 +1,5 @@
+# Add your top line text here
+# Your line to add at the top here
 # Depends on: alsa-lib colord fontconfig gcr4 geoclue geocode-glib gnome-desktop lcms2 libcanberra libgweather libnotify libwacom pulseaudio upower cups networkmanager wayland
 
 name=gnome-settings-daemon

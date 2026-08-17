@@ -1,0 +1,15 @@
+# Description: C++ interface to GTK+ 4
+# URL: http://www.gtkmm.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: atkmm-gtk4 glibmm-gtk4 gtk4 pangomm-gtk4
+
+name=gtkmm4
+version=4.22.0
+release=1
+source=(https://ftp.gnome.org/pub/gnome/sources/gtkmm/${version%.*}/gtkmm-$version.tar.xz)
+
+build() {
+	meson setup $name-$version build
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

@@ -1,0 +1,21 @@
+# Description: Yet Another SHell is a POSIX-compliant command line shell
+# URL: https://github.com/magicant/yash
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: ncurses
+
+name=yash
+version=2.61
+release=1
+source=($name-$version.tar.gz::https://github.com/magicant/${name}/archive/${version}.tar.gz)
+
+build() {
+
+	export XML_CATALOG_FILES=/etc/xml/catalog
+	cd $name-$version
+	./configure \
+		--prefix=/usr \
+		--disable-nls 
+	make
+	make DESTDIR=$PKG install
+	rm -rf $PKG/usr/share/man/ja
+}

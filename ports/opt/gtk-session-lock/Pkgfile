@@ -1,0 +1,15 @@
+# Description: A library to create screen lockers for Wayland using the ext-session-lock protocol
+# URL: https://github.com/Cu3PO42/gtk-session-lock
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: meson gobject-introspection gtk3 vala wayland-protocols
+
+name=gtk-session-lock
+version=0.2.0
+release=1
+source=($name-$version.tar.gz::https://github.com/Cu3PO42/gtk-session-lock/archive/v${version}.tar.gz)
+
+build() {
+	meson setup $name-$version build
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

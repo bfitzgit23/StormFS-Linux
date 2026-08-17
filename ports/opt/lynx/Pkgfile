@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: Text-based web browser.
 # URL: https://lynx.invisible-island.net/
-# Maintainer: John McQuah, jmcquah at disroot dot org
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on:
 # Optional: gnutls zip unzip sharutils
 name=lynx

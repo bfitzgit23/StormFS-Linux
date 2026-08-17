@@ -1,0 +1,15 @@
+# Description: Openbox Logout Menu, ported to Python 3.
+# URL: https://github.com/trizen/oblogout-py3
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: python3-pillow python3-gobject3 python3-distutils-extra
+
+name=oblogout-py3
+version=0.03
+release=1
+source=($name-$version.tar.gz::https://github.com/trizen/$name/archive/refs/tags/$version.tar.gz)
+
+build() {
+  cd $name-$version
+  python3 setup.py install --root=$PKG
+  install -m644 data/oblogout.conf $PKG/etc/
+}

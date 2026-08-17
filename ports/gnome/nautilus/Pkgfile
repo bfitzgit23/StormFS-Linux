@@ -1,3 +1,5 @@
+# Add your top line text here
+# Your line to add at the top here
 # Depends on: bubblewrap gexiv2 gnome-autoar gnome-desktop libadwaita libnotify libportal libseccomp tracker desktop-file-utils exempi glib gobject-introspectiongst-plugins-base libcloudproviders libexif gvfs adwaita-icon-theme
 
 name=nautilus

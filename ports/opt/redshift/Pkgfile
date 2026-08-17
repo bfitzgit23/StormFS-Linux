@@ -1,0 +1,18 @@
+# Description: Adjusts the color temperature of your screen according to your surroundings
+# URL: http://jonls.dk/redshift/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libdrm libxxf86vm glib intltool
+
+name=redshift
+version=1.12
+release=2
+source=(https://github.com/jonls/$name/releases/download/v$version/$name-$version.tar.xz)
+
+build() {
+	cd $name-$version
+	autoreconf -vif
+	./configure --prefix=/usr
+	make
+	make DESTDIR=$PKG install
+
+}

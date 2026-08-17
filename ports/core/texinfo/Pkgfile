@@ -1,4 +1,6 @@
+# Add your top line text here
+# Your line to add at the top here
 name=texinfo
-version=7.2
+version=7.3
 release=1
-source=(https://ftp.gnu.org/gnu/$name/$name-$version.tar.xz)
+source=(https://ftpmirror.gnu.org/texinfo/texinfo-$version.tar.xz)

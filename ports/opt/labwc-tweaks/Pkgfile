@@ -1,0 +1,21 @@
+# Description: A Wayland window-stacking compositor
+# URL: https://github.com/labwc/labwc-tweaks
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libxml2 qt6-tools
+
+name=labwc-tweaks
+version=0.1.0
+release=1
+source=(https://github.com/labwc/$name/archive/$version/$name-$version.tar.gz)
+
+build() {
+	cmake -S $name-$version -B build \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DCMAKE_BUILD_TYPE=None \
+		-D CMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
+		-D CMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+		-Wno-dev 
+	cmake --build build
+	DESTDIR=$PKG cmake --install build
+}	

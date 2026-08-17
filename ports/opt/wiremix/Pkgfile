@@ -1,0 +1,16 @@
+# Description: A simple TUI audio mixer for PipeWire
+# URL: https://github.com/tsowell/wiremix
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: clang rust pipewire
+
+name=wiremix
+version=0.11.0
+release=1
+source=($name-$version.tar.gz::https://github.com/tsowell/wiremix/archive/v$version.tar.gz)
+
+build() {
+	cd $name-$version
+	cargo fetch --locked --target "$(rustc -vV | sed -n 's/host: //p')"
+	cargo build --release --frozen
+	install -Dm 755 "target/release/$name" "$PKG/usr/bin/$name"
+}

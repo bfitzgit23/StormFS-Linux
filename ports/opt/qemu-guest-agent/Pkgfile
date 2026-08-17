@@ -1,0 +1,37 @@
+# Description: QEMU guest agent
+# URL: https://www.qemu.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: glib xorg-libpixman dtc python3-tomli
+
+name=qemu-guest-agent
+version=10.2.0
+release=1
+source=(https://download.qemu.org/qemu-$version.tar.xz qemu-ga.conf rc.$name run.$name)
+
+build() {
+cd qemu-$version
+    ./configure --prefix=/usr \
+        --sysconfdir=/etc \
+        --enable-guest-agent \
+        --disable-docs
+    make qemu-ga
+    install -D -o root -g root -m 0755 build/qga/qemu-ga \
+        $PKG/usr/bin/qemu-ga
+    install -dm 0755 $PKG/etc/qemu
+    install -m 0644 scripts/$name/fsfreeze-hook \
+        $PKG/etc/qemu/
+    install -m 0755 $SRC/qemu-ga.conf \
+        $PKG/etc/qemu/
+
+
+	# runit service
+	prt-get isinst runit && {
+		install -Dm755 $SRC/run $PKG/etc/sv/$name/run
+		ln -s /run/runit/supervise.$name $PKG/etc/sv/$name/supervise
+	} || continue
+
+	# rc service
+	prt-get isinst sysvinit && \
+		install -Dm755 $SRC/rc.$name $PKG/etc/rc.d/$name || continue
+
+}

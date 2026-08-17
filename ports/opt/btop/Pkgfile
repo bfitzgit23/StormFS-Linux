@@ -1,0 +1,15 @@
+# Description: A monitor for system resources
+# URL: https://github.com/aristocratos/btop
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: coreutils
+
+name=btop
+version=1.4.7
+release=1
+source=($name-$version.tar.gz::https://github.com/aristocratos/${name}/archive/refs/tags/v${version}.tar.gz)
+
+build() {
+	cd $name-$version
+	make PREFIX=/usr
+	make DESTDIR=$PKG PREFIX=/usr install
+}

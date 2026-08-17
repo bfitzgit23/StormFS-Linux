@@ -1,0 +1,23 @@
+# Description: OpenGL Mathematics
+# URL: https://github.com/g-truc/glm
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=glm
+version=1.0.3
+release=1
+source=(https://github.com/g-truc/glm/archive/$version/$name-$version.tar.gz glm.pc.in glmConfig.cmake.in glmConfigVersion.cmake.in glmTargets.cmake)
+
+build() {
+    cd $name-$version
+
+    mkdir -p $PKG/usr/include/
+    cp -r glm $PKG/usr/include/
+
+    mkdir -p $PKG/usr/lib/pkgconfig/
+    sed "s/@VERSION@/$version/" $SRC/glm.pc.in > $PKG/usr/lib/pkgconfig/glm.pc
+
+    mkdir -p $PKG/usr/lib/cmake/glm/
+    sed "s/@VERSION@/$version/" $SRC/glmConfigVersion.cmake.in > $PKG/usr/lib/cmake/glm/glmConfigVersion.cmake
+    sed "s/@VERSION@/$version/" $SRC/glmConfig.cmake.in > $PKG/usr/lib/cmake/glm/glmConfig.cmake
+    install -Dm644 $SRC/glmTargets.cmake $PKG/usr/lib/cmake/glm/glmTargets.cmake
+}

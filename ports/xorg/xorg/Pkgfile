@@ -1,0 +1,13 @@
+# Description: Meta port for Xorg
+# URL: https://xorg.freedesktop.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: util-macros xorgproto libxau libxdmcp xorg-libraries xcb-util xcb-util-image xcb-util-keysyms xcb-util-renderutil xcb-util-wm xcb-util-cursor mesa xbitmaps xorg-applications xcursor-themes xorg-fonts xkeyboard-config xorg-server xf86-input-evdev libinput twm xterm xclock xinit ttf-dejavu
+
+name=xorg
+version=1.0
+release=2
+source=()
+
+build() {
+	mkdir -pv $PKG/etc
+}

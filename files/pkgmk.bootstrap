@@ -1,22 +1,48 @@
-build() {
-	# detect extracted source directory name
-	for s in ${source[@]}; do
-		case $s in
-			*.tar.*|*.tgz) srcdir=$(tar -tf $PKGMK_SOURCE_DIR/${s##*/} | cut -d / -f1 | head -n1);;
-		esac
-		break
-	done
-	# cd into extracted source directory
-	if [ "$srcdir" ] && [ -d "$srcdir" ]; then
-		cd $srcdir
-	fi
+# BFSOS temporary-toolchain pkgmk extension.
+# Apply patch/diff sources before bootstrap_build(), matching normal pkgmk
+# extension behavior and respecting renames[]/patch_opt.
+_bootstrap_patch() {
+    [ "${skip_patch:-}" ] && return 0
+    local i="" n=0 patch_name=""
+    for i in "${source[@]}"; do
+        patch_name="$i"
+        if [ "${renames:-}" ]; then
+            case ${renames[$n]:-} in
+                SKIP) ;;
+                "") ;;
+                *) patch_name=${renames[$n]} ;;
+            esac
+        fi
+        case $patch_name in
+            *.patch|*.diff)
+                printf 'Applying bootstrap patch: %s\n' "${patch_name##*/}"
+                patch -t ${patch_opt:--p1} -i "$SRC/${patch_name##*/}" || return $?
+                ;;
+        esac
+        n=$((n + 1))
+    done
+}
 
-	if [ "$(command -v bootstrap_build)" ]; then
-		bootstrap_build
-	else
-		./configure --prefix=$TOOLS $bootstrap_opt $@ || return $?
-		make || return $?
-		make install || return $?
-	fi
-	touch $PKG/dummyfile
+build() {
+    # detect extracted source directory name
+    for s in ${source[@]}; do
+        case $s in
+            *.tar.*|*.tgz) srcdir=$(tar -tf $PKGMK_SOURCE_DIR/${s##*/} | cut -d / -f1 | head -n1);;
+        esac
+        break
+    done
+    if [ "$srcdir" ] && [ -d "$srcdir" ]; then
+        cd "$srcdir"
+    fi
+
+    _bootstrap_patch || return $?
+
+    if [ "$(command -v bootstrap_build)" ]; then
+        bootstrap_build
+    else
+        ./configure --prefix=$TOOLS $bootstrap_opt $@ || return $?
+        make || return $?
+        make install || return $?
+    fi
+    touch $PKG/dummyfile
 }

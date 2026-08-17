@@ -1,0 +1,15 @@
+# Description: SVG optimizer/cleaner that reduces their size by optimizing structure and removing unnecessary data
+# URL: https://github.com/scour-project/scour
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: python3-setuptools
+
+name=python3-scour
+version=0.38.2
+release=1
+source=($name-$version.tar.gz::https://github.com/scour-project/scour/archive/v$version/scour-v$version.tar.gz)
+
+build() {
+	cd scour-$version
+	python3 setup.py build
+	python3 setup.py install --root=$PKG --optimize=1 --skip-build
+}

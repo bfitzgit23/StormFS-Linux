@@ -1,0 +1,17 @@
+# Description: wallpaper setting utility for X
+# URL: https://github.com/stoeckmann/xwallpaper
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: xcb-util-image pixman
+
+name=xwallpaper
+version=0.7.6
+release=1
+source=(https://github.com/stoeckmann/$name/archive/v$version/$name-v$version.tar.gz)
+
+build() {
+	cd $name-$version
+	./autogen.sh
+	./configure --prefix=/usr
+	make
+	make DESTDIR=$PKG install
+}

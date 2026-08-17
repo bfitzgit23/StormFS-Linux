@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: The Oil Runtime Compiler
 # URL: https://gstreamer.freedesktop.org/projects/orc.html
-# Maintainer: Tim Biermann, tbier at posteo dot de
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 
 name=orc
 version=0.4.41

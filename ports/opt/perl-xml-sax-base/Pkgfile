@@ -1,0 +1,20 @@
+# Description: Base class SAX Drivers and Filters
+# URL: https://search.cpan.org/dist/XML-SAX-Base
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: perl
+
+name=perl-xml-sax-base
+version=1.09
+release=2
+source=($name-$version.tar.gz::http://search.cpan.org/CPAN/authors/id/G/GR/GRANTM/XML-SAX-Base-$version.tar.gz)
+
+build() {
+	cd XML-SAX-Base-$version
+
+	PERL_MM_USE_DEFAULT=1 perl Makefile.PL INSTALLDIRS=vendor
+	make
+	make install DESTDIR=$PKG
+
+	find $PKG -name '.packlist' -delete
+	find $PKG -name '*.pod' -delete
+}

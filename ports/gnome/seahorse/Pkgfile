@@ -1,3 +1,5 @@
+# Add your top line text here
+# Your line to add at the top here
 # Depends on: gcr3 gnupg gpgme itstool libhandy libpwquality libsecret vala libsoup3 p11-kit openssh avahi gnome-keyring 
 
 name=seahorse

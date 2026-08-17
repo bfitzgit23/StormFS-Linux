@@ -1,0 +1,23 @@
+# Description: Database of photographic lenses and a library that allows advanced access to the database
+# URL: https://lensfun.github.io/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: cmake ninja glib
+
+name=lensfun
+version=0.3.4
+release=1
+source=(https://github.com/lensfun/lensfun/archive/v$version/$name-$version.tar.gz)
+
+build() {
+	cmake -S $name-$version -B build -G Ninja \
+		-DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+		-D CMAKE_INSTALL_PREFIX=/usr \
+		-D CMAKE_INSTALL_LIBDIR=lib \
+		-DCMAKE_INSTALL_LIBEXECDIR=lib \
+		-D CMAKE_BUILD_TYPE=Release \
+		-D CMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS -fno-delete-null-pointer-checks" \
+		-D CMAKE_C_FLAGS_RELEASE="$CFLAGS -fno-delete-null-pointer-checks" \
+		-Wno-dev
+	cmake --build build
+	DESTDIR=$PKG cmake --install build
+}

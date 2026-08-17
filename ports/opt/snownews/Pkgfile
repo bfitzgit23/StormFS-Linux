@@ -1,0 +1,16 @@
+# Description: RSS feed reader for the command-line
+# URL: https://sourceforge.net/projects/snownews/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libxml2 curl gettext lynx
+
+name=snownews
+version=1.11
+release=2
+source=(https://sourceforge.net/projects/$name/files/$name-$version.tar.gz)
+
+build() {
+    cd $name-$version
+	./configure --prefix=/usr
+	make
+	make PREFIX=/usr DESTDIR=$PKG install
+}

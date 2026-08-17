@@ -1,0 +1,28 @@
+# Description: Pager that can also be used as a text-based web browser
+# URL: http://w3m.sourceforge.net/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: gc
+
+name=w3m
+version=0.5.6
+release=1
+source=($name-$version.tar.gz::https://git.sr.ht/~rkta/w3m/archive/v$version.tar.gz)
+
+build() {
+	cd $name-v$version
+
+	./configure \
+ 	       --prefix=/usr \
+        	--libexecdir=/usr/lib \
+		--enable-image=x11,fb \
+		--with-imagelib=imlib2 \
+		--disable-w3mmailer
+	make
+	make DESTDIR=$PKG install 
+
+	rm -r $PKG/usr/share/man/ja
+	rm $PKG/usr/share/w3m/w3mhelp-funcdesc.ja.pl
+	
+	install -v -m644 -D doc/keymap.default $PKG/etc/w3m/keymap
+	install -v -m644    doc/menu.default $PKG/etc/w3m/menu
+}

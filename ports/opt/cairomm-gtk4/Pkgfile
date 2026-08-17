@@ -1,0 +1,15 @@
+# Description: Provides a C++ interface to Cairo
+# URL: https://www.cairographics.org/cairomm/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: cairo libsigc++3
+
+name=cairomm-gtk4
+version=1.18.1
+release=1
+source=($name-$version.tar.xz::https://cairographics.org/releases/$nm-$version.tar.xz)
+
+build() {
+	meson setup $name-$version build
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

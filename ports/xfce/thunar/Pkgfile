@@ -1,3 +1,5 @@
+# Add your top line text here
+# Your line to add at the top here
 # Depends on: exo hicolor-icon-theme libgudev libnotify pcre
 
 name=thunar

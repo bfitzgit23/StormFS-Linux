@@ -1,0 +1,19 @@
+# Description: A terminal based Matrix client written in Go
+# URL: https://github.com/tulir/gomuks
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libolm go sqlite
+
+name=gomuks
+version=0.3.1
+release=1
+source=(https://github.com/tulir/gomuks/archive/v$version/$name-v$version.tar.gz)
+
+build() {
+        cd $name-$version
+            export GOFLAGS="$GOFLAGS -tags=libsqlite3"
+            export GOCACHE="${GOCACHE:-"$SRC/go-cache"}"
+            export GOTMPDIR="${GOTMPDIR:-"$SRC"}"
+            export GOMODCACHE="${GOMODCACHE:-"$srcdir/go"}"
+        go build 
+            install -Dm755 gomuks "$PKG/usr/bin/gomuks"
+}

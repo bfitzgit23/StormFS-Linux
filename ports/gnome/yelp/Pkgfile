@@ -1,3 +1,5 @@
+# Add your top line text here
+# Your line to add at the top here
 # Depends on: webkitgtk-41 webkitgtk gsettings-desktop-schemas yelp-xsl desktop-file-utils
 
 name=yelp

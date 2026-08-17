@@ -1,3 +1,5 @@
+# Add your top line text here
+# Your line to add at the top here
 # Depends on: unicode-character-database dconf iso-codes vala glib gobject-introspection gtk3 libnotify
 
 name=ibus

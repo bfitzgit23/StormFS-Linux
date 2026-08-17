@@ -1,0 +1,32 @@
+# Description: Anonymizing overlay network
+# URL: https://www.torproject.org
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libseccomp libevent zlib
+
+name=tor
+version=0.4.9.11
+release=1
+source=(https://www.torproject.org/dist/$name-$version.tar.gz rc.tor run.tor torrc)
+
+build() {
+	cd $name-$version
+
+	./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var
+	make
+	make DESTDIR=$PKG install
+
+	install -Dm0644 $SRC/torrc $PKG/etc/tor/torrc
+	mv $PKG/etc/tor/torrc.sample $PKG/etc/tor/torrc-dist
+
+	install -d $PKG/var/lib/tor -o tor -g tor
+
+	# runit service
+	prt-get isinst runit && {
+		install -Dm755 $SRC/run.$name $PKG/etc/sv/$name/run
+		ln -s /run/runit/supervice.$name $PKG/etc/sv/$name/supervise
+	} || continue
+	
+	# rc service
+	prt-get isinst sysvinit && \
+		install -Dm755 $SRC/rc.$name $PKG/etc/rc.d/$name || continue
+}

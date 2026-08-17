@@ -1,0 +1,15 @@
+# Description: display directory contents, including directories, files, links, in a terminal
+# URL: http://mama.indstate.edu/users/ice/tree
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=tree
+version=2.3.2
+release=1
+source=(https://gitlab.com/OldManProgrammer/unix-tree/-/archive/$version/unix-tree-$version.tar.gz)
+
+build() {
+	cd unix-$name-$version
+
+  	make
+	make PREFIX=$PKG/usr MANDIR=$PKG/usr/share/man/man1 install
+}

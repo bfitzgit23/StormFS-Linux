@@ -1,0 +1,20 @@
+# Description: The MirBSD Korn Shell
+# URL: https://www.mirbsd.org/mksh.htm
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=mksh
+version=20260220
+release=1
+source=($name-$version.tar.gz::https://github.com/MirBSD/mksh/archive/$commit.tar.gz)
+
+build() {
+	cd ${name%-*}-$commit
+
+	CPPFLAGS="$CPPFLAGS -DMKSH_BINSHPOSIX=1 -DMKSH_UNLIMITED=1 -DMKSH_ASSUME_UTF8=1 \
+	-DMKSH_DISABLE_DEPRECATED=1 -DMKSH_DISABLE_EXPERIMENTAL=1 -DMKSH_NOPROSPECTOFWORK=1 \
+	-DMKSH_SMALL_BUT_FAST=1 -DMKSH_S_NOVI=1 -DMKSH_UNEMPLOYED=1" sh Build.sh -r
+
+	install -D -m 0755 mksh $PKG/bin/mksh
+	install -D -m 0644 mksh.1 $PKG/usr/share/man/man1/mksh.1
+	install -D -m 0644 dot.mkshrc $PKG/etc/mkshrc
+}

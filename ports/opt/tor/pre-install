@@ -1,0 +1,6 @@
+#!/bin/sh
+
+getent group tor >/dev/null || groupadd -g 43 tor
+
+getent passwd tor >/dev/null || \
+useradd -r -M -g tor -G tor -c "Anonymizing Overlay Network" -d /var/lib/tor -s /sbin/nologin -u 43 tor

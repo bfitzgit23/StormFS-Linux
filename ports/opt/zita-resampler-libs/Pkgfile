@@ -1,0 +1,20 @@
+# Description: A C++ library for resampling audio signals
+# URL: https://kokkinizita.linuxaudio.org/linuxaudio/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libsndfile
+
+name=zita-resampler-libs
+version=1.11.2
+release=1
+source=(https://kokkinizita.linuxaudio.org/linuxaudio/downloads/zita-resampler-$version.tar.xz)
+
+build() {
+	cd zita-resampler-$version/source
+
+	# strip march=native
+	sed -e '/native/d' -i Makefile
+	sed -e '/ldconfig/d' -i Makefile
+
+	make
+	make SUFFIX="" PREFIX=/usr DESTDIR=$PKG install
+}

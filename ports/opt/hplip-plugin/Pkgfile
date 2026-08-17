@@ -1,0 +1,39 @@
+# Description: Binary plugin for HPs hplip printer driver library
+# URL: https://developers.hp.com/hp-linux-imaging-and-printing/binary_plugin.html
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: hplip
+
+name=hplip-plugin
+version=3.26.4
+release=1
+source=($name-$version.run::https://www.openprinting.org/download/printdriver/auxfiles/HP/plugins/${name%-*}-${version}-plugin.run $name-$version.run.asc::https://www.openprinting.org/download/printdriver/auxfiles/HP/plugins/${name%-*}-${version}-plugin.run.asc)
+
+build() {
+	sh "$name-$version.run" --target "$SRC/$name-$version" --noexec
+	cd "$SRC/${name}-$version"
+	_arch='x86_64'
+
+	install -Dm644 -t "$PKG/usr/share/hplip" plugin.spec
+	install -Dm644 -t "$PKG/usr/share/hplip/data/firmware" hp_laserjet_*.fw.gz
+	install -Dm755 -t "$PKG/usr/share/hplip/fax/plugins" fax_marvell-"$_arch".so
+	install -Dm755 -t "$PKG/usr/share/hplip/prnt/plugins" hbpl1-"$_arch".so
+	install -Dm755 -t "$PKG/usr/share/hplip/prnt/plugins" lj-"$_arch".so
+	install -Dm755 -t "$PKG/usr/share/hplip/scan/plugins" bb_*-"$_arch".so
+
+# Create hplip.state used by hplip-tools
+cat << EOF > hplip.state
+[plugin]
+installed = 1
+eula = 1
+version = $version
+EOF
+
+	install -Dm644 -t "$PKG/var/lib/hp" hplip.state
+
+	# Create symlinks
+	find "$PKG/usr/share/hplip" -type f -name "*.so" | while read -r f; do
+		lib_dir="${f%/*}"
+		lib_name="${f##*/}"
+		ln -vsf "$lib_name" "$lib_dir/${lib_name%%-*}.so"
+	done
+}

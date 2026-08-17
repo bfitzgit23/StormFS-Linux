@@ -1,5 +1,7 @@
+# Add your top line text here
+# Your line to add at the top here
 name=dash
-version=0.5.12
+version=0.5.13
 release=1
 source=(http://gondor.apana.org.au/~herbert/$name/files/$name-$version.tar.gz)
 build_opt="--bindir=/bin"

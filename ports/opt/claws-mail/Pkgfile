@@ -1,0 +1,36 @@
+# Description: A GTK+ based e-mail client
+# URL: https://www.claws-mail.org
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: startup-notification gpgme libetpan libcanberra compface dbus-glib spamassassin bogofilter poppler-glib libical webkitgtk pinentry
+
+name=claws-mail
+version=4.4.0
+release=1
+source=(https://www.claws-mail.org/download.php?file=releases/$name-$version.tar.xz)
+
+build() {
+	cd $name-$version
+
+	./configure --prefix=/usr --disable-static \
+		--enable-enchant \
+		--enable-gnutls \
+		--enable-ldap \
+		--enable-crash-dialog \
+		--enable-pgpmime-plugin \
+		--enable-spamassassin-plugin \
+		--enable-bogofilter-plugin \
+		--enable-fancy-plugin \
+		--enable-manual
+	sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
+	make
+	make DESTDIR=$PKG install
+
+	# install extra tools
+	cd tools
+
+	install -m755 -d $PKG/usr/lib/claws-mail/tools
+	
+	for files in *.pl *.py *.sh *.conf tb2claws-mail update-po uudec uuooffice README; do
+		cp -arv $files $PKG/usr/lib/claws-mail/tools/
+	done
+}

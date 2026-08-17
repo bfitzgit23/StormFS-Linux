@@ -1,10 +1,12 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: A built-package format for Python
 # URL: https://pypi.python.org/pypi/wheel
-# Maintainer: Danny Rawlins, crux at romster dot me
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: python3-setuptools
 
 name=python3-wheel
-version=0.46.1
+version=0.48.0
 release=1
 source=(https://files.pythonhosted.org/packages/source/w/wheel/${name#*-}-$version.tar.gz)
 unpack_source() {

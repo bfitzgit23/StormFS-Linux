@@ -1,0 +1,17 @@
+# Description: Simple library for font loading and glyph rasterization using FontConfig, FreeType and pixman.
+# URL: https://codeberg.org/dnkl/fcft
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: fontconfig harfbuzz pixman scdoc tllist utf8proc wayland-protocols
+
+name=fcft
+version=3.3.3
+release=1
+source=($name-$version.tar.gz::https://codeberg.org/dnkl/fcft/archive/$version.tar.gz)
+
+build() {
+	meson setup $name-$version build  -Dgrapheme-shaping=enabled -Drun-shaping=enabled
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+
+	rm -r $PKG/usr/share/doc
+}

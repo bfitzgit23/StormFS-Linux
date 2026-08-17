@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: xorg lib libxkbfile
 # URL: https://xorg.freedesktop.org
-# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: xorg-libx11-32 xorg-libxkbfile
 
 name=xorg-libxkbfile-32

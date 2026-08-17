@@ -1,0 +1,24 @@
+# Description: Background browser and setter for X windows
+# URL: https://github.com/l3ib/nitrogen
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: gtkmm2 librsvg
+
+name=nitrogen
+version=1.6.1
+release=2
+source=(https://github.com/l3ib/nitrogen/releases/download/$version/nitrogen-$version.tar.gz)
+
+build() {
+	cd $name-$version
+
+	CXXFLAGS="$CXXFLAGS -std=c++11"
+
+	# fix metadata path with appstream
+	sed -i '/appdatadir/s|/appdata|/metainfo/|' data/Makefile.am
+
+	autoreconf -fi
+	./configure --prefix=/usr
+	make
+	make DESTDIR=$PKG install
+
+}

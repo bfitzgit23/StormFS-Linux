@@ -1,0 +1,17 @@
+# Description: Image processing and analysis applications
+# URL: http://www.leptonica.com/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: giflib libjpeg-turbo libpng libtiff libwebp
+
+name=leptonica
+version=1.87.0
+release=1
+source=(https://github.com/DanBloomberg/leptonica/releases/download/$version/$name-$version.tar.gz)
+
+build(){
+	cd $name-$version
+	./autogen.sh
+	./configure --prefix=/usr
+	make
+	make DESTDIR=$PKG install
+}

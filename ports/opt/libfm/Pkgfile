@@ -1,0 +1,29 @@
+# Description: Library used to develop file managers providing some file management utilities
+# URL: https://lxde.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: gtk3 menu-cache libexif vala
+
+name=libfm
+version=1.4.1
+release=1
+source=($name-$version.tar.gz::https://github.com/lxde/libfm/archive/$version.tar.gz)
+
+build() {
+	cd $name-$version
+	./autogen.sh
+	./configure --prefix=/usr \
+	            --sysconfdir=/etc \
+		    --with-gtk=3 \
+	            --disable-static
+	make
+	make DESTDIR=$PKG install
+
+	rm -rf $PKG/usr/include/libfm
+	mv $PKG/usr/include/libfm-1.0/ $PKG/usr/include/libfm
+
+	rm $PKG/usr/include/libfm/fm-version.h \
+	   $PKG/usr/include/libfm/fm-extra.h \
+	   $PKG/usr/include/libfm/fm-xml-file.h
+	rm $PKG/usr/lib/libfm-extra.*
+	rm $PKG/usr/lib/pkgconfig/libfm-extra.pc
+}

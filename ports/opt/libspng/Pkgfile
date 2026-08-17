@@ -1,0 +1,16 @@
+# Description: modern alternative to libpng
+# URL: https://github.com/randy408/libspng
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: meson zlib
+
+name=libspng
+version=0.7.4
+release=1
+source=($name-$version.tar.gz::https://github.com/randy408/libspng/archive/refs/tags/v$version.tar.gz)
+
+build() {
+	meson setup $name-$version build \
+	    -D build_examples=false		
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

@@ -1,16 +1,25 @@
 # Description: Firmware files for Linux
-# URL:         http://git.kernel.org/?p=linux/kernel/git/firmware/linux-firmware.git;a=summary
-# Maintainer:  Emmett1, emmett1 dot 2miligrams at gmail dot com
-# Depends on:  rdfind
+# URL: https://gitlab.com/kernel-firmware/linux-firmware
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Depends on: rdfind
 
 name=linux-firmware
-version=20250708
+version=20260622
 release=1
 source=(https://www.kernel.org/pub/linux/kernel/firmware/$name-$version.tar.xz)
 
 pkg_build() {
-		prt-get isinst parallel || MAKEFLAGS="-j 1"
-	make DESTDIR=$PKG FIRMWAREDIR=/lib/firmware install
-	make DESTDIR=$PKG dedup
-	find $PKG \( -name 'ChangeLog' -or -name 'README' \) -delete
+    make -j1 \
+        DESTDIR="$PKG" \
+        FIRMWAREDIR=/lib/firmware \
+        install
+
+    make \
+        DESTDIR="$PKG" \
+        FIRMWAREDIR=/lib/firmware \
+        dedup
+
+    find "$PKG" \
+        \( -name ChangeLog -o -name README \) \
+        -delete
 }

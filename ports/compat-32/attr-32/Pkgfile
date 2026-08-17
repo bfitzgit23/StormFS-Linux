@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: Extented attributes library
 # URL:         http://savannah.nongnu.org/projects/attr/
-# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 
 name=attr-32
 version=2.5.2

@@ -1,0 +1,16 @@
+# Description: Vulkan/GL/GLES/EGL/GLX/WGL Loader-Generator
+# URL: https://glad.dav1d.de
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: python3-jinja2
+
+name=glad
+version=2.0.8
+release=1
+source=(https://github.com/Dav1dde/glad/archive/v$version/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+
+	python3 -m build --wheel --no-isolation
+	python3 -m installer --destdir=$PKG dist/*.whl
+}

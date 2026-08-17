@@ -1,0 +1,21 @@
+# Description: Backport of pathlib-compatible object wrapper for zip files
+# URL: https://pypi.org/project/zipp/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: python3-gpep517 python3-setuptools-scm
+
+name=python3-zipp
+version=4.1.0
+release=1
+source=(https://pypi.python.org/packages/source/z/zipp/zipp-$version.tar.gz)
+
+build() {
+
+	 cd zipp-$version
+	 export SETUPTOOLS_SCM_PRETEND_VERSION=$pkgver
+        gpep517 build-wheel \
+                --wheel-dir .dist \
+                --output-fd 3 3>&1 >&2
+
+        python3 -m installer -d $PKG \
+                .dist/zipp*.whl
+}

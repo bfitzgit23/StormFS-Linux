@@ -1,0 +1,15 @@
+# Description: Helper application and MIME type associations for file types
+# URL: https://pagure.io/mailcap
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: python3
+
+name=mailcap
+version=2.1.54
+release=1
+source=(https://pagure.io/mailcap/archive/r$_version/mailcap-r$_version.tar.gz)
+
+build() {
+	cd $name-r$_version
+	make
+	make install DESTDIR="$PKG" sysconfdir=/etc mandir=/usr/share/man
+}

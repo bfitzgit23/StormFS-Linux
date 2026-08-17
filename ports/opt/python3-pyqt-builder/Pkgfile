@@ -1,0 +1,18 @@
+# Description: PyQt-builder is the PEP 517 compliant build system for PyQt
+# URL: https://pypi.org/project/PyQt-builder
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: python3-setuptools python3-setuptools-scm python3-sip python3-packaging
+
+name=python3-pyqt-builder
+version=1.19.1
+release=1
+source=(https://pypi.io/packages/source/p/pyqt_builder/pyqt_builder-$version.tar.gz)
+
+build() {
+	cd pyqt_builder-$version
+
+	SETUPTOOLS_SCM_PRETEND_VERSION=$version 	
+	python3 -m build --wheel --no-isolation
+	python3 -m installer --destdir=$PKG dist/*.whl
+
+}

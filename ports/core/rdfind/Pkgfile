@@ -1,16 +1,18 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: find duplicate files utility
 # URL: https://github.com/pauldreik/rdfind
-# Maintainer: CRUX System Team, core-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: nettle
 
 name=rdfind
-version=1.7.0
+version=1.8.0
 release=1
 source=(https://github.com/pauldreik/rdfind/archive/releases/$version.tar.gz)
 renames=($name-$version.tar.gz)
 
-build() {
-  cd $name-releases-$version
+pkg_build() {
+
 
   ./bootstrap.sh
   ./configure --prefix=/usr

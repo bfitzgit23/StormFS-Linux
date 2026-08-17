@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: An image loading library for GTK+
 # URL: https://www.gtk.org/
-# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: gdk-pixbuf glib-32 libpng-32 libtiff-32 libX11-32
 
 name=gdk-pixbuf-32

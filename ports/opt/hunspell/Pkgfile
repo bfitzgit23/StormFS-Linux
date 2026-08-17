@@ -1,0 +1,17 @@
+# Description: Advanced spell checker
+# URL: https://github.com/hunspell/hunspell
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=hunspell
+version=1.7.3
+release=1
+source=($name-$version.tar.gz::https://github.com/hunspell/hunspell/archive/v$version.tar.gz)
+
+build() {
+	cd $name-$version
+	autoreconf -vfi
+	./configure --prefix=/usr --disable-nls
+	make
+	make DESTDIR=$PKG install
+	rm -r $PKG/usr/share/man/hu/
+}

@@ -1,3 +1,5 @@
+# Add your top line text here
+# Your line to add at the top here
 # Depends on: layer-shell-qt libdbusmenu-lxqt liblxqt lxqt-globalkeys lxqt-menu-data solid menu-cache alsa-lib pulseaudio libstatgrab libsysstat libxkbcommon lm-sensors
 
 name=lxqt-panel

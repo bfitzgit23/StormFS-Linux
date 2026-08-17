@@ -1,0 +1,17 @@
+# Description: Remote filesystem in userspace using SSH
+# URL: https://github.com/libfuse/sshfs
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: fuse3 glib
+
+name=sshfs-fuse
+version=3.7.6
+release=1
+source=(https://github.com/libfuse/sshfs/releases/download/sshfs-$version/sshfs-$version.tar.xz)
+
+build() {
+	meson setup $name-$version build \
+		--buildtype=release
+
+	meson compile -C build -j ${JOBS:-1}
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

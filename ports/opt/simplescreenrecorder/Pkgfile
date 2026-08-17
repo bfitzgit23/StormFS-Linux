@@ -1,0 +1,23 @@
+# Description: SimpleScreenRecorder, a screen recorder for Linux
+# URL: https://github.com/MaartenBaert/ssr
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: ffmpeg qt5 v4l-utils
+
+name=simplescreenrecorder
+version=0.4.4
+release=3
+source=(https://github.com/MaartenBaert/ssr/archive/$version/ssr-$version.tar.gz ffmpeg7.patch)
+
+build() {
+	cd ssr-$version
+
+	patch -p1 -i $SRC/ffmpeg7.patch
+
+	cmake -DCMAKE_INSTALL_PREFIX="/usr" \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DWITH_QT5=on \
+		-DCMAKE_INSTALL_LIBDIR='lib'
+	make
+	make DESTDIR="$PKG" install	
+
+}

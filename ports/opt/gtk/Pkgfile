@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: A multi-platform toolkit for creating graphical user interfaces
 # URL: https://www.gtk.org/
-# Maintainer: CRUX System Team, core-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: at-spi2-core gdk-pixbuf hicolor-icon-theme pango xorg-libs
 
 name=gtk

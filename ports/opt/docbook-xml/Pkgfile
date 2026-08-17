@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: An document type definitions for verification of XML data files against the DocBook rule set.
 # URL: http://www.docbook.org/
-# Maintainer: John McQuah, jmcquah at disroot dot org
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: libxml2 unzip
 
 name=docbook-xml

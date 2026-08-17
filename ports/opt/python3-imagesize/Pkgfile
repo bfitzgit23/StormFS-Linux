@@ -1,0 +1,18 @@
+# Description: Getting image size from png/jpeg/jpeg2000/gif file.
+# URL: https://github.com/shibukawa/imagesize_py/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: python3-setuptools
+
+name=python3-imagesize
+version=2.0.0
+release=1
+source=($name-$version.tar.gz::https://files.pythonhosted.org/packages/source/i/imagesize/${name#*-}-$version.tar.gz)
+
+build() {
+	cd ${name#*-}-$version
+
+	/usr/bin/python3 setup.py build
+	/usr/bin/python3 setup.py install --prefix=/usr --root=$PKG --skip-build --optimize=1
+
+	chmod -R go-w,a+r,u+w $PKG
+}

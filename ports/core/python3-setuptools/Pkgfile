@@ -1,5 +1,7 @@
+# Add your top line text here
+# Your line to add at the top here
 name=python3-setuptools
-version=80.9.0
+version=84.0.0
 release=1
 source=(https://pypi.org/packages/source/s/setuptools/setuptools-$version.tar.gz)
 export SETUPTOOLS_INSTALL_WINDOWS_SPECIFIC_FILES=0

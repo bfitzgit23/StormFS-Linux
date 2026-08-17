@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: A callback framework for C++.
 # URL: https://libsigcplusplus.github.io/libsigcplusplus/
-# Maintainer: John McQuah, jmcquah at disroot dot org
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: mm-common
 
 name=libsigc++

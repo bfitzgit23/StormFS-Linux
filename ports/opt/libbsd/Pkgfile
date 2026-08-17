@@ -1,0 +1,16 @@
+# Description: Provides useful functions commonly found on BSD systems like strlcpy()
+# URL: https://libbsd.freedesktop.org
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libmd
+
+name=libbsd
+version=0.12.2
+release=1
+source=(https://libbsd.freedesktop.org/releases/$name-$version.tar.xz)
+
+build() {
+	cd $name-$version
+	./configure --prefix=/usr
+	make
+	make DESTDIR=$PKG install
+}

@@ -1,0 +1,15 @@
+# Description: A GTK theme based on the Catppuccin colour palette
+# URL: https://github.com/Fausto-Korpsvart/Catppuccin-GTK-Theme
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: gnome-themes-extra gtk-engine-murrine sassc
+
+name=catppuccin-gtk-theme
+version=250821
+release=1
+source=($name-$version.tar.gz::https://github.com/Fausto-Korpsvart/Catppuccin-GTK-Theme/archive/$commit.tar.gz)
+
+build() {
+	cd $rname-$commit/themes
+	./build.sh
+	./install.sh --dest $PKG/usr/share/themes --theme all --color light dark
+}

@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: A System V Release 4.0 curses emulation library
 # URL: https://invisible-island.net/ncurses/announce.html
-# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 
 name=ncurses-32
 version=6.5-20250531

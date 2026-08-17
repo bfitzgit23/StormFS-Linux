@@ -1,0 +1,10 @@
+# Description: X11 interface to lm_sensors
+# URL: http://www.linuxhardware.org/xsensors/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: lm_sensors gtk3
+
+name=xsensors
+version=0.80
+release=1
+source=($name-$version.tar.gz::https://github.com/Mystro256/$name/archive/$version.tar.gz)
+

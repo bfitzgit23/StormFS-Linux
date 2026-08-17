@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: Utility that does structural, content-preserving transformations on PDF files
 # URL: http://qpdf.sourceforge.net/
-# Maintainer: Juergen Daubert, jue at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: libjpeg-turbo openssl zlib
 # Optional: gnutls libidn2 ghostscript gnutls libtiff sphinx with sphinx_rtd_theme texlive install-tl-unx
 

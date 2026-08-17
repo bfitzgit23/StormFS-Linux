@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: Lightweight PDF and XPS viewer
 # URL: https://www.mupdf.com/
-# Maintainer: Juergen Daubert, jue at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: glu harfbuzz libjpeg-turbo xorg-libxi
 # Optional: freeglut openjpeg2 jbig2dec gumbo-parser
 

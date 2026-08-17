@@ -1,0 +1,17 @@
+# Description: C++ library for interacting with JSON
+# URL: https://github.com/open-source-parsers/jsoncpp
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=jsoncpp
+version=1.9.8
+release=1
+source=(https://github.com/open-source-parsers/jsoncpp/archive/$version/$name-$version.tar.gz)
+
+build() {
+	echo ${version} > $name-$version/version
+
+	meson setup $name-$version build \
+		--default-library shared
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

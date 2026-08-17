@@ -1,0 +1,15 @@
+# Description: Meson PEP 517 Python build backend
+# URL: https://github.com/mesonbuild/meson-python
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: meson patchelf python3-pyproject-metadata python3-build python3-installer python3-wheel
+
+name=meson-python
+version=0.20.0
+release=1
+source=(https://pypi.org/packages/source/m/meson_python/meson_python-$version.tar.gz)
+
+build() {
+	cd meson_python-$version
+	/usr/bin/python3 -m build --wheel --skip-dependency-check --no-isolation
+	/usr/bin/python3 -m installer --compile-bytecode 2 --destdir=$PKG dist/*.whl
+}

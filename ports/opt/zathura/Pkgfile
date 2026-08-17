@@ -1,0 +1,20 @@
+# Description: Minimalistic document viewer
+# URL: https://pwmt.org/projects/zathura/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: gettext libseccomp girara
+
+name=zathura
+version=2026.05.20
+release=1
+source=(https://github.com/pwmt/zathura/archive/$version/$name-$version.tar.gz)
+
+build() {
+
+	meson setup $name-$version build \
+		-Dconvert-icon=disabled \
+		-Dmanpages=disabled \
+		-Dseccomp=disabled \
+		-Dsynctex=disabled 
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

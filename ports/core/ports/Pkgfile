@@ -1,5 +1,7 @@
+# Add your top line text here
+# Your line to add at the top here
 name=ports
-version=1.5
+version=1.6
 release=2
 source=(https://crux.nu/files/tools/ports/$name-$version.tar.gz)
 build () {

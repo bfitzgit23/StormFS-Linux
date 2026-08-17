@@ -1,0 +1,24 @@
+# Description: Python Imaging Library (PIL) fork
+# URL: https://python-pillow.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: python3-setuptools python3-gpep517 python3-wheel freetype2 openjpeg2 python3-pybind11
+
+name=python3-pillow
+version=12.2.0
+release=1
+source=($name-$version.tar.gz::https://github.com/python-pillow/Pillow/archive/refs/tags/$version.tar.gz)
+
+build() {
+	cd Pillow-$version
+
+	export CFLAGS="$CFLAGS -O2 -L/lib -flto=auto"
+	    gpep517 build-wheel \
+		--wheel-dir .dist \
+		--output-fd 3 3>&1 >&2
+	python3 -m installer -d $PKG \
+		.dist/*.whl
+
+	local pversion=$(python3 -c 'import sys; print(".".join(map(str, sys.version_info[:2])))')
+	install -d "$PKG/usr/include/$pversion"
+	install -m644 -t "$PKG/usr/include/$pversion/" src/libImaging/*.h
+}

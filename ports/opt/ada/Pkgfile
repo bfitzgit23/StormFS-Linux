@@ -1,0 +1,25 @@
+# Description: WHATWG-compliant and fast URL parser written in modern C++
+# URL: https://github.com/ada-url/ada
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: cmake
+
+name=ada
+version=3.4.4
+release=1
+source=($name-$version.tar.gz::https://github.com/ada-url/ada/archive/refs/tags/v$version.tar.gz)
+
+build() {
+	cmake -S $name-$version -B build \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DCMAKE_INSTALL_LIBEXECDIR=lib \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+		-DCMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
+		-DBUILD_SHARED_LIBS=ON \
+		-DADA_TESTING=NO \
+		-DADA_TOOLS=NO \
+		-Wno-dev 
+	cmake --build build
+	DESTDIR=$PKG cmake --install build
+}

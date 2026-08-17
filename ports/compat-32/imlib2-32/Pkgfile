@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: A fast image manipulation library
 # URL: https://sourceforge.net/projects/enlightenment/
-# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: freetype-32 imlib2 libtiff-32 libSM-32 libXext-32 zstd-32
 # Optional: libid3tag-32 giflib-32 libwebp-32
 

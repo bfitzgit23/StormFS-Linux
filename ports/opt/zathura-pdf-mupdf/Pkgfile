@@ -1,0 +1,15 @@
+# Description: EPUB, PDF and XPS support based on MuPDF to zathura
+# URL: https://git.pwmt.org/pwmt/zathura-pdf-mupdf
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: zathura mupdf
+
+name=zathura-pdf-mupdf
+version=2026.05.10
+release=1
+source=(https://pwmt.org/projects/zathura-pdf-mupdf/download/$name-$version.tar.xz)
+
+build() {
+	meson setup $name-$version build
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

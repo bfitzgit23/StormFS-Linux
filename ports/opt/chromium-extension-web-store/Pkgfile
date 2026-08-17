@@ -1,0 +1,25 @@
+# Description: chromium web store extension (for ungoogled-chromium)
+# URL: https://github.com/NeverDecaf/chromium-web-store
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=chromium-extension-web-store
+version=1.5.5.3
+release=1
+source=($name-$version.crx::https://github.com/NeverDecaf/chromium-web-store/releases/download/v$version/Chromium.Web.Store.crx)
+noextract=($name-$version.crx)
+
+build() {
+
+_id=ocaahdebbfolfmndjeplogmgcagdmblk
+
+    # Create extension json
+    cat << EOF > "${_id}".json
+{
+    "external_crx": "/usr/lib/$name/$name-$version.crx",
+    "external_version": "$version"
+}
+EOF
+
+    install -Dm644 -t $PKG/usr/share/chromium/extensions/ ${_id}.json
+    install -Dm644 -t $PKG/usr/lib/$name/ $name-$version.crx
+}

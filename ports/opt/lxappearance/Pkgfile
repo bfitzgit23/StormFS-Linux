@@ -1,0 +1,22 @@
+# Description: Desktop-independent theme switcher for GTK+
+# URL: https://wiki.lxde.org/en/LXAppearance
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: gtk2 dbus-glib
+
+name=lxappearance
+version=0.6.4
+release=1
+source=(https://github.com/lxde/lxappearance/archive/refs/tags/$version/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+	./autogen.sh
+	./configure --prefix=/usr     \
+		--sysconfdir=/etc \
+		--disable-static  \
+		--enable-dbus \
+		   
+	make
+	make DESTDIR=$PKG install
+
+}

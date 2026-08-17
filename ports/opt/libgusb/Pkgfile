@@ -1,3 +1,5 @@
+# Add your top line text here
+# Your line to add at the top here
 # Depends on: json-glib libusb glib gobject-introspection hwdata vala python3-gi_docgen umockdev python3-markdown python3-typogrify
 
 name=libgusb

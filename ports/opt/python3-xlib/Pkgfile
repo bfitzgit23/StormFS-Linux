@@ -1,0 +1,15 @@
+# Description: A fully functional X client library for Python programs
+# URL: https://github.com/python-xlib/python-xlib
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: python3-six python3-setuptools-scm python3-pip
+
+name=python3-xlib
+version=0.33
+release=2
+source=($name-$version.tar.gz::https://github.com/python-xlib/python-xlib/archive/$version/python-$version.tar.gz)
+
+build() {
+	cd python-xlib-$version
+	python3 setup.py build
+	python3 setup.py install --root="$PKG" --optimize=1 --skip-build
+}

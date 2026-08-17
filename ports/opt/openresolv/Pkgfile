@@ -1,0 +1,23 @@
+# Description: A framework for managing DNS information
+# URL: https://roy.marples.name/projects/openresolv
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=openresolv
+version=3.17.4
+release=2
+source=($name-$version.tar.gz::https://github.com/NetworkConfiguration/$name/archive/refs/tags/v$version.tar.gz)
+
+build() {
+
+	cd $name-$version
+	# NOTE: Don't set --prefix, it should be /.
+	./configure \
+		--libexecdir=/lib/resolvconf \
+		--mandir=/usr/share/man \
+		--rundir=/run \
+		--sysconfdir=/etc
+	make
+	make DESTDIR=$PKG install
+
+	rm -f $PKG/lib/resolvconf/systemd-resolved
+}

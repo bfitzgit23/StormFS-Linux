@@ -1,0 +1,19 @@
+# Description: Multithreaded video transcoder
+# URL: https://handbrake.fr/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: numactl gst-plugins-base libass lame gtk3 speex jansson opus libvpx x264
+
+name=handbrake
+version=1.11.2
+release=1
+source=($name-$version.tar.bz2::https://github.com/HandBrake/HandBrake/releases/download/$version/HandBrake-$version-source.tar.bz2)
+
+build() {
+	cd HandBrake-$version
+
+	ln -s "$SRC" download
+
+	./configure --prefix=/usr --disable-df-fetch --enable-fdk-aac --enable-qsv --lto
+	make -C build
+	make -C build DESTDIR=$PKG install
+}

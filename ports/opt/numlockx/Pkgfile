@@ -1,0 +1,16 @@
+# Description: Turns on the numlock key in X11
+# URL: https://github.com/rg3/numlockx
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libxtst
+
+name=numlockx
+version=1.2
+release=1
+source=(https://github.com/rg3/numlockx/releases/download/$version/numlockx-$version.tar.gz)
+
+build() {
+	cd $name-$version
+	./configure --prefix=/usr
+	make
+	make DESTDIR=$PKG install
+}

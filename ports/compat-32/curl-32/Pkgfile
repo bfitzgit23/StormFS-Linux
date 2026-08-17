@@ -1,5 +1,7 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: A tool for transfering files with URL syntax
-# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # URL: https://curl.se/
 # Depends on: curl openssl-32 zstd-32 brotli-32
 # Optional:

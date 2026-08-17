@@ -1,0 +1,17 @@
+# Description: ninja-compatible build tool written in C
+# URL: https://github.com/michaelforney/samurai
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=samurai
+version=1.3
+release=1
+source=(https://github.com/michaelforney/${name}/releases/download/${version}/${name}-${version}.tar.gz)
+
+build() {
+	cd $name-$version
+	make samu
+	make PREFIX=/usr DESTDIR=$PKG install
+
+	prt-get isinst ninja || \
+		ln -s /usr/bin/samu $PKG/usr/bin/ninja
+}

@@ -1,0 +1,18 @@
+[Unit]
+Description=Netfilter Tables
+Documentation=man:nft(8)
+DefaultDependencies=no
+After=systemd-sysctl.service
+Before=network-pre.target shutdown.target
+Wants=network-pre.target
+Conflicts=shutdown.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/bin/nft -f /etc/nftables.nft
+ExecReload=/usr/bin/nft -f /etc/nftables.nft
+ExecStop=/usr/bin/nft flush ruleset
+
+[Install]
+WantedBy=multi-user.target

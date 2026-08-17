@@ -1,0 +1,21 @@
+# Description: Utils & libs to convert from/to X-Face format.
+# URL: http://ftp.xemacs.org/pub/xemacs/aux/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=compface
+version=1.5.2
+release=2
+source=(http://mirrors.ibiblio.org/xemacs/aux/$name-$version.tar.gz compface-1.5.2-build.patch)
+
+build() {
+	cd $name-$version
+
+	export CFLAGS="$CFLAGS -fPIC -Wno-implicit-function-declaration"
+
+	patch -Np0 -i $SRC/compface-1.5.2-build.patch
+
+	./configure --prefix=/usr --mandir=/usr/share/man
+	make
+	make DESTDIR=$PKG STRIP=/bin/true install
+
+}

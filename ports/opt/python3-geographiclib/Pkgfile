@@ -1,0 +1,18 @@
+# Description: Python implementation of the geodesic routines in GeographicLib
+# URL: https://geographiclib.sourceforge.io/1.50/python/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: python3-setuptools python3-gpep517 python3-wheel
+
+name=python3-geographiclib
+version=2.1
+release=2
+source=(https://files.pythonhosted.org/packages/source/g/$nm/$nm-$version.tar.gz)
+
+build() {
+	cd $nm-$version
+	gpep517 build-wheel \
+		--wheel-dir .dist \
+		--output-fd 3 3>&1 >&2
+	python3 -m installer -d "$PKG" \
+		.dist/*.whl
+}

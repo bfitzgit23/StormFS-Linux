@@ -1,10 +1,81 @@
 #!/bin/sh
+set -eu
 
-if [ -f /lib/modules/KERNELVERSION ]; then
-	kver=$(cat /lib/modules/KERNELVERSION)
-else
-	kver=$(file /boot/vmlinuz-BFS-Linux-6.15.8 | cut -d ' ' -f9)
+RAID_DRIVERS="linear raid0 raid1 raid10 raid456"
+
+find_new_kernel_release() {
+    find /boot -maxdepth 1 -type f -name 'vmlinuz-*-BFS-Linux' -printf '%T@ %f\n' 2>/dev/null |
+        sort -nr |
+        head -n1 |
+        sed 's/^[^ ]* vmlinuz-//'
+}
+
+kver="$(find_new_kernel_release)"
+if [ -z "$kver" ] || [ ! -d "/lib/modules/$kver" ]; then
+    echo "linux post-install: unable to determine newly installed kernel release" >&2
+    exit 1
 fi
 
-dracut -f /boot/initrd-6.15.8.img $kver
-depmod $kver
+kernel_image="/boot/vmlinuz-$kver"
+initramfs_image="/boot/initramfs-$kver.img"
+
+echo "Updating module dependencies for $kver"
+depmod -a "$kver"
+
+# During a BFSOS installation the installer owns the final storage topology,
+# Dracut invocation, and GRUB validation.  Defer those operations until the
+# installer has generated fstab/crypttab/mdadm/LVM state.
+if [ "${BFS_INSTALLER_RUNNING:-no}" = yes ]; then
+    echo "BFSOS installer detected; deferring initramfs/bootloader regeneration."
+    exit 0
+fi
+
+if ! command -v dracut >/dev/null 2>&1; then
+    echo "ERROR: dracut is not installed; refusing to finalize kernel $kver." >&2
+    exit 1
+fi
+
+echo "Generating $initramfs_image with BFSOS md RAID drivers"
+dracut --force --force-drivers "$RAID_DRIVERS" "$initramfs_image" "$kver"
+
+if command -v lsinitrd >/dev/null 2>&1; then
+    image_listing="$(lsinitrd "$initramfs_image" 2>/dev/null || true)"
+    for driver in $RAID_DRIVERS; do
+        if ! printf '%s\n' "$image_listing" | grep -qE "/${driver}\\.ko([.]|$)"; then
+            echo "ERROR: initramfs is missing required md driver: $driver" >&2
+            exit 1
+        fi
+    done
+fi
+
+
+# Remove only initramfs images whose matching installed module tree no longer
+# exists. Never remove the new image or the running kernel's image.
+running_kver="$(uname -r 2>/dev/null || true)"
+for image in /boot/initramfs-*-BFS-Linux.img; do
+    [ -e "$image" ] || continue
+    old_kver=${image#/boot/initramfs-}
+    old_kver=${old_kver%.img}
+    [ "$old_kver" = "$kver" ] && continue
+    [ "$old_kver" = "$running_kver" ] && continue
+    if [ ! -d "/lib/modules/$old_kver" ]; then
+        echo "Removing obsolete initramfs: $image"
+        rm -f -- "$image"
+    fi
+done
+
+# Clean the helper used by older BFSOS kernel packages after no code depends on
+# it anymore.
+rm -f /lib/modules/KERNELVERSION
+
+
+# Remove generic kernel aliases: grub-mkconfig can enumerate them as
+# separate kernels without pairing the matching initramfs.
+rm -f /boot/vmlinuz-BFS-Linux /boot/initramfs-BFS-Linux.img
+
+if command -v grub-mkconfig >/dev/null 2>&1 && [ -d /boot/grub ]; then
+    echo "Regenerating GRUB configuration"
+    grub-mkconfig -o /boot/grub/grub.cfg
+fi
+
+echo "Linux $kver post-install completed."

@@ -1,0 +1,23 @@
+# Description: Read metadata from Python packages
+# URL: https://pypi.org/project/importlib-metadata/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: python3-setuptools python3-setuptools-scm python3-gpep517 python3-zipp
+
+name=python3-importlib_metadata
+version=9.0.0
+release=1
+source=(https://pypi.python.org/packages/source/i/importlib_metadata/importlib_metadata-$version.tar.gz)
+
+build() {
+	cd importlib_metadata-$version
+
+	export SETUPTOOLS_SCM_PRETEND_VERSION=$version
+
+	    gpep517 build-wheel \
+		--wheel-dir .dist \
+		--output-fd 3 3>&1 >&2
+
+	    python3 -m installer \
+		-d $PKG \
+		.dist/*.whl
+}

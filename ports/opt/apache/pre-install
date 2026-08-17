@@ -1,0 +1,6 @@
+#!/bin/sh
+
+getent group apache >/dev/null || groupadd -g 25 apache
+
+getent passwd apache >/dev/null || \
+useradd -r -M -g apache -G apache -c "Apache Server" -d /srv/www -s /sbin/nologin -u 25 apache

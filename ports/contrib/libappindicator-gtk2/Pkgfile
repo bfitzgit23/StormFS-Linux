@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: Allow applications to extend a menu via Ayatana indicators in Unity, KDE or Systray
 # URL: https://launchpad.net/libappindicator
-# Maintainer: Tim Biermann, tbier at posteo dot de
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: dbus-glib libdbusmenu-gtk2
 
 name=libappindicator-gtk2

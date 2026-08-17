@@ -1,0 +1,16 @@
+# Description: The sysstat package contains various utilities, common to many commercial Unixes, to monitor system performance and usage activity
+# URL: https://sysstat.github.io
+# Maintainer: Fraggle, fraggle at disroot dot org
+# Depends on: gettext
+
+name=sysstat
+version=12.7.9
+release=1
+source=(https://sysstat.github.io/sysstat-packages/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+	./configure --prefix=/usr
+	make
+	make DESTDIR=$PKG install
+}

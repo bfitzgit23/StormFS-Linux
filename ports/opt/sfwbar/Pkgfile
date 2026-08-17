@@ -1,0 +1,20 @@
+# Description: S* Floating Window Bar
+# URL: https://github.com/LBCrion/sfwbar
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: gtk-layer-shell json-c
+
+name=sfwbar
+version=1.0_beta17
+release=1
+source=($name-$version.tar.gz::https://github.com/LBCrion/sfwbar/archive/refs/tags/v$version.tar.gz)
+
+build() {
+	export CFLAGS="$CFLAGS -Wno-incompatible-pointer-types"
+	export LDFLAGS="-Wl,-O1,--as-needed"
+
+	meson setup $name-$version build -Db_lto=false
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+
+	rm $PKG/usr/share/sfwbar/icons/weather/LICENSE
+}

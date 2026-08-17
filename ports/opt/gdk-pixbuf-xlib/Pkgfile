@@ -1,0 +1,16 @@
+# Description: Deprecated Xlib integration for GdkPixbuf
+# URL: https://gitlab.gnome.org/Archive/gdk-pixbuf-xlib
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: gdk-pixbuf libx11
+
+name=gdk-pixbuf-xlib
+version=2.40.2
+release=1
+source=(https://gitlab.gnome.org/Archive/$name/-/archive/$version/$name-$version.tar.bz2)
+
+build() {
+
+	meson setup $name-$version build 
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

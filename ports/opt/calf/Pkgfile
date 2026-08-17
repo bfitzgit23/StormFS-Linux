@@ -1,0 +1,23 @@
+# Description: LV2/DSSI/LADSPA plug-in suite and standalone Jack host
+# URL: https://calf-studio-gear.org
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: fluidsynth
+
+name=calf
+version=0.90.9
+release=1
+source=($name-$version.tar.gz::https://github.com/calf-studio-gear/calf/archive/$version.tar.gz)
+
+build() {
+	cmake -S $name-$version -B build -G Ninja \
+	        -DCMAKE_INSTALL_PREFIX=/usr \
+	        -DCMAKE_INSTALL_LIBDIR=lib \
+	        -DCMAKE_BUILD_TYPE=Release \
+	        -DCMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
+	        -DCMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+		-DWANT_EXPERIMENTAL=ON \
+		-DWANT_GUI=OFF \
+	        -Wno-dev
+	cmake --build build
+	DESTDIR=$PKG cmake --install build
+}

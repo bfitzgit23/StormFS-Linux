@@ -1,0 +1,44 @@
+# Description: Private WireGuard networks made easy
+# URL: https://tailscale.com
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: go
+
+name=tailscale
+version=1.100.0
+release=1
+source=($name-$version.tar.gz::https://github.com/$name/$name/archive/v$version.tar.gz rc.tailscaled)
+
+build() {
+	cd $name-$version
+
+	export GOCACHE="${GOCACHE:-"$SRC/go-cache"}"
+	export GOTMPDIR="${GOTMPDIR:-"$SRC"}"
+	export GOMODCACHE="${GOMODCACHE:-"$SRC/go"}"
+
+	TAGS="netcgo osusergo static_build xversion"
+
+	VERSIONFLAGS="
+	-X tailscale.com/version.shortStamp=$version
+	-X tailscale.com/version.longStamp=$version-VenomLinux
+	-X tailscale.com/version.gitCommitStamp=VenomLinux
+	"
+
+	go build -tags "$TAGS" -ldflags "$VERSIONFLAGS" ./cmd/tailscale
+	go build -tags "$TAGS" -ldflags "$VERSIONFLAGS" ./cmd/tailscaled
+
+	install -Dm755 tailscale $PKG/usr/bin/tailscale
+	install -Dm755 tailscaled $PKG/usr/sbin/tailscaled
+
+	 # runit service
+	prt-get isinst runit && {
+		install -Dm755 $SRC/run.tailscaled $PKG/etc/sv/sshd/run
+		ln -s /run/runit/supervise.tailscaled $PKG/etc/sv/sshd/supervise
+	} || continue
+
+	# rc service
+	prt-get isinst sysvinit && \
+		install -Dm755 $SRC/rc.tailscaled $PKG/etc/rc.d/tailscaled || continue
+
+	mkdir $PKG/etc/modules-load.d/
+	printf "tun" > $PKG/etc/modules-load.d/tailscale.conf
+}

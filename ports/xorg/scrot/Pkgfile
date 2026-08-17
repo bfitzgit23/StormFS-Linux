@@ -1,0 +1,20 @@
+# Description: Simple command-line screenshot utility for X
+# URL: https://github.com/resurrecting-open-source-projects/scrot
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: giblib imlib2 autoconf-archive libxfixes libxcomposite libbsd
+
+name=scrot
+version=2.0.0
+release=1
+source=(https://github.com/resurrecting-open-source-projects/$name/archive/refs/tags/$version.tar.gz)
+
+build() {
+	cd $name-$version
+
+	NOCONFIGURE=1 ./autogen.sh
+	./configure \
+		--prefix=/usr \
+		--mandir=/usr/share/man
+	make
+	make DESTDIR=$PKG install
+}

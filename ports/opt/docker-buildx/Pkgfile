@@ -1,0 +1,26 @@
+# Description: Docker CLI plugin for extended build capabilities with BuildKit
+# URL: https://github.com/docker/buildx/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: docker
+
+name=docker-buildx
+version=0.35.0
+release=1
+source=(https://github.com/docker/buildx/archive/v$version/$name-$version.tar.gz)
+
+build() {
+	export CGO_CFLAGS="${CFLAGS}"
+	export CGO_CPPFLAGS="${CPPFLAGS}"
+	export CGO_CXXFLAGS="${CXXFLAGS}"
+	export CGO_LDFLAGS="${LDFLAGS}"
+	export GOFLAGS="-buildmode=pie -trimpath -mod=readonly -modcacherw"
+	export GO111MODULE=on
+
+	cd buildx-$version
+	go build -mod=vendor -o docker-buildx -ldflags "-linkmode=external \
+		-X github.com/docker/buildx/version.Version=$version \
+		-X github.com/docker/buildx/version.Revision=1c1dbb2e4cb5363110f42102744a08d034c2300d \
+		-X github.com/docker/buildx/version.Package=github.com/docker/buildx" \
+		./cmd/buildx
+	install -Dm755 $name $PKG/usr/lib/docker/cli-plugins/$name
+}

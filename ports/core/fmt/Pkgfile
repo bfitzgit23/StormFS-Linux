@@ -1,0 +1,19 @@
+# Description: Modern formatting library for C++
+# URL: https://fmt.dev/
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+
+name=fmt
+version=12.2.0
+release=1
+source=(https://github.com/fmtlib/fmt/releases/download/$version/fmt-$version.zip)
+
+build() {
+    cmake -S $name-$version -B build -G Ninja \
+        -D CMAKE_INSTALL_PREFIX=/usr \
+        -D CMAKE_INSTALL_LIBDIR=lib \
+        -D CMAKE_BUILD_TYPE=Release \
+        -D FMT_DOC=OFF \
+        -D FMT_TEST=OFF
+    cmake --build build
+    DESTDIR=$PKG cmake --install build
+}

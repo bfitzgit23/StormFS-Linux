@@ -1,0 +1,18 @@
+# Description: Brushes used by MyPaint and other software using libmypaint (v1.x)
+# URL: https://github.com/mypaint/mypaint-brushes
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libmypaint
+
+name=mypaint-brushes1
+version=1.3.1
+release=2
+source=(https://github.com/mypaint/mypaint-brushes/archive/v${version}/${name}-${version}.tar.gz)
+
+build() {
+	cd ${name%1}-$version
+
+	autoreconf -fiv
+	./configure --prefix=/usr
+	make
+	make DESTDIR=$PKG install
+}

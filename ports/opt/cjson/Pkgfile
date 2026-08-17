@@ -1,0 +1,23 @@
+# Description: Ultralightweight JSON parser in ANSI C
+# URL: https://github.com/DaveGamble/cJSON
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: cmake
+
+name=cjson
+version=1.7.19
+release=1
+source=($name-$version.tar.gz::https://github.com/DaveGamble/cJSON/archive/v$version.tar.gz)
+
+build() {
+	cmake -S cJSON-$version -B build \
+		-DCMAKE_POLICY_VERSION_MINIMUM=3.5\
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DCMAKE_INSTALL_LIBEXECDIR=lib \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+		-DENABLE_CJSON_UTILS=On \
+		-Wno-dev
+	make -C build
+	make -C build DESTDIR=$PKG install
+}

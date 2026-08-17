@@ -1,0 +1,26 @@
+# Description: Modular text mode IRC client with Perl scripting
+# URL: https://irssi.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: meson glib openssl perl
+
+name=irssi
+version=1.4.5
+release=3
+source=(https://github.com/irssi/irssi/releases/download/$version/$name-$version.tar.xz)
+
+build() {
+
+	meson setup $name-$version build \
+		-Dwith-perl-lib=vendor \
+		-Dwith-proxy=yes \
+		-Dwith-perl=yes \
+		-Denable-true-color=yes
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+	install -Dm 644 $name-$version/irssi.conf "$PKG"/etc/irssi.conf
+	
+	# exclude library for revdep.
+        install -d $PKG/etc/revdep.d
+        echo "/usr/lib/perl5/site_perl/5.42/x86_64-linux-thread-multi/auto/Irssi/" > $PKG/etc/revdep.d/$name.conf
+
+}

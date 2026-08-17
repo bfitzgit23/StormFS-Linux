@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: A free and open video compression format from the Xiph.org Foundation.
 # URL: https://www.theora.org/
-# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: libtheora libvorbis-32
 
 name=libtheora-32

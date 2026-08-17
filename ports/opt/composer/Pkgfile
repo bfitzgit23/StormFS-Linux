@@ -1,0 +1,13 @@
+# Description: Dependency Manager for PHP
+# URL: https://getcomposer.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: php unzip
+
+name=composer
+version=2.10.1
+release=1
+source=($name-$version.phar::https://github.com/composer/composer/releases/download/$version/composer.phar)
+
+build() {
+	install -Dm755 composer-$version.phar "${PKG}/usr/bin/composer"
+}

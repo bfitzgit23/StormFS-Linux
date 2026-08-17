@@ -1,0 +1,25 @@
+# Description: The Berkeley DB embedded database system
+# URL: https://www.oracle.com/technology/software/products/berkeley-db/index.html
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: bash
+
+name=db
+version=6.2.32
+release=2
+source=(http://download.oracle.com/berkeley-db/${name}-${version}.tar.gz)
+
+build() {
+	cd $name-$version
+	cd build_unix
+	export CFLAGS="$CFLAGS -Wno-incompatible-pointer-types"
+	../dist/configure \
+		--prefix=/usr \
+		--enable-compat185 \
+		--disable-static \
+		--enable-cxx \
+		--enable-dbm
+	make
+	make DESTDIR=$PKG install
+
+	rm -r $PKG/usr/docs
+}

@@ -1,0 +1,19 @@
+# Description: A tiny but valid init for containers
+# URL: https://github.com/krallin/tini
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: cmake ninja
+
+name=tini
+version=0.19.0
+release=1
+source=($name-$version.tar.gz::https://github.com/krallin/$name/archive/v$version.tar.gz)
+
+build() {
+	cmake -S $name-$version -B build -G Ninja \
+		-DCMAKE_POLICY_VERSION_MINIMUM=3.5\
+		-DCMAKE_BUILD_TYPE=None
+	cmake --build build --target all 
+
+	install -Dm755 build/tini "$PKG"/sbin/tini
+
+}

@@ -1,3 +1,5 @@
+# Add your top line text here
+# Your line to add at the top here
 # Depends on: gst-plugins-base tracker exempi gexiv2 giflib gst-plugins-good gst-libav icu libexif libgxps libseccomp poppler upower
 
 name=tracker-miners

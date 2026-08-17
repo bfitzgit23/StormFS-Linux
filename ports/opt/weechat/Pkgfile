@@ -1,0 +1,25 @@
+# Description: The extensible chat client
+# URL: https://weechat.org
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libgcrypt gnutls lua zstd cjson
+
+name=weechat
+version=4.9.2
+release=1
+source=(https://weechat.org/files/src/weechat-$version.tar.xz)
+
+build() {
+	cmake -S $name-$version -B build -G Ninja \
+	        -DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+		-DENABLE_PHP=OFF \
+		-DENABLE_GUILE=OFF \
+		-DENABLE_TCL=OFF \
+		-DENABLE_SPELL=OFF \
+		-DENABLE_JAVASCRIPT=OFF \
+		-DENABLE_RUBY=OFF \
+		-Wno-dev 
+	cmake --build build
+	DESTDIR=$PKG cmake --install build
+}

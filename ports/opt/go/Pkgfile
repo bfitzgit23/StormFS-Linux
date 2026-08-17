@@ -1,0 +1,40 @@
+# Description: The Go Programming Language
+# URL: https://golang.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=go
+version=1.26.4
+release=1
+source=($name-${version}.src.tar.gz::https://golang.org/dl/go${version}.src.tar.gz ${name}-${version}.linux-amd64.tar.gz::https://golang.org/dl/go${version}.linux-amd64.tar.gz)
+noextract=(${name}-${version}.linux-amd64.tar.gz)
+
+build() {
+
+	install -d $name-${version}
+
+	tar -xf $SRC/$name-${version}.linux-amd64.tar.gz \
+	-C $SRC/$name-${version} --strip-components=1
+
+	tar -xf $SRC/$name-${version}.src.tar.gz \
+        -C $SRC
+
+	export GOCACHE=$SRC/go-build
+	export GOROOT_BOOTSTRAP=$SRC/$name-${version}
+	export GOROOT_FINAL=/usr/lib/go
+	export GOARCH=amd64
+	export GOOS=linux
+	
+	cd go/src
+	./make.bash
+
+	install -d $PKG/usr/lib
+	mv $SRC/go $PKG/usr/lib/
+
+	install -d $PKG/usr/bin
+	ln -s /usr/lib/go/bin/go $PKG/usr/bin/
+	ln -s /usr/lib/go/bin/gofmt $PKG/usr/bin/
+
+	rm -rf $SRC/go/pkg/obj/go-build/*
+	find $PKG \( -name "README*" -o -name "AUTHORS" -o -name "TODO" \) -delete
+	rm $PKG/usr/lib/go/src/*.bat
+}

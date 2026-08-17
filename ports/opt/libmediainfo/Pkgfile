@@ -1,0 +1,25 @@
+# Description: Shared library for mediainfo
+# URL: https://mediaarea.net
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libmms libzen tinyxml2
+
+name=libmediainfo
+version=26.05
+release=1
+source=(https://mediaarea.net/download/source/libmediainfo/$version/libmediainfo_$version.tar.xz graphviz-13.patch)
+
+build() {
+	patch -d MediaInfoLib -p1 < graphviz-13.patch # Fix build with GraphViz 13
+
+	cd MediaInfoLib/Project/GNU/Library
+
+	./autogen.sh
+	./configure --prefix=/usr \
+              --enable-shared \
+              --disable-static \
+              --with-libcurl \
+              --with-libmms \
+              --with-libtinyxml2
+	make
+	make DESTDIR=$PKG install
+}

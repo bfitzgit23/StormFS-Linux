@@ -1,0 +1,25 @@
+# Description: Daemon-less notifications without D-Bus. Minimal and lightweight.
+# URL: https://github.com/dudik/herbe
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libx11 libxft
+
+name=herbe
+version=1.0.0
+release=1
+source=(https://github.com/dudik/herbe/archive/$version/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+
+	if [ -f $_portdir/config.h ]; then
+		cp $_portdir/config.h .
+	fi
+
+	for p in $_portdir/*.patch $_portdir/*.diff; do
+		[ -f $p ] || continue
+		patch -Np1 -i $p
+	done
+
+	make PREFIX=/usr
+        make PREFIX=/usr DESTDIR=$PKG install
+}

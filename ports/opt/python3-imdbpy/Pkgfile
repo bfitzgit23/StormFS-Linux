@@ -1,0 +1,16 @@
+# Description: Python bindings for the Internet Movie Database (IMDb)
+# URL: https://imdbpy.sourceforge.io/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: python3-lxml python3-setuptools python3-sqlalchemy python3-greenlet
+
+name=python3-imdbpy
+version=2023.05.01
+release=1
+source=($name-$version.tar.gz::https://github.com/cinemagoer/cinemagoer/archive/refs/tags/$version.tar.gz)
+
+build() {
+	cd cinemagoer-$version
+	python3 setup.py build
+	python3 setup.py install --skip-build --optimize=1 --root="${PKG}"
+	
+}

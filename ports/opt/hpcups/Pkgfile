@@ -1,0 +1,32 @@
+# Description: Description: Ghostscript add-on for HP inkjet/laserjet printers
+# URL: https://sourceforge.net/projects/hplip/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: cups libjpeg-turbo
+
+name=hpcups
+version=3.25.8
+release=1
+source=(http://downloads.sourceforge.net/project/hplip/hplip/$version/hplip-$version.tar.gz hplip-gcc14.patch)
+
+build() {
+	cd hplip-$version
+
+	patch -Np1 -i $SRC/hplip-gcc14.patch
+
+	./configure \
+		--prefix=/usr \
+		--enable-hpcups-only-build \
+		--enable-hpcups-install \
+		--with-hpppddir=/usr/share/cups/model/HP \
+		--disable-doc-build \
+		--disable-network-build
+
+	make
+	make DESTDIR=$PKG install
+
+	# https://bugs.archlinux.org/task/59548
+	install prnt/hpcups/libImageProcessor-x86_64.so $PKG/usr/lib
+	ln -s libImageProcessor-x86_64.so $PKG/usr/lib/libImageProcessor.so
+
+	rm -r $PKG/usr/share/doc
+}

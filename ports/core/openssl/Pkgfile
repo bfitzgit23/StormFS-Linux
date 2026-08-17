@@ -1,5 +1,7 @@
+# Add your top line text here
+# Your line to add at the top here
 name=openssl
-version=3.5.2
+version=4.0.1
 release=1
 source=(https://github.com/openssl/openssl/releases/download/$name-$version/$name-$version.tar.gz)
 keep_static=1

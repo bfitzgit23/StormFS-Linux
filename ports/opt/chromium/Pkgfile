@@ -1,0 +1,96 @@
+# Description: Chromium web browser built from source
+# URL: https://www.chromium.org/
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Depends on: alsa-lib at-spi2-core atk cups dbus-glib dbus-python ffmpeg fontconfig freetype2 harfbuzz icu libXcomposite libXcursor libXdamage libXext libXfixes libXrandr libXrender libXScrnSaver libdrm libgbm libxcb gtk3 nspr nss pango pciutils pipewire png systemd libva xdg-utils
+# Optional: ccache clang lld llvm nodejs python3
+
+name=chromium
+version=138.0.7103.49
+release=1
+source=(https://chromium.googlesource.com/chromium/src.git/+archive/refs/tags/$version.tar.gz
+    chromium.desktop
+    chromium-launcher
+    smoothscroll.patch
+    remove-smooth-scrolling-flag.patch
+    fix-niceness.patch
+    chromium.d/default)
+
+build() {
+    cd src
+
+    for p in $SRC/*.patch; do
+        patch -p1 -i $p
+    done
+
+    # Configure build with GN
+    cat > out/Default/args.gn << EOF
+is_official_build = true
+is_debug = false
+symbol_level = 0
+chrome_pgo_phase = 0
+is_component_build = false
+proprietary_codecs = true
+ffmpeg_branding = "Chrome"
+use_vaapi = true
+use_pulseaudio = true
+use_cups = true
+use_dbus = true
+use_gnome_keyring = false
+use_kerberos = false
+use_unofficial_google_api_keys = false
+enable_nacl = false
+enable_print_preview = true
+enable_remoting = false
+enable_webui_tab_strip = false
+enable_widevine = false
+use_gio = true
+use_system_harfbuzz = true
+use_system_libjpeg = true
+use_system_zlib = true
+use_system_freetype = true
+use_system_libpng = true
+use_system_libdrm = true
+use_system_xdg_utils = true
+use_sysroot = false
+custom_toolchain = ""
+gcc_toolchain = ""
+target_cpu = "x64"
+EOF
+
+    # Build with gn and ninja
+    which gn || ln -s /usr/bin/gn /usr/local/bin/gn
+    which ninja || ln -s /usr/bin/ninja /usr/local/bin/ninja
+
+    gn gen out/Default
+    ninja -C out/Default chrome chromedriver
+
+    # Install
+    install -Dm755 out/Default/chrome $PKG/usr/lib/chromium/chromium
+    install -Dm755 out/Default/chromedriver $PKG/usr/lib/chromium/chromedriver
+
+    # Install desktop file
+    install -Dm644 $SRC/chromium.desktop $PKG/usr/share/applications/chromium.desktop
+
+    # Install launcher script
+    install -Dm755 $SRC/chromium-launcher $PKG/usr/bin/chromium
+
+    # Install chromium default flags
+    install -Dm644 $SRC/chromium.d/default $PKG/etc/chromium.d/default
+
+    # Install icons
+    for size in 24 48 64 128 256; do
+        install -Dm644 chrome/app/theme/chromium/product_logo_${size}.png \
+            $PKG/usr/share/icons/hicolor/${size}x${size}/apps/chromium.png
+    done
+
+    # Install man page
+    install -Dm644 chrome/app/resources/manpage.1 $PKG/usr/share/man/man1/chromium.1
+
+    # Remove unnecessary files
+    rm -rf $PKG/usr/lib/chromium/locales/*.pak
+    install -Dm644 locales/en-US.pak $PKG/usr/lib/chromium/locales/en-US.pak
+
+    # Create symlinks
+    mkdir -p $PKG/usr/bin
+    ln -s /usr/lib/chromium/chromedriver $PKG/usr/bin/chromedriver
+}

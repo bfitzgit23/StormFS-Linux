@@ -1,0 +1,24 @@
+# Description: A simple Wayland output mirror client
+# URL: https://github.com/Ferdi265/wl-mirror
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: mesa wayland-protocols
+
+name=wl-mirror
+version=0.18.5
+release=1
+source=(https://github.com/Ferdi265/wl-mirror/releases/download/v$version/$name-$version.tar.gz)
+
+build() {
+	cmake -S $name-$version -B build \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DCMAKE_INSTALL_LIBEXECDIR=lib \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+		-DCMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
+		-DINSTALL_EXAMPLE_SCRIPTS=OFF \
+		-DINSTALL_DOCUMENTATION=OFF \
+		-Wno-dev 
+	cmake --build build
+	DESTDIR=$PKG cmake --install build
+}

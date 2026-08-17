@@ -1,0 +1,13 @@
+# Description: ALSA Configuration for PulseAudio
+# URL: https://www.alsa-project.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: alsa-plugins pulseaudio
+
+name=pulseaudio-alsa
+version=1
+release=1
+source=(asound.conf)
+
+build() {
+	install -Dm644 asound.conf "$PKG/etc/asound.conf"
+}

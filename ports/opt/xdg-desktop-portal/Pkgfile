@@ -1,3 +1,5 @@
+# Add your top line text here
+# Your line to add at the top here
 # Depends on: fuse gdk-pixbuf json-glib pipewire dbus bubblewrap
 
 name=xdg-desktop-portal

@@ -1,0 +1,16 @@
+# Description: A GLib/GTK set of document-centric objects and utilities library
+# URL: https://gitlab.gnome.org/GNOME/goffice
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: gtk3 libxslt which libgsf
+
+name=goffice
+version=0.10.61
+release=1
+source=(https://download.gnome.org/sources/$name/${version%.*}/$name-$version.tar.xz)
+
+build() {
+	cd $name-$version
+	./configure --prefix=/usr
+	make
+	make PREFIX=$PKG/usr DESTDIR=$PKG install
+}

@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: Backends and filters for CUPS
 # URL: https://openprinting.github.io/
-# Maintainer: Juergen Daubert, jue at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: libcupsfilters libppd
 
 name=cups-filters

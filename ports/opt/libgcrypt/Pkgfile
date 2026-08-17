@@ -1,34 +1,26 @@
-# Description: A general purpose cryptographic library based on GnuPG
-# URL: https://www.gnupg.org
-# Maintainer: CRUX System Team, core-ports at crux dot nu
+# Description: General-purpose cryptographic library used by GnuPG and other applications.
+# URL: https://www.gnupg.org/software/libgcrypt/
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: libgpg-error
-# Optional: pth texlive tl-unx
 
 name=libgcrypt
-version=1.11.0
+version=1.11.2
 release=1
-source=(https://www.gnupg.org/ftp/gcrypt/libgcrypt/$name-$version.tar.bz2)
 
-build() {
-	cd $name-$version
+source=(
+    https://mirrors.dotsrc.org/gcrypt/libgcrypt/$name-$version.tar.bz2
+)
 
-	./configure --prefix=/usr &&
-make                      &&
+build_opt=(
+    --prefix=/usr
+)
 
-make -C doc html                                                       &&
-makeinfo --html --no-split -o doc/gcrypt_nochunks.html doc/gcrypt.texi &&
-makeinfo --plaintext       -o doc/gcrypt.txt           doc/gcrypt.texi
-	make DESTDIR=$PKG install &&
-install -v -dm755   $PKG/usr/share/doc/$name-$version &&
-install -v -m644    README doc/{README.apichanges,fips*,libgcrypt*} \
-                    $PKG/usr/share/doc/$name-$version &&
+pkg_build() {
+    ./configure "${build_opt[@]}"
 
-install -v -dm755   $PKG/usr/share/doc/$name-$version/html &&
-install -v -m644 doc/gcrypt.html/* \
-                    $PKG/usr/share/doc/$name-$version/html &&
-install -v -m644 doc/gcrypt_nochunks.html \
-                    $PKG/usr/share/doc/$name-$version      &&
-install -v -m644 doc/gcrypt.{txt,texi} \
-                    $PKG/usr/share/doc/$name-$version
-	rm -r $PKG/usr/share/info
+    make
+    make DESTDIR="$PKG" install
+
+    # BFS does not package GNU info pages.
+    rm -rf "$PKG/usr/share/info"
 }

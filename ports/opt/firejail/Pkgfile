@@ -1,0 +1,16 @@
+# Description: Linux namespaces sandbox program
+# URL: https://github.com/netblue30/firejail
+# Maintainer: 
+# Depends on: apparmor
+
+name=firejail
+version=0.9.80
+release=1
+source=(https://github.com/netblue30/$name/releases/download/$version/$name-$version.tar.xz)
+
+build() {
+  cd $name-$version
+  ./configure --prefix=/usr --enable-apparmor
+  make
+  make DESTDIR=$PKG install
+}

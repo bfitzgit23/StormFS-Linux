@@ -1,0 +1,19 @@
+# Description: a packaging friendly copy of the AudioProcessing module from the WebRTC project
+# URL: https://freedesktop.org/software/pulseaudio/webrtc-audio-processing/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: abseil-cpp
+
+name=webrtc-audio-processing
+version=2.1
+release=2
+source=(https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/archive/v2.1/webrtc-audio-processing-v$version.tar.bz2 58.patch 60.patch)
+
+build() {
+	patch -Np1 -d $name-v$version -i $SRC/58.patch
+	patch -Np1 -d $name-v$version -i $SRC/60.patch
+	meson setup $name-$version build \
+		-Dcpp_std=c++17 \
+		-Dneon=disabled
+	meson compile -C build
+	DESTDIR=$PKG meson install -C build
+}

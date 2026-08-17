@@ -1,3 +1,5 @@
+# Add your top line text here
+# Your line to add at the top here
 # Depends on: python3-certifi python3-urllib3
 
 name=sentry_sdk

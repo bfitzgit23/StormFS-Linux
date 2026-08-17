@@ -1,3 +1,5 @@
+# Add your top line text here
+# Your line to add at the top here
 # Depends on: docbook-xsl karchive ki18n p5-uri
 
 name=kdoctools

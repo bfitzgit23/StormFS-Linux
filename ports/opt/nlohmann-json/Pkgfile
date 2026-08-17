@@ -1,0 +1,23 @@
+# Description: JSON for Modern C++
+# URL: https://github.com/nlohmann/json
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: cmake
+
+name=nlohmann-json
+version=3.12.0
+release=1
+source=(https://github.com/nlohmann/json/archive/v$version/$name-$version.tar.gz)
+
+build() {
+
+	cmake -S json-$version -B build -G Ninja \
+		-D CMAKE_INSTALL_PREFIX=/usr \
+		-D CMAKE_INSTALL_LIBDIR=lib \
+		-D CMAKE_BUILD_TYPE=Release \
+		-D CMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
+		-D JSON_BuildTests=OFF \
+		-D JSON_MultipleHeaders=ON \
+		-Wno-dev		
+	cmake --build build
+	DESTDIR=$PKG cmake --install build
+}

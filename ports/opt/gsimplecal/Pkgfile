@@ -1,0 +1,17 @@
+# Description: Simple and lightweight GTK calendar
+# URL: https://dmedvinsky.github.io/gsimplecal/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: gtk3
+
+name=gsimplecal
+version=2.5.2
+release=1
+source=($name-$version.tar.gz::https://github.com/dmedvinsky/$name/archive/v$version.tar.gz)
+
+build() {
+	cd $name-$version
+	./autogen.sh
+	./configure --prefix=/usr
+	make
+	make DESTDIR=$PKG install
+}

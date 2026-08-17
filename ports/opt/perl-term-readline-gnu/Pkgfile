@@ -1,0 +1,16 @@
+# Description: Perl extension for the GNU Readline/History Library
+# URL: https://metacpan.org/release/Term-ReadLine-Gnu/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: perl
+
+name=perl-term-readline-gnu
+version=1.47
+release=1
+source=($name-$version.tar.gz::https://cpan.metacpan.org/authors/id/H/HA/HAYASHI/Term-ReadLine-Gnu-$version.tar.gz)
+
+build() {
+	cd Term-ReadLine-Gnu-$version
+	perl -I. Makefile.PL INSTALLDIRS=vendor
+        make
+	make DESTDIR=$PKG install
+}

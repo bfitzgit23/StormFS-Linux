@@ -1,0 +1,20 @@
+# Description: A color image editing tool which features most standard paint program options
+# URL: http://sourceforge.net/projects/sf-xpaint/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libxaw3dxft netpbm
+
+name=xpaint
+version=3.1.4
+release=1
+source=(https://downloads.sourceforge.net/sf-$name/$name-$version.tar.bz2 $name.desktop)
+
+build() {
+	cd $name-$version
+
+	./configure --prefix=/usr
+	make -j1
+	make DESTDIR=$PKG install
+
+	install -Dm644 $SRC/$name.desktop \
+	    $PKG/usr/share/applications/$name.desktop
+}

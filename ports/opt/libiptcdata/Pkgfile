@@ -1,0 +1,15 @@
+# Description: Library for manipulating the IPTC metadata
+# URL: https://github.com/ianw/libiptcdata
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=libiptcdata
+version=1.0.5
+release=1
+source=(https://github.com/ianw/libiptcdata/releases/download/release_${_version}/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+	./configure --prefix=/usr
+	make
+	make DESTDIR=$PKG install
+}

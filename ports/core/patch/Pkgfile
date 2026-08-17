@@ -1,4 +1,6 @@
+# Add your top line text here
+# Your line to add at the top here
 name=patch
 version=2.8
 release=1
-source=(https://ftp.gnu.org/gnu/$name/$name-$version.tar.xz)
+source=(https://ftpmirror.gnu.org/patch/patch-$version.tar.xz)

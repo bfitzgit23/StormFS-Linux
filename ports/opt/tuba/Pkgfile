@@ -1,0 +1,16 @@
+# Description: Browse the fediverse
+# URL: https://tuba.geopjr.dev/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libadwaita libgee libsoup3 gtksourceview5
+
+name=tuba
+version=0.10.3
+release=1
+source=($name-$version.tar.gz::https://github.com/GeopJr/Tuba/archive/refs/tags/v$version.tar.gz)
+
+build() {
+	meson setup $name-$version build
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+	ln -s /usr/bin/dev.geopjr.Tuba $PKG/usr/bin/tuba
+}

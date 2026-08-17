@@ -1,0 +1,10 @@
+#!/bin/sh
+set -eu
+if [ "$(id -u)" -eq 0 ] \
+   && command -v runuser >/dev/null 2>&1 \
+   && command -v fakeroot >/dev/null 2>&1 \
+   && id pkgmk >/dev/null 2>&1; then
+    exec runuser -u pkgmk -- env HOME=/var/lib/pkgmk USER=pkgmk LOGNAME=pkgmk \
+        CCACHE_DIR=/var/cache/ccache fakeroot -- pkgmk "$@"
+fi
+exec pkgmk "$@"

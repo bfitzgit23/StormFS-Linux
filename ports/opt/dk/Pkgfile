@@ -1,0 +1,17 @@
+# Description: Tiling window manager taking inspiration from dwm, bspwm, and xmonad
+# URL: https://bitbucket.org/natemaia/dk
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: xcb-util-wm xcb-util-cursor xcb-util-keysyms
+
+name=dk
+version=2.3
+release=1
+source=($name-$version.tar.gz::https://bitbucket.org/natemaia/dk/get/v$version.tar.gz dk.desktop)
+
+build() {
+	cd natemaia-dk-$commit
+	make PREFIX=/usr
+	make PREFIX=/usr DESTDIR=$PKG install
+	install -d 644 $PKG/usr/share/xsessions
+	install -Dm 644 $SRC/dk.desktop $PKG/usr/share/xsessions/dk.desktop
+}

@@ -1,0 +1,39 @@
+# Description: Professional vector graphics editor
+# URL: https://inkscape.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: gsl boost gc poppler-glib popt gtkmm3 double-conversion potrace libsoup python3-lxml python3-numpy
+
+name=inkscape
+version=1.4.4
+release=4
+source=(https://media.inkscape.org/dl/resources/file/$name-$version.tar.xz 7919.patch)
+
+build() {
+	# https://gitlab.com/inkscape/inkscape/-/merge_requests/7919
+	patch -d $name-${version}* -Np1 -i $SRC/7919.patch
+
+	cmake -S $name-${version}* -B build -G Ninja \
+	        -DCMAKE_INSTALL_PREFIX=/usr \
+	        -DCMAKE_INSTALL_LIBDIR=lib \
+		-DCMAKE_INSTALL_LIBEXECDIR=lib \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+		-DCMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
+		-DPOPPLER_INCLUDE_DIR=/usr/include/poppler \
+		-DWITH_GSPELL=OFF \
+		-DWITH_GSOURCEVIEW=OFF \
+		-DWITH_IMAGE_MAGICK=OFF \
+		-DWITH_GRAPHICS_MAGICK=OFF \
+		-DWITH_LIBCDR=OFF \
+		-DWITH_LIBVISIO=OFF \
+		-DWITH_LIBWPG=OFF \
+		-DWITH_JEMALLOC=OFF \
+		-DWITH_ASAN=OFF \
+		-DWITH_PROFILING=OFF \
+		-DWITH_INTERNAL_2GEOM=ON \
+		-DBUILD_TESTING=OFF \
+		-DENABLE_POPPLER=OFF \
+		-Wno-dev
+	cmake --build build
+	DESTDIR=$PKG cmake --install build
+}

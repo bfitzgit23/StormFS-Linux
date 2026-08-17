@@ -1,0 +1,26 @@
+# Description: Vulkan Installable Client Driver (ICD) Loader
+# URL: https://www.khronos.org/vulkan/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: python3-lxml libxrandr vulkan-headers wayland
+
+name=vulkan-icd-loader
+version=1.4.350.1
+release=1
+source=($name-$version.tar.gz::https://github.com/khronosgroup/vulkan-loader/archive/${name%%-*}-sdk-$version/Vulkan-Loader-$version.tar.gz)
+
+build() {
+	cmake -S Vulkan-Loader-${name%%-*}-sdk-$version -B build \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DVULKAN_HEADERS_INSTALL_DIR=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DCMAKE_INSTALL_SYSCONFDIR=/etc \
+		-DCMAKE_INSTALL_DATADIR=/share \
+		-DCMAKE_SKIP_RPATH=True \
+		-DBUILD_TESTS=Off \
+		-DBUILD_WSI_XCB_SUPPORT=On \
+		-DBUILD_WSI_XLIB_SUPPORT=On \
+		-DBUILD_WSI_WAYLAND_SUPPORT=On \
+		-DCMAKE_BUILD_TYPE=Release 
+	cmake --build build
+	DESTDIR=$PKG cmake --install build
+}

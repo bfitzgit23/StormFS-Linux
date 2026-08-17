@@ -1,0 +1,16 @@
+# Description: A GObject library to create cabinet files
+# URL: https://wiki.gnome.org/msitools
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: glib gobject-introspection vala meson
+
+name=gcab
+version=1.6
+release=2
+source=(https://download.gnome.org/sources/gcab/$version/gcab-$version.tar.xz)
+
+build() {
+	cd $name-$version
+	venom-meson -Ddocs=false -Dtests=false build
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

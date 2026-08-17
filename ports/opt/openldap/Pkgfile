@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: Lightweight Directory Access Protocol (LDAP) Toolkit
 # URL: https://www.openldap.org/
-# Maintainer: CRUX System Team, core-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: cyrus-sasl libtool perl util-linux
 
 name=openldap

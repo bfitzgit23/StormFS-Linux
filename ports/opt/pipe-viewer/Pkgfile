@@ -1,0 +1,15 @@
+# Description: Lightweight YouTube client that does not require an YouTube API key
+# URL: github.com/trizen/pipe-viewer
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: mpv perl-module-build perl-data-dump perl-json perl-lwp-protocol-https perl-clone perl-http-date perl-try-tiny perl-http-cookies perl-encode-locale perl-html-parser perl-term-readline-gnu perl-unicode-linebreak perl-text-charwidth perl-http-message yt-dlp
+
+name=pipe-viewer
+version=0.5.8
+release=1
+source=($name-$version.tar.gz::https://github.com/trizen/pipe-viewer/archive/$version.tar.gz)
+
+build() {
+	cd $name-$version
+	perl Build.PL --gtk3
+	./Build install --destdir=$PKG --installdirs=vendor
+}

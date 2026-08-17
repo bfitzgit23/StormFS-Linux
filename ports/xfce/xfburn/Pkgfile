@@ -1,3 +1,5 @@
+# Add your top line text here
+# Your line to add at the top here
 # Depends on: exo libburn libisofs libxfce4ui gst-plugins-base cdrao
 
 name=xfburn

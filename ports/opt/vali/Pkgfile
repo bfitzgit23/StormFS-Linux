@@ -1,0 +1,15 @@
+# Description: A C library and code generator for Varlink
+# URL: https://gitlab.freedesktop.org/emersion/vali
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: aml json-c
+
+name=vali
+version=0.1.1
+release=1
+source=(https://gitlab.freedesktop.org/emersion/vali/-/releases/v$version/downloads/$name-$version.tar.gz)
+
+build() {
+	meson setup $name-$version build
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

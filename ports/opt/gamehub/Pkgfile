@@ -1,0 +1,15 @@
+# Description: All your games in one place Steam, GoG, Humble, etc
+# URL: https://tkashkin.tk/projects/gamehub/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: graphite2 json-glib keyutils krb5 libgee polkit webkitgtk
+
+name=gamehub
+version=0.16.3.2
+release=1
+source=($name-$vesion.tar.gz::https://github.com/tkashkin/GameHub/archive/${vrsn}-master/$name-${vrsn}-master.tar.gz)
+
+build() {
+	meson setup $name-$version build
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

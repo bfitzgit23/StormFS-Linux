@@ -1,0 +1,15 @@
+# Description: A YouTube/Youku/Niconico video downloader written in Python 3
+# URL: https://github.com/soimort/you-get
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: python3-setuptools
+
+name=you-get
+version=0.4.1743
+release=1
+source=(https://github.com/soimort/you-get/archive/v$version/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+	python3 setup.py build
+	python3 setup.py install --root="$PKG" --optimize=1 --skip-build
+}

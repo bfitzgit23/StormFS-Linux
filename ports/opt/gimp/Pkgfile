@@ -1,0 +1,15 @@
+# Description: GNU Image Manipulation Program
+# URL: https://www.gimp.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: appstream appstream-glib gexiv2 gegl libgudev libexif libjxl libwebp mypaint-brushes
+
+name=gimp
+version=3.2.4
+release=1
+source=(https://download.gimp.org/pub/gimp/v${version%.*}/$name-$version.tar.xz)
+
+build() {
+	meson setup $name-$version build -Ddebug=false -Db_lto=false
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

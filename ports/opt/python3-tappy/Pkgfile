@@ -1,0 +1,17 @@
+# Description: Test Anything Protocol (TAP) tools for Python
+# URL: https://pypi.python.org/pypi/tap.py
+# Maintainer: CELESTIFYX Team <celestifyx@gmail.com>
+# Depends on: python3-hatchling python3-babel python3-pyaml python3-more-itertools
+
+name=python3-tappy
+version=3.2.1
+release=1
+source=(${name}-${version}.tar.gz::https://files.pythonhosted.org/packages/source/t/tap_py/tap_py-${version}.tar.gz)
+
+build() {
+    cd tap_py-${version}
+
+    python3 -m build --wheel --no-isolation
+    python3 -m unittest discover -v
+    python3 -m installer --destdir="${PKG}" dist/*.whl
+}

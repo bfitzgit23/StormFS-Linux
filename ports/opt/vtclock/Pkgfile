@@ -1,0 +1,17 @@
+# Description: Text-mode full-screen digital clock
+# URL: http://github.com/dse/vtclock
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: ncurses
+
+name=vtclock
+version=0.99.1
+release=1
+source=($name-$version.tar.gz::https://github.com/dse/$name/archive/refs/tags/v$version.tar.gz)
+
+build() {
+	cd $name-$version
+
+	make
+  	install -d $PKG/usr/bin
+	make prefix=$PKG/usr/ install
+}

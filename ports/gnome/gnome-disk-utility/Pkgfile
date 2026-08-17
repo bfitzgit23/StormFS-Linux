@@ -1,3 +1,5 @@
+# Add your top line text here
+# Your line to add at the top here
 # Depends on: gnome-settings-daemon itstool libdvdread libhandy libpwquality libsecret udisks
 
 name=gnome-disk-utility

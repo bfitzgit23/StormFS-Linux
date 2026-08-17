@@ -1,0 +1,23 @@
+# Description: Ruby FFI
+# URL: https://github.com/ffi/ffi
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: ruby
+
+name=ruby-ffi
+version=1.17.4
+release=1
+source=(https://rubygems.org/downloads/${name##*-}-$version.gem)
+
+build() {
+	_gemdir="$(ruby -e'puts Gem.default_dir')"
+
+	gem install \
+		--ignore-dependencies \
+		--no-user-install \
+		--no-document \
+		-i "$PKG/$_gemdir" \
+		-n "$PKG"/usr/bin \
+		${name##*-}-$version.gem
+
+	rm "$PKG/$_gemdir/cache/${name##*-}-$version.gem"
+}

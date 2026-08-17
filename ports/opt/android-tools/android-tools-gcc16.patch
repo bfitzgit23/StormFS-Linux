@@ -1,0 +1,39 @@
+diff --git a/vendor/libbase/hex.cpp.orig b/vendor/libbase/hex.cpp
+index a4b7715..b980f61 100644
+--- a/vendor/libbase/hex.cpp.orig
++++ b/vendor/libbase/hex.cpp
+@@ -17,6 +17,7 @@
+ #include "android-base/hex.h"
+ 
+ #include "android-base/logging.h"
++#include <cstdint>
+ 
+ namespace android {
+ namespace base {
+
+diff --git a/vendor/extras/libjsonpb/parse/jsonpb.cpp.orig b/vendor/extras/libjsonpb/parse/jsonpb.cpp
+index b342c2b..ebd71bf 100644
+--- a/vendor/extras/libjsonpb/parse/jsonpb.cpp.orig
++++ b/vendor/extras/libjsonpb/parse/jsonpb.cpp
+@@ -33,7 +33,7 @@ using google::protobuf::util::TypeResolver;
+ static constexpr char kTypeUrlPrefix[] = "type.googleapis.com";
+ 
+ std::string GetTypeUrl(const Message& message) {
+-  return std::string(kTypeUrlPrefix) + "/" + message.GetDescriptor()->full_name();
++  return std::string(kTypeUrlPrefix) + "/" + std::string(message.GetDescriptor()->full_name());
+ }
+ 
+ ErrorOr<std::string> MessageToJsonString(const Message& message) {
+
+diff --git a/vendor/libziparchive/include/ziparchive/zip_writer.h.orig b/vendor/libziparchive/include/ziparchive/zip_writer.h
+index 268e8b6..968203f 100644
+--- a/vendor/libziparchive/include/ziparchive/zip_writer.h.orig
++++ b/vendor/libziparchive/include/ziparchive/zip_writer.h
+@@ -27,6 +27,7 @@
+ 
+ #include "android-base/macros.h"
+ #include "android-base/off64_t.h"
++#include <cstdint>
+ 
+ struct z_stream_s;
+ typedef struct z_stream_s z_stream;

@@ -1,0 +1,19 @@
+# Description: Linux OS platform information API
+# URL: https://github.com/python-distro/distro
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: python3-gpep517
+
+name=python3-distro
+version=1.9.0
+release=3
+source=($name-$version.tar.gz::https://github.com/nir0s/distro/archive/v${version}/python-distro-${version}.tar.gz)
+
+build() {
+	cd distro-$version
+	gpep517 build-wheel \
+		--wheel-dir .dist \
+		--output-fd 3 3>&1 >&2
+
+	python3 -m installer -d $PKG \
+		.dist/distro-*.whl
+}

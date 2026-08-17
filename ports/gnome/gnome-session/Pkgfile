@@ -1,3 +1,5 @@
+# Add your top line text here
+# Your line to add at the top here
 # Depends on: gnome-desktop json-glib mesa systemd upower
 
 name=gnome-session

@@ -1,0 +1,25 @@
+# Description: Simple X display locker
+# URL: https://tools.suckless.org/slock/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libx11 libxext libxrandr
+
+name=slock
+version=1.6
+release=1
+source=(https://dl.suckless.org/tools/slock-$version.tar.gz)
+
+build() {
+	cd $name-$version
+
+	if [ -f $_portdir/config.h ]; then
+		cp $_portdir/config.h .
+	fi
+
+	for p in $_portdir/*.patch $_portdir/*.diff; do
+		[ -f $p ] || continue
+		patch -Np1 -i $p
+	done
+
+	make PREFIX=/usr
+        make PREFIX=/usr DESTDIR=$PKG install
+}

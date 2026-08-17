@@ -1,0 +1,17 @@
+# Description: Drop-in replacement for the wlroots scene API
+# URL: https://github.com/wlrfx/scenefx
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: glslang pkgconf wlroots
+
+name=scenefx
+version=0.4.1
+release=1
+source=($name-$version.tar.gz::https://github.com/wlrfx/scenefx/archive/refs/tags/${version}.tar.gz)
+
+build() {
+	meson setup $name-$version build \
+		-Dwerror=false \
+		-Db_ndebug=false
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

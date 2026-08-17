@@ -1,0 +1,15 @@
+# Description: Set of C++ bindings for GLib
+# URL: https://www.gtkmm.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: doxygen glib libsigc++3
+
+name=glibmm-gtk4
+version=2.88.0
+release=1
+source=($name-$version.tar.bz2::https://gitlab.gnome.org/GNOME/${name%-*}/-/archive/$version/${name%-*}-$version.tar.bz2)
+
+build() {
+	meson setup $name-$version build -Dmaintainer-mode=true
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

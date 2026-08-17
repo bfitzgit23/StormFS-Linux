@@ -1,19 +1,26 @@
-syntax: glob
+# BFS generated/downloaded build data
+/packages/*
+/sources/*
+/archives/*
 
-**/*~
-target/
-.idea/
+# ISO builder working files
+/iso-builder/work/
+/iso-builder/iso/
+/iso-builder/*.tar.xz
 
-# You may want to ignore .wasm files, which are binary files.
-# We are commenting out the line below, which means that we are keeping a
-# binary file in the source control, because we want the .wasm file to appear
-# in Github Pages.
-##-- docs/*.wasm
+# Runtime/generated files
+.bfs*
+.bootstrap.pid
+bfs-installer-profile.conf
+bfs-install*.log
 
-**lfs-rootfs.tar.xz**
-**toolchain.tar.xz**
-stormfs-grub-theme/.git*
-stormfs-grub-theme
-packages
-sources
-**.oh-my-bash**
+# Ignore everything under logs/
+/logs/**
+
+# Keep only the log directory placeholders
+!/logs/toolchain/
+!/logs/toolchain/.gitkeep
+!/logs/base/
+!/logs/base/.gitkeep
+!/logs/installer/
+!/logs/installer/.gitkeep

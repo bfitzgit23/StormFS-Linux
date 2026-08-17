@@ -1,0 +1,16 @@
+# Description: Fully feature complete YAML parser and emitter
+# URL: https://pantoniou.github.io/libfyaml/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=libfyaml
+version=0.9.6
+release=1
+source=($name-$version.tar.gz::https://github.com/pantoniou/libfyaml/archive/refs/tags/v$version.tar.gz)
+
+build() {
+	cd $name-$version
+	autoreconf -fvi
+	./configure --prefix=/usr
+	make
+	make DESTDIR=$PKG install
+}

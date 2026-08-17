@@ -1,0 +1,34 @@
+#!/bin/sh
+#
+# /etc/rc.d/iwd: start/stop wireless interface
+#
+. /etc/rc.subr
+
+NAME="Iwd daemon"
+PROG=/usr/sbin/iwd
+PID=/var/run/iwd.pid
+OPTS=""
+
+case $1 in	
+	start)	
+		msg "Starting $NAME..."	
+		start_daemon -p $PID $PROG $OPTS
+		;;	
+	stop)	
+		msg "Stopping $NAME..."	
+		stop_daemon -p $PID $PROG
+		;;	
+	restart)	
+		$0 stop	
+		sleep 1	
+		$0 start	
+		;;	
+	status)
+		status_daemon $PROG
+		;;
+	*)
+		echo "usage: $0 [start|stop|restart|status]"
+		;;
+esac
+
+# End of file

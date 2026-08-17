@@ -1,0 +1,19 @@
+# Description: Idle management daemon for Wayland
+# URL: https://github.com/swaywm/swayidle
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: wayland-protocols scdoc
+
+name=swayidle
+version=1.9.0
+release=1
+source=(https://github.com/swaywm/$name/releases/download/v$version/$name-$version.tar.gz)
+
+build() {
+	meson setup $name-$version build \
+		-Dbash-completions=$(prt-get isinst bash-completions && printf "true" || printf "false") \
+		-Dfish-completions=$(prt-get isinst fish-completions && printf "true" || printf "false") \
+		-Dzsh-completions=$(prt-get isinst zsh-completions && printf "true" || printf "false") \
+		-Dlogind=disabled
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

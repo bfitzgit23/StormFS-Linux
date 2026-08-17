@@ -125,7 +125,7 @@ if [ ! "$(command -v build)" ]; then
 	_patch() {
 		[ "$skip_patch" ] && return 0
 		n=0
-		for i in ${source[@]}; do
+		for i in "${source[@]}"; do
 			if [ "$renames" ]; then
 				case ${renames[$n]} in
 					SKIP) ;;
@@ -148,24 +148,30 @@ if [ ! "$(command -v build)" ]; then
 		export INSTALL_ROOT=$PKG # qt5
 		export CARGO_HOME=/tmp
 
-		if [ "$source" ]; then
-			for s in source; do
-				case $s in
-					*.tar|*.tar.gz|*.tar.Z|*.tgz|*.tar.bz2|*.tbz2|*.tar.xz|*.txz|*.tar.lzma|*.tar.lz|*.zip|*.rpm|*.7z) break;;
-				esac
+		if [ "${#source[@]}" -gt 0 ]; then
+			s=""
+			n=0
+			for candidate in "${source[@]}"; do
+				case $candidate in
+					*.tar|*.tar.gz|*.tar.Z|*.tgz|*.tar.bz2|*.tbz2|*.tar.xz|*.txz|*.tar.zst|*.tzst|*.tar.lz4|*.tar.lzma|*.tar.lz|*.zip|*.rpm|*.7z)
+						s="$candidate"
+						break
+						;;
+					esac
+				n=$((n + 1))
 			done
-			s=${source[0]}
+			[ -n "$s" ] || { s="${source[0]}"; n=0; }
 			if [ "$renames" ]; then
-				case ${renames[0]} in
+				case ${renames[$n]} in
 					SKIP) ;;
-					*) s=${renames[0]};;
+					*) s=${renames[$n]};;
 				esac
 			fi
 			# detect extracted source directory name
 			srcdir=$name-$version
 			if [ ! -d $srcdir ]; then
 				case $s in
-					*.tar|*.tar.gz|*.tar.Z|*.tgz|*.tar.bz2|*.tbz2|*.tar.xz|*.txz|*.tar.lzma|*.tar.lz|*.zip|*.rpm|*.7z)
+					*.tar|*.tar.gz|*.tar.Z|*.tgz|*.tar.bz2|*.tbz2|*.tar.xz|*.txz|*.tar.zst|*.tzst|*.tar.lz4|*.tar.lzma|*.tar.lz|*.zip|*.rpm|*.7z)
 						srcdir=$(bsdtar -tf $PKGMK_SOURCE_DIR/${s##*/} | cut -d / -f1 | head -n1);;
 				esac
 			fi
@@ -242,19 +248,5 @@ if [ ! "$(command -v build)" ]; then
 			rm -rf $PKG/usr/doc
 		fi
 		
-		# runit service
-		for s in ${sv[@]}; do
-			[ -f $SRC/$s ] || exit 1
-			case $s in
-					 run) install -Dm755 $SRC/$s $PKG/etc/sv/$name/run
-						  ln -s /run/runit/supervise.$name $PKG/etc/sv/$name/supervise;;
-				  finish) install -Dm755 $SRC/$s $PKG/etc/sv/$name/finish;;
-				   *.run) install -Dm755 $SRC/$s $PKG/etc/sv/${s%.*}/run
-						  ln -s /run/runit/supervise.${s%.*} $PKG/etc/sv/${s%.*}/supervise;;
-				*.finish) install -Dm755 $SRC/$s $PKG/etc/sv/${s%.*}/finish;;
-					 *.*) install -Dm644 $SRC/$s $PKG/etc/sv/${s%%.*}/${s#*.};;
-					   *) install -Dm644 $SRC/$s $PKG/etc/sv/$name/$s;;
-			esac
-		done
 	}
 fi

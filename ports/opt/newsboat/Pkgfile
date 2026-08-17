@@ -1,0 +1,19 @@
+# Description: An RSS/Atom feed reader for text terminals
+# URL: https://newsboat.org
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: json-c stfl asciidoc rust
+
+name=newsboat
+version=2.44
+release=1
+source=(https://newsboat.org/releases/$version/newsboat-$version.tar.xz newsboat.1.gz podboat.1.gz)
+
+build() {
+	cd $name-$version
+	make prefix=/usr newsboat podboat
+	install -d \
+		$PKG/usr/bin \
+		$PKG/usr/share/man/man1
+	install -m 0755 newsboat podboat $PKG/usr/bin
+	install -m 0644 $SRC/*.1.gz $PKG/usr/share/man/man1
+}

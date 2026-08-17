@@ -1,0 +1,16 @@
+# Description: End-to-end encryption for things that matter.
+# URL: https://keybase.io/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: lsof gtk3 fuse2 libxscrnsaver
+
+name=keybase-bin
+version=6.6.3
+release=1
+source=($name-$version.rpm::https://prerelease.keybase.io/keybase_amd64.rpm)
+
+build() {
+	#cd "$SRC"
+	cp --reflink=auto -ra * "$PKG"
+
+	rm -fr $PKG/usr/lib/systemd
+}

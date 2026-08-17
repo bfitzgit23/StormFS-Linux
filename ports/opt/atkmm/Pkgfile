@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: C++ interface for atk
 # URL: https://www.gtkmm.org/
-# Maintainer: John McQuah, jmcquah at disroot dot org
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: at-spi2-core glibmm
 
 name=atkmm

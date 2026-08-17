@@ -1,0 +1,18 @@
+# Description: Simple and extensible shell script for managing your todo.txt file
+# URL: https://github.com/todotxt/todo.txt-cli
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: bash
+
+name=todotxt
+version=2.13.0
+release=1
+source=(https://github.com/todotxt/todo.txt-cli/releases/download/v${version}/$_name-${version}.tar.gz)
+
+build() {
+	cd $_name-$version
+	install -D -m644 todo.cfg $PKG/usr/share/$name/todo.cfg
+	install -D -m755 todo.sh $PKG/usr/bin/todo.sh
+
+	install -d $PKG/usr/share/bash-completion/completions/
+	install -D -m644 todo_completion $PKG/usr/share/bash-completion/completions/todo.sh
+}

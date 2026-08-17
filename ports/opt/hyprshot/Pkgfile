@@ -1,0 +1,15 @@
+# Description: A utility to easily take screenshots in Hyprland using your mouse
+# URL: https://github.com/Gustash/Hyprshot
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: jq grim slurp wl-clipboard libnotify imagemagick
+
+name=hyprshot
+version=1.3.0
+release=1
+source=($name-$version.tar.gz::https://github.com/Gustash/Hyprshot/archive/$version.tar.gz)
+
+build() {
+	cd Hyprshot-$version
+	mkdir -p $PKG/usr/bin
+	cp hyprshot $PKG/usr/bin/
+}

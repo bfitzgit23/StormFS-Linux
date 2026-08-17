@@ -1,0 +1,43 @@
+# Description: Media player for Linux
+# URL: http://www.mplayerhq.hu/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libmad libmng jack faad2 libxvmc unzip mesa git mpg123 ladspa libcdio-paranoia subversion libdvdnav giflib libbs2b desktop-file-utils openal speex
+
+name=mplayer
+version=1.5_p20241125
+release=4
+source=(https://dev.gentoo.org/~sam/distfiles/media-video/mplayer/$name-$version.tar.xz ffmpeg-7.patch ffmpeg-8.patch mplayer-c99.patch)
+
+build() {
+	cd $name-$version
+
+	export CFLAGS="$CLFAGS -Wno-incompatible-pointer-types -Wno-implicit-function-declaration -Wno-int-conversion"
+
+	patch -p0 -i $SRC/ffmpeg-7.patch
+        patch -p0 -i $SRC/ffmpeg-8.patch 
+	patch -Np1 -i $SRC/mplayer-c99.patch
+
+	./configure \
+		--prefix=/usr \
+		--confdir=/etc/mplayer \
+		--disable-gui \
+		--disable-arts \
+		--disable-liblzo \
+		--disable-libdv \
+		--disable-musepack \
+		--disable-esd \
+		--disable-mga \
+		--disable-ass-internal \
+		--disable-cdparanoia \
+		--disable-ffmpeg_a \
+		--enable-runtime-cpudetection \
+		--language=all
+	make
+	make DESTDIR=$PKG install
+
+	install -d $PKG/etc/$name
+	install -v -m644 etc/codecs.conf $PKG/etc/$name
+	install -v -m644 etc/*.conf $PKG/etc/$name
+
+	rmdir $PKG/usr/lib
+}

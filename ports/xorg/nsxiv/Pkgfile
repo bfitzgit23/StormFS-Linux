@@ -1,0 +1,15 @@
+# Description: Neo Simple X Image Viewer
+# URL: https://github.com/nsxiv/nsxiv
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: imlib2 libx11 libxft fontconfig libexif giflib libwebp
+
+name=nsxiv
+version=34
+release=1
+source=($name-$version.tar.gz::https://github.com/nsxiv/nsxiv/archive/v$version.tar.gz)
+
+build() {
+	cd $name-$version
+	make
+	make PREFIX=/usr DESTDIR=$PKG install-all
+}

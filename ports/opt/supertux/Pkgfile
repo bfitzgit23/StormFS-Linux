@@ -1,0 +1,23 @@
+# Description: Open-source classic 2D jump'n run sidescroller game
+# URL: https://www.supertux.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: boost glew glm openal physfs sdl2_image
+
+name=supertux
+version=0.7.0
+release=1
+source=($name-$version.tar.gz::https://github.com/SuperTux/supertux/releases/download/v${version}/SuperTux-v${version}-Source.tar.gz)
+
+build() {
+	cd "SuperTux-v${version}-Source"
+
+	export CMAKE_POLICY_VERSION_MINIMUM=3.5
+	cmake \
+		-DENABLE_DISCORD=ON \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DINSTALL_SUBDIR_BIN=bin
+	make
+        make DESTDIR=$PKG install
+	
+	rm -rf "${PKG}"/usr/include
+}

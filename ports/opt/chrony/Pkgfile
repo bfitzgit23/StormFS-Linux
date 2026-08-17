@@ -1,0 +1,16 @@
+# Description: Lightweight NTP client and server
+# URL: https://chrony-project.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: gnutls libedit libcap ncurses nettle nss
+
+name=chrony
+version=4.8
+release=1
+source=(https://chrony-project.org/releases/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+	./configure --prefix=/usr
+	make
+	make DESTDIR=$PKG install
+}

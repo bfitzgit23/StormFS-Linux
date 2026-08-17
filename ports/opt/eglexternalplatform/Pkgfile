@@ -1,0 +1,14 @@
+# Description: EGL External Platform interface
+# URL: https://github.com/NVIDIA/eglexternalplatform
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=eglexternalplatform
+version=1.2.1
+release=1
+source=(https://github.com/NVIDIA/eglexternalplatform/archive/$version/$name-$version.tar.gz)
+
+build() {
+	meson setup $name-$version build
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

@@ -1,0 +1,39 @@
+# Description: Bind tools
+# URL: https://www.isc.org/bind/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: liburcu libuv openssl zlib openssl
+
+name=bindutils
+version=9.20.16
+release=1
+source=(https://ftp.isc.org/isc/bind9/$version/bind-$version.tar.xz utils.patch)
+
+build() {
+    cd bind-$version
+
+    patch -Np1 -i $SRC/utils.patch
+
+    ./configure \
+        --prefix=/usr \
+        --libdir=/usr/lib/bindutils \
+        --includedir=/usr/include/bindutils \
+        --disable-linux-caps \
+        --disable-doh \
+	--with-openssl=yes \
+        --with-libxml2=no \
+        --with-gssapi=no
+
+    make -C lib
+    make bind.keys.h
+    make -C bin/dig
+    make -C bin/delv
+    make -C doc
+    make DESTDIR=$PKG -C lib install
+    make DESTDIR=$PKG -C bin/dig install
+    make DESTDIR=$PKG -C bin/delv install
+
+    install -D -m 644 doc/man/delv.1 $PKG/usr/share/man/man1/delv.1
+    install -D -m 644 doc/man/dig.1 $PKG/usr/share/man/man1/dig.1
+    install -D -m 644 doc/man/host.1 $PKG/usr/share/man/man1/host.1
+    install -D -m 644 doc/man/nslookup.1 $PKG/usr/share/man/man1/nslookup.1
+}

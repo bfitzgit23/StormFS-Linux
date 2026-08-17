@@ -1,0 +1,36 @@
+# Description: Dead simple CLI Display Manager on TTY
+# URL: https://github.com/tvrzna/emptty
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: go
+
+name=emptty
+version=0.16.1
+release=2
+source=($name-$version.tar.gz::https://github.com/tvrzna/emptty/archive/v${version}.tar.gz rc.$name run.$name)
+
+build() {
+           cd $name-$version
+           make build
+           make DESTDIR="$PKG/" install-all
+           make DESTDIR="$PKG/" install-config
+   
+        # Configure PAM
+cat <<'EOF' > $PKG/etc/pam.d/emptty
+auth        include     system-auth
+-auth       optional    pam_kwallet5.so
+account     include     system-account
+password    include     system-password
+session     optional    pam_keyinit.so force revoke
+session     include     system-session
+-session    optional    pam_kwallet5.so auto_start
+EOF
+	# runit service
+	prt-get isinst runit && {
+		install -Dm755 $SRC/run.$name $PKG/etc/sv/$name/run
+		ln -s /run/runit/supervise.$name $PKG/etc/sv/$name/supervise
+	} || continue
+	
+	# rc service
+	prt-get isinst sysvinit && \
+		install -Dm755 $SRC/rc.$name $PKG/etc/rc.d/$name || continue
+}

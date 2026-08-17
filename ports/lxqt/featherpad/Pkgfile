@@ -1,0 +1,23 @@
+# Description: lightweight Qt5 plain-text editor
+# URL: https://github.com/tsujan/FeatherPad
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: qt6-tools qt6-svg hunspell
+
+name=featherpad
+version=1.6.4
+release=1
+source=(https://github.com/tsujan/FeatherPad/archive/V$version/$_name-$version.tar.gz)
+
+build() {
+	cmake -S $_name-$version -B build \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+	        -DCMAKE_INSTALL_LIBDIR=lib \
+		-DCMAKE_INSTALL_LIBEXECDIR=lib \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+		-DCMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
+		-DENABLE_QT5=OFF \
+		-Wno-dev 
+	cmake --build build
+	DESTDIR=$PKG cmake --install build
+}

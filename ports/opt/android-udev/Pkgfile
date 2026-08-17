@@ -1,0 +1,15 @@
+# Description: Udev rules to connect Android devices to your linux box
+# URL: https://github.com/M0Rf30/android-udev-rules
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libgudev libmtp
+
+name=android-udev
+version=20260423
+release=1
+source=(android-udev-$version.zip::https://github.com/M0Rf30/android-udev-rules/archive/$version.zip)
+
+build() {
+  cd android-udev-rules-$version
+  install -Dm 644 51-android.rules $PKG/etc/udev/rules.d/51-android.rules
+  install -Dm 644 android-udev.conf $PKG/usr/lib/sysusers.d/android-udev.conf
+}

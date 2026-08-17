@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: Fast & memory efficient hashtable based on robin hood hashing for C++11/14/17/20
 # URL: https://github.com/martinus/robin-hood-hashing
-# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: robin-hood-hashing
 
 name=robin-hood-hashing-32

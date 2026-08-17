@@ -1,0 +1,26 @@
+# Description: A terminal emulator based on GTK and VTE
+# URL: https://launchpad.net/sakura
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: vte3 ninja
+
+name=sakura
+version=3.8.9
+release=1
+source=(https://launchpad.net/sakura/trunk/$version/+download/$name-$version.tar.bz2)
+
+build() {
+	cd $name-$version
+	# Set default font size a bit smaller
+	sed -i 's|#define DEFAULT_FONT "Bitstream Vera Sans Mono 14"|#define DEFAULT_FONT "Dejavu Sans Mono Book 10"|g' src/sakura.c
+	
+	cmake -B build -G Ninja \
+	        -DCMAKE_INSTALL_PREFIX=/usr \
+	        -DCMAKE_INSTALL_LIBDIR=lib \
+		-DCMAKE_INSTALL_LIBEXECDIR=lib \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+		-DCMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
+		-Wno-dev 
+	cmake --build build
+	DESTDIR=$PKG cmake --install build
+}

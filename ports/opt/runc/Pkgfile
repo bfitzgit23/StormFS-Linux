@@ -1,0 +1,22 @@
+# Description: A lightweight universal runtime container
+# URL: https://github.com/opencontainers/runc
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: go libseccomp libpathrs
+
+name=runc
+version=1.5.0
+release=1
+source=(https://github.com/opencontainers/runc/archive/v${version}/$name-${version}.tar.gz)
+
+build() {
+    mkdir -pv src/github.com/opencontainers
+    cd src/github.com/opencontainers
+    ln -sf $SRC/$name-$version $name
+    cd $name
+    export GOPATH=$SRC
+    export BUILDTAGS="seccomp"
+    export GOFLAGS="-trimpath -mod=readonly -modcacherw"
+    make runc
+
+    install -D -m 0755 $name $PKG/usr/bin/$name
+}

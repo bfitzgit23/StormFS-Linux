@@ -1,0 +1,16 @@
+# Description: LiSt Open Files
+# URL: https://lsof.readthedocs.io/en/latest/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libtirpc
+
+name=lsof
+version=4.99.7
+release=1
+source=(https://github.com/lsof-org/lsof/releases/download/$version/lsof-$version.tar.gz)
+
+build() {
+	cd $name-$version
+	./configure --prefix=/usr
+	make
+	make DESTDIR=$PKG install
+}

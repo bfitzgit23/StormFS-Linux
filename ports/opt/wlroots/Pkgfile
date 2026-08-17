@@ -1,0 +1,20 @@
+# Description: Modular Wayland compositor library
+# URL: https://gitlab.freedesktop.org/wlroots/wlroots
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libdisplay-info libinput libxkbcommon mesa pixman seatd wayland-protocols xcb-util-errors xcb-util-image xcb-util-renderutil xcb-util-wm
+
+name=wlroots
+version=0.19.3
+release=1
+source=(https://gitlab.freedesktop.org/wlroots/wlroots/-/archive/$version/wlroots-$version.tar.gz)
+
+build() {
+	meson setup $name-$version build \
+		-Dwerror=false \
+		-Dexamples=false \
+		-Dxwayland=$(prt-get isinst xwayland && printf "enabled" || printf "disabled") \
+		-Dbackends=drm,libinput,x11 \
+		-Dlibliftoff=disabled
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

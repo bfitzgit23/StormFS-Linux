@@ -1,0 +1,24 @@
+# Description: X.Org font utilities
+# URL: https://xorg.freedesktop.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: util-macros
+
+name=font-util
+version=1.4.2
+release=1
+source=(https://gitlab.freedesktop.org/xorg/font/util/-/archive/$name-$version/util-$name-$version.tar.gz)
+
+build() {
+	cd util-$name-$version
+
+	NOCONFIGURE=1 ./autogen.sh
+  	./configure \
+		--prefix=/usr \
+		--sysconfdir=/etc \
+		--localstatedir=/var \
+		--disable-static \
+		--with-mapdir=/usr/share/fonts/util \
+		--with-fontrootdir=/usr/share/fonts
+	make
+	make DESTDIR=$PKG install
+}

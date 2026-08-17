@@ -1,3 +1,5 @@
+# Add your top line text here
+# Your line to add at the top here
 # Depends on: cups kglobalaccel kio kirigami kpipewire kstatusnotifieritem kwayland xdg-desktop-portal
 
 name=xdg-desktop-portal-kde

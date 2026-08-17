@@ -1,0 +1,15 @@
+# Description: Client for battery, power, and thermal readings
+# URL: https://sourceforge.net/projects/acpiclient
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=acpi
+version=1.8
+release=1
+source=(https://downloads.sourceforge.net/acpiclient/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+	./configure --prefix=/usr
+	make
+	make DESTDIR=$PKG install
+}

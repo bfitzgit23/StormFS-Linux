@@ -1,0 +1,15 @@
+# Description: A GUI to help manage Vulkan/OpenGL overlays
+# URL: https://github.com/benjamimgois/goverlay
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: mangohud lazarus ttf-ubuntu-font-family vkbasalt pascube
+
+name=goverlay
+version=1.8.4
+release=1
+source=($name-$version.tar.gz::https://github.com/benjamimgois/goverlay/archive/$version.tar.gz)
+
+build() {
+	cd $name-$version
+        make LAZBUILDOPTS=--lazarusdir=/usr/lib/lazarus
+        make prefix=/usr libexecdir=/lib DESTDIR=$PKG install
+}

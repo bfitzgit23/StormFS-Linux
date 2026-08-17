@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: Netscape Portable Runtime library
 # URL: https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSPR
-# Maintainer: CRUX System Team, core-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 
 name=nspr
 version=4.36

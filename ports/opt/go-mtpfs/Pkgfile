@@ -1,0 +1,29 @@
+# Description: Mount MTP devices over FUSE
+# URL: https://github.com/hanwen/go-mtpfs
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: go fuse2 libusb
+
+name=go-mtpfs
+version=1.0.0
+release=1
+source=(https://github.com/hanwen/go-mtpfs/archive/v$version/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+	export CGO_LDFLAGS="${LDFLAGS}"
+	export CGO_CFLAGS="${CFLAGS}"
+	export CGO_CPPFLAGS="${CPPFLAGS}"
+	export CGO_CXXFLAGS="${CXXFLAGS}"
+	export GOFLAGS="-buildmode=pie -trimpath -mod=readonly -modcacherw -ldflags=-linkmode=external"
+	export GOPATH=$SRC/go
+	export PATH=$PATH:$GOPATH/bin
+
+	go build \
+		-trimpath \
+		-buildmode=pie \
+		-mod=readonly \
+		-modcacherw \
+		-o go-mtpfs .
+
+	install -Dm755 go-mtpfs $PKG/usr/bin/go-mtpfs
+}

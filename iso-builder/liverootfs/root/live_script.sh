@@ -94,6 +94,19 @@ Type=Application
 Categories=System;
 DESK
 chmod +x "$deskdir/stormfs-installer.desktop"
+
+cat > "$deskdir/stormfs-portmanager.desktop" <<DESK2
+[Desktop Entry]
+Name=StormFS Port Manager
+Comment=Manage packages and ports
+Exec=/usr/bin/stormfs-portmanager
+Icon=system-software-install
+Terminal=false
+Type=Application
+Categories=System;
+DESK2
+chmod +x "$deskdir/stormfs-portmanager.desktop"
+
 chown -R "$LIVEUSER:$LIVEUSER" /home/$LIVEUSER/Desktop 2>/dev/null || true
 
 # Polkit: allow wheel group to use pkexec without password

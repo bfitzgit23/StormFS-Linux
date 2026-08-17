@@ -1,0 +1,20 @@
+# Description: Just-in-time compiler and drop-in replacement for Lua 5.1.
+# URL: https://github.com/openresty/luajit2
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=luajit
+version=2.1.20260415
+release=1
+source=($name-$version.tar.gz::https://github.com/openresty/luajit2/archive/v${version%.*}-${version##*.}.tar.gz)
+
+build() {
+	cd ${name}2-${version%.*}-${version##*.}
+
+	# flags recommended by OpenResty
+	xcflags="-DLUAJIT_ENABLE_LUA52COMPAT -DLUAJIT_NUMMODE=2"
+
+	make PREFIX=/usr XCFLAGS="$xcflags" BUILDMODE=dynamic TARGET_STRIP=" @:" amalg
+	make PREFIX=/usr DESTDIR=$PKG install
+
+	find $PKG -type f -name *.a -delete -print
+}

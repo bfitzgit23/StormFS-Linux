@@ -1,0 +1,20 @@
+# Description: Proton builds with the latest Dawn Winery fixes for gacha games, based on Proton-CachyOS
+# URL: https://dawn.wine/dawn-winery/dwproton
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: dbus desktop-file-utils diffutils freetype2 gdk-pixbuf2 hicolor-icon-theme libxcrypt libxcrypt-legacy libxkbcommon lsb-release lsof nss usbutils vulkan-icd-loader xdg-user-dirs xrandr xz zenity fontconfig-32 libgpg-error-32 libva-32 libx11-32 libxinerama-32 vulkan-icd-loader-32
+
+name=dwproton-bin
+version=11.0.5
+release=1
+source=(https://dawn.wine/dawn-winery/dwproton/releases/download/dwproton-$srcver/dwproton-$srcver-x86_64.tar.xz)
+
+build() {
+
+    # Similar to how proton-ge-custom-bin worked
+    sed -i -E 's/"dwproton-[^"]*"/"dwproton"/g' "$SRC/dwproton-$srcver-x86_64"/compatibilitytool.vdf
+
+    install -d "$PKG/usr/share/steam/compatibilitytools.d/dwproton"
+    mv "$SRC/dwproton-$srcver-x86_64"/* "$PKG/usr/share/steam/compatibilitytools.d/dwproton"
+
+
+}

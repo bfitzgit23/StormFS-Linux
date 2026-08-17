@@ -1,139 +1,261 @@
+# Description: Base filesystem hierarchy and default system configuration
+# URL: https://www.linuxfromscratch.org/
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+
 name=aaa_filesystem
 version=1
-release=2
-source=(fstab
-	group
-	hostname
-	hosts
-	issue
-	locale.conf
-	locale.sh
-	os-release
-	passwd
-	Pkgfile
-	resolv.conf
-	shells
-	inputrc
-	profile
-bash_completion.sh
-debuginfod.csh 
-debuginfod.sh
-dircolors.sh
-extrapaths.sh
-gawk.csh
-gawk.sh
-readline.sh
-umask.sh
-i18n.sh
-kf6.sh
-qt5.sh
-qt6.sh
-readline.sh
-rustc.sh
-umask.sh
-vte.csh
-vte.sh
-xorg.sh
-bashrc
-.bash_profile
-.profile
-.bash_logout
-.bashrc
-.vimrc)
+release=6
+
+# BFS Linux distribution release. Change this value when preparing a new
+# BFS release; the aaa_filesystem package version remains independent.
+bfs_version=0.9.0
+
+source=(
+    fstab
+    group
+    hostname
+    hosts
+    locale.conf
+    locale.sh
+    passwd
+    resolv.conf
+    shells
+    inputrc
+    profile
+    bash_completion.sh
+    debuginfod.csh
+    debuginfod.sh
+    dircolors.sh
+    extrapaths.sh
+    gawk.csh
+    gawk.sh
+    readline.sh
+    umask.sh
+    i18n.sh
+    kf6.sh
+    qt5.sh
+    qt6.sh
+    rustc.sh
+    vte.csh
+    vte.sh
+    xorg.sh
+    bashrc
+    .bash_profile
+    .profile
+    .bash_logout
+    .bashrc
+    .vimrc
+)
 
 pkg_build() {
-	cd $SRC
-	
-	#  root dirs
-	for d in proc sys run dev boot etc/{opt,sysconfig} /lib/firmware /media/{floppy,cdrom}  home mnt \
-		opt srv var; do
-		mkdir -p $PKG/$d
-	done
-	install -d -m 0750 $PKG/root
-	install -d -m 1777 $PKG/tmp $PKG/var/tmp
-	
-	# /usr and /usr/local dirs
-#	for d in bin include lib sbin src; do
-		mkdir -pv $PKG/usr/{,local/}{include,src}
-	        mkdir -pv $PKG/usr/local/{bin,lib,sbin}
-		mkdir -pv $PKG/usr/{,local/}share/{color,dict,doc,info,locale,man}
-		mkdir -pv $PKG/usr/{,local/}share/{misc,terminfo,zoneinfo}
-		mkdir -pv $PKG/usr/{,local/}share/}
-		mkdir -pv $PKG/var/{cache,local,log,mail,opt,spool}
-		mkdir -pv $PKG/var/lib/{color,misc,locate}
-	        mkdir -pv $PKG/root
-#	done
-	
-	# man page dirs
-	for d in 1 2 3 4 5 6 7 8; do
-		mkdir -p $PKG/usr/share/man/man$d
-		mkdir -p $PKG/usr/local/share/man/man$d
-	done
-	
-		# /var dirs
-	for d in log spool/mail opt cache lib/misc local; do
-		mkdir -p $PKG/var/$d
-	done
-	
-	ln -s ../run $PKG/var/run
-	ln -s ../run/lock $PKG/var/lock
-	
-	ln -s /proc/self/mounts $PKG/etc/mtab
+    cd "$SRC"
 
-	# log files
-	for f in btmp lastlog faillog wtmp; do
-		touch $PKG/var/log/$f
-	done
-	chgrp utmp $PKG/var/log/lastlog
-	chmod 664  $PKG/var/log/lastlog
-	chmod 600  $PKG/var/log/btmp
-		
-	install -m644 passwd $PKG/etc
-	install -m644 group $PKG/etc
-	install -m644 resolv.conf $PKG/etc
-	install -m644 locale.conf $PKG/etc
-	install -m644 hosts $PKG/etc
-	install -m644 hostname $PKG/etc
-	install -m644 shells $PKG/etc
-	install -m644 inputrc $PKG/etc
-	install -m644 fstab $PKG/etc
-	install -m644 profile $PKG/etc
-	install -dm0755 $PKG/etc/profile.d
-	install -m644 locale.sh $PKG/etc/profile.d
-	install -m644 bash_completion.sh $PKG/etc/profile.d
-	install -m644 debuginfod.csh $PKG/etc/profile.d
-	install -m644 debuginfod.sh $PKG/etc/profile.d
-	install -m644 gawk.csh $PKG/etc/profile.d
-	install -m644 gawk.sh $PKG/etc/profile.d
-	install -m644 kf6.sh $PKG/etc/profile.d
-	install -m644 locale.sh $PKG/etc/profile.d
-  	install -m644 qt5.sh $PKG/etc/profile.d
-	install -m644 qt6.sh $PKG/etc/profile.d
-	install -m644 rustc.sh $PKG/etc/profile.d
-	install -m644 vte.csh $PKG/etc/profile.d
-	install -m644 vte.sh $PKG/etc/profile.d
-	install -m644 xorg.sh $PKG/etc/profile.d
-	install -dm0755 $PKG/etc/bash_completion.d
-	install -m644 dircolors.sh $PKG/etc/profile.d
-	install -m644 extrapaths.sh $PKG/etc/profile.d
-	install -m644 readline.sh $PKG/etc/profile.d
-	install -m644 umask.sh $PKG/etc/profile.d
-	install -m644 i18n.sh $PKG/etc/profile.d
-	install -m644 bashrc $PKG/etc/
-	install -d $PKG/etc/skel
-	install -m644 .bash_profile $PKG/etc/skel
-	install -m644 .profile $PKG/etc/skel
-	install -m644 .bashrc  $PKG/etc/skel
-	install -m644 .bash_logout $PKG/etc/skel
-	install -m644 .vimrc $PKG/etc/skel
-	install -m644 bashrc $PKG/etc
-	install -m644 issue $PKG/etc
-	install -m644 .bash_profile $PKG/root
-	install -m644 .profile $PKG/root
-	install -m644 .bashrc $PKG/root
-	install -m644 .bash_logout $PKG/root
-	install -m644 .vimrc $PKG/root
-	dircolors -p > $PKG/etc/dircolors
-	echo rolling > $PKG/etc/lfs-release
-	cat os-release > $PKG/etc/os-release
+    #
+    # Root filesystem directories.
+    #
+    install -d -m 0755 \
+        "$PKG/proc" \
+        "$PKG/sys" \
+        "$PKG/run" \
+        "$PKG/dev" \
+        "$PKG/boot" \
+        "$PKG/etc" \
+        "$PKG/etc/opt" \
+        "$PKG/etc/sysconfig" \
+        "$PKG/usr/lib/firmware" \
+        "$PKG/media/floppy" \
+        "$PKG/media/cdrom" \
+        "$PKG/home" \
+        "$PKG/mnt" \
+        "$PKG/opt" \
+        "$PKG/srv" \
+        "$PKG/var"
+
+    install -d -m 0750 "$PKG/root"
+
+    install -d -m 1777 \
+        "$PKG/tmp" \
+        "$PKG/var/tmp"
+
+    #
+    # Merged-/usr layout.
+    #
+    install -d -m 0755 \
+        "$PKG/usr/bin" \
+        "$PKG/usr/lib" \
+        "$PKG/usr/lib32" \
+        "$PKG/usr/sbin"
+
+    ln -sfn usr/bin "$PKG/bin"
+    ln -sfn usr/lib "$PKG/lib"
+    ln -sfn usr/sbin "$PKG/sbin"
+
+    ln -sfn usr/lib32 "$PKG/lib32"
+
+    ln -sfn lib "$PKG/lib64"
+
+    #
+    # /usr and /usr/local directory hierarchy.
+    #
+    install -d -m 0755 \
+        "$PKG/usr/include" \
+        "$PKG/usr/src" \
+        "$PKG/usr/local/bin" \
+        "$PKG/usr/local/include" \
+        "$PKG/usr/local/lib" \
+        "$PKG/usr/local/sbin" \
+        "$PKG/usr/local/src"
+
+    install -d -m 0755 \
+        "$PKG/usr/share/color" \
+        "$PKG/usr/share/dict" \
+        "$PKG/usr/share/doc" \
+        "$PKG/usr/share/info" \
+        "$PKG/usr/share/locale" \
+        "$PKG/usr/share/man" \
+        "$PKG/usr/share/misc" \
+        "$PKG/usr/share/terminfo" \
+        "$PKG/usr/share/zoneinfo" \
+        "$PKG/usr/local/share/color" \
+        "$PKG/usr/local/share/dict" \
+        "$PKG/usr/local/share/doc" \
+        "$PKG/usr/local/share/info" \
+        "$PKG/usr/local/share/locale" \
+        "$PKG/usr/local/share/man" \
+        "$PKG/usr/local/share/misc" \
+        "$PKG/usr/local/share/terminfo" \
+        "$PKG/usr/local/share/zoneinfo"
+
+    #
+    # Manual-page directories.
+    #
+    for section in 1 2 3 4 5 6 7 8; do
+        install -d -m 0755 \
+            "$PKG/usr/share/man/man$section" \
+            "$PKG/usr/local/share/man/man$section"
+    done
+
+    #
+    # /var directory hierarchy.
+    #
+    install -d -m 0755 \
+        "$PKG/var/cache" \
+        "$PKG/var/lib" \
+        "$PKG/var/lib/color" \
+        "$PKG/var/lib/locate" \
+        "$PKG/var/lib/misc" \
+        "$PKG/var/local" \
+        "$PKG/var/log" \
+        "$PKG/var/mail" \
+        "$PKG/var/opt" \
+        "$PKG/var/spool" \
+        "$PKG/var/spool/mail"
+
+    ln -sfn ../run "$PKG/var/run"
+    ln -sfn ../run/lock "$PKG/var/lock"
+
+    ln -sfn /proc/self/mounts "$PKG/etc/mtab"
+
+    #
+    # Traditional login accounting files.
+    #
+    install -m 0600 /dev/null "$PKG/var/log/btmp"
+    install -m 0664 /dev/null "$PKG/var/log/lastlog"
+    install -m 0664 /dev/null "$PKG/var/log/faillog"
+    install -m 0664 /dev/null "$PKG/var/log/wtmp"
+
+    chgrp utmp "$PKG/var/log/lastlog"
+
+    #
+    # Base system configuration.
+    #
+    install -m 0644 passwd "$PKG/etc/passwd"
+    install -m 0644 group "$PKG/etc/group"
+    install -m 0644 resolv.conf "$PKG/etc/resolv.conf"
+    install -m 0644 locale.conf "$PKG/etc/locale.conf"
+    install -m 0644 hosts "$PKG/etc/hosts"
+    install -m 0644 hostname "$PKG/etc/hostname"
+    install -m 0644 shells "$PKG/etc/shells"
+    install -m 0644 inputrc "$PKG/etc/inputrc"
+    install -m 0644 fstab "$PKG/etc/fstab"
+    install -m 0644 profile "$PKG/etc/profile"
+    install -m 0644 bashrc "$PKG/etc/bashrc"
+
+    install -d -m 0755 \
+        "$PKG/etc/profile.d" \
+        "$PKG/etc/bash_completion.d" \
+        "$PKG/etc/skel"
+
+    #
+    # Profile scripts.
+    #
+    for file in \
+        locale.sh \
+        bash_completion.sh \
+        debuginfod.csh \
+        debuginfod.sh \
+        dircolors.sh \
+        extrapaths.sh \
+        gawk.csh \
+        gawk.sh \
+        i18n.sh \
+        kf6.sh \
+        qt5.sh \
+        qt6.sh \
+        readline.sh \
+        rustc.sh \
+        umask.sh \
+        vte.csh \
+        vte.sh \
+        xorg.sh
+    do
+        install -m 0644 "$file" "$PKG/etc/profile.d/$file"
+    done
+
+    #
+    # Default user skeleton.
+    #
+    install -m 0644 .bash_profile "$PKG/etc/skel/.bash_profile"
+    install -m 0644 .profile "$PKG/etc/skel/.profile"
+    install -m 0644 .bashrc "$PKG/etc/skel/.bashrc"
+    install -m 0644 .bash_logout "$PKG/etc/skel/.bash_logout"
+    install -m 0644 .vimrc "$PKG/etc/skel/.vimrc"
+
+    #
+    # Root user defaults.
+    #
+    install -m 0644 .bash_profile "$PKG/root/.bash_profile"
+    install -m 0644 .profile "$PKG/root/.profile"
+    install -m 0644 .bashrc "$PKG/root/.bashrc"
+    install -m 0644 .bash_logout "$PKG/root/.bash_logout"
+    install -m 0644 .vimrc "$PKG/root/.vimrc"
+
+    #
+    # Generated and release-identification files.
+    #
+    dircolors -p > "$PKG/etc/dircolors"
+
+    printf '%s\n' "$bfs_version" > "$PKG/etc/bfs-release"
+
+    # Retain this compatibility file for software that checks for an
+    # LFS-derived system.
+    printf '%s\n' "$bfs_version" > "$PKG/etc/lfs-release"
+
+    cat > "$PKG/etc/os-release" <<EOF
+NAME="BFS Linux"
+PRETTY_NAME="BFS Linux $bfs_version"
+ID=bfs
+VERSION="$bfs_version"
+VERSION_ID="$bfs_version"
+HOME_URL="https://codeberg.org/bmadonnaster/BFSOS"
+SUPPORT_URL="https://codeberg.org/bmadonnaster/BFSOS/issues"
+BUG_REPORT_URL="https://codeberg.org/bmadonnaster/BFSOS/issues"
+EOF
+
+    cat > "$PKG/etc/issue" <<EOF
+BFS Linux $bfs_version \\n \\l
+
+EOF
+
+    chmod 0644         "$PKG/etc/bfs-release"         "$PKG/etc/lfs-release"         "$PKG/etc/os-release"         "$PKG/etc/issue"
 }

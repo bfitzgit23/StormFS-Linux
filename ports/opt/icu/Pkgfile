@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: Widely used set of C/C++ libraries providing Unicode and Globalization support.
 # URL: https://icu.unicode.org
-# Maintainer: Tim Biermann, tbier at posteo dot de
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Optional: llvm doxygen
 
 name=icu

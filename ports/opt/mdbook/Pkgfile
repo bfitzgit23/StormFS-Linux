@@ -1,0 +1,15 @@
+# Description: Create book from markdown files, like Gitbook but implemented in Rust
+# URL: https://github.com/rust-lang/mdBook
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: rust
+
+name=mdbook
+version=0.5.3
+release=1
+source=(https://github.com/rust-lang-nursery/mdBook/archive/v$version/$name-$version.tar.gz)
+
+build() {
+	cd "mdBook-$version"
+	cargo build --release
+	install -Dm 755 "target/release/${name}" "${PKG}/usr/bin/${name}"
+}

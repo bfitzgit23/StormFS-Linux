@@ -1,0 +1,19 @@
+# Description: Implementations for atomic memory update operations on a number of architectures
+# URL: https://github.com/ivmai/libatomic_ops
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=libatomic_ops
+version=7.10.0
+release=1
+source=($name-$version.tar.gz::https://github.com/ivmai/libatomic_ops/archive/v$version.tar.gz)
+
+build() {
+	cd $name-$version
+	./autogen.sh
+	./configure --prefix=/usr    \
+	            --enable-shared  \
+	            --disable-static
+	make
+	make DESTDIR=$PKG install
+
+}

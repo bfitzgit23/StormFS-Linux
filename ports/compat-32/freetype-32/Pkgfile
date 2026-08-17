@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: A free and portable TrueType font rendering engine
 # URL: https://www.freetype.org/
-# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: bzip2-32 freetype libpng-32
 
 name=freetype-32

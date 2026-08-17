@@ -1,0 +1,25 @@
+# Description: Epson Inkjet Printer Driver (ESC/P-R) for Linux
+# URL: http://download.ebz.epson.net/dsc/search/01/search/?OSC=LX
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: ghostscript
+
+name=epson-inkjet-printer-escpr
+version=1.8.8
+release=1
+source=(https://dev.alpinelinux.org/archive/epson-inkjet-printer-escpr/epson-inkjet-printer-escpr-$version-1.src.rpm)
+
+build() {
+
+        tar xzf "${name}-${version}-1.tar.gz"
+        cd "${name}-${version}"
+        autoreconf -vif 
+
+	export CFLAGS="$CFLAGS -Wno-implicit-function-declaration"
+
+	./configure \
+		--prefix=/usr \
+		--with-cupsfilterdir=/usr/lib/cups/filter \
+	  	--with-cupsppddir=/usr/share/ppd
+	make
+	make DESTDIR=$PKG install
+}

@@ -1,0 +1,17 @@
+# Description: A typed linked list C header file only library
+# URL: https://codeberg.org/dnkl/tllist
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: meson ninja
+
+name=tllist
+version=1.1.0
+release=1
+source=($name-$version.tar.gz::https://codeberg.org/dnkl/tllist/archive/$version.tar.gz)
+
+build() {
+
+  meson setup $name-$version build 
+  meson compile -C build
+  DESTDIR=$PKG meson install --no-rebuild -C build
+  rm -r $PKG/usr/share
+}

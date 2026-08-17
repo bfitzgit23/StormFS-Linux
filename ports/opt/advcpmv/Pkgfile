@@ -1,0 +1,25 @@
+# Description: A patch for GNU Core Utilities cp, mv to add progress bars
+# URL: https://github.com/jarun/advcpmv
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: coreutils
+
+name=advcpmv
+version=0.9
+release=1
+source=(https://ftp.gnu.org/gnu/coreutils/coreutils-$cuversion.tar.xz https://raw.githubusercontent.com/jarun/advcpmv/master/$name-$version-$cuversion.patch)
+
+build() {
+	cd coreutils-$cuversion
+
+	export FORCE_UNSAFE_CONFIGURE=1
+
+	patch -p1 -i $SRC/$name-$version-$cuversion.patch
+
+	./configure
+
+	make
+
+	mkdir -p $PKG/usr/bin
+	cp src/cp $PKG/usr/bin/advcp
+	cp src/mv $PKG/usr/bin/advmv
+}

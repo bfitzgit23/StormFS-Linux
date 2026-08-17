@@ -1,0 +1,19 @@
+# Description: lilv library to make use of lv2 plugins as simple as possible
+# URL: https://github.com/lv2/lilv
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: python3-sphinxygen sratom swig
+
+name=lilv
+version=0.28.0
+release=1
+source=(https://download.drobilla.net/$name-$version.tar.xz)
+
+build() {
+	meson setup $name-$version build \
+		-Ddocs=disabled \
+		-Dhtml=disabled \
+		-Dsinglehtml=disabled \
+		-Dtests=disabled
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

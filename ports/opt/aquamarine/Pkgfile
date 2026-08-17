@@ -1,0 +1,17 @@
+# Description: A very light linux rendering backend library
+# URL: https://github.com/hyprwm/$name
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: hyprutils hyprwayland-scanner libdisplay-info pixman mesa wayland seatd libinput
+
+name=aquamarine
+version=0.12.1
+release=1
+source=(https://github.com/hyprwm/$name/archive/v$version/$name-$version.tar.gz)
+
+build() {
+	cmake -S $name-$version -B build \
+		-D CMAKE_INSTALL_PREFIX=/usr \
+		-D CMAKE_BUILD_TYPE=Release
+	cmake --build build
+	DESTDIR=$PKG cmake --install build
+}

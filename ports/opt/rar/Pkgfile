@@ -1,0 +1,15 @@
+# Description: A command-line port of the rar compression utility
+# URL: https://www.rarlab.com
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=rar
+version=7.22
+release=1
+source=($name-$version.tar.gz::https://www.rarlab.com/rar/rarlinux-x64-${_version}.tar.gz)
+
+build() {
+	cd $name
+	install -Dm755 rar          $PKG/usr/bin/rar
+	install -Dm755 default.sfx  $PKG/usr/lib/default.sfx
+	install -Dm644 rarfiles.lst $PKG/etc/rarfiles.lst
+}

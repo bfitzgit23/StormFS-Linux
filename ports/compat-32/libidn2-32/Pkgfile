@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: Provides support for IETF Internationalized Domain Names (IDN).
 # URL: http://www.gnu.org/software/libidn/
-# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: libidn2 libunistring-32
 
 name=libidn2-32

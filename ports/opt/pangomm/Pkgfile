@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: C++ interface to pango.
 # URL: https://gitlab.gnome.org/GNOME/pangomm
-# Maintainer: John McQuah, jmcquah at disroot dot org
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: cairomm-1.0 glibmm pango
 
 name=pangomm

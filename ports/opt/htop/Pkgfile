@@ -1,0 +1,18 @@
+# Description: Interactive process viewer
+# URL: https://htop.dev/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: python3
+
+name=htop
+version=3.5.1
+release=1
+source=(https://github.com/htop-dev/htop/archive/$version/htop-$version.tar.gz)
+
+build() {
+	cd $name-$version
+
+	./autogen.sh
+	./configure --prefix=/usr --disable-nls --mandir=/usr/share/man
+	make
+	make DESTDIR=$PKG install
+}

@@ -1,0 +1,15 @@
+# Description: A code-searching tool similar to ack, but faster
+# URL: https://github.com/ggreer/the_silver_searcher
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: pcre2 xz
+
+name=silversearcher
+version=2.2.0
+release=2
+source=($name-$version$commit.tar.gz::https://github.com/ggreer/the_silver_searcher/archive/$commit.tar.gz)
+
+build() {
+	cd the_silver_searcher-$commit
+	./build.sh
+	make DESTDIR=$PKG install
+}

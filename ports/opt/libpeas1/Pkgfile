@@ -1,0 +1,17 @@
+# Description: GObject based plugins engine
+# URL: https://wiki.gnome.org/Projects/Libpeas
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: gobject-introspection gtk3 python3-gobject3 libxml2 meson
+
+name=libpeas1
+version=1.36.0
+release=1
+source=(https://gitlab.gnome.org/GNOME/libpeas/-/archive/$_name-$version/$_name-$version.tar.gz)
+
+build() {
+	meson setup $name-$version build \
+		-Dgtk_doc=false \
+		-Dlua51=false
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

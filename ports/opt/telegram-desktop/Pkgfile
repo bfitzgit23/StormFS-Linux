@@ -1,0 +1,31 @@
+# Description: Official Telegram Desktop client
+# URL: https://desktop.telegram.org
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: minizip jemalloc openal range-v3 tg_owt qt6-imageformats svt-av1 qt6-svg qt6-wayland qt6-5compat rnnoise webkitgtk kcoreaddons protobuf fmt graphviz boost libsigc++3 ada libheif libavif
+
+name=telegram-desktop
+version=6.9.3
+release=1
+source=(https://github.com/telegramdesktop/tdesktop/releases/download/v$version/tdesktop-$version-full.tar.gz https://github.com/tdlib/td/archive/$td_commit.tar.gz)
+
+build() {
+
+	cmake -S $SRC/td-$td_commit -B $SRC/td-$td_commit/build \
+		-DCMAKE_BUILD_TYPE=None \
+		-DCMAKE_INSTALL_PREFIX="$SRC/td-$td_commit/install" \
+		-Wno-dev \
+		-DTD_E2E_ONLY=ON
+	cmake --build $SRC/td-$td_commit/build
+	cmake --install $SRC/td-$td_commit/build
+
+	cmake -S tdesktop-$version-full -B build -G Ninja \
+		-DCMAKE_VERBOSE_MAKEFILE=ON \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_BUILD_TYPE=Release \
+		-Dtde2e_DIR="$SRC/td-$td_commit/install/lib/cmake/tde2e" \
+		-DTDESKTOP_API_ID=611335 \
+		-DTDESKTOP_API_HASH=d524b414d21f4d37f08684c1df41ac9c \
+		-Wno-dev
+	cmake --build build
+	DESTDIR=$PKG cmake --install build
+}

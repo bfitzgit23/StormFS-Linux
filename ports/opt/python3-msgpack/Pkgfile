@@ -1,0 +1,15 @@
+# Description: Efficient binary serialization format
+# URL: https://pypi.org/project/msgpack/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: python3-setuptools
+
+name=python3-msgpack
+version=1.2.1
+release=1
+source=($name-$version.tar.gz::https://files.pythonhosted.org/packages/source/m/msgpack/msgpack-$version.tar.gz)
+
+build() {
+	cd msgpack-$version
+	python3 setup.py build
+	python3 setup.py install -O1 --root="$PKG" --skip-build
+}

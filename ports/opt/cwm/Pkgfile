@@ -1,0 +1,14 @@
+# Description: Linux port of the OpenBSD window manager
+# URL: https://github.com/leahneukirchen/cwm
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libx11 libxft xrandr
+
+name=cwm
+version=7.9
+release=1
+source=(https://github.com/leahneukirchen/$name/archive/v$version/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+	make DESTDIR=$PKG PREFIX=/usr install
+}

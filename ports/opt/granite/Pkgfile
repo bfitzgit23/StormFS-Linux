@@ -1,0 +1,16 @@
+# Description: Library that extends Gtk+
+# URL: https://github.com/elementary/granite
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: cairo gdk-pixbuf glib gtk3 libgee pango gobject-introspection meson vala
+
+name=granite
+version=7.8.1
+release=1
+source=($name-$version.tar.gz::https://github.com/elementary/granite/archive/refs/tags/$version.tar.gz)
+
+build() {
+	
+	meson setup $name-$version build -Ddemo=false
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

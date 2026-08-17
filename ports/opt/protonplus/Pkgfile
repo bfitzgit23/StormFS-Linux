@@ -1,0 +1,15 @@
+# Description: A simple Wine and Proton-based compatiblity tools manager for GNOME
+# URL: https://github.com/Vysp3r/ProtonPlus
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: meson vala gtk4 libadwaita libarchive libgee libsoup3
+
+name=protonplus
+version=0.5.21
+release=1
+source=($name-$version.tar.gz::https://github.com/Vysp3r/ProtonPlus/archive/refs/tags/v$version.tar.gz)
+
+build() {
+  meson setup $name-$version build
+  meson compile -C build
+  DESTDIR=$PKG meson install --no-rebuild -C build
+}

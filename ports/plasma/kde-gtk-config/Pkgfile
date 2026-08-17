@@ -1,3 +1,5 @@
+# Add your top line text here
+# Your line to add at the top here
 # Depends on: gsettings-desktop-schemas gtk3 kcolorscheme kcoreaddons kdbusaddons kdecoration kwindowsystem sassc
 
 name=kde-gtk-config

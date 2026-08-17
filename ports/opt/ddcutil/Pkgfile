@@ -1,0 +1,17 @@
+# Description: Program for querying and changing monitor settings, such as brightness and color levels
+# URL: https://www.ddcutil.com
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libdrm libgudev
+
+name=ddcutil
+version=2.2.7
+release=1
+source=(https://github.com/rockowitz/ddcutil/archive/v${version}/${name}-${version}.tar.gz)
+
+build() {
+	cd $name-$version
+	./autogen.sh
+	./configure --prefix=/usr --enable-drm
+	make
+	make DESTDIR=$PKG install
+}

@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: Set of symbols and convenience functions for Ayatana indicators (GTK+ 2 library) 32bit
 # URL: https://launchpad.net/libindicator
-# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: gtk-32 libindicator-gtk2 xorg-libxdamage-32
 
 name=libindicator-gtk2-32

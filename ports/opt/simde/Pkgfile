@@ -1,0 +1,19 @@
+# Description: Implementations of SIMD instruction sets
+# URL: https://github.com/simd-everywhere/simde
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: meson
+
+name=simde
+version=0.8.2
+release=3
+source=($name-$version.tar.gz::https://github.com/simd-everywhere/simde/archive/v$version/$name-v$version.tar.gz)
+
+build() {
+	# Fix build with znver4 or newer
+	export CFLAGS="$CFLAGS -march=x86-64"
+	export CXXFLAGS="$CFLAGS"
+
+ 	venom-meson build $name-$version -Db_lto=false
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

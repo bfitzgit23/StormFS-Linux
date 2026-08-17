@@ -1,7 +1,9 @@
+# Add your top line text here
+# Your line to add at the top here
 name=pcre2
-version=10.45
+version=10.47
 release=1
-source=(https://github.com/PCRE2Project/$name/releases/download/$name-$version/$name-$version.tar.bz2)
+source=(https://github.com/PCRE2Project/pcre2/releases/download/pcre2-$version/pcre2-$version.tar.bz2)
 
 pkg_build() {
 	./configure --prefix=/usr                       \

@@ -1,0 +1,197 @@
+# Description: Linux 6.12 LTS compatibility kernel with broad x86_64 hardware support
+# URL: https://www.kernel.org/
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: bc bison cpio dracut elfutils flex linux-firmware openssl
+# Optional: pahole
+
+name=linux-lts
+version=6.12.101
+release=6
+
+source=(
+    https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-${version}.tar.xz
+    gcc16-const-cast.patch
+    config
+)
+
+pkg_build() {
+    local kernver=""
+
+    make mrproper
+
+    # Start from the known-good BFSOS Current-kernel configuration.  The
+    # supplied config is intentionally used as the compatibility baseline so
+    # the LTS flavor keeps the same proven EFI/console/virtio/storage behavior
+    # instead of inheriting thousands of unrelated allmodconfig differences.
+    # olddefconfig below reconciles version-specific symbols for Linux 6.12.
+    cp "$SRC/config" .config
+
+    scripts/config --set-str CONFIG_LOCALVERSION "-BFS-LTS"
+    scripts/config --disable CONFIG_LOCALVERSION_AUTO
+    scripts/config --disable WERROR
+    scripts/config --disable DEBUG_INFO
+    scripts/config --disable DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
+    scripts/config --disable DEBUG_KERNEL
+    scripts/config --disable KASAN
+    scripts/config --disable KCSAN
+    scripts/config --disable UBSAN
+    scripts/config --disable CMDLINE_BOOL
+
+    # Core x86_64 boot/platform support.
+    scripts/config --enable 64BIT
+    scripts/config --enable X86_64
+    scripts/config --enable RELOCATABLE
+    scripts/config --enable RANDOMIZE_BASE
+    scripts/config --enable EFI
+    scripts/config --enable EFI_STUB
+    scripts/config --enable EFI_PARTITION
+    scripts/config --enable BLK_DEV_INITRD
+    scripts/config --enable DEVTMPFS
+    scripts/config --enable DEVTMPFS_MOUNT
+    scripts/config --enable PCI
+    scripts/config --enable PCI_MSI
+    scripts/config --enable IOMMU_SUPPORT
+    scripts/config --enable IA32_EMULATION
+
+    # Common root/storage filesystems are built in so the compatibility kernel
+    # can reach a normal BFSOS root independently of host-only driver guesses.
+    scripts/config --enable EXT4_FS
+    scripts/config --enable XFS_FS
+    scripts/config --enable BTRFS_FS
+    scripts/config --enable F2FS_FS
+    scripts/config --enable VFAT_FS
+    scripts/config --enable EFIVAR_FS
+
+    # Storage transports commonly used on x86_64 systems.
+    scripts/config --enable SCSI
+    scripts/config --enable BLK_DEV_SD
+    scripts/config --enable ATA
+    scripts/config --enable SATA_AHCI
+    scripts/config --enable BLK_DEV_NVME
+
+    # BFSOS boot-critical MD RAID stack.  Keep the MD core and all RAID
+    # personalities supported for root/storage topologies built into the
+    # kernel.  Root RAID must not depend on Dracut successfully carrying or
+    # loading these modules before LUKS/LVM discovery.
+    scripts/config --enable MD
+    scripts/config --enable BLK_DEV_MD
+    scripts/config --enable MD_LINEAR
+    scripts/config --enable MD_RAID0
+    scripts/config --enable MD_RAID1
+    scripts/config --enable MD_RAID10
+    scripts/config --enable MD_RAID456
+    scripts/config --module BLK_DEV_DM
+    scripts/config --module DM_CRYPT
+    scripts/config --module DM_INTEGRITY
+    scripts/config --module DM_VERITY
+    scripts/config --module DM_SNAPSHOT
+    scripts/config --module DM_THIN_PROVISIONING
+    scripts/config --module DM_CACHE
+    scripts/config --module DM_WRITECACHE
+    scripts/config --module DM_MIRROR
+    scripts/config --module DM_RAID
+    scripts/config --module DM_MULTIPATH
+
+    # Optional compressed swap exposed by the installer.
+    scripts/config --module ZRAM
+
+    # Early console and graphics support must be built in.  Keep these
+    # explicit so version reconciliation cannot make them modular or disable
+    # kernel without usable console output before the initramfs can load them.
+    scripts/config --enable VT
+    scripts/config --enable VT_CONSOLE
+    scripts/config --enable SERIAL_8250
+    scripts/config --enable SERIAL_8250_CONSOLE
+    scripts/config --enable AGP
+    scripts/config --enable FB
+    scripts/config --enable FB_EFI
+    scripts/config --enable DRM
+    scripts/config --enable DRM_SIMPLEDRM
+    scripts/config --enable DRM_FBDEV_EMULATION
+    scripts/config --enable FRAMEBUFFER_CONSOLE
+    scripts/config --enable FRAMEBUFFER_CONSOLE_DEFERRED_TAKEOVER
+
+    # QEMU/KVM and generic virtio boot path.  These are deliberately built in
+    # so the kernel can reach the initramfs and retain a usable early console
+    # without depending on modules from that same initramfs.
+    scripts/config --enable VIRTIO
+    scripts/config --enable VIRTIO_PCI
+    scripts/config --enable VIRTIO_PCI_LIB
+    scripts/config --enable VIRTIO_PCI_LIB_LEGACY
+    scripts/config --enable VIRTIO_BLK
+    scripts/config --enable VIRTIO_CONSOLE
+
+    # Networking fundamentals; the supplied distro-style baseline carries the broad device-driver set.
+    scripts/config --enable NET
+    scripts/config --enable INET
+    scripts/config --enable IPV6
+
+    make olddefconfig
+    make syncconfig
+
+    echo "===== BFSOS LTS console configuration ====="
+    grep -E '^CONFIG_(VT|VT_CONSOLE|SERIAL_8250|SERIAL_8250_CONSOLE|FB|FB_EFI|DRM|DRM_SIMPLEDRM|DRM_FBDEV_EMULATION|FRAMEBUFFER_CONSOLE|FRAMEBUFFER_CONSOLE_DEFERRED_TAKEOVER|VIRTIO|VIRTIO_PCI|VIRTIO_BLK|VIRTIO_CONSOLE)=' .config || true
+
+    # Refuse to build if dependency resolution turned any of the
+    # early console path back into modules.
+    for console_option in VT VT_CONSOLE SERIAL_8250 SERIAL_8250_CONSOLE AGP FB FB_EFI DRM DRM_SIMPLEDRM FRAMEBUFFER_CONSOLE FRAMEBUFFER_CONSOLE_DEFERRED_TAKEOVER; do
+        grep -q "^CONFIG_${console_option}=y$" .config || {
+            echo "linux-lts config error: CONFIG_${console_option} is not built in" >&2
+            return 1
+        }
+    done
+
+
+    for virtio_option in VIRTIO VIRTIO_PCI VIRTIO_BLK VIRTIO_CONSOLE; do
+        grep -q "^CONFIG_${virtio_option}=y$" .config || {
+            echo "linux-lts config error: CONFIG_${virtio_option} is not built in" >&2
+            return 1
+        }
+    done
+
+    for md_option in MD BLK_DEV_MD MD_LINEAR MD_RAID0 MD_RAID1 MD_RAID10 MD_RAID456; do
+        grep -q "^CONFIG_${md_option}=y$" .config || {
+            echo "linux-lts config error: CONFIG_${md_option} is not built in" >&2
+            return 1
+        }
+    done
+    grep -q '^CONFIG_ZRAM=m$' .config || {
+        echo "linux-lts config error: CONFIG_ZRAM is not modular" >&2
+        return 1
+    }
+
+    kernver="$(make -s kernelrelease)"
+    if [ "$kernver" != "$version-BFS-LTS" ]; then
+        echo "Unexpected LTS kernel release: $kernver" >&2
+        return 1
+    fi
+
+    echo "Building broad-support LTS kernel release: $kernver"
+    make bzImage modules
+    make INSTALL_MOD_PATH="$PKG" modules_install
+
+    if [ ! -d "$PKG/lib/modules/$kernver" ]; then
+        echo "linux-lts packaging error: modules_install did not create $PKG/lib/modules/$kernver" >&2
+        echo "Module directories actually created:" >&2
+        find "$PKG/lib/modules" -mindepth 1 -maxdepth 1 -type d -print 2>/dev/null >&2 || true
+        return 1
+    fi
+
+    install -Dm644 arch/x86/boot/bzImage "$PKG/boot/vmlinuz-$kernver"
+    install -Dm644 System.map "$PKG/boot/System.map-$kernver"
+    install -Dm644 .config "$PKG/boot/config-$kernver"
+
+    rm -rf "$PKG/lib/firmware"
+
+    make clean
+    make prepare scripts
+    install -d "$PKG/usr/src"
+    mv "$SRC/linux-$version" "$PKG/usr/src/linux-$kernver"
+    ln -sfn "linux-$kernver" "$PKG/usr/src/linux-lts"
+
+    rm -f "$PKG/lib/modules/$kernver/build" "$PKG/lib/modules/$kernver/source"
+    ln -s "/usr/src/linux-$kernver" "$PKG/lib/modules/$kernver/build"
+    ln -s "/usr/src/linux-$kernver" "$PKG/lib/modules/$kernver/source"
+
+    find -L "$PKG/usr/src/linux-$kernver" -type l -delete 2>/dev/null || true
+}

@@ -1,0 +1,15 @@
+# Description: Modern XMPP (Jabber) chat client written in Vala
+# URL: https://dino.im/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: gpgme gspell gst-plugins-good libadwaita libgee libnice libsignal-protocol-c libsoup3 libsrtp qrencode gnutls
+
+name=dino
+version=0.5.1
+release=1
+source=(https://github.com/dino/dino/releases/download/v${version}/${name}-${version}.tar.gz)
+
+build() {
+	meson setup $name-$version build
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

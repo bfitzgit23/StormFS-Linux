@@ -1,3 +1,5 @@
+# Add your top line text here
+# Your line to add at the top here
 # Depends on: kauth knewstuff kservice libnl libpcap lm-sensors plasma-activities solid
 
 name=libksysguard

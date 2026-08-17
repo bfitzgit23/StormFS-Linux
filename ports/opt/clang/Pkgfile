@@ -1,0 +1,57 @@
+# Description: Collection of modular and reusable compiler and toolchain technologies
+# URL: https://clang.llvm.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: llvm
+
+name=clang
+version=22.1.8
+release=1
+source=(https://github.com/llvm/llvm-project/releases/download/llvmorg-$version/llvm-project-$version.src.tar.xz)
+
+build() {
+
+	# CBUILD: enable o disable LLVM_TARGETS_TO_BUILD, source CBUILD_LLVM_TARGETS from "llvm.opt" file
+	CBUILD_LLVM_TARGETS="AArch64;AMDGPU;ARM;AVR;BPF;Hexagon;Lanai;LoongArch;Mips;MSP430;NVPTX;PowerPC"
+	CBUILD_LLVM_TARGETS="${CBUILD_LLVM_TARGETS};RISCV;Sparc;SPIRV;SystemZ;VE;WebAssembly;X86;XCore"
+
+	mv llvm-project-$version.src/clang-tools-extra llvm-project-$version.src/clang/tools/extra
+	cmake -S llvm-project-$version.src/clang -B build -G Ninja \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBEXECDIR=/usr/lib/clang \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+		-DCMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
+		-DCLANG_BUILD_EXAMPLES=OFF \
+		-DCLANG_DEFAULT_PIE_ON_LINUX=ON \
+		-DCLANG_INCLUDE_DOCS=OFF \
+		-DCLANG_INCLUDE_TESTS=OFF \
+		-DCLANG_LINK_CLANG_DYLIB=YES \
+		-DLLVM_ENABLE_EH=ON \
+		-DLLVM_ENABLE_LIBXML2=OFF \
+		-DLLVM_ENABLE_RTTI=ON \
+		-DLLVM_INCLUDE_TESTS=OFF \
+		-DLLVM_TARGETS_TO_BUILD="$CBUILD_LLVM_TARGETS" \
+		-Wno-dev
+		
+	jobs=
+	while : ; do
+		echo "Try ${jobs:-default} parallel jobs ..."
+
+		cmake --build build -j $jobs && break
+
+		# Try few parallel jobs to avoid OOM
+		if [ -z "$jobs" ]; then
+			jobs=$(expr $(free -g | grep Mem: | awk '{print $2}') / 2 + 1)
+			continue
+		elif [ $jobs -gt 2 ]; then
+			jobs=$(expr $jobs - 2)
+			continue
+		elif [ $jobs = 1 ]; then
+			exit 1
+		else
+			jobs=1
+		fi
+	done
+
+	DESTDIR=$PKG cmake --install build
+}

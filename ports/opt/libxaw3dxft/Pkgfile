@@ -1,0 +1,25 @@
+# Description: xaw3d library for xpaint
+# URL: https://sourceforge.net/projects/sf-xpaint
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libxft libxmu libxpm util-macros
+
+name=libxaw3dxft
+version=1.6.4
+release=1
+source=(https://github.com/DaveFlater/libXaw3dXft/releases/download/v$version/$name-$version.tar.xz)
+
+build() {
+	cd $name-$version
+	./configure \
+		--prefix=/usr \
+		--sysconfdir=/etc \
+		--mandir=/usr/share/man \
+		--localstatedir=/var \
+		--enable-internationalization \
+		--enable-multiplane-bitmaps \
+		--enable-gray-stipples \
+		--enable-arrow-scrollbars
+	make
+	make DESTDIR=$PKG install
+
+}

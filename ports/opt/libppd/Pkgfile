@@ -1,11 +1,13 @@
+# Add your top line text here
+# Your line to add at the top here
 # Depends on: libcupsfilters
 
 name=libppd
 version=2.1.1
 release=1
 source=(https://github.com/OpenPrinting/${name}/releases/download/${version}/${name}-${version}.tar.xz)
-build_opt--prefix=/usr                   
-            --disable-static                
-            --with-cups-rundir=/run/cups    
-            --enable-ppdc-utils             
-            --docdir=/usr/share/doc/$name-$versiom"
+build_opt="--prefix=/usr
+           --disable-static
+           --with-cups-rundir=/run/cups
+           --enable-ppdc-utils
+           --docdir=/usr/share/doc/$name-$version"

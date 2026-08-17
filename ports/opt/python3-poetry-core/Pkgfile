@@ -1,0 +1,26 @@
+# Description: Poetry PEP 517 Build Backend & Core Utilities
+# URL: https://github.com/python-poetry/poetry-core
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: python3-fastjsonschema python3-packaging
+
+name=python3-poetry-core
+version=2.4.1
+release=1
+source=(https://github.com/python-poetry/poetry-core/archive/$version/$name-$version.tar.gz)
+
+build() {
+  cd poetry-core-$version
+
+	gpep517 build-wheel \
+		--wheel-dir .dist \
+		--output-fd 3 3>&1 >&2
+
+	python3 -m installer -d "$PKG" \
+		.dist/*.whl
+
+	# remove vendored versions of installed modules
+	local sitedir=$(python3 -c "import site; print(site.getsitepackages()[0])")
+	rm -r "$PKG/$sitedir"/poetry/core/_vendor
+
+
+}

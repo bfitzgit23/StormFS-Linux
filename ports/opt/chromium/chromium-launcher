@@ -1,0 +1,13 @@
+#!/bin/bash
+# Chromium launcher script for StormFS
+
+# Set up environment
+export CHROME_WRAPPER=/usr/lib/chromium/chromium
+
+# Check for GPU acceleration
+if [ -n "$CHROME_DISABLE_GPU" ]; then
+    CHROME_FLAGS="--disable-gpu"
+fi
+
+# Launch Chromium
+exec /usr/lib/chromium/chromium "$@"

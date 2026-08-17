@@ -1,0 +1,23 @@
+# Description: Configuration GUI for niri Wayland compositor
+# URL: https://github.com/stefonarch/niri-settings
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: niri qt6-wayland python3-pyqt6
+
+name=niri-settings
+version=20260326
+release=1
+source=($name-$version.tar.gz::https://github.com/stefonarch/$name/archive/$_commit.tar.gz)
+
+build() {
+	cd $name-$_commit
+
+	install -Dm755 niri-settings "$PKG/usr/bin/niri-settings"
+	install -Dm644 niri-settings.desktop "$PKG/usr/share/applications/niri-settings.desktop"
+
+	install -d "$PKG/usr/lib/niri-settings/ui"
+	install -Dm644 niri_settings.py "$PKG/usr/lib/niri-settings/"
+	install -Dm644 ui/*.py "$PKG/usr/lib/niri-settings/ui"
+
+	install -d "$PKG /usr/share/icons/hicolor/scalable/apps/"
+	install -Dm644 niri-settings.svg "$PKG/usr/share/icons/hicolor/scalable/apps/niri-settings.svg"
+}

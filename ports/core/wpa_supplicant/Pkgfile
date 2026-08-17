@@ -1,16 +1,20 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: Implements WPA key negotiation with a WPA Authenticator and Extensible Authentication Protocol (EAP) authentication with an Authentication Server
 # URL:         
-# Maintainer:  Emmett1, emmett1 dot 2miligrams at gmail dot com
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on:  libnl openssl dbus libxml2
 
 name=wpa_supplicant
 version=2.11
-release=1
+release=3
 source=(https://w1.fi/releases/wpa_supplicant-$version.tar.gz
-	wpa_supplicant.conf)
+        wpa_supplicant.conf
+        openssl-4-asn1.patch)
 
 build() {
 	cd $name-$version
+        patch -Np1 -i "$SRC/openssl-4-asn1.patch"
 
 	cat > wpa_supplicant/.config << "EOF"
 CONFIG_BACKEND=file

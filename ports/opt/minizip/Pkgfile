@@ -1,0 +1,23 @@
+# Description: (un)zip based on zlib
+# URL: https://www.zlib.net/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=minizip
+version=1.3.2
+release=2
+source=(https://zlib.net/zlib-$version.tar.gz https://github.com/madler/zlib/commit/36ff1be48ef696cc67b0855f7c8537ce0276210d.patch)
+
+build() {
+	cd zlib-$version/contrib/minizip
+	cp Makefile Makefile.orig
+	cp ../README.contrib readme.txt
+
+	# Fix missing header
+	patch -p3 < "$SRC"/36ff1be48ef696cc67b0855f7c8537ce0276210d.patch
+
+	autoreconf -fvi
+	./configure --prefix=/usr --enable-static=no
+	make
+	make DESTDIR=$PKG install
+	rm $PKG/usr/include/minizip/crypt.h
+}

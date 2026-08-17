@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description:	Uniform Resource Identifiers (absolute and relative)
 # URL:		https://github.com/libwww-perl/URI
-# Maintainer:	Alan Mizrahi, alan at mizrahi dot com dot ve
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on:	perl
 # Optional:	p5-business-isbn
 

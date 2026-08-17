@@ -1,0 +1,18 @@
+# Description: command-line programm for getting and setting the contents of the X selection
+# URL: https://vergenet.net/~conrad/software/xsel/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libxt
+
+name=xsel
+version=1.2.1
+release=1
+source=(https://github.com/kfish/$name/archive/$version/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+	sed -e 's,-Wall -Werror -g,-Wall -g,' -i configure.ac
+	NOCONFIGURE=1 ./autogen.sh
+	./configure --prefix=/usr
+	make
+	make DESTDIR=$PKG install
+}

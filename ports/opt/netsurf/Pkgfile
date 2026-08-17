@@ -1,0 +1,28 @@
+# Description: Lightweight and fast web browser
+# URL: https://www.netsurf-browser.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: perl-html-parser gtk3 curl
+
+name=netsurf
+version=3.11
+release=1
+source=(http://download.netsurf-browser.org/netsurf/releases/source-full/netsurf-all-$version.tar.gz)
+
+build() {
+	cd $name-all-$version
+
+	CFLAGS="$CFLAGS -w -Os -funroll-loops" \
+	make \
+		PREFIX=/usr \
+		LIBDIR=lib \
+		INCLUDEDIR=include \
+		NETSURF_GTK_MAJOR=3 \
+		TARGET=gtk3
+	make install \
+		PREFIX=/usr \
+		LIBDIR=lib \
+		INCLUDEDIR=include \
+		DESTDIR=$PKG \
+		NETSURF_GTK_MAJOR=3 \
+		TARGET=gtk3
+}

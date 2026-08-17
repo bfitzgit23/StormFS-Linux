@@ -1,11 +1,13 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: GNU database library for C
 # URL: https://www.gnu.org/software/gdbm/gdbm.html
-# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 
 name=gdbm-32
 version=1.25
 release=1
-source=(https://ftpmirror.gnu.org/gnu/${name%-*}/${name%-*}-$version.tar.gz)
+source=(https://ftp.gnu.org/gnu/${name%-*}/${name%-*}-$version.tar.gz)
 
 build() {
 	export CC="${CC:-gcc} ${CFLAGS}"

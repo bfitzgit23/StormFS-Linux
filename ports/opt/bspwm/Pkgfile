@@ -1,0 +1,17 @@
+# Description: Tiling window manager based on binary space partitioning
+# URL: https://github.com/baskerville/bspwm
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libxcb xcb-util xcb-util-keysyms xcb-util-wm
+
+name=bspwm
+version=0.9.12
+release=1
+source=(https://github.com/baskerville/bspwm/archive/$version/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+
+	make PREFIX=/usr
+	make PREFIX=/usr DESTDIR=$PKG install
+
+}

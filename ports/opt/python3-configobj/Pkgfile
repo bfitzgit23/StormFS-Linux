@@ -1,0 +1,18 @@
+# Description: Python 3+ compatible port of the configobj library
+# URL: https://github.com/DiffSK/configobj
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: python3-setuptools python3-six
+
+name=python3-configobj
+version=5.0.9
+release=1
+source=(https://github.com/DiffSK/configobj/archive/v$version/configobj-$version.tar.gz)
+
+build() {
+  cd configobj-$version
+  /usr/bin/python3 setup.py build
+  /usr/bin/python3 setup.py install \
+    --optimize=1 \
+    --root=$PKG \
+    --skip-build
+}

@@ -1,0 +1,22 @@
+# Description: A dynamic window manager for X
+# URL: https://dwm.suckless.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libxinerama libxft freetype2
+
+name=dwm
+version=6.8
+release=1
+source=(https://dl.suckless.org/dwm/dwm-$version.tar.gz)
+
+build() {
+	cd $name-$version
+
+
+	for p in $_portdir/*.patch $_portdir/*.diff; do
+		[ -f $p ] || continue
+		patch -Np1 -i $p
+	done
+
+	make PREFIX=/usr
+	make PREFIX=/usr DESTDIR=$PKG install
+}

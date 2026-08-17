@@ -1,0 +1,34 @@
+# Description: A C/C++ MIME creation and parser library with support for S/MIME, PGP, and Unix mbox spools
+# URL: https://github.com/jstedfast/gmime
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: glib gpgme libidn2 gtk-doc
+
+name=gmime3
+version=3.2.15
+release=2
+source=(https://github.com/jstedfast/gmime/archive/$version/$name-$version.tar.gz)
+
+build() {
+	cd gmime-$version
+
+	cat > which <<EOF
+#!/bin/sh
+type -p \$1
+EOF
+
+chmod +x which
+export PATH=$PATH:$PWD
+
+	sed -i '/AM_INIT_AUTOMAKE/s/]/ foreign]/' configure.ac
+	autoreconf -fvi
+
+
+	./configure --prefix=/usr \
+    	--program-prefix=gmime3 \
+    	--enable-smime \
+    	--disable-gtk-doc \
+    	--disable-static
+  	sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
+  	make
+  	make DESTDIR=$PKG install
+}

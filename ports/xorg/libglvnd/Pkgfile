@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: The GL Vendor-Neutral Dispatch library
 # URL: https://github.com/NVIDIA/libglvnd
-# Maintainer: CRUX Xorg Team, xorg-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: xorg-libs
 
 name=libglvnd

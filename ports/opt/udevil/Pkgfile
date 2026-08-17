@@ -1,0 +1,28 @@
+# Description: Mount and unmount without password
+# URL: https://github.com/IgnorantGuru/udevil
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: intltool gettext eudev glib
+
+name=udevil
+version=0.4.4
+release=2
+source=($name-$version.tar.gz::https://github.com/IgnorantGuru/udevil/archive/$version.tar.gz udevil-0.4.3-flags.patch udevil-0.4.4-include-sysmacros.patch udevil-0.4.4-no-libtool.patch udevil-0.4.4-stat.patch)
+
+build() {
+	cd $name-$version
+
+	for p in $SRC/*.patch; do
+		patch -Np1 -i $p
+	done
+
+	./configure --prefix=/usr \
+	            --sysconfdir=/etc \
+		    --libexecdir=/usr/lib \
+	            --localstatedir=/var \
+	            --disable-static \
+		    --disable-man \
+		    --disable-systemd
+	make
+	make DESTDIR=$PKG install
+
+}

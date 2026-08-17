@@ -1,7 +1,10 @@
+# Add your top line text here
+# Your line to add at the top here
 name=bash
-version=5.3.3
+version=5.3
 release=1
-source=(https://ftpmirror.gnu.org/gnu/$name/$name-${version:0:3}.tar.gz)
+source=(https://ftpmirror.gnu.org/bash/bash-$version.tar.gz
+)
 #	bashrc
 #	profile
 build_opt="--prefix=/usr

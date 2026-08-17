@@ -1,0 +1,15 @@
+# Description: C++ interface to pango
+# URL: https://gitlab.gnome.org/GNOME/pangomm
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: cairomm-gtk4 glibmm-gtk4 pango
+
+name=pangomm-gtk4
+version=2.56.1
+release=1
+source=($name-$version.tar.xz::https://ftp.gnome.org/pub/GNOME/sources/$nm/${version%.*}/$nm-$version.tar.xz)
+
+build() {
+	meson setup $name-$version build
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

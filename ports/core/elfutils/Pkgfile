@@ -1,12 +1,14 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: A collection of utilities to handle ELF objects.
 # URL: https://sourceware.org/elfutils/
-# Maintainer: CRUX System Team, core-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: bzip2 xz zlib
 
 name=elfutils
-version=0.193
+version=0.195
 release=2
-source=(https://sourceware.org/$name/ftp/$version/$name-$version.tar.bz2
+source=(https://sourceware.org/ftp/elfutils/$version/elfutils-$version.tar.bz2
 	libeu.patch)
 keep_static=1
 pkg_build () {

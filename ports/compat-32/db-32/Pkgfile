@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: Berkeley DB
 # URL:         http://www.oracle.com/database/berkeley-db/index.html
-# Maintainer:  CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 
 name=db-32
 version=5.3.28

@@ -1,0 +1,21 @@
+# Description: Lightweight in-process concurrent programming
+# URL: https://pypi.org/project/greenlet/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: python3-setuptools python3-gpep517 python3-wheel
+
+name=python3-greenlet
+version=3.5.3
+release=1
+source=($name-$version.tar.gz::https://files.pythonhosted.org/packages/source/g/greenlet/greenlet-$version.tar.gz)
+
+build() {
+	cd greenlet-$version
+
+	    gpep517 build-wheel \
+		--wheel-dir .dist \
+		--output-fd 3 3>&1 >&2
+	    python3 -m installer -d "$PKG" .dist/*.whl
+
+	    rm -r "$PKG"/usr/lib/python3*/site-packages/greenlet/tests/
+
+}

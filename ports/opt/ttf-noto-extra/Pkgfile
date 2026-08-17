@@ -1,0 +1,20 @@
+# Description: Google Noto TTF fonts (extra)
+# URL: https://fonts.google.com/noto
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: ttf-noto
+
+name=ttf-noto-extra
+version=2026.06.01
+release=1
+source=(https://github.com/notofonts/notofonts.github.io/archive/refs/tags/noto-monthly-release-$version.tar.gz)
+
+build() {
+	cd notofonts.*
+	mkdir -p $PKG/usr/share/fonts/noto
+	find . -type f -iname '*Condensed*.ttf' -exec install -Dm644 {} -t $PKG/usr/share/fonts/noto/ \;
+	find . -type f -iname '*SemiBold*.ttf' -exec install -Dm644 {} -t $PKG/usr/share/fonts/noto/ \;
+	find . -type f -iname '*Extra*.ttf' -exec install -Dm644 {} -t $PKG/usr/share/fonts/noto/ \;
+	# fix conflict with ttf-noto
+	rm -f $PKG/usr/share/fonts/noto/NotoSansGunjalaGondi-Semibold.ttf \
+              $PKG/usr/share/fonts/noto/NotoSansNewTaiLue-Semibold.ttf
+}

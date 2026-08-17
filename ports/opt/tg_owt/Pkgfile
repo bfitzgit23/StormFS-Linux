@@ -1,0 +1,33 @@
+# Description: WebRTC library for Telegram-desktop
+# URL: https://github.com/desktop-app/tg_owt
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: abseil-cpp libjpeg-turbo libxcomposite openh264 pipewire pulseaudio
+
+name=tg_owt
+version=20260309
+release=2
+source=($name-$version-$_commit.tar.gz::https://github.com/desktop-app/tg_owt/archive/$_commit.tar.gz libyuv-${_libyuv_commit}.tar.gz::https://chromium.googlesource.com/libyuv/libyuv/+archive/${_libyuv_commit}.tar.gz crc32c-${_crc32c_commit}.tar.gz::https://github.com/google/crc32c/archive/${_crc32c_commit}.tar.gz abseil-${_abseil_commit}.tar.gz::https://github.com/abseil/abseil-cpp/archive/${_abseil_commit}.tar.gz libsrtp-${_libsrtp_commit}.tar.gz::https://github.com/cisco/libsrtp/archive/$_libsrtp_commit.tar.gz tg_owt-gcc16.patch)
+noextract=(libyuv-${_libyuv_commit}.tar.gz)
+
+build() {
+	cd $name-$_commit
+	patch -Np1 -i $SRC/tg_owt-gcc16.patch
+	for d in libyuv libyuv crc32c/src abseil-cpp libsrtp; do mkdir -pv $SRC/src/third_party/$d; done
+	mv $SRC/crc32c-${_crc32c_commit}/* src/third_party/crc32c/src 
+	mv $SRC/abseil-cpp-${_abseil_commit}/* src/third_party/abseil-cpp
+	mv $SRC/libsrtp-$_libsrtp_commit/* src/third_party/libsrtp
+	bsdtar xzf $SRC/libyuv-${_libyuv_commit}.tar.gz -C src/third_party/libyuv
+
+	cmake -B build -G Ninja \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DCMAKE_INSTALL_LIBEXECDIR=lib \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+		-DCMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
+		-DTG_OWT_PACKAGED_BUILD=True \
+		-DBUILD_SHARED_LIBS=OFF \
+		-Wno-dev
+	cmake --build build
+	DESTDIR=$PKG cmake --install build
+}

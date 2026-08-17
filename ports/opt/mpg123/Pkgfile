@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: Commandline MP3 player
 # URL: https://www.mpg123.de
-# Maintainer: Juergen Daubert, jue at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: alsa-lib
 # Optional: pulseAudio sdl12-compat jack openal portaudio
 

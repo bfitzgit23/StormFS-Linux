@@ -1,0 +1,15 @@
+# Description: Outputs X window titles
+# URL: https://github.com/baskerville/xtitle
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: xcb-util xcb-util-wm
+
+name=xtitle
+version=0.4.4
+release=1
+source=(https://github.com/baskerville/xtitle/archive/$version/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+	make PREFIX=/usr
+	make PREFIX=/usr DESTDIR=$PKG install
+}

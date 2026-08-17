@@ -1,0 +1,22 @@
+# Description: Spice gtk client and libraries
+# URL: https://www.spice-space.org
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: cyrus-sasl graphite2 gst-plugins-good gtk3 json-glib libva polkit libxcomposite libxcursor libxinerama spice usbutils
+
+name=spice-gtk
+version=0.42
+release=3
+source=(https://www.spice-space.org/download/gtk/$name-$version.tar.xz)
+
+build() {
+	meson setup $name-$version build \
+		--libexecdir=/usr/lib/$name \
+		-Dgtk=enabled \
+		-Dgtk_doc=disabled \
+		-Dusb-ids-path=/usr/share/hwdata/usb.ids 
+
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+	
+	rm -rf $PKG/usr/share/locale
+}

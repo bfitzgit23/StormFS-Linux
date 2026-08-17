@@ -1,0 +1,28 @@
+# Description: Binary precompiled packages for Rust
+# URL: https://www.rust-lang.org
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=rust-bin
+version=1.96.0
+release=1
+source=(https://static.rust-lang.org/dist/rust-$version-x86_64-unknown-linux-gnu.tar.gz)
+
+build() {
+	cd rust-$version-x86_64-unknown-linux-gnu
+	./install.sh --prefix=/usr --destdir=$PKG --disable-ldconfig
+
+	# move libexec to lib, remove libexec dir
+	mv $PKG/usr/libexec/* $PKG/usr/lib
+	rmdir $PKG/usr/libexec
+
+	# Remove doc
+	rm -rf $PKG/usr/share/doc
+
+	# Completions
+	prt-get isinst bash-completion || rm -rf $PKG/usr/etc/bash_completion.d
+	prt-get isinst zsh || rm -rf $PKG/usr/share/zsh
+
+	# Clean files
+	rm -f $PKG/usr/lib/rustlib/install.log
+	rm -f $PKG/usr/lib/rustlib/uninstall.sh
+}

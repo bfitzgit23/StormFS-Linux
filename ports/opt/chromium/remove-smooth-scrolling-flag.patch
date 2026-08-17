@@ -1,0 +1,11 @@
+--- a/chrome/browser/about_flags.cc
++++ b/chrome/browser/about_flags.cc
+@@ -1234,7 +1234,7 @@ const FeatureEntry kFeatureEntries[] = {
+     // Smooth Scrolling
+     {"smooth-scrolling",
+      flag_descriptions::kSmoothScrollingName,
+-     flag_descriptions::kSmoothScrollingDescription,
++     "",
+      kOsAll,
+      SINGLE_VALUE_TYPE(switches::kEnableSmoothScrolling)},
+ 

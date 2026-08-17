@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: GTK version of the vim editor
 # URL: https://www.vim.org/
-# Maintainer: Juergen Daubert, jue at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: gtk3 vim libXt
 
 name=gvim

@@ -1,0 +1,60 @@
+# Description: Lightweight Display Manager for the LXDE desktop
+# URL: https://lxde.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: gtk3 iso-codes consolekit2 linux-pam xorg-server librsvg
+
+name=lxdm
+version=0.5.3
+release=10
+source=(https://sourceforge.net/projects/lxde/files/$name/$name%20$version/$name-$version.tar.xz run.$name rc.$name)
+
+build() {
+	cd $name-$version
+
+cat > pam/lxdm << "EOF"
+#%PAM-1.0
+auth       requisite      pam_nologin.so
+auth       required       pam_env.so
+auth       include        system-auth
+-auth      optional       pam_gnome_keyring.so
+account    include        system-account
+password   include        system-password
+session    required       pam_limits.so
+session    include        system-session
+-session   optional       pam_gnome_keyring.so auto_start
+EOF
+
+sed -i 's:sysconfig/i18n:profile.d/i18n.sh:g' data/lxdm.in
+sed -i 's:/etc/xprofile:/etc/profile:g' data/Xsession
+sed -e 's/^bg/#&/'        \
+    -e '/reset=1/ s/# //' \
+    -e 's/logou$/logout/' \
+    -e "/arg=/a arg=/usr/bin/X" \
+    -i data/lxdm.conf.in
+
+	autoreconf -fiv
+	./configure --prefix=/usr \
+				--with-pam \
+				--disable-nls \
+				--libexecdir=/usr/lib/$name \
+				--with-systemdsystemunitdir=no \
+				--sysconfdir=/etc \
+	            --enable-gtk3
+	make
+	make DESTDIR=$PKG install
+        
+	#sed -i 's/Clearlooks/OSX-Arc-Plus/;s/Industrial/Venom/;s/disable=0/disable=1/' $PKG/etc/$name/$name.conf
+	
+	#cd $SRC/$name-venom-theme
+	#cp -r Venom $PKG/usr/share/$name/themes
+
+	# runit service
+	prt-get isinst runit && {
+		install -Dm755 $SRC/run.$name $PKG/etc/sv/$name/run
+		ln -s /run/runit/supervise.$name $PKG/etc/sv/$name/supervise
+	} || continue
+
+	# rc service
+	prt-get isinst sysvinit && \
+		install -Dm755 $SRC/rc.$name $PKG/etc/rc.d/$name || continue
+}

@@ -1,0 +1,21 @@
+# Description: Fedora Media Writer - Write Fedora Images to Portable Media
+# URL: https://github.com/FedoraQt/MediaWriter
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: qt6-imageformats qt6-tools qt6-5compat qt6-svg udisks2
+
+name=mediawriter
+version=5.3.1
+release=1
+source=(https://github.com/FedoraQt/${_name}/archive/${version}.tar.gz)
+
+build() {
+	cmake -S ${_name-}-${version} -B build -G Ninja \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+		-DCMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
+		-Wno-dev 
+	cmake --build build
+	DESTDIR=$PKG cmake --install build
+}

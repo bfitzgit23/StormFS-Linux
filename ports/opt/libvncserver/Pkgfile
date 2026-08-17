@@ -1,0 +1,23 @@
+# Description: Cross-platform C libraries that allow you to easily implement VNC server or client functionality
+# URL: https://libvnc.github.io/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: gnutls libgcrypt libjpeg-turbo libpng cyrus-sasl lzo sdl2-compat
+
+name=libvncserver
+version=0.9.15
+release=2
+source=($name-$version.tar.gz::https://github.com/LibVNC/libvncserver/archive/LibVNCServer-$version.tar.gz)
+
+build() {
+    cmake -S $name-LibVNCServer-$version -B build -G Ninja \
+	-DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+        -DCMAKE_INSTALL_PREFIX=/usr \
+        -DCMAKE_INSTALL_LIBDIR=lib \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DCMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
+        -DCMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+        -Wno-dev
+    cmake --build build
+    DESTDIR=$PKG cmake --install build
+
+}

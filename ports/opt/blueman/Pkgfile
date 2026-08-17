@@ -1,0 +1,27 @@
+# Description: GTK+ Bluetooth Manager
+# URL: https://github.com/blueman-project/blueman
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: bluez gtk3 python3-gobject3 inetutils polkit
+
+name=blueman
+version=2.4.6
+release=1
+source=($name-$version.tar.gz::https://github.com/blueman-project/blueman/archive/$version.tar.gz)
+
+build() {
+	cd $name-$version
+	./autogen.sh
+	./configure \
+	    --prefix=/usr \
+	    --sysconfdir=/etc \
+	    --libexecdir=/usr/lib/$name \
+	    --disable-schemas-compile \
+	    --disable-nls \
+	    --disable-runtime-deps-check
+	make
+	make DESTDIR=$PKG install
+
+	rm -r $PKG/usr/share/doc/
+	rm -r $PKG/usr/lib/systemd/
+
+}

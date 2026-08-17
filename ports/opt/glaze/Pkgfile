@@ -1,0 +1,22 @@
+# Description: An Extremely fast, In-Memory JSON and Interface Library for Modern C++
+# URL: https://github.com/stephenberry/glaze
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: cmake
+
+name=glaze
+version=7.8.3
+release=1
+source=()
+
+build() {
+	cmake -S $name-$version -B build \
+	        -DCMAKE_INSTALL_PREFIX=/usr \
+	        -DCMAKE_INSTALL_LIBDIR=lib \
+	        -DCMAKE_BUILD_TYPE=Release \
+	        -DCMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
+	        -DCMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+		-DBUILD_TESTING=OFF \
+		-Wno-devcd 
+	cmake --build build
+	DESTDIR=$PKG cmake --install build
+}

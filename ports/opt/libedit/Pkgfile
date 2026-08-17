@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: Command line editor library providing generic line editing, history, and tokenization functions
 # URL: https://thrysoee.dk/editline/
-# Maintainer: CRUX System Team, core-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 
 name=libedit
 version=20230828_3.1

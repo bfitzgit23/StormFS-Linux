@@ -1,0 +1,23 @@
+# Description: The hyprland cursor format, library and utilities
+# URL: https://github.com/hyprwm/hyprcursor
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: gdb hyprlang libzip librsvg tomlplusplus
+
+name=hyprcursor
+version=0.1.13
+release=1
+source=(${name}-${version}.tar.gz::https://github.com/hyprwm/hyprcursor/archive/refs/tags/v$version.tar.gz)
+
+build() {
+	cmake -S $name-$version -B build \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DCMAKE_INSTALL_LIBEXECDIR=lib \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+		-DCMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
+		--no-warn-unused-cli \
+		-Wno-dev 
+	cmake --build build
+	DESTDIR=$PKG cmake --install build
+}

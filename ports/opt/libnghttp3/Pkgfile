@@ -1,0 +1,20 @@
+# Description: Framing layer of HTTP/3 is implemented as a reusable C library
+# URL: https://github.com/ngtcp2/nghttp3
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=libnghttp3
+version=1.17.0
+release=1
+source=($name-$version.tar.xz::https://github.com/ngtcp2/nghttp3/releases/download/v${version}/nghttp3-${version}.tar.xz)
+
+build() {
+	cd nghttp3-$version
+	autoreconf -i
+	  ./configure \
+	    --prefix=/usr \
+	    --disable-examples \
+	    --disable-python-bindings \
+	    --enable-lib-only
+	make
+	make DESTDIR=$PKG install
+}

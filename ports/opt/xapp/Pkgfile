@@ -1,0 +1,20 @@
+# Description: Common library for X-Apps project
+# URL: https://github.com/linuxmint/xapp
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libdbusmenu libgnomekbd ninja python3-gobject3 vala
+
+name=xapp
+version=3.2.2
+release=1
+source=(https://github.com/linuxmint/xapp/archive/master.lmde5/$name-$version.tar.gz)
+
+build() {
+
+	meson setup $name-$version build 
+	samu -C build
+	DESTDIR=$PKG samu -C build install
+
+	local site_packages=$(python -c "import site; print(site.getsitepackages()[0])")
+	python3 -m compileall -o 0 -o 1 -o 2 --hardlink-dupes -s "$PKG" "$PKG"${site_packages}
+
+}

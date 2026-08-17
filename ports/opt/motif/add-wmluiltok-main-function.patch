@@ -1,0 +1,17 @@
+diff --git a/tools/wml/wmluiltok.c b/tools/wml/wmluiltok.c
+index 4b2b69e..8d7feca 100644
+--- a/tools/wml/wmluiltok.c
++++ b/tools/wml/wmluiltok.c
+@@ -1955,6 +1955,12 @@ add_token (t)					/* keep sorted by name */
+ }
+ 
+ 
++int main(int argc, char **argv)
++{
++    yyin = stdin;
++    yylex();
++    return 0;
++}
+ 
+ int yywrap ()
+ {

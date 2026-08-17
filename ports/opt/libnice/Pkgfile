@@ -1,0 +1,16 @@
+# Description: An implementation of the IETF's draft ICE (for p2p UDP data streams)
+# URL: https://nice.freedesktop.org
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: meson glib
+
+name=libnice
+version=0.1.23
+release=1
+source=(https://libnice.freedesktop.org/releases/libnice-$version.tar.gz)
+
+build() {
+	cd $name-$version
+	meson setup $name-$version build
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

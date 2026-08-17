@@ -1,0 +1,24 @@
+# Description: A Free software that gathers information on CPU, motherboard and more
+# URL: CPU-X is a system profiling and monitoring application
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: gtkmm3 libcpuid nasm pciutils procps-ng vulkan-icd-loader
+
+name=cpu-x
+version=5.4.0
+release=2
+source=($name-$version.tar.gz::https://github.com/TheTumultuousUnicornOfDarkness/CPU-X/archive/v$version.tar.gz cpu-x-5.4.0-fix-for-nasm-3.patch)
+
+build() {
+	patch -d CPU-X-$version -Np1 -i $SRC/cpu-x-5.4.0-fix-for-nasm-3.patch
+
+	cmake -S CPU-X-$version -B build -G Ninja \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DCMAKE_INSTALL_LIBEXECDIR=lib \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+		-DCMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
+		-Wno-dev 
+	cmake --build build
+        DESTDIR=$PKG cmake --install build
+}

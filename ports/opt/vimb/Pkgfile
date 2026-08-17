@@ -1,0 +1,15 @@
+# Description: Fast and lightweight web browser based on WebKit/GTK+
+# URL: https://github.com/fanglingsu/vimb
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: webkitgtk
+
+name=vimb
+version=3.7.1
+release=1
+source=(https://github.com/fanglingsu/vimb/archive/$version/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+	make PREFIX=/usr
+	make PREFIX=/usr DESTDIR=$PKG install
+}

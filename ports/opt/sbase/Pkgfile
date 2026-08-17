@@ -1,0 +1,15 @@
+# Description: Portable UNIX tools (suckless)
+# URL: https://github.com/michaelforney/sbase
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=sbase
+version=20230729
+release=1
+source=($name-$version.tar.gz::https://github.com/michaelforney/sbase/archive/$_commit.tar.gz)
+
+build() {
+	cd $name-$_commit
+	make $name-box
+	install -Dm 755 $name-box $PKG/bin/$name-box
+	#make DESTDIR=$PKG PREFIX=/usr $name-box-install
+}

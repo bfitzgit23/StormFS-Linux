@@ -1,0 +1,5 @@
+#!/bin/sh
+
+getent passwd mpd >/dev/null || \
+useradd -r -M -g mpd -G audio -c "mpd music daemon" -d /var/lib/mpd -s /sbin/nologin mpd
+

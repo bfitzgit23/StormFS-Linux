@@ -1,0 +1,15 @@
+# Description: Wayland protocol extensions for Hyprland
+# URL: https://github.com/hyprwm/hyprland-protocols
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: wayland
+
+name=hyprland-protocols
+version=0.7.0
+release=1
+source=($name-$version.tar.gz::https://github.com/hyprwm/hyprland-protocols/archive/v$version.tar.gz)
+
+build() {
+	meson setup $name-$version build
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

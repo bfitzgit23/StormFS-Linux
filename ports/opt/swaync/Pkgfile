@@ -1,0 +1,17 @@
+# Description: A simple GTK based notification daemon for SwayWM
+# URL: https://github.com/ErikReider/SwayNotificationCenter
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: gtk4-layer-shell json-glib libhandy pulseaudio scdoc granite blueprint-compiler libadwaita
+
+name=swaync
+version=0.12.6
+release=1
+source=($name-$version.tar.gz::https://github.com/ErikReider/SwayNotificationCenter/archive/v$version.tar.gz)
+
+build() {
+	meson setup $name-$version build \
+		-Dsystemd-service=false \
+		-Dscripting=true
+	meson compile -C build
+	DESTDIR=$PKG meson install -C build
+}

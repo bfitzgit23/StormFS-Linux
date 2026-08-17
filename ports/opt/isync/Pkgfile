@@ -1,0 +1,15 @@
+# Description: IMAP and MailDir mailbox synchronizer
+# URL: http://isync.sourceforge.net/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=isync
+version=1.5.1
+release=1
+source=(https://sourceforge.net/projects/isync/files/$name/$version/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+	./configure --prefix=/usr
+	make
+	make DESTDIR=$PKG install
+}

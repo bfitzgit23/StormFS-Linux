@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: A set of python bindings for cairo.
 # URL: https://pypi.org/project/pycairo/
-# Maintainer: Tim Biermann, tbier at posteo dot de
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: cairo
 
 name=python3-cairo

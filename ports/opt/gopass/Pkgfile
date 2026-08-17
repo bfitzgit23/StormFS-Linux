@@ -1,0 +1,24 @@
+# Description: The slightly more awesome standard unix password manager for teams.
+# URL: https://github.com/gopasspw/gopass
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: go gnupg
+
+name=gopass
+version=1.16.1
+release=1
+source=(https://github.com/gopasspw/gopass/releases/download/v$version/gopass-$version.tar.gz)
+
+build() {
+
+	export CGO_CPPFLAGS="${CPPFLAGS}"
+	export CGO_CFLAGS="${CFLAGS}"
+	export CGO_CXXFLAGS="${CXXFLAGS}"
+	export CGO_LDFLAGS="${LDFLAGS}"
+	export GOFLAGS="-buildmode=pie -trimpath -ldflags=-linkmode=external -mod=readonly -modcacherw"
+
+	sed -i 's|-gcflags="-trimpath=$(GOPATH)" -asmflags="-trimpath=$(GOPATH)"||' Makefile
+	sed -i 's|CGO_ENABLED=0||' Makefile
+
+  make DESTDIR="${PKG}" PREFIX="/usr" install
+  install -Dm644 LICENSE "${PKG}/usr/share/licenses/${name}/LICENSE"
+}

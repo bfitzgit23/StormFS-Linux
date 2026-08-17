@@ -1,0 +1,18 @@
+# Description: UI library that focuses on simplicity and minimalism
+# URL: https://pwmt.org/projects/girara
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: meson glib json-c gtk3 pkgconf json-glib
+
+name=girara
+version=2026.02.04
+release=1
+source=(https://pwmt.org/projects/girara/download/$name-$version.tar.xz)
+
+build() {
+	meson setup $name-$version build \
+		--libexecdir=/usr/lib/$name \
+		-Ddocs=disabled \
+		-Dtests=disabled 
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

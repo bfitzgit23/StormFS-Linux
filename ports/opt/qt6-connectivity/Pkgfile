@@ -1,0 +1,23 @@
+# Description: Provides access to Bluetooth hardware
+# URL: https://www.qt.io/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: qt6-declarative bluez
+
+name=qt6-connectivity
+version=6.11.1
+release=1
+source=($name-$version.tar.xz::https://download.qt.io/official_releases/qt/${version%.*}/$version/submodules/qtconnectivity-everywhere-src-$version.tar.xz)
+
+build() {
+	cmake -S qtconnectivity-everywhere-src-$version -B build -G Ninja \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DCMAKE_INSTALL_LIBEXECDIR=lib \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+		-DCMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
+		-D QT_USE_CCACHE=$(prt-get isinst ccache && printf "ON" || printf "OFF") \
+		-D INSTALL_PUBLICBINDIR=usr/bin
+	cmake --build build
+	DESTDIR=$PKG cmake --install build
+}

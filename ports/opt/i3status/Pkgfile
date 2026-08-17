@@ -1,0 +1,18 @@
+# Description: Generates status bar to use with i3bar, dzen2 or xmobar
+# URL: https://i3wm.org/i3status/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: confuse yajl libnl alsa-lib pulseaudio asciidoc xmlto meson
+
+name=i3status
+version=2.15
+release=1
+source=(https://i3wm.org/i3status/$name-$version.tar.xz)
+
+build() {
+	cd $name-$version
+
+	export XML_CATALOG_FILES=/etc/xml/catalog
+	meson setup $name-$version build
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

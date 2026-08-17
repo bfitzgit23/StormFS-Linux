@@ -1,3 +1,5 @@
+# Add your top line text here
+# Your line to add at the top here
 # Depends on: evolution-data-server gcr4 gjs gnome-desktop ibus mutter polkit sassc startup-notification desktop-file-utils gnome-autoar gnome-bluetooth gst-plugins-base networkmanager power-profiles-daemon
 
 name=gnome-shell

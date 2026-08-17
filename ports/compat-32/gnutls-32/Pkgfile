@@ -1,12 +1,14 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: A library that provides a secure layer over a reliable transport layer
 # URL: https://gnutls.org/
-# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: gnutls libidn2-32 nettle-32 p11-kit-32
 
 name=gnutls-32
 version=3.8.9
 release=1
-source=(https://www.gnupg.org/ftp/gcrypt/${name%-*}/v${version:0:3}/${name%-*}-$version.tar.xz)
+source=(https://mirrors.dotsrc.org/gcrypt/${name%-*}/v${version:0:3}/${name%-*}-$version.tar.xz)
 
 build() {
 	cd ${name%-*}-${version:0:5}

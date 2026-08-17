@@ -1,0 +1,16 @@
+# Description: Use TrueType fonts in your SDL 2.x applications
+# URL: https://github.com/libsdl-org/SDL_ttf
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: freetype2 sdl2-compat libsm
+
+name=sdl2_ttf
+version=2.24.0
+release=2
+source=($name-$version.tar.gz::https://github.com/libsdl-org/SDL_ttf/releases/download/release-${version}/SDL2_ttf-${version}.tar.gz)
+
+build() {
+    cd SDL2_ttf-$version
+    ./configure --disable-static -prefix=/usr
+    make
+    make DESTDIR=$PKG install
+}

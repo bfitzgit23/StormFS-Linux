@@ -1,0 +1,17 @@
+# Description: Secure file wiping utility
+# URL: http://wipe.sourceforge.net/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: linux-headers
+
+name=wipe
+version=2.3.1
+release=1
+source=(https://downloads.sourceforge.net/$name/$name-$version.tar.bz2)
+
+build() {
+	cd $SRC/$name-$version
+	export CPPFLAGS=
+	./configure --prefix=/usr --mandir=/usr/share/man
+	make
+        make prefix=$PKG/usr mandir=$PKGr/share/man install
+}

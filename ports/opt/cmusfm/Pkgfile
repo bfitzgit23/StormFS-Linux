@@ -1,0 +1,17 @@
+# Description: Last.fm scrobbler for cmus music player
+# URL: https://github.com/Arkq/cmusfm
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: cmus libnotify
+
+name=cmusfm
+version=0.5.0
+release=2
+source=(https://github.com/Arkq/$name/archive/v$version/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+	autoreconf --install
+	./configure --prefix=/usr --enable-libnotify
+	make
+	make DESTDIR=$PKG install
+}

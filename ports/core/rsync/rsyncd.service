@@ -1,0 +1,10 @@
+[Unit]
+Description=Rsync daemon
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/rsync --daemon --no-detach
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

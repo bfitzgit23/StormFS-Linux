@@ -1,0 +1,22 @@
+# Description: Terminal based 'The Matrix' like implementation
+# URL: https://github.com/abishekvashok/cmatrix
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: cmake ninja ncurses
+
+name=cmatrix
+version=2.0
+release=2
+source=(https://github.com/abishekvashok/cmatrix/archive/v$version/$name-$version.tar.gz)
+
+build() {
+	cmake -S $name-$version -B build -G Ninja \
+	        -DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+                -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+		-Wno-dev
+	cmake --build build
+	DESTDIR=$PKG cmake --install build
+
+	install -Dm644 $SRC/$name-$version/$name.1 $PKG/usr/share/man/man1/$name.1
+}

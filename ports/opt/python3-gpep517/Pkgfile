@@ -1,0 +1,24 @@
+# Description: Wrappers to build Python packages using PEP 517 hooks
+# URL: https://github.com/pypa/pep517
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: python3-installer
+
+name=python3-gpep517
+version=19
+release=1
+source=(https://github.com/mgorny/gpep517/archive/v$version/gpep517-v$version.tar.gz default.bytecode.level.patch gpep517)
+
+build() {
+	cd gpep517-$version
+
+
+	patch -Np1 -i $SRC/default.bytecode.level.patch
+	pyver=$(python3 -c 'import site;print(site.getsitepackages()[0])')     
+
+	mkdir -p $PKG/$pyver
+	
+	cp -a gpep517 $PKG/$pyver
+	python3 -m compileall $PKG/$pyver
+
+	install -Dm755 $SRC/gpep517 -t $PKG/usr/bin
+}

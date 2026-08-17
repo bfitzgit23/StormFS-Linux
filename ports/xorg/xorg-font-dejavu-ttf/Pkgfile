@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: A font family based on the Bitstream Vera Fonts
 # URL:         https://dejavu-fonts.github.io/
-# Maintainer:  CRUX Xorg Team, xorg-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on:  fontconfig mkfontscale
 
 name=xorg-font-dejavu-ttf

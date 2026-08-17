@@ -1,0 +1,31 @@
+# Description: Scanner Access Now Easy - Scanner driver for Linux
+# URL: https://gitlab.com/sane-project/backends
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libusb libtiff libpng autoconf-archive
+
+name=sane
+version=1.4.0
+release=2
+source=($name-$version.tar.gz::https://gitlab.com/sane-project/backends/-/archive/$version/backends-$version.tar.bz2 $homepage/-/commit/d04d17b456d9847021b6df6eb08a3419a75172cf.patch)
+
+build() {
+	cd backends-$version
+	patch -Np1 -i $SRC/d04d17b456d9847021b6df6eb08a3419a75172cf.patch
+	./autogen.sh
+    	./configure \
+		--prefix=/usr \
+                --localstatedir=/var \
+                --sysconfdir=/etc \
+		--enable-pthread \
+		--disable-translations \
+                --disable-locking \
+                --disable-latex \
+                --with-group=scanner \
+		--with-libcurl \
+                --with-usb    
+	make
+	make -j1 DESTDIR=$PKG install
+
+	install -D -m 644 tools/udev/libsane.rules $PKG/etc/udev/rules.d/85-libsane.rules
+
+}

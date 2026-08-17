@@ -1,0 +1,21 @@
+# Description: SANE drivers from Brother for compatible models
+# URL: http://support.brother.com
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: avahi sane
+
+name=brother-brscan4
+version=0.4.11_1
+release=2
+source=($name-$version.rpm::https://download.brother.com/welcome/dlf105203/brscan4-${vrsn}.x86_64.rpm)
+
+build() {
+	cp -r $SRC/etc $PKG
+	cp -r $SRC/opt $PKG
+	cp -r $SRC/usr $PKG
+
+	mv $PKG/usr/lib64 $PKG/usr/lib
+
+  	cd $PKG/usr/lib/sane
+  	ln -sf libsane-brother4.so.1.0.7 libsane-brother4.so.1
+  	ln -sf libsane-brother4.so.1 libsane-brother4.so
+}

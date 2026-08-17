@@ -1,4 +1,6 @@
-# Depends on: python3-arkdown python3-packaging python3-pygments python3-typogrify
+# Add your top line text here
+# Your line to add at the top here
+# Depends on: python3-markdown python3-packaging python3-pygments python3-typogrify
 
 name=python3-gi_docgen
 version=2024.1

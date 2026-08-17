@@ -1,0 +1,25 @@
+# Description: Color Picker
+# URL: http://www.gpick.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: boost gtk3 lua ragel
+
+name=gpick
+version=0.3
+release=1
+source=(https://github.com/thezbyg/gpick/releases/download/v$version/$name-$version.tar.gz boost-version.patch revert-cpp-lua.patch)
+
+build() {
+	patch -d $name-$version -Np1 -i $SRC/boost-version.patch
+	patch -d $name-$version -Np1 -i $SRC/revert-cpp-lua.patch
+
+	cmake -S $name-$version -B build -G Ninja \
+	        -DCMAKE_INSTALL_PREFIX=/usr \
+	        -DCMAKE_INSTALL_LIBDIR=lib \
+		-DCMAKE_INSTALL_LIBEXECDIR=lib \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+		-DCMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
+		-Wno-dev 
+	cmake --build build
+	DESTDIR=$PKG cmake --install build
+}

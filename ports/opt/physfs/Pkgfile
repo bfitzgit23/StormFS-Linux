@@ -1,0 +1,21 @@
+# Description: Library to provide abstract access to various archives.
+# URL: http://icculus.org/physfs/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=physfs
+version=3.2.0
+release=2
+source=(https://github.com/icculus/$name/archive/release-$version/$name-$version.tar.gz)
+
+build() {
+	cmake -S $name-release-$version -B build -G Ninja \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+		-DPHYSFS_BUILD_TEST=OFF \
+		-DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+		-Wno-dev
+	cmake --build build
+	DESTDIR=$PKG cmake --install build
+}

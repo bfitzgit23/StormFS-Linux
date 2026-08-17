@@ -1,0 +1,18 @@
+# Description: Terminal file manager
+# URL: https://github.com/gokcehan/lf
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: go
+
+name=lf
+version=41
+release=1
+source=(https://github.com/gokcehan/$name/archive/r$version/$name-r$version.tar.gz)
+
+build() {
+	cd $name-r$version
+
+	go mod tidy
+	go build -v -o bin/$name
+
+	install -Dt $PKG/usr/bin bin/$name
+}

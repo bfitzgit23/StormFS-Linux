@@ -1,0 +1,14 @@
+# Description: Wine's built-in replacement for Microsoft's Internet Explorer
+# URL: https://gitlab.winehq.org/wine/wine/-/wikis/Gecko
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: wine
+
+name=wine-gecko
+version=2.47.4
+release=1
+source=(https://dl.winehq.org/wine/wine-gecko/$version/wine-gecko-$version-x86_64.msi https://dl.winehq.org/wine/wine-gecko/$version/wine-gecko-$version-x86.msi)
+
+build() {
+	install -Dm644 wine-gecko-$version-x86_64.msi $PKG/usr/share/wine/gecko/wine-gecko-$version-x86_64.msi
+	install -Dm644 wine-gecko-$version-x86.msi $PKG/usr/share/wine/gecko/wine-gecko-$version-x86.msi
+}

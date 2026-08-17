@@ -1,0 +1,21 @@
+# Description: Functions for multiple precision math
+# URL: https://www.mpfr.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libgmp
+
+name=libmpfr
+version=4.2.2
+release=1
+source=(https://www.mpfr.org/mpfr-$version/mpfr-$version.tar.xz)
+
+build() {
+	cd mpfr-$version
+
+	./configure --prefix=/usr        \
+	            --disable-static     \
+	            --enable-thread-safe
+	make
+	make DESTDIR=$PKG install
+
+	rm -r $PKG/usr/share
+}

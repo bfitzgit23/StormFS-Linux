@@ -1,0 +1,15 @@
+# Description: Fast correct Python JSON library supporting dataclasses and datetimes
+# URL: https://github.com/ijl/orjson
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: maturin python3-installer
+
+name=python3-orjson
+version=3.11.9
+release=1
+source=(https://github.com/ijl/orjson/archive/$version/orjson-$version.tar.gz)
+
+build() {
+	cd orjson-$version
+	maturin build --release --strip
+	python3 -m installer --destdir=$PKG target/wheels/*.whl
+}

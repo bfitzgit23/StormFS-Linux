@@ -1,0 +1,22 @@
+# Description: The Swiss Army knife of sound processing tools
+# URL: https://sox.sourceforge.net/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libsoxr speex
+
+name=sox
+version=14.8.0.1
+release=1
+source=($name-$version.tar.gz::https://codeberg.org/sox_ng/sox_ng/releases/download/${name}_ng-$version/${name}_ng-$version.tar.gz)
+
+build() {
+	cd ${name}_ng-$version
+	./configure \
+		--prefix=/usr \
+		--sysconfdir=/etc \
+		--localstatedir=/var \
+		--enable-replace \
+		--with-distro="Venom Linux" \
+		--with-ffmpeg 
+	make 
+	make DESTDIR=$PKG install
+}

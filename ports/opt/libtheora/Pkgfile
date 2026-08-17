@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: a free and open video compression format
 # URL: https://www.theora.org/
-# Maintainer: Tim Biermann, tbier at posteo dot de
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: libogg
 # Optional: libvorbis sdl12-compat libpng doxygen texlive tl-unx bibtex transfig valgrind
 

@@ -1,0 +1,17 @@
+# Description: Papirus icon theme (Dark)
+# URL: https://github.com/PapirusDevelopmentTeam
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: papirus-icon-theme
+
+name=papirus-icon-theme-dark
+version=20250501
+release=2
+source=(https://github.com/PapirusDevelopmentTeam/$_name/archive/$version/${name%-*}-$version.tar.gz)
+
+build() {
+	cd ${name%-*}-$version
+	make DESTDIR="$PKG" ICON_THEMES="Papirus-Dark" install
+
+	rm -f $PKG/usr/share/icons/Papirus/*/mimetypes/text-x-systemd-unit.svg \
+              $PKG/usr/share/icons/Papirus/*/places/folder*systemd.svg
+}

@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: A library for CD-ROM and CD image access.
 # URL: http://www.gnu.org/software/libcdio/
-# Maintainer: John McQuah, jmcquah at disroot dot org
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: ncurses
 # Optional: libcddb
 

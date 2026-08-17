@@ -1,0 +1,26 @@
+# Description: Python3 bindings to the D-Bus
+# URL: http://dbus.freedesktop.org/releases/dbus-python
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: dbus python3 dbus-glib python3-pyproject-metadata
+
+name=python3-dbus
+version=1.4.0
+release=1
+source=($name-$version.tar.gz::http://dbus.freedesktop.org/releases/dbus-python/dbus-python-$version.tar.xz)
+
+build() {
+	export PYTHON=/usr/bin/python3
+
+
+	meson setup $name-$version build \
+		-Dtests=false
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+
+
+	/usr/bin/python3 $SRC/dbus-python-$version/tools/generate-pkginfo.py $version PKG-INFO
+	/usr/bin/python3 -m compileall -d /usr/lib $PKG/usr/lib
+	/usr/bin/python3 -O -m compileall -d /usr/lib $PKG/usr/lib
+
+
+}

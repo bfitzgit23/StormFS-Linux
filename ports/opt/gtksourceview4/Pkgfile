@@ -1,0 +1,16 @@
+# Description: A text widget adding syntax highlighting and more to GNOME
+# URL: https://wiki.gnome.org/Projects/GtkSourceView
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: gobject-introspection vala meson gtk3
+
+name=gtksourceview4
+version=4.8.4
+release=1
+source=(https://download.gnome.org/sources/gtksourceview/${version%.*}/gtksourceview-$version.tar.xz)
+
+build() {
+	cd gtksourceview-$version
+	venom-meson build
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

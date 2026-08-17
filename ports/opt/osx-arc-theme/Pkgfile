@@ -1,0 +1,16 @@
+# Description: OSX-Arc-Shadow Theme for GTK 3.x
+# URL: https://gitlab.com/LinxGem33/X-Arc-White
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: gtk3
+
+name=osx-arc-theme
+version=1.4.7
+release=1
+source=($name-$version.deb::https://gitlab.com/LinxGem33/X-Arc-White/uploads/26bccc81678392584149afa3167f8e78/osx-arc-collection_${version}_amd64.deb)
+noextract=($name-$version.deb)
+
+build() {
+	bsdtar xf $name-$version.deb
+	tar xf data.tar.xz -C $PKG
+
+}

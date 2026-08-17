@@ -1,32 +1,46 @@
-# Description: Sudo (superuser do)
-# URL: https://www.sudo.ws/sudo/
-# Maintainer:
-# Depends on: zlib linux-pam
-
 name=sudo
-version=1.9.16p2
+version=1.9.17p2
 release=1
-source=(https://www.sudo.ws/dist/$name-$version.tar.gz
-$name.pam)
 
+source=(
+    https://www.sudo.ws/dist/$name-$version.tar.gz
+    $name.pam
+)
 
-build() {
-	cd $name-$version
+build_opt=(
+    --prefix=/usr
+    --sbindir=/usr/bin
+    --libexecdir=/usr/lib
+    --sysconfdir=/etc
+    --with-pam
+    --with-env-editor
+    --with-all-insults
+    --with-secure-path=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+    "--with-passprompt=[sudo] password for %p: "
+    --docdir=/usr/share/doc/$name-$version
+)
 
-	./configure \
-		--prefix=/usr \
-		--libexecdir=/usr/lib \
-		--with-secure-path \
-		--with-all-insults \
-		--with-env-editor \
-		--with-pam \
-		--docdir=/usr/share/doc/$name-$version \
-		--with-passprompts="[sudo] password for %p: " &&
-	make
-	make DESTDIR=$PKG install
+pkg_build() {
 
-	# PAM service file
-	install -D -m 0644 $SRC/$name.pam $PKG/etc/pam.d/$name
+    # OpenSSL 4 compatibility
+    sed -i \
+        's/current_name->d\.iPAddress->length/ASN1_STRING_length(current_name->d.iPAddress)/g' \
+        lib/iolog/hostcheck.c
 
-#	rm -r $PKG/usr/share/doc $PKG/run
+    ./configure "${build_opt[@]}"
+
+    make
+    make DESTDIR="$PKG" install
+
+    # Install PAM configuration
+    install -Dm644 \
+        "$SRC/$name.pam" \
+        "$PKG/etc/pam.d/$name"
+
+    # Remove documentation (packaged separately if desired)
+    rm -rf \
+        "$PKG/usr/share/doc" \
+        "$PKG/usr/share/info"
+
+    rm -f "$PKG/usr/share/info/dir"
 }

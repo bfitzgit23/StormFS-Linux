@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: X cursor management library
 # URL: https://cgit.freedesktop.org/xorg/lib/libXcursor/
-# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: libXcursor libXfixes-32 libXrender-32
 
 name=libXcursor-32

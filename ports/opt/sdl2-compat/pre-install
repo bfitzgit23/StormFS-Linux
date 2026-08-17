@@ -1,0 +1,4 @@
+#!/bin/sh
+
+# The port 'sdl2' conflicts with 'sdl2-compat', remove 'sdl2' before installing 'sdl2-compat'
+scratch isinstalled sdl2 && scratch remove -y sdl2

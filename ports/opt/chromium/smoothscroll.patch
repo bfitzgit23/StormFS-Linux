@@ -1,0 +1,11 @@
+--- a/base/compiler_specific.h
++++ b/base/compiler_specific.h
+@@ -10,7 +10,7 @@
+ 
+ // Allows disabling compiler warnings for specific functions/parameters.
+ #if defined(__clang__) || defined(__GNUC__)
+-#define WARN_UNUSED_RESULT __attribute__((warn_unused_result))
++#define WARN_UNUSED_RESULT
+ #else
+ #define WARN_UNUSED_RESULT
+ #endif

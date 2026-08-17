@@ -1,0 +1,19 @@
+# Description: microcode update files for intel CPUs'
+# URL: https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: iucode-tool
+
+name=intel-ucode
+version=20260512
+release=1
+source=(https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/archive/microcode-$version.tar.gz)
+
+build() {
+	cd Intel-Linux-Processor-Microcode-Data-Files-microcode-$version
+
+	rm -f intel-ucode/list intel-ucode-with-caveats/list
+	mkdir -p kernel/x86/microcode
+	/usr/sbin/iucode_tool --write-earlyfw=intel-ucode.img intel-ucode/ intel-ucode-with-caveats/
+
+	install -D -m0644 intel-ucode.img "${PKG}"/boot/intel-ucode.img
+}

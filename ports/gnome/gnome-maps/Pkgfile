@@ -1,3 +1,5 @@
+# Add your top line text here
+# Your line to add at the top here
 # Depends on: desktop-file-utils geoclue geocode-glib  gjs libadwaita libportal libshumate libgweather rest
 
 name=gnome-maps

@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: embeddable Javascript engine, with a focus on portability and compact footprint
 # URL: https://duktape.org/
-# Maintainer: Tim Biermann, tbier at posteo dot de
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 
 name=duktape
 version=2.7.0

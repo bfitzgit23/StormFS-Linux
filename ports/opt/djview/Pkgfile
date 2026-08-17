@@ -1,0 +1,23 @@
+# Description: Viewer for DjVu documents
+# URL: https://djvu.sourceforge.net/djview4.html
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: qt6-5compat djvulibre qt6-tools
+
+name=djview
+version=4.12.3
+release=1
+source=(https://downloads.sourceforge.net/djvu/$name-$version.tar.gz djvulibre-djview4.appdata.xml)
+
+build() {
+	cd $name-$version
+
+	NOCONFIGURE=1 ./autogen.sh
+	./configure --prefix=/usr --disable-nsdejavu QMAKE=qmake6
+	make
+	make DESTDIR=$PKG install
+
+	install -Dm644 $SRC/djvulibre-djview4.appdata.xml \
+        	"$PKG/usr/share/metainfo/djvulibre-djview4.appdata.xml"
+
+	ln -s djview "$PKG/usr/bin/djview4"
+}

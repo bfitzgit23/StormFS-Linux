@@ -1,0 +1,16 @@
+# Description: Tool to attack multiple WEP and WPA encrypted networks at the same time
+# URL: https://github.com/kimocoder/wifite2
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: python3-setuptools aircrack-ng iproute2 iw
+
+name=wifite2
+version=2.8.2
+release=1
+source=(https://github.com/kimocoder/$name/archive/$version/$name-$version.tar.gz)
+
+build() {
+  cd $name-$version
+  sed 's|sbin|bin|g' -i setup.cfg
+  python3 setup.py build
+  python3 setup.py install --root=$PKG -O1 --skip-build
+}

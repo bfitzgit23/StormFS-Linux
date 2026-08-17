@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: Graph visualization software
 # URL: https://www.graphviz.org/
-# Maintainer: Juergen Daubert, jue at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: expat libtool zlib
 # Optional: ghostscript gtk libgd librsvg libxrender pango poppler swig tcl
 

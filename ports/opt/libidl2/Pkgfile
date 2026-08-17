@@ -1,0 +1,17 @@
+# Description: A front-end for CORBA 2.2 IDL and Netscape's XPIDL
+# URL: http://www.gnome.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: glib texinfo
+
+name=libidl2
+version=0.8.14
+release=1
+source=($name-$version.tar.bz2::https://ftp.gnome.org/pub/gnome/sources/libIDL/${version%.*}/libIDL-$version.tar.bz2)
+
+build() {
+	cd libIDL-$version
+	./configure --prefix=/usr
+	make
+	make DESTDIR=$PKG install
+
+}

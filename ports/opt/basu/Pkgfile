@@ -1,0 +1,19 @@
+# Description: The sd-bus library
+# URL: https://sr.ht/~emersion/basu/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: gperf libcap meson
+
+name=basu
+version=0.2.1
+release=1
+source=($name-$version.tar.gz::https://git.sr.ht/~emersion/basu/archive/v$version.tar.gz)
+
+build() {
+
+	meson setup $name-$version build \
+		-Dsystem-bus-address="unix:path=/run/dbus/system_bus_socket" \
+		-Ddefault_library=both 
+
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

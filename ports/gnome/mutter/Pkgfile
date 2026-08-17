@@ -1,3 +1,5 @@
+# Add your top line text here
+# Your line to add at the top here
 # Depends on: gnome-settings-daemon graphene libei libxcvt libxkbcommon pipewire desktop-file-utils glib gobject-introspection startup-notification libinput wayland wayland-protocols xwayland libdisplay-info
 
 name=mutter

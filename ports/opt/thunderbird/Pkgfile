@@ -1,0 +1,110 @@
+# Description: Standalone mail and news reader from mozilla.org
+# URL: https://www.thunderbird.net/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: autoconf2.13 gtk3 rust yasm icu libevent nspr dbus-glib gconf clang cbindgen nodejs nasm unzip zip nss libxcomposite which
+
+name=thunderbird
+version=152.0
+release=1
+source=(https://archive.mozilla.org/pub/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz clang22-wasm32-wasip1.patch metainfo.patch missing-include.patch)
+
+build() {
+	INITDIR=$PWD
+
+	cd $name-$version
+
+	for p in $SRC/*.patch; do
+ 		patch -Np1 -i $p
+	done
+
+	sed -e 's|73114a5c28472e77082ad259113ffafb418ed602c1741f26da3e10278b0bf93e|a88d6cc10ec1322b53a8f4c782b5133135ace0fdfcf03d1624b768788e17be0f|' \
+		-i third_party/rust/mp4parse/.cargo-checksum.json
+	sed -e 's|880c982df0843cbdff38b9f9c3829a2d863a224e4de2260c41c3ac69e9148ad4|239b3e4d20498f69ed5f94481ed932340bd58cb485b26c35b09517f249d20d11|' \
+		-i third_party/rust/bindgen/.cargo-checksum.json
+
+	# Clear cargo checksums for glslopt - the glibc-2.43 patch modifies files in both
+	# third_party and comm/third_party copies; clearing is simpler than computing exact hashes
+	sed -i -e 's/\("files":{\)[^}]*/\1/' third_party/rust/glslopt/.cargo-checksum.json
+
+	sed -i -e 's/\("files":{\)[^}]*/\1/' comm/third_party/rust/glslopt/.cargo-checksum.json
+
+	# https://bugzilla.mozilla.org/show_bug.cgi?id=2041134
+	sed -i 's/log\.warn(/log.warning(/' comm/build/moz.configure/gecko_source.configure
+
+	# Make icon transparent
+	sed -i '/^<rect/d' comm/mail/branding/thunderbird/TB-symbolic.svg
+
+	# Set BOTAN_VERSION from system-botan
+	_botan_ver=$(pkg-config --modversion botan-3)
+	sed -i "s|crypto_backend_version = CONFIG\[\"BOTAN_VERSION\"\]|crypto_backend_version = CONFIG[\"BOTAN_VERSION\"] or \"${_botan_ver}\"|" \
+		comm/third_party/rnp/moz.build
+	sed -e 's|73114a5c28472e77082ad259113ffafb418ed602c1741f26da3e10278b0bf93e|a88d6cc10ec1322b53a8f4c782b5133135ace0fdfcf03d1624b768788e17be0f|' \
+		-i third_party/rust/mp4parse/.cargo-checksum.json
+	sed -e 's|880c982df0843cbdff38b9f9c3829a2d863a224e4de2260c41c3ac69e9148ad4|239b3e4d20498f69ed5f94481ed932340bd58cb485b26c35b09517f249d20d11|' \
+		-i third_party/rust/bindgen/.cargo-checksum.json
+ 
+cat > mozconfig << "EOF"
+ac_add_options --disable-audio-backends
+ac_add_options --disable-bootstrap
+ac_add_options --disable-crashreporter
+ac_add_options --disable-debug
+ac_add_options --disable-debug-symbols
+ac_add_options --disable-necko-wifi
+ac_add_options --disable-tests
+ac_add_options --disable-updater
+ac_add_options --enable-alsa
+ac_add_options --enable-application=comm/mail
+ac_add_options --enable-install-strip
+ac_add_options --enable-official-branding
+ac_add_options --enable-optimize=-O2
+ac_add_options --enable-strip
+ac_add_options --enable-install-strip
+ac_add_options --enable-system-ffi
+ac_add_options --enable-system-pixman
+ac_add_options --prefix=/usr
+ac_add_options --with-system-icu
+ac_add_options --with-system-jpeg
+ac_add_options --with-system-libevent
+ac_add_options --with-system-libvpx
+ac_add_options --with-system-nspr
+ac_add_options --with-system-nss
+ac_add_options --with-system-png
+ac_add_options --with-system-zlib
+ac_add_options --without-wasm-sandboxed-libraries
+EOF
+
+	#export CC=gcc CXX=g++
+        export MOZBUILD_STATE_PATH=${PWD}/mozbuild
+	export MOZ_NOSPAM=1
+	export CARGO_HOME=$INITDIR
+	export MACH_BUILD_PYTHON_NATIVE_PACKAGE_SOURCE=none
+	export SHELL=/bin/sh
+
+        ./mach build
+        DESTDIR=$PKG ./mach install
+
+	mkdir -pv $PKG/usr/share/applications  $PKG/usr/share/pixmaps
+
+cat > $PKG/usr/share/applications/thunderbird.desktop << "EOF"
+[Desktop Entry]
+Name=Thunderbird Mail
+Comment=Send and receive mail with Thunderbird
+GenericName=Mail Client
+Exec=thunderbird %u
+Terminal=false
+Type=Application
+Icon=thunderbird
+Categories=Network;Email;
+MimeType=application/xhtml+xml;text/xml;application/xhtml+xml;application/xml;application/rss+xml;x-scheme-handler/mailto;
+StartupNotify=true
+EOF
+
+	ln -sfv /usr/lib/thunderbird/chrome/icons/default/default256.png \
+        $PKG/usr/share/pixmaps/thunderbird.png
+
+	
+	# exclude library for revdep
+	install -d $PKG/etc/revdep.d
+	echo "/usr/lib/thunderbird/" > $PKG/etc/revdep.d/$name.conf
+
+}

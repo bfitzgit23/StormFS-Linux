@@ -1,0 +1,23 @@
+# Description: General-purpose library for WPE WebKit
+# URL: https://wpewebkit.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: cmake ninja libxkbcommon mesa
+
+name=libwpe
+version=1.16.3
+release=1
+source=(https://wpewebkit.org/releases/$name-$version.tar.xz)
+
+build() {
+	cmake -S $name-$version -B build -G Ninja \
+	        -DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DCMAKE_INSTALL_LIBEXECDIR=lib \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+		-DCMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
+		-DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+		-Wno-dev	
+	cmake --build build
+	DESTDIR=$PKG cmake --install build
+}

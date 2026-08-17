@@ -116,9 +116,27 @@ rm -f "$ROOT/root/splash.png"
 rm -f "$ROOT/etc/lightdm/lightdm.conf.d/99-live.conf" 2>/dev/null || true
 rm -f "$ROOT/fastboot"
 
-# Remove live desktop shortcuts
+# Remove live desktop shortcuts (installer is only for live session)
 for dir in Desktop 桌面; do
 	rm -f "$ROOT/home/$USERNAME/$dir/stormfs-installer.desktop" 2>/dev/null || true
+done
+
+# Add port manager shortcut to installed system desktop
+for dir in Desktop 桌面; do
+	if [ -d "$ROOT/home/$USERNAME/$dir" ]; then
+		cat > "$ROOT/home/$USERNAME/$dir/stormfs-portmanager.desktop" <<DESK
+[Desktop Entry]
+Name=StormFS Port Manager
+Comment=Manage packages and ports
+Exec=/usr/bin/stormfs-portmanager
+Icon=system-software-install
+Terminal=false
+Type=Application
+Categories=System;
+DESK
+		chmod +x "$ROOT/home/$USERNAME/$dir/stormfs-portmanager.desktop"
+		chown -R "$USERNAME:$USERNAME" "$ROOT/home/$USERNAME/$dir" 2>/dev/null || true
+	fi
 done
 
 exit 0

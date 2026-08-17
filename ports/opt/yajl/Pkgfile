@@ -1,0 +1,25 @@
+# Description: Yet Another JSON Library
+# URL: https://dev.alpinelinux.org/archive/yajl
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: cmake ninja
+
+name=yajl
+version=2.1.0
+release=3
+source=(https://dev.alpinelinux.org/archive/yajl/$name-$version.tar.gz cmake4.patch)
+
+build() {
+
+	patch -d $name-$version -i $SRC/cmake4.patch -Np1
+	cmake -S $name-$version -B build -G Ninja \
+		-DCMAKE_POLICY_VERSION_MINIMUM=3.5  \
+		-D CMAKE_BUILD_TYPE=Release \
+		-D CMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+		-D CMAKE_INSTALL_PREFIX=/usr \
+		-Wno-dev
+	cmake --build build
+	DESTDIR=$PKG cmake --install build
+
+	mv $PKG/usr/share/pkgconfig $PKG/usr/lib
+	rm -r $PKG/usr/share
+}

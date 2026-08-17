@@ -1,0 +1,22 @@
+# Description: Tool and library for running OCI-based containers in pods
+# URL: https://github.com/containers/libpod
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: go-md2man libseccomp gpgme
+
+name=podman
+version=6.0.0
+release=1
+source=(https://github.com/containers/podman/archive/v$version/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+	export GOCACHE=$PWD/gocache
+	export GOPATH=$PWD/gopath
+	export GOFLAGS="-buildmode=pie"
+	make  BUILDTAGS="seccomp exclude_graphdriver_devicemapper exclude_graphdriver_btrfs"
+	make install PREFIX=/usr DESTDIR=$PKG LIBEXECDIR=/usr/lib
+
+	# not use in venom: usr/lib/systemd
+	rm -rf $PKG/usr/lib/systemd
+	rm -f $PKG/usr/share/man/man*/*systemd*
+}

@@ -1,0 +1,19 @@
+# Description: Libraries used for displaying certificates and accessing key stores
+# URL: https://gitlab.gnome.org/GNOME/gcr
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: glib libgcrypt libsecret libxslt p11-kit gtk3 gobject-introspection vala meson gnupg openssh
+
+name=gcr3
+version=3.41.2
+release=2
+source=($name-$version.tar.xz::https://gitlab.gnome.org/GNOME/${name%3}/-/archive/$version/${name%3}-$version.tar.bz2)
+
+build() {
+	cd ${name%3}-$version
+
+	sed -i -r 's:"(/desktop):"/org/gnome\1:' schema/*.xml
+
+	venom-meson build -Dgtk_doc=false -Dssh_agent=false 
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

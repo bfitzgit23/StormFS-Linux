@@ -1,0 +1,15 @@
+# Description: gtklock module adding power controls to the lockscreen
+# URL: https://github.com/jovanlanik/gtklock-powerbar-module
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: gtklock
+
+name=gtklock-powerbar-module
+version=4.0.0
+release=1
+source=($name-$version.tar.gz::https://github.com/jovanlanik/gtklock-powerbar-module/archive/refs/tags/v$version.tar.gz)
+
+build() {
+	meson setup $name-$version build
+	meson compile -C build
+        DESTDIR=$PKG meson install --no-rebuild -C build
+}

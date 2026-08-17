@@ -1,0 +1,19 @@
+# Description: C-friendly API to make path resolution safer on Linux
+# URL: https://github.com/cyphar/libpathrs
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: rust
+
+name=libpathrs
+version=0.2.5
+release=1
+source=(https://github.com/cyphar/$name/releases/download/v$version/$name-$version.tar.xz crate-type.patch)
+
+build() {
+	cd $name-$version
+
+	patch -Np1 -i $SRC/crate-type.patch
+	export RUSTUP_TOOLCHAIN=stable
+	cargo fetch --locked --target host-tuple
+	RUSTFLAGS="-C panic=abort" cargo build --frozen --release --features=capi
+	./install.sh DESTDIR="$PKG" --prefix=/usr --lib=/usr/lib
+}

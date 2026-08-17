@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: Protocol definitions and daemon for D-Bus at-spi
 # URL: https://gitlab.gnome.org/GNOME/at-spi2-core
-# Maintainer: CRUX System Team, core-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: dbus gobject-introspection intltool libxml2 libxtst xorg-libs
 # Optional: gi-docgen sphinx
 

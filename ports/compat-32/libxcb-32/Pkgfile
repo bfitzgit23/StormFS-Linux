@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: X11 client-side library
 # URL: https://xcb.freedesktop.org/
-# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: libinput-32 libpthread-stubs-32 libxslt-32 libXau-32 libxcb libXdmcp-32
 
 name=libxcb-32

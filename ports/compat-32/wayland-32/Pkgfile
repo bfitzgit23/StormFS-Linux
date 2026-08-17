@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: Wayland is intended as a simpler replacement for X
 # URL: https://wayland.freedesktop.org/
-# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: expat-32 libffi-32 libxml2-32 wayland libX11-32
 
 name=wayland-32

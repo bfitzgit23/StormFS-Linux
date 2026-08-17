@@ -1,0 +1,15 @@
+# Description: Intel VA-API Media Applications and Scripts for libva
+# URL: https://01.org/linuxmedia/vaapi
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libva
+
+name=libva-utils
+version=2.23.0
+release=1
+source=(https://github.com/intel/libva-utils/archive/$version/$name-$version.tar.gz)
+
+build() {
+	meson setup $name-$version build -Dtests=false
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

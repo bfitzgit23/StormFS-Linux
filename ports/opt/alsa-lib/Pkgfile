@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: ALSA libraries
 # URL: http://www.alsa-project.org/
-# Maintainer: Matt Housh, jaeger at crux dot ninja
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # optional: systemd doxygen python2 alsa-ucm-conf
 
 name=alsa-lib

@@ -1,0 +1,14 @@
+# Description: Atlas Engineer Nyxt Browser
+# URL: https://nyxt.atlas.engineer
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: hicolor-icon-theme libfixposix sbcl webkitgtk
+
+name=nyxt
+version=3.12.0
+release=1
+source=($name-$version.tar.xz::https://github.com/atlas-engineer/nyxt/releases/download/$version/$name-$version-source-with-submodules.tar.xz)
+
+build() {
+	make all
+	make PREFIX=/usr DESTDIR=$PKG install
+}

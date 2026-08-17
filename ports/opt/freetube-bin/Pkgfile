@@ -1,0 +1,13 @@
+# Description: The Private YouTube Client
+# URL: https://freetubeapp.io/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=freetube-bin
+version=0.24.1
+release=1
+source=($name-$version.deb::https://github.com/FreeTubeApp/FreeTube/releases/download/v$version-beta/freetube_${version}_beta_amd64.deb)
+
+build() {
+	bsdtar -xf $name-${version}.deb
+	bsdtar -xf data.tar.xz -C $PKG
+}

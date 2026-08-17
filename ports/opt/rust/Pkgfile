@@ -1,0 +1,113 @@
+# Description: The Rust programming language is designed to be a safe, concurrent, practical language
+# URL: https://www.rust-lang.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: curl cmake python3 libssh2 lld
+
+name=rust
+version=1.96.0
+release=1
+source=(https://static.rust-lang.org/dist/rustc-$version-src.tar.xz https://static.rust-lang.org/dist/$_date/rust-std-$_rust-$_triplet.tar.xz https://static.rust-lang.org/dist/$_date/rustc-$_rust-$_triplet.tar.xz https://static.rust-lang.org/dist/$_date/cargo-$_cargo-$_triplet.tar.xz 0001-bootstrap-Change-libexec-dir.patch 0002-bootstrap-Change-bash-completion-dir.patch 0003-bootstrap-Workaround-for-system-stage0.patch 0004-compiler-Change-LLVM-targets.patch 0005-compiler-Use-ld.lld-by-default.patch 0008-compiler-Swap-primary-and-secondary-lib-dirs.patch)
+noextract=(rust-std-$_rust-$_triplet.tar.xz rustc-$_rust-$_triplet.tar.xz cargo-$_cargo-$_triplet.tar.xz)
+
+build() {
+	cd rustc-$version-src
+	# Patch bootstrap so that rust-analyzer-proc-macro-srv
+	# is in /usr/lib instead of /usr/libexec
+	patch -Np1 -i $SRC/0001-bootstrap-Change-libexec-dir.patch
+
+	# Put bash completions where they belong
+	patch -Np1 -i $SRC/0002-bootstrap-Change-bash-completion-dir.patch
+
+	# Fix build with system rustc
+	# https://github.com/rust-lang/rust/issues/143735
+	patch -Np1 -i $SRC/0003-bootstrap-Workaround-for-system-stage0.patch
+
+	# Use our *-pc-linux-gnu targets, making LTO with clang simpler
+	patch -Np1 -i $SRC/0004-compiler-Change-LLVM-targets.patch
+
+	# Use our ld.lld
+	patch -Np1 -i $SRC/0005-compiler-Use-ld.lld-by-default.patch
+
+	# Prefer "lib" over "lib64"
+	patch -Np1 -i $SRC/0008-compiler-Swap-primary-and-secondary-lib-dirs.patch
+
+	mkdir -p build/cache/$_date
+	cp $SRC/rust-std-$_rust-$_triplet.tar.xz build/cache/$_date/
+	cp $SRC/rustc-$_rust-$_triplet.tar.xz build/cache/$_date/
+	cp $SRC/cargo-$_cargo-$_triplet.tar.xz build/cache/$_date/
+
+cat << EOF > config.toml
+profile = "dist"
+change-id = 154587
+
+[llvm]
+ninja = true
+download-ci-llvm = false
+link-shared = true
+
+[install]
+prefix = "/usr"
+
+[rust]
+channel = "stable"
+codegen-units = 1
+codegen-units-std = 1
+debuginfo-level = 1
+debuginfo-level-std = 2
+codegen-tests = false
+backtrace-on-ice = true
+lld = false
+use-lld = "external"
+jemalloc = true
+remap-debuginfo = false
+debug-assertions = false
+rpath = false
+frame-pointers = true
+deny-warnings = false
+optimize = true
+codegen-backends = ["llvm"]
+lto = "fat"
+
+[build]
+target = ["x86_64-unknown-linux-gnu", "i686-unknown-linux-gnu"]
+description = "Venom"
+tools = ["cargo", "clippy", "rustdoc", "rustfmt"]
+docs = false
+extended = true
+sanitizers = true
+profiler = true
+locked-deps = true
+vendor = true
+optimized-compiler-builtins = true
+python = "/usr/bin/python3"
+
+[target.x86_64-unknown-linux-gnu]
+cc = "/usr/bin/gcc"
+cxx = "/usr/bin/g++"
+ar = "/usr/bin/gcc-ar"
+ranlib = "/usr/bin/gcc-ranlib"
+llvm-config = "/usr/bin/llvm-config"
+
+[target.i686-unknown-linux-gnu]
+cc = "/usr/bin/gcc"
+cxx = "/usr/bin/g++"
+ar = "/usr/bin/gcc-ar"
+ranlib = "/usr/bin/gcc-ranlib"
+EOF
+
+	mkdir "$SRC/rust"
+	export CARGO_HOME="$SRC/rust"
+	export RUST_BACKTRACE=1
+	[ ! -e /usr/include/libssh2.h ] || export LIBSSH2_SYS_USE_PKG_CONFIG=1
+	[ ! -e /usr/include/sqlite3.h ] || export LIBSQLITE3_SYS_USE_PKG_CONFIG=1
+	
+	python3 ./x.py build
+	DESTDIR=$PKG python3 ./x.py install -v
+
+	unset LIBSSH2_SYS_USE_PKG_CONFIG LIBSQLITE3_SYS_USE_PKG_CONFIG
+
+	rm -rf $PKG/usr/lib/rustlib/components
+	rm -rf $PKG/usr/lib/rustlib/manifest-rustc
+	rm -rf $PKG/usr/lib/rustlib/rust-installer-version
+	rm -rf $PKG/etc
+}

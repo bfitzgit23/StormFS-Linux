@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: Little CMS intends to be an small-footprint color management engine
 # URL: http://www.littlecms.com/
-# Maintainer: Juergen Daubert, jue at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: libtiff
 # Optional: libjpeg-turbo
 name=lcms2

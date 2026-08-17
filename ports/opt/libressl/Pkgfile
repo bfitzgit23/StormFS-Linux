@@ -1,0 +1,21 @@
+# Description: FREE version of the SSL/TLS protocol forked from OpenSSL
+# URL: https://www.libressl.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=libressl
+version=4.3.2
+release=1
+source=(https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+
+	autoreconf -fi
+	./configure \
+		--prefix=/usr \
+		--sysconfdir=/etc
+	make
+	make DESTDIR=$PKG install
+
+	rm $PKG/etc/ssl/cert.pem
+}

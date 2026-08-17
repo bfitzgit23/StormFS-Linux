@@ -1,0 +1,36 @@
+# Description: TUI display manager
+# URL: https://github.com/fairyglade/ly
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: linux-pam libxcb zig-bin
+
+name=ly
+version=1.4.1
+release=1
+source=($name-$version.tar.gz::https://codeberg.org/fairyglade/ly/archive/v$version.tar.gz config.ini setup.sh rc.ly)
+
+build() {
+	cd $name
+
+	sed -i '/try install_service(allocator, patch_map);/d' build.zig
+	sed -i 's|restart_cmd = /sbin/shutdown -r now|restart_cmd = reboot|' res/config.ini
+	sed -i 's|shutdown_cmd = /sbin/shutdown $PLATFORM_SHUTDOWN_ARG now|shutdown_cmd = poweroff|' res/config.ini
+	sed -i 's|sleep_cmd = null|sleep_cmd = zzz|' res/config.ini
+
+	zig build -Ddest_directory="$PKG" -Dname="ly-dm" -Dcpu=baseline -Doptimize=ReleaseSafe installexe
+
+	install -Dm755 $SRC/config.ini $PKG/etc/ly/config.ini
+	install -Dm755 $SRC/setup.sh $PKG/etc/ly/setup.sh
+	install -Dm755 $SRC/rc.ly $PKG/etc/rc.d/ly
+        rm -r $PKG/usr/lib/systemd
+
+# Configure PAM
+cat <<'EOF' > $PKG/etc/pam.d/ly
+auth        include     system-auth
+-auth       optional    pam_kwallet5.so
+account     include     system-account
+password    include     system-password
+session     optional    pam_keyinit.so force revoke
+session     include     system-session
+-session    optional    pam_kwallet5.so auto_start
+EOF
+}

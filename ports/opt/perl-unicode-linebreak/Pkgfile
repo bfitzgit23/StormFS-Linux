@@ -1,0 +1,15 @@
+# Description: UAX #14 Unicode Line Breaking Algorithm
+# URL: https://metacpan.org/release/Unicode-LineBreak/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: perl-mime-charset
+
+name=perl-unicode-linebreak
+version=2019.001
+release=7
+source=($name-$version.tar.gz::https://cpan.metacpan.org/authors/id/N/NE/NEZUMI/Unicode-LineBreak-$version.tar.gz)
+
+build() {
+	cd Unicode-LineBreak-$version
+        perl -I. Makefile.PL INSTALLDIRS=vendor
+	make DESTDIR=$PKG install
+}

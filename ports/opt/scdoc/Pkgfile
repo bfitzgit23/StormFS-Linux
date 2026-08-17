@@ -1,0 +1,16 @@
+# Description: Simple man page generator for POSIX systems written in C99
+# URL: https://git.sr.ht/~sircmpwn/scdoc
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=scdoc
+version=1.11.4
+release=1
+source=($name-$version.tar.gz::https://git.sr.ht/~sircmpwn/scdoc/archive/$version.tar.gz)
+
+build() {
+
+	cd $name-$version
+
+	make PREFIX=/usr
+	make PREFIX=/usr DESTDIR=$PKG install
+}

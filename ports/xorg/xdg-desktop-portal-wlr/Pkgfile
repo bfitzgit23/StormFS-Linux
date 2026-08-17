@@ -1,0 +1,15 @@
+# Description: xdg-desktop-portal backend for wlroots
+# URL: https://github.com/emersion/xdg-desktop-portal-wlr
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: basu inih wayland-protocols xdg-desktop-portal
+
+name=xdg-desktop-portal-wlr
+version=0.8.3
+release=1
+source=(https://github.com/emersion/xdg-desktop-portal-wlr/archive/v$version/$name-$version.tar.gz)
+
+build() {
+	meson setup $name-$version build -Dsd-bus-provider=basu
+	meson compile -C build
+	DESTDIR=$PKG meson install -C build
+}

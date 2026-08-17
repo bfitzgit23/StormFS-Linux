@@ -1,0 +1,25 @@
+# Description: Parses so-called cue sheets and handles the parsed data
+# URL: https://github.com/lipnitsk/libcue/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: cmake ninja
+
+name=libcue
+version=2.3.0
+release=2
+source=($name-$version.tar.gz::https://github.com/lipnitsk/libcue/archive/v$version.tar.gz)
+
+build() {
+	export CFLAGS="$CFLAGS -fPIC"
+
+	cmake -S $name-$version -B build -G Ninja \
+		-DCMAKE_POLICY_VERSION_MINIMUM=3.5  \
+	        -DCMAKE_INSTALL_PREFIX=/usr \
+	        -DCMAKE_INSTALL_LIBDIR=lib \
+		-DCMAKE_INSTALL_LIBEXECDIR=lib \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+		-DCMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
+		-Wno-dev 
+	cmake --build build
+	DESTDIR=$PKG cmake --install build
+}

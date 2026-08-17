@@ -1,0 +1,28 @@
+# Description: NTFS filesystem driver and utilities
+# URL: https://www.tuxera.com/community/open-source-ntfs-3g/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: fuse2
+
+name=ntfs-3g
+version=2026.2.25
+release=1
+source=($name-$version.tar.gz::https://github.com/tuxera/ntfs-3g/archive/refs/tags/$version.tar.gz)
+
+build() {
+	cd $name-$version
+	autoreconf -fvi
+	./configure \
+		--prefix=/usr \
+		--disable-static \
+		--with-fuse=external \
+		--disable-ldconfig
+	make
+	install -d $PKG/lib
+	make DESTDIR=$PKG install
+
+	ln -sv ../bin/ntfs-3g $PKG/sbin/mount.ntfs
+	ln -sv ntfs-3g.8 $PKG/usr/share/man/man8/mount.ntfs.8
+
+	chmod -v 4755 $PKG/sbin/mount.ntfs
+
+}

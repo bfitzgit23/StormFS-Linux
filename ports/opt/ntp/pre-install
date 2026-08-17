@@ -1,0 +1,6 @@
+#!/bin/sh
+
+getent group ntp >/dev/null || groupadd -g 87 ntp
+
+getent passwd ntp >/dev/null || \
+useradd -r -M -g ntp -G ntp -c "Network Time Protocol" -d /var/lib/ntp -s /sbin/nologin -u 87 ntp

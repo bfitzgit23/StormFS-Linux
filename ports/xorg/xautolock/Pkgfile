@@ -1,0 +1,20 @@
+# Description: An automatic X screen-locker/screen-saver
+# URL: https://ibiblio.org/pub/Linux/X11/screensavers/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: imake libxscrnsaver
+
+name=xautolock
+version=2.2
+release=1
+source=(https://ibiblio.org/pub/Linux/X11/screensavers/$name-$version.tgz union-wait.patch)
+
+build() {
+	cd $name-$version
+
+	patch -p1 -i $SRC/union-wait.patch
+	xmkmf
+	make
+
+       make DESTDIR=$PKG install
+       make DESTDIR=$PKG install.man
+}

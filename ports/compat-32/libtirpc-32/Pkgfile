@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: Transport Independent RPC library
 # URL: https://git.linux-nfs.org/?p=steved/libtirpc.git;a=summary
-# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: libtirpc
 
 name=libtirpc-32

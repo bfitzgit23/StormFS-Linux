@@ -1,0 +1,6 @@
+#!/bin/sh
+
+getent group libvirt >/dev/null || groupadd -r libvirt
+getent passwd libvirt >/dev/null || \
+useradd -r -M -g libvirt -G libvirt -c "libvirt service user" -d /etc/libvirt -s /sbin/nologin libvirt
+

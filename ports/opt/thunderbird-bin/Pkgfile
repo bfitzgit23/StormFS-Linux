@@ -1,0 +1,34 @@
+# Description: Thunderbird binary
+# URL: https://www.thunderbird.net/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: gtk3 dbus-glib
+
+name=thunderbird-bin
+version=152.0
+release=1
+source=($name-$version.tar.xz::https://ftp.mozilla.org/pub/thunderbird/releases/${version}/linux-x86_64/en-US/thunderbird-${version}.tar.xz policies.json thunderbird.desktop)
+
+build() {
+	cd thunderbird
+
+	install -d $PKG/usr/lib
+	install -d $PKG/usr/bin
+	cp --reflink=auto -ra $SRC/thunderbird $PKG/usr/lib/thunderbird
+	ln -s /usr/lib/thunderbird/thunderbird $PKG/usr/bin/thunderbird
+
+	# Disable autoupdate
+	install -d $PKG/usr/lib/thunderbird/distribution
+	install -m644 $SRC/policies.json $PKG/usr/lib/thunderbird/distribution/
+
+	install -m 0755 -d $PKG/usr/share/pixmaps
+	ln -s /usr/lib/thunderbird/chrome/icons/default/default32.png \
+		$PKG/usr/share/pixmaps/thunderbird.png
+
+	install -m 0644 -D $SRC/thunderbird.desktop \
+		$PKG/usr/share/applications/thunderbird.desktop
+
+	# exclude library for revdep
+	install -d $PKG/etc/revdep.d
+	echo "/usr/lib/thunderbird/" > $PKG/etc/revdep.d/$name.conf
+
+}

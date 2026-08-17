@@ -1,0 +1,13 @@
+# Description: Meta port for Xorg applications
+# URL: https://xorg.freedesktop.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: iceauth luit mkfontscale sessreg setxkbmap smproxy x11perf xauth xbacklight xcmsdb xcursorgen xdpyinfo xdriinfo xev xgamma xhost xinput xkbcomp xkbevd xkbutils xkill xlsatoms xlsclients xmessage xmodmap xpr xprop xrandr xrdb xrefresh xset xsetroot xvinfo xwd xwininfo xwud
+
+name=xorg-applications
+version=1.0
+release=2
+source=()
+
+build() {
+	mkdir -pv $PKG/etc
+}

@@ -1,0 +1,18 @@
+# Description: Implements a typesafe callback system for standard C++
+# URL: https://libsigcplusplus.github.io/libsigcplusplus/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: meson mm-common
+
+name=libsigc++3
+version=3.8.1
+release=1
+source=($name-$version.tar.gz::https://github.com/libsigcplusplus/libsigcplusplus/archive/$version.tar.gz)
+
+build() {
+	meson setup $name-$version build \
+		-Dbuild-documentation=false \
+		-Dbuild-examples=false \
+		-Dbuild-tests=false
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

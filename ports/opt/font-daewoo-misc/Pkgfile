@@ -1,0 +1,21 @@
+# Description: X.org daewoo-misc fonts
+# URL: https://www.x.org
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: mkfontscale bdftopcf
+
+name=font-daewoo-misc
+version=1.0.4
+release=1
+source=(https://www.x.org/archive/individual/font/$name-$version.tar.xz)
+
+build() {
+	cd $name-$version
+
+	./configure \
+		--prefix=/usr \
+		--sysconfdir=/etc \
+		--localstatedir=/var \
+		--disable-static
+	make
+	make DESTDIR=$PKG install
+}

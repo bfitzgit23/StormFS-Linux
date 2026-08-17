@@ -1,0 +1,39 @@
+#!/bin/sh
+#
+# /etc/rc.d/qemu-guest-agent: start/stop qemu-guest-agent daemon
+#
+. /etc/rc.subr
+
+NAME="QEMU guest agent"
+PROG=/usr/bin/qemu-ga
+PID=/run/qemu-ga.pid
+OPTS="-d"
+
+case $1 in
+start)
+	start_daemon -p $PID $PROG -- $OPTS
+	;;
+stop)
+	stop_daemon  -p $PID $PROG
+	;;
+restart)
+	$0 stop
+	sleep 1
+	$0 start
+	;;
+status)
+	status_daemon -p $PID
+	case $? in
+	0) echo "$PROG is running with pid $(cat $PID)" ;;
+	1) echo "$PROG is not running but the pid file $PID exists" ;;
+	3) echo "$PROG is not running" ;;
+	4) echo "Unable to determine the program status" ;;
+	esac
+	;;
+*)
+	echo "usage: $0 [start|stop|restart|status]"
+	;;
+esac
+
+# End of file
+

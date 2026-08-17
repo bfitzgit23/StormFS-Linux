@@ -1,0 +1,20 @@
+# Description: Efficient animated wallpaper daemon for wayland, controlled at runtime
+# URL: https://github.com/LGFae/swww
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: rust lz4 wayland-protocols wlroots
+
+name=swww
+version=0.11.2
+release=1
+source=($name-$version.tar.gz::https://github.com/LGFae/$name/archive/refs/tags/v$version.tar.gz)
+
+build() {
+	export CARGO_HOME="$SRC/cargo"
+  cd $name-$version
+	cargo fetch --locked
+  cargo build --release
+  install -Dt $PKG/usr/bin target/release/$name
+  
+  #Copy daemon too
+  install -Dt $PKG/usr/bin target/release/$name-daemon
+}

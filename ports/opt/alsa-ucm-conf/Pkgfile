@@ -1,0 +1,14 @@
+# Description: ALSA Use Case Manager configuration (and topologies)
+# URL: https://alsa-project.org
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=alsa-ucm-conf
+version=1.2.16.1
+release=1
+source=(https://www.alsa-project.org/files/pub/lib/$name-$version.tar.bz2)
+
+build() {
+	cd $name-$version
+	find ucm2 -type f -iname "*.conf" -exec install -vDm 644 {} "$PKG/usr/share/alsa/"{} \;
+	find ucm2 -type l -iname "*.conf" -exec cp -dv {} "$PKG/usr/share/alsa/"{} \;
+}

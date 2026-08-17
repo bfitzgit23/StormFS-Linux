@@ -1,0 +1,20 @@
+# Description: Fast JSON schema validator
+# URL: https://horejsek.github.io/python-fastjsonschema/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: python3-gpep517 python3-setuptools python3-wheel
+
+name=python3-fastjsonschema
+version=2.21.2
+release=1
+source=($name-$version.tar.gz::https://github.com/horejsek/python-fastjsonschema/archive/refs/tags/v$version.tar.gz)
+
+build() {
+	cd python-fastjsonschema-$version
+
+	gpep517 build-wheel \
+		--wheel-dir .dist \
+		--output-fd 3 3>&1 >&2
+	python3 -m installer -d "$PKG" \
+		.dist/*.whl
+
+}

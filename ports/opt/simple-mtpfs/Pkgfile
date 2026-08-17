@@ -1,0 +1,17 @@
+# Description: A FUSE filesystem that supports reading/writing from MTP devices
+# URL: https://github.com/phatina/simple-mtpfs/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: autoconf-archive fuse2 libmtp
+
+name=simple-mtpfs
+version=0.4.0
+release=1
+source=($name-$version.tar.gz::https://github.com/phatina/simple-mtpfs/archive/$commit.tar.gz)
+
+build() {
+	cd $name-$commit
+	./autogen.sh
+	./configure --prefix=/usr
+	make
+	make DESTDIR=$PKG install
+}

@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: Library for manipulation of TIFF (Tag Image File Format) images
 # URL: http://www.simplesystems.org/libtiff/
-# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: libjpeg-turbo-32 zlib-32
 
 name=libtiff4-32

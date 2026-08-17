@@ -1,0 +1,17 @@
+# Description: Blazing fast terminal-ui for git written in rust
+# URL: https://github.com/Extrawurst/gitui
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: rust
+
+name=gitui
+version=0.28.1
+release=1
+source=(https://github.com/extrawurst/$name/archive/v$version/$name-v$version.tar.gz)
+
+build() {
+	export CARGO_HOME="$SRC/cargo"
+	cd $name-$version
+	cargo fetch --locked
+	cargo build $_cargo_opts --release
+	install -Dt $PKG/usr/bin target/release/$name
+}

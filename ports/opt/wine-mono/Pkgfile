@@ -1,0 +1,13 @@
+# Description: Wine's built-in replacement for Microsoft's .NET Framework
+# URL: https://github.com/madewokherd/wine-mono
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: wine
+
+name=wine-mono
+version=11.2.0
+release=1
+source=(https://github.com/madewokherd/wine-mono/releases/download/${name}-${version}/${name}-${version}-x86.msi)
+
+build() {
+	install -Dm644 wine-mono-$version-x86.msi $PKG/usr/share/wine/mono/wine-mono-$version.msi
+}

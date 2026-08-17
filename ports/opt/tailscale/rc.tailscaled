@@ -1,0 +1,41 @@
+#!/bin/sh
+#
+# /etc/rc.d/tailscaled
+#
+
+. /etc/rc.subr
+
+NAME=tailscale
+PROG=/usr/sbin/tailscaled
+PID=/run/tailscaled/pid
+TAILSCALED_LOGFILE="${TAILSCALED_LOGFILE:-/var/log/${NAME}d.log}"
+
+case $1 in
+start)
+	msg "Starting $NAME..."
+        start_daemon -p $PID $PROG $OPTS >>${TAILSCALED_LOGFILE} 2>&1 &
+        ;;
+stop)
+	msg "Stopping $NAME..."
+        stop_daemon -p $PID $PROG
+        ;;
+restart)
+        $0 stop
+	sleep 1
+        $0 start
+        ;;
+status)
+        status_daemon -p $PID $PROG
+        e=$?
+        case $e in
+        0) echo "$PROG is running with pid $(cat $PID)" ;;
+        1) echo "$PROG is not running but the pid file $PID exists" ;;
+        3) echo "$PROG is not running" ;;
+        4) echo "Unable to determine the program status" ;;
+        esac
+        exit $e
+        ;;
+*)
+        echo "usage: $0 [start|stop|restart|status]"
+        ;;
+esac

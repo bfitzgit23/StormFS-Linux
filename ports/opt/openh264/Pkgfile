@@ -1,0 +1,21 @@
+# Description: Open Source h264 codec implementation
+# URL: https://www.openh264.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: nasm
+
+name=openh264
+version=2.6.0
+release=2
+source=(https://github.com/cisco/openh264/archive/v$version/$name-$version.tar.gz)
+
+build() {
+	meson setup $name-$version build -D tests=disabled
+	meson compile -C build
+	DESTDIR=$PKG meson install -C build
+
+	 install -Dm755 build/codec/console/dec/h264dec $PKG/usr/bin/h264dec
+	install -Dm755 build/codec/console/enc/h264enc $PKG/usr/bin/h264enc
+
+	# Ungoogled-chromium-bin need libopenh264.so.8
+	ln -s libopenh264.so.2.6.0 $PKG/usr/lib/libopenh264.so.8
+}

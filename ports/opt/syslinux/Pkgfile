@@ -1,0 +1,23 @@
+# Add your top line text here
+# Your line to add at the top here
+# Description: Collection of boot loaders for the Linux operating system
+# URL:         
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Depends on:  mtools
+
+name=syslinux
+version=6.03
+release=1
+source=(http://www.kernel.org/pub/linux/utils/boot/$name/$name-$version.tar.xz
+        $name-$version-sysmacros.patch)
+
+build() {
+	cd $name-$version
+
+	export CFLAGS="$CFLAGS -fcommon"
+
+	patch -p1 -i $SRC/$name-$version-sysmacros.patch
+
+	make OPTFLAGS="$CFLAGS" installer
+	make OPTFLAGS="$CFLAGS" INSTALLROOT=$PKG MANDIR=/usr/share/man install
+}

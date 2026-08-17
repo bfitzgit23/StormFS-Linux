@@ -1,0 +1,36 @@
+# Description: Google Noto TTF fonts
+# URL: https://fonts.google.com/noto
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: fontconfig
+
+name=ttf-noto
+version=2026.06.01
+release=1
+source=(https://github.com/notofonts/notofonts.github.io/archive/refs/tags/noto-monthly-release-$version.tar.gz 66-noto-sans.conf 66-noto-serif.conf 66-noto-mono.conf)
+
+build() {
+	cd notofonts.github.io-noto-monthly-release-$version
+
+	# Remove duplicated fonts
+	rm -f \
+		hinted/ttf/NotoSansTifinagh/NotoSansTifinaghA*.ttf \
+		hinted/ttf/NotoSansTifinagh/NotoSansTifinaghG*.ttf \
+		hinted/ttf/NotoSansTifinagh/NotoSansTifinaghH*.ttf \
+		hinted/ttf/NotoSansTifinagh/NotoSansTifinaghR*.ttf \
+		hinted/ttf/NotoSansTifinagh/NotoSansTifinaghS*.ttf \
+		hinted/ttf/NotoSansTifinagh/NotoSansTifinaghT*.ttf \
+		unhinted/ttf/NotoSansTifinagh/NotoSansTifinaghA*.ttf \
+		unhinted/ttf/NotoSansTifinagh/NotoSansTifinaghG*.ttf \
+		unhinted/ttf/NotoSansTifinagh/NotoSansTifinaghH*.ttf \
+		unhinted/ttf/NotoSansTifinagh/NotoSansTifinaghR*.ttf \
+		unhinted/ttf/NotoSansTifinagh/NotoSansTifinaghS*.ttf \
+		unhinted/ttf/NotoSansTifinagh/NotoSansTifinaghT*.ttf
+
+	find . -type f -iname '*.ttf' -exec install -Dm644 {} -t $PKG/usr/share/fonts/noto/ \;
+
+	rm -f 	$PKG/usr/share/fonts/noto/Noto*Condensed*.ttf \
+		$PKG/usr/share/fonts/noto/Noto*SemiBold*.ttf \
+		$PKG/usr/share/fonts/noto/Noto*Extra*.ttf
+
+	install -Dm644 $SRC/*.conf -t $PKG/etc/fonts/conf.avail/
+}

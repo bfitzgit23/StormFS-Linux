@@ -1,0 +1,33 @@
+# Description: Broadcom Wireless driver for kernel stable
+# URL: https://docs.broadcom.com/docs/12358410
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=broadcom-wl
+version=6.30.223.271
+release=3
+source=(http://download.tuxfamily.org/nutyx/sources/$name/$name-$version.tar.xz)
+
+build() {
+
+	cd $name-$version
+	for k in $(ls /lib/modules/); do
+		 KVER=$k
+		 [ "$KVER" ] || KVER=$(uname -r)
+		make -C /lib/modules/$KVER/build M=$(pwd)
+		install -Dm755 wl.ko \
+		$PKG/lib/modules/$KVER/kernel/drivers/net/wireless/wl.ko
+		find $PKG -name "*.ko" -exec xz {} +	
+	done
+
+	#Blacklist some kernel modules
+	mkdir -pv $PKG/etc/modprobe.d
+
+cat > $PKG/etc/modprobe.d/broadcom-wl-kernel.conf << EOF
+# wireless drivers (conflict with Broadcom hybrid wireless driver 'wl')
+blacklist ssb
+blacklist bcma
+blacklist b43
+blacklist brcmsmac
+EOF
+
+}

@@ -1,0 +1,17 @@
+# Description: Apache Xerces-C validating XML parser
+# URL: xerces.apache.org
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: curl libnsl icu
+
+name=xerces-c
+version=3.3.0
+release=1
+source=(https://archive.apache.org/dist/xerces/c/3/sources/${name}-${version}.tar.gz)
+
+build() {
+
+	cd $name-$version
+	./configure --prefix=/usr --sysconfdir=/etc
+	make
+	make DESTDIR=$PKG install
+}

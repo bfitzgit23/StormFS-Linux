@@ -1,0 +1,25 @@
+# Description: Network utility to retrieve files from the Web
+# URL: https://www.gnu.org/software/wget/wget.html
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: ca-certificates openssl util-linux libidn2 pcre2 xz gperf
+
+name=wget2
+version=2.2.1
+release=1
+source=(https://ftp.gnu.org/gnu/wget/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+
+  	./configure --prefix=/usr \
+	            --sysconfdir=/etc \
+	            --with-ssl=openssl \
+		    --without-libhsts \
+		    --without-libidn \
+		    --without-pcre
+	make
+	make DESTDIR=$PKG install
+	rm -f $PKG/usr/bin/wget2_noinstall
+	rm -f $PKG/usr/lib/libwget.a
+
+}

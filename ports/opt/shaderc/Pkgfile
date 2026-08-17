@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: A collection of tools, libraries and tests for shader compilation
 # URL: https://github.com/google/shaderc
-# Maintainer: John McQuah, jmcquah at disroot dot org
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: glslang
 # Optional: asciidoctor
 

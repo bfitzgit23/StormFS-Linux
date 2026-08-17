@@ -1,0 +1,15 @@
+# Description: Use any linux distribution inside your terminal
+# URL: https://github.com/89luca89/distrobox
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: docker
+
+name=distrobox
+version=1.8.2.5
+release=1
+source=($name-$version.tar.gz::https://github.com/89luca89/$name/archive/$version.tar.gz)
+
+build() {
+	cd $name-$version
+	install -dm755  $PKG/usr
+	./install -P $PKG/usr
+}

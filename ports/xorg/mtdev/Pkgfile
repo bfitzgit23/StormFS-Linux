@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: Kernel multi-touch transformation library
 # URL: https://launchpad.net/mtdev
-# Maintainer: CRUX Xorg Team, xorg-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 
 name=mtdev
 version=1.1.7

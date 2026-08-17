@@ -1,0 +1,24 @@
+# Description: Customizable and lightweight notification-daemon
+# URL: https://dunst-project.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libxinerama pango libnotify libxscrnsaver
+
+name=dunst
+version=1.13.2
+release=1
+source=(https://github.com/dunst-project/dunst/archive/v$version/$name-$version.tar.gz)
+
+build() {
+
+	cd $name-$version
+
+	prt-get isinst wayland && \
+	make all || \
+	export WAYLAND=0 make
+
+	make PREFIX=/usr SYSCONFDIR=/etc DESTDIR=$PKG install
+	install -Dm755 dunstify $PKG/usr/bin/dunstify
+
+	# remove systemd trash file
+	rm -fr $PKG/usr/lib/
+}

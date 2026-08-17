@@ -1,0 +1,25 @@
+# Description: suckless status monitor for window managers that use WM_NAME or stdin to fill the status bar
+# URL: https://tools.suckless.org/slstatus/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libx11
+
+name=slstatus
+version=1.1
+release=1
+source=($name-$version.tar.gz::https://github.com/drkhsh/slstatus/archive/refs/tags/$version.tar.gz)
+
+build() {
+	cd $name-$version
+
+	if [ -f $_portdir/config.h ]; then
+		cp $_portdir/config.h .
+	fi
+
+	for p in $_portdir/*.patch $_portdir/*.diff; do
+		[ -f $p ] || continue
+		patch -Np1 -i $p
+	done
+
+	make PREFIX=/usr
+	make PREFIX=/usr DESTDIR=$PKG install
+}

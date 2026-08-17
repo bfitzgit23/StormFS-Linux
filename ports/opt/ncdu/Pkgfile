@@ -1,0 +1,18 @@
+# Description: Disk usage analyzer with an ncurses interface
+# URL: https://dev.yorhel.nl/ncdu
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: ncurses zig-bin
+
+name=ncdu
+version=2.9.2
+release=2
+source=(https://dev.yorhel.nl/download/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+	DESTDIR=$PKG zig build \
+		--prefix /usr \
+		--search-prefix /usr \
+		--release=fast \
+		-Dpie=true
+}

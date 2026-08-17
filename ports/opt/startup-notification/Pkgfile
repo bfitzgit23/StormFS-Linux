@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: Startup notification library.
 # URL: http://freedesktop.org/wiki/Software/startup-notification
-# Maintainer: Matt Housh, jaeger at crux dot ninja
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: xorg-libs xcb-util
 
 name=startup-notification

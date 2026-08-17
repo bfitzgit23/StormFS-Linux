@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: Meta package to run steam-native
 # URL: https://steampowered.com
-# Maintainer: Tim Biermann, tbier at posteo dot de
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: brotli-32 ibus libcaca-32 libcanberra-32 libidn133-32 libjpeg6-turbo-32 libnewt-32 libnl-32 libnm-32 libpng12-32 libsdl2-32 libtiff4-32 libudev0-shim-32 libva-32 openssl11-32 pipewire-32 rtmpdump-32 steam vulkan-loader-32 vulkan-validation-layers-32 libXScrnSaver-32 libvdpau-32
 # Optional: apulse-32 libappindicator-sharp-32 pulseaudio-32
 

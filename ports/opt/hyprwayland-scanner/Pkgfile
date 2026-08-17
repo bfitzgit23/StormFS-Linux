@@ -1,0 +1,16 @@
+# Description: A Hyprland implementation of wayland-scanner, in and for C++
+# URL: https://github.com/hyprwm/hyprwayland-scanner
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: pugixml
+
+name=hyprwayland-scanner
+version=0.4.6
+release=1
+source=($name-$version.tar.gz::https://github.com/hyprwm/hyprwayland-scanner/archive/refs/tags/v$version.tar.gz)
+
+build() {
+	cd $name-$version
+	cmake --no-warn-unused-cli -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_INSTALL_PREFIX=/usr -S . -B ./build
+	cmake --build ./build --config Release
+	DESTDIR="${PKG}" cmake --install build
+}

@@ -1,0 +1,30 @@
+# Description: Fully featured yet light and fast cross platform word processor
+# URL: http://www.abisource.com
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: wv libxslt gtk3 boost pkgconf
+
+name=abiword
+version=3.0.8
+release=1
+source=($name-$version.tar.bz2::https://gitlab.gnome.org/World/AbiWord/-/archive/release-$version/AbiWord-release-$version.tar.bz2 enchant.patch)
+
+build() {
+	cd AbiWord-release-$version
+
+	# fix build with GCC 14
+	export CFLAGS="$CFLAGS -Wno-incompatible-pointer-types"
+
+	patch -Np1 -i $SRC/enchant.patch
+	sed -i 's/enchant >=/enchant-2 >=/' configure.ac
+
+	./autogen-common.sh
+	autoreconf -fi
+
+	./configure \
+		--prefix=/usr \
+		--disable-static \
+		--enable-plugins="$_plugins" \
+		--enable-shared
+	make
+	make DESTDIR=$PKG install
+}

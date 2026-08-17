@@ -1,0 +1,16 @@
+# Description: Point and click selection of X11 font names
+# URL: https://xorg.freedesktop.org
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libxaw util-macros
+
+name=xfontsel
+version=1.1.1
+release=1
+source=(https://xorg.freedesktop.org/archive/individual/app/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+	./configure --prefix=/usr
+	make
+	make DESTDIR=$PKG install
+}

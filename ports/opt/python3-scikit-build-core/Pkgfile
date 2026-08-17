@@ -1,0 +1,20 @@
+# Description: Build backend for Python that uses CMake to build extension modules
+# URL: https://github.com/scikit-build/scikit-build-core
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: cmake python3-packaging python3-pathspec python3-typing_extensions ninja python3-gpep517 python3-hatchling python3-hatch-vcs python3-wheel
+
+name=python3-scikit-build-core
+version=0.12.2
+release=1
+source=($name-$version.tar.gz::https://github.com/scikit-build/scikit-build-core/archive/refs/tags/v$version.tar.gz)
+
+build() {
+	cd scikit-build-core-$version
+
+	gpep517 build-wheel \
+		--wheel-dir .dist \
+		--output-fd 3 3>&1 >&2
+	python3 -m installer -d "$PKG" \
+		.dist/*.whl
+	
+}

@@ -1,0 +1,15 @@
+# Description: Screenshot utility for Wayland
+# URL: https://github.com/emersion/grim
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: cairo libjpeg-turbo wayland meson pango scdoc wayland-protocols
+
+name=grim
+version=1.5.0
+release=1
+source=(https://gitlab.freedesktop.org/emersion/grim/-/releases/v$version/downloads/$name-$version.tar.gz)
+
+build() {
+    meson setup $name-$version build
+    meson compile -C build
+    DESTDIR=$PKG meson install --no-rebuild -C build
+}

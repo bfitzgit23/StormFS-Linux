@@ -1,0 +1,37 @@
+# Description: Seamless operability between C++11 and Python
+# URL: https://github.com/pybind/pybind11
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: cmake boost python3-setuptools python3-gpep517 python3-wheel ninja python3-scikit-build-core
+
+name=python3-pybind11
+version=3.0.4
+release=1
+source=($name-$version.tar.gz::https://github.com/pybind/pybind11/archive/v$version.tar.gz)
+
+build() {
+	cd pybind11-$version
+
+	# fails with lto due to fortify-headers
+	export CXXFLAGS="$CXXFLAGS -U_FORTIFY_SOURCE "
+
+	python3 -m build --wheel --no-isolation
+
+	export	CXXFLAGS="$CXXFLAGS -flto=auto" 
+	cmake -B build -G Ninja \
+		-DCMAKE_BUILD_TYPE=None \
+		-DPYTHON_EXECUTABLE=/usr/bin/python3 \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DUSE_PYTHON_INCLUDE_DIR=FALSE \
+		-DPYBIND11_TEST=OFF \
+		-Wno-dev
+	cmake --build build
+
+	gpep517 build-wheel \
+		--wheel-dir .dist \
+		--output-fd 3 3>&1 >&2
+
+	python3 -m installer -d "$PKG" \
+		.dist/*.whl
+
+	DESTDIR="$PKG" cmake --install build
+}

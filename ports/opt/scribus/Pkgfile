@@ -1,0 +1,38 @@
+# Description: Desktop publishing software
+# URL: https://www.scribus.net/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: boost cups harfbuzz-icu hunspell poppler qt5
+
+name=scribus
+version=1.7.0
+release=1
+source=(https://downloads.sourceforge.net/$name/$name-$version.tar.xz scribus-1.6.1-findhyphen.patch)
+
+build() {
+	cd $name-$version
+
+	#for p in $SRC/*.patch; do
+	#	patch -Np1 -i $p
+	#done
+
+	sed -e 's|WANT_CPP17|WANT_CPP20|g' -e 's|CMAKE_CXX_STANDARD 17|CMAKE_CXX_STANDARD 20|g' -i CMakeLists.txt
+
+	cmake -B build \
+		-D CMAKE_INSTALL_PREFIX=/usr \
+		-D CMAKE_BUILD_TYPE=None \
+		-D CMAKE_SKIP_RPATH=On \
+		-D WANT_CPP20=ON \
+		-D WANT_HUNSPELL=On \
+		-D WITH_PODOFO=Off \
+		-D WANT_GRAPHICSMAGICK=On
+	make -C build
+	make -C build DESTDIR=$PKG install
+
+	rm -r $PKG/usr/share/man/??
+	find $PKG \( \
+	    -iname '*changelog*' -o \
+	    -iname '*news*' -o \
+	    -iname '*todo*' -o \
+	    -iname '*readme*' -o \
+	    -iname '*copying*' \) -exec rm -fr '{}' \+
+}

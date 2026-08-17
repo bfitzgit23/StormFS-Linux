@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: XCB X protocol descriptions
 # URL: https://xcb.freedesktop.org/
-# Maintainer:
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: python3
 
 name=xcb-proto

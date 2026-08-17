@@ -1,0 +1,18 @@
+# Description: Perl bindings for POSIX i18n gettext functions
+# URL: https://metacpan.org/release/Locale-gettext/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: perl gettext
+
+name=perl-locale-gettext
+version=1.07
+release=1
+source=(https://cpan.metacpan.org/authors/id/P/PV/PVANDRY/Locale-gettext-$version.tar.gz)
+
+build() {
+	cd Locale-gettext-$version
+	export CFLAGS=$(perl -MConfig -E 'say $Config{ccflags}')
+	PERL_MM_USE_DEFAULT=1 perl -I. Makefile.PL INSTALLDIRS=vendor
+	make
+	make DESTDIR=$PKG install
+	find $PKG \( -name perllocal.pod -o -name .packlist \) -delete
+}

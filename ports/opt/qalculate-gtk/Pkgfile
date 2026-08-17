@@ -1,0 +1,17 @@
+# Description: GTK frontend for libqalculate
+# URL: https://qalculate.github.io/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libqalculate gtk3 python3
+
+name=qalculate-gtk
+version=5.11.0
+release=1
+source=($name-$version.tar.gz::https://github.com/Qalculate/qalculate-gtk/archive/refs/tags/v$version.tar.gz)
+
+build() {
+	cd $name-$version
+	autoreconf -fvi
+	./configure --prefix=/usr --libexecdir=/usr/lib
+	make
+	make DESTDIR=$PKG install
+}

@@ -1,0 +1,15 @@
+# Description: Python bindings for libcups
+# URL: https://github.com/OpenPrinting/pycups
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: cups python3-setuptools
+
+name=python3-pycups
+version=2.0.4
+release=1
+source=($name-$version.tar.gz::https://pypi.python.org/packages/source/p/pycups/pycups-$version.tar.gz)
+
+build() {
+	cd pycups-$version
+	python3 setup.py build
+	python3 setup.py install --skip-build --root=$PKG
+}

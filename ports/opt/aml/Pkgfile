@@ -1,0 +1,15 @@
+# Description: Another Main Loop
+# URL: https://github.com/any1/aml
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: meson ninja
+
+name=aml
+version=1.0.0
+release=1
+source=($name-$version.tar.gz::https://github.com/any1/aml/archive/refs/tags/v$version.tar.gz)
+
+build() {
+	meson setup $name-$version build
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

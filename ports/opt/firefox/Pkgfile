@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: The Mozilla Firefox browser with Alsa support
 # URL: https://www.mozilla.com/firefox/
-# Maintainer: John McQuah, jmcquah at disroot dot org
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: cbindgen dbus-glib gtk3 libnotify llvm  nodejs pulseAudio alsa-lib  python3 sqlite startup-notification unzip nspr libwebp libvpx nss icu desk>
 # Optional: libevent  nasm curl doxygen ffmpeg liboauth pciutils valgrind wget wireless-tools yasm libproxy
 

@@ -1,0 +1,19 @@
+# Description: Themes for SMPlayer
+# URL: https://www.smplayer.info/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: smplayer optipng
+
+name=smplayer-themes
+version=20.11.0
+release=1
+source=(https://downloads.sourceforge.net/smplayer/$name-$version.tar.bz2)
+
+build() {
+	cd $name-$version
+
+	# Fix invalid PNG icons to work with libpng 1.6
+	find -name '*.png' -exec optipng -quiet -force -fix {} +
+	
+	make PREFIX=/usr
+	make DESTDIR=$PKG PREFIX=/usr install
+}

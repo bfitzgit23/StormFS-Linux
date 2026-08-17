@@ -1,0 +1,20 @@
+# Description: A collection of user-contributed scripts for sway
+# URL: https://github.com/OctopusET/sway-contrib
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: python3-i3ipc sway
+
+name=sway-contrib
+version=1.11
+release=1
+source=($name-$version.tar.gz::https://github.com/OctopusET/sway-contrib/archive/$version.tar.gz)
+
+build() {
+	cd $name-$version
+	
+	install -dm755 "$PKG/usr/share/$name"
+
+	for util in autoname-workspaces.py firefox-focus-monitor.py inactive-windows-transparency.py \
+		layout-per-window.py switch-top-level.py; do
+			install -Dm755 "$util" -t "$PKG/usr/share/$name/"
+	done
+}

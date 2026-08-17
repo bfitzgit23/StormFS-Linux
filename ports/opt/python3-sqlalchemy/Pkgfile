@@ -1,0 +1,15 @@
+# Description: Python SQL toolkit and Object Relational Mapper
+# URL: https://www.sqlalchemy.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: python3-greenlet
+
+name=python3-sqlalchemy
+version=2.0.51
+release=1
+source=($name-$version.tar.gz::https://pypi.org/packages/source/s/sqlalchemy/sqlalchemy-$version.tar.gz)
+
+build() {
+	cd sqlalchemy-$version
+	python3 setup.py build
+	python3 setup.py install --root="${PKG}" --skip-build
+}

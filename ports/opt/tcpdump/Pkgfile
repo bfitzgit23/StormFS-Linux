@@ -1,0 +1,17 @@
+# Description: Powerful command-line packet analyzer
+# URL: https://www.tcpdump.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libpcap
+
+name=tcpdump
+version=4.99.6
+release=1
+source=(http://www.tcpdump.org/release/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+
+  	./configure --prefix=/usr --with-system-libpcap
+	make
+	make DESTDIR=$PKG install
+}

@@ -1,0 +1,19 @@
+# Description: Plugins for audacious media player
+# URL: https://audacious-media-player.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: mpg123 audacious flac neon ffmpeg
+
+name=audacious-plugins
+version=4.6.1
+release=1
+source=(http://distfiles.audacious-media-player.org/$name-$version.tar.bz2)
+
+build() {
+	meson setup $name-$version build \
+		-Dgtk=false \
+		-Dgtk2=false \
+		-Dqt=true \
+		-Dqt5=true
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

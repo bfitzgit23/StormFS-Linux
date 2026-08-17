@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: Generic PCI access library
 # URL: http://xorg.freedesktop.org
-# Maintainer: CRUX Xorg Team, xorg-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 
 name=libpciaccess
 version=0.18.1

@@ -1,0 +1,10 @@
+# Description: Unofficial client of whatsapp
+# URL: https://gitlab.com/zerkc/whatsdesk/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libxscrnsaver nss libnotify libappindicator cups
+
+name=whatsdesk-bin
+version=0.3.12
+release=1
+source=(${name}-${version}_amd64.deb::https://zerkc.gitlab.io/whatsdesk/whatsdesk_${version}_amd64.deb)
+

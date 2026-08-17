@@ -1,0 +1,15 @@
+# Description: Window Navigator Construction Kit
+# URL: https://gitlab.gnome.org/GNOME/libwnck
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: gtk3 startup-notification gobject-introspection meson
+
+name=libwnck3
+version=43.3
+release=1
+source=(https://gitlab.gnome.org/GNOME/libwnck/-/archive/$version/libwnck-$version.tar.gz)
+
+build() {
+	meson setup $name-$version build -Dgtk_doc=false
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

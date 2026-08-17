@@ -1,0 +1,17 @@
+# Description: Free Pascal Qt6 binding library updated by lazarus IDE
+# URL: https://gitlab.com/freepascal.org/lazarus
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: qt6-base
+
+name=qt6pas
+version=6.2.10
+release=1
+source=(lazarus-$lz_version.tar.bz2::https://gitlab.com/freepascal.org/lazarus/lazarus/-/archive/lazarus_${lz_tag}/lazarus-lazarus_${lz_tag}.tar.bz2)
+
+build() {
+
+    cd lazarus-lazarus_${lz_tag}/lcl/interfaces/qt6/cbindings
+    qmake6 
+    make 
+    make  INSTALL_ROOT=$PKG install
+}

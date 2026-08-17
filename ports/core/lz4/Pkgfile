@@ -1,12 +1,14 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: Extremely fast compression algorithm
 # URL:         https://github.com/lz4/lz4
-# Maintainer:  Emmett1, emmett1 dot 2miligrams at gmail dot com
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on:  
 
 name=lz4
 version=1.10.0
 release=1
-source=(https://github.com/lz4/lz4/archive/v$version/lz4-v$version.tar.gz)
+source=(https://github.com/lz4/lz4/releases/download/v$version/lz4-$version.tar.gz)
 
 build() {
 	cd $name-$version

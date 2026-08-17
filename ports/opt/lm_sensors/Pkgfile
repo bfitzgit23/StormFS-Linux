@@ -1,0 +1,20 @@
+# Description: User-space support for the hardware monitoring drivers in the Linux kernel
+# URL: https://github.com/lm-sensors/lm-sensors
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=lm_sensors
+version=3.6.2
+release=1
+source=($name-$version.tar.gz::https://github.com/hramrach/lm-sensors/archive/refs/tags/V$_version.tar.gz)
+
+build() {
+	cd $_name-$_version
+	make PREFIX=/usr        \
+	     BUILD_STATIC_LIB=0 \
+	     MANDIR=/usr/share/man
+
+	make PREFIX=/usr        \
+	     BUILD_STATIC_LIB=0 \
+	     MANDIR=/usr/share/man \
+	     DESTDIR=$PKG install
+}

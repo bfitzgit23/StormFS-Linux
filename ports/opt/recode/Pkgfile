@@ -1,0 +1,23 @@
+# Description: Converts files between various character sets and usages
+# URL: https://github.com/rrthomas/recode
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: python3
+
+name=recode
+version=3.7.15
+release=1
+source=(https://github.com/rrthomas/recode/releases/download/v$version/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+
+	./configure \
+		--prefix=/usr \
+		--mandir=/usr/share/man \
+		--infodir=/usr/share/info \
+		--disable-nls \
+		--without-included-gettext
+	make
+	make DESTDIR=$PKG install
+
+}

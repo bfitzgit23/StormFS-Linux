@@ -1,0 +1,15 @@
+# Description: Vimix is a flat Material Design theme for GTK 3, GTK 2 and Gnome-Shell
+# URL: https://github.com/vinceliuice/vimix-gtk-themes
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: gtk-engine-murrine gtk-engines
+
+name=vimix-gtk-themes
+version=2025.06.20
+release=1
+source=($name-$version.tar.gz::https://github.com/vinceliuice/$name/archive/$_version.tar.gz)
+
+build() {
+	cd "Vimix-gtk-themes-$_version"
+	install -d "$PKG/usr/share/themes"
+	./install.sh  -d "$PKG/usr/share/themes"
+}

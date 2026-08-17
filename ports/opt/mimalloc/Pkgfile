@@ -1,0 +1,24 @@
+# Description: General-purpose allocator with excellent performance characteristics
+# URL: https://github.com/microsoft/mimalloc
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: cmake ninja
+
+name=mimalloc
+version=3.3.2
+release=1
+source=(https://github.com/microsoft/mimalloc/archive/v$version/$name-$version.tar.gz)
+
+build() {
+	cmake -S $name-$version -B build -G Ninja \
+	        -DCMAKE_INSTALL_PREFIX=/usr \
+	        -DCMAKE_INSTALL_LIBDIR=lib \
+		-DCMAKE_INSTALL_LIBEXECDIR=lib \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+		-DCMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
+		-DMI_BUILD_OBJECT=OFF \
+		-DMI_INSTALL_TOPLEVEL=ON \
+		-Wno-dev 
+	cmake --build build
+	DESTDIR=$PKG cmake --install build
+}

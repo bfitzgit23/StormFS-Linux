@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Chromium
+GenericName=Web Browser
+Comment=Access the Internet
+Icon=chromium
+Type=Application
+Categories=Network;WebBrowser;
+MimeType=text/html;text/xml;application/xhtml+xml;application/xml;application/rss+xml;application/rdf+xml;x-scheme-handler/http;x-scheme-handler/https;x-scheme-handler/ftp;
+Exec=/usr/bin/chromium %U
+StartupNotify=true
+Terminal=false

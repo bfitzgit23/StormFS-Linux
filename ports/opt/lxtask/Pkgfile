@@ -1,0 +1,19 @@
+# Description: Lightweight and desktop-independent task manager
+# URL: https://lxde.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: gtk2
+
+name=lxtask
+version=0.1.12
+release=1
+source=($name-$version.tar.gz::https://github.com/lxde/lxtask/archive/refs/tags/$version.tar.gz)
+
+build() {
+	cd $name-$version
+	export CFLAGS="$CFLAGS -fcommon"
+	autoreconf -fvi
+	./configure --prefix=/usr
+	make
+	make DESTDIR=$PKG install
+
+}

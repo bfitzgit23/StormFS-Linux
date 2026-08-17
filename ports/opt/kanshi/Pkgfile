@@ -1,0 +1,17 @@
+# Description: Dynamic output configuration for Wayland WMs
+# URL: https://wayland.emersion.fr/kanshi/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libscfg libvarlink vali wayland
+
+name=kanshi
+version=1.9.0
+release=1
+source=(https://gitlab.freedesktop.org/emersion/kanshi/-/releases/v$version/downloads/$name-$version.tar.gz)
+
+build() {
+	meson setup $name-$version build \
+	        -Dman-pages=disabled \
+      		-Dipc=enabled 
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

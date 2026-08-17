@@ -1,0 +1,15 @@
+# Description: A sleek and minimal desktop shell thoughtfully crafted for Wayland, built with Quickshell.
+# URL: https://github.com/noctalia-dev/noctalia-shell
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: brightnessctl imagemagick qt6-multimedia noctalia-qs cliphist ddcutil power-profiles-daemon
+
+name=noctalia-shell
+version=4.7.7
+release=2
+source=(https://github.com/noctalia-dev/noctalia-shell/archive/v$version/$name-$version.tar.gz)
+
+build() {
+	cd ${name%-*}-$version
+	install -dm755 $PKG/etc/xdg/quickshell/noctalia-shell
+	cp -r $SRC/${name%-*}-$version/* $PKG/etc/xdg/quickshell/noctalia-shell/
+}

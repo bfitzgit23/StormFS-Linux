@@ -1,0 +1,33 @@
+diff --git a/src/corelib/text/qstringview.cpp b/src/corelib/text/qstringview.cpp
+index 0b7fbca0a44..374e37731dd 100644
+--- a/src/corelib/text/qstringview.cpp
++++ b/src/corelib/text/qstringview.cpp
+@@ -712,7 +712,7 @@ QT_BEGIN_NAMESPACE
+ 
+     \note The behavior is undefined when \a length < 0 or \a length > size().
+ 
+-    \sa mid(), left(), right(), chop(), truncate(), slice()
++    \sa sliced(), left(), right(), chop(), truncate(), slice()
+ */
+ 
+ /*!
+@@ -724,7 +724,7 @@ QT_BEGIN_NAMESPACE
+ 
+     \note The behavior is undefined when \a length < 0 or \a length > size().
+ 
+-    \sa mid(), left(), right(), chopped(), chop()
++    \sa sliced(), left(), right(), chopped(), chop()
+ */
+ 
+ /*!
+@@ -736,7 +736,7 @@ QT_BEGIN_NAMESPACE
+ 
+     \note The behavior is undefined when \a length < 0 or \a length > size().
+ 
+-    \sa mid(), left(), right(), chopped(), truncate(), slice()
++    \sa sliced(), left(), right(), chopped(), truncate(), slice()
+ */
+ 
+ /*!
+
+

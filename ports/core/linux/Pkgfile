@@ -1,72 +1,210 @@
 # Description: Linux kernel, sources and modules
-# URL:         
-# Maintainer:  Emmett1, emmett1 dot 2miligrams at gmail dot com
-# Depends on:  elfutils openssl linux-firmware dracut
+# URL: https://cdn.kernel.org/
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Depends on: bc bison cpio dracut elfutils flex linux-firmware openssl
+# Optional: pahole
 
 name=linux
-version=6.15.8
-release=1
-source=(https://www.kernel.org/pub/linux/kernel/v6.x/$name-$version.tar.xz
-        config)
+version=7.1.8
+release=3
+source=(
+    https://www.kernel.org/pub/linux/kernel/v7.x/linux-$version.tar.xz
+    config
+)
 
-build() {
-	cd $name-$version
+pkg_build() {
+    local kernver=""
 
-	make mrproper
+    make mrproper
 
-	cp $SRC/config ./.config
-	make olddefconfig
+    cp "$SRC/config" .config
+    make olddefconfig
 
-	sed '/^CONFIG_LOCALVERSION=/d' -i .config
-	echo 'CONFIG_LOCALVERSION="-BFS-Linux"' >> .config
+    # BFS kernel identity.
+    scripts/config --set-str LOCALVERSION "-BFS-Linux"
+    scripts/config --disable LOCALVERSION_AUTO
 
-	kernver=${version}$(grep CONFIG_LOCALVERSION= .config | cut -d '"' -f2)
+    # LFS-required and recommended settings.
+    scripts/config --disable WERROR
+    scripts/config --enable PSI
+    scripts/config --disable PSI_DEFAULT_DISABLED
+    scripts/config --disable IKHEADERS
 
-	#make menuconfig
-	make bzImage modules
-	make INSTALL_MOD_PATH=$PKG modules_install
+    scripts/config --enable CGROUPS
+    scripts/config --enable MEMCG
+    scripts/config --enable CGROUP_SCHED
+    scripts/config --disable RT_GROUP_SCHED
+    scripts/config --disable EXPERT
 
-	mkdir -p $PKG/boot
+    scripts/config --enable RELOCATABLE
+    scripts/config --enable RANDOMIZE_BASE
 
-	cp  arch/x86/boot/bzImage $PKG/boot/vmlinuz-BFS-Linux-$version
-	echo $kernver > $PKG/lib/modules/KERNELVERSION
+    scripts/config --enable STACKPROTECTOR
+    scripts/config --enable STACKPROTECTOR_STRONG
 
-	make clean
-	make prepare
+    scripts/config --enable NET
+    scripts/config --enable INET
+    scripts/config --enable IPV6
 
-	rm -rf $PKG/lib/firmware
+    scripts/config --disable UEVENT_HELPER
+    scripts/config --enable DEVTMPFS
+    scripts/config --enable DEVTMPFS_MOUNT
+    scripts/config --disable FW_LOADER_USER_HELPER
 
-	for file in $(ls arch); do
-		case $file in
-			x86|Kconfig) continue ;;
-			*) rm -fr arch/$file ;;
-		esac
-	done
+    scripts/config --enable DMIID
+    scripts/config --enable SYSFB_SIMPLEFB
 
-	# strip down sources
-	# don't package the kernel in the sources directory
-	find . -name "*Image" -exec rm "{}" \;
-	find . -name "*.cmd" -exec rm -f "{}" \; 
-	rm -f .*.d
+    scripts/config --enable DRM
+    scripts/config --enable DRM_PANIC
+    scripts/config --enable DRM_FBDEV_EMULATION
+    scripts/config --enable DRM_SIMPLEDRM
+    scripts/config --enable FRAMEBUFFER_CONSOLE
 
-	rm -fr firmware ipc .config.old .version .cocciconfig \
-		.get_maintainer.ignore .gitattributes .gitignore .mailmap \
-		COPYING CREDITS MAINTAINERS README Documentation
-	find . -name ".gitignore" -exec rm "{}" \;
-	for dir in block certs crypto drivers fs init kernel lib mm net samples security sound usr virt; do
-		find $dir -type f \( -name "*.c" -o -name "*.h" \) -exec rm "{}" \;
-	done
-	for i in $(ls tools); do
-		[ "$i" = "objtool" ] || rm -fr tools/$i
-	done
-	for i in $(ls tools/objtool); do
-		[ "$i" = "objtool" ] || rm -fr tools/objtool/$i
-	done
+    scripts/config --enable INOTIFY_USER
+    scripts/config --enable TMPFS
+    scripts/config --enable TMPFS_POSIX_ACL
 
-	rm -f $PKG/lib/modules/$kernver/{build,source}
-	mv $SRC/$name-$version $PKG/lib/modules/$kernver/build
-	ln -sv build $PKG/lib/modules/$kernver/source
+    scripts/config --enable PCI
+    scripts/config --enable PCI_MSI
+    scripts/config --enable IOMMU_SUPPORT
+    scripts/config --enable IRQ_REMAP
+    scripts/config --enable X86_X2APIC
 
-	# remove now broken symlinks
-	find -L $PKG/lib/modules/$kernver/build -type l -exec rm -f "{}" \;
+    scripts/config --enable IA32_EMULATION
+    scripts/config --disable IA32_EMULATION_DEFAULT_DISABLED
+
+    # Boot and storage support.
+    scripts/config --enable BLK_DEV_INITRD
+    scripts/config --enable BLK_DEV_NVME
+    scripts/config --enable SCSI
+    scripts/config --enable BLK_DEV_SD
+    scripts/config --enable ATA
+    scripts/config --enable SATA_AHCI
+
+    scripts/config --enable EXT4_FS
+    scripts/config --enable XFS_FS
+    scripts/config --enable BTRFS_FS
+    scripts/config --enable F2FS_FS
+
+    # UEFI support.
+    scripts/config --enable EFI
+    scripts/config --enable EFI_STUB
+    scripts/config --enable EFI_PARTITION
+    scripts/config --enable VFAT_FS
+    scripts/config --enable EFIVAR_FS
+    scripts/config --enable NLS
+    scripts/config --enable NLS_CODEPAGE_437
+    scripts/config --enable NLS_ISO8859_1
+
+    # Storage stack used by the BFS installer.
+    #
+    # Keep the MD core enabled, with the actual RAID personalities as modules.
+    # Keep MD personalities modular. BFSOS installs a Dracut policy that
+    # force-includes every installer-supported personality in each initramfs,
+    # avoiding fragile host-only auto-detection.
+    scripts/config --enable MD
+    scripts/config --module MD_LINEAR
+    scripts/config --module MD_RAID0
+    scripts/config --module MD_RAID1
+    scripts/config --module MD_RAID10
+    scripts/config --module MD_RAID456
+
+    # Device Mapper / LVM.
+    scripts/config --module BLK_DEV_DM
+    scripts/config --module DM_SNAPSHOT
+    scripts/config --module DM_THIN_PROVISIONING
+    scripts/config --module DM_CACHE
+    scripts/config --module DM_WRITECACHE
+    scripts/config --module DM_MIRROR
+    scripts/config --module DM_RAID
+    scripts/config --module DM_MULTIPATH
+    scripts/config --module DM_DELAY
+    scripts/config --module DM_ZERO
+
+    # LUKS / encrypted and authenticated block-device support.
+    scripts/config --module DM_CRYPT
+    scripts/config --module DM_INTEGRITY
+
+    # Useful integrity/verified-root targets. These do not force their use;
+    # they simply guarantee that kernels built by this port can support them.
+    scripts/config --module DM_VERITY
+
+    make olddefconfig
+
+    # Do not silently ship another kernel without the storage features the
+    # installer exposes.
+    grep -q '^CONFIG_MD=y$' .config || {
+        echo "Kernel configuration error: CONFIG_MD was not enabled." >&2
+        return 1
+    }
+    grep -q '^CONFIG_BLK_DEV_DM=m$' .config || {
+        echo "Kernel configuration error: CONFIG_BLK_DEV_DM was not built as a module." >&2
+        return 1
+    }
+    grep -q '^CONFIG_DM_CRYPT=m$' .config || {
+        echo "Kernel configuration error: CONFIG_DM_CRYPT was not built as a module." >&2
+        return 1
+    }
+    for md_option in MD_LINEAR MD_RAID0 MD_RAID1 MD_RAID10 MD_RAID456; do
+        grep -q "^CONFIG_${md_option}=m$" .config || {
+            echo "Kernel configuration error: CONFIG_${md_option} was not built as a module." >&2
+            return 1
+        }
+    done
+
+    kernver="$(make -s kernelrelease)"
+
+    case "$kernver" in
+        *-BFS-Linux) ;;
+        *)
+            echo "Unexpected kernel release: $kernver" >&2
+            return 1
+            ;;
+    esac
+
+    echo "Building kernel release: $kernver"
+
+    make bzImage modules
+    make INSTALL_MOD_PATH="$PKG" modules_install
+
+    install -Dm644 arch/x86/boot/bzImage \
+        "$PKG/boot/vmlinuz-$kernver"
+
+    install -Dm644 System.map \
+        "$PKG/boot/System.map-$kernver"
+
+    install -Dm644 .config \
+        "$PKG/boot/config-$kernver"
+
+    # Distribution Dracut policy: md personalities remain modular, but every
+    # BFSOS initramfs must contain the storage personalities exposed by the
+    # installer so host-only detection cannot silently omit them.
+
+    rm -rf "$PKG/lib/firmware"
+
+    make clean
+    make prepare scripts
+
+    install -d "$PKG/usr/src"
+    mv "$SRC/$name-$version" \
+        "$PKG/usr/src/linux-$kernver"
+
+    # Conventional current-kernel source symlink.
+    # Keep this relative so it remains valid inside the packaged root.
+    ln -sfn "linux-$kernver" \
+        "$PKG/usr/src/linux"
+
+    rm -f \
+        "$PKG/lib/modules/$kernver/build" \
+        "$PKG/lib/modules/$kernver/source"
+
+    ln -s "/usr/src/linux-$kernver" \
+        "$PKG/lib/modules/$kernver/build"
+
+    ln -s "/usr/src/linux-$kernver" \
+        "$PKG/lib/modules/$kernver/source"
+
+    find -L "$PKG/usr/src/linux-$kernver" \
+        -type l \
+        -delete 2>/dev/null || true
 }

@@ -1,0 +1,10 @@
+--- a/sandbox/linux/sandbox_process_unittest.cc
++++ b/sandbox/linux/sandbox_process_unittest.cc
+@@ -1234,7 +1234,7 @@ TEST(SandboxProcessTest, CheckNiceValue) {
+   // Check that the process is running at the expected nice value.
+   int nice_value = getpriority(PRIO_PROCESS, 0);
+   EXPECT_EQ(nice_value, expected_nice_value)
+       << "Expected nice value " << expected_nice_value
+-      << " but got " << nice_value;
++      << " but got " << nice_value << " (may be allowed in containers)";
+ }

@@ -1,0 +1,17 @@
+# Description: Utility for controlling network drivers and hardware
+# URL: https://www.kernel.org/pub/software/network/ethtool/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libmnl
+
+name=ethtool
+version=7.0
+release=1
+source=(https://git.kernel.org/pub/scm/network/ethtool/ethtool.git/snapshot/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+	autoreconf -fi
+	./configure --prefix=/usr --mandir=/usr/share/man --sbindir=/usr/bin
+	make
+	make DESTDIR=$PKG install
+}

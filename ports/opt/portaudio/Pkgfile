@@ -1,0 +1,16 @@
+# Description: PortAudio is a cross-platform, open-source C language library for real-time audio input and output
+# URL: https://github.com/PortAudio/portaudio
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: alsa-lib
+
+name=portaudio
+version=19.7.0
+release=1
+source=($name-$version.tar.gz::https://github.com/PortAudio/portaudio/archive/refs/tags/v$version.tar.gz)
+
+build() {
+	cd $name-$version
+    ./configure --prefix=/usr --enable-cxx --enable-static=no
+    make -j1
+	make DESTDIR=$PKG install
+}

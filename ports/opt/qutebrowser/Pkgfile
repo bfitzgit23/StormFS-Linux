@@ -1,0 +1,14 @@
+# Description: A keyboard-driven, vim-like browser based on PyQt5
+# URL: https://www.qutebrowser.org/:w
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: asciidoc python3-jinja2 python3-pyqt6-webengine
+
+name=qutebrowser
+version=3.7.0
+release=1
+source=(https://github.com/qutebrowser/qutebrowser/releases/download/v$version/qutebrowser-$version.tar.gz)
+
+build() {
+	cd $name-$version
+	make -f misc/Makefile DESTDIR=$PKG PREFIX=/usr install
+}

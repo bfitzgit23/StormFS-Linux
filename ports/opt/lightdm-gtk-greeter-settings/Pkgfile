@@ -1,0 +1,16 @@
+# Description: Settings editor for the LightDM GTK+ Greeter
+# URL: https://github.com/xubuntu/lightdm-gtk-greeter-settings
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: lightdm-gtk-greeter python3-gobject3 python3-distutils-extra
+
+name=lightdm-gtk-greeter-settings
+version=1.2.3
+release=1
+source=(https://github.com/Xubuntu/lightdm-gtk-greeter-settings/releases/download/$name-$version/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+	python3 setup.py build
+	python3 setup.py install --root="$PKG" --optimize='1' --xfce-integration
+
+}

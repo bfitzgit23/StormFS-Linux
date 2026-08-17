@@ -1,0 +1,18 @@
+# Description: MPRIS command-line controller for music players
+# URL: https://github.com/altdesktop/playerctl
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: gobject-introspection
+
+name=playerctl
+version=2.4.1
+release=2
+source=($name-$version.tar.gz::https://github.com/altdesktop/playerctl/archive/v$version.tar.gz)
+
+build() {
+	meson setup $name-$version build \
+		-Dgtk-doc=false \
+                -Dbash-completions=true \
+		-Dintrospection=true 
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

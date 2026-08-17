@@ -1,0 +1,24 @@
+# Description: Lightweight video thumbnailer that can be used by file managers
+# URL: https://github.com/dirkvdb/ffmpegthumbnailer
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: cmake ninja ffmpeg libjpeg-turbo libpng
+
+name=ffmpegthumbnailer
+version=2.3.0
+release=1
+source=($name-$version.tar.gz::https://github.com/dirkvdb/ffmpegthumbnailer/archive/refs/tags/v$version.tar.gz)
+
+build() {
+	cmake  -S $name-$version -B build -G Ninja \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DCMAKE_INSTALL_LIBEXECDIR=lib \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+		-DCMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
+		-DENABLE_GIO=ON \
+		-DENABLE_THUMBNAILER=ON \
+		-Wno-dev 
+	cmake --build build
+	DESTDIR=$PKG cmake --install build
+}

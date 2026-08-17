@@ -1,0 +1,27 @@
+# Description: Enhanced version of the Berkeley C shell
+# URL: https://www.tcsh.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: ncurses
+
+name=tcsh
+version=6.24.16
+release=1
+source=(https://astron.com/pub/$name/$name-$version.tar.gz csh.cshrc csh.login)
+
+build() {
+	cd $name-$version
+
+#	sed -i 's|SVID_SOURCE|DEFAULT_SOURCE|g' config/linux
+#	sed -i 's|BSD_SOURCE|DEFAULT_SOURCE|g'  config/linux
+
+	./configure --prefix=/usr --bindir=/bin
+	make
+	make DESTDIR=$PKG install
+
+	ln -v -sf tcsh $PKG/bin/csh
+	ln -v -sf tcsh.1 $PKG/usr/share/man/man1/csh.1
+
+	install -d $PKG/etc
+	install -m 644 $SRC/csh.* $PKG/etc
+
+}

@@ -1,0 +1,16 @@
+# Description: Locate per-dist and per-module shared files
+# URL: https://metacpan.org/dist/File-ShareDir
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: perl-class-inspector
+
+name=perl-file-sharedir
+version=1.118
+release=1
+source=($name-$version.tar.gz::https://cpan.org/modules/by-module/File/File-ShareDir-$version.tar.gz)
+
+build() {
+	cd File-ShareDir-$version
+	perl Makefile.PL INSTALLDIRS=vendor
+	make
+	make DESTDIR=$PKG install
+}

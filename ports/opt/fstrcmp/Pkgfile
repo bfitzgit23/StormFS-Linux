@@ -1,0 +1,17 @@
+# Description: fstrcmp - a library that is used to make fuzzy comparisons of strings and byte arrays
+# URL: http://fstrcmp.sourceforge.net/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: ghostscript
+
+name=fstrcmp
+version=0.7.D001
+release=1
+source=()
+
+build() {
+  cd $name-$version
+  ./configure --prefix=/usr
+  make
+  make DESTDIR=$PKG install
+  rm -fr $PKG/usr/share/doc
+}

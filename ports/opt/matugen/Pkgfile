@@ -1,0 +1,16 @@
+# Description: A material you color generation tool
+# URL: https://github.com/InioX/matugen
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: rust
+
+name=matugen
+version=4.1.0
+release=1
+source=(https://github.com/InioX/matugen/archive/v$version/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+	cargo fetch --locked --target x86_64-unknown-linux-gnu
+	cargo build --frozen --release --all-features
+	install -Dm0755 -t "$PKG/usr/bin/" "target/release/$name"
+}

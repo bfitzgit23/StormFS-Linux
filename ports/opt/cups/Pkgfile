@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: CUPS - Common UNIX Printing System
 # URL: https://openprinting.github.io/cups/
-# Maintainer: Juergen Daubert, jue at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: acl zlib linux-pam gnutls dbus libusb xdg-utils colord 
 # Optional: 
 name=cups

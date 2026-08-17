@@ -1,0 +1,30 @@
+# Description: Modern library for one-way hashing of passwords
+# URL: https://github.com/besser82/libxcrypt/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: glibc
+
+name=libxcrypt-legacy
+version=4.5.2
+release=2
+source=(https://github.com/besser82/${name%-*}/archive/v${version}/${name%-*}-${version}.tar.gz 174c24d6e87aeae631bc0a7bb1ba983cf8def4de.patch)
+
+build() {
+	cd ${name%-*}-${version}
+
+        patch -Np1 -i $SRC/174c24d6e87aeae631bc0a7bb1ba983cf8def4de.patch
+
+	./autogen.sh
+	./configure --prefix=/usr \
+		--disable-static \
+		--enable-hashes=strong,glibc \
+		--enable-obsolete-api=glibc \
+		--disable-failure-tokens
+	make
+	make DESTDIR=$PKG install
+
+	# Remove files provided by libxcrypt
+	rm $PKG/usr/include/crypt.h
+	rm $PKG/usr/lib/libcrypt.so
+	rm -r $PKG/usr/lib/pkgconfig
+	rm -r $PKG/usr/share
+}

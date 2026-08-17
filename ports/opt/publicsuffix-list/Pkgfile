@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: Cross-vendor public domain suffix database
 # URL: https://github.com/publicsuffix/list
-# Maintainer: Tim Biermann, tbier at posteo dot de
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 
 name=publicsuffix-list
 version=20230812.1829.5e6ac3a

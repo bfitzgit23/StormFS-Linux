@@ -1,14 +1,25 @@
-# Description: generates fstab
+# Description: Generates an fstab from the current system
 # URL:         https://github.com/glacion/genfstab
-# Maintainer:  
-# Depends on: git  
+# Maintainer:  Brian Madonna <bmadonnaster@gmail.com>
 
 name=genfstab
 version=1.0
 release=1
-source=(COPYING LICENSE genfstab)
 
-build() {
-	mkdir -p $PKG/usr/bin
-	cp -r genfstab $PKG/usr/bin
+source=(
+    COPYING
+    LICENSE
+    genfstab
+)
+
+pkg_build() {
+    install -d "$PKG/usr/bin"
+    install -m755 "$SRC/genfstab" "$PKG/usr/bin/genfstab"
+
+    install -d "$PKG/usr/share/licenses/$name"
+    install -m644 "$SRC/COPYING" "$PKG/usr/share/licenses/$name/"
+
+    install -d "$PKG/usr/share/doc/$name"
+    install -m644 "$SRC/LICENSE" "$PKG/usr/share/doc/$name/"
 }
+

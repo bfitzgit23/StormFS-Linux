@@ -1,0 +1,17 @@
+# Description: Papirus icon theme
+# URL: https://github.com/PapirusDevelopmentTeam
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: gtk3
+
+name=papirus-icon-theme
+version=20250501
+release=3
+source=(https://github.com/PapirusDevelopmentTeam/papirus-icon-theme/archive/$version/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+	make DESTDIR="$PKG" ICON_THEMES="Papirus Papirus-Dark Papirus-Light" install
+
+	rm -f $PKG/usr/share/icons/Papirus/*/mimetypes/text-x-systemd-unit.svg \
+              $PKG/usr/share/icons/Papirus/*/places/folder*systemd.svg
+}

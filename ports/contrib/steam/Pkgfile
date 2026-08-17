@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: Digital distribution client bootstrap package.
 # URL: https://store.steampowered.com/
-# Maintainer: Tim Biermann, tbier at posteo dot de
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: desktop-file-utils gtk-32 libgcrypt-32 mesa-32 nss-32 openal-32 xdg-user-dirs zenity
 # Optional: pulseaudio-32
 

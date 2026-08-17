@@ -1,0 +1,14 @@
+# Description: A simple alternative to xinit and startx
+# URL: https://github.com/Earnestly/sx
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: xorg-server
+
+name=sx
+version=3.0.0
+release=1
+source=(https://github.com/Earnestly/$name/archive/$version/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+	make PREFIX="/usr" DESTDIR="$PKG" install
+}

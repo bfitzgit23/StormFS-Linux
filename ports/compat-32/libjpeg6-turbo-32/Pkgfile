@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: libjpeg derivative with accelerated baseline JPEG compression and decompression
 # URL: https://libjpeg-turbo.org/
-# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: libjpeg6-turbo
 
 name=libjpeg6-turbo-32

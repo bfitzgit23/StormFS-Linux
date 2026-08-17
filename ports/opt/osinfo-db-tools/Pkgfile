@@ -1,0 +1,18 @@
+# Description: Tools for management of the osinfo database
+# URL: https://libosinfo.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: json-glib libsoup3
+
+name=osinfo-db-tools
+version=1.12.0
+release=1
+source=(https://releases.pagure.org/libosinfo/$name-$version.tar.xz)
+
+build() {
+
+	meson setup $name-$version build
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+
+	rm -r $PKG/usr/share/locale
+}

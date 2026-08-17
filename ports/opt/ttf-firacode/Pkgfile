@@ -1,0 +1,13 @@
+# Description: Monospaced font with programming ligatures
+# URL: https://github.com/tonsky/FiraCode
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=ttf-firacode
+version=6.2
+release=1
+source=($name-$version.zip::https://github.com/tonsky/FiraCode/releases/download/${version}/Fira_Code_v${version}.zip)
+
+build() {
+	mkdir -p "$PKG/usr/share/fonts/firacode"
+	cp "ttf/"*.ttf "$PKG/usr/share/fonts/firacode"
+}

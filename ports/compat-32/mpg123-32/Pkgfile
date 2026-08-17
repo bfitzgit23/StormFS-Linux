@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: Commandline MP3 player
 # URL: https://www.mpg123.de
-# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: mpg123
 # Optional: alsa-lib-32 flac-32 lame-32 libsdl2-32 pulseaudio-32
 

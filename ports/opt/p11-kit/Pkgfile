@@ -1,34 +1,77 @@
-# Description: Provides a way to load and enumerate PKCS #11 (a Cryptographic Token Interface Standard) modules
-# URL:         
-# Maintainer:  Emmett1, emmett1 dot 2miligrams at gmail dot com
-# Depends on:  
-# Optional: libtasn1 make-ca gtk-doc libxslt nss
+# Description: Provides a way to load and enumerate PKCS #11 modules.
+# URL: https://p11-glue.github.io/p11-glue/p11-kit.html
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Depends on: libtasn1 make-ca
+# Optional: libffi nss
+
 name=p11-kit
-version=0.25.5
+version=0.26.4
 release=1
-source=(https://github.com/p11-glue/p11-kit/releases/download/$version/p11-kit-$version.tar.xz)
 
-build() {
-	cd $name-$version
+source=(
+    https://github.com/p11-glue/$name/releases/download/$version/$name-$version.tar.xz
+)
 
-	sed '20,$ d' -i trust/trust-extract-compat &&
-cat >> trust/trust-extract-compat << "EOF"
-# Copy existing anchor modifications to /etc/ssl/local
+build_opt=(
+    --prefix=/usr
+    --libdir=/usr/lib
+    --libexecdir=/usr/libexec
+    --sysconfdir=/etc
+    --buildtype=release
+    -Dtrust_module=enabled
+    -Dtrust_paths=/etc/pki/anchors:/usr/share/pki/anchors
+    -Dsystemd=disabled
+    -Dbash_completion=disabled
+    -Dzsh_completion=disabled
+    -Dgtk_doc=false
+    -Dman=false
+    -Dtest=false
+    -Dpost_install_test=false
+)
+
+pkg_build() {
+    meson setup \
+        p11-build \
+        "${build_opt[@]}"
+
+    ninja -C p11-build
+
+    DESTDIR="$PKG" \
+        ninja -C p11-build install
+}
+
+post_build() {
+    local compat_script="$PKG/usr/libexec/p11-kit/trust-extract-compat"
+
+    # Replace the upstream compatibility helper with the BFS make-ca workflow.
+    install -Dm755 /dev/stdin "$compat_script" <<'EOF'
+#!/bin/sh
+set -e
+
+# Copy locally added and removed trust anchors.
 /usr/libexec/make-ca/copy-trust-modifications
 
-# Update trust stores
+# Rebuild the system certificate stores.
 /usr/sbin/make-ca -r
 EOF
-mkdir p11-build &&
-cd    p11-build &&
 
-meson setup ..            \
-      --prefix=/usr       \
-      --buildtype=release \
-      -Dtrust_paths=/etc/pki/anchors &&
-ninja
-DESTDIR=$PKG ninja install &&
-ln -sfv /usr/libexec/p11-kit/trust-extract-compat \
-        $PKG/usr/bin/update-ca-certificates
-ln -sfv ./pkcs11/p11-kit-trust.so $PKG/usr/lib/libnssckbi.so
+    # Compatibility command expected by some software.
+    mkdir -p "$PKG/usr/bin"
+
+    ln -sfn \
+        ../libexec/p11-kit/trust-extract-compat \
+        "$PKG/usr/bin/update-ca-certificates"
+
+    # Allow NSS-based applications to use the p11-kit trust module.
+    mkdir -p "$PKG/usr/lib"
+
+    ln -sfn \
+        ./pkcs11/p11-kit-trust.so \
+        "$PKG/usr/lib/libnssckbi.so"
+
+    find "$PKG" -type f -name '*.la' -delete
+
+    rm -rf \
+        "$PKG/usr/share/doc" \
+        "$PKG/usr/share/gtk-doc"
 }

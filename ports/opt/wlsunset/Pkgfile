@@ -1,0 +1,15 @@
+# Description: Day/night gamma adjustments for Wayland compositors
+# URL: https://sr.ht/~kennylevinsen/wlsunset
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: wayland-protocols scdoc
+
+name=wlsunset
+version=0.4.0
+release=1
+source=($name-$version.tar.gz::https://git.sr.ht/~kennylevinsen/wlsunset/archive/$version.tar.gz)
+
+build() {
+	meson setup $name-$version build 
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

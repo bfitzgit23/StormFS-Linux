@@ -1,0 +1,15 @@
+# Description: The cross-shell prompt for astronauts
+# URL: https://starship.rs/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: rust openssl
+
+name=starship
+version=1.25.1
+release=1
+source=(https://github.com/${name}/${name}/archive/v${version}/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+	cargo build --release --locked
+	install -Dm755 "target/release/starship" "$PKG/usr/bin/$name"
+}

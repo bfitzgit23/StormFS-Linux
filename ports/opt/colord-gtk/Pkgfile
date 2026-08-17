@@ -1,3 +1,5 @@
+# Add your top line text here
+# Your line to add at the top here
 # Depends on: colord gtk3 glib gobject-introspection gtk4 vala
 
 name=colord-gtk

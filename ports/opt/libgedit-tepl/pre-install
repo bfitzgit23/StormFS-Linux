@@ -1,0 +1,4 @@
+#!/bin/sh
+
+# libgedit-tepl is tepl replacement
+scratch isinstalled tepl && scratch remove -y tepl

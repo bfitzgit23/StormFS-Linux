@@ -1,0 +1,19 @@
+# Description: A multi-platform library for OpenGL, OpenGL ES, Vulkan, window and input
+# URL: https://github.com/glfw/glfw
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: cmake ninja glu
+
+name=glfw
+version=3.4
+release=1
+source=($name-$version.tar.gz::https://github.com/$name/$name/archive/$version.tar.gz)
+
+build() {
+
+	cmake -S $name-$version -B build -G Ninja \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DBUILD_SHARED_LIBS=On
+	cmake --build build
+	DESTDIR=$PKG cmake --install build
+}

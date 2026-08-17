@@ -1,0 +1,35 @@
+# Description: Implementation of Windows DLL's and core
+# URL: https://dl.winehq.org/wine
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: gst-plugins-bad gst-plugins-good gst-plugins-ugly lcms2 libunwind libva libxcomposite libxcursor libxinerama libxkbcommon mingw-w64-gcc mpg123 opencl-headers pulseaudio v4l-utils vkd3d x265
+
+name=wine
+version=11.11
+release=1
+source=(https://dl.winehq.org/wine/source/${version%%.*}.x/$name-$version.tar.xz)
+
+build() {
+	cd $name-$version
+
+	mkdir build64 
+	cd build64
+
+	../configure \
+		--prefix=/usr \
+		--libdir=/usr/lib \
+		--with-x \
+		--with-wayland \
+                --with-gstreamer \
+                --with-freetype \
+		--enable-win64 \
+		--enable-archs=i386,x86_64
+	make
+	make DESTDIR=$PKG install
+
+	rm -r $PKG/usr/share/man/??.UTF-8
+
+	# Exclude libraries for revdep
+	install -d $PKG/etc/revdep.d
+	echo "/usr/lib/wine/x86_64-unix/" > $PKG/etc/revdep.d/$name.conf
+	echo "/usr/lib/wine/i386-unix/" >> $PKG/etc/revdep.d/$name.conf
+}

@@ -1,13 +1,14 @@
+# Add your top line text here
+# Your line to add at the top here
 name=linux-headers
-version=6.16.4
+version=7.1.8
 release=1
-source=(https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-$version.tar.xz)
+source=(https://cdn.kernel.org/pub/linux/kernel/v7.x/linux-$version.tar.xz)
 
 bootstrap_build() {
 	make mrproper
 	make headers
-	find usr/include -name '.*' -delete
-	rm usr/include/Makefile
+	find usr/include -type f ! -name '*.h' -delete
 	mkdir -p $TOOLS/include
 	cp -rv usr/include/* $TOOLS/include
 }
@@ -15,8 +16,7 @@ bootstrap_build() {
 pkg_build() {
 	make mrproper
 	make headers
-	find usr/include -name '.*' -delete
-	rm usr/include/Makefile
+	find usr/include -type f ! -name '*.h' -delete
 	mkdir -p $PKG/usr/include
 	cp -rv usr/include/* $PKG/usr/include
 }

@@ -1,0 +1,23 @@
+# Description: Securely and easily download, verify, install, and launch Tor Browser in Linux
+# URL: https://github.com/torproject/torbrowser-launcher
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: dbus-glib gnupg hicolor-icon-theme python3-pysocks python3-requests tor
+
+name=tor-browser-launcher
+version=0.3.9
+release=1
+source=(torbrowser-launcher-$version.tar.gz::https://github.com/torproject/torbrowser-launcher/archive/v$version.tar.gz pyproject.toml)
+
+build() {
+	cd torbrowser-launcher-$version
+
+	[ ! -e pyproject.toml ] # remove our pyproject.toml if upstream already has one
+	cp ../pyproject.toml .
+
+	python3 -m build --wheel --no-isolation
+	python3 -m installer --destdir=$PKG dist/*.whl
+	
+	install -d $PKG/etc/apparmor.d
+	cp -a apparmor/* $PKG/etc/apparmor.d
+	rm $PKG/etc/apparmor.d/license.txt
+}

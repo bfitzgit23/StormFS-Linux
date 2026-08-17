@@ -1,10 +1,12 @@
+# Add your top line text here
+# Your line to add at the top here
 # Depends on: kde-frameworks-6
 
 name=dolphin
 version=25.04.0
 release=1
 source=(https://download.kde.org/stable/release-service/${version}/src/$name-$version.tar.xz)
-build_opt=-D CMAKE_INSTALL_PREFIX=$KF6_PREFIX \
-      -D CMAKE_BUILD_TYPE=Release         \
-      -D BUILD_TESTING=OFF                \
-      -W no-dev .."
+build_opt="-D CMAKE_INSTALL_PREFIX=$KF6_PREFIX
+           -D CMAKE_BUILD_TYPE=Release
+           -D BUILD_TESTING=OFF
+           -W no-dev .."

@@ -1,0 +1,27 @@
+# Description: The user-friendly command line shell
+# URL: https://fishshell.com/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: cmake ninja gettext pcre2 python3-babel rust
+
+name=fish
+version=4.8.0
+release=1
+source=(https://github.com/fish-shell/fish-shell/releases/download/$version/$name-$version.tar.xz)
+
+build() {
+	cmake -S $name-$version -B build -G Ninja \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DCMAKE_INSTALL_LIBEXECDIR=lib \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+		-DCMAKE_INSTALL_SYSCONFDIR=/etc \
+		 -DWITH_DOCS=OFF \
+		-DFISH_USE_SYSTEM_PCRE2=ON \
+		-DWITH_MESSAGE_LOCALIZATION=ON \
+    		-Wno-dev 
+	cmake --build build
+	DESTDIR=$PKG cmake --install build
+
+	rm -f $PKG/usr/share/fish/functions/*systemd* $PKG/usr/share/fish/completions/systemd*
+}

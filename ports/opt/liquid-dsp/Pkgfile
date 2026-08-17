@@ -1,0 +1,18 @@
+# Description: Opensource signal processing library for software-defined radios
+# URL: http://liquidsdr.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=liquid-dsp
+version=1.8.0
+release=1
+source=(https://github.com/jgaeddert/$name/archive/v$version/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+
+	./bootstrap.sh
+	./configure --prefix=/usr
+
+	make
+	make DESTDIR=$PKG install
+}

@@ -1,3 +1,5 @@
+# Add your top line text here
+# Your line to add at the top here
 # Depends on: poppler-data fontconfig gobject-introspection boost cairo lcms2 libjpeg-turbo libpng nss openjpeg2 gpgme qt6
 
 name=poppler

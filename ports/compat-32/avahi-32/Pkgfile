@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: A system which facilitates service discovery on a local network via the mDNS/DNS-SD protocol suite
 # URL: https://www.avahi.org/
-# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: avahi dbus-32 gdbm-32 glib-32 libcap-32 libdaemon-32 libevent-32
 
 name=avahi-32

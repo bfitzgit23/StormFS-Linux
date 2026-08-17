@@ -1,0 +1,27 @@
+# Description: SPICE server
+# URL: https://www.spice-space.org
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: pixman opus libjpeg-turbo lz4 meson spice-protocol libcacard python3-pyparsing python3-six gdk-pixbuf glib-networking cyrus-sasl asciidoc
+
+name=spice
+version=0.16.0
+release=1
+source=(https://www.spice-space.org/download/releases/spice-server/$name-$version.tar.bz2)
+
+build() {
+	cd $name-$version
+
+	sed -i "s/if not version_info.contains('git')/if version_info.length() >= 4/" server/meson.build
+	sed -i "/meson-dist/d" meson.build
+
+	meson setup $name-$version build \
+		-Dgstreamer=1.0 \
+		-Dlz4=true \
+		-Dsasl=true \
+		-Dopus=enabled \
+		-Dmanual=false \
+		-Dsmartcard=disabled  \
+		-Dtests=false
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

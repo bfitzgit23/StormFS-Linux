@@ -1,0 +1,21 @@
+# Description: Cross-platform video editor
+# URL: https://www.shotcut.org
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: mlt qt6-websockets qt6-multimedia qt6-translations fftw qt6-charts
+
+name=shotcut
+version=26.6.25
+release=1
+source=($name-$version.tar.gz::https://github.com/mltframework/shotcut/archive/v${version}.tar.gz)
+
+build() {
+	cmake -S $name-$version -B build -G Ninja \
+        	-D CMAKE_BUILD_TYPE=Release \
+	        -D CMAKE_INSTALL_PREFIX:PATH=/usr \
+	        -D CMAKE_C_FLAGS_RELEASE="$CFLAGS -DNDEBUG" \
+	        -D CMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS -DNDEBUG -DHOSTCUT_NOUPGRADE" \
+		-D SHOTCUT_VERSION=$version \
+		-DCMAKE_POLICY_VERSION_MINIMUM=3.5
+	cmake --build build
+	DESTDIR=$PKG cmake --install build
+}

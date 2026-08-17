@@ -1,0 +1,15 @@
+# Description: Gtk+ based image viewer
+# URL: http://geeqie.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: gtk3 meson
+
+name=geeqie
+version=2.9
+release=1
+source=(https://github.com/BestImageViewer/geeqie/releases/download/v$version/$name-$version.tar.xz)
+
+build() {
+	meson setup $name-$version build
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

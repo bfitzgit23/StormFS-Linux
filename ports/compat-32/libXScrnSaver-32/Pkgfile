@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: X Screen Saver extension client library
 # URL: http://xorg.freedesktop.org
-# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: libXext-32 libXScrnSaver 
 
 name=libXScrnSaver-32

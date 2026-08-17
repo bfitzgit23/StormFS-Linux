@@ -1,0 +1,15 @@
+# Description: Library that contains several hash-map implementations, including implementations that optimize for space or speed.
+# URL: https://github.com/sparsehash/sparsehash
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=sparsehash
+version=2.0.4
+release=1
+source=(https://github.com/$name/$name/archive/$name-$version.tar.gz)
+
+build() {
+	cd $name-$name-$version
+	./configure --prefix=/usr
+	make
+	make DESTDIR=$PKG install
+}

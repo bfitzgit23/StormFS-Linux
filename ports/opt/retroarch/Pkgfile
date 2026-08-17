@@ -1,0 +1,25 @@
+# Description: Reference frontend for the libretro API
+# URL: http://www.libretro.com/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: qt5 openal pulseaudio dbus libusb libxv v4l-utils ffmpeg
+
+name=retroarch
+version=1.22.2
+release=1
+source=(https://github.com/libretro/RetroArch/archive/v$version/$name-$version.tar.gz)
+
+build() {
+	cd RetroArch-$version
+
+	./configure \
+		--prefix=/usr \
+		--enable-builtinmbedtls \
+		--disable-builtinzlib \
+		--disable-cg \
+		--disable-jack \
+		--disable-oss \
+		--disable-sdl \
+		--enable-dbus 
+	make
+	make DESTDIR=$PKG install
+}

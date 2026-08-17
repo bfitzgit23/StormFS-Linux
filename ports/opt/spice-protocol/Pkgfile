@@ -1,0 +1,15 @@
+# Description: Headers for SPICE protocol
+# URL: https://spice-space.org
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: meson
+
+name=spice-protocol
+version=0.14.5
+release=1
+source=($name-$version.tar.gz::https://gitlab.freedesktop.org/spice/spice-protocol/-/archive/v$version/${name}-v$version.tar.gz)
+
+build() {
+	meson setup $name-$version build
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

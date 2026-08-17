@@ -1,0 +1,36 @@
+!/bin/sh
+
+[ -f /var/lib/scratchpkg/db/sysvinit ] && . /etc/rc.subr || . /etc/sinit/rc.subr
+
+USER="spamd"
+GROUP="spamd"
+PIDFILE="/run/spamd.pid"
+PROG="/usr/bin/spamd"
+ARGS="--daemonize --max-children=5 --pidfile $PIDFILE --username=$USER --groupname=$GROUP --socketpath=/run/spamd.sock --socketgroup=$GROUP --socketmode=660 --allow-tell --create-prefs --helper-home-dir --paranoid"
+
+case $1 in
+start)
+	install -d -m 755 -o $USER -g $GROUP $RUNDIR || exit 1
+	start_daemon  $PROG $ARGS
+	;;
+stop)
+	stop_daemon $PROG
+	;;
+restart)
+	$0 stop
+	$0 start
+	;;
+status)
+	status_daemon $PROG
+	case $? in
+	0) echo "$PROG running with pid: $(cat $PIDFILE)" ;;
+	1) echo "$PROG not running, stale pidfile: $PIDFILE" ;;
+	3) echo "$PROG not running" ;;
+	4) echo "Unable to determine program status" ;;
+	esac
+	;;
+*)
+	echo "usage: $0 [start|stop|restart|status]"
+	;;
+esac
+

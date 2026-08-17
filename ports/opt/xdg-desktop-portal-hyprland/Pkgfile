@@ -1,0 +1,26 @@
+# Description: xdg-desktop-portal backend for wlroots
+# URL: https://github.com/fufexan/xdg-desktop-portal-hyprland
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: hyprland inih pipewire sdbus-cpp
+
+name=xdg-desktop-portal-hyprland
+version=1.3.12
+release=1
+source=($name-$version.tar.gz::https://github.com/hyprwm/$name/archive/v$version/$name-$version.tar.gz https://github.com/hyprwm/hyprland-protocols/archive/$_protocolver.tar.gz)
+
+build() {
+
+    cd $name-$version/subprojects
+
+	rm -rf hyprland-protocols sdbus-cpp
+	ln -sfT $SRC/hyprland-protocols-$_protocolver hyprland-protocols
+    cd ..
+
+	cmake -B build \
+		-D CMAKE_INSTALL_PREFIX=/usr \
+		-D CMAKE_INSTALL_LIBEXECDIR=/usr/lib \
+		-D CMAKE_BUILD_TYPE=Release
+	cmake --build build
+	DESTDIR=$PKG cmake --install build
+	rm -rf $PKG/usr/lib/systemd
+}

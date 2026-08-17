@@ -1,0 +1,32 @@
+# Description: X.Org imake program and related utilities
+# URL: https://xorg.freedesktop.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: pkgconf xorgproto font-util
+
+name=imake
+version=1.0.11
+release=1
+source=(https://xorg.freedesktop.org/archive/individual/util/imake-$version.tar.xz https://xorg.freedesktop.org/releases/individual/util/gccmakedep-1.0.4.tar.xz https://xorg.freedesktop.org/releases/individual/util/lndir-1.0.5.tar.xz https://xorg.freedesktop.org/releases/individual/util/makedepend-1.0.9.tar.xz https://xorg.freedesktop.org/releases/individual/util/xorg-cf-files-1.0.8.tar.xz linuxconfig.patch)
+
+build() {
+	cd xorg-cf-files-1.0.8
+	patch -p1 -i ../linuxconfig.patch
+	cd ..
+	for i in *; do
+	if [ -d "${i}" ]; then
+	cd "${i}"
+	autoreconf -fi
+	./configure --prefix=/usr --mandir=/usr/share/man
+	make
+	cd ..
+	fi
+	 done
+
+	for i in *; do
+	if [ -d "${i}" ]; then
+	cd  "${i}"
+	make DESTDIR=$PKG install
+	cd ..
+	fi
+	done
+}

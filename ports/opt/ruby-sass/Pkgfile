@@ -1,0 +1,23 @@
+# Description: Sass makes CSS fun again
+# URL: https://sass-lang.com/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: ruby-yard ruby-maruku
+
+name=ruby-sass
+version=3.7.4
+release=3
+source=(https://rubygems.org/downloads/${name#*-}-$version.gem)
+
+build() {
+	_gemdir="$(gem env gemdir)"
+
+	gem install \
+		--ignore-dependencies \
+		--no-user-install \
+		--no-document \
+		-i "$PKG/$_gemdir" \
+		-n "$PKG"/usr/bin \
+		${name#*-}-$version.gem
+
+	rm "$PKG/$_gemdir/cache/${name#*-}-$version.gem"
+}

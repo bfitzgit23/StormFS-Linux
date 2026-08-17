@@ -1,0 +1,21 @@
+# Description: X.org 75dpi fonts
+# URL: https://xorg.freedesktop.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: util-macros mkfontscale font-util bdftopcf
+
+name=font-adobe-75dpi
+version=1.0.4
+release=1
+source=(https://www.x.org/archive/individual/font/$name-$version.tar.xz)
+
+build() {
+	cd $name-$version
+
+	./configure \
+		--prefix=/usr \
+		--sysconfdir=/etc \
+		--localstatedir=/var \
+		--disable-static
+	make
+	make DESTDIR=$PKG install
+}

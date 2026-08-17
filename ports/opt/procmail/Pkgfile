@@ -1,0 +1,17 @@
+# Description: Mail processing and sorting program
+# URL: https://github.com/BuGlessRB/procmail
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=procmail
+version=3.24
+release=1
+source=(http://ftp.osuosl.org/pub/blfs/conglomeration/${name}/${name}-${version}.tar.gz gcc14.patch)
+
+build() {
+    cd ${name}-${version}
+
+    patch -Np1 -i $SRC/gcc14.patch
+
+    yes n | make CFLAGS0="${CFLAGS} ${LDFLAGS}" LOCKINGTEST="/tmp ."
+    make BASENAME=${PKG}/usr MANDIR=${PKG}/usr/share/man install
+}

@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: Python interpreter, version 2.7
 # URL:         https://www.python.org/
-# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: bzip2-32 db-32 gdbm-32 libtirpc-32 openssl-32 python sqlite3-32 zlib-32
 
 name=python-32

@@ -1,0 +1,22 @@
+# Description: Mozilla's CA cert bundle in PEM format
+# URL: https://metacpan.org/release/Mozilla-CA/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: perl
+
+name=perl-mozilla-ca
+version=20250602
+release=1
+source=($name-$version.tar.gz::https://search.cpan.org/CPAN/authors/id/L/LW/LWP/Mozilla-CA-$version.tar.gz)
+
+build() {
+
+  # Use system CA store. Replacing the copy in the source tree so the test suite is actually run against it.
+	ln -sf /etc/ssl/certs/ca-certificates.crt Mozilla-CA-$version/lib/Mozilla/CA/cacert.pem
+
+
+	cd Mozilla-CA-$version
+	PERL_MM_USE_DEFAULT=1 perl -I. Makefile.PL INSTALLDIRS=vendor
+	make
+	make DESTDIR=$PKG install
+	find $PKG \( -name perllocal.pod -o -name .packlist \) -delete
+}

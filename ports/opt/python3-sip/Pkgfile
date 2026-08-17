@@ -1,0 +1,18 @@
+# Description: A tool that makes it easy to create Python bindings for C and C++ libraries
+# URL: https://www.riverbankcomputing.com/software/sip/intro
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: python3-setuptools python3-packaging python3-gpep517
+
+name=python3-sip
+version=6.15.3
+release=1
+source=($name-$version.tar.gz::https://pypi.python.org/packages/source/s/sip/sip-$version.tar.gz)
+
+build() {
+	cd sip-$version
+	gpep517 build-wheel \
+		--wheel-dir .dist \
+		--output-fd 3 3>&1 >&2
+	python3 -m installer -d $PKG \
+		.dist/sip-*.whl
+}

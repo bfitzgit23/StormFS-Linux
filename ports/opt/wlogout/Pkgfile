@@ -1,0 +1,15 @@
+# Description: A wayland based logout menu
+# URL: https://github.com/ArtsyMacaw/wlogout
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: gtk-layer-shell scdoc
+
+name=wlogout
+version=1.2.2
+release=1
+source=(https://github.com/ArtsyMacaw/wlogout/archive/$version/$name-$version.tar.gz)
+
+build(){
+	meson setup $name-$version build 
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

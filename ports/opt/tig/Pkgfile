@@ -1,0 +1,17 @@
+# Description: Text-mode interface for git
+# URL: https://jonas.github.io/tig/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: ncurses
+
+name=tig
+version=2.6.1
+release=1
+source=(https://github.com/jonas/$name/releases/download/$name-$version/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+
+    ./configure --prefix=/usr --sysconfdir=/etc --sbindir=/usr/sbin --disable-nfsv4 --disable-gss
+    make
+	make PREFIX=$PKG/usr DESTDIR=$PKG install
+}

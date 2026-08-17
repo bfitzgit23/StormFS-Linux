@@ -1,0 +1,14 @@
+# Description: High number of extra glyphs from popular iconic fonts
+# URL: https://github.com/ryanoasis/nerd-fonts
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=ttf-nerd-fonts-symbols
+version=3.4.0
+release=1
+source=(SymbolsNerdFont-Regular-$version.ttf::https://raw.githubusercontent.com/ryanoasis/nerd-fonts/v$version/patched-fonts/NerdFontsSymbolsOnly/SymbolsNerdFont-Regular.ttf SymbolsNerdFontMono-Regular-$version.ttf::https://raw.githubusercontent.com/ryanoasis/nerd-fonts/v$version/patched-fonts/NerdFontsSymbolsOnly/SymbolsNerdFontMono-Regular.ttf 10-nerd-font-symbols-$version.conf::https://raw.githubusercontent.com/ryanoasis/nerd-fonts/v$version/10-nerd-font-symbols.conf)
+
+build() {
+	install -Dm644 $SRC/SymbolsNerdFont-Regular-$version.ttf $PKG/usr/share/fonts/TTF/SymbolsNerdFont-Regular.ttf
+	install -Dm644 $SRC/SymbolsNerdFontMono-Regular-$version.ttf $PKG/usr/share/fonts/TTF/SymbolsNerdFontMono-Regular.ttf
+	install -Dm644 $SRC/10-nerd-font-symbols-$version.conf $PKG/usr/share/fontconfig/conf.avail/10-nerd-font-symbols.conf
+}

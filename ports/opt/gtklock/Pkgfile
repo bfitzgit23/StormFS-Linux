@@ -1,0 +1,15 @@
+# Description: GTK-based lockscreen for Wayland
+# URL: https://github.com/jovanlanik/gtklock
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: linux-pam gtk-session-lock scdoc
+
+name=gtklock
+version=4.0.0
+release=1
+source=($name-$version.tar.gz::https://github.com/jovanlanik/gtklock/archive/refs/tags/v$version.tar.gz)
+
+build() {
+	meson setup $name-$version build
+	meson compile -C build
+        DESTDIR=$PKG meson install -C build
+}

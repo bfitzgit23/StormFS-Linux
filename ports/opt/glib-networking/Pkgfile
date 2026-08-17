@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: Network-related giomodules for glib
 # URL: https://git.gnome.org/browse/glib-networking/
-# Maintainer: CRUX System Team, core-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: gnutls gsettings-desktop-schemas
 # Optional : make-ca
 

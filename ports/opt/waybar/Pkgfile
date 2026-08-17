@@ -1,0 +1,22 @@
+# Description: Highly customizable Wayland bar for Sway and Wlroots based compositors
+# URL: https://github.com/Alexays/Waybar
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: gtkmm3 jsoncpp spdlog pulseaudio libnl libappindicator libmpdclient playerctl gtk-layer-shell
+
+name=waybar
+version=0.15.0
+release=1
+source=($name-$version.tar.gz::https://github.com/Alexays/Waybar/archive/$version.tar.gz)
+
+build() {
+	meson setup $name-$version build \
+		-Dcpp_std=c++20 \
+		-Dexperimental=true \
+		-Dcava=disabled \
+		-Dlogind=disabled \
+		-Dman-pages=disabled \
+		-Dsystemd=disabled \
+		-Dtests=disabled 
+          meson compile -C build
+          DESTDIR=$PKG meson install --no-rebuild -C build 
+}

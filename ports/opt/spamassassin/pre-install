@@ -1,0 +1,6 @@
+#!/bin/sh
+
+getent group spamd >/dev/null || groupadd -r spamd
+
+getent passwd spamd >/dev/null || \
+useradd useradd -r -M -g spamd -G spamd -d /var/empty -s /sbin/nologin spamd && passwd --lock spamd

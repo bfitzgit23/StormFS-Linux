@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=StormFS Port Manager
+GenericName=Package Manager
+Comment=Manage packages and ports for StormFS
+Icon=system-software-install
+Type=Application
+Categories=System;
+Exec=/usr/bin/stormfs-portmanager
+StartupNotify=true
+Terminal=false

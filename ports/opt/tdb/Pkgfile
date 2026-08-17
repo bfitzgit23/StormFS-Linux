@@ -1,0 +1,17 @@
+# Description: Trivial DataBase similar to gdbm
+# URL: https://tdb.samba.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: python3
+
+name=tdb
+version=1.4.15
+release=1
+source=(https://www.samba.org/ftp/$name/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+
+	./configure --prefix=/usr
+	make
+	make DESTDIR=$PKG install
+}

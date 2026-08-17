@@ -1,7 +1,9 @@
+# Add your top line text here
+# Your line to add at the top here
 name=binutils
-version=2.45
+version=2.47
 release=1
-source=(https://sourceware.org/pub/$name/releases/$name-$version.tar.xz)
+source=(https://sourceware.org/pub/binutils/releases/binutils-$version.tar.xz)
 
 bootstrap_build() {
 	mkdir -v build
@@ -15,11 +17,12 @@ bootstrap_build() {
 			--disable-nls \
 			--disable-werror \
 			--enable-gprofng=no \
-			--with-lib-path=$TOOLS/lib:$TOOLS/lib32:$TOOLS/libx32
+			--enable-new-dtags \
+			--enable-default-hash-style=gnu \
+			--with-lib-path=$TOOLS/lib:$TOOLS/lib32
 		make
 		mkdir -v $TOOLS/lib && ln -sv lib $TOOLS/lib64
 		mkdir -p $TOOLS/lib32
-		mkdir -p $TOOLS/libx32
 		make install
 	elif [ "$tcpkg" = binutils-pass2 ]; then
 		CC=$LFS_TGT-gcc \
@@ -27,15 +30,19 @@ bootstrap_build() {
 		RANLIB=$LFS_TGT-ranlib \
 		../configure \
 			--prefix=$TOOLS \
+			--enable-shared \
 			--disable-nls \
 			--disable-werror \
+			--enable-64-bit-bfd \
+			--enable-new-dtags \
+    			--enable-default-hash-style=gnu \
 			--with-lib-path=$TOOLS/lib \
 			--enable-gprofng=no \
 			--with-sysroot
-		make || make -j1
+		make CFLAGS="-O2 -DPATH_MAX=4096" || make -j1
 		make install
 		make -C ld clean
-		make -C ld LIB_PATH=/usr/lib:/lib:/usr/lib32:/usr/libx32
+		make -C ld LIB_PATH=/usr/lib:/lib:/usr/lib32
 		cp -v ld/ld-new $TOOLS/bin
 	fi
 }
@@ -55,7 +62,7 @@ pkg_build() {
 		--disable-werror \
 		--with-system-zlib \
 		--enable-multilib \
-		--with-lib-path=/usr/lib:/lib:/usr/lib32:/usr/libx32
+		--with-lib-path=/usr/lib:/lib:/usr/lib32
 	make DESTDIR=$PKG tooldir=/usr
 	make DESTDIR=$PKG tooldir=/usr install
 }

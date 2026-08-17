@@ -1,0 +1,15 @@
+# Description: Skins for SMPlayer
+# URL: https://www.smplayer.info/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: smplayer
+
+name=smplayer-skins
+version=20.11.0
+release=1
+source=(https://downloads.sourceforge.net/smplayer/$name-$version.tar.bz2)
+
+build() {
+	cd $name-$version
+	make PREFIX=/usr
+	make DESTDIR=$PKG PREFIX=/usr install
+}

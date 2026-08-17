@@ -1,0 +1,20 @@
+# Description: An interactive post-processing tool for scanned pages
+# URL: https://github.com/ScanTailor-Advanced/scantailor-advanced
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: qt6-tools boost qt6-svg hicolor-icon-theme libpng libtiff
+
+name=scantailor-advanced
+version=1.2.1
+release=1
+source=(https://github.com/ScanTailor-Advanced/scantailor-advanced/archive/v$version/$name-$version.tar.gz)
+
+build() {
+	sed -e '/native/d' -i $name-$version/CMakeLists.txt
+
+	cmake -B build -S $name-$version -DCMAKE_INSTALL_PREFIX=/usr
+	cmake --build build
+	DESTDIR="$PKG/" cmake --install build
+
+	install -Dm0644 "$name-$version/src/resources/appicon.svg" "$PKG/usr/share/icons/hicolor/scalable/apps/scantailor-advanced.svg"
+	install -Dm0644 "$name-$version/src/resources/unix/scantailor.desktop.in" "$PKG/usr/share/applications/scantailor.desktop"
+}

@@ -1,0 +1,20 @@
+# Description: Launch shell commands with your keyboard or your mouse under X
+# URL: https://www.nongnu.org/xbindkeys/xbindkeys.html
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libx11 guile
+
+name=xbindkeys
+version=1.8.7
+release=2
+source=(http://www.nongnu.org/$name/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+	
+	# pick up new guile versions
+	autoreconf -vi
+
+	./configure --prefix=/usr
+	make
+	make DESTDIR=$PKG install
+}

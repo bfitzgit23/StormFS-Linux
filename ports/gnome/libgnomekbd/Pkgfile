@@ -1,0 +1,15 @@
+# Description: Keyboard management library
+# URL: https://gitlab.gnome.org/GNOME/libgnomekbd
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libxklavier gtk3 dconf gobject-introspection
+
+name=libgnomekbd
+version=3.28.1
+release=1
+source=(https://gitlab.gnome.org/GNOME/libgnomekbd/-/archive/$version/$name-$version.tar.gz)
+
+build() {
+	meson setup $name-$version build
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

@@ -1,10 +1,12 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: A utility to show the full path of commands
 # URL:         https://savannah.gnu.org/projects/which
-# Maintainer:  Emmett1, emmett1 dot 2miligrams at gmail dot com
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on:  
 
 name=which
-version=2.23
+version=2.25
 release=1
 source=(https://ftp.gnu.org/gnu/$name/$name-$version.tar.gz)
 

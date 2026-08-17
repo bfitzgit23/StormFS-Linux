@@ -1,0 +1,28 @@
+# Description: Basic, good-looking task manager for WMs
+# URL: https://gitlab.com/o9000/tint2
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: gtk3 imlib2 startup-notification cmake ninja libxdamage libxcomposite librsvg
+
+name=tint2
+version=17.1.3
+release=1
+source=(https://gitlab.com/nick87720z/tint2/-/archive/$version/$name-$version.tar.gz glib2.patch tint2conf-lm.patch)
+
+build() {
+
+	patch -Np1 -d $name-$version -i $SRC/glib2.patch
+    patch -Np1 -d $name-$version -i $SRC/tint2conf-lm.patch
+
+	cmake -S $name-$version -B build -G Ninja \
+	  -DCMAKE_INSTALL_PREFIX=/usr \
+	  -DCMAKE_INSTALL_LIBDIR=lib \
+	  -DCMAKE_INSTALL_LIBEXECDIR=lib \
+	  -DCMAKE_BUILD_TYPE=Release \
+	  -DCMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+	  -DCMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
+      -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+	  -Wno-dev 
+	cmake --build build
+	DESTDIR="$PKG" cmake --install build
+
+}

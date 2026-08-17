@@ -1,20 +1,16 @@
-# Description: Various utilities for use with the FAT family of file systems
-# URL:         
-# Maintainer:  Emmett1, emmett1 dot 2miligrams at gmail dot com
-# Depends on:  
+# Description: Tools for creating and checking DOS/FAT filesystems
+# URL:         https://github.com/dosfstools/dosfstools
+# Maintainer:  Brian Madonna <bmadonnaster@gmail.com>
 
 name=dosfstools
 version=4.2
 release=1
-source=(https://github.com/dosfstools/dosfstools/releases/download/v$version/dosfstools-$version.tar.gz)
+source=(https://github.com/dosfstools/dosfstools/releases/download/v$version/$name-$version.tar.gz)
 
-build() {
-	cd $name-$version
+build_opt="--prefix=/usr
+           --sbindir=/sbin
+           --enable-compat-symlinks"
 
-	./configure --prefix=/usr            \
-            --enable-compat-symlinks \
-            --mandir=/usr/share/man  \
-            --docdir=/usr/share/doc/dosfstools-4.2 &&
-make
-        make DESTDIR=$PKG install
+post_build() {
+    rm -rf "$PKG/usr/share/doc"
 }

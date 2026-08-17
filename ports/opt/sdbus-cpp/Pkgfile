@@ -1,0 +1,22 @@
+# Description: Unofficial, high-level C++ dbus bindings
+# URL: https://github.com/Kistler-Group/sdbus-cpp/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: basu gtest ninja
+
+name=sdbus-cpp
+version=2.3.1
+release=1
+source=($name-$version.tar.gz::https://github.com/Kistler-Group/sdbus-cpp/archive/v$version.tar.gz)
+
+build() {
+	cmake -S $name-$version -B build -G Ninja \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
+		-DCMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+		-DBUILD_SHARED_LIBS=True \
+		-Wno-dev
+	cmake --build build
+	DESTDIR=$PKG cmake --install build
+}

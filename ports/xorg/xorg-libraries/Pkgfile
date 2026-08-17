@@ -1,0 +1,13 @@
+# Description: Meta port for Xorg libraries
+# URL: https://xorg.freedesktop.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: xtrans libx11 libxext libfs libice libsm libxscrnsaver libxt libxmu libxpm libxaw libxfixes libxcomposite libxrender libxcursor libxdamage libfontenc libxfont2 libxft libxi libxinerama libxrandr libxres libxtst libxv libxvmc libxxf86vm libpciaccess libxkbfile libxshmfence
+
+name=xorg-libraries
+version=1.0
+release=2
+source=()
+
+build() {
+	mkdir -pv $PKG/etc
+}

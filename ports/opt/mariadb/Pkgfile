@@ -1,0 +1,45 @@
+# Description: SQL database server, drop-in replacement for MySQL
+# URL: https://mariadb.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: fmt libaio pcre2 linux-pam
+
+name=mariadb
+version=12.3.2
+release=1
+source=(https://downloads.mariadb.org/interstitial/$name-$version/source/$name-$version.tar.gz mariadb.rc mariadb.pam)
+
+build() {
+	cmake -S $name-$version -B build -G Ninja\
+		-D CMAKE_BUILD_TYPE=Release \
+		-D INSTALL_LAYOUT=RPM \
+		-D INSTALL_LIBDIR=lib \
+		-D INSTALL_PLUGINDIR=lib/mysql/plugin \
+		-D INSTALL_PCDIR=/usr/lib/pkgconfig \
+		-D INSTALL_PAMDIR=/lib/security \
+		-D MYSQL_DATADIR=/var/lib/mysql \
+		-D MYSQL_UNIX_ADDR=/run/mysqld/mysqld.sock \
+		-D WITH_READLINE=ON \
+		-D WITH_LIBAIO=ON \
+		-D WITH_ZLIB=system \
+		-D WITH_SSL=system \
+		-D WITH_PCRE=system \
+		-D WITH_LIBFMT=system \
+		-D WITH_SYSTEMD=no \
+		-D WITH_EXTRA_CHARSETS=complex \
+		-D WITH_EMBEDDED_SERVER=ON \
+		-D WITH_UNIT_TESTS=OFF \
+		-D SKIP_TESTS=ON
+	cmake --build build
+	DESTDIR=$PKG cmake --install build
+
+	rm -fr $PKG/etc/init.d  $PKG/etc/logrotate.d $PKG/usr/share/mariadb-test \
+               $PKG/usr/share/doc $PKG/usr/share/groonga*
+	rm -f $PKG/usr/sbin/rcmysql $PKG/usr/share/man/man1/mysql-test-run.pl.1
+
+	find $PKG/usr/share/mariadb/* -type d ! -name english ! -name charsets | xargs rm -rf {} \;
+
+        install -d -m 700 -o mysql -g mysql $PKG/var/lib/mysql
+        install -d -m 700 -o mysql -g mysql $PKG/var/log/mysql
+        install -D -m 755 $SRC/mariadb.rc $PKG/etc/rc.d/mariadb
+        install -D -m 644 $SRC/mariadb.pam $PKG/etc/pam.d/mysql
+}

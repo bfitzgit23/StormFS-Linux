@@ -1,7 +1,9 @@
+# Add your top line text here
+# Your line to add at the top here
 name=readline
-version=8.3.1
+version=8.3
 release=1
-source=(http://ftpmirror.gnu.org/gnu/$name/$name-${version:0:3}.tar.gz)
+source=(https://ftpmirror.gnu.org/readline/readline-$version.tar.gz)
 bootstrap_build() {
        sed -i '/MV.*old/d' Makefile.in
 sed -i '/{OLDSUFF}/c:' support/shlib-install

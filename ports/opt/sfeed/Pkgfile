@@ -1,0 +1,16 @@
+# Description: RSS and Atom parser
+# URL: https://git.codemadness.org/sfeed
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: ncurses
+
+name=sfeed
+version=2.4
+release=1
+source=(https://codemadness.org/releases/$name/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+	sed -i 's|MANPREFIX = ${PREFIX}/man|MANPREFIX = ${PREFIX}/share/man|' Makefile
+	make PREFIX=/usr
+        make PREFIX=/usr DESTDIR=$PKG install
+}

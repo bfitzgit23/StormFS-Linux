@@ -1,0 +1,49 @@
+# Description: Virtualization for Linux on x86 hardware containing virtualization extensions (Intel VT or AMD-V)
+# URL: https://www.qemu.org
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: alsa-lib sdl2-compat coreutils libslirp orc spice usbredir virglrenderer
+
+name=qemu
+version=11.0.1
+release=1
+source=(${name}-$version.tar.gz::https://github.com/qemu/qemu/archive/refs/tags/v$version.tar.gz)
+
+build() {
+	cd $name-$version
+
+	# CBUILD: enable o disable CBUILD_QEMU_OPTS, source CBUILD_QEMU_OPTS from "qemu.opt" file
+	CBUILD_QEMU_OPTS="
+	--enable-spice
+	--enable-tpm
+	"
+	cbuild_options
+
+	./configure \
+		--prefix=/usr \
+		--sysconfdir=/etc \
+		--libdir=/usr/lib/$name \
+		--libexecdir=/usr/lib/$name \
+		--localstatedir=/var \
+		--python=/usr/bin/python3 \
+		--disable-docs \
+		--disable-gtk \
+		--enable-kvm \
+                --enable-modules \
+                --enable-sdl \
+		--enable-slirp \
+		--enable-usb-redir \
+		--enable-vhost-net \
+		--enable-virglrenderer $CBUILD_QEMU_OPTS \
+                --smbd=/usr/bin/smbd \
+                --with-coroutine=ucontext
+	make
+	make DESTDIR=$PKG install
+
+	#cp -r $SRC/man $PKG/usr/share
+
+	install -d $PKG/etc/udev/rules.d/
+	echo 'KERNEL=="kvm", NAME="kvm", OWNER="root", GROUP="kvm", MODE="0660"' > \
+		$PKG/etc/udev/rules.d/60-kvm.rules
+
+	rm -fr $PKG/var/run
+}

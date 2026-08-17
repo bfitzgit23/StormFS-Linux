@@ -1,0 +1,18 @@
+# Description: Libtpms-based TPM emulator with socket, character device, and Linux CUSE interface
+# URL: https://github.com/stefanberger/swtpm
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: expect fuse2 gnutls libseccomp libtpms socat
+
+name=swtpm
+version=0.10.1
+release=1
+source=($name-$version.tar.gz::https://github.com/stefanberger/swtpm/archive/v$version.tar.gz)
+
+build() {
+	cd $name-$version
+
+	autoreconf --install --force
+        ./configure --prefix=/usr --libexecdir=/usr/lib --with-cuse --with-gnutls --with-seccomp 
+        make
+        make DESTDIR=$PKG install
+}

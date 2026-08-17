@@ -1,0 +1,22 @@
+# Description: Fast and lightweight IDE
+# URL: https://www.geany.org
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: gtk3 hicolor-icon-theme desktop-file-utils intltool
+
+name=geany
+version=2.1
+release=1
+source=(http://download.geany.org/$name-$version.tar.bz2)
+
+build() {
+	cd $name-$version
+
+	./configure \
+		--prefix=/usr \
+		--disable-api-docs \
+		--disable-html-docs \
+		--disable-pdf-docs \
+		--disable-nls
+	make
+	make DESTDIR=$PKG install
+}

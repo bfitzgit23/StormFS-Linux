@@ -1,14 +1,28 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: The Libxcrypt package contains a modern library for one-way hashing of passwords.
 # URL:         https://github.com/besser82/libxcrypt/
-# Maintainer:  Emmett1, emmett1 dot 2miligrams at gmail dot com
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on:  
 
 name=libxcrypt
-version=4.4.38
+version=4.5.2
 release=1
-source=(https://github.com/besser82/$name/releases/download/v$version/$name-$version.tar.xz)
+source=(https://github.com/besser82/libxcrypt/releases/download/v$version/libxcrypt-$version.tar.xz)
 build_opt="--enable-hashes=strong,glibc --enable-obsolete-api=no --disable-failure-tokens"
-
+pre_build() {
+sed -i '/strchr/s/const//' lib/crypt-{sm3,gost}-yescrypt.c
+}
 post_build() {
 	rm -f $PKG/usr/share/man/man3/crypt.3 $PKG/usr/share/man/man3/crypt_r.3
+}
+bootstrap_build() {
+sed -i '/strchr/s/const//' lib/crypt-{sm3,gost}-yescrypt.c
+./configure --prefix=$TOOLS                \
+            --enable-hashes=strong,glibc \
+            --enable-obsolete-api=no     \
+            --disable-static             \
+            --disable-failure-tokens
+make
+make install
 }

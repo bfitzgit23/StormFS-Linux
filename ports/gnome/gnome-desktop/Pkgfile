@@ -1,3 +1,5 @@
+# Add your top line text here
+# Your line to add at the top here
 # Depends on: gsettings-desktop-schemas gtk3 gtk4 iso-codes itstool libseccomp libxml2 xkeyboard-config bubblewrap glib gobject-introspection
 
 name=gnome-desktop

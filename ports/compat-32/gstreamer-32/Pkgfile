@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: Gstreamer is a library that allows the construction of graphs of media-handling components.
 # URL: https://gstreamer.freedesktop.org/
-# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: glib-32 gstreamer libcap-32 libgmp-32
 
 name=gstreamer-32

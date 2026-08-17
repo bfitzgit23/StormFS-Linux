@@ -1,0 +1,15 @@
+# Description: Deletes unneeded files to free disk space and maintain privacy
+# URL: https://www.bleachbit.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: desktop-file-utils gtk3 hicolor-icon-theme python3-gobject3
+
+name=bleachbit
+version=6.0.1
+release=1
+source=(https://github.com/bleachbit/bleachbit/archive/v$version/$name-$version.tar.gz)
+
+build() {
+	cd $name-$version
+	sed -i '/make -C po install/d' Makefile
+	make prefix=/usr DESTDIR="$PKG" install
+}

@@ -1,0 +1,23 @@
+# Add your top line text here
+# Your line to add at the top here
+# Description: Extremely fast non-cryptographic hash algorithm
+# URL: https://github.com/Cyan4973/xxHash
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Depends on:
+
+name=xxhash
+version=0.8.3
+release=1
+source=(https://github.com/Cyan4973/xxHash/archive/v$version/$name-$version.tar.gz)
+
+build() {
+  ls
+  cmake -S xxHash-$version/cmake_unofficial -B build -G Ninja \
+    -D CMAKE_INSTALL_PREFIX=/usr \
+    -D CMAKE_INSTALL_LIBDIR=lib \
+    -D CMAKE_BUILD_TYPE=Release \
+    -D CMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+    -Wno-dev
+  cmake --build build
+  DESTDIR=$PKG cmake --install build
+}

@@ -1,6 +1,8 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: Low-level data structure handling, portability wrappers, and interfaces for runtime functionality
 # URL: https://www.gtk.org/
-# Maintainer: CRUX compat-32 Team, compat-32-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on: elfutils-32 glib libffi-32 libpcre-32 libpcre2-32 util-linux-32
 
 name=glib-32

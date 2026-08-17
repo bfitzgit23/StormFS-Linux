@@ -1,0 +1,24 @@
+# Description: Sophisticated command line based FTP client
+# URL: https://lftp.yar.ru/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: readline gnutls expat ncurses
+
+name=lftp
+version=4.9.3
+release=1
+source=(https://lftp.yar.ru/ftp/$name-$version.tar.xz)
+
+build() {
+	cd $name-$version
+	./configure \
+		--prefix=/usr \
+		--with-gnutls \
+		--without-openssl \
+		--without-included-regex \
+		--disable-static \
+		--disable-nls
+	make
+	make DESTDIR=$PKG install
+
+	rm -r $PKG/usr/lib
+}

@@ -1,0 +1,34 @@
+# Description: The itch.io desktop app
+# URL: https://itchio.itch.io/itch
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: alsa-lib bash gtk3 cups nss libxkbcommon libxrandr
+
+name=itch-bin
+version=26.13.0
+release=1
+source=(itch-linux-amd64-$version.zip::https://broth.itch.zone/itch/linux-amd64/$version/archive/default)
+
+build() {
+
+  mkdir -p "$PKG/opt/itch" "$PKG/usr/bin"
+  install -Dm644 resources/app/src/static/images/tray/itch.png -t "$PKG/usr/share/icons/hicolor/256x256/apps"
+  install -Dm644 resources/app/src/static/images/window/itch/icon.png "$PKG/usr/share/icons/hicolor/128x128/apps/itch.png"
+  install -Dm644 resources/app/src/static/images/window/itch/icon-32.png "$PKG/usr/share/icons/hicolor/32x32/apps/itch.png"
+  cp --reflink=auto -r * "$PKG/opt/itch"
+  ln -s /opt/itch/itch "$PKG/usr/bin"
+
+cat > itch.desktop << "EOF"
+[Desktop Entry]
+Name=itch
+Comment=The itch.io desktop app
+Exec=/opt/itch/itch %U
+Icon=itch
+Terminal=false
+Type=Application
+StartupWMClass=itch
+Categories=Game;
+MimeType=x-scheme-handler/itchio;x-scheme-handler/itch
+EOF
+
+  install -Dm644 itch.desktop -t "$PKG/usr/share/applications"
+}

@@ -1,0 +1,7 @@
+#!/bin/sh
+
+for k in $(ls /lib/modules/) ; do
+	kernver=$k
+	depmod -a $kernver
+done
+ 

@@ -1,0 +1,15 @@
+# Description: Scripts to mount the cgroupfs hierarchy
+# URL: https://github.com/tianon/cgroupfs-mount
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=cgroupfs-mount
+version=1.4
+release=1
+source=(https://github.com/tianon/${name}/archive/$version/$name-$version.tar.gz)
+
+build() {
+    cd $name-$version
+
+    install -D -m 755 cgroupfs-mount $PKG/usr/bin/cgroupfs-mount
+    install -D -m 755 cgroupfs-umount $PKG/usr/bin/cgroupfs-umount
+}

@@ -1,3 +1,5 @@
+# Add your top line text here
+# Your line to add at the top here
 # Depends on: exo libgudev libnotify gvfs
 
 name=thunar-volman

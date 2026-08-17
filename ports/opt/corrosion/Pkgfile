@@ -1,0 +1,22 @@
+# Description: Marrying Rust and CMake - Easy Rust and C/C++ Integration
+# URL: https://github.com/corrosion-rs/corrosion
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: rust samurai
+
+name=corrosion
+version=0.6.1
+release=1
+source=(https://github.com/AndrewGaspar/corrosion/archive/v$version/corrosion-$version.tar.gz)
+
+build() {
+	cmake -S $name-$version -B build -G Ninja \
+ 	        -DCMAKE_INSTALL_PREFIX=/usr \
+	        -DCMAKE_INSTALL_LIBDIR=lib \
+	        -DCMAKE_BUILD_TYPE=Release \
+	        -DCMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
+	        -DCMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+	        -DCORROSION_BUILD_TESTS=OFF \
+	        -Wno-dev
+	cmake --build build
+	DESTDIR=$PKG cmake --install build
+}

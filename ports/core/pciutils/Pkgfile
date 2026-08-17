@@ -1,11 +1,13 @@
+# Add your top line text here
+# Your line to add at the top here
 # Description: Library and utilities to access the PCI bus configuration registers
 # URL: https://mj.ucw.cz/pciutils.shtml
-# Maintainer: CRUX System Team, core-ports at crux dot nu
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
 # Depends on:
 # Optional: curl wget lynx
 
 name=pciutils
-version=3.13.0
+version=3.15.0
 release=1
 source=(https://mj.ucw.cz/download/linux/pci/$name-$version.tar.gz)
 

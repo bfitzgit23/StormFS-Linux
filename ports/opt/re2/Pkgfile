@@ -1,0 +1,15 @@
+# Description: Fast, safe, thread-friendly regular expression engine
+# URL: https://github.com/google/re2
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: abseil-cpp
+
+name=re2
+version=2025.11.05
+release=2
+source=(https://github.com/google/re2/archive/$_version/$name-$_version.tar.gz)
+
+build() {
+	cd $name-$_version
+	make
+	make prefix=/usr DESTDIR=$PKG install
+}

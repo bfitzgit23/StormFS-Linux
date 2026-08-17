@@ -1,5 +1,20 @@
+# Description: Utilities and libraries for managing POSIX Access Control Lists.
+# URL: https://savannah.nongnu.org/projects/acl
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Depends on: attr
+
 name=acl
-version=2.3.2
-release=1
-source=(https://download.savannah.gnu.org/releases/$name/$name-$version.tar.xz)
+version=2.4.0
+release=2
 keep_static=1
+
+source=(
+    https://download.savannah.gnu.org/releases/acl/acl-$version.tar.xz)
+
+post_build() {
+    find "$PKG" -type f -name '*.la' -delete
+
+    rm -rf \
+        "$PKG/usr/share/doc" \
+        "$PKG/usr/share/info"
+}

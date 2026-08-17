@@ -1,0 +1,10 @@
+# Description: Scanner frontend and GIMP plugin for sane
+# URL: http://www.sane-project.org
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: gimp sane
+
+name=xsane
+version=0.999
+release=4
+source=(http://http.debian.net/debian/pool/main/x/$name/${name}_$version.orig.tar.gz xsane-0.995-xdg-open.patch 0165-xsane-0.999-lcms2.patch xsane-preview-selection.patch configure-add-stdlib-to-conftest.patch fix-func_arg_mismatch.patch)
+

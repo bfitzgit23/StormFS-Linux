@@ -1,0 +1,16 @@
+# Description: Google Noto CJK fonts
+# URL: https://www.google.com/get/noto/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+
+name=ttf-noto-cjk
+version=2026.05.01
+release=1
+source=(https://github.com/googlefonts/noto-cjk/releases/download/Sans${_sans_version}/03_NotoSansCJK-OTC.zip https://github.com/googlefonts/noto-cjk/releases/download/Serif${_serif_version}/04_NotoSerifCJKOTC.zip 70-noto-cjk.conf)
+
+build() {
+  install -Dm644 *.ttc -t $PKG/usr/share/fonts/noto-cjk
+  install -Dm644 OTC/*.ttc -t $PKG/usr/share/fonts/noto-cjk
+  install -Dm644 70-noto-cjk.conf -t $PKG/usr/share/fontconfig/conf.avail
+  install -d $PKG/usr/share/fontconfig/conf.default
+  ln -rs $PKG/usr/share/fontconfig/conf.avail/* $PKG/usr/share/fontconfig/conf.default
+}

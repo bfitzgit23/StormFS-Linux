@@ -1,0 +1,15 @@
+# Description: A Linux port of OpenBSD's ksh
+# URL: https://github.com/dimkr/loksh/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: ncurses
+
+name=loksh
+version=7.9
+release=1
+source=(https://github.com/dimkr/loksh/releases/download/$version/$name-$version.tar.xz)
+
+build() {
+ 	meson setup $name-$version build
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

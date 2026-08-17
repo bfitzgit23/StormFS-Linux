@@ -1,0 +1,16 @@
+# Description: Modernized fork of NEdit with unicode support and AA text rendering
+# URL: https://sourceforge.net/projects/xnedit
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: libxpm motif tcl
+
+name=xnedit
+version=1.6.3
+release=1
+source=($name-$version.tar.gz::https://github.com/unixwork/xnedit/archive/refs/tags/v$version.tar.gz)
+
+build() {
+
+	cd $name-$version
+	make linux
+	make DESTDIR=$PKG install
+}

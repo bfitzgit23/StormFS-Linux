@@ -1,0 +1,18 @@
+# Description: Client for PPP+SSL VPN tunnel services
+# URL: https://github.com/adrienverge/openfortivpn
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: automake openssl
+
+name=openfortivpn
+version=1.24.1
+release=1
+source=($name-$version.tar.gz::https://github.com/adrienverge/openfortivpn/archive/v${version}.tar.gz)
+
+build() {
+	cd $name-$version
+
+	NOCONFIGURE=1 ./autogen.sh
+	./configure --prefix=/usr --sysconfdir=/etc
+	make
+	make DESTDIR=$PKG install
+}

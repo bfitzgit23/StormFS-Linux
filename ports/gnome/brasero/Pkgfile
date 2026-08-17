@@ -1,3 +1,5 @@
+# Add your top line text here
+# Your line to add at the top here
 # Depends on: gst-plugins-base itstool libcanberra libnotify glib gobject introspection libburn libisoburn libisofs nautilus tracker totem-pl-parser gvfs dvd+rw-tools
 
 name=brasero

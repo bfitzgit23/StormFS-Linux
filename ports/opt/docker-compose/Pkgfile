@@ -1,0 +1,20 @@
+# Description: Compose is a tool for defining and running multi-container Docker applications
+# URL: https://docs.docker.com/compose/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: go
+
+name=docker-compose
+version=5.2.0
+release=1
+source=(https://github.com/docker/compose/archive/v$version/$name-$version.tar.gz)
+
+build() {
+	export CGO_CFLAGS="${CFLAGS}"
+	export CGO_CPPFLAGS="${CXXFLAGS}"
+	export CGO_CXXFLAGS="${CXXFLAGS}"
+	cd compose-$version
+	make VERSION=v$version
+	install -Dm0755 bin/build/${name} ${PKG}/usr/bin/${name}
+	install -dm0755 ${PKG}/usr/lib/docker/cli-plugins
+	ln -s /usr/bin/docker-compose ${PKG}/usr/lib/docker/cli-plugins/
+}

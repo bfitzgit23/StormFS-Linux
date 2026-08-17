@@ -1,21 +1,41 @@
-# Description: Keyutils is a set of utilities for managing the key retention facility in the kernel, which can be used by filesystems, block devices and more to gain and retain the authorization and encryption keys required to perform secure operations.
-# URL:         https://people.redhat.com/~dhowells/keyutils/
-# Maintainer:  B.r.i.a.n M.a.d.o.n.n.a b.m.a.d.o.n.n.a.s.t.e.r @ g.m.a.i.l.c.o.m
-# Depends on:  kerberos
+# Description: Utilities and library for managing the Linux kernel key retention facility.
+# URL: https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/keyutils.git/
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Optional: lsb-tools
 
 name=keyutils
 version=1.6.3
 release=1
-source=(https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/keyutils.git/snapshot/$name-$version.tar.gz)
 
-build () {
-    cd $name-$version
+source=(
+    https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/keyutils.git/snapshot/$name-$version.tar.gz
+)
 
-    sed -i "/^CFLAGS/s/-g/$CFLAGS/" Makefile
+build_opt=(
+    NO_ARLIB=1
+    BINDIR=/usr/bin
+    SBINDIR=/usr/sbin
+    LIBDIR=/usr/lib
+    USRLIBDIR=/usr/lib
+    INCLUDEDIR=/usr/include
+    PKGCONFIGDIR=/usr/lib/pkgconfig
+)
 
-    make
-    make install DESTDIR=$PKG USRLIBDIR=/usr/lib LIBDIR=/lib
+pkg_build() {
+    # Use BFS compiler flags instead of upstream's hard-coded debug flag.
+    sed -i \
+        "s|^CFLAGS := -g|CFLAGS := $CFLAGS|" \
+        Makefile
 
-    mv $PKG/lib/pkgconfig $PKG/usr/lib
-    chmod 0644 $PKG/usr/lib/pkgconfig/libkeyutils.pc
+    make "${build_opt[@]}"
+
+    make \
+        DESTDIR="$PKG" \
+        "${build_opt[@]}" \
+        install
+
+    chmod 0644 \
+        "$PKG/usr/lib/pkgconfig/libkeyutils.pc"
+
+    rm -rf "$PKG/usr/share/man"
 }

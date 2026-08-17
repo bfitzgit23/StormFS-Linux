@@ -1,0 +1,18 @@
+# Description: Deepin Icons
+# URL: https://github.com/linuxdeepin/deepin-gtk-theme
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: papirus-icon-theme
+
+name=deepin-icon-theme
+version=2026.02.27
+release=1
+source=(https://github.com/linuxdeepin/$name/archive/$version/$name-$version.tar.gz)
+
+build() {
+	find $name-$version -name "* 2.svg" -delete
+	cd $name-$version
+	make hicolor-links
+	make DESTDIR="$PKG" install
+
+	cp -a ./Sea ./usr/share/icons/hicolor "$PKG"/usr/share/icons/
+}

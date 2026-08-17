@@ -1,0 +1,17 @@
+# Description: Rofi like application launcher written for wayland
+# URL: https://hg.sr.ht/~scoopta/wofi
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: gtk3 libxkbcommon wayland-protocols
+
+name=wofi
+version=1.5.3
+release=1
+source=($name-$version.tar.gz::https://hg.sr.ht/~scoopta/wofi/archive/v$version.tar.gz)
+
+build() {
+  ls /usr/include/gtk-3.0/gdk/gdkwayland.h || (printf '\e[1;31m%-6s\e[m\n' "gtk3 is missing wayland libraries, rebuild mesa, then gtk3 to install $name" ; exit 1)
+
+  meson setup $name-$version build
+  meson compile -C build
+  DESTDIR=$PKG meson install --no-rebuild -C build
+}

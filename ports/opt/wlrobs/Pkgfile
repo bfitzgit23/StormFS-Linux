@@ -1,0 +1,16 @@
+# Description: obs-studio plugin that allows you to screen capture on wlroots
+# URL: https://hg.sr.ht/~scoopta/wlrobs
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: obs-studio wayland
+
+name=wlrobs
+version=1.2
+release=1
+source=($name-$version.tar.gz::https://hg.sr.ht/~scoopta/wlrobs/archive/v$version.tar.gz)
+
+build() {
+	meson setup $name-$version build
+	meson compile -C build
+	mkdir -p ${PKG}/usr/lib/obs-plugins
+	install -D -m 0644 build/libwlrobs.so ${PKG}/usr/lib/obs-plugins/${name}.so
+}

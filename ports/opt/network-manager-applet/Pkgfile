@@ -1,0 +1,18 @@
+# Description: Panel applet used to configure wired and wireless network connections
+# URL: https://gitlab.gnome.org/GNOME/network-manager-applet
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: iso-codes libsecret libnotify networkmanager gobject-introspection meson libnma libappindicator
+
+name=network-manager-applet
+version=1.36.0
+release=1
+source=(https://gitlab.gnome.org/GNOME/network-manager-applet/-/archive/$version/$name-$version.tar.gz)
+
+build() {
+	meson setup $name-$version build \
+		-Dselinux=false \
+		-Dteam=false \
+		-Dwwan=$(prt-get isinst modemmanager && printf "true" || printf "false")
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
+}

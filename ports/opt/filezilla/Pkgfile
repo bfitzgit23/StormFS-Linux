@@ -1,0 +1,23 @@
+# Description: Fast and reliable FTP, FTPS and SFTP client
+# URL: https://filezilla-project.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: boost fzssh wxgtk3 libidn xdg-utils
+
+name=filezilla
+version=3.70.6
+release=1
+source=(https://sources.archlinux.org/other/filezilla/$name-$version.tar.xz)
+
+build() {
+	cd $name-$version
+
+	./configure \
+	    --prefix=/usr \
+	    --disable-manualupdatecheck \
+	    --disable-autoupdatecheck \
+	    --without-dbus \
+	    --with-pugixml=builtin
+	make
+	make DESTDIR=$PKG install
+
+}

@@ -1,0 +1,25 @@
+# Description: Android platform tools
+# URL: http://tools.android.com/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: protobuf brotli zstd android-udev pcre2 go gtest
+
+name=android-tools
+version=35.0.2
+release=2
+source=(https://github.com/nmeum/$name/releases/download/$version/$name-$version.tar.xz $name-gcc16.patch)
+
+build() {
+	patch -d $name-$version -Np1 -i $SRC/$name-gcc16.patch
+
+	cmake -S $name-$version -B build -G Ninja \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_CXX_FLAGS="$CXXFLAGS" \
+		-DCMAKE_C_FLAGS="$CFLAGS" \
+		-DCMAKE_FIND_PACKAGE_PREFER_CONFIG=ON \
+		-Dprotobuf_MODULE_COMPATIBLE=ON \
+		-DANDROID_TOOLS_LIBUSB_ENABLE_UDEV=ON \
+		-DANDROID_TOOLS_USE_BUNDLED_LIBUSB=ON 
+	cmake --build build
+	DESTDIR=$PKG cmake --install build
+}

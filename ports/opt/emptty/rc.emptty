@@ -1,0 +1,38 @@
+#!/bin/sh
+#
+# /etc/rc.d/emptty: start/stop emptty service
+#
+
+. /etc/rc.subr
+
+NAME="EMPTTY display manager"
+PROG=/usr/bin/dbus-launch-session /usr/bin/emptty -d
+PID=/run/$NAME/$NAME.pid
+
+# Create X11-unix temp dir 
+mkdir -p /tmp/.X11-unix
+chmod 1777 /tmp/.X11-unix
+
+case $1 in
+	start)
+		msg "Starting $NAME..."
+		start_daemon -p $PID $PROG
+		;;
+	stop)
+		msg "Stopping $NAME..."
+		stop_daemon -p $PID $PROG
+		;;
+	restart)
+		$0 stop
+		sleep 1
+		$0 start
+		;;
+	status)
+		status_daemon $PROG
+		;;
+	*)
+		echo "usage: $0 [start|stop|restart|status]"
+		;;
+esac
+
+# End of file

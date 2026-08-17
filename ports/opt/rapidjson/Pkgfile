@@ -1,0 +1,10 @@
+# Description: Fast JSON parser/generator for C++ with both SAX/DOM style API
+# URL: https://github.com/miloyip/rapidjson
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: cmake ninja
+
+name=rapidjson
+version=1.1.0
+release=3
+source=(https://github.com/miloyip/$name/archive/v$version/$name-$version.tar.gz gcc14.patch::https://github.com/Tencent/rapidjson/commit/3b2441b8.patch)
+

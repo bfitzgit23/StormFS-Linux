@@ -1,0 +1,24 @@
+# Description: library providing software emulation of a Trusted Platform Module (TPM 1.2 and TPM 2.0)
+# URL: https://github.com/stefanberger/libtpms
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: openssl
+
+name=libtpms
+version=0.10.2
+release=2
+source=($name-$version.tar.gz::https://github.com/stefanberger/libtpms/archive/v$version.tar.gz)
+
+build() {
+	cd $name-$version
+
+	# Fix build with znver4 or newer
+	export CFLAGS="$CFLAGS -march=x86-64 -Wno-error=discarded-qualifiers"
+
+	autoreconf --install --force
+	./configure --prefix=/usr \
+	            --libdir=/usr/lib \
+                    --with-tpm2 \
+                    --with-openssl
+	make
+        make DESTDIR=$PKG install
+}

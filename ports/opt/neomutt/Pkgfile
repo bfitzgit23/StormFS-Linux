@@ -1,0 +1,30 @@
+# Description: A version of mutt with added features
+# URL: https://neomutt.org/
+# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Depends on: lua libidn krb5 gpgme
+
+name=neomutt
+version=20260616
+release=1
+source=($name-$version.tar.gz::https://github.com/neomutt/neomutt/archive/refs/tags/$version.tar.gz)
+
+build() {
+	cd $name-$version
+
+	./configure \
+	        --prefix=/usr \
+	        --sysconfdir=/etc \
+	        --libexecdir=/usr/lib \
+	        --gpgme \
+	        --enable-lua \
+	        --gss \
+	        --ssl \
+	        --with-ui=ncurses \
+	        --with-idn=/usr \
+        	--gdbm \
+		--disable-nls \
+		--disable-doc
+	make
+	make DESTDIR=$PKG install
+
+}
