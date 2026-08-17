@@ -1,0 +1,15 @@
+[submodule ".oh-my-bash"]
+	path = .oh-my-bash
+	url = https://github.com/ohmybash/oh-my-bash
+[submodule "StormFS-grub-theme"]
+	path = StormFS-grub-theme
+	url = https://github.com/bfitzgit23/stormfs-grub-theme
+[submodule "adw-gtk3"]
+	path = adw-gtk3
+	url = https://github.com/lassekongo83/adw-gtk3
+[submodule "tela-icon-theme"]
+	path = tela-icon-theme
+	url = https://github.com/vinceliuice/Tela-icon-theme
+[submodule "tela-circle-icon-theme"]
+	path = tela-circle-icon-theme
+	url = https://github.com/vinceliuice/Tela-circle-icon-theme

@@ -1,0 +1,40 @@
+#!/bin/sh
+#
+# StormFS Linux Installer Launcher
+# Finds and launches the stormfs-gui.py installer.
+#
+
+# Must be root
+if [ "$(id -u)" -ne 0 ]; then
+	if command -v pkexec >/dev/null 2>&1; then
+		exec pkexec "$0" "$@"
+	elif command -v sudo >/dev/null 2>&1; then
+		exec sudo "$0" "$@"
+	else
+		echo "ERROR: This installer requires root privileges." >&2
+		echo "Please run as root or use sudo." >&2
+		exit 1
+	fi
+fi
+
+# Locate the installer script
+INSTALLER=""
+for dir in /usr/share/stormfs /usr/lib/stormfs /opt/stormfs; do
+	if [ -f "$dir/stormfs-gui.py" ]; then
+		INSTALLER="$dir/stormfs-gui.py"
+		break
+	fi
+done
+
+if [ -z "$INSTALLER" ]; then
+	# Fallback: search PATH and common locations
+	INSTALLER="$(command -v stormfs-gui.py 2>/dev/null || true)"
+fi
+
+if [ -z "$INSTALLER" ]; then
+	echo "ERROR: stormfs-gui.py installer not found." >&2
+	echo "Ensure the stormfs-installer package is installed." >&2
+	exit 1
+fi
+
+exec python3 "$INSTALLER" "$@"
