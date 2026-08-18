@@ -1,0 +1,19 @@
+#!/sbin/openrc-run
+
+description="Color management daemon"
+
+depend() {
+	need dbus logger
+}
+
+start() {
+	ebegin "Starting colord"
+	start-stop-daemon --start --exec /usr/lib/colord/colord
+	eend $?
+}
+
+stop() {
+	ebegin "Stopping colord"
+	start-stop-daemon --stop --exec /usr/lib/colord/colord
+	eend $?
+}

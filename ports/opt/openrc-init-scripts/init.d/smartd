@@ -1,0 +1,19 @@
+#!/sbin/openrc-run
+
+description="SMART disk monitoring"
+
+depend() {
+	need localmount logger
+}
+
+start() {
+	ebegin "Starting SMART daemon"
+	start-stop-daemon --start --exec /usr/sbin/smartd -n
+	eend $?
+}
+
+stop() {
+	ebegin "Stopping SMART daemon"
+	start-stop-daemon --stop --exec /usr/sbin/smartd
+	eend $?
+}

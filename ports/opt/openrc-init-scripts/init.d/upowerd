@@ -1,0 +1,19 @@
+#!/sbin/openrc-run
+
+description="UPower power management daemon"
+
+depend() {
+	need dbus logger
+}
+
+start() {
+	ebegin "Starting UPower daemon"
+	start-stop-daemon --start --exec /usr/lib/upower/upowerd
+	eend $?
+}
+
+stop() {
+	ebegin "Stopping UPower daemon"
+	start-stop-daemon --stop --exec /usr/lib/upower/upowerd
+	eend $?
+}

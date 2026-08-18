@@ -1,0 +1,22 @@
+#!/sbin/openrc-run
+
+description="LXDE Display Manager"
+
+PIDFILE=/run/lxdm.pid
+
+depend() {
+	need dbus
+	need xdm
+}
+
+start() {
+	ebegin "Starting LXDM"
+	start-stop-daemon --start --exec /usr/sbin/lxdm-binary
+	eend $?
+}
+
+stop() {
+	ebegin "Stopping LXDM"
+	start-stop-daemon --stop --exec /usr/sbin/lxdm-binary
+	eend $?
+}

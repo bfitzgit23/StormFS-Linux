@@ -1,0 +1,19 @@
+#!/sbin/openrc-run
+
+description="PulseAudio sound server"
+
+depend() {
+	need dbus logger
+}
+
+start() {
+	ebegin "Starting PulseAudio"
+	start-stop-daemon --start --exec /usr/bin/pulseaudio -- --system --disallow-exit
+	eend $?
+}
+
+stop() {
+	ebegin "Stopping PulseAudio"
+	start-stop-daemon --stop --exec /usr/bin/pulseaudio
+	eend $?
+}

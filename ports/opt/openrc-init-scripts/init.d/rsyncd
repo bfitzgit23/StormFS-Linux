@@ -1,0 +1,21 @@
+#!/sbin/openrc-run
+
+description="Rsync daemon"
+
+depend() {
+	need localmount logger net
+}
+
+pidfile=/run/rsyncd.pid
+
+start() {
+	ebegin "Starting rsync daemon"
+	start-stop-daemon --start --exec /usr/bin/rsync -- --daemon --no-detach
+	eend $?
+}
+
+stop() {
+	ebegin "Stopping rsync daemon"
+	start-stop-daemon --stop --exec /usr/bin/rsync
+	eend $?
+}

@@ -1,0 +1,19 @@
+#!/sbin/openrc-run
+
+description="Avahi mDNS/DNS-SD daemon"
+
+depend() {
+	need dbus logger
+}
+
+start() {
+	ebegin "Starting Avahi daemon"
+	start-stop-daemon --start --exec /usr/sbin/avahi-daemon -- -D
+	eend $?
+}
+
+stop() {
+	ebegin "Stopping Avahi daemon"
+	start-stop-daemon --stop --exec /usr/sbin/avahi-daemon
+	eend $?
+}

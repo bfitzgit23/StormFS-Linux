@@ -1,0 +1,19 @@
+#!/sbin/openrc-run
+
+description="Bluetooth daemon"
+
+depend() {
+	need dbus logger
+}
+
+start() {
+	ebegin "Starting Bluetooth daemon"
+	start-stop-daemon --start --exec /usr/libexec/bluetooth/bluetoothd
+	eend $?
+}
+
+stop() {
+	ebegin "Stopping Bluetooth daemon"
+	start-stop-daemon --stop --exec /usr/libexec/bluetooth/bluetoothd
+	eend $?
+}

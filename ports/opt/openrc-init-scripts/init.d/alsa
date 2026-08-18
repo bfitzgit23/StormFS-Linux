@@ -1,0 +1,20 @@
+#!/sbin/openrc-run
+
+description="ALSA sound state restore/save"
+
+depend() {
+	need localmount
+	need logger
+}
+
+start() {
+	ebegin "Restoring ALSA sound state"
+	alsactl restore
+	eend $?
+}
+
+stop() {
+	ebegin "Saving ALSA sound state"
+	alsactl store
+	eend $?
+}

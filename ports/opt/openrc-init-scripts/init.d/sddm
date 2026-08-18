@@ -1,0 +1,22 @@
+#!/sbin/openrc-run
+
+description="Simple Desktop Display Manager"
+
+PIDFILE=/run/sddm.pid
+
+depend() {
+	need dbus
+	need xdm
+}
+
+start() {
+	ebegin "Starting SDDM"
+	start-stop-daemon --start --exec /usr/bin/sddm
+	eend $?
+}
+
+stop() {
+	ebegin "Stopping SDDM"
+	start-stop-daemon --stop --exec /usr/bin/sddm
+	eend $?
+}

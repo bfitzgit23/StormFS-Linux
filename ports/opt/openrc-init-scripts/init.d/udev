@@ -1,0 +1,19 @@
+#!/sbin/openrc-run
+
+description="Device manager (eudev)"
+
+depend() {
+	need localmount logger
+}
+
+start() {
+	ebegin "Starting udev daemon"
+	/sbin/udevd --daemon
+	eend $?
+}
+
+stop() {
+	ebegin "Stopping udev daemon"
+	/sbin/udevadm control --exit
+	eend $?
+}

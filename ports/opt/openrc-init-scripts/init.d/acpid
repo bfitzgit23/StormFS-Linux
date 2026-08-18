@@ -1,0 +1,22 @@
+#!/sbin/openrc-run
+
+description="Advanced power management daemon"
+
+PIDFILE=/run/acpid.pid
+
+depend() {
+	need localmount
+	need logger
+}
+
+start() {
+	ebegin "Starting acpid"
+	start-stop-daemon --start --exec /usr/sbin/acpid -- -f
+	eend $?
+}
+
+stop() {
+	ebegin "Stopping acpid"
+	start-stop-daemon --stop --exec /usr/sbin/acpid
+	eend $?
+}

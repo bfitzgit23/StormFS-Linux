@@ -1,0 +1,20 @@
+#!/sbin/openrc-run
+
+description="Firewall"
+
+depend() {
+	need localmount logger
+	before networkmanager
+}
+
+start() {
+	ebegin "Loading firewall rules"
+	/usr/bin/nft -f /etc/nftables.nft
+	eend $?
+}
+
+stop() {
+	ebegin "Flushing firewall rules"
+	/usr/bin/nft flush ruleset
+	eend $?
+}

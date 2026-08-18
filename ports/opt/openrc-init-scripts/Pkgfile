@@ -1,0 +1,49 @@
+# Description: OpenRC init scripts for StormFS services
+# URL: https://github.com/bfitzgit23/StormFS-Linux
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Depends on: openrc
+# Optional: networkmanager bluez lightdm sddm lxdm gdm alsa-utils dhcpcd wpa_supplicant chrony cronie acpid gpm openssh nftables rustdesk-bin anydesk teamviewer pulseaudio pipewire wireplumber smartmontools udisks2 colord accounts-daemon avahi polkit
+
+name=openrc-init-scripts
+version=1.0
+release=1
+
+build() {
+	for script in init.d/*; do
+		name=$(basename "$script")
+		install -Dm755 "$script" $PKG/etc/init.d/$name
+	done
+
+	# Default runlevels
+	mkdir -p $PKG/etc/runlevels/{sysinit,boot,default,nonetwork,single}
+
+	# sysinit
+	for s in udev udev-postmount; do
+		[ -f $PKG/etc/init.d/$s ] && \
+			ln -sf /etc/init.d/$s $PKG/etc/runlevels/sysinit/$s
+	done
+
+	# boot
+	for s in dbus cronie chronyd acpid sysctl alsa; do
+		[ -f $PKG/etc/init.d/$s ] && \
+			ln -sf /etc/init.d/$s $PKG/etc/runlevels/boot/$s
+	done
+
+	# default
+	for s in networkmanager lightdm bluez sshd smartd udisks2 colord accounts-daemon avahi-daemon avahi-dnsconfd polkitd upowerd; do
+		[ -f $PKG/etc/init.d/$s ] && \
+			ln -sf /etc/init.d/$s $PKG/etc/runlevels/default/$s
+	done
+
+	# nonetwork (recovery)
+	for s in udev udev-postmount dbus; do
+		[ -f $PKG/etc/init.d/$s ] && \
+			ln -sf /etc/init.d/$s $PKG/etc/runlevels/nonetwork/$s
+	done
+
+	# single
+	for s in udev udev-postmount; do
+		[ -f $PKG/etc/init.d/$s ] && \
+			ln -sf /etc/init.d/$s $PKG/etc/runlevels/single/$s
+	done
+}

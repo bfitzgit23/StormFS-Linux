@@ -1,0 +1,21 @@
+#!/sbin/openrc-run
+
+description="WiFi authentication daemon"
+
+depend() {
+	need logger
+	before networkmanager
+}
+
+start() {
+	ebegin "Starting wpa_supplicant"
+	start-stop-daemon --start --exec /usr/sbin/wpa_supplicant -- \
+		-B -i wlan0 -c /etc/wpa_supplicant/wpa_supplicant.conf
+	eend $?
+}
+
+stop() {
+	ebegin "Stopping wpa_supplicant"
+	start-stop-daemon --stop --exec /usr/sbin/wpa_supplicant
+	eend $?
+}

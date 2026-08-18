@@ -1,0 +1,17 @@
+# Description: StormFS Linux graphical installer
+# URL: https://github.com/bfitzgit23/StormFS-Linux
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Depends on: python3 python3-pip qt5-alternate
+
+name=stormfs-gui
+version=1.0
+release=1
+source=(stormfs-gui.py
+    stormfs-gui.desktop)
+
+build() {
+    install -Dm755 $SRC/stormfs-gui.py $PKG/usr/bin/stormfs-gui
+    install -Dm644 $SRC/stormfs-gui.desktop $PKG/usr/share/applications/stormfs-gui.desktop
+    mkdir -p $PKG/usr/share/pixmaps
+    ln -s /usr/share/icons/hicolor/128x128/apps/system-software-install.png $PKG/usr/share/pixmaps/stormfs-gui.png
+}

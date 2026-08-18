@@ -1,0 +1,23 @@
+#!/sbin/openrc-run
+
+description="Light Display Manager"
+
+PIDFILE=/run/lightdm.pid
+
+depend() {
+	need dbus
+	need xdm
+	need logger
+}
+
+start() {
+	ebegin "Starting LightDM"
+	start-stop-daemon --start --exec /usr/bin/lightdm
+	eend $?
+}
+
+stop() {
+	ebegin "Stopping LightDM"
+	start-stop-daemon --stop --exec /usr/bin/lightdm
+	eend $?
+}

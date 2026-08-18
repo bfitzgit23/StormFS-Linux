@@ -1,0 +1,19 @@
+#!/sbin/openrc-run
+
+description="TeamViewer remote desktop"
+
+depend() {
+	need dbus logger
+}
+
+start() {
+	ebegin "Starting TeamViewer daemon"
+	start-stop-daemon --start --exec /opt/teamviewer/tv_bin/teamviewerd
+	eend $?
+}
+
+stop() {
+	ebegin "Stopping TeamViewer daemon"
+	start-stop-daemon --stop --exec /opt/teamviewer/tv_bin/teamviewerd
+	eend $?
+}

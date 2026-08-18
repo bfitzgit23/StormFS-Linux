@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=StormFS Installer
+GenericName=System Installer
+Comment=Install StormFS Linux to disk
+Icon=stormfs
+Type=Application
+Categories=System;
+Exec=/usr/bin/stormfs-gui
+StartupNotify=true
+Terminal=false

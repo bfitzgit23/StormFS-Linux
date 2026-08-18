@@ -1,0 +1,22 @@
+#!/sbin/openrc-run
+
+description="Network Management daemon"
+
+PIDFILE=/run/NetworkManager/NetworkManager.pid
+
+depend() {
+	need dbus
+	need logger
+}
+
+start() {
+	ebegin "Starting NetworkManager"
+	start-stop-daemon --start --exec /usr/sbin/NetworkManager
+	eend $?
+}
+
+stop() {
+	ebegin "Stopping NetworkManager"
+	start-stop-daemon --stop --exec /usr/sbin/NetworkManager
+	eend $?
+}

@@ -1,0 +1,19 @@
+#!/sbin/openrc-run
+
+description="Accounts service"
+
+depend() {
+	need dbus logger
+}
+
+start() {
+	ebegin "Starting Accounts daemon"
+	start-stop-daemon --start --exec /usr/libexec/accounts-daemon
+	eend $?
+}
+
+stop() {
+	ebegin "Stopping Accounts daemon"
+	start-stop-daemon --stop --exec /usr/libexec/accounts-daemon
+	eend $?
+}

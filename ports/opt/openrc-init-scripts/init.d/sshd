@@ -1,0 +1,23 @@
+#!/sbin/openrc-run
+
+description="OpenSSH server daemon"
+
+PIDFILE=/run/sshd.pid
+
+depend() {
+	need localmount
+	need logger
+	need net
+}
+
+start() {
+	ebegin "Starting sshd"
+	start-stop-daemon --start --exec /usr/sbin/sshd -- -D
+	eend $?
+}
+
+stop() {
+	ebegin "Stopping sshd"
+	start-stop-daemon --stop --exec /usr/sbin/sshd
+	eend $?
+}

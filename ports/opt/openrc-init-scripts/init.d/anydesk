@@ -1,0 +1,19 @@
+#!/sbin/openrc-run
+
+description="AnyDesk remote desktop"
+
+depend() {
+	need dbus logger
+}
+
+start() {
+	ebegin "Starting AnyDesk"
+	start-stop-daemon --start --exec /usr/bin/anydesk -- --service
+	eend $?
+}
+
+stop() {
+	ebegin "Stopping AnyDesk"
+	start-stop-daemon --stop --exec /usr/bin/anydesk
+	eend $?
+}

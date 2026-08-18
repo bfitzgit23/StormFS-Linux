@@ -1,0 +1,22 @@
+#!/sbin/openrc-run
+
+description="DHCP client daemon"
+
+PIDFILE=/run/dhcpcd.pid
+
+depend() {
+	need logger
+	optional net.eth0 net.wlan0
+}
+
+start() {
+	ebegin "Starting dhcpcd"
+	start-stop-daemon --start --exec /usr/sbin/dhcpcd -- -q
+	eend $?
+}
+
+stop() {
+	ebegin "Stopping dhcpcd"
+	start-stop-daemon --stop --exec /usr/sbin/dhcpcd
+	eend $?
+}

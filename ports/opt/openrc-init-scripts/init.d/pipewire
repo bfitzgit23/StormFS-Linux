@@ -1,0 +1,19 @@
+#!/sbin/openrc-run
+
+description="PipeWire multimedia server"
+
+depend() {
+	need dbus logger
+}
+
+start() {
+	ebegin "Starting PipeWire"
+	start-stop-daemon --start --exec /usr/bin/pipewire
+	eend $?
+}
+
+stop() {
+	ebegin "Stopping PipeWire"
+	start-stop-daemon --stop --exec /usr/bin/pipewire
+	eend $?
+}

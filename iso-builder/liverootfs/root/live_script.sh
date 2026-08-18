@@ -95,6 +95,18 @@ Categories=System;
 DESK
 chmod +x "$deskdir/stormfs-installer.desktop"
 
+cat > "$deskdir/stormfs-gui.desktop" <<DESK2
+[Desktop Entry]
+Name=StormFS Installer (GUI)
+Comment=Install StormFS Linux to disk using graphical interface
+Exec=/usr/bin/stormfs-gui
+Icon=system-software-install
+Terminal=false
+Type=Application
+Categories=System;
+DESK2
+chmod +x "$deskdir/stormfs-gui.desktop"
+
 cat > "$deskdir/stormfs-portmanager.desktop" <<DESK2
 [Desktop Entry]
 Name=StormFS Port Manager
