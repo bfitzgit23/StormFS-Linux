@@ -1,0 +1,33 @@
+# Description: Python parsing module for building recursive descent parsers
+# URL: https://github.com/pyparsing/pyparsing/
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: python3 python3-setuptools
+
+name=python3-pyparsing
+version=3.2.5
+release=1
+source=(https://files.pythonhosted.org/packages/source/p/pyparsing/pyparsing-$version.tar.gz)
+
+pkg_build() {
+    cd "pyparsing-$version" || return 1
+
+    /usr/bin/python3 -m pip install \
+        --no-index \
+        --no-deps \
+        --no-build-isolation \
+        --no-compile \
+        --ignore-installed \
+        --prefix=/usr \
+        --root="$PKG" \
+        . || return 1
+
+    /usr/bin/python3 -m compileall \
+        -q \
+        -f \
+        -d /usr/lib/python${PYTHON_VERSION:-3.14}/site-packages \
+        "$PKG/usr/lib/python3.14/site-packages" || return 1
+
+    find "$PKG/usr/lib/python"*"/site-packages" \
+        -type f \
+        -exec chmod go-w '{}' +
+}
