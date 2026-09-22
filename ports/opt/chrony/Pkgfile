@@ -2,6 +2,8 @@
 # URL: https://chrony-project.org/
 # Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: gnutls libcap libedit libseccomp nettle
+# NOTE: OpenRC profile integration (chronyd service script) ships in the
+# openrc-init-scripts port; systemd units below are inert on non-systemd builds.
 
 name=chrony
 version=4.9

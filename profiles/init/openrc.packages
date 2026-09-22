@@ -6,3 +6,6 @@ networkmanager
 acpid
 bluez
 gpm
+chrony
+pipewire
+wireplumber

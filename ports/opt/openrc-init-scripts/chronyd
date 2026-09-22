@@ -1,0 +1,22 @@
+#!/sbin/openrc-run
+name="chronyd"
+description="chrony NTP client/server"
+command="/usr/sbin/chronyd"
+command_args="-n"
+command_background=true
+pidfile="/run/${RC_SVCNAME}.pid"
+required_files="/etc/chrony.conf"
+
+depend() {
+    need localmount
+    after bootmisc modules
+    use net dns logger
+}
+
+start_pre() {
+    # systemd-tmpfiles owns these directories on the systemd profile; on
+    # OpenRC they must exist before chronyd drops privileges to the chrony
+    # user (the package is built with --with-user=chrony).
+    checkpath -d -m 0750 -o chrony:chrony /var/lib/chrony || return 1
+    checkpath -d -m 0755 -o chrony:chrony /run/chrony-dhcp || return 1
+}

@@ -1,10 +1,10 @@
 # Description: BFSOS OpenRC service scripts
 # URL: https://github.com/OpenRC/openrc
 # Maintainer: BFSOS maintainers
-# Depends: openrc dbus networkmanager acpid bluez gpm
+# Depends: openrc dbus networkmanager acpid bluez gpm chrony pipewire wireplumber
 
 name=openrc-init-scripts
-version=1
+version=2
 release=1
 source=(
     networkmanager
@@ -12,11 +12,25 @@ source=(
     bluetooth
     dbus
     gpm
+    chronyd
+    pipewire.desktop
+    pipewire-pulse.desktop
+    wireplumber.desktop
 )
 
 pkg_build() {
-    install -d -m 0755 "$PKG/etc/init.d"
-    for service in $source; do
+    install -d -m 0755 "$PKG/etc/init.d" \
+                      "$PKG/etc/xdg/autostart" || return 1
+
+    # SysV-style daemon services live in /etc/init.d.
+    for service in networkmanager acpid bluetooth dbus gpm chronyd; do
         install -m 0755 "$service" "$PKG/etc/init.d/$service" || return 1
+    done
+
+    # PipeWire session stack is per-user; without a per-user service manager
+    # it is launched by the desktop session from XDG autostart (as documented
+    # by LFS/BLFS and the Gentoo OpenRC wiki).
+    for entry in pipewire.desktop pipewire-pulse.desktop wireplumber.desktop; do
+        install -m 0644 "$entry" "$PKG/etc/xdg/autostart/$entry" || return 1
     done
 }

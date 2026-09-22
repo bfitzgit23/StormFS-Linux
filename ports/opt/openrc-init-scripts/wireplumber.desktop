@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=WirePlumber
+Comment=Start the PipeWire session policy manager when the desktop session starts
+Exec=/usr/bin/wireplumber
+Terminal=false
+Type=Application
+NoDisplay=true
+NotShowIn=none
