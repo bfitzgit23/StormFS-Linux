@@ -1,17 +1,14 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: FFTW is a C subroutine library for computing the discrete Fourier transform (DFT) in one or more dimensions, of arbitrary input size, and of both real and complex data (as well as of even/odd data, i.e. the discrete cosine/sine transforms or DCT/DST).
 # URL:         https://www.fftw.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on:  
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on:
 
 name=fftw
-version=3.3.10
-release=1
+version=3.3.11
+release=2
 source=(https://www.$name.org/$name-$version.tar.gz)
 
-build() {
-	cd $name-$version
+pkg_build() {
 
 	./configure --prefix=/usr    \
             --enable-shared  \

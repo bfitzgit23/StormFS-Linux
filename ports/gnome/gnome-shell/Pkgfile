@@ -1,11 +1,16 @@
-# Add your top line text here
-# Your line to add at the top here
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: evolution-data-server gcr4 gjs gnome-desktop ibus mutter polkit sassc startup-notification desktop-file-utils gnome-autoar gnome-bluetooth gst-plugins-base networkmanager power-profiles-daemon
 
 name=gnome-shell
-version=47.4
+version=50.4
 release=1
-source=(https://download.gnome.org/sources/$name/47/$name-$version.tar.xz)
+source=(https://download.gnome.org/sources/$name/${version%.*}/$name-$version.tar.xz)
 build_opt="--prefix=/usr  
             --buildtype=release 
             -D tests=false "
+
+pre_build () {
+    # GCC 16 const-correctness fix carried by current BLFS for GNOME Shell 50.
+    sed -e '/(ICalProperty/s/ICalProperty/const &/' \
+        -i src/calendar-server/gnome-shell-calendar-server.c
+}

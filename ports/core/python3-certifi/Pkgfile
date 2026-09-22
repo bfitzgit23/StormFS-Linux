@@ -1,12 +1,11 @@
-# Add your top line text here
-# Your line to add at the top here
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: 
 
 name=python3-certifi
-version=2024.12.14
-release=1
+version=2026.7.22
+release=2
 source=(https://files.pythonhosted.org/packages/source/c/certifi/certifi-${version}.tar.gz)
-pkg_buile () {
+pkg_build() {
 python3 -m build --wheel --no-isolation
 python3 -m installer --destdir="$PKG" dist/*.whl
 }

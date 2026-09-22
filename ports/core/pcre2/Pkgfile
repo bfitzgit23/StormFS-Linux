@@ -1,7 +1,6 @@
-# Add your top line text here
-# Your line to add at the top here
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 name=pcre2
-version=10.47
+version=10.48
 release=1
 source=(https://github.com/PCRE2Project/pcre2/releases/download/pcre2-$version/pcre2-$version.tar.bz2)
 

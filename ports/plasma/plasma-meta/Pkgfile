@@ -1,17 +1,18 @@
-# Add your top line text here
-# Your line to add at the top here
-# Description: KDE Plasma 6 meta port
+# Description: KDE Plasma 6 desktop meta package
 # URL: https://kde.org/plasma-desktop/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on: kde-frameworks-6 pulseaudio-qtkdecoration libkscreen libksysguard breeze breeze-gtk layer-shell-qt  plasma-activities libplasma kscreenlocker kinfocenter kglobalacceld kwayland kwin plasma5support plasma-activities-stats kpipewire plasma-workspace plasma-disks bluedevil kde-gtk-config kmenuedit kscreen kwallet-pam kwrited milou plasma-nm plasma-pa plasma-workspace-wallpapers polkit-kde-agent-1 powerdevil plasma-desktop kgamma ksshaskpass sddm-kcm kactivitymanagerd plasma-integration xdg-desktop-portal-kde drkonqi plasma-vault plasma-browser-integration kde-cli-tools systemsettings plasma-thunderbolt plasma-firewall plasma-systemmonitor qqc2-breeze-style ksystemstats oxygen-sounds kdeplasma-adons plasma-welcome ocean-sound-theme print-manager kdeplasma-addons
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Optional: plasma-login-manager
+# Depends on: kde-frameworks-6 pulseaudio-qt kdecoration libkscreen libksysguard breeze breeze-gtk layer-shell-qt plasma-activities libplasma kscreenlocker kinfocenter kglobalacceld kwayland kwin plasma5support plasma-activities-stats kpipewire plasma-workspace plasma-disks bluedevil kde-gtk-config kmenuedit kscreen kwallet-pam kwrited milou plasma-nm plasma-pa plasma-workspace-wallpapers polkit-kde-agent-1 powerdevil plasma-desktop kgamma ksshaskpass sddm-kcm kactivitymanagerd plasma-integration xdg-desktop-portal-kde drkonqi plasma-vault plasma-browser-integration kde-cli-tools systemsettings plasma-thunderbolt plasma-firewall plasma-systemmonitor qqc2-breeze-style ksystemstats oxygen-sounds kdeplasma-addons plasma-welcome ocean-sound-theme print-manager kwin-x11 pipewire wireplumber alsa-utils rtkit plasma-default-apps phonon-backend-vlc sddm
 
 name=plasma-meta
-version=6.3.4
-release=1
+version=6.7.5
+release=2
 source=()
 
-build() {
-    mkdir $PKG/usr
+pkg_build() {
+    install -d "$PKG/usr/share/bfsos/meta-packages" || return 1
+
+    printf '%s\n'         'BFSOS Plasma meta-package. Desktop audio activation is owned by the WirePlumber systemd user preset.'         > "$PKG/usr/share/bfsos/meta-packages/plasma-meta" || return 1
 }
 
 # vim: set ts=4 et:

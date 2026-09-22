@@ -1,16 +1,21 @@
-# Description: Fully feature complete YAML parser and emitter
-# URL: https://pantoniou.github.io/libfyaml/
-# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Description: Fully-featured YAML parser and emitter library
+# URL: https://github.com/pantoniou/libfyaml
+# Maintainer: Brian
+# Depends on: cmake
 
 name=libfyaml
 version=0.9.6
 release=1
-source=($name-$version.tar.gz::https://github.com/pantoniou/libfyaml/archive/refs/tags/v$version.tar.gz)
+source=(https://github.com/pantoniou/libfyaml/archive/refs/tags/v$version.tar.gz)
 
-build() {
-	cd $name-$version
-	autoreconf -fvi
-	./configure --prefix=/usr
-	make
-	make DESTDIR=$PKG install
+pkg_build() {
+    cmake -S . -B build \
+        -DCMAKE_INSTALL_PREFIX=/usr \
+        -DCMAKE_INSTALL_LIBDIR=lib \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DBUILD_SHARED_LIBS=ON \
+        -Wno-dev || return 1
+
+    cmake --build build -j "${JOBS:-1}" || return 1
+    DESTDIR="$PKG" cmake --install build || return 1
 }

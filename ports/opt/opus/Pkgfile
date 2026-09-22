@@ -1,18 +1,15 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: a totally open, royalty-free, highly versatile audio codec
 # URL: https://www.opus-codec.org
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Optional: doxygen texlive tl-unx
 
 
 name=opus
-version=1.5.2
-release=2
+version=1.6.1
+release=3
 source=(https://downloads.xiph.org/releases/opus/opus-$version.tar.gz)
 
-build() {
-  cd $name-$version
+pkg_build() {
   mkdir build &&
 cd    build &&
 

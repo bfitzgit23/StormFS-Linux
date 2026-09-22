@@ -1,0 +1,4 @@
+#!/bin/sh
+# Runtime linker cache refresh only.  Qt5 profile/ld.so configuration and
+# *-qt5 helper symlinks are package-owned by the Pkgfile.
+ldconfig

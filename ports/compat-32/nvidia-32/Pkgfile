@@ -1,16 +1,17 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: NVIDIA Linux Display Driver (production branch)
 # URL: http://www.nvidia.com/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: libglvnd-32
 
 name=nvidia-32
-version=550.107.02
-release=1
+version=595.99.02
+release=2
 source=(http://us.download.nvidia.com/XFree86/Linux-x86_64/$version/NVIDIA-Linux-x86_64-$version.run)
 
-build() {
+# Custom build required: prebuilt vendor archive supplies its own 32-bit payload
+pkg_build() {
+  (
+    set -e
 	sh NVIDIA-Linux-x86_64-$version.run --extract-only
 	cd NVIDIA-Linux-x86_64-$version/32
 
@@ -73,4 +74,5 @@ build() {
 	install -m 0755 libnvidia-gpucomp.so.$version $PKG/usr/lib32/
 	ln -s libnvidia-gpucomp.so.$version $PKG/usr/lib32/libnvidia-gpucomp.so.1
 	ln -s libnvidia-gpucomp.so.$version $PKG/usr/lib32/libnvidia-gpucomp.so
+  )
 }

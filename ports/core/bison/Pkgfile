@@ -1,6 +1,5 @@
-# Add your top line text here
-# Your line to add at the top here
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 name=bison
 version=3.8.2
 release=1
-source=(https://ftpmirror.gnu.org/bison/bison-$version.tar.xz)
+source=(https://ftp.gnu.org/gnu/bison/bison-$version.tar.xz)

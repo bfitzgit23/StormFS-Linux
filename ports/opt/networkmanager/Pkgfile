@@ -1,24 +1,41 @@
-# Add your top line text here
-# Your line to add at the top here
-# Description:  NetworkManager is a set of co-operative tools that make networking simple and straightforward. Whether you use WiFi, wired, 3G, or Bluetooth, NetworkManager allows you to quickly move from one network to another: Once a network has been configured and joined once, it can be detected and re-joined automatically the next time it's available.
-# URL:          https://download.gnome.org/sources/NetworkManager/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on:  jansson libndp curl dhcpcd gobject-introspection iptables newt nss polkit python3-gobject Systemd vala wpa_supplicant mobile-broadband-provider-info gtkdoc-scan glibmm
-# Optional: bluez dbus-python gnutls gtk-doc libpsl qt6 modemmanager upower valgrind dnsmasq firewalld libaudit libteam mobile-broadband-provider-info PPP RP-PPPoE
+# Description: Core NetworkManager daemon, nmcli, nm-online and nmtui
+# URL: https://networkmanager.dev/
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: curl gobject-introspection iptables libndp libpsl newt nss polkit python3-gobject systemd vala wpa_supplicant
+# Optional: bluez dbus-python gnutls gtk-doc jansson libaudit libbpf libnvme libteam modemmanager upower valgrind dnsmasq firewalld
+
 name=networkmanager
-version=1.50.0
+version=1.58.1
 release=1
-source=(https://download.gnome.org/sources/NetworkManager/1.50/NetworkManager-$version.tar.xz)
-build_opt="  --prefix=/usr
-      --buildtype=release         
-      -D libaudit=no              
-      -D nmtui=true               
-      -D ovs=false                
-      -D ppp=false                
-      -D selinux=false            
-      -D qt=false                 
-      -D session_tracking=systemd
-      -D modem_manager=false"
-pre_build() {
-grep -rl '^#!.*python$' | xargs sed -i '1s/python/&3/'
+source=(https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/releases/$version/downloads/NetworkManager-$version.tar.xz)
+
+pkg_build() {
+    grep -rl '^#!.*python$' . |
+        xargs -r sed -i '1s/python$/python3/' || return 1
+
+    meson setup build \
+        --prefix=/usr \
+        --buildtype=release \
+        -Dlibaudit=no \
+        -Dnmtui=true \
+        -Dovs=false \
+        -Dppp=false \
+        -Dnbft=false \
+        -Dselinux=false \
+        -Dqt=false \
+        -Dsession_tracking=systemd \
+        -Dnm_cloud_setup=false \
+        -Dclat=false \
+        -Dmodem_manager=false || return 1
+
+    meson compile -C build -j "${JOBS:-1}" || return 1
+
+    DESTDIR="$PKG" meson install -C build || return 1
+
+    install -d "$PKG/etc/NetworkManager/conf.d" || return 1
+
+    cat > "$PKG/etc/NetworkManager/NetworkManager.conf" <<'EOC'
+[main]
+plugins=keyfile
+EOC
 }

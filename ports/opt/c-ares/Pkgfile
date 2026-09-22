@@ -1,16 +1,14 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Asynchronous C DNS library
 # URL: https://c-ares.haxx.se/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends On: cmake
-# Optional: 
+# Optional:
 name=c-ares
-version=1.34.4
-release=1
+version=1.34.8
+release=3
 source=(https://github.com/c-ares/c-ares/releases/download/v$version/c-ares-$version.tar.gz)
-build() {
-  cmake -S $name-$version -B build -G Ninja \
+pkg_build() {
+  cmake -S . -B build -G Ninja \
     -D CMAKE_INSTALL_PREFIX=/usr \
     -D CMAKE_INSTALL_LIBDIR=lib \
     -D CMAKE_BUILD_TYPE=Release \

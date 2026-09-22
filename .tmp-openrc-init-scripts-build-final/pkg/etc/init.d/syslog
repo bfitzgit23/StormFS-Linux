@@ -1,0 +1,13 @@
+#!/sbin/openrc-run
+
+description="System logger"
+
+pidfile=/run/syslog.pid
+command=/usr/sbin/syslogd
+command_args="-F"
+command_background=true
+
+depend() {
+	provide logger
+	need localmount
+}

@@ -1,6 +1,6 @@
 # Description: Modern multi-threaded file and website downloader based on GNU Wget2.
 # URL: https://gitlab.com/gnuwget/wget2
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: gnutls libidn2 libpsl libunistring pcre2 zlib
 
 name=wget

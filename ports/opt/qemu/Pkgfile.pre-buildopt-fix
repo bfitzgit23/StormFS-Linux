@@ -1,0 +1,69 @@
+# Description: QEMU machine emulator and KVM virtualizer
+# URL: https://www.qemu.org/
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: alsa-lib glib gtk3 libaio libcap-ng libepoxy libseccomp libslirp liburing libusb usbredir libxml2 ncurses pixman sdl2 virglrenderer zlib zstd
+# Optional: pipewire pulseaudio
+
+name=qemu
+version=11.1.1
+release=3
+build_work=disk
+source=(https://download.qemu.org/qemu-$version.tar.xz)
+
+# QEMU's normal configure -> Ninja -> install flow is extension-owned.
+# Only QEMU-specific policy belongs here; standard prefix/sysconf/localstate
+# directories are supplied by the BFSOS pkgutils extension.
+build_opt=(
+    --libexecdir=/usr/lib/qemu
+    --target-list=x86_64-softmmu,i386-softmmu
+    --disable-download
+    --enable-tools
+    --enable-guest-agent
+    --enable-kvm
+    --enable-linux-aio
+    --enable-linux-io-uring
+    --enable-slirp
+    --enable-gtk
+    --enable-sdl
+    --enable-opengl
+    --enable-virglrenderer
+    --enable-vnc
+    --enable-seccomp
+    --enable-cap-ng
+    --enable-libusb
+    --enable-usb-redir
+    --disable-werror
+)
+
+pkg_build() {
+    mkdir -p build || return 1
+    cd build || return 1
+
+    ../configure \
+        --prefix=/usr \
+        --libdir=/usr/lib \
+        --libexecdir=/usr/lib/qemu \
+        --sysconfdir=/etc \
+        --localstatedir=/var \
+        --target-list=x86_64-softmmu,i386-softmmu \
+        --disable-download \
+        --enable-tools \
+        --enable-guest-agent \
+        --enable-kvm \
+        --enable-linux-aio \
+        --enable-linux-io-uring \
+        --enable-slirp \
+        --enable-gtk \
+        --enable-sdl \
+        --enable-opengl \
+        --enable-virglrenderer \
+        --enable-vnc \
+        --enable-seccomp \
+        --enable-cap-ng \
+        --enable-libusb \
+        --enable-usb-redir \
+        --disable-werror || return 1
+
+    ninja || return 1
+    DESTDIR="$PKG" ninja install || return 1
+}

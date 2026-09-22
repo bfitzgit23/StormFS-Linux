@@ -1,29 +1,22 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: A free and open video compression format from the Xiph.org Foundation.
 # URL: https://www.theora.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on: libtheora libvorbis-32
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: libogg-32 libtheora libvorbis-32
 
 name=libtheora-32
 version=1.2.0
-release=1
+release=3
 source=(https://downloads.xiph.org/releases/theora/libtheora-$version.tar.gz)
 
-build() {
-	cd libtheora-$version
+build_opt="--mandir=/usr/man --disable-examples"
 
-	./configure \
-		--prefix=/usr \
-		--libdir=/usr/lib32 \
-		--mandir=/usr/man \
-		--disable-examples \
-		--host=i686-pc-linux-gnu
-
-	make
-	make DESTDIR=$PKG install
+post_build() {
 	rm -r $PKG/usr/share/doc
 	rmdir $PKG/usr/share
 
 	rm -rf $PKG/{etc,var} $PKG/usr/{bin,etc,include,man,sbin,share}
+}
+
+pre_build() {
+        _bfs_require_compat32_extension 2 || return $?
 }

@@ -1,0 +1,20 @@
+#!/sbin/openrc-run
+
+description="Network Management daemon"
+
+pidfile=/run/NetworkManager/NetworkManager.pid
+command=/usr/sbin/NetworkManager
+command_args="--no-daemon"
+command_background=true
+
+depend() {
+	provide net
+	need dbus
+	need logger
+}
+
+stop() {
+	ebegin "Stopping NetworkManager"
+	start-stop-daemon --stop --exec /usr/sbin/NetworkManager
+	eend $?
+}

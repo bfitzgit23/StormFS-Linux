@@ -1,0 +1,57 @@
+--- a/pkgutil.cc
++++ b/pkgutil.cc
+@@ -388,6 +388,7 @@
+ void pkgutil::pkg_install(const string& filename, const set<string>& keep_list, const set<string>& non_install_list, bool upgrade) const
+ {
+ 	struct archive* archive;
++	struct archive* disk;
+ 	struct archive_entry* entry;
+ 	unsigned int i;
+ 	char buf[PATH_MAX];
+@@ -401,6 +402,22 @@
+ 	    DEFAULT_BYTES_PER_BLOCK) != ARCHIVE_OK)
+ 		throw runtime_error_with_errno("could not open " + filename, archive_errno(archive));
+ 
++	// Preserve numeric UID/GID values from the package archive.
++	// Do not enable libarchive standard user/group lookup here:
++	// static pkgadd must not enter NSS modules such as nss-systemd.
++	unsigned int flags = ARCHIVE_EXTRACT_OWNER |
++	                     ARCHIVE_EXTRACT_PERM |
++	                     ARCHIVE_EXTRACT_TIME |
++	                     ARCHIVE_EXTRACT_UNLINK;
++
++	disk = archive_write_disk_new();
++	if (!disk)
++		throw runtime_error("could not create archive disk writer");
++
++	if (archive_write_disk_set_options(disk, flags) != ARCHIVE_OK)
++		throw runtime_error("could not configure archive disk writer");
++
++
+ 	chdir(root.c_str());
+ 	absroot = getcwd(buf, sizeof(buf));
+ 
+@@ -433,13 +450,11 @@
+ 		                           (real_filename.c_str()));
+ 
+ 		// Extract file
+-		unsigned int flags = ARCHIVE_EXTRACT_OWNER | ARCHIVE_EXTRACT_PERM | ARCHIVE_EXTRACT_TIME | ARCHIVE_EXTRACT_UNLINK;
+-
+-		if (archive_read_extract(archive, entry, flags) != ARCHIVE_OK) {
++		if (archive_read_extract2(archive, entry, disk) != ARCHIVE_OK) {
+ 			// If a file fails to install we just print an error message and
+ 			// continue trying to install the rest of the package,
+ 			// unless this is not an upgrade.
+-			const char* msg = archive_error_string(archive);
++			const char* msg = archive_error_string(disk);
+ 			cerr << utilname << ": could not install " + archive_filename << ": " << msg << endl;
+ 			if (!upgrade)
+ 				throw runtime_error("extract error: " + archive_filename + ": " + msg);
+@@ -474,6 +489,7 @@
+ 			throw runtime_error("could not read " + filename);
+ 	}
+ 
++	archive_write_free(disk);
+ 	archive_read_free(archive);
+ }
+ 

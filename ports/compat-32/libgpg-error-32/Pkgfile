@@ -1,27 +1,20 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: A small library defining error values for GnuPG components
 # URL: https://www.gnupg.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: libgpg-error
 
 name=libgpg-error-32
-version=1.50
-release=1
+version=1.61
+release=2
 source=(https://mirrors.dotsrc.org/gcrypt/${name%-*}/${name%-*}-$version.tar.bz2)
 
-build() {
-	cd ${name%-*}-$version
+build_opt="--disable-nls --enable-static"
 
-	./configure \
-	    --host=i686-pc-linux-gnu      \
-		--prefix=/usr \
-		--libdir=/usr/lib32 \
-		--disable-nls \
-		--enable-static
-
-	make
-	make DESTDIR=$PKG install
+post_build() {
 
 	rm -r $PKG/usr/{share,bin,include}
+}
+
+pre_build() {
+        _bfs_require_compat32_extension 2 || return $?
 }

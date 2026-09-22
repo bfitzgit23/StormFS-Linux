@@ -1,17 +1,16 @@
-# Add your top line text here
-# Your line to add at the top here
-# Description: The Xorg libraries provide library routines that are used within all X Window applications.
+# Description: Standard X.Org applications plus BFSOS basic X test/session clients.
 # URL:         https://www.x.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on:  libpng mesa xbitmaps xcb-util iceauth luit mkfontscale sessreg setxkbmap smproxy x11perf xauth xbacklight xcmsdb xcursorgen xdpyinfo xdriinfo xev xgamma xhost xinput xkbcomp xkbcomp xkbevd xkbutils xkill xlsatoms xlsclients xmessage xmodmap xpr xprop xrandr xrdb xrefresh xset xsetroot xvinfo xwd xwininfo xwud bdftopcf
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: libpng mesa xbitmaps xcb-util iceauth luit mkfontscale sessreg setxkbmap smproxy x11perf xauth xbacklight xcmsdb xcursorgen xdpyinfo xdriinfo xev xgamma xhost xinput xkbcomp xkbevd xkbutils xkill xlsatoms xlsclients xmessage xmodmap xpr xprop xrandr xrdb xrefresh xset xsetroot xvinfo xwd xwininfo xwud bdftopcf twm xclock xterm
 
 name=xorg-apps
 version=7x
-release=1
+release=3
 source=()
 
-build() {
-
-
-	mkdir $PKG/usr
+pkg_build() {
+    mkdir -p "$PKG/usr/share/bfsos/meta-packages"
+    printf '%s
+' 'BFSOS xorg-apps meta package' \
+        > "$PKG/usr/share/bfsos/meta-packages/xorg-apps"
 }

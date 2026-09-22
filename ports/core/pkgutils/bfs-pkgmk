@@ -1,10 +1,181 @@
 #!/bin/sh
 set -eu
-if [ "$(id -u)" -eq 0 ] \
-   && command -v runuser >/dev/null 2>&1 \
-   && command -v fakeroot >/dev/null 2>&1 \
-   && id pkgmk >/dev/null 2>&1; then
-    exec runuser -u pkgmk -- env HOME=/var/lib/pkgmk USER=pkgmk LOGNAME=pkgmk \
-        CCACHE_DIR=/var/cache/ccache fakeroot -- pkgmk "$@"
+
+start_epoch="$(date +%s)"
+start_stamp="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+status=0
+
+# pkgutils upgrades are self-hosting.  If a previous interrupted pkgadd -u
+# removed the installed extension before replacement, restore it from the
+# synced core port before invoking pkgmk.
+if [ ! -r /var/lib/pkgmk/extension ] \
+   && [ "$(id -u)" -eq 0 ] \
+   && [ -r /usr/ports/core/pkgutils/extension ]; then
+    install -d -m755 -o 0 -g 0 /var/lib/pkgmk
+    install -m644 -o 0 -g 0 \
+        /usr/ports/core/pkgutils/extension /var/lib/pkgmk/extension
+    printf '%s\n' \
+        'BFSOS pkgmk: restored missing /var/lib/pkgmk/extension from the core port' >&2
 fi
-exec pkgmk "$@"
+
+# Determine ABI from the active ports collection.
+# A compat-32 build must use PKGMK_ARCH=32, while native collections must
+# never inherit that setting from an earlier dependency build.
+case "$PWD/" in
+    */compat-32/*)
+        export PKGMK_ARCH=32
+        ;;
+    *)
+        unset PKGMK_ARCH
+        ;;
+esac
+
+# Select the build-work backend before pkgmk creates or extracts any work.
+# An administrator-provided BFS_PKG_BUILD_WORK wins; otherwise read only the
+# simple top-level build_work= metadata rather than sourcing arbitrary Pkgfile
+# code in this wrapper.
+if [ -z "${BFS_PKG_BUILD_WORK:-}" ] && [ -r ./Pkgfile ]; then
+    bfs_port_build_work="$(
+        sed -n 's/^[[:space:]]*build_work[[:space:]]*=[[:space:]]*["'"'"']\{0,1\}\([^"'"'"'[:space:]#]*\).*/\1/p' ./Pkgfile | head -n1
+    )"
+    [ -n "$bfs_port_build_work" ] && BFS_PKG_BUILD_WORK="$bfs_port_build_work"
+fi
+BFS_PKG_BUILD_WORK="${BFS_PKG_BUILD_WORK:-tmpfs}"
+case "$BFS_PKG_BUILD_WORK" in
+    tmpfs|disk) export BFS_PKG_BUILD_WORK ;;
+    *)
+        printf 'BFSOS pkgmk: invalid build_work backend %s (expected tmpfs or disk)\n' \
+            "$BFS_PKG_BUILD_WORK" >&2
+        exit 2
+        ;;
+esac
+unset bfs_port_build_work
+
+human_elapsed() {
+    total="${1:-0}"
+    case "$total" in *[!0-9]*|'') total=0 ;; esac
+    days=$((total / 86400))
+    hours=$(((total % 86400) / 3600))
+    minutes=$(((total % 3600) / 60))
+    seconds=$((total % 60))
+    if [ "$days" -gt 0 ]; then
+        printf '%dd %dh %02dm %02ds' "$days" "$hours" "$minutes" "$seconds"
+    elif [ "$hours" -gt 0 ]; then
+        printf '%dh %02dm %02ds' "$hours" "$minutes" "$seconds"
+    elif [ "$minutes" -gt 0 ]; then
+        printf '%dm %02ds' "$minutes" "$seconds"
+    else
+        printf '%ds' "$seconds"
+    fi
+}
+
+# Prefer a persistent pkgmk-owned history location.  Fall back to /tmp only
+# during very early/bootstrap contexts where /var/lib/pkgmk is unavailable.
+history_dir="/var/lib/pkgmk"
+history_file="$history_dir/build-times.log"
+if ! mkdir -p "$history_dir" 2>/dev/null; then
+    history_file="/tmp/bfs-pkgmk-build-times.log"
+fi
+
+run_pkgmk() {
+    if [ "$(id -u)" -eq 0 ] \
+       && command -v runuser >/dev/null 2>&1 \
+       && command -v fakeroot >/dev/null 2>&1 \
+       && id pkgmk >/dev/null 2>&1; then
+        runuser -u pkgmk -- env HOME=/var/lib/pkgmk USER=pkgmk LOGNAME=pkgmk \
+            CCACHE_DIR=/var/cache/ccache fakeroot -- pkgmk "$@"
+    else
+        pkgmk "$@"
+    fi
+}
+
+set +e
+run_pkgmk "$@"
+status=$?
+set -e
+
+# Resolve package identity immediately so a failed build can never leave a
+# reusable archive behind. This also lets us validate successful-looking
+# archives before reporting success to prt-get.
+pkg_name="unknown"
+pkg_version="unknown"
+pkg_release="unknown"
+if [ -r ./Pkgfile ]; then
+    pkg_name="$(sed -n 's/^name=//p' ./Pkgfile | head -n1 | tr -d '"' || true)"
+    pkg_version="$(sed -n 's/^version=//p' ./Pkgfile | head -n1 | tr -d '"' || true)"
+    pkg_release="$(sed -n 's/^release=//p' ./Pkgfile | head -n1 | tr -d '"' || true)"
+fi
+
+package_glob="${pkg_name}#${pkg_version}-${pkg_release}.pkg.tar.*"
+
+# Honor a simple PKGMK_PACKAGE_DIR assignment from the active configuration so
+# failure cleanup is not tied to BFSOS's default cache path.  Keep the default
+# as a fallback for early/bootstrap environments.
+package_dir="${PKGMK_PACKAGE_DIR:-}"
+
+if [ -z "$package_dir" ] && [ -r /etc/pkgmk.conf ]; then
+    package_dir="$(
+        awk -F= '
+            /^[[:space:]]*PKGMK_PACKAGE_DIR[[:space:]]*=/ {
+                value = substr($0, index($0, "=") + 1)
+                gsub(/^[[:space:]]+|[[:space:]]+$/, "", value)
+
+                if ((value ~ /^".*"$/) || (value ~ /^\047.*\047$/))
+                    value = substr(value, 2, length(value) - 2)
+
+                print value
+            }
+        ' /etc/pkgmk.conf | tail -n1
+    )"
+fi
+
+[ -n "$package_dir" ] || package_dir=/var/cache/pkg/packages
+
+cleanup_failed_archives() {
+    [ "$pkg_name" != unknown ] || return 0
+    rm -f -- "$package_dir"/$package_glob 2>/dev/null || true
+}
+
+if [ "$status" -eq 0 ] && [ "$pkg_name" != unknown ]; then
+    archive_list="/tmp/bfs-pkgmk-archive-list.$$"
+    for archive in "$package_dir"/$package_glob; do
+        [ -f "$archive" ] || continue
+        if ! bsdtar -tf "$archive" >"$archive_list" 2>/dev/null || [ ! -s "$archive_list" ]; then
+            printf 'BFSOS pkgmk: rejecting invalid or empty package archive: %s\n' "$archive" >&2
+            status=1
+            cleanup_failed_archives
+            break
+        fi
+        # A directory-only archive is not an installable package payload. This
+        # catches failed builds that previously produced only entries such as
+        # usr/ while still returning a successful pkgmk status.
+        if ! awk 'substr($0, length($0), 1) != "/" { found=1; exit } END { exit !found }' "$archive_list"; then
+            printf 'BFSOS pkgmk: rejecting directory-only package archive: %s\n' "$archive" >&2
+            status=1
+            cleanup_failed_archives
+            break
+        fi
+    done
+    rm -f "$archive_list" 2>/dev/null || true
+fi
+
+if [ "$status" -ne 0 ]; then
+    cleanup_failed_archives
+fi
+
+end_epoch="$(date +%s)"
+elapsed=$((end_epoch - start_epoch))
+
+line="$(printf '%s\tpkgmk\t%s\t%s\t%s\tstatus=%s\telapsed_seconds=%s\n' \
+    "$start_stamp" "$pkg_name" "$pkg_version" "$pkg_release" "$status" "$elapsed")"
+
+if [ -w "$history_file" ] || { [ ! -e "$history_file" ] && [ -w "$(dirname "$history_file")" ]; }; then
+    printf '%s' "$line" >> "$history_file" 2>/dev/null || true
+elif command -v runuser >/dev/null 2>&1 && id pkgmk >/dev/null 2>&1; then
+    printf '%s' "$line" | runuser -u pkgmk -- sh -c 'cat >> /var/lib/pkgmk/build-times.log' 2>/dev/null || true
+fi
+
+printf 'BFSOS package timing: %s-%s-%s: %s (status %s)\n' \
+    "$pkg_name" "$pkg_version" "$pkg_release" "$(human_elapsed "$elapsed")" "$status"
+
+exit "$status"

@@ -1,0 +1,8 @@
+# Description: Yet Another JSON Library
+# URL: https://github.com/lloyd/yajl
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+name=yajl
+version=2.1.0
+release=1
+source=(https://github.com/lloyd/yajl/archive/refs/tags/$version.tar.gz)
+build_opt=(-DBUILD_SHARED_LIBS=ON)

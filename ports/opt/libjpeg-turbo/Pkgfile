@@ -1,19 +1,17 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Library of JPEG support functions.
 # URL: https://www.libjpeg-turbo.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: nasm cmake
 # Optional: yasm
 name=libjpeg-turbo
-version=3.1.1
-release=1
+version=3.2.0
+release=2
 source=(https://github.com/libjpeg-turbo/libjpeg-turbo/releases/download/$version/$name-$version.tar.gz)
 
 pkg_build() {
 
 
-	
+
 	mkdir build &&
 cd    build &&
 

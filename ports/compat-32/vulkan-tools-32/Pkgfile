@@ -1,25 +1,26 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Vulkan tools
 # URL: https://www.khronos.org/vulkan/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on: volk-32 vulkan-tools
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: glslang volk-32 vulkan-headers vulkan-loader-32
 # Optional: wayland-32
 
 name=vulkan-tools-32
 _name=Vulkan-Tools
-version=1.4.304
+version=1.4.357.0
 _version=vulkan-sdk-$version
-release=1
+release=3
 source=(https://github.com/KhronosGroup/Vulkan-Tools/archive/$_version/$_name-$version.tar.gz)
 
-build() {
+# Custom build required: 32-bit helper executables are retained with renamed commands
+pkg_build() {
+  (
+    set -e
 	prt-get isinst wayland-32 || PKGMK_VULKAN_TOOLS+=' -D BUILD_WSI_WAYLAND_SUPPORT=OFF'
 	prt-get isinst wayland-32 && export PKG_CONFIG_LIBDIR=/usr/lib32/pkgconfig:/usr/share/pkgconfig
 
 	export ASFLAGS='--32'
 
-	cmake -S $_name-$_version -B build -G Ninja $PKGMK_VULKAN_TOOLS \
+	cmake -S . -B build -G Ninja $PKGMK_VULKAN_TOOLS \
 		-D CMAKE_INSTALL_PREFIX=/usr \
 		-D CMAKE_INSTALL_LIBDIR=lib32 \
 		-D CMAKE_BUILD_TYPE=Release \
@@ -40,4 +41,5 @@ build() {
 	for app in $PKG/usr/bin/* ; do
 		mv $app $app-32
 	done
+  )
 }

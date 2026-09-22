@@ -1,8 +1,6 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: xorg driver xf86-input-vmmouse
 # URL: http://xorg.freedesktop.org
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: xorg-server
 
 name=xf86-input-vmmouse
@@ -10,8 +8,7 @@ version=13.2.0
 release=1
 source=(https://www.x.org/releases/individual/driver/$name-$version.tar.xz)
 
-build() {
-	cd xf86-input-vmmouse-$version
+pkg_build() {
 
 	./configure \
 		--prefix=/usr \

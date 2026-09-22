@@ -1,17 +1,14 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: ICE authority file utility
 # URL: http://xorg.freedesktop.org
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on:
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: libICE
 
 name=iceauth
-version=1.0.9
-release=1
+version=1.0.11
+release=2
 source=(https://www.x.org/releases/individual/app/iceauth-$version.tar.xz)
 
-build() {
-	cd iceauth-$version
+pkg_build() {
 
 	./configure $XORG_CONFIG
 

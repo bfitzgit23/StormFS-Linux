@@ -1,8 +1,6 @@
-# Add your top line text here
-# Your line to add at the top here
-# Description: The Desktop File Utils package contains command line utilities for working with Desktop entries. These utilities are used by Desktop Environments and other applications to manipulate the MIME-types application databases and help adhere to the Desktop Entry Specification. 
+# Description: The Desktop File Utils package contains command line utilities for working with Desktop entries. These utilities are used by Desktop Environments and other applications to manipulate the MIME-types application databases and help adhere to the Desktop Entry Specification.
 # URL:         https://www.freedesktop.org/software/$name
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on:  glib
 # Optional:    emacs
 
@@ -11,10 +9,8 @@ version=0.28
 release=1
 source=(https://www.freedesktop.org/software/$name/releases/$name-$version.tar.xz)
 
-build() {
-	cd $name-$version
+pkg_build() {
 
-	rm -fv /usr/bin/desktop-file-edit
 	mkdir build &&
 	cd    build &&
 

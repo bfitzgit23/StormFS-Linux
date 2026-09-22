@@ -1,5 +1,7 @@
 # Chapter 1: Introduction to OpenRC
 
+> **Scope:** This OpenRC guide accompanies the StormFS LFS book and defines the default init/service path for the LFS/BLFS 13.1 release line. Systemd is treated as optional compatibility material.
+
 ## What is OpenRC?
 
 OpenRC is a dependency-based init system that can be used with Linux distributions. It is developed by the Gentoo project and provides a fast, flexible, and reliable way to manage system services.

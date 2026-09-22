@@ -1,0 +1,13 @@
+# Description: BFSOS maintained Compiz Reloaded desktop stack
+# URL: https://gitlab.com/compiz
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: compiz compiz-bcop libcompizconfig compizconfig-python ccsm compiz-plugins-main compiz-plugins-extra compiz-plugins-experimental emerald emerald-themes fusion-icon
+
+name=compiz-meta
+version=0.8.18
+release=3
+
+pkg_build() {
+    install -d "$PKG/usr/share/doc/$name"
+    printf '%s\n' 'BFSOS Compiz Reloaded 0.8.18 meta-package.' > "$PKG/usr/share/doc/$name/README"
+}

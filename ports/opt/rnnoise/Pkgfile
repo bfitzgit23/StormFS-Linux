@@ -1,17 +1,19 @@
-# Description: A noise suppression library based on a recurrent neural network
-# URL: https://jmvalin.ca/demo/rnnoise
-# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Description: Recurrent neural network based audio noise suppression library
+# URL: https://github.com/xiph/rnnoise
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 
 name=rnnoise
 version=0.2
 release=1
-source=($name-$version.tar.gz::https://gitlab.xiph.org/xiph/rnnoise/-/archive/v$version/$name-v$version.tar.gz https://media.xiph.org/rnnoise/models/rnnoise_data-$_model_version.tar.gz)
+source=(https://github.com/xiph/rnnoise/releases/download/v$version/rnnoise-$version.tar.gz)
 
-build() {
-	cd $name-v$version
-	mv $SRC/src/* src
-	autoreconf -isf
-	./configure --prefix=/usr
-	make
-	make DESTDIR=$PKG install
+pkg_build() {
+    ./configure \
+        --prefix=/usr \
+        --disable-static || return 1
+
+    make -j${JOBS:-1} || return 1
+    make DESTDIR="$PKG" install || return 1
+
+    rm -rf "$PKG/usr/share/doc"
 }

@@ -1,6 +1,5 @@
-# Add your top line text here
-# Your line to add at the top here
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 name=m4
 version=1.4.21
 release=1
-source=(https://ftpmirror.gnu.org/m4/m4-$version.tar.xz)
+source=(https://ftp.gnu.org/gnu/m4/m4-$version.tar.xz)

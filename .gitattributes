@@ -1,0 +1,16 @@
+# Normalize all text files to Unix line endings (LF) on commit and checkout.
+* text=auto eol=lf
+
+# Never touch vendored blobs.
+*.png binary
+*.jpg binary
+*.gif binary
+*.ico binary
+*.zip binary
+*.gz binary
+*.xz binary
+*.bz2 binary
+*.zst binary
+*.pdf binary
+*.pem binary
+*.crt binary

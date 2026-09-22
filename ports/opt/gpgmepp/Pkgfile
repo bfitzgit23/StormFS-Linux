@@ -1,22 +1,13 @@
 # Description: C++ bindings for GPGME
-# URL: https://www.gnupg.org/related_software/gpgme/
-# Maintainer: Venom Linux Team, venomlinux at disroot dot org
-# Depends on: gpgme
+# URL: https://www.gnupg.org/
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: cmake gpgme
 
 name=gpgmepp
-version=2.1.0
+version=2.2.0
 release=1
-source=(https://gnupg.org/ftp/gcrypt/gpgmepp/$name-$version.tar.xz)
+source=(https://gnupg.org/ftp/gcrypt/$name/$name-$version.tar.xz)
 
-build() {
-	cmake -S $name-$version -B build \
-		-DCMAKE_INSTALL_PREFIX=/usr \
-		-DCMAKE_INSTALL_LIBDIR=lib \
-		-DCMAKE_INSTALL_LIBEXECDIR=lib \
-		-DCMAKE_BUILD_TYPE=Release \
-		-DCMAKE_C_FLAGS_RELEASE="$CFLAGS" \
-		-DCMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
-		-Wno-dev 
-	cmake --build build
-	DESTDIR=$PKG cmake --install build
-}
+build_opt="-DCMAKE_INSTALL_PREFIX=/usr
+           -DCMAKE_BUILD_TYPE=Release
+           -DBUILD_TESTING=OFF"

@@ -1,8 +1,6 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: A simple pythonic template language written in Python
 # URL: https://palletsprojects.com/p/jinja/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: python3-babel python3-markupsafe python3-build python3-wheel python3-installer 
 
 name=python3-jinja2

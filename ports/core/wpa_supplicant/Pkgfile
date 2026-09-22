@@ -1,22 +1,18 @@
-# Add your top line text here
-# Your line to add at the top here
-# Description: Implements WPA key negotiation with a WPA Authenticator and Extensible Authentication Protocol (EAP) authentication with an Authentication Server
-# URL:         
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on:  libnl openssl dbus libxml2
+# Description: WPA/WPA2/WPA3 supplicant and IEEE 802.1X client
+# URL: https://w1.fi/wpa_supplicant/
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: libnl openssl dbus libxml2 wireless-regdb
 
 name=wpa_supplicant
-version=2.11
-release=3
-source=(https://w1.fi/releases/wpa_supplicant-$version.tar.gz
-        wpa_supplicant.conf
-        openssl-4-asn1.patch)
+version=2.12
+release=6
+source=(
+    https://w1.fi/releases/wpa_supplicant-$version.tar.gz
+    wpa_supplicant.conf
+)
 
-build() {
-	cd $name-$version
-        patch -Np1 -i "$SRC/openssl-4-asn1.patch"
-
-	cat > wpa_supplicant/.config << "EOF"
+pkg_build() {
+    cat > wpa_supplicant/.config <<'EOF'
 CONFIG_BACKEND=file
 CONFIG_CTRL_IFACE=y
 CONFIG_DEBUG_FILE=y
@@ -47,37 +43,32 @@ CONFIG_CTRL_IFACE_DBUS_NEW=y
 CONFIG_CTRL_IFACE_DBUS_INTRO=y
 EOF
 
-	cd wpa_supplicant
-	make BINDIR=/usr/sbin LIBDIR=/usr/lib
-	mkdir -p $PKG/usr/sbin
-	install -v -m755 wpa_{cli,passphrase,supplicant} $PKG/usr/sbin/ &&
-	mkdir -p $PKG/usr/share/man/man5/ &&
-	install -v -m644 doc/docbook/wpa_supplicant.conf.5 $PKG/usr/share/man/man5/ &&
-	mkdir -p  $PKG/usr/share/man/man8/ &&
-	install -v -m644 doc/docbook/wpa_{cli,passphrase,supplicant}.8 $PKG/usr/share/man/man8/
-	
+    cd wpa_supplicant || return 1
 
-        # wpa_supplicant.conf
-        install -Dm 600 $SRC/wpa_supplicant.conf $PKG/etc/wpa_supplicant.conf
+    make -j "${JOBS:-1}" BINDIR=/usr/sbin LIBDIR=/usr/lib || return 1
 
-	#install the systemd support files
-	mkdir -p $PKG/usr/lib/systemd/system/
-	install -v -m644 systemd/*.service $PKG/usr/lib/systemd/system/
+    install -Dm755 wpa_cli "$PKG/usr/sbin/wpa_cli" || return 1
+    install -Dm755 wpa_passphrase "$PKG/usr/sbin/wpa_passphrase" || return 1
+    install -Dm755 wpa_supplicant "$PKG/usr/sbin/wpa_supplicant" || return 1
 
-	# If you have built WPA Supplicant with D-Bus support,
+    install -d "$PKG/usr/share/man/man5" "$PKG/usr/share/man/man8" || return 1
+    install -m644 doc/docbook/wpa_supplicant.conf.5 "$PKG/usr/share/man/man5/" || return 1
+    install -m644 doc/docbook/wpa_cli.8 doc/docbook/wpa_passphrase.8 \
+        doc/docbook/wpa_supplicant.8 "$PKG/usr/share/man/man8/" || return 1
 
-	  mkdir -p $PKG/usr/share/dbus-1/system-services/
-	  mkdir -p $PKG/etc/dbus-1/system.d
- install -v -m644 dbus/fi.w1.wpa_supplicant1.service \
-                $PKG/usr/share/dbus-1/system-services/ &&
-install -v -d -m755 $PKG/etc/dbus-1/system.d &&
-install -v -m644 dbus/dbus-wpa_supplicant.conf \
-                 $PKG/etc/dbus-1/system.d/wpa_supplicant.conf
-	
-       
+    install -Dm600 "$SRC/wpa_supplicant.conf" "$PKG/etc/wpa_supplicant.conf" || return 1
 
-	mkdir -p $PKG/etc/sysconfig
-	cat > $PKG/etc/sysconfig/ifconfig.wifi0 << "EOF"
+    install -d "$PKG/usr/lib/systemd/system" || return 1
+    install -m644 systemd/*.service "$PKG/usr/lib/systemd/system/" || return 1
+
+    install -d "$PKG/usr/share/dbus-1/system-services" "$PKG/etc/dbus-1/system.d" || return 1
+    install -m644 dbus/fi.w1.wpa_supplicant1.service \
+        "$PKG/usr/share/dbus-1/system-services/" || return 1
+    install -m644 dbus/dbus-wpa_supplicant.conf \
+        "$PKG/etc/dbus-1/system.d/wpa_supplicant.conf" || return 1
+
+    install -d "$PKG/etc/sysconfig" || return 1
+    cat > "$PKG/etc/sysconfig/ifconfig.wifi0" <<'EOF'
 ONBOOT="no"
 IFACE="wlan0"
 SERVICE="wpa"

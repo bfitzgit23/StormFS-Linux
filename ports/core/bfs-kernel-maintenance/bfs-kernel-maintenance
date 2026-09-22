@@ -1,0 +1,434 @@
+#!/bin/sh
+set -eu
+
+STATE_ROOT=${BFS_KERNEL_STATE_ROOT:-/var/lib/bfsos/kernel-state}
+ROLLBACK_ROOT=${BFS_KERNEL_ROLLBACK_ROOT:-/var/lib/bfsos/kernel-rollback}
+BOOT_ROOT=${BFS_KERNEL_BOOT_ROOT:-/boot}
+MODULE_ROOT=${BFS_KERNEL_MODULE_ROOT:-/lib/modules}
+SOURCE_ROOT=${BFS_KERNEL_SOURCE_ROOT:-/usr/src}
+ETC_ROOT=${BFS_KERNEL_ETC_ROOT:-/etc}
+GRUB_BOOT_PREFIX=${BFS_KERNEL_GRUB_BOOT_PREFIX:-/boot}
+
+flavor_suffix() (
+    case "$1" in
+        linux) printf '%s' 'BFS-Linux' ;;
+        linux-lts) printf '%s' 'BFS-LTS' ;;
+        *) echo "Unknown BFSOS kernel flavor: $1" >&2; return 2 ;;
+    esac
+)
+
+state_dir() (
+    printf '%s/%s' "$STATE_ROOT" "$1"
+)
+
+atomic_write() (
+    file=$1
+    value=$2
+    dir=${file%/*}
+    mkdir -p "$dir"
+    tmp="$dir/.${file##*/}.tmp.$$"
+    printf '%s\n' "$value" > "$tmp"
+    mv -f "$tmp" "$file"
+)
+
+atomic_symlink() (
+    target=$1
+    link=$2
+    dir=${link%/*}
+    base=${link##*/}
+    mkdir -p "$dir"
+    tmp="$dir/.${base}.tmp.$$"
+    rm -f -- "$tmp"
+    ln -s "$target" "$tmp"
+    mv -Tf -- "$tmp" "$link"
+)
+
+latest_artifact_for_flavor() (
+    suffix=$(flavor_suffix "$1")
+    find "$BOOT_ROOT" -maxdepth 1 -type f -name "vmlinuz-*-${suffix}" -printf '%f\n' 2>/dev/null |
+        sed 's/^vmlinuz-//' | sort -V | tail -n1
+)
+
+running_for_flavor() (
+    flavor=$1
+    suffix=$(flavor_suffix "$flavor")
+    running=$(uname -r 2>/dev/null || true)
+    case "$running" in
+        *-"$suffix") printf '%s\n' "$running" ;;
+    esac
+)
+
+candidate_previous() (
+    flavor=$1
+    dir=$(state_dir "$flavor")
+    candidate=$(running_for_flavor "$flavor" || true)
+    if [ -z "$candidate" ] && [ -s "$dir/known-good" ]; then
+        candidate=$(cat "$dir/known-good")
+    fi
+    if [ -z "$candidate" ]; then
+        candidate=$(latest_artifact_for_flavor "$flavor" || true)
+    fi
+    printf '%s\n' "$candidate"
+)
+
+stage_kernel() (
+    flavor=$1
+    kver=$2
+    [ -n "$kver" ] || return 0
+    dest="$ROLLBACK_ROOT/$flavor/$kver"
+    mkdir -p "$dest/boot" "$dest/modules"
+
+    for prefix in vmlinuz initramfs System.map config; do
+        case "$prefix" in
+            initramfs) src="$BOOT_ROOT/initramfs-$kver.img" ;;
+            *) src="$BOOT_ROOT/$prefix-$kver" ;;
+        esac
+        [ -e "$src" ] || continue
+        cp -a "$src" "$dest/boot/" || return 1
+    done
+
+    if [ -d "$MODULE_ROOT/$kver" ]; then
+        rm -rf "$dest/modules/$kver"
+        cp -a "$MODULE_ROOT/$kver" "$dest/modules/$kver" || return 1
+    fi
+
+    atomic_write "$dest/STAGED" "$kver"
+)
+
+restore_staged_kernel() (
+    flavor=$1
+    kver=$2
+    [ -n "$kver" ] || return 0
+    src="$ROLLBACK_ROOT/$flavor/$kver"
+    [ -s "$src/STAGED" ] || return 0
+
+    mkdir -p "$BOOT_ROOT" "$MODULE_ROOT"
+    for f in "$src"/boot/*; do
+        [ -e "$f" ] || continue
+        target="$BOOT_ROOT/${f##*/}"
+        [ -e "$target" ] || cp -a "$f" "$target" || return 1
+    done
+    if [ -d "$src/modules/$kver" ] && [ ! -d "$MODULE_ROOT/$kver" ]; then
+        cp -a "$src/modules/$kver" "$MODULE_ROOT/$kver" || return 1
+    fi
+)
+
+set_selected_aliases() (
+    flavor=$1
+    kver=$2
+    selected=$(cat "$ETC_ROOT/bfsos/kernel-flavor" 2>/dev/null || true)
+
+    case "$flavor" in
+        linux)
+            if [ "$selected" = linux ]; then
+                atomic_symlink "linux-$kver" "$SOURCE_ROOT/linux"
+            fi
+            ;;
+        linux-lts)
+            atomic_symlink "vmlinuz-$kver" "$BOOT_ROOT/vmlinuz-lts"
+            if [ -d "$SOURCE_ROOT/linux-$kver" ]; then
+                atomic_symlink "linux-$kver" "$SOURCE_ROOT/linux-lts"
+                if [ "$selected" = linux-lts ]; then
+                    atomic_symlink "linux-$kver" "$SOURCE_ROOT/linux"
+                fi
+            fi
+            ;;
+    esac
+)
+
+md_compat_state_file() (
+    printf '%s/bfsos/md-compat.conf' "$ETC_ROOT"
+)
+
+kernel_has_md_compat_parameter() (
+    kver=$1
+    info="$MODULE_ROOT/$kver/modules.builtin.modinfo"
+    [ -r "$info" ] || return 1
+    grep -Eq '(^|[.=:])check_new_feature([=:]|$)' "$info"
+)
+
+apply_md_compat_policy() (
+    cfg=$1
+    state=$(md_compat_state_file)
+    [ -s "$state" ] || return 0
+    grep -q '^uuid=' "$state" || return 0
+
+    kvers=$(sed -nE 's@^[[:space:]]*linux[[:space:]]+[^[:space:]]*vmlinuz-(6\.18\.[^[:space:]]*-BFS-LTS)([[:space:]].*)?$@\1@p' "$cfg" | sort -u)
+    [ -n "$kvers" ] || {
+        echo "BFSOS kernel maintenance: MD compatibility state exists but no Linux 6.18 LTS GRUB entry was generated." >&2
+        return 1
+    }
+
+    for kver in $kvers; do
+        kernel_has_md_compat_parameter "$kver" || {
+            echo "BFSOS kernel maintenance: refusing MD compatibility token for $kver; modules.builtin.modinfo does not expose check_new_feature." >&2
+            return 1
+        }
+    done
+
+    # Every affected 6.18 LTS entry must already carry the required MD UUIDs
+    # from the installer-managed global storage command line before the safety
+    # bypass is appended.
+    while IFS= read -r uuid; do
+        [ -n "$uuid" ] || continue
+        awk -v uuid="$uuid" '
+            /^[[:space:]]*linux[[:space:]]/ && /vmlinuz-6\.18\.[^[:space:]]*-BFS-LTS/ {
+                found=1
+                if (index($0, "rd.md.uuid=" uuid) == 0) bad=1
+            }
+            END { exit (!found || bad) }
+        ' "$cfg" || {
+            echo "BFSOS kernel maintenance: refusing MD compatibility token; a 6.18 LTS entry is missing rd.md.uuid=$uuid." >&2
+            return 1
+        }
+    done <<EOF_UUIDS
+$(sed -n 's/^uuid=//p' "$state")
+EOF_UUIDS
+
+    tmp="$cfg.mdcompat.$$"
+    awk '
+        /^[[:space:]]*linux[[:space:]]/ && /vmlinuz-6\.18\.[^[:space:]]*-BFS-LTS/ {
+            if ($0 !~ /(^|[[:space:]])md_mod\.check_new_feature=/)
+                $0=$0 " md_mod.check_new_feature=0"
+        }
+        { print }
+    ' "$cfg" > "$tmp" || { rm -f "$tmp"; return 1; }
+    mv -f "$tmp" "$cfg"
+
+    # The bypass is deliberately kernel-specific.  A leak into mainline or a
+    # future LTS series is a hard error, not something to silently tolerate.
+    if awk '
+        /^[[:space:]]*linux[[:space:]]/ && $0 !~ /vmlinuz-6\.18\.[^[:space:]]*-BFS-LTS/ && /md_mod\.check_new_feature=0/ { bad=1 }
+        END { exit bad ? 0 : 1 }
+    ' "$cfg"; then
+        echo "BFSOS kernel maintenance: MD compatibility token leaked into a non-6.18-LTS GRUB entry." >&2
+        return 1
+    fi
+)
+
+set_grub_top_level() (
+    selected=$(cat "$ETC_ROOT/bfsos/kernel-flavor" 2>/dev/null || true)
+    case "$selected" in
+        linux) suffix=BFS-Linux ;;
+        linux-lts) suffix=BFS-LTS ;;
+        *) return 0 ;;
+    esac
+
+    dir=$(state_dir "$selected")
+    preferred=$(cat "$dir/pending" 2>/dev/null || true)
+    if [ -z "$preferred" ] || [ ! -s "$BOOT_ROOT/vmlinuz-$preferred" ]; then
+        preferred=$(cat "$dir/known-good" 2>/dev/null || true)
+    fi
+    if [ -z "$preferred" ] || [ ! -s "$BOOT_ROOT/vmlinuz-$preferred" ]; then
+        preferred=$(latest_artifact_for_flavor "$selected" || true)
+    fi
+    [ -n "$preferred" ] || return 0
+
+    grub_default="$ETC_ROOT/default/grub"
+    mkdir -p "${grub_default%/*}"
+    tmp="${grub_default}.tmp.$$"
+    if [ -f "$grub_default" ]; then
+        awk '!/^[[:space:]]*GRUB_TOP_LEVEL=/' "$grub_default" > "$tmp"
+    else
+        : > "$tmp"
+    fi
+    printf '\n# Managed by BFSOS kernel maintenance.\nGRUB_TOP_LEVEL="%s/vmlinuz-%s"\n' \
+        "$GRUB_BOOT_PREFIX" "$preferred" >> "$tmp"
+    mv -f "$tmp" "$grub_default"
+)
+
+regenerate_grub() (
+    command -v grub-mkconfig >/dev/null 2>&1 || return 0
+    [ -d "$BOOT_ROOT/grub" ] || return 0
+
+    set_grub_top_level
+    target="$BOOT_ROOT/grub/grub.cfg"
+    tmp="$BOOT_ROOT/grub/.grub.cfg.bfs.$$"
+    lts_alias="$BOOT_ROOT/vmlinuz-lts"
+    alias_tmp="$BOOT_ROOT/.bfs-vmlinuz-lts.$$"
+
+    cleanup_grub_generation() {
+        rm -f -- "$tmp"
+        if [ -L "$alias_tmp" ]; then
+            mv -Tf -- "$alias_tmp" "$lts_alias"
+        fi
+    }
+    trap cleanup_grub_generation EXIT HUP INT TERM
+
+    # /boot/vmlinuz-lts is a convenience alias, not a distinct installed
+    # kernel. Hide it only while GRUB scans /boot so 10_linux cannot emit a
+    # duplicate menu entry for the same versioned BFS-LTS image.
+    if [ -L "$lts_alias" ]; then
+        rm -f -- "$alias_tmp"
+        mv -Tf -- "$lts_alias" "$alias_tmp"
+    fi
+
+    grub-mkconfig -o "$tmp" || {
+        echo "BFSOS kernel maintenance: grub-mkconfig failed; existing grub.cfg was preserved." >&2
+        return 1
+    }
+
+    apply_md_compat_policy "$tmp" || {
+        echo "BFSOS kernel maintenance: per-kernel MD compatibility policy failed; existing grub.cfg was preserved." >&2
+        return 1
+    }
+
+    # Restore the public alias immediately after discovery; later validation
+    # operates only on the generated temporary configuration.
+    if [ -L "$alias_tmp" ]; then
+        mv -Tf -- "$alias_tmp" "$lts_alias"
+    fi
+    [ -s "$tmp" ] || {
+        echo "BFSOS kernel maintenance: generated GRUB configuration is empty." >&2
+        return 1
+    }
+    if command -v grub-script-check >/dev/null 2>&1; then
+        grub-script-check "$tmp" >/dev/null || {
+            echo "BFSOS kernel maintenance: generated GRUB configuration failed validation." >&2
+            return 1
+        }
+    fi
+    mv -f "$tmp" "$target"
+    trap - EXIT HUP INT TERM
+)
+
+prune_flavor() (
+    flavor=$1
+    keep_current=$2
+    keep_previous=$3
+    suffix=$(flavor_suffix "$flavor")
+
+    for image in "$BOOT_ROOT"/vmlinuz-*-"$suffix"; do
+        [ -e "$image" ] || continue
+        kver=${image##*/vmlinuz-}
+        [ "$kver" = "$keep_current" ] && continue
+        [ -n "$keep_previous" ] && [ "$kver" = "$keep_previous" ] && continue
+
+        echo "BFSOS kernel cleanup: removing obsolete $kver"
+        rm -f -- \
+            "$BOOT_ROOT/vmlinuz-$kver" \
+            "$BOOT_ROOT/initramfs-$kver.img" \
+            "$BOOT_ROOT/System.map-$kver" \
+            "$BOOT_ROOT/config-$kver"
+        rm -rf -- "$MODULE_ROOT/$kver" "$SOURCE_ROOT/linux-$kver"
+    done
+
+    for image in "$BOOT_ROOT"/initramfs-*-"$suffix".img; do
+        [ -e "$image" ] || continue
+        kver=${image##*/initramfs-}
+        kver=${kver%.img}
+        [ "$kver" = "$keep_current" ] && continue
+        [ -n "$keep_previous" ] && [ "$kver" = "$keep_previous" ] && continue
+        [ -e "$BOOT_ROOT/vmlinuz-$kver" ] || rm -f -- "$image"
+    done
+
+    # Rollback staging is only needed until a successful boot. Keep the current
+    # and immediately previous snapshots; discard older staging directories.
+    if [ -d "$ROLLBACK_ROOT/$flavor" ]; then
+        for dir in "$ROLLBACK_ROOT/$flavor"/*; do
+            [ -d "$dir" ] || continue
+            kver=${dir##*/}
+            [ "$kver" = "$keep_current" ] && continue
+            [ -n "$keep_previous" ] && [ "$kver" = "$keep_previous" ] && continue
+            rm -rf -- "$dir"
+        done
+    fi
+)
+
+pre_upgrade() (
+    flavor=$1
+    dir=$(state_dir "$flavor")
+    mkdir -p "$dir"
+
+    pending=$(cat "$dir/pending" 2>/dev/null || true)
+    running=$(uname -r 2>/dev/null || true)
+    if [ -n "$pending" ] && [ "$pending" != "$running" ]; then
+        echo "BFSOS kernel update refused: $flavor kernel $pending is still pending boot verification." >&2
+        echo "Boot that kernel successfully (or resolve/remove the pending state deliberately) before another $flavor update." >&2
+        return 1
+    fi
+
+    previous=$(candidate_previous "$flavor")
+    if [ -n "$previous" ]; then
+        echo "BFSOS kernel update: staging rollback kernel $previous"
+        stage_kernel "$flavor" "$previous"
+        atomic_write "$dir/previous" "$previous"
+    else
+        rm -f "$dir/previous"
+    fi
+)
+
+restore_previous() (
+    flavor=$1
+    dir=$(state_dir "$flavor")
+    previous=$(cat "$dir/previous" 2>/dev/null || true)
+    restore_staged_kernel "$flavor" "$previous"
+)
+
+mark_pending() (
+    flavor=$1
+    kver=$2
+    dir=$(state_dir "$flavor")
+    mkdir -p "$dir"
+
+    restore_previous "$flavor"
+    atomic_write "$dir/pending" "$kver"
+    set_selected_aliases "$flavor" "$kver"
+)
+
+finalize_boot() (
+    running=$(uname -r 2>/dev/null || true)
+    case "$running" in
+        *-BFS-Linux) flavor=linux ;;
+        *-BFS-LTS) flavor=linux-lts ;;
+        *)
+            # This service may run on a rescue/non-BFS kernel; leave pending
+            # state untouched rather than falsely declaring success.
+            return 0
+            ;;
+    esac
+
+    dir=$(state_dir "$flavor")
+    pending=$(cat "$dir/pending" 2>/dev/null || true)
+    [ -n "$pending" ] || return 0
+    [ "$pending" = "$running" ] || return 0
+
+    previous=$(cat "$dir/previous" 2>/dev/null || true)
+    echo "BFSOS kernel verification: confirmed successful boot of $running"
+    atomic_write "$dir/known-good" "$running"
+    rm -f "$dir/pending"
+
+    # Never delete the running kernel or the immediate rollback kernel.
+    prune_flavor "$flavor" "$running" "$previous"
+    set_selected_aliases "$flavor" "$running"
+    regenerate_grub
+)
+
+usage() (
+    echo "Usage: bfs-kernel-maintenance {pre-upgrade FLAVOR|restore-previous FLAVOR|mark-pending FLAVOR KVER|regenerate-grub|finalize-boot}" >&2
+    exit 2
+)
+
+case "${1:-}" in
+    pre-upgrade)
+        [ "$#" -eq 2 ] || usage
+        pre_upgrade "$2"
+        ;;
+    restore-previous)
+        [ "$#" -eq 2 ] || usage
+        restore_previous "$2"
+        ;;
+    mark-pending)
+        [ "$#" -eq 3 ] || usage
+        mark_pending "$2" "$3"
+        ;;
+    regenerate-grub)
+        [ "$#" -eq 1 ] || usage
+        regenerate_grub
+        ;;
+    finalize-boot)
+        [ "$#" -eq 1 ] || usage
+        finalize_boot
+        ;;
+    *) usage ;;
+esac

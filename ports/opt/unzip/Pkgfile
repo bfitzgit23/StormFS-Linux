@@ -1,23 +1,29 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Decompress utility for zipfiles
 # URL: https://infozip.sourceforge.net/UnZip.html
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 
 name=unzip
 version=6.0
-release=8
-source=(https://downloads.sourceforge.net/sourceforge/infozip/${name}${version//./}.tar.gz
-  28-cve-2022-0529-and-cve-2022-0530.patch
-  cumulative.patch)
+release=9
 
-build() {
-    cd ${name}${version//./}
-    patch -Np1 -i $SRC/cumulative.patch
-    patch -p1 -F3 -i $SRC/28-cve-2022-0529-and-cve-2022-0530.patch
+source=(
+    https://downloads.sourceforge.net/sourceforge/infozip/${name}${version//./}.tar.gz
+    cumulative.patch
+    gcc15.patch
+)
 
+pkg_build() {
     sed -i 's/-O3//' unix/configure
-    make -f unix/Makefile LOCAL_UNZIP="$CFLAGS" unzips
-    make -f unix/Makefile prefix=$PKG/usr MANDIR=$PKG/usr/share/man/man1 install
-    ln -sf unzip $PKG/usr/bin/zipinfo
+
+    make -f unix/Makefile \
+        LOCAL_UNZIP="$CFLAGS -std=gnu17" \
+        unzips
+
+    make -f unix/Makefile \
+        prefix="$PKG/usr" \
+        MANDIR="$PKG/usr/share/man/man1" \
+        install
+
+    ln -sf unzip "$PKG/usr/bin/zipinfo"
 }
+

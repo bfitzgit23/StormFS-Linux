@@ -75,8 +75,8 @@ Enable=false
 
 ```bash
 # Enable GNOME-related services
+sudo rc-update add dbus boot
 sudo rc-update add gdm default
-sudo rc-update add dbus default
 sudo rc-update add polkitd default
 sudo rc-update add upowerd default
 sudo rc-update add accounts-daemon default
@@ -84,35 +84,15 @@ sudo rc-update add colord default
 sudo rc-update add avahi-daemon default
 ```
 
-### GNOME Service Init Script
+### Session Services
+
+GNOME Shell, Tracker, and the calendar server are user-session components. Do not launch them from a root-owned OpenRC init script. GDM starts the selected GNOME session, and GNOME or its desktop autostart files launch the user services with the correct D-Bus and display environment.
+
+Inspect the active user session instead:
 
 ```bash
-cat > /etc/init.d/gnome-services <<'EOF'
-#!/sbin/openrc-run
-
-depend() {
-    need dbus
-    after elogind
-    before gdm
-}
-
-start() {
-    ebegin "Starting GNOME services"
-    # Start GNOME Shell services
-    /usr/lib/gnome-shell-calendar-server &
-    /usr/lib/tracker-miner-fs-3 &
-    eend $?
-}
-
-stop() {
-    ebegin "Stopping GNOME services"
-    killall gnome-shell-calendar-server 2>/dev/null
-    killall tracker-miner-fs-3 2>/dev/null
-    eend $?
-}
-EOF
-
-chmod +x /etc/init.d/gnome-services
+pgrep -a 'gnome-shell|tracker|evolution-calendar'
+gnome-session-inhibit --list 2>/dev/null || true
 ```
 
 ### Service Management
@@ -256,6 +236,15 @@ gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-timeout 
    ```bash
    sudo journalctl -u gdm
    ```
+
+   With the OpenRC logging path, inspect the syslog files instead:
+   ```bash
+   rc-service syslog status
+   tail -n 100 /var/log/messages
+   tail -n 100 /var/log/auth.log 2>/dev/null || true
+   ```
+
+   The existing `journalctl` command above is the systemd form; keep it for systemd installations. On OpenRC, use the syslog files and the display-manager service status.
 
 3. Reset GNOME settings:
    ```bash

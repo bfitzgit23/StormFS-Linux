@@ -1,8 +1,7 @@
-# Add your top line text here
-# Your line to add at the top here
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 name=groff
 version=1.24.1
 release=1
-source=(https://ftpmirror.gnu.org/groff/groff-$version.tar.gz)
+source=(https://ftp.gnu.org/gnu/groff/groff-$version.tar.gz)
 export PAGE=Letter
 build_opt="--without-x"

@@ -1,14 +1,12 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: A stream oriented C library for parsing XML
-# URL:         
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on:  
+# URL:
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on:
 
 name=dejagnu
 version=1.6.3
 release=1
-source=( https://ftpmirror.gnu.org/dejagnu/dejagnu-$version.tar.gz)
+source=( https://ftp.gnu.org/gnu/dejagnu/dejagnu-$version.tar.gz)
 
 pkg_build() {
 

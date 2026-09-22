@@ -1,12 +1,12 @@
 # Description: Provides a way to load and enumerate PKCS #11 modules.
 # URL: https://p11-glue.github.io/p11-glue/p11-kit.html
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on: libtasn1 make-ca
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: libtasn1 meson
 # Optional: libffi nss
 
 name=p11-kit
-version=0.26.4
-release=1
+version=0.26.5
+release=4
 
 source=(
     https://github.com/p11-glue/$name/releases/download/$version/$name-$version.tar.xz
@@ -32,12 +32,12 @@ build_opt=(
 pkg_build() {
     meson setup \
         p11-build \
-        "${build_opt[@]}"
+        "${build_opt[@]}" || return 1
 
-    ninja -C p11-build
+    meson compile -C p11-build -j "${JOBS:-1}" || return 1
 
     DESTDIR="$PKG" \
-        ninja -C p11-build install
+        meson install -C p11-build || return 1
 }
 
 post_build() {

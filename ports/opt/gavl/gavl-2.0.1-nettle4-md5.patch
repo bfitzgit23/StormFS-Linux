@@ -1,0 +1,5 @@
+--- a/gavl/md5.c
++++ b/gavl/md5.c
+@@ -33 +33 @@
+-  md5_digest(&ctx, GAVL_MD5_SIZE, resblock);
++  md5_digest(&ctx, resblock);

@@ -1,25 +1,20 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: libmng - Mutliple Image Network Graphics 
 # URL: http://www.libmng.com
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on: lcms2-32
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: lcms2-32 libjpeg-turbo-32
 
 name=libmng-32
 version=2.0.3
-release=1
+release=3
 source=(https://downloads.sourceforge.net/project/libmng//libmng-devel/$version/libmng-$version.tar.gz)
 
-build() {
-	cd libmng-$version
+build_opt="--mandir=/usr/man"
 
-	./configure \
-		--prefix=/usr \
-		--libdir=/usr/lib32 \
-		--mandir=/usr/man
-
-	make
-	make DESTDIR=$PKG install
+post_build() {
 
 	rm -r $PKG/usr/{include,man}
+}
+
+pre_build() {
+        _bfs_require_compat32_extension 2 || return $?
 }

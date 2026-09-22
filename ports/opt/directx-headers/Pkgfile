@@ -1,15 +1,13 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Official DirectX headers available under an open source license
 # URL: https://github.com/microsoft/DirectX-Headers
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 
 name=directx-headers
-version=1.615.0
+version=1.619.5
 release=1
 source=(https://github.com/microsoft/DirectX-Headers/archive/v$version/$name-$version.tar.gz)
 
-build() {
+pkg_build() {
   meson setup DirectX-Headers-$version build \
     --prefix=/usr \
     --buildtype=plain \

@@ -1,3 +1,4 @@
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 name=python3-babel
 version=2.18.0
 release=1
@@ -34,8 +35,7 @@ unpack_source() {
     done
 }
 
-build() {
-    cd "babel-$version"
+pkg_build() {
 
     /usr/bin/python3 setup.py import_cldr
 

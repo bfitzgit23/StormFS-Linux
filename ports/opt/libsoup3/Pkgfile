@@ -1,18 +1,15 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: HTTP library implementation in C
 # URL: https://wiki.gnome.org/action/show/Projects/libsoup
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on: glib-networking libpsl libxml2 sqlite nghttp2
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: glib-networking libpsl libxml2 sqlite libnghttp2
 # Optional: gobject-introspection vala apache brotli curl MIT Kerberos V5  gtk-doc php samba sysprof
 
 name=libsoup3
-version=3.6.5
+version=3.6.6
 release=1
 source=(https://ftp.gnome.org/pub/gnome/sources/libsoup/${version%.*}/libsoup-$version.tar.xz)
 
-build() {
-  cd libsoup-$version
+pkg_build() {
   sed 's/apiversion/soup_version/' -i docs/reference/meson.build
    mkdir build &&
 cd    build &&

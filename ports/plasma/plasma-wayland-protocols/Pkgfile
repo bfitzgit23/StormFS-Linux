@@ -1,9 +1,8 @@
-# Add your top line text here
-# Your line to add at the top here
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: extra-cmake-modules
 
 name=plasma-wayland-protocols
-version=1.18.0
-release=1
+version=1.21.0
+release=3
 source=(https://download.kde.org/stable/${name}/$name-$version.tar.xz)
 

@@ -1,8 +1,6 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: xorg font font-bh-ttf
 # URL: http://xorg.freedesktop.org
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: fontconfig mkfontscale
 
 name=xorg-font-bh-ttf
@@ -10,8 +8,7 @@ version=1.0.3
 release=2
 source=(https://www.x.org/releases/individual/font/font-bh-ttf-$version.tar.bz2)
 
-build() {
-	cd font-bh-ttf-$version
+pkg_build() {
 
 	./configure --prefix=/usr
 

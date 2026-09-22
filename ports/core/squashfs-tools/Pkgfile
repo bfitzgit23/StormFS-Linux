@@ -1,19 +1,26 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Tools for squashfs, a highly compressed read-only filesystem for Linux
-# URL:         
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# URL:
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on:  zlib lzo xz lz4
 
 name=squashfs-tools
 version=4.7.5
-release=1
-source=(https://downloads.sourceforge.net/squashfs/squashfs$version.tar.gz
-	squashfs-tools-$version-symlink_install.patch)
+release=2
+source=(https://downloads.sourceforge.net/squashfs/squashfs$version.tar.gz)
 
-build() {
-	cd $name-$version
-	patch -Np1 -i ../squashfs-tools-$version-symlink_install.patch
-	make -C $name XZ_SUPPORT=1 LZO_SUPPORT=1 LZMA_XZ_SUPPORT=1 LZ4_SUPPORT=1 ZSTD_SUPPORT=0
-	make -C $name install INSTALL_DIR="$PKG/usr/bin"
+pkg_build() {
+        make -C $name \
+                XZ_SUPPORT=1 \
+                LZO_SUPPORT=1 \
+                LZMA_XZ_SUPPORT=1 \
+                LZ4_SUPPORT=1 \
+                ZSTD_SUPPORT=0
+
+        make -C $name install \
+                XZ_SUPPORT=1 \
+                LZO_SUPPORT=1 \
+                LZMA_XZ_SUPPORT=1 \
+                LZ4_SUPPORT=1 \
+                ZSTD_SUPPORT=0 \
+                INSTALL_DIR="$PKG/usr/bin"
 }

@@ -1,0 +1,20 @@
+# Description: PEP 517 build backend and core utilities for Poetry
+# URL: https://github.com/python-poetry/poetry-core
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: python3-build python3-installer
+
+name=python3-poetry-core
+version=2.4.1
+release=1
+
+source=(
+  https://files.pythonhosted.org/packages/b2/f2/fa88c58efb9a737c7e0e40e470edd0973fe33f0f277d24dcf17454b50974/poetry_core-$version.tar.gz
+)
+
+pkg_build() {
+  python3 -m build --wheel --no-isolation
+
+  python3 -m installer \
+    --destdir="$PKG" \
+    dist/*.whl
+}

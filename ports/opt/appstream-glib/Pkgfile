@@ -1,11 +1,10 @@
-# Add your top line text here
-# Your line to add at the top here
-# Depends on: curl gdk-pixbuf libarchive 
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: curl gdk-pixbuf libarchive
 
 name=appstream-glib
-version=0.8.3
-release=1
+version=0.8.4
+release=2
 source=(http://people.freedesktop.org/~hughsient/${name}/releases/${name}-${version}.tar.xz)
-build_opt="--prefix=/usr   
-      --buildtype=release 
+build_opt="--prefix=/usr
+      --buildtype=release
       -D rpm=false"

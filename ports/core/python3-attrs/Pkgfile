@@ -1,10 +1,9 @@
-# Add your top line text here
-# Your line to add at the top here
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: python3-hatch-fancy-pypi-readme python3-hatch-vcs
 
 
 name=python3-attrs
-version=24.3.0
+version=26.1.0
 release=1
 source=(https://files.pythonhosted.org/packages/source/a/attrs/attrs-${version}.tar.gz)
 pkg_build() {

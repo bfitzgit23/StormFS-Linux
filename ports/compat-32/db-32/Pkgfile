@@ -1,19 +1,18 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Berkeley DB
 # URL:         http://www.oracle.com/database/berkeley-db/index.html
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 
 name=db-32
 version=5.3.28
-release=2
+release=4
 source=(https://download.oracle.com/berkeley-db/db-$version.tar.gz
 	0001-atomic-Rename-local-__atomic_compare_exchange-to-avo.patch)
 
-build() {
-    cd db-$version/build_unix
-
-    patch -p1 -d .. -i $SRC/0001-atomic-Rename-local-__atomic_compare_exchange-to-avo.patch
+# Custom build required: Berkeley DB configures from build_unix and dist
+pkg_build() {
+  (
+    set -e
+    cd build_unix || return 1
 
     ../dist/configure --prefix=/usr \
 		--libdir=/usr/lib32 \
@@ -26,4 +25,5 @@ build() {
     rm -r $PKG/usr/docs
     chmod -R +w $PKG
     rm -rf $PKG/usr/{bin,include}
+  )
 }

@@ -1,9 +1,10 @@
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 name=gettext
 version=1.0
 release=1
 
 source=(
-    https://ftpmirror.gnu.org/gettext/gettext-$version.tar.xz)
+    https://ftp.gnu.org/gnu/gettext/gettext-$version.tar.xz)
 
 pkg_build() {
     ./configure \

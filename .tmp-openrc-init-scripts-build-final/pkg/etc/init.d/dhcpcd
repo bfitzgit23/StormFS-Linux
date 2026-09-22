@@ -1,0 +1,23 @@
+#!/sbin/openrc-run
+
+description="DHCP client daemon"
+
+pidfile=/run/dhcpcd.pid
+command=/usr/sbin/dhcpcd
+command_args="-q"
+command_background=true
+
+start_pre() {
+	checkpath --directory --mode 0755 /run/dhcpcd
+}
+
+depend() {
+	provide net
+	need logger
+}
+
+stop() {
+	ebegin "Stopping dhcpcd"
+	start-stop-daemon --stop --pidfile "$pidfile" --exec "$command"
+	eend $?
+}

@@ -1,17 +1,15 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: A library for layout and rendering of text
 # URL: https://www.gtk.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on: fontconfig freerype harfbuzz fribidi 
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: fontconfig freetype harfbuzz fribidi
 # Optional: cairo gobject-introspection xorg-libs cantarell gi-docGen  help2man libthai sysprof
 name=pango
-version=1.56.1
-release=1
+version=1.58.2
+release=2
 source=(https://download.gnome.org/sources/$name/${version:0:4}/$name-$version.tar.xz)
 
-build() {
-	meson setup $name-$version build \
+pkg_build() {
+	meson setup build . \
 		--prefix=/usr \
 		--buildtype=plain \
 		--wrap-mode nodownload \

@@ -1,3 +1,0 @@
-# /etc/conf.d/rc.conf.default - StormFS OpenRC defaults
-
-OPENRC_SHELL=/bin/sh

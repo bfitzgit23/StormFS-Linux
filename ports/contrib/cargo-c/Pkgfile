@@ -1,27 +1,55 @@
-# Add your top line text here
-# Your line to add at the top here
-# Description: A cargo subcommand to build and install C-ABI compatibile dynamic and static libraries
+# Description: Cargo subcommand to build and install C-ABI compatible dynamic and static libraries
 # URL: https://github.com/lu-zero/cargo-c/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on: rustc libssh2 sqlite
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: rustc libssh2 sqlite openssl pkgconf
 
 name=cargo-c
-version=0.10.14
-release=1
-source=(https://github.com/lu-zero/cargo-c/archive/v$version/$name-$version.tar.gz
-  https://github.com/lu-zero/cargo-c/releases/download/v$version/Cargo.lock)
-renames=(SKIP $name-$version-cargo.lock)
+version=0.10.24
+release=2
 
-build() {
-  prt-get isinst sccache && export RUSTC_WRAPPER=/usr/bin/sccache
-  [[ ! -e $PKGMK_SOURCE_DIR/rust ]] && mkdir $PKGMK_SOURCE_DIR/rust
-  [ ! -e /usr/include/libssh2.h ] || export LIBSSH2_SYS_USE_PKG_CONFIG=1    &&
-  [ ! -e /usr/include/sqlite3.h ] || export LIBSQLITE3_SYS_USE_PKG_CONFIG=1 &&
-  cp $SRC/$name-$version-cargo.lock $name-$version/Cargo.lock
+source=(
+  https://github.com/lu-zero/cargo-c/archive/v$version/$name-$version.tar.gz
+  https://github.com/lu-zero/cargo-c/releases/download/v$version/Cargo.lock
+)
 
-  export CFLAGS+=' -ffat-lto-objects'
-  cargo fetch --locked --target "$(rustc -vV | sed -n 's/host: //p')" --manifest-path $name-$version/Cargo.toml
-  cargo build --release --frozen --manifest-path $name-$version/Cargo.toml
+renames=(
+  SKIP
+  $name-$version-cargo.lock
+)
 
-  find $SRC/$name-$version/target/release -maxdepth 1 -type f -executable -exec install -D -m755 -t $PKG/usr/bin {} +
+# Custom build required: Cargo uses an externally supplied lockfile and target-qualified binaries
+pkg_build() {
+  (
+    set -e
+  local target
+  target="$(rustc -vV | sed -n 's/^host: //p')" || return 1
+
+  if prt-get isinst sccache >/dev/null 2>&1; then
+    export RUSTC_WRAPPER=/usr/bin/sccache
+  fi
+
+  export LIBSSH2_SYS_USE_PKG_CONFIG=1
+  export LIBSQLITE3_SYS_USE_PKG_CONFIG=1
+  export CFLAGS="${CFLAGS} -ffat-lto-objects"
+
+  cp "$SRC/$name-$version-cargo.lock" Cargo.lock || return 1
+
+  cargo fetch \
+    --locked \
+    --target "$target" || return 1
+
+  cargo build \
+    --release \
+    --frozen \
+    --target "$target" || return 1
+
+  install -d "$PKG/usr/bin" || return 1
+
+  install -m755 \
+    "target/$target/release/cargo-capi" \
+    "target/$target/release/cargo-cbuild" \
+    "target/$target/release/cargo-cinstall" \
+    "target/$target/release/cargo-ctest" \
+    "$PKG/usr/bin/" || return 1
+  )
 }

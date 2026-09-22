@@ -1,18 +1,15 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: libpcap provides functions for user-level packet capture, used in low-level network monitoring.
 # URL:          https://www.tcpdump.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on:  
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on:
 # Optional:	bluezlibnl libusb dag septel
 
 name=libpcap
-version=1.10.4
+version=1.10.7
 release=1
 source=(https://www.tcpdump.org/release/$name-$version.tar.gz)
 
-build() {
-	cd $name-$version
+pkg_build() {
 
 	./configure --prefix=/usr &&
 make

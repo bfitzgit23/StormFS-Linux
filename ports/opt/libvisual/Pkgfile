@@ -1,24 +1,23 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Libvisual Audio Visualization
-# URL: http://libvisual.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on: libsdl sdl2
+# URL: https://github.com/Libvisual/libvisual
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: sdl12-compat
 
 name=libvisual
 version=0.4.2
-release=1
-source=(https://github.com/Libvisual/libvisual/releases/download/$name-$version/$name-$version.tar.bz2)
+release=2
 
-build() {
-  cd $name-$version
+source=(
+  https://github.com/Libvisual/libvisual/releases/download/$name-$version/$name-$version.tar.bz2
+)
 
+pkg_build() {
   ./configure \
     --prefix=/usr \
     --enable-extra-optimization \
     --disable-examples \
-    --disable-nls
+    --disable-nls || return 1
 
-  make
-  make DESTDIR=$PKG install
+  make -j "${JOBS:-1}" || return 1
+  make DESTDIR="$PKG" install || return 1
 }

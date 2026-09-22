@@ -1,8 +1,301 @@
 # Chapter 12: System Initialization
 
-This chapter covers **systemd**, the init system and service manager used by StormFS Linux. An OpenRC alternative is also documented.
+This chapter uses **OpenRC** as the default init system and service manager for StormFS Linux. The systemd material later in this chapter is optional compatibility/reference material and must not be enabled when OpenRC is the selected init system.
 
-## 12.1 systemd Overview
+## 12.1 OpenRC Default
+
+OpenRC manages service dependencies and runlevels. It is not itself PID 1; pair it with the OpenRC init provided by the package and boot the system with the OpenRC init path.
+
+### Installing OpenRC
+
+Use the MLFS OpenRC build, or install the StormFS port:
+
+```bash
+# Port-based installation
+prt-get install openrc openrc-init-scripts
+
+# Source-based installation
+cd /sources
+wget https://github.com/OpenRC/openrc/archive/refs/tags/0.63.tar.gz
+wget https://www.linuxfromscratch.org/glfs/view/dev/download/openrc/openrc-0.63-lock-1.patch
+tar xf 0.63.tar.gz
+cd openrc-0.63
+patch -Np1 -i ../openrc-0.63-lock-1.patch
+sed -i '/set -u/d' tools/meson_final.sh
+mkdir build
+cd build
+meson setup --prefix=/usr \\
+            --sysconfdir=/etc \\
+            --buildtype=release \\
+            -D uucp_group=root \\
+            -D pam=false ..
+ninja
+ninja install
+```
+
+### Enable the OpenRC Base Services
+
+```bash
+# Create the standard runlevels if the package did not create them
+mkdir -p /etc/runlevels/{boot,default,nonetwork,shutdown,sysinit}
+
+# Add the core services needed by an installed system
+rc-update add devfs sysinit
+rc-update add dmesg sysinit
+rc-update add mdev sysinit 2>/dev/null || true
+rc-update add hwdrivers boot 2>/dev/null || true
+rc-update add syslog boot 2>/dev/null || true
+rc-update add networking boot
+
+# Inspect and start the selected runlevel
+rc-status
+rc-service networking start
+```
+
+Set the kernel command line to use the OpenRC init supplied by the installation, and verify after reboot:
+
+```bash
+ps -p 1 -o comm=
+rc-status
+rc-update show
+```
+
+### OpenRC Equivalents for Common Services
+
+The following services provide the OpenRC equivalents for the functions commonly supplied by systemd. Install only the services you need, then add them to the indicated runlevel.
+
+| systemd function | OpenRC implementation | Typical runlevel |
+|------------------|-----------------------|------------------|
+| `systemd-journald` | `sysklogd` or `syslog-ng` | `boot` |
+| `systemd-logind` | `ConsoleKit2` (or elogind from an external port tree) | D-Bus activated |
+
+| `systemd-networkd` | `networking` with `dhcpcd`, or `NetworkManager` | `boot`/`default` |
+| `systemd-resolved` | `openresolv` with `dhcpcd` or NetworkManager | `boot` |
+| `systemd-udevd` | `eudev` with the `udev` and `udev-postmount` scripts | `sysinit` |
+| `systemd-timesyncd` | `chronyd` | `boot` |
+| `systemd-tmpfiles` | OpenRC `local.d`/`localmount` setup scripts | `boot` |
+| `dbus.service` | `dbus` OpenRC service | `boot` |
+| `getty@tty1.service` | `agetty` entries in `/etc/inittab` | PID 1/inittab |
+
+For the services shipped by StormFS, enable the available OpenRC scripts as follows:
+
+```bash
+# Logging, device management, time, and message bus
+prt-get install sysklogd eudev chrony dbus openrc-init-scripts
+rc-update add syslog boot 2>/dev/null || rc-update add sysklogd boot 2>/dev/null || true
+rc-update add udev sysinit
+rc-update add udev-postmount sysinit
+rc-update add chronyd boot
+rc-update add dbus boot 2>/dev/null || true
+
+# Session provider for desktop environments (D-Bus activated)
+prt-get install consolekit2
+rc-update add dbus boot 2>/dev/null || true
+```
+
+Desktop environments that expect the logind D-Bus API need a compatible session provider. This repository provides `consolekit2`; it is D-Bus activated rather than an OpenRC runlevel service. An external `elogind` port can be used instead when available, but do not enable a systemd service in the OpenRC profile.
+
+### OpenRC Logging Instead of journald
+
+Use a traditional syslog daemon and text logs in `/var/log`. With the StormFS `sysklogd` port:
+
+```bash
+prt-get install sysklogd
+install -d -m 0755 /var/log
+
+cat > /etc/init.d/syslog << 'EOF'
+#!/sbin/openrc-run
+
+description="System logger"
+command="/usr/sbin/syslogd"
+command_args="-F"
+command_background=true
+pidfile="/run/${RC_SVCNAME}.pid"
+
+depend() {
+    need localmount
+}
+EOF
+chmod 755 /etc/init.d/syslog
+rc-update add syslog boot
+rc-service syslog start
+
+# Follow the equivalent of journalctl -f
+tail -f /var/log/messages
+
+# Filter the equivalent of journalctl -p err
+grep -iE 'err|crit|alert|emerg' /var/log/messages
+```
+
+Configure rotation with `logrotate` or a periodic cron job. `syslogd -F` can receive kernel and daemon messages, while individual services should log through syslog or their own files.
+
+### OpenRC Session, Device, and Time Services
+
+```bash
+# Session management for graphical desktops
+prt-get install consolekit2
+rc-update add dbus boot 2>/dev/null || true
+
+# Device events and post-mount triggers
+rc-update add udev sysinit
+rc-update add udev-postmount sysinit
+
+# NTP synchronization, replacing systemd-timesyncd
+prt-get install chrony
+rc-update add chronyd boot
+rc-service chronyd start
+
+# Check the replacements
+rc-service udev status
+rc-service chronyd status
+rc-status --all
+```
+
+For temporary-file setup, place idempotent commands in `/etc/local.d/boot.start` and make the file executable. This replaces the subset of `systemd-tmpfiles-setup.service` normally needed by local services:
+
+```bash
+install -d -m 0755 /etc/local.d
+cat > /etc/local.d/boot.start << 'EOF'
+#!/bin/sh
+install -d -m 0755 /run/stormfs /var/log/stormfs
+chown root:root /run/stormfs /var/log/stormfs
+EOF
+chmod 755 /etc/local.d/boot.start
+rc-update add local default
+```
+
+### OpenRC Console Logins
+
+OpenRC uses the kernel's init process together with `agetty`; it does not require a `getty@tty1.service` unit. Add the consoles you want to `/etc/inittab`:
+
+```text
+tty1::respawn:/sbin/agetty --noclear tty1  linux
+tty2::respawn:/sbin/agetty tty2  linux
+tty3::respawn:/sbin/agetty tty3  linux
+```
+
+After editing `inittab`, ask the init process to reload it:
+
+```bash
+init q
+```
+
+### OpenRC Replacement for systemd Service Files
+
+Translate a long-running `.service` unit into an executable `/etc/init.d/` script. Dependencies replace `After=`/`Requires=`, `command_background` replaces a simple service supervisor, and `rc-update` replaces `[Install]` targets:
+
+```bash
+cat > /etc/init.d/stormfs-webapp << 'EOF'
+#!/sbin/openrc-run
+
+description="StormFS Web Application"
+command="/opt/stormfs-webapp/bin/webapp"
+command_args="--config /etc/stormfs/webapp.conf"
+command_user="webapp:webapp"
+command_background=true
+pidfile="/run/${RC_SVCNAME}.pid"
+output_log="/var/log/stormfs-webapp.log"
+error_log="/var/log/stormfs-webapp.err"
+
+depend() {
+    need net
+    use logger
+    after firewall
+}
+
+start_pre() {
+    checkpath --directory --owner webapp:webapp --mode 0750 /run/stormfs-webapp
+}
+EOF
+chmod 755 /etc/init.d/stormfs-webapp
+rc-update add stormfs-webapp default
+rc-service stormfs-webapp start
+```
+
+### OpenRC Replacement for systemd Timers
+
+OpenRC has no native timer-unit format. Use `cronie` for recurring jobs and an executable OpenRC service for a one-shot operation:
+
+```bash
+prt-get install cronie
+rc-update add crond boot 2>/dev/null || true
+
+cat > /etc/cron.d/stormfs-cleanup << 'EOF'
+17 3 * * * root /usr/local/bin/stormfs-cleanup.sh
+EOF
+chmod 644 /etc/cron.d/stormfs-cleanup
+```
+
+The cron entry replaces `OnCalendar=daily`; put `Persistent`-style catch-up behavior in the cleanup script if the job must run after downtime.
+
+### OpenRC Replacement for Socket Activation
+
+OpenRC does not provide native `.socket` units. Prefer making the daemon listen on its own socket and managing it with an OpenRC service. If a separate listener is required, use a socket-capable daemon such as `socat` and make the application service depend on it:
+
+```bash
+cat > /etc/init.d/mysocketapp << 'EOF'
+#!/sbin/openrc-run
+
+description="StormFS socket application"
+command="/opt/myapp/bin/myapp"
+command_args="--socket /run/stormfs/app.sock"
+command_background=true
+pidfile="/run/${RC_SVCNAME}.pid"
+
+depend() {
+    need localmount
+    after logger
+}
+
+start_pre() {
+    checkpath --directory --mode 0755 /run/stormfs
+}
+EOF
+chmod 755 /etc/init.d/mysocketapp
+rc-update add mysocketapp default
+```
+
+### OpenRC Runlevels Instead of systemd Targets
+
+OpenRC runlevels replace the operational role of systemd targets:
+
+| systemd target | OpenRC equivalent |
+|----------------|-------------------|
+| `rescue.target` | `single` or `nonetwork` |
+| `multi-user.target` | `default` |
+| `graphical.target` | `default` plus the display manager |
+| `poweroff.target` | `shutdown` and `/sbin/poweroff` |
+| `reboot.target` | `shutdown` and `/sbin/reboot` |
+
+```bash
+# Inspect and switch runlevels
+rc-status --all
+rc-update show
+rc single
+rc default
+
+# Enable or disable a service in a runlevel
+rc-update add sshd default
+rc-update del sshd default
+```
+
+### OpenRC Boot Optimization
+
+```bash
+# /etc/rc.conf
+RC_PARALLEL="YES"       # Start independent services in parallel
+RC_VERBOSE="NO"         # Set YES while troubleshooting
+RC_LOGGER="YES"         # Keep a boot log when supported by the logger
+
+# Measure service startup without systemd-analyze
+rc-status --servicelist
+rc-status --all
+rc-depend -a
+```
+
+Use `rc_parallel` only after dependencies are correct. A service that relies on ordering must declare `need`, `use`, `after`, or `before` in its init script.
+
+## 12.2 Optional systemd Compatibility
 
 systemd is the first process started by the kernel (PID 1) and is responsible for:
 
@@ -26,26 +319,30 @@ If rebuilding from source:
 
 ```bash
 cd /sources
-tar -xf systemd-256.tar.xz
-cd systemd-256
+tar -xf systemd-261.2.tar.gz
+cd systemd-261.2
 
-mkdir build && cd build
+mkdir -p build
+cd build
 
 meson setup .. \
     --prefix=/usr \
-    --sysconfdir=/etc \
-    --localstatedir=/var \
-    -Dblkid=true \
-    -Dbuildtype=release \
-    -Dfirstboot=false \
-    -Dinstall-tests=false \
-    -Dman=false \
-    -Dmode=release \
-    -Drootprefix= \
-    -Dhomed=false \
-    -Duserdb=false \
-    -Dldconfig=false \
-    -Dnss-systemd=false
+    --buildtype=release \
+    -D default-dnssec=no \
+    -D firstboot=false \
+    -D install-tests=false \
+    -D ldconfig=false \
+    -D sysusers=false \
+    -D rpmmacrosdir=no \
+    -D homed=disabled \
+    -D man=disabled \
+    -D mode=release \
+    -D pamconfdir=no \
+    -D dev-kvm-mode=0660 \
+    -D nobody-group=nogroup \
+    -D sysupdate=disabled \
+    -D ukify=disabled \
+    -D docdir=/usr/share/doc/systemd-261.2
 
 ninja
 ninja install
@@ -54,7 +351,7 @@ systemd-machine-id-setup
 systemd-hwdb update
 ```
 
-## 12.2 Essential systemd Units
+## 12.3 Optional systemd Units
 
 ### systemd-journald (Logging)
 
@@ -197,7 +494,7 @@ resolvectl flush-caches
 | `dbus.service` | D-Bus message bus (required by most services) |
 | `getty@tty1.service` | Virtual console login |
 
-## 12.3 Creating Custom Service Files
+## 12.4 Optional systemd Service Files
 
 ### Service File Structure
 
@@ -327,7 +624,7 @@ User=webapp
 ExecStart=/opt/myapp/bin/myapp --socket
 ```
 
-## 12.4 Service Management Commands
+## 12.5 Optional systemd Service Management Commands
 
 ### Starting and Stopping Services
 
@@ -432,7 +729,7 @@ systemctl list-dependencies multi-user.target
 systemctl show nginx.service
 ```
 
-## 12.5 Runlevels and Targets
+## 12.6 Optional systemd Runlevels and Targets
 
 systemd replaces traditional runlevels with **targets**. Each target represents a specific system state.
 
@@ -503,7 +800,7 @@ systemctl enable stormfs-custom.target
 systemctl isolate stormfs-custom.target
 ```
 
-## 12.6 Boot Target Dependencies
+## 12.7 Optional systemd Boot Target Dependencies
 
 Understanding the boot sequence:
 
@@ -528,7 +825,7 @@ View the dependency tree:
 systemctl list-dependencies multi-user.target
 ```
 
-## 12.7 Boot Optimization
+## 12.8 Optional systemd Boot Optimization
 
 ### Measuring Boot Time
 
@@ -560,9 +857,9 @@ systemctl disable systemd-resolved
 sed -i 's/^#SystemMaxUse=.*/SystemMaxUse=200M/' /etc/systemd/journald.conf
 ```
 
-## 12.8 OpenRC Alternative
+## 12.9 OpenRC Reference
 
-For users who prefer a lightweight init system without systemd, StormFS provides OpenRC as an alternative.
+For detailed OpenRC service and runlevel reference, use this section together with the dedicated BLFS OpenRC book. OpenRC is the default path for this book; the systemd sections above are optional.
 
 ### Key Differences
 
@@ -576,12 +873,12 @@ For users who prefer a lightweight init system without systemd, StormFS provides
 | Boot speed | faster (parallel) | fast (parallel with zsh) |
 | Resource usage | higher | minimal |
 
-### Installing OpenRC
+### OpenRC Source Reference
 
 ```bash
 cd /sources
-tar -xf openrc-0.54.tar.xz
-cd openrc-0.54
+tar -xf openrc-0.63.tar.gz
+cd openrc-0.63
 
 ./configure --prefix=/usr           \
             --sysconfdir=/etc/openrc \
@@ -677,7 +974,7 @@ RC_DEFAULT_OPTS="--quiet"
 - [Arch Wiki: OpenRC](https://wiki.archlinux.org/title/OpenRC)
 - [CRUX Handbook: init](https://crux.nu/Handbook#init)
 
-## 12.9 References
+## 12.10 References
 
 - [systemd Documentation](https://www.freedesktop.org/software/systemd/man/)
 - [systemd.unit(5)](https://www.freedesktop.org/software/systemd/man/systemd.unit.html)

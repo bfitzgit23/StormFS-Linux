@@ -1,21 +1,18 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: CD paranoia libraries from libcdio
 # URL: https://github.com/rocky/libcdio-paranoia
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: libcdio
 
 name=libcdio-paranoia
-version=10.2+2.0.1
+version=10.2+2.0.2
 release=1
 source=(https://ftp.gnu.org/gnu/libcdio/$name-$version.tar.gz)
 
-build() {
-	cd $name-$version
+pkg_build() {
 
 	./configure --prefix=/usr --disable-static &&
 make
 	make DESTDIR=$PKG install
 
-	rm -r $PKG/usr/share/man/jp
+	rm -rf "$PKG/usr/share/man/ja"
 }

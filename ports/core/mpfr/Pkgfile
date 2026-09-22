@@ -1,7 +1,6 @@
-# Add your top line text here
-# Your line to add at the top here
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 name=mpfr
 version=4.2.2
 release=1
-source=(https://ftpmirror.gnu.org/mpfr/mpfr-$version.tar.xz)
+source=(https://ftp.gnu.org/gnu/mpfr/mpfr-$version.tar.xz)
 build_opt="--enable-thread-safe"

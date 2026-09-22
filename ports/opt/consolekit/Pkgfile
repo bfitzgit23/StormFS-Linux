@@ -1,9 +1,7 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Framework for defining and tracking users, login sessions, and seats
 # URL: http://www.freedesktop.org/wiki/Software/ConsoleKit
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on: dbus gobject-introspection linux-pam xorg-libx11
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: dbus gobject-introspection linux-pam libX11
 # Optional: polkit
 
 name=consolekit
@@ -12,8 +10,7 @@ release=1
 source=(https://github.com/ConsoleKit2/ConsoleKit2/archive/$version/ConsoleKit2-$version.tar.gz
   system-session pam-foreground-compat.ck)
 
-build() {
-  cd ConsoleKit2-$version
+pkg_build() {
 
   NOCONFIGURE=1 ./autogen.sh
   ./configure \

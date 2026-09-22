@@ -1,0 +1,69 @@
+#!/bin/sh
+set -eu
+
+state_dir=/etc/bfsos
+state_file=$state_dir/display-manager
+
+usage() {
+    cat <<'USAGE'
+Usage: bfs-display-manager {sddm|plasmalogin|status}
+
+Select exactly one BFSOS graphical display manager without uninstalling the
+other package. "plasmalogin" selects KDE Plasma Login Manager.
+USAGE
+}
+
+unit_exists() {
+    [ -e "/usr/lib/systemd/system/$1" ] || [ -e "/lib/systemd/system/$1" ]
+}
+
+status() {
+    selected=$(cat "$state_file" 2>/dev/null || printf '%s' 'unselected')
+    printf 'Selected BFSOS display manager: %s\n' "$selected"
+    for unit in sddm.service plasmalogin.service; do
+        if command -v systemctl >/dev/null 2>&1; then
+            printf '%-24s %s\n' "$unit" "$(systemctl is-enabled "$unit" 2>/dev/null || true)"
+        fi
+    done
+}
+
+[ "$#" -eq 1 ] || { usage >&2; exit 2; }
+case "$1" in
+    status)
+        status
+        exit 0
+        ;;
+    sddm)
+        selected=sddm
+        unit=sddm.service
+        other=plasmalogin.service
+        ;;
+    plasmalogin)
+        selected=plasmalogin
+        unit=plasmalogin.service
+        other=sddm.service
+        ;;
+    *)
+        usage >&2
+        exit 2
+        ;;
+esac
+
+unit_exists "$unit" || {
+    echo "Cannot select $selected: $unit is not installed." >&2
+    exit 1
+}
+
+mkdir -p "$state_dir"
+printf '%s\n' "$selected" > "$state_file.tmp.$$"
+mv -f "$state_file.tmp.$$" "$state_file"
+
+if command -v systemctl >/dev/null 2>&1; then
+    if unit_exists "$other"; then
+        systemctl disable "$other" >/dev/null 2>&1 || true
+    fi
+    rm -f /etc/systemd/system/display-manager.service
+    systemctl enable --force "$unit"
+fi
+
+printf 'BFSOS display manager selected: %s (%s)\n' "$selected" "$unit"

@@ -1,26 +1,34 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: POSIX.1e capabilities library
 # URL: https://sites.google.com/site/fullycapable/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: attr-32
 
 name=libcap-32
-version=2.76
-release=1
+version=2.78
+release=3
 source=(https://www.kernel.org/pub/linux/libs/security/linux-privs/libcap2/${name%-*}-$version.tar.xz)
 
-build() {
-	cd ${name%-*}-$version
+# Custom build required: libcap installs only the libcap subdirectory and must
+# override the upstream multilib install locations for its 32-bit payload.
+pkg_build() {
+    (
+        set -e
 
-	sed -i '/install -m.*STA/d' libcap/Makefile
-#	make CC="gcc -m32 -march=i686"
-	make CC="gcc -m32 -march=i686" lib=lib32 prefix=$PWD/DESTDIR/usr -C libcap install
-	mkdir -p $PKG/usr/lib32/
-cp -Rv DESTDIR/usr/lib32/* $PKG/usr/lib32
-sed -e "s|^libdir=.*|libdir=/usr/lib32|" -i $PKG/usr/lib32/pkgconfig/lib{cap,psx}.pc
-chmod -v 755 $PKG/usr/lib32/libcap.so.2.76
-rm -rf DESTDIR
+        sed -i "/^CFLAGS/s/-O2/$CFLAGS/" Make.Rules
 
-	rm -rf $PKG/usr/include
+        make -C libcap \
+            GOLANG=no \
+            RAISE_SETFCAP=no \
+            PKGCONFIGDIR=/usr/lib32/pkgconfig
+
+        make -C libcap \
+            GOLANG=no \
+            RAISE_SETFCAP=no \
+            DESTDIR="$PKG" \
+            prefix=/usr \
+            lib=lib32 \
+            install
+
+        rm -rf "$PKG/usr/include"
+    )
 }

@@ -1,4 +1,6 @@
 #!/bin/sh
+set -eu
+
 install -v -dm755 -o sddm -g sddm /var/lib/sddm
 /usr/bin/sddm --example-config > /etc/sddm.conf
 sed -i 's/-nolisten tcp//' /etc/sddm.conf
@@ -54,3 +56,7 @@ session  required       pam_unix.so
 
 # End /etc/pam.d/sddm-greeter
 EOF
+
+# BFSOS display-manager policy: package installation is deliberately
+# non-activating.  The installer/administrator selects a greeter explicitly;
+# installing or updating SDDM must not alter display-manager.service.

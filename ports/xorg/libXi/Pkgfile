@@ -1,19 +1,16 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: X Input client library
 # URL: http://xorg.freedesktop.org
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: libXext libXfixes
 
 name=libXi
-version=1.8.1
-release=1
+version=1.8.3
+release=3
 source=(https://www.x.org/releases/individual/lib/libXi-$version.tar.xz)
 
-build() {
-	cd libXi-$version
+pkg_build() {
 
-	./configure $XORG_CONFIG $docdir
+	./configure $XORG_CONFIG --docdir=/usr/share/doc/$name-$version
 
 	make
 	make DESTDIR=$PKG install

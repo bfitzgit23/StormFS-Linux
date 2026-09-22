@@ -1,12 +1,15 @@
-# Add your top line text here
-# Your line to add at the top here
+# Description: Extensible I/O abstraction library for structured file formats
+# URL: https://gitlab.gnome.org/GNOME/libgsf
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: glib libxml2 gdk-pixbuf
 
 name=libgsf
-version=1.14.52
-release=1
-source=(https://download.gnome.org/sources/$name/1.14/$name-$version.tar.xz
-https://www.linuxfromscratch.org/patches/blfs/svn/$name-$version-upstream_fixes-1.patch)
-pre_build() {
-autoreconf -fi
+version=1.14.58
+release=2
+source=(https://download.gnome.org/sources/$name/1.14/$name-$version.tar.xz)
+
+pkg_build() {
+    ./configure --prefix=/usr --disable-static || return 1
+    make -j"${JOBS:-1}" || return 1
+    make DESTDIR="$PKG" install || return 1
 }

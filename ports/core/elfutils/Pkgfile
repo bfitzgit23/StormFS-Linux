@@ -1,8 +1,6 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: A collection of utilities to handle ELF objects.
 # URL: https://sourceware.org/elfutils/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: bzip2 xz zlib
 
 name=elfutils

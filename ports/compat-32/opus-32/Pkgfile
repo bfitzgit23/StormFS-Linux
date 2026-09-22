@@ -1,28 +1,20 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: a totally open, royalty-free, highly versatile audio codec
 # URL: https://www.opus-codec.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: opus
 
 name=opus-32
-version=1.5.2
-release=1
+version=1.6.1
+release=3
 source=(https://downloads.xiph.org/releases/opus/opus-$version.tar.gz)
 
-build() {
-	meson setup opus-$version build \
-		--prefix=/usr \
-		--libdir=/usr/lib32 \
-		--buildtype=plain \
-		--wrap-mode nodownload \
-		-D b_lto=true \
-		-D b_pie=true \
-		-D custom-modes=true \
-		-D tests=disabled
+build_opt="-D custom-modes=true -D tests=disabled"
 
-	meson compile -C build
-	DESTDIR=$PKG meson install -C build
+post_build() {
 
 	rm -r $PKG/usr/include
+}
+
+pre_build() {
+        _bfs_require_compat32_extension 2 || return $?
 }

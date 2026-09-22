@@ -1,18 +1,22 @@
-# Add your top line text here
-# Your line to add at the top here
-# Depends on: qt5-alternate boost lua
-
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: boost lua
 
 name=highlight
-version=4.12
-release=1
+version=4.21
+release=5
 source=(http://www.andre-simon.de/zip/${name}-${version}.tar.bz2)
-pkg_build () {
 
-sed -i '/GZIP/s/^/#/' makefile
-make
-make doc_dir=/usr/share/doc/highlight-4.12/ gui
-mkdir -p $PKG/usr/share/doc/$name-$version/ 
-make DESTDIR=$PKG doc_dir=$PKG/usr/share/doc/$name-$version/ install
-make DESTDIR=$PKG install-gui
+pkg_build() {
+    sed -i '/GZIP/s/^/#/' makefile || return 1
+
+    # BFSOS ships Highlight as the CLI syntax-highlighter.  The optional Qt5
+    # GUI is intentionally omitted so packages such as Evolution do not pull
+    # the legacy Qt5 stack into an otherwise GTK/GNOME installation.
+    make || return 1
+
+    mkdir -p "${PKG}/usr/share/doc/${name}-${version}" || return 1
+    make \
+        DESTDIR="${PKG}" \
+        doc_dir=/usr/share/doc/${name}-${version}/ \
+        install || return 1
 }

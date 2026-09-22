@@ -1,25 +1,20 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: D-Bus GLib bindings
 # URL: http://freedesktop.org/wiki/Software/DBusBindings
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: dbus-32 dbus-glib glib-32
 
 name=dbus-glib-32
-version=0.112
-release=1
+version=0.114
+release=2
 source=(https://dbus.freedesktop.org/releases/${name%-*}/${name%-*}-$version.tar.gz)
 
-build() {
-	cd ${name%-*}-$version
+build_opt="--enable-bash-completion=no"
 
-	./configure \
-		--prefix=/usr \
-		--libdir=/usr/lib32 \
-		--enable-bash-completion=no
-
-	make
-	make DESTDIR=$PKG install
+post_build() {
 
 	rm -r $PKG/usr/{bin,share,include}
+}
+
+pre_build() {
+        _bfs_require_compat32_extension 2 || return $?
 }

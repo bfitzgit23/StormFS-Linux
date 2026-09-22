@@ -23,8 +23,8 @@ If GRUB was not included in your base LFS build:
 
 ```bash
 cd /sources
-tar -xf grub-2.12.tar.xz
-cd grub-2.12
+tar -xf grub-2.14.tar.xz
+cd grub-2.14
 
 # Disable-Werror is needed for some compiler versions
 ./configure --prefix=/usr          \
@@ -179,13 +179,13 @@ To add a manual entry, create `/etc/grub.d/40_custom`:
 exec tail -n +3 $0
 
 menuentry "StormFS Linux (recovery mode)" {
-    linux /boot/vmlinuz-6.10.6-stormfs root=/dev/sda2 ro single
-    initrd /boot/initramfs-6.10.6-stormfs.img
+    linux /boot/vmlinuz-7.1.8-stormfs root=/dev/sda2 ro single
+    initrd /boot/initramfs-7.1.8-stormfs.img
 }
 
 menuentry "StormFS Linux (verbose boot)" {
-    linux /boot/vmlinuz-6.10.6-stormfs root=/dev/sda2 ro loglevel=5
-    initrd /boot/initramfs-6.10.6-stormfs.img
+    linux /boot/vmlinuz-7.1.8-stormfs root=/dev/sda2 ro loglevel=5
+    initrd /boot/initramfs-7.1.8-stormfs.img
 }
 
 menuentry "Memtest86+" {
@@ -351,8 +351,8 @@ sbsign --key /var/lib/shim-signed/MOK.priv \
 # Sign the kernel
 sbsign --key /var/lib/shim-signed/MOK.priv \
        --cert /var/lib/shim-signed/MOK.pem \
-       --output /boot/vmlinuz-6.10.6-stormfs.signed \
-       /boot/vmlinuz-6.10.6-stormfs
+       --output /boot/vmlinuz-7.1.8-stormfs.signed \
+       /boot/vmlinuz-7.1.8-stormfs
 
 # Enroll the key
 mokutil --import /var/lib/shim-signed/MOK.der
@@ -399,8 +399,8 @@ menuentry "StormFS Linux — Fallback (previous kernel)" {
 }
 
 menuentry "StormFS Linux — Recovery Shell" {
-    linux /boot/vmlinuz-6.10.6-stormfs root=/dev/sda2 ro init=/bin/bash
-    initrd /boot/initramfs-6.10.6-stormfs.img
+    linux /boot/vmlinuz-7.1.8-stormfs root=/dev/sda2 ro init=/bin/bash
+    initrd /boot/initramfs-7.1.8-stormfs.img
 }
 ```
 
@@ -481,8 +481,8 @@ If you see `GRUB _` with no commands, the configuration is missing:
 
 ```bash
 set root=(hd0,msdos2)
-linux /boot/vmlinuz-6.10.6-stormfs root=/dev/sda2 ro
-initrd /boot/initramfs-6.10.6-stormfs.img
+linux /boot/vmlinuz-7.1.8-stormfs root=/dev/sda2 ro
+initrd /boot/initramfs-7.1.8-stormfs.img
 boot
 ```
 
@@ -492,4 +492,4 @@ boot
 - [EFI Booting on the Arch Wiki](https://wiki.archlinux.org/title/EFI_system_partition)
 - [Secure Boot on the Arch Wiki](https://wiki.archlinux.org/title/Unified_Extensible_Firmware_Interface/Secure_Boot)
 - [Chapter 09: Linux Kernel](chapter-09-linux-kernel.md) — Kernel installation
-- [Chapter 12: System Initialization](chapter-12-system-initialization.md) — systemd and init
+- [Chapter 12: System Initialization](chapter-12-system-initialization.md) — OpenRC init and optional systemd compatibility

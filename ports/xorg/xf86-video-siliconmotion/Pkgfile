@@ -1,8 +1,6 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: xorg driver xf86-video-siliconmotion
 # URL: http://xorg.freedesktop.org
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: xorg-server
 
 name=xf86-video-siliconmotion
@@ -10,8 +8,7 @@ version=1.7.9
 release=1
 source=(https://www.x.org/releases/individual/driver/xf86-video-siliconmotion-$version.tar.bz2)
 
-build() {
-	cd xf86-video-siliconmotion-$version
+pkg_build() {
 
 	./configure --prefix=/usr
 

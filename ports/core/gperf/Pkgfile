@@ -1,6 +1,5 @@
-# Add your top line text here
-# Your line to add at the top here
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 name=gperf
 version=3.3
 release=1
-source=(https://ftpmirror.gnu.org/gperf/gperf-$version.tar.gz)
+source=(https://ftp.gnu.org/gnu/gperf/gperf-$version.tar.gz)

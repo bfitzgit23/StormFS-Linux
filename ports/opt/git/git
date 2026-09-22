@@ -1,0 +1,152 @@
+#!/bin/sh
+#
+# /etc/ports/drivers/git: git driver script for ports(8)
+# BFSOS keeps stock CRUX single-collection behavior and adds an optional
+# monorepo COLLECTIONS mode used by the BFSOS repository.
+#
+
+set -u
+
+if [ $# -ne 1 ]; then
+    echo "usage: $0 <file>" >&2
+    exit 1
+fi
+
+CONFIG=$1
+# shellcheck disable=SC1090
+. "$CONFIG"
+
+: "${URL:=}"
+: "${NAME:=}"
+: "${BRANCH:=}"
+: "${LOCAL_REPOSITORY:=}"
+: "${COLLECTIONS:=}"
+
+[ -n "$URL" ] || { echo "URL not set in '$CONFIG'" >&2; exit 2; }
+[ -n "$NAME" ] || { echo "NAME not set in '$CONFIG'" >&2; exit 2; }
+[ -n "$BRANCH" ] || { echo "BRANCH not set in '$CONFIG'" >&2; exit 2; }
+
+# Stock CRUX-compatible path for ordinary third-party *.git definitions.
+if [ -z "$COLLECTIONS" ]; then
+    REPOSITORY="$PORTS_DIR/$NAME"
+    [ -z "$LOCAL_REPOSITORY" ] || REPOSITORY="$LOCAL_REPOSITORY"
+
+    echo "Fetching updates from $URL"
+    echo "Updating collection $NAME"
+
+    if cd "$REPOSITORY" 2>/dev/null; then
+        git checkout -q "$BRANCH" || exit $?
+        git fetch -q origin "$BRANCH" || exit $?
+        git diff --pretty=format: --name-status "$BRANCH" "origin/$BRANCH" \
+            | sed "s/M\t/ Edit /g; s/A\t/ Checkout /g; s/D\t/ Delete /g" | sort
+        git clean -q -f
+        git reset -q --hard "origin/$BRANCH" || exit $?
+    else
+        git clone -q -b "$BRANCH" "$URL" "$REPOSITORY" || exit $?
+        ls -1 "$REPOSITORY" | sed "s/^/ Checkout /"
+    fi
+
+    echo "Finished successfully"
+    exit 0
+fi
+
+# BFSOS monorepo mode. COLLECTIONS is a whitespace-separated list of
+# local-name:repository/subdirectory mappings. One cached checkout services all
+# collections so the BFSOS monorepo is not cloned once per collection.
+CACHE=${LOCAL_REPOSITORY:-/var/cache/ports-git/$NAME}
+STATE=/var/lib/ports/git/$NAME
+MANIFESTS=$STATE/manifests
+BACKUPS=$STATE/migration-backup
+STAGE=$(mktemp -d "${TMPDIR:-/var/tmp}/ports-git-${NAME}.XXXXXX") || exit 1
+trap 'rm -rf "$STAGE"' EXIT HUP INT TERM
+
+manifest_tree() {
+    tree=$1
+    [ -d "$tree" ] || return 0
+    (
+        cd "$tree" || exit 1
+        find . -type f \
+            ! -name '.md5sum' \
+            ! -name '.footprint' \
+            -print | LC_ALL=C sort | while IFS= read -r file; do
+            sha256sum "$file"
+        done
+        find . -type l -print | LC_ALL=C sort | while IFS= read -r link; do
+            printf 'L %s -> %s\n' "$link" "$(readlink "$link")"
+        done
+    )
+}
+
+mkdir -p "$(dirname "$CACHE")" "$MANIFESTS" "$BACKUPS" || exit 1
+
+echo "Fetching updates from $URL"
+echo "Updating BFSOS Git collections from one monorepo checkout"
+if [ -d "$CACHE/.git" ]; then
+    git -C "$CACHE" fetch -q origin "$BRANCH" || {
+        echo "Git fetch failed; existing /usr/ports trees were left unchanged." >&2
+        exit 3
+    }
+else
+    rm -rf "$CACHE"
+    git clone -q --no-checkout -b "$BRANCH" "$URL" "$CACHE" || {
+        echo "Git clone failed; existing /usr/ports trees were left unchanged." >&2
+        exit 3
+    }
+fi
+
+# Export every configured collection first. Nothing under /usr/ports is touched
+# unless the complete remote snapshot can be fetched and staged successfully.
+for mapping in $COLLECTIONS; do
+    collection=${mapping%%:*}
+    subdir=${mapping#*:}
+    [ -n "$collection" ] && [ -n "$subdir" ] && [ "$collection" != "$subdir" ] || {
+        echo "Invalid COLLECTIONS mapping '$mapping' in $CONFIG" >&2
+        exit 2
+    }
+    mkdir -p "$STAGE/$collection" || exit 1
+    git -C "$CACHE" archive "origin/$BRANCH:$subdir" \
+        | tar -xf - -C "$STAGE/$collection" || {
+            echo "Unable to export '$subdir' from origin/$BRANCH; ports trees were left unchanged." >&2
+            exit 4
+        }
+done
+
+# Refuse to overwrite local edits after the first Git-managed synchronization.
+for mapping in $COLLECTIONS; do
+    collection=${mapping%%:*}
+    target="$PORTS_DIR/$collection"
+    saved="$MANIFESTS/$collection.sha256"
+    if [ -f "$saved" ] && [ -d "$target" ]; then
+        current="$STAGE/current-$collection.sha256"
+        manifest_tree "$target" > "$current" || exit 1
+        if ! cmp -s "$saved" "$current"; then
+            echo "Local modifications detected in $target." >&2
+            echo "Refusing to overwrite them. Revert/move the edits and rerun ports -u." >&2
+            exit 5
+        fi
+    fi
+done
+
+stamp=$(date -u +%Y%m%dT%H%M%SZ)
+for mapping in $COLLECTIONS; do
+    collection=${mapping%%:*}
+    target="$PORTS_DIR/$collection"
+    saved="$MANIFESTS/$collection.sha256"
+
+    # First migration from HttpUp: preserve the old tree by moving it aside.
+    if [ ! -f "$saved" ] && [ -d "$target" ] && [ -n "$(find "$target" -mindepth 1 -maxdepth 1 -print -quit 2>/dev/null)" ]; then
+        mkdir -p "$BACKUPS/$stamp" || exit 1
+        mv "$target" "$BACKUPS/$stamp/$collection" || exit 1
+        echo " Backup $collection -> $BACKUPS/$stamp/$collection"
+    else
+        rm -rf "$target"
+    fi
+
+    mkdir -p "$(dirname "$target")" || exit 1
+    mv "$STAGE/$collection" "$target" || exit 1
+    manifest_tree "$target" > "$saved" || exit 1
+    echo " Checkout $collection"
+done
+
+printf '%s\n' "$(git -C "$CACHE" rev-parse "origin/$BRANCH")" > "$STATE/commit"
+echo "Finished successfully"

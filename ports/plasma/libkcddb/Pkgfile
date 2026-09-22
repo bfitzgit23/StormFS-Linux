@@ -1,26 +1,21 @@
-# Add your top line text here
-# Your line to add at the top here
-# Description: The libkcddb package contains a library used to retrieve audio CD meta data from the internet.
-# URL:          https://kde.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on:  kde-frameworks-6 libmusicbrainz
+# Description: Library used to retrieve audio CD metadata from the internet
+# URL: https://kde.org/
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: kde-frameworks-6 libmusicbrainz qt6
 
 name=libkcddb
-version=25.04.0
+version=26.08.1
 release=1
 source=(https://download.kde.org/stable/release-service/$version/src/$name-$version.tar.xz)
 
-build() {
-	cd $name-$version
-
-	mkdir build &&
-cd    build &&
-
-cmake -D CMAKE_INSTALL_PREFIX=$KF6_PREFIX \
-      -D CMAKE_BUILD_TYPE=Release         \
-      -D BUILD_TESTING=OFF                \
-      -D QT_MAJOR_VERSION=6               \
-      -W no-dev ..                        &&
-make
-	make DESTDIR=$PKG install
+pkg_build() {
+    cmake -S . -B build -G Ninja \
+        -DCMAKE_INSTALL_PREFIX=/opt/kf6 \
+        "-DCMAKE_PREFIX_PATH=/opt/qt6;/opt/kf6" \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DBUILD_TESTING=OFF \
+        -DQT_MAJOR_VERSION=6 \
+        -Wno-author || return 1
+    cmake --build build -j "${JOBS:-1}" || return 1
+    DESTDIR="$PKG" cmake --install build || return 1
 }

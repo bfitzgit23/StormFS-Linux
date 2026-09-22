@@ -1,27 +1,21 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Library providing APIs to netlink protocol based Linux kernel interfaces
 # URL: http://www.infradead.org/~tgr/libnl/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: libnl
 
 name=libnl-32
-version=3.10.0
-release=1
+version=3.12.0
+release=2
 source=(https://github.com/thom311/libnl/releases/download/libnl${version//./_}/${name%-*}-$version.tar.gz)
 
-build() {
-	cd ${name%-*}-$version
+build_opt="--disable-cli"
 
-	./configure \
-		--prefix=/usr \
-		--libdir=/usr/lib32 \
-		--sysconfdir=/etc \
-		--disable-cli
-
-	make
-	make DESTDIR=$PKG install
+post_build() {
 
 	rm -r $PKG/usr/{share,include}
 	rm -r $PKG/etc
+}
+
+pre_build() {
+        _bfs_require_compat32_extension 2 || return $?
 }

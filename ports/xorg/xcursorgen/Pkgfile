@@ -1,17 +1,14 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Utility to create X cursors
 # URL: http://xorg.freedesktop.org
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: libpng libXcursor
 
 name=xcursorgen
-version=1.0.8
-release=1
+version=1.0.9
+release=2
 source=(https://www.x.org/releases/individual/app/xcursorgen-$version.tar.xz)
 
-build() {
-	cd xcursorgen-$version
+pkg_build() {
 
 	  ./configure $XORG_CONFIG
 

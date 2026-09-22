@@ -52,7 +52,7 @@ amixer set Master unmute
 
 ## PulseAudio
 
-PulseAudio provides advanced audio features.
+PulseAudio provides advanced audio features. For a desktop, prefer per-user PulseAudio or PipeWire; the system-wide OpenRC wrapper is intended for machines that explicitly need a system daemon.
 
 ### Installation
 
@@ -95,7 +95,7 @@ default-fragment-size-msec = 25
 
 ## PipeWire
 
-PipeWire is a modern multimedia server.
+PipeWire is a modern multimedia server. Its OpenRC wrapper requires D-Bus and should be started after the system bus is available.
 
 ### Installation
 
@@ -104,26 +104,32 @@ prt-get install pipewire
 prt-get install wireplumber
 ```
 
-### Configuration
+### System-Wide Configuration
+
+The OpenRC `pipewire` wrapper is an explicit system-wide option. Enable it only when a system daemon is required:
 
 ```bash
-# Enable PipeWire
+sudo rc-update add dbus boot
 sudo rc-update add pipewire default
-sudo rc-update add wireplumber default
-
-# Start PipeWire
 sudo rc-service pipewire start
-sudo rc-service wireplumber start
 ```
 
-### User Mode
+### User Mode (Recommended)
 
-For per-user PipeWire:
+PipeWire and WirePlumber normally belong to each logged-in user's audio session. Do not add `wireplumber` to a root runlevel. Start both from the desktop session or its autostart mechanism:
 
 ```bash
-# Add to user's .bash_profile
+# In the desktop session environment
 pipewire &
 wireplumber &
+```
+
+Check the active session:
+
+```bash
+pgrep -a pipewire
+pgrep -a wireplumber
+pactl info 2>/dev/null || true
 ```
 
 ## Audio Applications

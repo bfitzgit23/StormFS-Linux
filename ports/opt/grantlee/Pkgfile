@@ -1,9 +1,7 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Grantlee is a set of free software libraries written using the Qt framework. Currently two libraries are shipped with Grantlee: Grantlee Templates and Grantlee TextDocument. The goal of Grantlee Templates is to make it easier for application developers to separate the structure of documents from the data they contain, opening the door for theming.
 # URL:          https://github.com/steveire/grantlee/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on:  cmake qt5-alternate
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on:  cmake qt5
 # Optional: doxygen
 
 name=grantlee
@@ -11,8 +9,7 @@ version=5.3.1
 release=1
 source=(https://github.com/steveire/grantlee/releases/download/v$version/$name-$version.tar.gz)
 
-build() {
-	cd $name-$version
+pkg_build() {
 
 	mkdir build &&
 	cd    build &&

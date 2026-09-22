@@ -1,13 +1,11 @@
-# Add your top line text here
-# Your line to add at the top here
-# Depends on: 
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on:
 
 name=net-tools
 version=2.10
 release=1
 source=(https://downloads.sourceforge.net/project/${name}/${name}-${version}.tar.xz)
-build() {
-cd $name-$version
+pkg_build() {
  export BINDIR='/usr/bin' SBINDIR='/usr/bin' &&
 yes "" | make -j1                           &&
 

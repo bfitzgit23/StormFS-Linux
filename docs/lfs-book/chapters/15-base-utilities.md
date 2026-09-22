@@ -48,8 +48,8 @@ StormFS ships with **vim** as the primary system editor.
 
 ```bash
 cd /sources
-tar -xf vim-9.1.tar.bz2
-cd vim-9.1
+tar -xf vim-9.2.1025.tar.gz
+cd vim-9.2.1025
 
 ./configure --prefix=/usr \
             --with-features=huge \
@@ -164,14 +164,14 @@ nano is a simple, user-friendly editor for quick edits.
 
 ```bash
 cd /sources
-tar -xf nano-8.1.tar.xz
-cd nano-8.1
+tar -xf nano-9.1.tar.xz
+cd nano-9.1
 
 ./configure --prefix=/usr \
             --sysconfdir=/etc \
             --enable-color \
             --enable-utf8 \
-            --docdir=/usr/share/doc/nano-8.1
+            --docdir=/usr/share/doc/nano-9.1
 make -j$(nproc)
 make install
 ```
@@ -222,11 +222,11 @@ man-db provides the `man` command and manual page database:
 
 ```bash
 cd /sources
-tar -xf man-db-2.12.1.tar.xz
-cd man-db-2.12.1
+tar -xf man-db-2.13.1.tar.xz
+cd man-db-2.13.1
 
 ./configure --prefix=/usr                        \
-            --docdir=/usr/share/doc/man-db-2.12.1 \
+            --docdir=/usr/share/doc/man-db-2.13.1 \
             --sysconfdir=/etc                    \
             --disable-setuid                     \
             --enable-cache-owner=man             \
@@ -578,8 +578,8 @@ PROFILE
 
 ```bash
 cd /sources
-tar -xf glibc-2.40.tar.xz
-cd glibc-2.40
+tar -xf glibc-2.44.tar.xz
+cd glibc-2.44
 
 # Generate locales
 localedef -i en_US -f UTF-8 en_US.UTF-8

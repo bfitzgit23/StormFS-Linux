@@ -1,14 +1,12 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Network-related giomodules for glib
 # URL: https://git.gnome.org/browse/glib-networking/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: gnutls gsettings-desktop-schemas
 # Optional : make-ca
 
 name=glib-networking
-version=2.80.0
-release=1
+version=2.80.1
+release=2
 source=(https://download.gnome.org/sources/$name/2.80/$name-$version.tar.xz)
 
 pkg_build() {
@@ -22,6 +20,6 @@ meson setup            \
    -Dlibproxy=disabled \
    .. &&
 ninja
- 
+
   DESTDIR=$PKG ninja install
 }

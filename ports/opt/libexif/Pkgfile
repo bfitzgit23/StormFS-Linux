@@ -1,16 +1,13 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: An EXIF tag parsing library
 # URL: https://libexif.github.io/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Optional: doxygen graphviz
 name=libexif
-version=0.6.25
+version=0.6.26
 release=1
 source=(https://github.com/$name/$name/releases/download/v$version/$name-$version.tar.bz2)
 
-build () {
-	cd $name-$version
+pkg_build() {
 
 	./configure --prefix=/usr    \
             --disable-static \

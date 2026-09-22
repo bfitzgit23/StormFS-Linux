@@ -1,8 +1,6 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: A built-package format for Python
 # URL: https://pypi.python.org/pypi/wheel
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: python3-setuptools
 
 name=python3-wheel
@@ -19,8 +17,7 @@ unpack_source() {
                    esac
            done
    }
-build() {
-  cd wheel-$version
+pkg_build() {
 
   /usr/bin/python3 -m build --wheel --skip-dependency-check --no-isolation
   /usr/bin/python3 -m installer --destdir=$PKG dist/*.whl

@@ -1,6 +1,6 @@
 # Chapter 13: Networking
 
-This chapter covers network configuration in StormFS Linux, including hostname setup, DNS, firewall rules, and network daemon configuration.
+This chapter covers OpenRC-first network configuration in StormFS Linux, including hostname setup, DNS, firewall rules, and network daemon configuration. The systemd-networkd material is optional compatibility content.
 
 ## 13.1 Setting the Hostname
 
@@ -12,6 +12,65 @@ The hostname identifies the machine on the network:
 cat > /etc/hostname << 'EOF'
 stormfs-box
 EOF
+```
+
+## 13.2 OpenRC Network Services (Default)
+
+OpenRC should start the network services. Use `dhcpcd` for DHCP and `iwd` plus `dhcpcd` for Wi-Fi; do not enable systemd-networkd or systemd-resolved in an OpenRC installation.
+
+### Wired DHCP
+
+```bash
+cat > /etc/conf.d/net << 'EOF'
+config_eth0="dhcp"
+EOF
+
+rc-update add networking boot
+rc-update add dhcpcd default 2>/dev/null || true
+rc-service networking start
+rc-service dhcpcd start 2>/dev/null || true
+```
+
+### Wi-Fi with iwd
+
+```bash
+prt-get install iwd dhcpcd 2>/dev/null || true
+rc-update add iwd default
+rc-update add dhcpcd default
+rc-service iwd start
+rc-service dhcpcd start
+
+iwctl station wlan0 scan
+iwctl station wlan0 get-networks
+iwctl station wlan0 connect "MyNetwork"
+```
+
+### Static IPv4
+
+```bash
+cat > /etc/conf.d/net << 'EOF'
+config_eth0="192.168.1.100/24"
+route_eth0="default via 192.168.1.1"
+dns_servers_eth0="1.1.1.1 8.8.8.8"
+EOF
+rc-service networking restart
+```
+
+### OpenRC Hostname
+
+```bash
+echo stormfs-box > /etc/hostname
+hostname stormfs-box
+rc-update show
+```
+
+### Verify OpenRC Networking
+
+```bash
+rc-status
+ip addr show
+ip route show
+getent hosts example.com
 ```
 
 ### /etc/hosts
@@ -33,7 +92,7 @@ EOF
 
 Replace `stormfs-box` with your chosen hostname. The second line maps the hostname to `127.0.1.1` (standard Debian/Ubuntu convention) or to your LAN IP.
 
-### Setting Hostname with systemd
+### Optional systemd Hostname Integration
 
 ```bash
 # Set hostname (updates /etc/hostname and applies immediately)
@@ -44,9 +103,98 @@ hostnamectl status
 hostname
 ```
 
-## 13.2 systemd-networkd Configuration
+## 13.3 OpenRC Equivalents for systemd-networkd
 
-systemd-networkd is the recommended network daemon for StormFS, providing DHCP and static configuration.
+The systemd-networkd examples in the next section are retained as reference. The equivalent OpenRC configurations use the `networking` service, `/etc/conf.d/net`, `dhcpcd`, `iwd`, and `openresolv`.
+
+### OpenRC DHCP and DNS
+
+```bash
+prt-get install dhcpcd openresolv
+
+cat > /etc/conf.d/net << 'EOF'
+config_eth0="dhcp"
+EOF
+
+# dhcpcd supplies the lease; openresolv updates /etc/resolv.conf
+rc-update add networking boot
+rc-update add dhcpcd default
+rc-service networking start
+rc-service dhcpcd start
+```
+
+Use a static resolver only when a DHCP or NetworkManager resolver is not managing the file:
+
+```bash
+ln -sf /run/resolvconf/resolv.conf /etc/resolv.conf
+resolvconf -u
+```
+
+### OpenRC Wi-Fi with iwd
+
+```bash
+prt-get install iwd dhcpcd openresolv
+rc-update add iwd default
+rc-update add dhcpcd default
+rc-service iwd start
+rc-service dhcpcd start
+
+iwctl station wlan0 scan
+iwctl station wlan0 connect "MyNetwork"
+```
+
+For a persistent iwd network, save its credentials through `iwctl` under `/var/lib/iwd/`; let `dhcpcd` manage the address and DNS lease.
+
+### OpenRC Static Address, Bond, and Bridge
+
+The Linux interfaces created by `ip`, `bridge`, and `ip link` are independent of the init system. Put the commands in `/etc/local.d/network.start`, or use the equivalent `net.*` variables supported by the installed OpenRC networking scripts:
+
+```bash
+install -d -m 0755 /etc/local.d
+cat > /etc/local.d/network.start << 'EOF'
+#!/bin/sh
+ip link add bond0 type bond mode 802.3ad 2>/dev/null || true
+ip link set eth0 down 2>/dev/null || true
+ip link set eth0 master bond0 2>/dev/null || true
+ip link set bond0 up
+ip addr add 192.168.1.100/24 dev bond0 2>/dev/null || true
+ip route replace default via 192.168.1.1
+EOF
+chmod 755 /etc/local.d/network.start
+rc-update add local default
+```
+
+For an OpenRC bridge, replace the bond commands with `ip link add br0 type bridge`, enslave the physical interface with `ip link set eth0 master br0`, and assign the address to `br0`, never to the enslaved port.
+
+### OpenRC NetworkManager Alternative
+
+NetworkManager already has an OpenRC service in `openrc-init-scripts`. Build it with `-D session_tracking=none` for the OpenRC profile; ConsoleKit2 supplies the desktop session/seat API separately when needed. Do not use the systemd session-tracking backend on an OpenRC-only system.
+
+```bash
+prt-get install networkmanager openrc-init-scripts
+rc-update del networking boot 2>/dev/null || true
+rc-update del dhcpcd default 2>/dev/null || true
+rc-update add dbus boot
+rc-update add networkmanager default
+rc-service networkmanager start
+```
+
+### OpenRC Network Troubleshooting
+
+```bash
+rc-status --all
+rc-service networking status
+rc-service dhcpcd status
+rc-service iwd status
+ip addr show
+ip route show
+cat /etc/resolv.conf
+getent hosts example.com
+```
+
+## 13.4 Optional systemd-networkd Configuration
+
+systemd-networkd is an optional compatibility daemon for systemd installations. OpenRC installations should use the networking service described in Sections 13.2 and 13.3.
 
 ### Enabling systemd-networkd
 
@@ -190,9 +338,11 @@ Bridge=br0
 EOF
 ```
 
-## 13.3 NetworkManager Setup
+## 13.5 NetworkManager Setup with OpenRC
 
 For desktop systems with WiFi, mobile broadband, and VPN requirements, NetworkManager provides a more feature-rich experience.
+
+For the OpenRC profile, build NetworkManager without the systemd session-tracking backend. The systemd variant is retained below for installations that intentionally select systemd.
 
 ### Installing NetworkManager
 
@@ -206,7 +356,7 @@ meson setup build \
     --sysconfdir=/etc \
     --localstatedir=/var \
     -Dmodify_system=true \
-    -Dsession-tracking=systemd \
+    -Dsession-tracking=none \
     -Dlibaudit=no \
     -Dselinux=no \
     -Dppp=false \
@@ -218,7 +368,40 @@ ninja -C build
 ninja -C build install
 ```
 
-### Enabling NetworkManager
+For a systemd installation, use the systemd session-tracking backend instead:
+
+```bash
+meson setup build-systemd \
+    --prefix=/usr \
+    --sysconfdir=/etc \
+    --localstatedir=/var \
+    -Dmodify_system=true \
+    -Dsession-tracking=systemd \
+    -Dlibaudit=no \
+    -Dselinux=no \
+    -Dppp=false \
+    -Dvapi=false \
+    -Dgtk_doc=false \
+    -Dtests=false
+ninja -C build-systemd
+ninja -C build-systemd install
+```
+
+### Enabling NetworkManager with OpenRC (default)
+
+```bash
+# Remove conflicting OpenRC services when using NetworkManager
+rc-update del networking boot 2>/dev/null || true
+rc-update del dhcpcd default 2>/dev/null || true
+
+# Enable NetworkManager through OpenRC
+rc-update add networkmanager default
+rc-service networkmanager start
+```
+
+### Enabling NetworkManager with systemd (reference)
+
+On a systemd installation, keep the systemd service path instead:
 
 ```bash
 # Disable systemd-networkd if switching
@@ -236,13 +419,24 @@ Edit `/etc/NetworkManager/NetworkManager.conf`:
 ```ini
 [main]
 plugins=keyfile
-dns=systemd
+dns=default
 wlbackend=iwd
 
 [logging]
 level=INFO
 domain=CONFIG,PLATFORM
 ```
+
+For a systemd installation using `systemd-resolved`, retain this systemd-specific DNS setting:
+
+```ini
+[main]
+plugins=keyfile
+dns=systemd
+wlbackend=iwd
+```
+
+The OpenRC default uses `dns=default` and `openresolv`; do not run both resolver managers against `/etc/resolv.conf`.
 
 ### Managing Connections
 
@@ -277,7 +471,7 @@ nmcli connection show "Home"
 nmcli connection modify "Home" ipv4.dns "9.9.9.9"
 ```
 
-## 13.4 DNS Configuration
+## 13.6 DNS Configuration
 
 ### /etc/resolv.conf
 
@@ -331,7 +525,16 @@ EOF
 
 ### DNSSEC Validation
 
-Verify DNSSEC is working:
+For the OpenRC resolver path, inspect the resolver file and query directly:
+
+```bash
+cat /etc/resolv.conf
+getent hosts example.com
+# Test DNSSEC
+dig +dnssec example.com
+```
+
+On a systemd-resolved installation, use its status and cache commands:
 
 ```bash
 # Check DNSSEC status
@@ -359,7 +562,7 @@ Destination=10.0.0.0/8
 Gateway=10.0.0.1
 ```
 
-## 13.5 Firewall (nftables)
+## 13.7 Firewall (nftables)
 
 StormFS uses **nftables** as the packet filtering framework, replacing iptables.
 
@@ -451,7 +654,20 @@ table ip nat {
 }
 ```
 
-### Starting nftables
+### Starting nftables with OpenRC (default)
+
+```bash
+# Enable at boot through OpenRC
+rc-update add nftables default
+
+# Load rules
+rc-service nftables start
+
+# Verify rules
+nft list ruleset
+```
+
+### Starting nftables with systemd (reference)
 
 ```bash
 # Enable at boot
@@ -483,7 +699,13 @@ nft flush ruleset
 # Save rules
 nft list ruleset > /etc/nftables.conf
 
-# Reload rules
+# Reload rules through OpenRC
+rc-service nftables reload
+```
+
+For a systemd installation, reload the same service with:
+
+```bash
 systemctl reload nftables
 ```
 
@@ -516,9 +738,9 @@ For a more user-friendly interface, consider:
 - **ufw** (Uncomplicated Firewall) — wrapper around nftables/iptables
 - **firewalld** — D-Bus based firewall management with zones
 
-## 13.6 IPv6 Configuration
+## 13.8 IPv6 Configuration
 
-systemd-networkd supports IPv6 natively. Example static configuration:
+For OpenRC, configure IPv6 in `/etc/conf.d/net` and let the `networking` service apply it. The following systemd-networkd example is optional compatibility material:
 
 ```ini
 # /etc/systemd/network/10-eth0-ipv6.network
@@ -544,9 +766,11 @@ cat /proc/sys/net/ipv6/conf/eth0/disable_ipv6
 echo 0 > /proc/sys/net/ipv6/conf/all/disable_ipv6
 ```
 
-## 13.7 Network Troubleshooting
+## 13.9 Network Troubleshooting
 
 ### Diagnostic Commands
+
+The OpenRC commands are the default diagnostic path:
 
 ```bash
 # Interface status
@@ -557,7 +781,7 @@ ip link show
 ip route show
 
 # DNS resolution test
-resolvectl query example.com
+getent hosts example.com
 dig example.com
 
 # Connectivity test
@@ -577,29 +801,51 @@ netstat -s
 ss -s
 
 # DNS debug
-resolvectl statistics
-journalctl -u systemd-resolved -f
+rc-status
+logread 2>/dev/null || tail -f /var/log/messages
 
 # Packet capture
 tcpdump -i eth0 -n port 22
 tcpdump -i eth0 -n 'host 192.168.1.1'
 ```
 
+### systemd Diagnostic Commands (reference)
+
+On a systemd installation, the corresponding network and resolver checks remain:
+
+```bash
+resolvectl status
+resolvectl statistics
+resolvectl query example.com
+journalctl -u systemd-resolved -f
+systemctl status systemd-networkd systemd-resolved
+```
+
 ### Common Issues
+
+The OpenRC diagnosis table is the default:
+
+| Symptom | Diagnosis | Fix |
+|---------|-----------|-----|
+| No network at boot | Interface not configured | Check `/etc/conf.d/net` and `rc-service networking status` |
+| DNS not resolving | Resolver or dhcpcd not running | `rc-service dhcpcd status` and `/etc/resolv.conf` |
+| Can't reach gateway | Wrong route or ARP issue | `ip route show; arp -a` |
+| WiFi not connecting | iwd/dhcpcd not running | `rc-service iwd status` and `rc-service dhcpcd status` |
+| High latency | MTU mismatch or routing loop | `ping -M do -s 1472 <gateway>` |
+
+For a systemd installation, the corresponding diagnosis table is:
 
 | Symptom | Diagnosis | Fix |
 |---------|-----------|-----|
 | No network at boot | Interface not configured | Check `/etc/systemd/network/` files |
 | DNS not resolving | systemd-resolved not running | `systemctl status systemd-resolved` |
-| Can't reach gateway | Wrong route or ARP issue | `ip route show; arp -a` |
 | WiFi not connecting | iwd/NetworkManager not running | `systemctl status iwd NetworkManager` |
-| High latency | MTU mismatch or routing loop | `ping -M do -s 1472 <gateway>` |
 
-## 13.8 References
+## 13.10 References
 
 - [systemd.network(5)](https://www.freedesktop.org/software/systemd/man/systemd.network.html)
 - [systemd-resolved(8)](https://www.freedesktop.org/software/systemd/man/systemd-resolved.html)
 - [nftables Wiki](https://wiki.nftables.org/)
 - [Arch Wiki: Networking](https://wiki.archlinux.org/title/Networking)
-- [Chapter 12: System Initialization](chapter-12-system-initialization.md) — systemd overview
+- [Chapter 12: System Initialization](chapter-12-system-initialization.md) — OpenRC default and optional systemd compatibility
 - [Chapter 14: SSH Server](chapter-14-ssh-server.md) — Remote access

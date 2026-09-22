@@ -1,9 +1,8 @@
-# Add your top line text here
-# Your line to add at the top here
-# Depends on: ffmpeg icu xorg-libs cairo docbook-xsl-nons fuse3 json-c kerberos libusb libxkbcommon wayland
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: ffmpeg icu xorg-libs cairo docbook-xsl-nons fuse json-c kerberos libusb libxkbcommon wayland
 
 name=freerdp
-version=3.11.1
+version=3.31.1
 release=1
 source=(https://github.com/${name}/${name}/archive/${version}/FreeRDP-${version}.tar.gz)
 pkg_build () {
@@ -24,6 +23,5 @@ cmake -D CMAKE_INSTALL_PREFIX=/usr   \
       -W no-dev                      \
       -G Ninja ..                    &&
 ninja
-ninja install
+DESTDIR="$PKG" ninja install
 }
-

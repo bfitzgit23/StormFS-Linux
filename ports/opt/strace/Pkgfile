@@ -1,20 +1,18 @@
-# Description: A diagnostic, debugging and instructional userspace tracer
+# Description: Diagnostic, debugging and instructional Linux syscall tracer
 # URL: https://strace.io/
-# Maintainer: Venom Linux Team, venomlinux at disroot dot org
-# Depends on: elfutils
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 
 name=strace
-version=7.1
+version=7.2
 release=1
-source=(https://github.com/strace/strace/releases/download/v$version/$name-$version.tar.xz)
+source=(https://strace.io/files/$version/$name-$version.tar.xz)
 
-build() {
-	cd $name-$version
+pkg_build() {
+  ./configure \
+    --prefix=/usr \
+    --disable-mpers \
+    --disable-gcc-Werror || return 1
 
-	./configure \
-	--prefix=/usr \
-	--enable-silent-rules \
-	--enable-bundled=yes
-	make
-	make DESTDIR=$PKG install
+  make -j ${JOBS:-1} || return 1
+  make DESTDIR="$PKG" install || return 1
 }

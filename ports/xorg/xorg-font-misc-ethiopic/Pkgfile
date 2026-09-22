@@ -1,8 +1,6 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: xorg font font-misc-ethiopic
 # URL: https//xorg.freedesktop.org
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: fontconfig mkfontscale
 
 name=xorg-font-misc-ethiopic
@@ -10,8 +8,7 @@ version=1.0.5
 release=1
 source=(https://www.x.org/releases/individual/font/font-misc-ethiopic-$version.tar.xz)
 
-build() {
-	cd font-misc-ethiopic-$version
+pkg_build() {
 
 	./configure --prefix=/usr
 

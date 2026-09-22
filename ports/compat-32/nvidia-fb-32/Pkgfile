@@ -1,16 +1,17 @@
-# Add your top line text here
-# Your line to add at the top here
-# Description: NVIDIA Linux Display Driver (feature branch)
-# URL: http://www.nvidia.com/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Description: NVIDIA 32-bit userspace libraries matching the production driver
+# URL: https://www.nvidia.com/
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: libglvnd-32
 
 name=nvidia-fb-32
-version=560.35.03
-release=1
-source=(http://us.download.nvidia.com/XFree86/Linux-x86_64/$version/NVIDIA-Linux-x86_64-$version.run)
+version=595.99.02
+release=2
+source=(https://us.download.nvidia.com/XFree86/Linux-x86_64/$version/NVIDIA-Linux-x86_64-$version.run)
 
-build() {
+# Custom build required: prebuilt vendor archive supplies its own 32-bit payload
+pkg_build() {
+  (
+    set -e
 	sh NVIDIA-Linux-x86_64-$version.run --extract-only
 	cd NVIDIA-Linux-x86_64-$version/32
 
@@ -77,4 +78,5 @@ build() {
 	install -m 0755 libnvidia-opticalflow.so.$version $PKG/usr/lib32/
 	ln -s libnvidia-opticalflow.so.$version $PKG/usr/lib32/libnvidia-opticalflow.so.1
 	ln -s libnvidia-opticalflow.so.$version $PKG/usr/lib32/libnvidia-opticalflow.so
+  )
 }

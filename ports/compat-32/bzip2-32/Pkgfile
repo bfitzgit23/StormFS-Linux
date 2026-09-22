@@ -1,26 +1,44 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Very high-quality data compression program
 # URL: http://www.bzip.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 
 name=bzip2-32
 version=1.0.8
-release=1
+release=3
 source=(https://sourceware.org/pub/${name%-*}/${name%-*}-$version.tar.gz)
 
-build() {
-	cd ${name%-*}-$version
+# Custom build required: upstream has separate shared/static Makefiles
+pkg_build() {
+  (
+    set -e
+        install -d "$PKG/usr/lib32"
 
-	install -d $PKG/usr/lib32
-sed -e "s/^CC=.*/CC=gcc -m32/" -i Makefile{,-libbz2_so}
+        # pkgmk already enters the extracted source directory.
+        # Start from clean objects so no native objects can leak into
+        # the compat-32 library.
+        make clean
 
-make -f Makefile-libbz2_so
-make libbz2.a
-	install -m 0644 libbz2.so.$version $PKG/usr/lib32
-	ln -s libbz2.so.$version $PKG/usr/lib32/libbz2.so
-	ln -s libbz2.so.$version $PKG/usr/lib32/libbz2.so.1.0
+        make -f Makefile-libbz2_so \
+                CC="${CC:-gcc}" \
+                CFLAGS="$CFLAGS -fPIC -D_FILE_OFFSET_BITS=64"
 
-	make libbz2.a CC="gcc $CFLAGS $LDFLAGS"
-	install -m 0644 libbz2.a $PKG/usr/lib32
+        rm -f libbz2.a
+        make libbz2.a \
+                CC="${CC:-gcc}" \
+                CFLAGS="$CFLAGS"
+
+        install -m 0644 \
+                libbz2.so.$version \
+                "$PKG/usr/lib32/"
+
+        ln -s libbz2.so.$version \
+                "$PKG/usr/lib32/libbz2.so"
+
+        ln -s libbz2.so.$version \
+                "$PKG/usr/lib32/libbz2.so.1.0"
+
+        install -m 0644 \
+                libbz2.a \
+                "$PKG/usr/lib32/"
+  )
 }

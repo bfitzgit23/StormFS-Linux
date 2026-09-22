@@ -1,11 +1,10 @@
-# Add your top line text here
-# Your line to add at the top here
-# Depends on: cmake nasm 
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: cmake nasm
 
 name=x265
-version=4.1
+version=4.3
 release=1
-source=(https://bitbucket.org/multicoreware/x265_git/downloads/x265_3.6.tar.gz)
+source=(https://github.com/Multicorewareinc/x265/releases/download/$version/x265_$version.tar.gz)
 pkg_build () {
 mkdir bld &&
 cd    bld &&
@@ -14,5 +13,5 @@ cmake -D CMAKE_INSTALL_PREFIX=/usr \
       -D GIT_ARCHETYPE=1           \
       -W no-dev ../source          &&
 make
-make install
+make DESTDIR="$PKG" install
 }

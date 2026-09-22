@@ -1,14 +1,13 @@
-# Add your top line text here
-# Your line to add at the top here
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: cmake spirv-tools
 
 name=glslang
-version=15.1.0
-release=1
+version=16.5.0
+release=2
 source=(https://github.com/KhronosGroup/glslang/archive/$version/$name-sdk-$version.tar.gz)
 build_opt="-D CMAKE_INSTALL_PREFIX=/usr
-      -D CMAKE_BUILD_TYPE=Release      
-      -D ALLOW_EXTERNAL_SPIRV_TOOLS=ON 
-      -D BUILD_SHARED_LIBS=ON          
-      -D GLSLANG_TESTS=ON              
+      -D CMAKE_BUILD_TYPE=Release
+      -D ALLOW_EXTERNAL_SPIRV_TOOLS=ON
+      -D BUILD_SHARED_LIBS=ON
+      -D GLSLANG_TESTS=ON
       -G Ninja .."

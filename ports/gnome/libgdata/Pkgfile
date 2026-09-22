@@ -1,5 +1,4 @@
-# Add your top line text here
-# Your line to add at the top here
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: libsoup gnome-online-accounts gtk3 json-glib vala gcr glib gobject-introspection uhttpmock
 
 name=libgdata

@@ -1,17 +1,15 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Public Suffix List library
 # URL: https://github.com/rockdaboot/libpsl
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: libidn2 publicsuffix-list
 # Optional:  gtk-doc valgrind
 name=libpsl
-version=0.21.5
+version=0.23.3
 release=1
 source=(https://github.com/rockdaboot/$name/releases/download/$version/$name-$version.tar.lz)
 
-build() {
-  meson setup build $name-$version \
+pkg_build() {
+  meson setup build . \
     --prefix=/usr \
     --buildtype=plain \
     --wrap-mode nodownload \
@@ -23,7 +21,6 @@ build() {
     -D psl_testfile=/usr/share/publicsuffix/test_psl.txt \
     -D tests=false
 
-  ninja -j ${JOBS-1} -C build
-  DESTDIR=$PKG meson install -C build
+  ninja -j "${JOBS:-1}" -C build
+  DESTDIR="$PKG" meson install -C build
 }
-

@@ -1,17 +1,15 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: A set of python bindings for cairo.
 # URL: https://pypi.org/project/pycairo/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: cairo
 
 name=python3-cairo
-version=1.27.0
+version=1.29.1
 release=2
 source=(https://github.com/pygobject/pycairo/releases/download/v$version/pycairo-$version.tar.gz)
 
-build() {
-  meson setup pycairo-$version build \
+pkg_build() {
+  meson setup build . \
     --prefix=/usr \
     --buildtype=plain \
     --wrap-mode nodownload \

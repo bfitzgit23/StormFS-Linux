@@ -1,0 +1,7 @@
+#!/bin/sh
+set -eu
+command -v /usr/libexec/bfs-kernel-maintenance >/dev/null 2>&1 || {
+    echo "linux pre-install: bfs-kernel-maintenance is required" >&2
+    exit 1
+}
+exec /usr/libexec/bfs-kernel-maintenance pre-upgrade linux

@@ -1,11 +1,10 @@
-# Add your top line text here
-# Your line to add at the top here
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 name=coreutils
 version=9.11
 release=1
 source=(
-    https://ftpmirror.gnu.org/coreutils/coreutils-$version.tar.xz
-    https://www.linuxfromscratch.org/patches/lfs/development/coreutils-9.11-i18n-1.patch
+    https://ftp.gnu.org/gnu/coreutils/coreutils-$version.tar.xz
+    https://www.linuxfromscratch.org/patches/downloads/coreutils/coreutils-9.11-i18n-1.patch
 )
 
 export FORCE_UNSAFE_CONFIGURE=1

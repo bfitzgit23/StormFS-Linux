@@ -1,59 +1,23 @@
-# Description: Replacement for systemd using BSD-style init scripts
+# Description: Dependency-based service manager and init system
 # URL: https://github.com/OpenRC/openrc
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on: bash
+# Maintainer: BFSOS maintainers
+# Depends: linux-pam meson ninja
 
 name=openrc
-version=0.55
+version=0.63
 release=1
-source=(https://github.com/OpenRC/openrc/archive/refs/tags/$version.tar.gz
-	rc.conf.default)
+source=(https://github.com/OpenRC/openrc/archive/$version/openrc-$version.tar.gz)
 
-build() {
-	cd $name-$version
+pkg_build() {
+    cd "$name-$version" || return 1
+    mkdir build && cd build || return 1
+    meson setup .. \
+        --prefix=/usr \
+        --buildtype=release \
+        -D uucp_group=root || return 1
+    ninja -j"${JOBS:-1}" || return 1
+    DESTDIR="$PKG" ninja install || return 1
 
-	./configure \
-		--prefix=/usr \
-		--sysconfdir=/etc \
-		--libdir=/usr/lib \
-		--sbindir=/sbin
-
-	make
-	make DESTDIR=$PKG install
-
-	# Set default runlevel
-	sed -i 's/^#DEFAULT_RUNLEVEL=.*/DEFAULT_RUNLEVEL=3/' $PKG/etc/conf.d/rc
-
-	# Create runlevel directories
-	for d in boot default nonetwork single sysinit; do
-		install -d -m 0755 $PKG/etc/runlevels/$d
-	done
-
-	# sysinit runlevel
-	for s in udev udev-postmount; do
-		ln -sf /etc/init.d/$s $PKG/etc/runlevels/sysinit/$s
-	done
-
-	# boot runlevel
-	for s in cronie dbus ntp-client sysctl urandom; do
-		ln -sf /etc/init.d/$s $PKG/etc/runlevels/boot/$s
-	done
-
-	# default runlevel
-	for s in NetworkManager lightdm bluetooth; do
-		ln -sf /etc/init.d/$s $PKG/etc/runlevels/default/$s
-	done
-
-	# single runlevel
-	for s in udev udev-postmount; do
-		ln -sf /etc/init.d/$s $PKG/etc/runlevels/single/$s
-	done
-
-	# nonetwork runlevel (base services for recovery)
-	for s in udev udev-postmount; do
-		ln -sf /etc/init.d/$s $PKG/etc/runlevels/nonetwork/$s
-	done
-
-	# Install rc.conf.default
-	install -D -m 0644 $SRC/rc.conf.default $PKG/etc/conf.d/rc.conf.default
+    install -d -m 0755 "$PKG/etc/runlevels" "$PKG/etc/init.d"
+    ln -sfn /sbin/openrc-init "$PKG/sbin/init"
 }

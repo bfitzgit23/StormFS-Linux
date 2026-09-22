@@ -1,17 +1,14 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Docutils is an open-source text processing system for processing plaintext documentation into useful formats
 # URL: https://docutils.sourceforge.io/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: python3-setuptools
 
 name=python3-docutils
-version=0.21.2
+version=0.23
 release=1
 source=(https://downloads.sourceforge.net/docutils/docutils-$version.tar.gz)
 
-build() {
-  cd docutils-$version
+pkg_build() {
 
   /usr/bin/python3 -m build --wheel --skip-dependency-check --no-isolation
   /usr/bin/python3 -m installer --compile-bytecode 2 --destdir=$PKG dist/*.whl

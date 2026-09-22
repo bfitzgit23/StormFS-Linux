@@ -1,9 +1,7 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: The cpio package contains tools for archiving.
 # URL:          https://ftp.gnu.org/gnu/cpio/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on:  
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on:
 # Optional: texlive (or install-tl-unx)
 
 name=cpio
@@ -11,8 +9,8 @@ version=2.15
 release=1
 source=(https://ftp.gnu.org/gnu/$name/$name-$version.tar.bz2)
 CFLAGS+=' -fcommon'
-build_opt="--prefix=/usr 
-            --enable-mt   
+build_opt="--prefix=/usr
+            --enable-mt
             --with-rmt=/usr/libexec/rmt"
 pre_build() {
 sed -e "/^extern int (\*xstat)/s/()/(const char * restrict,  struct stat * restrict)/" \
@@ -22,4 +20,3 @@ sed -e "/^int (\*xstat)/s/()/(const char * restrict,  struct stat * restrict)/" 
 CFLAGS+=' -fcommon'
 autoreconf -fi
 }
-

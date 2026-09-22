@@ -1,0 +1,22 @@
+#!/sbin/openrc-run
+
+description="Bluetooth daemon"
+
+command=/usr/lib/bluetooth/bluetoothd
+command_args="--nodetach"
+command_background=true
+
+start_pre() {
+	checkpath --directory --mode 0755 /run/bluetooth
+}
+
+depend() {
+	need dbus
+	need logger
+}
+
+stop() {
+	ebegin "Stopping Bluetooth daemon"
+	start-stop-daemon --stop --exec "$command"
+	eend $?
+}

@@ -1,0 +1,186 @@
+# Description: Mesa 3D Graphics Library (32-bit)
+# URL: https://www.mesa3d.org/
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: elfutils-32 expat-32 libdrm-32 libglvnd-32 llvm-32 mesa libXdamage-32 libXrandr-32 libxshmfence-32 libXxf86vm-32 wayland-32
+# Optional: cbindgen clang-32 directx-headers-32 glslang libclc libunwind-32 libva-32 lm_sensors-32 lua python3-ply rust-bindgen rustc spirv-llvm-translator-32 vulkan-loader-32 wayland-protocols
+
+name=mesa-32
+version=26.2.2
+release=7
+source=(https://archive.mesa3d.org/mesa-$version.tar.xz
+        x86-linux-gnu
+        x86-linux-gnu-ccache)
+
+build_opt="-Db_lto=false \
+-Db_pie=true \
+-Degl=enabled \
+-Dllvm=enabled \
+-Dshared-llvm=enabled \
+-Dgbm=enabled \
+-Dgles1=disabled \
+-Dgles2=enabled \
+-Dglx=dri \
+-Dvideo-codecs=all \
+-Dglvnd=enabled"
+
+pkg_build() {
+    export PKG_CONFIG_LIBDIR="/usr/lib32/pkgconfig:/usr/share/pkgconfig"
+    export BINDGEN_EXTRA_CLANG_ARGS="--target=i686-unknown-linux-gnu"
+
+    local _cross_file="x86-linux-gnu"
+    local _mesa_opt=""
+    local _gallium_drivers="iris,crocus,nouveau,r300,r600,radeonsi,svga,virgl,i915,llvmpipe,softpipe"
+    local _platforms="x11"
+    local _vulkan_drivers=""
+    local _vulkan_layers=""
+
+    if prt-get isinst ccache >/dev/null 2>&1; then
+        _cross_file="x86-linux-gnu-ccache"
+    fi
+
+    #
+    # Optional D3D12 Gallium driver.
+    #
+    if prt-get isinst directx-headers-32 >/dev/null 2>&1; then
+        _gallium_drivers="d3d12,${_gallium_drivers}"
+    fi
+
+    #
+    # Optional Rusticl OpenCL frontend.
+    #
+    # Only enable it when the complete 32-bit toolchain is present.
+    #
+    if prt-get isinst clang-32 libclc rust-bindgen spirv-llvm-translator-32 >/dev/null 2>&1 &&
+       command -v rustc >/dev/null 2>&1 &&
+       _rustlib="$(rustc --print target-libdir --target i686-unknown-linux-gnu 2>/dev/null)" &&
+       ls "$_rustlib"/libstd-*.rlib >/dev/null 2>&1; then
+        _mesa_opt+=" -Dgallium-rusticl=true"
+    else
+        _mesa_opt+=" -Dgallium-rusticl=false"
+    fi
+
+    #
+    # Optional libunwind support.
+    #
+    if prt-get isinst libunwind-32 >/dev/null 2>&1; then
+        _mesa_opt+=" -Dlibunwind=enabled"
+    else
+        _mesa_opt+=" -Dlibunwind=disabled"
+    fi
+
+    #
+    # Optional VA-API frontend.
+    #
+    if prt-get isinst libva-32 >/dev/null 2>&1; then
+        _mesa_opt+=" -Dgallium-va=enabled"
+    else
+        _mesa_opt+=" -Dgallium-va=disabled"
+    fi
+
+    #
+    # Optional lm_sensors HUD support.
+    #
+    if prt-get isinst lm_sensors-32 >/dev/null 2>&1; then
+        _mesa_opt+=" -Dlmsensors=enabled"
+    else
+        _mesa_opt+=" -Dlmsensors=disabled"
+    fi
+
+    #
+    # Wayland support uses native wayland-protocols together with
+    # the 32-bit wayland libraries.
+    #
+    if prt-get isinst wayland-protocols >/dev/null 2>&1; then
+        _platforms="wayland,x11"
+    fi
+
+    #
+    # Build Vulkan drivers when the 32-bit loader is installed.
+    #
+    if prt-get isinst vulkan-loader-32 >/dev/null 2>&1; then
+        _gallium_drivers="zink,${_gallium_drivers}"
+
+        #
+        # RADV.
+        #
+        if prt-get isinst glslang >/dev/null 2>&1; then
+            _vulkan_drivers+="amd,"
+            _vulkan_layers+="overlay,"
+        fi
+
+        #
+        # ANV.
+        #
+        if prt-get isinst clang-32 glslang libclc lua python3-ply spirv-llvm-translator-32 >/dev/null 2>&1; then
+            _vulkan_drivers+="intel,"
+            _vulkan_layers+="intel-nullhw,"
+        fi
+
+        #
+        # NVK.
+        #
+        # Mesa 26.2 requires Rust for vulkan-drivers=nouveau.
+        # BFSOS rustc release 3 provides the i686 Rust stdlib.
+        #
+        if prt-get isinst cbindgen clang-32 libclc rust-bindgen spirv-llvm-translator-32 >/dev/null 2>&1 &&
+           command -v rustc >/dev/null 2>&1 &&
+           _rustlib="$(rustc --print target-libdir --target i686-unknown-linux-gnu 2>/dev/null)" &&
+           ls "$_rustlib"/libstd-*.rlib >/dev/null 2>&1; then
+            _vulkan_drivers+="nouveau,"
+        fi
+
+        #
+        # HasVK, VirtIO and Lavapipe.
+        #
+        if prt-get isinst clang-32 spirv-llvm-translator-32 >/dev/null 2>&1; then
+            _vulkan_drivers+="intel_hasvk,"
+        fi
+
+        _vulkan_drivers+="virtio,swrast"
+
+        _vulkan_drivers="${_vulkan_drivers%,}"
+        _vulkan_layers="${_vulkan_layers%,}"
+    fi
+
+    rm -rf build
+
+    meson setup build . \
+        $build_opt \
+        $_mesa_opt \
+        --cross-file="$SRC/$_cross_file" \
+        --prefix=/usr \
+        --libdir=/usr/lib32 \
+        --sysconfdir=/etc \
+        --buildtype=plain \
+        -Dgallium-drivers="$_gallium_drivers" \
+        -Dplatforms="$_platforms" \
+        -Dvulkan-drivers="$_vulkan_drivers" \
+        -Dvulkan-layers="$_vulkan_layers" \
+        || return 1
+
+    meson compile -C build -j "${JOBS:-1}" \
+        || return 1
+
+    DESTDIR="$PKG" meson install -C build \
+        || return 1
+
+    #
+    # 32-bit indirect GLX entry point.
+    #
+    install -d "$PKG/usr/lib32"
+
+    ln -sfn libGLX_mesa.so.0 \
+        "$PKG/usr/lib32/libGLX_indirect.so.0"
+
+    #
+    # mesa-32 supplies the 32-bit libraries/drivers only.
+    # Native Mesa owns the architecture-independent files.
+    #
+    rm -rf \
+        "$PKG/usr/include" \
+        "$PKG/usr/bin" \
+        "$PKG/usr/share/drirc.d" \
+        "$PKG/usr/share/glvnd" \
+        "$PKG/usr/share/vulkan/explicit_layer.d" \
+        "$PKG/usr/share/vulkan/implicit_layer.d"
+}

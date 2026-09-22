@@ -1,27 +1,23 @@
-# Add your top line text here
-# Your line to add at the top here
-# Description: The K3b package contains a KF5-based graphical interface to the Cdrtools and dvd+rw-tools CD/DVD manipulation tools. It also combines the capabilities of many other multimedia packages into one central interface to provide a simple-to-operate application that can be used to handle many of your CD/DVD recording and formatting requirements. It is used for creating audio, data, video and mixed-mode CDs as well as copying, ripping and burning CDs and DVDs. Though k3b can be used to copy almost any DVD to similar medium, it does not provide a way to copy, or reproduce a double-layer DVD onto single-layer medium. Of course, there is not a program anywhere on any platform that can make an exact duplicate of a double-layer DVD onto a single-layer disk, there are programs on some platforms that can compress the data on a double-layer DVD to fit on a single-layer DVD producing a duplicate, but compressed, image. If you need to copy the contents of a double-layer DVD to single-layer medium, you may want to look at the RMLCopyDVD package.
-# URL:         https://kde.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on:  kde-rameworks-6 libkcddb libsamplerate shared-mime-info udisks libburn libdvdread taglib dvd+rw-tools cdrdao cdrtools
-# Optional:	ffmpeg flac lame libmad libsndfile libvorbis libmusicbrainz musepack libmpcdec
+# Description: KDE optical-disc authoring, ripping, copying, and burning application.
+# URL: https://kde.org/
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: kde-frameworks-6 libkcddb libsamplerate shared-mime-info udisks libburn libdvdread taglib dvd+rw-tools cdrdao cdrtools qt6
+# Optional: ffmpeg flac lame libmad libsndfile libvorbis libmusicbrainz musepack libmpcdec
 
 name=k3b
-version=25.04.0
+version=26.08.1
 release=1
 source=(https://download.kde.org/stable/release-service/$version/src/$name-$version.tar.xz)
 
-build() {
-	cd $name-$version
-
-	mkdir build &&
-	cd    build &&
-
-cmake -D CMAKE_INSTALL_PREFIX=$KF6_PREFIX \
-      -D CMAKE_BUILD_TYPE=Release         \
-      -D BUILD_TESTING=OFF                \
-      -D QT_MAJOR_VERSION=6               \
-      -W no-dev ..                        &&
-make
-	make DESTDIR=$PKG install
+pkg_build() {
+    cmake -S . -B build -G Ninja \
+        -DCMAKE_INSTALL_PREFIX=/opt/kf6 \
+        -DCMAKE_INSTALL_LIBEXECDIR=libexec \
+        "-DCMAKE_PREFIX_PATH=/opt/qt6;/opt/kf6" \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DBUILD_TESTING=OFF \
+        -DQT_MAJOR_VERSION=6 \
+        -Wno-author || return 1
+    cmake --build build -j "${JOBS:-1}" || return 1
+    DESTDIR="$PKG" cmake --install build || return 1
 }

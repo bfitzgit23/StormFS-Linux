@@ -1,20 +1,22 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Fancy PyPI READMEs with Hatch
 # URL: https://github.com/hynek/hatch-fancy-pypi-readme
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: python3-build python3-hatchling
 
 name=python3-hatch-fancy-pypi-readme
-version=24.1.0
-release=1
+version=25.1.0
+release=2
 source=(https://github.com/hynek/hatch-fancy-pypi-readme/archive/$version/$name-$version.tar.gz)
 
-build() {
-    cd hatch-fancy-pypi-readme-$version
-    /usr/bin/python3 -m build --wheel --no-isolation
-    PIP_CONFIG_FILE=/dev/null /usr/bin/pip3 install --isolated --root=$PKG \
-        --ignore-installed --no-deps dist/*.whl
+pkg_build() {
+    /usr/bin/python3 -m build --wheel --no-isolation || return 1
 
-    rm $PKG/usr/lib/python*/site-packages/hatch_fancy_pypi_readme-*/{licenses/AUTHORS.md,INSTALLER}
+    PIP_CONFIG_FILE=/dev/null /usr/bin/pip3 install \
+        --isolated \
+        --root="$PKG" \
+        --ignore-installed \
+        --no-deps \
+        dist/*.whl || return 1
+
+    rm -f "$PKG"/usr/lib/python*/site-packages/hatch_fancy_pypi_readme-*/{licenses/AUTHORS.md,INSTALLER}
 }

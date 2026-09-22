@@ -1,8 +1,6 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Masquerade directory to use ccache with mingw
 # URL: https://ccache.dev/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: ccache mingw-w64-gcc
 
 name=mingw-ccache-bindings
@@ -10,7 +8,7 @@ version=10.2.0
 release=1
 source=()
 
-build() {
+pkg_build() {
   install -d $PKG/usr/lib/ccache
 
   ln -s ../../bin/ccache $PKG/usr/lib/ccache/i686-w64-mingw32-c++

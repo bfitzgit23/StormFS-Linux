@@ -1,26 +1,26 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Graph visualization software
-# URL: https://www.graphviz.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on: expat libtool zlib
-# Optional: ghostscript gtk libgd librsvg libxrender pango poppler swig tcl
+# URL: https://graphviz.org/
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: cmake expat zlib
+# Optional: cairo fontconfig ghostscript gtk3 libgd libpng librsvg pango poppler swig tcl
 
 name=graphviz
-version=12.2.0
+version=16.1.0
 release=1
-source=(https://gitlab.com/graphviz/graphviz/-/archive/$version/$name-$version.tar.bz2)
+source=(https://gitlab.com/graphviz/graphviz/-/archive/$version/graphviz-$version.tar.bz2)
 
 pkg_build() {
-	
-awk -i inplace '/aghtmlstr/ && ++f == 2 {getline} 1' \
-    lib/cgraph/cgraph.h
-	sed -i '/LIBPOSTFIX="64"/s/64//' configure.ac &&
+    # Current Graphviz supports CMake directly; avoid carrying the obsolete
+    # autotools/libpostfix surgery from the old recipe.
+    sed '/ORIGIN/d' -i lib/CMakeLists.txt || return 1
 
-./autogen.sh              &&
-./configure --prefix=/usr \
-            --docdir=/usr/share/doc/$name-$version
-            sed -i "s/0/$(date +%Y%m%d)/" builddate.h
-	make
-	make DESTDIR=$PKG install
+    cmake -S . -B build \
+        -DCMAKE_INSTALL_PREFIX=/usr \
+        -DCMAKE_BUILD_TYPE=Release || return 1
+
+    # Match the current BLFS packaging fix for generated gzip commands.
+    sed -i '/GZIP/s/:.*$/=/' build/CMakeCache.txt || return 1
+
+    cmake --build build -j"${JOBS:-1}" || return 1
+    DESTDIR="$PKG" cmake --install build || return 1
 }

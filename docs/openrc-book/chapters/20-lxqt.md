@@ -91,39 +91,20 @@ greeter-session=lightdm-gtk-greeter
 
 ```bash
 # Enable LXQt-related services
+sudo rc-update add dbus boot
 sudo rc-update add sddm default
-sudo rc-update add dbus default
 sudo rc-update add polkitd default
 sudo rc-update add upowerd default
 ```
 
-### LXQt Service Init Script
+### Session Services
+
+`lxqt-session`, `lxqt-panel`, and the selected window manager belong to the logged-in user session. Do not launch `lxqt-panel` from a root-owned OpenRC init script. SDDM or LightDM starts the session, which then starts the panel and other user components.
+
+Inspect the active user session instead:
 
 ```bash
-cat > /etc/init.d/lxqt-services <<'EOF'
-#!/sbin/openrc-run
-
-depend() {
-    need dbus
-    after elogind
-    before sddm
-}
-
-start() {
-    ebegin "Starting LXQt services"
-    # Start LXQt panel
-    /usr/bin/lxqt-panel &
-    eend $?
-}
-
-stop() {
-    ebegin "Stopping LXQt services"
-    killall lxqt-panel 2>/dev/null
-    eend $?
-}
-EOF
-
-chmod +x /etc/init.d/lxqt-services
+pgrep -a 'lxqt-session|lxqt-panel|openbox|kwin'
 ```
 
 ### Service Management

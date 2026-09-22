@@ -1,27 +1,27 @@
-# Add your top line text here
-# Your line to add at the top here
-# Description: Newt is a programming library for color text mode, widget based user interfaces. It can be used to add stacked windows, entry widgets, checkboxes, radio buttons, labels, plain text fields, scrollbars, etc., to text mode user interfaces. Newt is based on the S-Lang library.
-# URL:         https://releases.pagure.org/$name
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on:  popt slang
+# Description: Newt is a programming library for color text mode, widget based user interfaces.
+# URL: https://releases.pagure.org/newt/
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: popt slang
 # Optional: gpm
 
 name=newt
-version=0.52.24
-release=1
+version=0.52.25
+release=2
 source=(https://releases.pagure.org/$name/$name-$version.tar.gz)
 
-build() {
-	cd $name-$version
+pkg_build() {
+    sed \
+        -e '/install -m 644 $(LIBNEWT)/ s/^/#/' \
+        -e '/$(LIBNEWT):/,/rv/ s/^/#/' \
+        -e 's/$(LIBNEWT)/$(LIBNEWTSH)/g' \
+        -i Makefile.in || return 1
 
-	sed -e '/install -m 644 $(LIBNEWT)/ s/^/#/' \
-    -e '/$(LIBNEWT):/,/rv/ s/^/#/'          \
-    -e 's/$(LIBNEWT)/$(LIBNEWTSH)/g'        \
-    -i Makefile.in                          &&
+    ./configure \
+        --prefix=/usr \
+        --with-gpm-support \
+        --without-python || return 1
 
-./configure --prefix=/usr           \
-            --with-gpm-support      \
-            --with-python=python3.11 &&
-make
-	make DESTDIR=$PKG install
+    make -j "${JOBS:-1}" || return 1
+
+    make DESTDIR="$PKG" install || return 1
 }

@@ -1,6 +1,5 @@
-# Add your top line text here
-# Your line to add at the top here
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 name=autoconf
 version=2.73
 release=1
-source=(https://ftpmirror.gnu.org/autoconf/autoconf-$version.tar.xz)
+source=(https://ftp.gnu.org/gnu/autoconf/autoconf-$version.tar.xz)

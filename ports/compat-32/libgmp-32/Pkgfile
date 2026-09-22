@@ -1,17 +1,18 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Free library for arbitrary precision arithmetic
 # URL: https://gmplib.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 
 name=libgmp-32
 version=6.3.0
-release=1
+release=3
 source=(https://gmplib.org/download/gmp/gmp-$version.tar.xz)
 
-build() {
-	cd gmp-$version
-
+# Custom build required: package-specific ABI cleanup follows the Autotools build
+pkg_build() {
+  (
+    set -e
+	CC="gcc -std=gnu17" \
+	CXX="g++ -std=gnu++17" \
 	./configure \
 		--prefix=/usr \
 		--libdir=/usr/lib32 \
@@ -25,4 +26,5 @@ build() {
 	rm $PKG/usr/include/gmpxx.h
 
 	rm -r $PKG/usr/share
+  )
 }

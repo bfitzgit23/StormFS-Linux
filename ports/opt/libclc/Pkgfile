@@ -1,8 +1,19 @@
-# Add your top line text here
-# Your line to add at the top here
-# Depends on: spirv-llvm-translator
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: llvm ninja spirv-llvm-translator
 
 name=libclc
-version=20.1.1.src
+version=23.1.1
 release=1
-source=(https://github.com/llvm/llvm-project/releases/download/llvmorg-${version%.*}/${name}-${version}.tar.xz)
+source=(https://github.com/llvm/llvm-project/releases/download/llvmorg-$version/llvm-project-$version.src.tar.xz)
+
+pkg_build() {
+    mkdir -p libclc/build
+    cd libclc/build
+
+    cmake -D CMAKE_INSTALL_PREFIX=/usr \
+          -D CMAKE_BUILD_TYPE=Release \
+          -G Ninja .. || return 1
+
+    ninja -j "${JOBS:-1}" || return 1
+    DESTDIR="$PKG" ninja install || return 1
+}

@@ -1,26 +1,20 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Mesa OpenGL Utility library
 # URL: https://www.mesa3d.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: glu mesa-32
 
 name=glu-32
 version=9.0.3
-release=1
+release=3
 source=(https://mesa.freedesktop.org/archive/glu/glu-$version.tar.xz)
 
-build() {
-	meson build glu-$version \
-		--prefix /usr \
-		--libdir lib32 \
-		--wrap-mode nodownload \
-		-D b_lto=true \
-		-D b_pie=true \
-		-D default_library=shared
+build_opt="-D default_library=shared"
 
-	meson compile -C build
-	DESTDIR=$PKG meson install -C build
+post_build() {
 
 	rm -rf $PKG/usr/include
+}
+
+pre_build() {
+        _bfs_require_compat32_extension 2 || return $?
 }

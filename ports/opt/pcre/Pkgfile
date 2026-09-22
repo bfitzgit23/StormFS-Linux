@@ -1,9 +1,7 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: The PCRE package contains Perl Compatible Regular Expression libraries. These are useful for implementing regular expression pattern matching using the same syntax and semantics as Perl 5.
 # URL:          https://sourceforge.net/projects/pcre/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on:  
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on:
 # Optional: valgrind
 
 name=pcre
@@ -11,8 +9,7 @@ version=8.45
 release=1
 source=(https://sourceforge.net/projects/$name/files/$name/$version/$name-$version.tar.bz2)
 
-build() {
-	cd $name-$version
+pkg_build() {
 
 	./configure --prefix=/usr                     \
             --docdir=/usr/share/doc/$name-$version \

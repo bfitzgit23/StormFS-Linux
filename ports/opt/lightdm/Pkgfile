@@ -1,53 +1,80 @@
-# Description: Lightweight display manager
-# URL: https://github.com/canonical/lightdm
-# Maintainer: Venom Linux Team, venomlinux at disroot dot org
-# Depends on: libgcrypt polkit libxklavier itstool vala
+# Description: Lightweight cross-desktop display manager
+# URL: https://github.com/ubuntu/lightdm
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: glib libgcrypt linux-pam intltool itstool xorg-server
+# Optional: accountsservice libxklavier vala
 
 name=lightdm
-version=1.32.0
-release=5
-source=(https://github.com/CanonicalLtd/lightdm/releases/download/$version/lightdm-$version.tar.xz Xsession lightdm.rules $name.pam $name-autologin.pam run.$name rc.$name)
+version=1.33.1
+release=2
 
-build() {
-	cd $name-$version
+source=(
+    https://github.com/ubuntu/lightdm/archive/$version/$name-$version.tar.gz
+)
 
-	./configure                          \
-	       --prefix=/usr                 \
-	       --libexecdir=/usr/lib/lightdm \
-	       --localstatedir=/var          \
-	       --sbindir=/usr/bin            \
-	       --sysconfdir=/etc             \
-	       --disable-static              \
-	       --disable-tests               \
-	       --disable-nls                 \
-	       --with-greeter-user=lightdm   \
-	       --with-greeter-session=lightdm-gtk-greeter
-	make
-	make DESTDIR=$PKG install
+pkg_build() {
+    # GitHub tag archives do not contain a generated configure script.
+    # Current upstream/BLFS also removes obsolete Yelp help generation.
+    sed -i '/YELP_HELP/d' \
+        configure.ac \
+        help/Makefile.am \
+        || return 1
 
-	rm -rf $PKG/etc/init
+    autoreconf -fiv || return 1
 
-	install -Dm755 $SRC/Xsession $PKG/etc/lightdm/Xsession
+    ./configure \
+        --prefix=/usr \
+        --libexecdir=/usr/lib/lightdm \
+        --localstatedir=/var \
+        --sbindir=/usr/bin \
+        --sysconfdir=/etc \
+        --disable-static \
+        --disable-tests \
+        --with-greeter-user=lightdm \
+        --with-greeter-session=lightdm-gtk-greeter \
+        || return 1
 
-	install -Dm 644 $SRC/$name.rules $PKG/usr/share/polkit-1/rules.d/$name.rules
-	install -Dm 644 $SRC/$name.pam $PKG/etc/pam.d/$name
-	install -Dm 644 $SRC/$name-autologin.pam $PKG/etc/pam.d/$name-autologin
+    make -j"${JOBS:-1}" || return 1
+    make DESTDIR="$PKG" install || return 1
 
-	sed -i 's:#session-wrapper=lightdm-session:session-wrapper=/etc/lightdm/Xsession:' $PKG/etc/lightdm/lightdm.conf
-	sed -i 's:minimum-uid=500:minimum-uid=1000:' $PKG/etc/lightdm/users.conf
+    # Ensure graphical sessions use the normal BFSOS login environment.
+    install -Dm755 \
+        tests/src/lightdm-session \
+        "$PKG/usr/bin/lightdm-session" \
+        || return 1
 
-	install -dm755 -o lightdm -g lightdm $PKG/var/lib/lightdm
-	install -dm755 -o lightdm -g lightdm $PKG/var/lib/lightdm-data
-	install -dm755 -o lightdm -g lightdm $PKG/var/cache/lightdm
-	install -dm770 -o lightdm -g lightdm $PKG/var/log/lightdm
+    sed -i '1 s|/bin/sh|/bin/bash --login|' \
+        "$PKG/usr/bin/lightdm-session" \
+        || return 1
 
-	# runit service
-	prt-get isinst runit && {
-		install -Dm755 $SRC/run.$name $PKG/etc/sv/$name/run
-		ln -s /run/runit/supervise.$name $PKG/etc/sv/$name/supervise
-	} || continue
+    # Remove obsolete Upstart integration.
+    rm -rf "$PKG/etc/init"
 
-	# rc service
-	prt-get isinst sysvinit && \
-		install -Dm755 $SRC/rc.$name $PKG/etc/rc.d/$name || continue
+    # Runtime directories. Ownership is applied by post-install after
+    # the lightdm service account exists.
+    install -d \
+        "$PKG/var/lib/lightdm" \
+        "$PKG/var/lib/lightdm-data" \
+        "$PKG/var/cache/lightdm" \
+        "$PKG/var/log/lightdm" \
+        || return 1
+
+    # BFSOS systemd service.
+    install -Dm644 /dev/stdin \
+        "$PKG/usr/lib/systemd/system/lightdm.service" <<'UNIT'
+[Unit]
+Description=Light Display Manager
+Documentation=man:lightdm(1)
+After=systemd-user-sessions.service systemd-logind.service
+Conflicts=getty@tty7.service
+
+[Service]
+ExecStart=/usr/bin/lightdm
+Restart=always
+RestartSec=2
+BusName=org.freedesktop.DisplayManager
+
+[Install]
+Alias=display-manager.service
+UNIT
 }

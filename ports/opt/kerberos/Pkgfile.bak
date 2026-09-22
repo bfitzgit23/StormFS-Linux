@@ -1,0 +1,30 @@
+# Description: MIT Kerberos V5 is a free implementation of Kerberos 5. Kerberos is a network authentication protocol. It centralizes the authentication database and uses kerberized applications to work with servers or services that support Kerberos allowing single logins and encrypted communication over internal networks or the Internet.
+# URL:         https://kerberos.org/
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Depends on:
+# Optional:    bind-utils gnupg keyutils openldap valgrind yasm libedit cmocka kdcproxy pyrad resolv_wrapper
+name=kerberos
+version=1.22.2
+release=2
+source=(https://$name.org/dist/krb5/${version%.*}/krb5-$version.tar.gz)
+
+pkg_build() {
+
+cd src &&
+
+sed -i -e '/eq 0/{N;s/12 //}'    plugins/kdb/db2/libdb2/test/run.test &&
+
+
+./configure --prefix=/usr            \
+            --sysconfdir=/etc        \
+            --localstatedir=/var/lib \
+            --runstatedir=/run       \
+            --with-system-et         \
+            --with-system-ss         \
+            --with-system-verto=no   \
+            --enable-dns-for-realm &&
+make
+	make DESTDIR=$PKG install
+mkdir -p $PKG/usr/share/doc/krb5-$version
+cp -vfr ../doc -T $PKG/usr/share/doc/krb5-$version
+}

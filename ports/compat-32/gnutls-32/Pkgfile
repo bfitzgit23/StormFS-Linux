@@ -1,18 +1,17 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: A library that provides a secure layer over a reliable transport layer
 # URL: https://gnutls.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on: gnutls libidn2-32 nettle-32 p11-kit-32
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: gnutls libidn2-32 libtasn1-32 nettle-32 p11-kit-32
 
 name=gnutls-32
-version=3.8.9
-release=1
+version=3.8.13
+release=3
 source=(https://mirrors.dotsrc.org/gcrypt/${name%-*}/v${version:0:3}/${name%-*}-$version.tar.xz)
 
-build() {
-	cd ${name%-*}-${version:0:5}
-
+# Custom build required: generated libtool must be adjusted after configure
+pkg_build() {
+  (
+    set -e
 	./configure \
 		--prefix=/usr \
 		--libdir=/usr/lib32 \
@@ -29,4 +28,5 @@ build() {
 	rm -r \
 		$PKG/usr/share/{doc,info,locale,man} \
 		$PKG/usr/{bin,include,share}
+  )
 }

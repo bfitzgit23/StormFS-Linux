@@ -1,46 +1,88 @@
-# Add your top line text here
-# Your line to add at the top here
-# Depends on: gnutls jansson libitrpc perl-parse-yapp rpcsvc-proto fuse gpgme icu libtasn1 libxslt linux-pam kerberos openldap avahi cups cyrus-sasl git gdb gnupg libaio libarchive libcap libgcrypt libnsl libunwind lmdb python3-markdown nss popt talloc vala valgrind xfsprogs 
+# Description: SMB/CIFS file, print, and Windows networking services
+# URL: https://www.samba.org/
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: gnutls libtirpc perl-parse-yapp rpcsvc-proto gpgme icu jansson libtasn1 libxslt linux-pam kerberos openldap lmdb popt talloc python3 systemd
+# Optional: avahi cups cyrus-sasl fuse3 libaio libarchive libcap libgcrypt libnsl libunwind nss python3-markdown xfsprogs
 
 name=samba
-version=4.21.4
+version=4.24.7
 release=1
-source=(https://download.${name}.org/pub/${name}/stable/${name}-${version}.tar.gz)
+
+source=(
+    https://download.samba.org/pub/samba/stable/samba-$version.tar.gz
+)
+
 pkg_build() {
-python3 -m venv pyvenv &&
-./pyvenv/bin/pip3 install cryptography pyasn1 iso8601
-PYTHON=$PWD/pyvenv/bin/python3             \
-./configure                                \
-    --prefix=/usr                          \
-    --sysconfdir=/etc                      \
-    --localstatedir=/var                   \
-    --with-piddir=/run/samba               \
-    --with-pammodulesdir=/usr/lib/security \
-    --enable-fhs                           \
-    --without-ad-dc                        \
-    --with-system-mitkrb5                  \
-    --enable-selftest                      \
-    --disable-rpath-install                &&
-make
-sed '1s@^.*$@#!/usr/bin/python3@' \
-    -i ./bin/default/source4/scripting/bin/*.inst
-make install &&
+    # BFSOS intentionally uses the system MIT Kerberos implementation.
+    # Fail early instead of allowing Samba to silently fall back to its
+    # bundled Heimdal and fail much later in the build.
+    if ! command -v krb5-config >/dev/null 2>&1; then
+        echo "ERROR: kerberos is installed but krb5-config is missing."
+        echo "Fix the BFSOS kerberos package before building Samba."
+        return 1
+    fi
 
-install -v -m644    examples/smb.conf.default $PKG/etc/samba &&
+    if [ ! -f /usr/include/gssapi/gssapi.h ]; then
+        echo "ERROR: kerberos is installed but GSSAPI headers are missing."
+        echo "Expected: /usr/include/gssapi/gssapi.h"
+        return 1
+    fi
 
-sed -e "s;log file =.*;log file = /var/log/samba/%m.log;" \
-    -e "s;path = /usr/spool/samba;path = /var/spool/samba;" \
-    -i $PKG/etc/samba/smb.conf.default &&
+    PYTHON=/usr/bin/python3 \
+    ./configure \
+        --prefix=/usr \
+        --sysconfdir=/etc \
+        --localstatedir=/var \
+        --with-piddir=/run/samba \
+        --with-pammodulesdir=/usr/lib/security \
+        --enable-fhs \
+        --without-ad-dc \
+        --with-system-mitkrb5 \
+        --with-systemd \
+        --systemd-install-services \
+        --with-systemddir=/usr/lib/systemd/system \
+        --disable-rpath-install \
+        || return 1
 
-mkdir -pv $PKG/etc/openldap/schema                        &&
+    make -j"${JOBS:-1}" || return 1
 
-install -v -m644    examples/LDAP/README              \
-                    $PKG/etc/openldap/schema/README.samba &&
+    make DESTDIR="$PKG" install || return 1
 
-install -v -m644    examples/LDAP/samba*              \
-                    $PKG/etc/openldap/schema              &&
+    # Install a sample configuration, but never make it the user's active
+    # smb.conf during package creation.
+    install -Dm644 \
+        examples/smb.conf.default \
+        "$PKG/etc/samba/smb.conf.default" \
+        || return 1
 
-install -v -m755    examples/LDAP/{get*,ol*} \
-                    $PKG/etc/openldap/schema
+    sed -e 's;log file =.*;log file = /var/log/samba/%m.log;' \
+        -e 's;path = /usr/spool/samba;path = /var/spool/samba;' \
+        -i "$PKG/etc/samba/smb.conf.default" \
+        || return 1
+
+    # Upstream systemd units reference /etc/sysconfig/samba.  Ship the
+    # upstream defaults so systemd does not complain about unset options.
+    install -Dm644 \
+        packaging/systemd/samba.sysconfig \
+        "$PKG/etc/sysconfig/samba" \
+        || return 1
+
+    # OpenLDAP Samba schema examples.
+    install -d "$PKG/etc/openldap/schema" || return 1
+
+    install -m644 \
+        examples/LDAP/README \
+        "$PKG/etc/openldap/schema/README.samba" \
+        || return 1
+
+    install -m644 \
+        examples/LDAP/samba* \
+        "$PKG/etc/openldap/schema/" \
+        || return 1
+
+    install -m755 \
+        examples/LDAP/get* \
+        examples/LDAP/ol* \
+        "$PKG/etc/openldap/schema/" \
+        || return 1
 }
-

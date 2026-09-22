@@ -1,31 +1,23 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Netscape Portable Runtime library
 # URL: https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSPR
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: nspr
 
 name=nspr-32
-version=4.36
-release=1
+version=4.40
+release=3
 source=(https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v$version/src/${name%-*}-$version.tar.gz
 	nspr.pc.in)
 
-build() {
+build_opt="--includedir=/usr/include/nspr --enable-optimize=$CFLAGS --disable-64bit --disable-debug"
+
+pre_build() {
+        _bfs_require_compat32_extension 2 || return 0
+	cd nspr || return 1
+}
+
+post_build() {
 	local NSPR_LIBS NSPR_CFLAGS NSPR_VERSION
-
-	cd ${name%-*}-$version/nspr
-
-	./configure \
-		--prefix=/usr \
-		--libdir=/usr/lib32 \
-		--includedir=/usr/include/nspr \
-		--enable-optimize="$CFLAGS" \
-		--disable-64bit \
-		--disable-debug
-
-	make
-	make DESTDIR=$PKG install
 
 	mv $PKG/usr/bin/nspr-config{,-32}
 	rm $PKG/usr/bin/{compile-et.pl,prerr.properties}

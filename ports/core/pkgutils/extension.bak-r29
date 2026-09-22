@@ -1,0 +1,392 @@
+# extra function for pkgmk
+if [ "$PKGMK_ARCH" = 32 ]; then
+        export PKG_CONFIG_LIBDIR="/usr/lib32/pkgconfig:/usr/share/pkgconfig"
+        export CC="${CC:-gcc} -m32"
+        export CXX="${CXX:-g++} -m32"
+else
+        unset PKGMK_ARCH
+fi
+
+# use these only if build() function not exist
+if [ ! "$(command -v build)" ]; then
+	# override stupid function in pkgmk
+	build_needed() {
+		if [ -f "$TARGET" ]; then
+			echo no
+		else
+			echo yes
+		fi
+	}
+
+	detect_buildtype() {
+		if [ -f meson.build ]; then
+			build_type=meson_build
+		elif [ -f configure ]; then
+			build_type=configure_build
+		elif [ -f CMakeLists.txt ]; then
+			build_type=cmake_build
+		elif [ -f setup.py ]; then
+			build_type=python3_build
+		elif [ -f Makefile.PL ]; then
+			build_type=perlmodule_build
+		elif [ -f Makefile ] || [ -f makefile ]; then
+			build_type=makefile_build
+		else
+			echo "failed to detect build_type"
+			exit 1
+		fi
+	}
+
+	_bfs_collect_build_opts() {
+		_bfs_build_opts=()
+		case "$(declare -p build_opt 2>/dev/null || true)" in
+			"declare -a "*|"declare -A "*)
+				_bfs_build_opts=("${build_opt[@]}")
+				;;
+			*)
+				# Preserve the historical scalar build_opt behavior: whitespace
+				# separates arguments.  Arrays are preferred when an option itself
+				# needs embedded whitespace.
+				if [ -n "${build_opt:-}" ]; then
+					read -r -a _bfs_build_opts <<< "${build_opt//$'\n'/ }"
+				fi
+				;;
+		esac
+	}
+
+	_bfs_build_opt_has() {
+		local needle=$1 arg
+		_bfs_collect_build_opts
+		for arg in "${_bfs_build_opts[@]}"; do
+			case "$arg" in
+				"$needle"|"$needle="*) return 0 ;;
+			esac
+		done
+		return 1
+	}
+
+	_bfs_cmake_policy_default() {
+		_bfs_cmake_policy_args=()
+		[ "${PKGMK_CMAKE_POLICY_COMPAT:-yes}" != no ] || return 0
+		_bfs_build_opt_has -DCMAKE_POLICY_VERSION_MINIMUM && return 0
+
+		local major
+		major=$(cmake --version 2>/dev/null | awk 'NR==1 {split($3,v,"."); print v[1]+0}')
+		if [ "${major:-0}" -ge 4 ]; then
+			_bfs_cmake_policy_args=(
+				"-DCMAKE_POLICY_VERSION_MINIMUM=${PKGMK_CMAKE_POLICY_VERSION_MINIMUM:-3.5}"
+			)
+		fi
+	}
+
+	_bfs_cmake_test_defaults() {
+		_bfs_cmake_test_args=()
+		[ "${PKGMK_RUN_TESTS:-no}" != yes ] || return 0
+		[ "${run_tests:-no}" != yes ] || return 0
+
+		local opt
+		for opt in BUILD_TESTING BUILD_TESTS ENABLE_TESTS; do
+			_bfs_build_opt_has "-D$opt" && continue
+			if grep -Eiq "(^|[^A-Za-z0-9_])(option[[:space:]]*\\([[:space:]]*$opt([[:space:]]|\\))|set[[:space:]]*\\([[:space:]]*$opt[[:space:]].*CACHE[[:space:]]+BOOL)" ../CMakeLists.txt 2>/dev/null; then
+				_bfs_cmake_test_args+=("-D$opt=OFF")
+			elif [ "$opt" = BUILD_TESTING ] && grep -Eiq 'include[[:space:]]*\\([[:space:]]*CTest[[:space:]]*\\)' ../CMakeLists.txt 2>/dev/null; then
+				_bfs_cmake_test_args+=("-DBUILD_TESTING=OFF")
+			fi
+		done
+	}
+
+	_bfs_configure_test_defaults() {
+		_bfs_configure_test_args=()
+		[ "${PKGMK_RUN_TESTS:-no}" != yes ] || return 0
+		[ "${run_tests:-no}" != yes ] || return 0
+
+		local help opt
+		help=$(./configure --help 2>/dev/null || true)
+		for opt in --disable-tests --disable-test --disable-checks --disable-check; do
+			case "$help" in
+				*"$opt"*) _bfs_configure_test_args+=("$opt"); break ;;
+			esac
+		done
+	}
+
+	_bfs_meson_disable_supported_tests() {
+		[ "${PKGMK_RUN_TESTS:-no}" != yes ] || return 0
+		[ "${run_tests:-no}" != yes ] || return 0
+
+		local cfg opt
+		cfg=$(meson configure _meson_build 2>/dev/null || true)
+		for opt in tests test build_tests build-tests enable_tests enable-tests; do
+			_bfs_build_opt_has "-D$opt" && continue
+			if printf '%s\n' "$cfg" | grep -Eq "^[[:space:]]*$opt[[:space:]]"; then
+				if meson configure _meson_build "-D$opt=disabled" >/dev/null 2>&1; then
+					printf 'pkgmk: disabled supported Meson test option %s\n' "$opt"
+				elif meson configure _meson_build "-D$opt=false" >/dev/null 2>&1; then
+					printf 'pkgmk: disabled supported Meson test option %s\n' "$opt"
+				else
+					echo "pkgmk: warning: detected Meson option '$opt' but could not disable it safely" >&2
+				fi
+			fi
+		done
+	}
+
+	_makefile_build() {
+		_bfs_collect_build_opts
+		make "${_bfs_build_opts[@]}" || return $?
+		make \
+			PREFIX=/usr \
+			prefix=/usr \
+			SYSCONFDIR=/etc \
+			sysconfdir=/etc \
+			MANDIR=/usr/share/man \
+			mandir=/usr/share/man \
+			LIBDIR=/usr/lib \
+			PKGCONFIGDIR=/usr/lib/pkgconfig \
+			"${_bfs_build_opts[@]}" \
+			DESTDIR="$PKG" install || return $?
+	}
+
+	_perlmodule_build() {
+		perl Makefile.PL || return $?
+		make || return $?
+		make DESTDIR="$PKG" install || return $?
+	}
+
+	_cmake_build() {
+		_bfs_collect_build_opts
+		mkdir -p cmakebuild || return $?
+		cd cmakebuild || return $?
+		_bfs_cmake_policy_default
+		_bfs_cmake_test_defaults
+		cmake -DCMAKE_INSTALL_PREFIX=/usr \
+			-DCMAKE_INSTALL_SYSCONFDIR=/etc \
+			-DCMAKE_INSTALL_LIBDIR=lib \
+			-DCMAKE_INSTALL_LIBEXECDIR=lib \
+			-DCMAKE_BUILD_TYPE=Release \
+			-DFETCHCONTENT_FULLY_DISCONNECTED=ON \
+			-DCMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+			-DCMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
+			"${_bfs_cmake_policy_args[@]}" \
+			"${_bfs_cmake_test_args[@]}" \
+			"${_bfs_build_opts[@]}" \
+			-G Ninja .. || return $?
+		cmake --build . --parallel "${JOBS:-1}" || return $?
+		DESTDIR="$PKG" cmake --install . || return $?
+	}
+
+	_python3_build() {
+		python3 setup.py build || return $?
+		python3 setup.py install --prefix=/usr --root="$PKG" --optimize=1 --skip-build || return $?
+	}
+
+	_configure_build() {
+		_bfs_collect_build_opts
+		_bfs_configure_test_defaults
+		./configure \
+			--prefix=/usr \
+			--sysconfdir=/etc \
+			--libexecdir=/usr/lib \
+			--localstatedir=/var \
+			--mandir=/usr/share/man \
+			--libdir=/usr/lib \
+			"${_bfs_configure_test_args[@]}" \
+			"${_bfs_build_opts[@]}" || return $?
+		make -j"${JOBS:-1}" || return $?
+		make DESTDIR="$PKG" install || return $?
+	}
+
+	_meson_build() {
+		_bfs_collect_build_opts
+		meson setup _meson_build \
+			--prefix=/usr \
+			--libdir=/usr/lib \
+			--libexecdir=/usr/lib \
+			--includedir=/usr/include \
+			--datadir=/usr/share \
+			--mandir=/usr/share/man \
+			--infodir=/usr/share/info \
+			--localedir=/usr/share/locale \
+			--sysconfdir=/etc \
+			--localstatedir=/var \
+			--sharedstatedir=/var/lib \
+			--buildtype=plain \
+			--auto-features=auto \
+			--wrap-mode=nodownload \
+			-Db_lto=true \
+			-Db_pie=true \
+			-Db_thinlto_cache=true \
+			"${_bfs_build_opts[@]}" || return $?
+		_bfs_meson_disable_supported_tests || return $?
+		meson compile -C _meson_build -j "${JOBS:-1}" || return $?
+		DESTDIR="$PKG" meson install --no-rebuild -C _meson_build || return $?
+	}
+
+	_patch() {
+		# Backward-compatible skip_patch plus explicit Pkgfile control.
+		[ "$skip_patch" ] && return 0
+		[ "${PKGMK_AUTO_PATCH:-yes}" = "no" ] && return 0
+		n=0
+		for i in "${source[@]}"; do
+			if [ "$renames" ]; then
+				case ${renames[$n]} in
+					SKIP) ;;
+					*) i=${renames[$n]};;
+				esac
+			fi
+			case $i in
+				*.patch|*.diff)
+					patch -t ${patch_opt:--p1} -i "$SRC/${i##*/}" || return $? ;;
+				*.patch.gz|*.diff.gz)
+					gzip -dc "$SRC/${i##*/}" | patch -t ${patch_opt:--p1} || return $? ;;
+				*.patch.xz|*.diff.xz)
+					xz -dc "$SRC/${i##*/}" | patch -t ${patch_opt:--p1} || return $? ;;
+				*.patch.bz2|*.diff.bz2)
+					bzip2 -dc "$SRC/${i##*/}" | patch -t ${patch_opt:--p1} || return $? ;;
+			esac
+			n=$(( n + 1 ))
+		done
+	}
+
+	build() {
+		export DESTDIR=$PKG
+		export DEST_DIR=$PKG     # p7zip
+		export INSTALLROOT=$PKG  # syslinux
+		export install_root=$PKG # glibc
+		export INSTALL_ROOT=$PKG # qt5
+		export CARGO_HOME=/tmp
+
+		if [ "${#source[@]}" -gt 0 ]; then
+			s=""
+			n=0
+			for candidate in "${source[@]}"; do
+				case $candidate in
+					*.tar|*.tar.gz|*.tar.Z|*.tgz|*.tar.bz2|*.tbz2|*.tar.xz|*.txz|*.tar.zst|*.tzst|*.tar.lz4|*.tar.lzma|*.tar.lz|*.zip|*.rpm|*.7z)
+						s="$candidate"
+						break
+						;;
+					esac
+				n=$((n + 1))
+			done
+			[ -n "$s" ] || { s="${source[0]}"; n=0; }
+			if [ "$renames" ]; then
+				case ${renames[$n]} in
+					SKIP) ;;
+					*) s=${renames[$n]};;
+				esac
+			fi
+			# Detect the extracted source directory.
+			srcdir="$name-$version"
+			
+			if [ ! -d "$srcdir" ]; then
+			        srcdir=""
+			        for candidate in */; do
+			                [ -d "$candidate" ] || continue
+			                candidate="${candidate%/}"
+			
+			                if [ -n "$srcdir" ]; then
+			                        # More than one directory: do not guess.
+			                        srcdir=""
+			                        break
+			                fi
+			
+			                srcdir="$candidate"
+			        done
+			fi
+			
+			if [ -n "$srcdir" ] && [ -d "$srcdir" ]; then
+			        cd "$srcdir" || return 1
+			fi
+			_patch || return $?
+			if [ "$(command -v pkg_build)" ]; then
+				# Custom recipes still participate in the standard extension hooks.
+				# This is important for ports migrated from legacy build(), where
+				# pre_build/post_build remain part of the package recipe.
+				if [ "$(command -v pre_build)" ]; then
+					pre_build || return $?
+				fi
+				pkg_build || return $?
+				if [ "$(command -v post_build)" ]; then
+					post_build || return $?
+				fi
+			else
+				if [ "$(command -v pre_build)" ]; then
+					pre_build
+				fi
+				if [ ! "$build_type" ]; then
+					detect_buildtype
+				fi
+				# run build
+				_$build_type $@
+				if [ "$(command -v post_build)" ]; then
+					post_build
+				fi
+			fi
+		else
+			# dummy pkg
+			mkdir -p $PKG/usr
+		fi
+		
+		# KDE/KF6 is intentionally installed under /opt/kf6, but systemd
+		# user/system units are host integration files and must live in the
+		# standard /usr/lib/systemd hierarchy so systemd can discover them.
+		# Relocate staged units before the package footprint is generated.
+		if [ -d "$PKG/opt/kf6/lib/systemd" ]; then
+			for _bfs_systemd_scope in system user; do
+				_bfs_systemd_src="$PKG/opt/kf6/lib/systemd/$_bfs_systemd_scope"
+				_bfs_systemd_dst="$PKG/usr/lib/systemd/$_bfs_systemd_scope"
+				[ -d "$_bfs_systemd_src" ] || continue
+				mkdir -p "$_bfs_systemd_dst" || return $?
+				cp -a "$_bfs_systemd_src/." "$_bfs_systemd_dst/" || return $?
+				rm -rf -- "$_bfs_systemd_src" || return $?
+			done
+			rmdir "$PKG/opt/kf6/lib/systemd" 2>/dev/null || true
+		fi
+
+		# info dir
+		if [ -d $PKG/usr/share/info ]; then
+			rm -f $PKG/usr/share/info/dir
+			find $PKG/usr/share/info -type f | while read -r file; do
+				case $file in
+					*/dir) continue;;
+				esac
+				if [ "$file" = "${file%%.gz}" ]; then
+					gzip -9 -f "$file"
+				fi
+			done
+		fi
+		
+		# possible conflicts
+		find $PKG -name "fonts.dir" -exec rm {} \;
+		find $PKG -name "fonts.scale" -exec rm {} \;
+		find $PKG -name "perllocal.pod" -exec rm {} \;
+		find $PKG -name "charset.alias" -exec rm {} \;
+		
+		# only keep man[1-8] man pages
+		if [ -d $PKG/usr/share/man ]; then
+			for m in $PKG/usr/share/man/*; do
+				case ${m##*/} in
+					man[1-8]) continue;;
+				esac
+				rm -rf $m
+			done
+		fi
+		
+		if [ ! "$keep_static" ]; then
+			find $PKG -name "*.a" -exec rm {} \;
+		fi
+		
+		if [ ! "$keep_libtool" ]; then
+			find $PKG -name "*.la" -exec rm {} \;
+		fi
+		
+		if [ ! "$keep_locale" ]; then
+			rm -rf $PKG/usr/share/locale
+			rm -rf $PKG/usr/lib/locale
+		fi
+		
+		if [ ! "$keep_doc" ]; then
+			rm -rf $PKG/usr/share/doc
+			rm -rf $PKG/usr/doc
+		fi
+		
+	}
+fi

@@ -36,52 +36,41 @@ prt-get install arc-icons arc-themes gtk-engine-murrine
 
 ## OpenRC Integration
 
-### XFCE Session Service
+OpenRC starts the system services required by XFCE. The display manager creates the user session; do not run `startxfce4` as a root-owned system daemon.
 
-Create an OpenRC init script for xfce4-session:
-
-```bash
-cat > /etc/init.d/xfce4-session <<'EOF'
-#!/sbin/openrc-run
-
-depend() {
-    need dbus
-    need localmount
-    after elogind
-    before NetworkManager
-}
-
-start() {
-    ebegin "Starting XFCE4 session"
-    start-stop-daemon --start --exec /usr/bin/startxfce4
-    eend $?
-}
-
-stop() {
-    ebegin "Stopping XFCE4 session"
-    start-stop-daemon --stop --exec /usr/bin/startxfce4
-    eend $?
-}
-EOF
-
-chmod +x /etc/init.d/xfce4-session
-```
-
-### Autostart Services
+### System Services
 
 ```bash
-# Enable XFCE4 session for default runlevel
-sudo rc-update add xfce4-session default
+# Enable the system bus and selected desktop services
+sudo rc-update add dbus boot
+sudo rc-update add polkitd default
+sudo rc-update add upowerd default
+sudo rc-update add lightdm default
 
-# Start XFCE4 session
-sudo rc-service xfce4-session start
+# Start the display manager after its dependencies
+sudo rc-service lightdm start
 ```
+
+### User Session Autostart
+
+Select the XFCE session in LightDM, or start it from the graphical user session:
+
+```bash
+# ~/.xinitrc or the desktop session launcher
+exec startxfce4
+```
+
+Use `~/.config/autostart/*.desktop` for `xfce4-power-manager` and panel plugins. These processes need the logged-in user’s `DISPLAY`, `DBUS_SESSION_BUS_ADDRESS`, and audio environment; placing them in a system runlevel is incorrect.
 
 ### Power Management Service
 
 ```bash
-# Enable XFCE power manager
-sudo rc-update add xfce4-power-manager default
+# System-level power policy
+sudo rc-update add upowerd default
+sudo rc-service upowerd status
+
+# User-level XFCE power manager, launched by XFCE
+xfce4-power-manager &
 ```
 
 ## Configuring XFCE
@@ -166,7 +155,8 @@ xdg-mime default firefox.desktop text/html
 
 ```bash
 # Enable power management
-sudo rc-update add xfce4-power-manager default
+# Launch xfce4-power-manager from the XFCE session autostart
+xfce4-power-manager &
 
 # Start power management
 xfce4-power-manager &

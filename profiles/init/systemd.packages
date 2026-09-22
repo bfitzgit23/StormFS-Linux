@@ -1,0 +1,5 @@
+# BFSOS build-time init profile: systemd
+systemd
+linux-pam
+dbus
+eudev

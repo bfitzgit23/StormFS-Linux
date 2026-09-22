@@ -1,8 +1,6 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Font rasterization library
 # URL:         https://www.freetype.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on:  libpng which
 
 name=freetype
@@ -11,8 +9,7 @@ release=1
 source=(https://downloads.sourceforge.net/freetype/freetype-$version.tar.xz
 https://downloads.sourceforge.net/freetype/freetype-doc-$version.tar.xz)
 
-build() {
-	cd freetype-$version
+pkg_build() {
 
 	sed -ri "s:.*(AUX_MODULES.*valid):\1:" modules.cfg &&
 

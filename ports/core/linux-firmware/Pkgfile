@@ -1,10 +1,10 @@
 # Description: Firmware files for Linux
 # URL: https://gitlab.com/kernel-firmware/linux-firmware
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: rdfind
 
 name=linux-firmware
-version=20260622
+version=20260810
 release=1
 source=(https://www.kernel.org/pub/linux/kernel/firmware/$name-$version.tar.xz)
 

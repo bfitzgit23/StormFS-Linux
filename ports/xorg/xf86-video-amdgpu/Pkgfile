@@ -1,18 +1,19 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Video driver for the AMD GPU families Tonga, Carrizo, Iceland, Fiji and Stoney
 # URL: http://xorg.freedesktop.org
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on: xorg-server
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: xorg-server meson
 
 name=xf86-video-amdgpu
-version=23.0.0
+version=25.0.0
 release=1
 source=(https://xorg.freedesktop.org/releases/individual/driver/xf86-video-amdgpu-$version.tar.xz)
 
-build() {
-	cd xf86-video-amdgpu-$version
-	./configure --prefix=/usr
-	make
-	make DESTDIR=$PKG install
+pkg_build() {
+    cd "$SRC/$name-$version" || return 1
+
+    meson setup build         --prefix=/usr         --buildtype=release         -Dglamor=enabled         || return 1
+
+    meson compile -C build || return 1
+
+    DESTDIR="$PKG" meson install -C build || return 1
 }

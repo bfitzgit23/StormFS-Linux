@@ -1,9 +1,7 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: The CDParanoia package contains a CD audio extraction tool. This is useful for extracting .wav files from audio CDs. A CDDA capable CDROM drive is needed. Practically all drives supported by Linux can be used.
 # URL:          https://xiph.org
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on:  
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on:
 
 name=cdparanoia
 version=10.2
@@ -11,8 +9,9 @@ release=1
 source=(https://downloads.xiph.org/releases/$name/$name-III-$version.src.tgz
 https://www.linuxfromscratch.org/patches/blfs/svn/$name-III-$version-gcc_fixes-1.patch)
 
-build() {
-	cd $name-III-$version
+skip_patch=1
+
+pkg_build() {
 
 	patch -Np1 -i ../$name-III-$version-gcc_fixes-1.patch &&
 ./configure --prefix=/usr --mandir=/usr/share/man &&

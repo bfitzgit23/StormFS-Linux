@@ -284,6 +284,23 @@ start() {
 
 ## Integration with Other Init Systems
 
+### OpenRC User Sessions and Portals
+
+Desktop applications that use D-Bus user services need a session bus even when systemd is absent. Start the desktop session through the display manager, install the OpenRC desktop dependencies, and use the desktop environment's own portal process or a user-session wrapper:
+
+```bash
+prt-get install dbus consolekit2 xdg-desktop-portal
+rc-update add dbus boot
+rc-update add lightdm default 2>/dev/null || true
+
+# Inspect the D-Bus session from the graphical terminal
+echo "$DBUS_SESSION_BUS_ADDRESS"
+pgrep -a dbus-daemon
+pgrep -a xdg-desktop-portal
+```
+
+`consolekit2` supplies the session and seat integration used by this repository. It is D-Bus activated and does not need its own `rc-update` entry. For portals launched per user, use the desktop session's autostart mechanism rather than a systemd user unit.
+
 ### Systemd Compatibility
 
 OpenRC provides systemd compatibility:

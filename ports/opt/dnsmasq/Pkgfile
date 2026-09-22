@@ -1,29 +1,17 @@
-# Description: Lightweight, easy to configure DNS forwarder and DHCP server
-# URL: http://www.thekelleys.org.uk/dnsmasq/doc.html
-# Maintainer: Venom Linux Team, venomlinux at disroot dot org
-# Depends on: nettle
+# Description: Lightweight DNS forwarder and DHCP server used by libvirt networks
+# URL: https://dnsmasq.org/
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 
 name=dnsmasq
-version=2.93
+version=2.92
 release=1
-source=(http://www.thekelleys.org.uk/$name/$name-$version.tar.xz run.$name rc.$name)
+source=(https://thekelleys.org.uk/dnsmasq/dnsmasq-$version.tar.xz)
 
-build() {
-	cd $name-$version
+build_opt=(
+    PREFIX=/usr
+)
 
-	# need to pass COPTS here to avoid rebuilding the binary.
-	make COPTS="$_build_copts" PREFIX=/usr BINDIR=/usr/bin DESTDIR=$PKG install-i18n
-
-	install -Dm 644 dnsmasq.conf.example $PKG/etc/dnsmasq.conf
-	install -Dm 644 trust-anchors.conf $PKG/usr/share/dnsmasq/trust-anchors.conf
-
-	# runit service
-	prt-get isinst runit && {
-		install -Dm755 $SRC/run.$name $PKG/etc/sv/$name/run
-		ln -s /run/runit/supervise.$name $PKG/etc/sv/$name/supervise
-	} || continue
-
-	# rc service
-	prt-get isinst sysvinit && \
-		install -Dm755 $SRC/rc.$name $PKG/etc/rc.d/$name || continue
+post_build() {
+    install -d "$PKG/etc"
+    install -m644 dnsmasq.conf.example "$PKG/etc/dnsmasq.conf.example"
 }

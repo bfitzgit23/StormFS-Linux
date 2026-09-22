@@ -1,0 +1,44 @@
+Submitted By: Ken Moffat <ken at linuxfromscratch dot org>
+Date: 2022-12-01
+Initial Package Version: 2.28.1
+BFSOS refresh: 2026-09-10 for Requests 2.34.2
+Upstream Status: downstream distribution policy
+Origin: Linux From Scratch / Fedora / Arch-derived policy, refreshed for BFSOS
+Description: Prefer the BFSOS system CA bundle and drop the certifi runtime dependency.
+
+Requests explicitly permits distribution packagers to replace certs.where().
+BFSOS uses /etc/pki/tls/certs/ca-bundle.crt, maintained by ca-certificates + make-ca.
+The _PIP_STANDALONE_CERT override is retained for pip's standalone bootstrap path.
+
+diff --git a/pyproject.toml b/pyproject.toml
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -18,8 +18,7 @@ requires-python = ">=3.10"
+ dependencies = [
+     "charset_normalizer>=2,<4",
+     "idna>=2.5,<4",
+-    "urllib3>=1.26,<3",
+-    "certifi>=2023.5.7"
++    "urllib3>=1.26,<3"
+ ]
+ dynamic = ["version"]
+ 
+diff --git a/src/requests/certs.py b/src/requests/certs.py
+--- a/src/requests/certs.py
++++ b/src/requests/certs.py
+@@ -12,7 +12,14 @@ environment, you can change the definition of where() to return a separately
+ packaged CA bundle.
+ """
+ 
+-from certifi import where
++import os
++
++if "_PIP_STANDALONE_CERT" not in os.environ:
++    def where():
++        return "/etc/pki/tls/certs/ca-bundle.crt"
++else:
++    def where():
++        return os.environ["_PIP_STANDALONE_CERT"]
+ 
+ if __name__ == "__main__":
+     print(where())

@@ -1,16 +1,13 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Kernel multi-touch transformation library
 # URL: https://launchpad.net/mtdev
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 
 name=mtdev
 version=1.1.7
 release=1
 source=(http://launchpad.net/$name/trunk/$version/+download/$name-$version.tar.gz)
 
-build() {
-	cd $name-$version
+pkg_build() {
 
 	./configure --prefix=/usr --disable-static &&
 make

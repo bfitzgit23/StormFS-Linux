@@ -1,8 +1,6 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: A stream oriented C library for parsing XML
 # URL:         
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on:  
 
 name=stripping
@@ -10,7 +8,7 @@ version=1.0
 release=1
 source=(cleanup.sh stripping.sh)
 
-build() {
+pkg_build() {
 
 	mkdir -p $PKG/sources/work
 	mkdir -p $PKG/sources/packages

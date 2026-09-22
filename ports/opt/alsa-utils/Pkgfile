@@ -1,23 +1,20 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description:  The ALSA Utilities package contains various utilities which are useful for controlling your sound card.
 # URL:         https://www.alsa-project.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on:  alsa-lib xmlto
 # Optional:    docutils fftw libsamplerate python3-dialog
 
 name=alsa-utils
-version=1.2.13
-release=1
+version=1.2.16
+release=2
 source=(https://www.alsa-project.org/files/pub/utils/$name-$version.tar.bz2)
 
-build() {
-	cd $name-$version
+pkg_build() {
 
 	./configure --disable-alsaconf \
             --disable-bat   \
             --enable-xmlto \
-            --with-curses=ncursesw &&
-make
-	make DESTDIR=$PKG install
+            --with-curses=ncursesw || return 1
+make || return 1
+make DESTDIR="$PKG" install || return 1
 }

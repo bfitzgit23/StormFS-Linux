@@ -1,18 +1,15 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Xapian is an open source search engine library.
 # URL:          https://oligarchy.co.uk/xapian/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on:  
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on:
 # Optional: valgrind
 
 name=xapian
 version=1.4.25
 release=1
-source=(https://oligarchy.co.uk/$name/$version/$name-core-$version.tar.xz)
+source=(https://mirror.freedif.org/pub/blfs/conglomeration/xapian/xapian-core-$version.tar.xz)
 
-build() {
-	cd $name-core-$version
+pkg_build() {
 
 	./configure --prefix=/usr    \
             --disable-static \

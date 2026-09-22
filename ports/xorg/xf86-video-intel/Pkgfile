@@ -1,17 +1,14 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Intel graphics video driver
 # URL: https://www.x.org/wiki/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on: xorg-libxscrnsaver xorg-server
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: libXScrnSaver xorg-server
 
 name=xf86-video-intel
 version=2.99.917-931
 release=1
 source=(https://crux.nu/files/distfiles/xf86-video-intel-$version.tar.xz)
 
-build() {
-	cd xf86-video-intel-$version
+pkg_build() {
 
 	./configure \
 		--prefix=/usr \

@@ -1,18 +1,15 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Source code documentation generator tool
 # URL: https://www.doxygen.nl/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: cmake git
 # Optional graphviz ghostscript libxml2 llvm qt qt-alternate texlive install-tl-unx xapian javacc
 
 name=doxygen
-version=1.12.0
-release=1
+version=1.18.0
+release=2
 source=(https://$name.nl/files/$name-$version.src.tar.gz)
 
-build() {
-	cd $name-$version
+pkg_build() {
 	grep -rl '^#!.*python$' | xargs sed -i '1s/python/&3/'
 	mkdir -p build
 	cd build

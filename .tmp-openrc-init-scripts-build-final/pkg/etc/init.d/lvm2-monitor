@@ -1,0 +1,23 @@
+#!/sbin/openrc-run
+
+description="LVM2 device monitoring"
+
+command=/usr/sbin/vgchange
+command_args="--monitor y"
+
+start() {
+	ebegin "Starting LVM2 monitoring"
+	"$command" $command_args
+	eend $?
+}
+
+depend() {
+	need localmount
+	need logger
+}
+
+stop() {
+	ebegin "Stopping LVM2 monitoring"
+	"$command" --monitor n
+	eend $?
+}

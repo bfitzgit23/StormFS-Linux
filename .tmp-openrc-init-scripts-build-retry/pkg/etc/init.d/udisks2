@@ -1,0 +1,19 @@
+#!/sbin/openrc-run
+
+description="UDisks2 disk management"
+
+depend() {
+	need dbus logger
+}
+
+start() {
+	ebegin "Starting UDisks2 daemon"
+	start-stop-daemon --start --exec /usr/lib/udisks2/udisksd
+	eend $?
+}
+
+stop() {
+	ebegin "Stopping UDisks2 daemon"
+	start-stop-daemon --stop --exec /usr/lib/udisks2/udisksd
+	eend $?
+}

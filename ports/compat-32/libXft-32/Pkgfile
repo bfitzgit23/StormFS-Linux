@@ -1,22 +1,19 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: X font rendering client library
 # URL: http://xorg.freedesktop.org
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: fontconfig-32 libXft libXrender-32
 
 name=libXft-32
-version=2.3.8
-release=1
+version=2.3.9
+release=2
 source=(https://www.x.org/releases/individual/lib/libXft-$version.tar.xz)
 
-build() {
-	cd libXft-$version
 
-	./configure --prefix=/usr --libdir=/usr/lib32
-
-	make
-	make DESTDIR=$PKG install
+post_build() {
 
 	rm -r $PKG/usr/{include,share/man}
+}
+
+pre_build() {
+        _bfs_require_compat32_extension 2 || return $?
 }

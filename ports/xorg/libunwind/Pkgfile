@@ -1,20 +1,17 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: The libunwind package contains a portable and efficient C programming interface (API) to determine the call-chain of a program. The API additionally provides the means to manipulate the preserved (callee-saved) state of each call-frame and to resume execution at any point in the call-chain (non-local goto). The API supports both local (same-process) and remote (across-process) operation.
 # URL:          https://download.savannah.nongnu.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on:  
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on:
 # Optional: texlive
 
 name=libunwind
-version=1.8.1
-release=1
+version=1.8.3
+release=3
 source=(https://github.com/libunwind/$name/releases/download/v$version/$name-$version.tar.gz)
 
-build() {
-	cd $name-$version
+pkg_build() {
 
-	./configure --prefix=/usr --disable-static &&
+	./configure --prefix=/usr --disable-static --disable-tests &&
 make
 	make DESTDIR=$PKG install
 }

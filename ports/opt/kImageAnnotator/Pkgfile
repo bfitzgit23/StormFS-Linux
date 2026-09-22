@@ -1,17 +1,14 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: kImageAnnotator is a tool for annotating images.
 # URL:          https://github.com/ksnip/kImageAnnotator/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on:  kColorPicker
 
-name=kImageAnnotator 
-version=0.6.1
+name=kImageAnnotator
+version=0.7.2
 release=1
 source=(https://github.com/ksnip/kImageAnnotator/archive/refs/tags/v$version/kImageAnnotator-$version.tar.gz)
 
-build() {
-	cd $name-$version
+pkg_build() {
 
 	mkdir build &&
 	cd    build &&

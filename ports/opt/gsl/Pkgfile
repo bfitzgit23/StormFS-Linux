@@ -1,6 +1,5 @@
-# Add your top line text here
-# Your line to add at the top here
-# Depends on: 
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on:
 
 name=gsl
 version=2.8

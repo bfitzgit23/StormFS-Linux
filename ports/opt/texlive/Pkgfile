@@ -1,62 +1,41 @@
-# Add your top line text here
-# Your line to add at the top here
-# Description: TeX distribution for UNIX compatible systems
-# URL: https://www.tug.org/tetex/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on: cairo fontconfig freetype gc, graphite2 harfbuzz icu libpaper libpng
+# Description: TeX Live typesetting system built from source
+# URL: https://www.tug.org/texlive/
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: cairo fontconfig freetype graphite2 harfbuzz icu libpaper libpng
 
 name=texlive
-version=20250308 
-release=2
-source=(https://ftp.math.utah.edu/pub/tex/historic/systems/$name/2023/$name-$version-source.tar.xz
-https://www.linuxfromscratch.org/patches/blfs/svn/$name-$version-source-security_fix-1.patch)
-build() {
+version=20260301
+release=3
+source=(
+    https://texlive.info/historic/systems/texlive/2026/texlive-$version-source.tar.xz
+    https://texlive.info/historic/systems/texlive/2026/texlive-$version-texmf.tar.xz
+    https://texlive.info/historic/systems/texlive/2026/texlive-$version-extra.tar.xz
+)
 
-  cd $name-$version-source
+pkg_build() {
+      export TEXLIVE_PREFIX=/opt/texlive/$version
+    export TEXARCH="$(uname -m | sed -e 's/i.86/i386/' -e 's/$/-linux/')"
 
-  export TEXARCH=$(uname -m | sed -e 's/i.86/i386/' -e 's/$/-linux/') &&
+    mkdir texlive-build
+    cd texlive-build
+    ../configure CC='gcc -std=gnu17' -C \
+        --prefix="$TEXLIVE_PREFIX" \
+        --bindir="$TEXLIVE_PREFIX/bin/$TEXARCH" \
+        --datarootdir="$TEXLIVE_PREFIX" \
+        --includedir="$TEXLIVE_PREFIX/include" \
+        --infodir="$TEXLIVE_PREFIX/texmf-dist/doc/info" \
+        --libdir="$TEXLIVE_PREFIX/lib" \
+        --mandir="$TEXLIVE_PREFIX/texmf-dist/doc/man" \
+        --disable-native-texlive-build
 
-patch -Np1 -i ../texlive-20230313-source-security_fix-1.patch &&
+    make -j "${JOBS:-1}"
+    make DESTDIR="$PKG" install-strip
+    make DESTDIR="$PKG" texlinks || true
 
-mkdir texlive-build &&
-cd    texlive-build &&
+    mkdir -p "$PKG$TEXLIVE_PREFIX/tlpkg"
+    tar -xf "$PKGMK_SOURCE_DIR/texlive-$version-texmf.tar.xz" -C "$PKG$TEXLIVE_PREFIX" --strip-components=1
+    tar -xf "$PKGMK_SOURCE_DIR/texlive-$version-extra.tar.xz" -C "$PKG$TEXLIVE_PREFIX/tlpkg" --strip-components=2
 
-../configure -C                                   \
-    --prefix=$TEXLIVE_PREFIX                      \
-    --bindir=$TEXLIVE_PREFIX/bin/$TEXARCH         \
-    --datarootdir=$TEXLIVE_PREFIX                 \
-    --includedir=$TEXLIVE_PREFIX/include          \
-    --infodir=$TEXLIVE_PREFIX/texmf-dist/doc/info \
-    --libdir=$TEXLIVE_PREFIX/lib                  \
-    --mandir=$TEXLIVE_PREFIX/texmf-dist/doc/man   \
-    --disable-native-texlive-build                \
-    --disable-static --enable-shared              \
-    --disable-dvisvgm                             \
-    --with-system-cairo                           \
-    --with-system-fontconfig                      \
-    --with-system-freetype2                       \
-    --with-system-gmp                             \
-    --with-system-graphite2                       \
-    --with-system-harfbuzz                        \
-    --with-system-icu                             \
-    --with-system-libgs                           \
-    --with-system-libpaper                        \
-    --with-system-libpng                          \
-    --with-system-mpfr                            \
-    --with-system-pixman                          \
-    --with-system-zlib                            \
-    --with-banner-add=" - BLFS" &&
-
-make
-make DESTDIR=$PKG install-strip &&
-/sbin/ldconfig     &&
-make texlinks      &&
-mkdir -pv                                $PKG/$TEXLIVE_PREFIX/tlpkg/TeXLive/ &&
-install -v -m644 ../texk/tests/TeXLive/* $PKG/$TEXLIVE_PREFIX/tlpkg/TeXLive/ &&
-wget ftp://tug.org/texlive/historic/2023/texlive-20230311-tlpdb-full.tar.gz
-tar -xf texlive-20230311-tlpdb-full.tar.gz -C $PKG/$TEXLIVE_PREFIX/tlpkg
-wget ftp://tug.org/texlive/historic/2023/texlive-20230313-texmf.tar.xz
-tar -xf texlive-20230313-texmf.tar.xz -C $PKG/$TEXLIVE_PREFIX --strip-components=1
-mkdir -p $PKG/usr/lib/
-ln -svf $PKG/$TEXLIVE_PREFIX/lib/libkpathsea.so $PKG/usr/lib
+    mkdir -p "$PKG/opt/texlive"
+    ln -sfn "$version" "$PKG/opt/texlive/current"
 }

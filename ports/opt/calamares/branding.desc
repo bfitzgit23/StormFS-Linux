@@ -1,0 +1,31 @@
+componentName: stormfs
+componentName: StormFS Linux
+productName: StormFS Linux
+shortProductName: StormFS
+version: 1.0
+welcomeStyle: sidebar
+windowIcon: stormfs-logo.png
+productLogo: stormfs-logo.png
+productIcon: stormfs-logo.png
+stylesheet: stylesheet.qss
+slideshow: show.qml
+slideshowAPI: 1
+images:
+  - StormFS-Wallpaper-01-Horizon.jpg
+  - StormFS-Wallpaper-02-Lightning.jpg
+  - StormFS-Wallpaper-03-Circuit.jpg
+  - StormFS-Wallpaper-04-Aurora.jpg
+  - StormFS-Wallpaper-05-Hex.jpg
+  - StormFS-Wallpaper-06-Orbit.jpg
+strings:
+  productName: StormFS Linux
+  shortProductName: StormFS
+  version: 1.0
+  shortVersion: 1.0
+  bootloader: GRUB
+  initSystem: OpenRC, systemd, or SysVinit
+colors:
+  accent: '#22d3ee'
+  sidebarBackground: '#07111f'
+  background: '#0b1220'
+  foreground: '#dbeafe'

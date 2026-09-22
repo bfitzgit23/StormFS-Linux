@@ -1,24 +1,19 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: XAudio2 reimplementation
 # URL: https://github.com/FNA-XNA/FAudio/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: libsdl2-32 faudio
 
 name=faudio-32
-version=25.02
-release=1
+version=26.09
+release=3
 source=(https://github.com/FNA-XNA/FAudio/archive/$version/faudio-$version.tar.gz)
 
-build() {
-	cmake -S FAudio-$version -B build -G Ninja \
-		-D CMAKE_INSTALL_PREFIX=/usr \
-		-D CMAKE_INSTALL_LIBDIR=lib32 \
-		-D CMAKE_BUILD_TYPE=Release \
-		-D CMAKE_C_FLAGS_RELEASE="$CFLAGS"
 
-	cmake --build build
-	DESTDIR=$PKG cmake --build build --target install
+post_build() {
 
 	rm -r $PKG/usr/include
+}
+
+pre_build() {
+        _bfs_require_compat32_extension 2 || return $?
 }

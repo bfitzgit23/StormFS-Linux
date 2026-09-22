@@ -1,17 +1,15 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: GTK version of the vim editor
 # URL: https://www.vim.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: gtk3 vim libXt
 
 name=gvim
-version=9.1.1055
+version=9.2.1036
 release=1
 source=(https://github.com/vim/vim/archive/v${version}/vim-$version.tar.gz)
 
-build() {
-	cd vim-$version/src
+pkg_build() {
+	cd src
 
 	sed -i '/^CFLAGS/d' Makefile
 

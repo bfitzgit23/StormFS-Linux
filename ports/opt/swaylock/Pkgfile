@@ -1,21 +1,22 @@
-# Description: Screen locker for Wayland
+# Description: Screen locker for Wayland compositors
 # URL: https://github.com/swaywm/swaylock
-# Maintainer: Venom Linux Team, venomlinux at disroot dot org
-# Depends on: cairo libxkbcommon wayland-protocols gdk-pixbuf scdoc linux-pam
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: meson wayland wayland-protocols libxkbcommon cairo linux-pam
 
 name=swaylock
-version=1.8.5
+version=1.8.6
 release=1
-source=(https://github.com/swaywm/swaylock/archive/v$version/$name-$version.tar.gz)
+source=(https://github.com/swaywm/${name}/archive/refs/tags/v${version}.tar.gz)
 
-build() {
-	meson setup $name-$version build \
-		-D pam=enabled \
-		-Dbash-completions=$(prt-get isinst bash-completions && printf "true" || printf "false") \
-		-Dfish-completions=$(prt-get isinst fish-completions && printf "true" || printf "false") \
-		-Dzsh-completions=$(prt-get isinst zsh-completions && printf "true" || printf "false") 
-	meson compile -C build
-	DESTDIR=$PKG meson install --no-rebuild -C build
-	# Adapt pam file to venom
-	sed -i 's|login|system-auth|' $PKG/etc/pam.d/swaylock
+pkg_build() {
+    meson setup build . \
+        --prefix=/usr \
+        --buildtype=release \
+        --wrap-mode=nodownload \
+        -Dpam=enabled \
+        -Dgdk-pixbuf=disabled \
+        -Dman-pages=disabled || return 1
+
+    meson compile -C build || return 1
+    DESTDIR="$PKG" meson install -C build || return 1
 }

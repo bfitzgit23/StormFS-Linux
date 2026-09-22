@@ -1,17 +1,15 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: X cursor management library
 # URL: http://xorg.freedesktop.org
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: libXfixes libXrender
 
 name=libXcursor
 version=1.2.3
-release=1
+release=2
 source=(https://www.x.org/releases/individual/lib/libXcursor-$version.tar.xz)
 
 pkg_build() {
-	./configure $XORG_CONFIG $docdir
+	./configure $XORG_CONFIG --docdir=/usr/share/doc/$name-$version
 
 	make
 	make DESTDIR=$PKG install

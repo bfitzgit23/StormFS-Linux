@@ -2,23 +2,56 @@
 
 ## Overview
 
-This chapter covers configuring various system services with OpenRC.
+This chapter covers configuring various system services with OpenRC. The service names below match the StormFS `openrc-init-scripts` port. Services that are D-Bus activated should have `dbus` enabled first; do not add every available service to a runlevel, only the services required by the installed system.
+
+## StormFS OpenRC Service Matrix
+
+| Function | Package | OpenRC service | Runlevel | Dependency notes |
+|----------|---------|----------------|----------|------------------|
+| Logging | `sysklogd` | `syslog` wrapper | `boot` | Requires `localmount` |
+| Device management | `eudev` + `openrc-init-scripts` | `udev`, `udev-postmount` | `sysinit` | Start `udev-postmount` after `udev` |
+| Message bus | `dbus` | `dbus` | `boot` | Required by most desktop daemons |
+| DHCP | `dhcpcd` | `dhcpcd` | `default` | Coordinate with `networking` or NetworkManager |
+| Wi-Fi | `iwd` | `iwd` | `default` | Uses D-Bus; do not run with conflicting Wi-Fi managers |
+| Network manager | `networkmanager` | `networkmanager` | `default` | Requires `dbus`; use `session_tracking=none` |
+| Time synchronization | `chrony` | `chronyd` | `boot` | Requires network |
+| Cron jobs | `cronie` | `crond` | `boot` | Timers become cron entries |
+| SSH server | `openssh` + scripts | `sshd` | `default` | Requires network and logger |
+| Display manager | `lightdm`, `sddm`, `lxdm`, or `gdm` | matching name | `default` | Requires `dbus` and `xdm`; enable one only |
+| Bluetooth | `bluez` + scripts | `bluez` | `default` | Requires `dbus` |
+| Audio | `alsa-utils`, `pipewire`, or `pulseaudio` | matching script | `boot`/`default` | Prefer per-user audio for desktops |
+| Storage | `udisks2` | `udisks2` | `default` | Requires `dbus` and PolicyKit |
+| Authorization | `polkit` | `polkitd` | `default` | Requires `dbus` |
+| Power policy | `upower` | `upowerd` | `default` | Requires `dbus` |
+| ACPI events | `acpid` | `acpid` | `boot` | Requires local mounts and logger |
+| Console mouse | `gpm` | `gpm` | `default` | Optional; uses `/dev/input/mice` |
+| Disk health | `smartmontools` | `smartd` | `default` | Requires local mounts |
+| mDNS | `avahi` | `avahi-daemon`, `avahi-dnsconfd` | `default` | Start Avahi before DNS configuration helper |
+| Remote desktop | `rustdesk-bin`, `anydesk`, or `teamviewer` | matching name | `default` | Enable only the selected product |
+
+Inspect the installed scripts before enabling a service:
+
+```bash
+ls -1 /etc/init.d/
+rc-update show
+rc-status --all
+```
 
 ## Cron Service
 
-### cronie
+### crond (Cronie)
 
-cronie provides cron functionality:
+Cronie provides cron functionality through the `crond` OpenRC service:
 
 ```bash
 # Install cronie
 prt-get install cronie
 
-# Enable cronie
-sudo rc-update add cronie boot
+# Enable the service installed by the cronie port
+sudo rc-update add crond boot
 
-# Start cronie
-sudo rc-service cronie start
+# Start crond
+sudo rc-service crond start
 ```
 
 ### Adding Cron Jobs
@@ -33,18 +66,24 @@ sudo nano /etc/crontab
 
 ## Logging
 
-### syslog-ng
+### syslog (Sysklogd)
 
-syslog-ng provides system logging:
+StormFS uses Sysklogd with the `syslog` OpenRC wrapper for the default logging path:
 
 ```bash
-# Install syslog-ng
+# Install the logger and its OpenRC wrapper
+prt-get install sysklogd openrc-init-scripts
+sudo rc-update add syslog boot
+
+# Start syslog
+sudo rc-service syslog start
+```
+
+An external `syslog-ng` port may be used instead, but do not run two syslog daemons at the same time:
+
+```bash
 prt-get install syslog-ng
-
-# Enable syslog-ng
 sudo rc-update add syslog-ng boot
-
-# Start syslog-ng
 sudo rc-service syslog-ng start
 ```
 
@@ -226,8 +265,8 @@ sudo rc-service upowerd start
 accounts-daemon manages user accounts:
 
 ```bash
-# Install accounts-service
-prt-get install accountsservice
+# Install AccountsService
+prt-get install accountsservice openrc-init-scripts
 
 # Enable accounts-daemon
 sudo rc-update add accounts-daemon default
@@ -243,8 +282,8 @@ sudo rc-service accounts-daemon start
 avahi-daemon provides mDNS/DNS-SD:
 
 ```bash
-# Install avahi
-prt-get install avahi
+# Install Avahi and its OpenRC scripts
+prt-get install avahi openrc-init-scripts
 
 # Enable avahi
 sudo rc-update add avahi-daemon default

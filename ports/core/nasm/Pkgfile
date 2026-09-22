@@ -1,23 +1,36 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: 80x86 assembler
 # URL: https://www.nasm.us/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Optional: asciidoc xmlto 
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Optional: asciidoc xmlto
 
 name=nasm
 version=3.02
-release=1
-source=(https://www.nasm.us/pub/nasm/releasebuilds/$version/$name-$version.tar.xz)
+release=4
+source=(
+    https://www.nasm.us/pub/nasm/releasebuilds/$version/$name-$version.tar.xz
+    https://www.nasm.us/pub/nasm/releasebuilds/$version/$name-$version-xdoc.tar.xz
+)
 
-build() {
-wget https://www.nasm.us/pub/nasm/releasebuilds/2.16.03/nasm-2.16.03-xdoc.tar.xz
-	cd $name-$version
-	tar -xf ../$name-$version-xdoc.tar.xz --strip-components=1
-	./configure --prefix=/usr
-	make
-	make DESTDIR=$PKG install
-install -m755 -d         $PKG/usr/share/doc/$name-$version/html  &&
-cp -v doc/html/*.html    $PKG/usr/share/doc/$name-$version/html  &&
-cp -v doc/*.{txt,ps,pdf} $PKG/usr/share/doc/$name-$version
+pkg_build() {
+    ./configure \
+        --prefix=/usr || return $?
+
+    make -j "${JOBS:-1}" || return $?
+
+    make DESTDIR="$PKG" install || return $?
+
+    install -d \
+        "$PKG/usr/share/doc/$name-$version/html" || return $?
+
+    for f in doc/html/*.html; do
+        [ -e "$f" ] || continue
+        cp -v "$f" \
+            "$PKG/usr/share/doc/$name-$version/html/" || return $?
+    done
+
+    for f in doc/*.txt doc/*.ps doc/*.pdf; do
+        [ -e "$f" ] || continue
+        cp -v "$f" \
+            "$PKG/usr/share/doc/$name-$version/" || return $?
+    done
 }

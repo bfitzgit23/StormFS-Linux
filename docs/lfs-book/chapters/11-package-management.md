@@ -64,7 +64,7 @@ Packages are placed in `/var/spool/pkg/` by default:
 
 ```bash
 ls /var/spool/pkg/
-# example: nano-8.1-1.pkg.tar.zst
+# example: nano-9.1-1.pkg.tar.zst
 ```
 
 ### Incremental Builds
@@ -79,10 +79,10 @@ pkgmk -c -d
 
 ```bash
 # Install a package from the spool
-pkgadd /var/spool/pkg/nano-8.1-1.pkg.tar.zst
+pkgadd /var/spool/pkg/nano-9.1-1.pkg.tar.zst
 
 # Install from a URL
-pkgadd https://pkg StormFS.org/repo/pkgs/nano-8.1-1.pkg.tar.zst
+pkgadd https://pkg StormFS.org/repo/pkgs/nano-9.1-1.pkg.tar.zst
 ```
 
 ### What pkgadd Does
@@ -129,7 +129,7 @@ pkginfo -a nano
 pkginfo -t
 
 # Show info about a built (not installed) package
-pkginfo -i /var/spool/pkg/nano-8.1-1.pkg.tar.zst
+pkginfo -i /var/spool/pkg/nano-9.1-1.pkg.tar.zst
 ```
 
 ## 11.5 Removing Packages with pkgutil
@@ -142,7 +142,7 @@ pkgutil -r nano
 pkgutil -ry nano
 
 # Upgrade a single package (reinstall over existing)
-pkgutil -i /var/spool/pkg/nano-8.1-1.pkg.tar.zst
+pkgutil -i /var/spool/pkg/nano-9.1-1.pkg.tar.zst
 
 # Upgrade all installed packages from spool
 pkgutil -u
@@ -552,10 +552,10 @@ Sign your packages for integrity verification:
 gpg --gen-key
 
 # Sign a package
-gpg --armor --detach-sign /var/spool/pkg/nano-8.1-1.pkg.tar.zst
+gpg --armor --detach-sign /var/spool/pkg/nano-9.1-1.pkg.tar.zst
 
 # Verify a package
-gpg --verify /var/spool/pkg/nano-8.1-1.pkg.tar.zst.sig
+gpg --verify /var/spool/pkg/nano-9.1-1.pkg.tar.zst.sig
 ```
 
 ## 11.12 References

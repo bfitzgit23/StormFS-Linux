@@ -1,18 +1,17 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: XSL Transformations library
 # URL: https://gitlab.gnome.org/GNOME/libxslt/-/wikis/home
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: libxml2-32 libxslt
 
 name=libxslt-32
-version=1.1.42
-release=1
+version=1.1.45
+release=2
 source=(https://download.gnome.org/sources/libxslt/${version:0:3}/libxslt-$version.tar.xz)
 
-build() {
-	cd libxslt-$version
-
+# Custom build required: library-only compatibility payload requires targeted staging
+pkg_build() {
+  (
+    set -e
 	sed -i -e 's/libgcrypt-config/&-32/g' configure
 
 	./configure \
@@ -30,4 +29,5 @@ build() {
 		$PKG/usr/share/doc \
 		$PKG/usr/share/gtk-doc \
 		$PKG/usr/{bin,include,share/man}
+  )
 }

@@ -1,0 +1,8 @@
+# BFSOS build-time init profile: OpenRC
+openrc
+openrc-init-scripts
+dbus
+networkmanager
+acpid
+bluez
+gpm

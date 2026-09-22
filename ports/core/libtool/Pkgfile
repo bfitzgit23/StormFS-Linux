@@ -1,6 +1,5 @@
-# Add your top line text here
-# Your line to add at the top here
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 name=libtool
 version=2.6.2
 release=1
-source=(https://ftpmirror.gnu.org/libtool/libtool-$version.tar.xz)
+source=(https://ftp.gnu.org/gnu/libtool/libtool-$version.tar.xz)

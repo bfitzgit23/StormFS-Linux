@@ -1,0 +1,15 @@
+--- a/ftp.c	2022-01-19 14:51:11.000000000 -0500
++++ b/ftp.c	2026-08-23 17:46:36.547458838 -0400
+@@ -768,7 +768,11 @@
+ } while (0)
+ 		A(ftp_head);
+ 		ud = stracpy(get_url_data(c->url));
+-		if (strchr(cast_const_char ud, POST_CHAR)) *strchr(cast_const_char ud, POST_CHAR) = 0;
++		{
++			char *post = strchr((char *)ud, POST_CHAR);
++			if (post)
++				*post = 0;
++		}
+ 		s0 = init_str();
+ 		s0l = 0;
+ 		add_conv_str(&s0, &s0l, ud, (int)strlen(cast_const_char ud), -1);

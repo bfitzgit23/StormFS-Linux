@@ -1,17 +1,14 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: The oxygen icons 5 theme is a photo-realistic icon style, with a high standard of graphics quality.
 # URL:         https://kde.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on:  extra-cmake-modules qt5-alternate
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on:  extra-cmake-modules qt5
 
 name=oxygen-icons5
 version=5.109.0
 release=1
-source=(https://download.kde.org/stable/frameworks/5.109/oxygen-icons5-$version.tar.xz)
+source=(https://download.kde.org/Attic/frameworks/5.109/oxygen-icons5-$version.tar.xz)
 
-build() {
-	cd $name-$version
+pkg_build() {
 sed -i '/( oxygen/ s/)/scalable )/' CMakeLists.txt
 mkdir build &&
 cd    build &&

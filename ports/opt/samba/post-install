@@ -1,9 +1,22 @@
 #!/bin/sh
-install -dvm 755 /usr/lib/cups/backend &&
-ln -v -sf /usr/bin/smbspool /usr/lib/cups/backend/smb
-cat > /etc/samba/smb.conf  << "EOF"
+
+# Create a minimal initial configuration only when the administrator does
+# not already have one.  Never overwrite an existing Samba configuration.
+if [ ! -e /etc/samba/smb.conf ]; then
+    install -d -m755 /etc/samba
+
+    cat > /etc/samba/smb.conf <<'CONF'
 [global]
     workgroup = WORKGROUP
-    dos charset = cp850
-    unix charset = ISO-8859-1
-EOF
+CONF
+
+    chmod 644 /etc/samba/smb.conf
+fi
+
+# CUPS SMB backend.  Only create it when CUPS is actually installed.
+if [ -d /usr/lib/cups ] && [ -x /usr/bin/smbspool ]; then
+    install -d -m755 /usr/lib/cups/backend
+    ln -sf /usr/bin/smbspool /usr/lib/cups/backend/smb
+fi
+
+exit 0

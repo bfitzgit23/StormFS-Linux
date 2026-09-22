@@ -9,7 +9,7 @@ release=2
 
 source=(
     https://anduin.linuxfromscratch.org/BLFS/gpm/$name-$version.tar.bz2
-    https://www.linuxfromscratch.org/patches/blfs/svn/gpm-1.20.7-consolidated-1.patch
+    gpm-1.20.7-consolidated-1.patch
     https://www.linuxfromscratch.org/patches/blfs/svn/gpm-1.20.7-gcc15_fixes-1.patch
 )
 

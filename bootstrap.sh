@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-# BFSOS bootstrap r55 - RC tracker consolidated fixes
+# BFSOS bootstrap r74 - Shadow finalization, ISO handoff, verified-base reuse, and live-ISO policy handoff
 
 # Bootstrap environments do not necessarily have generated UTF-8 locales.
 # The POSIX C locale is always available and keeps all bootstrap stages
@@ -98,12 +98,77 @@ BOOTSTRAP_SETTINGS_FILE="$SCRIPT_DIR/.bfs-bootstrap-settings"
 DIALOGRC_FILE=""
 ORIGINAL_DIALOGRC="${DIALOGRC-}"
 BFS_THEME="${BFS_BOOTSTRAP_THEME:-slackware}"
+# Select the service manager at build time: systemd, openrc, or sysvinit.
+BFS_INIT_SYSTEM="${BFS_INIT_SYSTEM-}"
+BFS_INIT_SYSTEM_ENV="$BFS_INIT_SYSTEM"
 
 BFS_BUILD_JOBS="auto"
 BFS_BUILD_OPT="portable"
 BFS_CCACHE="yes"
 BFS_CCACHE_SIZE="auto"
+BFS_KEEP_SOURCE_ARCHIVES="no"
+# Integrity verification is secure-by-default.  Development builds may
+# explicitly disable individual checks from Bootstrap Settings.
+BFS_VERIFY_MD5="yes"
+BFS_VERIFY_SIGNATURE="yes"
+BFS_VERIFY_FOOTPRINT="yes"
 BFS_BUILD_SETTINGS_CHANGED="no"
+
+_resolve_ccache_size() {
+    local requested="${BFS_CCACHE_SIZE:-auto}"
+    local mem_kib=0 mem_gib=1
+
+    if [ "$requested" != auto ]; then
+        printf '%s\n' "$requested"
+        return 0
+    fi
+
+    # BFSOS default policy:
+    #   VM -> 20G
+    #   bare metal -> physical RAM rounded down to GiB
+    if command -v systemd-detect-virt >/dev/null 2>&1 &&
+       systemd-detect-virt --quiet 2>/dev/null; then
+        printf '%s\n' "20G"
+        return 0
+    fi
+
+    if [ -r /proc/meminfo ]; then
+        mem_kib="$(awk '/^MemTotal:/ {print $2; exit}' /proc/meminfo 2>/dev/null || printf '0')"
+    fi
+    case "$mem_kib" in
+        ''|*[!0-9]*) mem_kib=0 ;;
+    esac
+    if [ "$mem_kib" -gt 0 ]; then
+        mem_gib=$((mem_kib / 1024 / 1024))
+        [ "$mem_gib" -lt 1 ] && mem_gib=1
+    fi
+    printf '%sG\n' "$mem_gib"
+}
+
+_prepare_target_ccache() {
+    local resolved_size=""
+
+    [ "${BFS_CCACHE:-yes}" = yes ] || return 0
+
+    resolved_size="$(_resolve_ccache_size)"
+    mkdir -p "$LFS/var/cache/ccache"
+
+    cat > "$LFS/var/cache/ccache/ccache.conf" <<EOF_CCACHE
+# Managed by BFSOS bootstrap.
+# ccache is intentionally disabled for Stage 1 and becomes active only after
+# the BFSOS ccache package and /usr/lib/ccache compiler wrappers exist.
+max_size = $resolved_size
+EOF_CCACHE
+
+    # Once the dedicated pkgmk account exists, keep the cache owned by it.
+    if chroot "$LFS" /usr/bin/getent passwd pkgmk >/dev/null 2>&1; then
+        chown -R 82:82 "$LFS/var/cache/ccache" 2>/dev/null || true
+        chmod 0775 "$LFS/var/cache/ccache" 2>/dev/null || true
+    fi
+
+    printf 'BFSOS ccache policy: enabled after BFSOS ccache is installed; max size %s\n' \
+        "$resolved_size"
+}
 
 _apply_build_settings() {
     local jobs="$BFS_BUILD_JOBS"
@@ -115,15 +180,26 @@ _apply_build_settings() {
         *) export CFLAGS="-O2 -march=x86-64 -pipe" ;;
     esac
     export CXXFLAGS="$CFLAGS"
-    if [ "$BFS_CCACHE" = yes ]; then export PATH="/usr/lib/ccache:$PATH"; fi
+
+    # Do NOT prepend /usr/lib/ccache here.  bootstrap.sh initially runs in a
+    # foreign live environment, and Stage 1 must never pick up host ccache
+    # wrappers.  Stage 2/3 enable BFSOS ccache from pkgmk.conf only after the
+    # target's own /usr/bin/ccache and /usr/lib/ccache wrappers exist.
 }
 
 load_bootstrap_settings() {
     BFS_THEME="${BFS_BOOTSTRAP_THEME:-slackware}"
+    BFS_INIT_SYSTEM="${BFS_INIT_SYSTEM-}"
     if [ -r "$BOOTSTRAP_SETTINGS_FILE" ]; then
         # shellcheck disable=SC1090
         . "$BOOTSTRAP_SETTINGS_FILE"
     fi
+    if [ -r "$SCRIPT_DIR/.bfs-init-profile" ]; then
+        # shellcheck disable=SC1090
+        . "$SCRIPT_DIR/.bfs-init-profile"
+    fi
+    [ -n "$BFS_INIT_SYSTEM_ENV" ] && BFS_INIT_SYSTEM="$BFS_INIT_SYSTEM_ENV"
+    [ -n "$BFS_INIT_SYSTEM" ] || BFS_INIT_SYSTEM=systemd
     _apply_build_settings
 }
 
@@ -133,27 +209,354 @@ BFS_BUILD_JOBS='$BFS_BUILD_JOBS'
 BFS_BUILD_OPT='$BFS_BUILD_OPT'
 BFS_CCACHE='$BFS_CCACHE'
 BFS_CCACHE_SIZE='$BFS_CCACHE_SIZE'
+BFS_KEEP_SOURCE_ARCHIVES='$BFS_KEEP_SOURCE_ARCHIVES'
+BFS_VERIFY_MD5='$BFS_VERIFY_MD5'
+BFS_VERIFY_SIGNATURE='$BFS_VERIFY_SIGNATURE'
+BFS_VERIFY_FOOTPRINT='$BFS_VERIFY_FOOTPRINT'
 BFS_BUILD_SETTINGS_CHANGED='$BFS_BUILD_SETTINGS_CHANGED'
+BFS_INIT_SYSTEM='$BFS_INIT_SYSTEM'
 EOF_SETTINGS
     _apply_build_settings
 }
 
 compiler_build_settings_menu() {
-    local jobs opt cache size
-    printf '\nCompiler / Build Settings\n=========================\n'
-    printf 'Jobs [auto or number] (current %s): ' "$BFS_BUILD_JOBS"; read -r jobs; [ -z "$jobs" ] || BFS_BUILD_JOBS="$jobs"
-    printf 'Optimization [portable/native/custom] (current %s): ' "$BFS_BUILD_OPT"; read -r opt
-    case "$opt" in
-        native) BFS_BUILD_OPT=native ;;
-        portable) BFS_BUILD_OPT=portable ;;
-        custom) printf 'CFLAGS: '; read -r opt; [ -z "$opt" ] || BFS_BUILD_OPT="custom:$opt" ;;
-        '') ;;
-    esac
-    printf 'ccache [yes/no] (current %s): ' "$BFS_CCACHE"; read -r cache; case "$cache" in yes|no) BFS_CCACHE="$cache";; esac
-    printf 'ccache size [auto/20G/etc.] (current %s): ' "$BFS_CCACHE_SIZE"; read -r size; [ -z "$size" ] || BFS_CCACHE_SIZE="$size"
-    BFS_BUILD_SETTINGS_CHANGED=yes
-    save_bootstrap_settings
-    echo "Build settings saved; customized values will carry into the base pkgmk.conf."
+    local choice="" status=0 value="" current_flags=""
+
+    while true; do
+        if command -v dialog >/dev/null 2>&1 &&
+           [ -r /dev/tty ] &&
+           [ -w /dev/tty ]; then
+            set +e
+            choice="$(
+                dialog --stdout --clear \
+                    --backtitle "BFS Linux Bootstrap" \
+                    --title "Compiler / Build Settings" \
+                    --ok-label "Select" \
+                    --cancel-label "Back" \
+                    --menu \
+                    "Current settings:\n\nJobs: $BFS_BUILD_JOBS\nOptimization: $BFS_BUILD_OPT\nccache: $BFS_CCACHE\nccache size: $BFS_CCACHE_SIZE\nKeep source archives: $BFS_KEEP_SOURCE_ARCHIVES\nMD5 verification: $BFS_VERIFY_MD5\nSignature verification: $BFS_VERIFY_SIGNATURE\nFootprint verification: $BFS_VERIFY_FOOTPRINT" \
+                    27 86 12 \
+                    jobs "Parallel build jobs" \
+                    optimization "Compiler optimization policy" \
+                    ccache "Enable or disable ccache" \
+                    ccache-size "Configure ccache maximum size" \
+                    source-cache "Keep downloaded source archives in base archive" \
+                    verify-md5 "Verify source MD5/checksums" \
+                    verify-signature "Verify source signatures" \
+                    verify-footprint "Verify package footprints" \
+                    defaults "Restore BFSOS build defaults" \
+                    </dev/tty 2>/dev/tty
+            )"
+            status=$?
+            set -e
+            [ "$status" -eq 0 ] || return 0
+
+            case "$choice" in
+                jobs)
+                    set +e
+                    value="$(
+                        dialog --stdout --clear \
+                            --backtitle "BFS Linux Bootstrap" \
+                            --title "Parallel Build Jobs" \
+                            --ok-label "Apply" \
+                            --cancel-label "Back" \
+                            --inputbox \
+                            "Enter auto or a positive job count.\n\nCurrent: $BFS_BUILD_JOBS" \
+                            12 66 "$BFS_BUILD_JOBS" \
+                            </dev/tty 2>/dev/tty
+                    )"
+                    status=$?
+                    set -e
+                    [ "$status" -eq 0 ] || continue
+                    case "$value" in
+                        auto) BFS_BUILD_JOBS=auto ;;
+                        ''|*[!0-9]*)
+                            dialog --clear --backtitle "BFS Linux Bootstrap" \
+                                --title "Invalid job count" \
+                                --msgbox "Use auto or a positive integer." 8 50 \
+                                </dev/tty >/dev/tty 2>&1 || true
+                            continue
+                            ;;
+                        0)
+                            dialog --clear --backtitle "BFS Linux Bootstrap" \
+                                --title "Invalid job count" \
+                                --msgbox "Job count must be greater than zero." 8 50 \
+                                </dev/tty >/dev/tty 2>&1 || true
+                            continue
+                            ;;
+                        *) BFS_BUILD_JOBS="$value" ;;
+                    esac
+                    ;;
+                optimization)
+                    set +e
+                    value="$(
+                        dialog --stdout --clear \
+                            --backtitle "BFS Linux Bootstrap" \
+                            --title "Compiler Optimization" \
+                            --ok-label "Apply" \
+                            --cancel-label "Back" \
+                            --radiolist \
+                            "Choose the compiler optimization policy." \
+                            18 82 5 \
+                            portable "Portable BFSOS x86_64 defaults" \
+                                "$([ "$BFS_BUILD_OPT" = portable ] && echo on || echo off)" \
+                            native "Optimize for this CPU (-march=native)" \
+                                "$([ "$BFS_BUILD_OPT" = native ] && echo on || echo off)" \
+                            custom "Enter custom CFLAGS/CXXFLAGS" \
+                                "$([[ "$BFS_BUILD_OPT" = custom:* ]] && echo on || echo off)" \
+                            </dev/tty 2>/dev/tty
+                    )"
+                    status=$?
+                    set -e
+                    [ "$status" -eq 0 ] || continue
+                    case "$value" in
+                        portable|native)
+                            BFS_BUILD_OPT="$value"
+                            ;;
+                        custom)
+                            current_flags=""
+                            [[ "$BFS_BUILD_OPT" = custom:* ]] && current_flags="${BFS_BUILD_OPT#custom:}"
+                            set +e
+                            value="$(
+                                dialog --stdout --clear \
+                                    --backtitle "BFS Linux Bootstrap" \
+                                    --title "Custom Compiler Flags" \
+                                    --ok-label "Apply" \
+                                    --cancel-label "Back" \
+                                    --inputbox \
+                                    "Enter the complete CFLAGS/CXXFLAGS value." \
+                                    11 82 "$current_flags" \
+                                    </dev/tty 2>/dev/tty
+                            )"
+                            status=$?
+                            set -e
+                            [ "$status" -eq 0 ] || continue
+                            [ -n "$value" ] || continue
+                            BFS_BUILD_OPT="custom:$value"
+                            ;;
+                    esac
+                    ;;
+                ccache)
+                    set +e
+                    if dialog --clear \
+                        --backtitle "BFS Linux Bootstrap" \
+                        --title "ccache" \
+                        --yes-label "Enable" \
+                        --no-label "Disable" \
+                        --yesno \
+                        "Enable ccache for applicable BFSOS package builds?\n\nCurrent: $BFS_CCACHE" \
+                        11 66 </dev/tty >/dev/tty 2>&1; then
+                        BFS_CCACHE=yes
+                        status=0
+                    else
+                        status=$?
+                        [ "$status" -eq 1 ] && BFS_CCACHE=no
+                    fi
+                    set -e
+                    [ "$status" -le 1 ] || continue
+                    ;;
+                ccache-size)
+                    set +e
+                    value="$(
+                        dialog --stdout --clear \
+                            --backtitle "BFS Linux Bootstrap" \
+                            --title "ccache Size" \
+                            --ok-label "Apply" \
+                            --cancel-label "Back" \
+                            --inputbox \
+                            "Enter auto or a ccache size such as 20G, 64G, or 500M.\n\nCurrent: $BFS_CCACHE_SIZE" \
+                            12 72 "$BFS_CCACHE_SIZE" \
+                            </dev/tty 2>/dev/tty
+                    )"
+                    status=$?
+                    set -e
+                    [ "$status" -eq 0 ] || continue
+                    [ -n "$value" ] || continue
+                    BFS_CCACHE_SIZE="$value"
+                    ;;
+                source-cache)
+                    set +e
+                    if dialog --clear \
+                        --backtitle "BFS Linux Bootstrap" \
+                        --title "Base Source Cache" \
+                        --yes-label "Keep" \
+                        --no-label "Exclude" \
+                        --yesno \
+                        "Keep downloaded source archives under /var/cache/pkg/sources in the generated base archive?\n\nCurrent: $BFS_KEEP_SOURCE_ARCHIVES" \
+                        12 76 </dev/tty >/dev/tty 2>&1; then
+                        BFS_KEEP_SOURCE_ARCHIVES=yes
+                        status=0
+                    else
+                        status=$?
+                        [ "$status" -eq 1 ] && BFS_KEEP_SOURCE_ARCHIVES=no
+                    fi
+                    set -e
+                    [ "$status" -le 1 ] || continue
+                    ;;
+                verify-md5)
+                    if [ "$BFS_VERIFY_MD5" = yes ]; then BFS_VERIFY_MD5=no; else BFS_VERIFY_MD5=yes; fi
+                    ;;
+                verify-signature)
+                    if [ "$BFS_VERIFY_SIGNATURE" = yes ]; then BFS_VERIFY_SIGNATURE=no; else BFS_VERIFY_SIGNATURE=yes; fi
+                    ;;
+                verify-footprint)
+                    if [ "$BFS_VERIFY_FOOTPRINT" = yes ]; then BFS_VERIFY_FOOTPRINT=no; else BFS_VERIFY_FOOTPRINT=yes; fi
+                    ;;
+                defaults)
+                    set +e
+                    if dialog --clear \
+                        --backtitle "BFS Linux Bootstrap" \
+                        --title "Restore Build Defaults" \
+                        --yes-label "Restore" \
+                        --no-label "Cancel" \
+                        --yesno \
+                        "Restore BFSOS build defaults?\n\nJobs: auto\nOptimization: portable\nccache: yes\nccache size: auto" \
+                        13 66 </dev/tty >/dev/tty 2>&1; then
+                        BFS_BUILD_JOBS=auto
+                        BFS_BUILD_OPT=portable
+                        BFS_CCACHE=yes
+                        BFS_CCACHE_SIZE=auto
+                        BFS_KEEP_SOURCE_ARCHIVES=no
+                        BFS_VERIFY_MD5=yes
+                        BFS_VERIFY_SIGNATURE=yes
+                        BFS_VERIFY_FOOTPRINT=yes
+                    fi
+                    set -e
+                    ;;
+            esac
+
+            BFS_BUILD_SETTINGS_CHANGED=yes
+            save_bootstrap_settings
+        else
+            printf '\nCompiler / Build Settings\n=========================\n'
+            printf '1) Build jobs           : %s\n' "$BFS_BUILD_JOBS"
+            printf '2) Optimization         : %s\n' "$BFS_BUILD_OPT"
+            printf '3) ccache               : %s\n' "$BFS_CCACHE"
+            printf '4) ccache size          : %s\n' "$BFS_CCACHE_SIZE"
+            printf '5) Keep source archives : %s\n' "$BFS_KEEP_SOURCE_ARCHIVES"
+            printf '6) Verify MD5/checksums   : %s\n' "$BFS_VERIFY_MD5"
+            printf '7) Verify signatures     : %s\n' "$BFS_VERIFY_SIGNATURE"
+            printf '8) Verify footprints     : %s\n' "$BFS_VERIFY_FOOTPRINT"
+            printf '9) Restore defaults\n'
+            printf '10) Back\n'
+            printf 'Choose [1-10]: '
+            read -r choice </dev/tty 2>/dev/null || read -r choice
+            case "$choice" in
+                1)
+                    printf 'Jobs [auto or number]: '
+                    read -r value
+                    [ -z "$value" ] || BFS_BUILD_JOBS="$value"
+                    ;;
+                2)
+                    printf 'Optimization [portable/native/custom]: '
+                    read -r value
+                    case "$value" in
+                        portable|native) BFS_BUILD_OPT="$value" ;;
+                        custom)
+                            printf 'CFLAGS: '
+                            read -r value
+                            [ -z "$value" ] || BFS_BUILD_OPT="custom:$value"
+                            ;;
+                    esac
+                    ;;
+                3)
+                    printf 'ccache [yes/no]: '
+                    read -r value
+                    case "$value" in yes|no) BFS_CCACHE="$value" ;; esac
+                    ;;
+                4)
+                    printf 'ccache size [auto/20G/etc.]: '
+                    read -r value
+                    [ -z "$value" ] || BFS_CCACHE_SIZE="$value"
+                    ;;
+                5)
+                    printf 'keep source archives in base [yes/no]: '
+                    read -r value
+                    case "$value" in yes|no) BFS_KEEP_SOURCE_ARCHIVES="$value" ;; esac
+                    ;;
+                6) case "$BFS_VERIFY_MD5" in yes) BFS_VERIFY_MD5=no ;; *) BFS_VERIFY_MD5=yes ;; esac ;;
+                7) case "$BFS_VERIFY_SIGNATURE" in yes) BFS_VERIFY_SIGNATURE=no ;; *) BFS_VERIFY_SIGNATURE=yes ;; esac ;;
+                8) case "$BFS_VERIFY_FOOTPRINT" in yes) BFS_VERIFY_FOOTPRINT=no ;; *) BFS_VERIFY_FOOTPRINT=yes ;; esac ;;
+                9)
+                    BFS_BUILD_JOBS=auto
+                    BFS_BUILD_OPT=portable
+                    BFS_CCACHE=yes
+                    BFS_CCACHE_SIZE=auto
+                    BFS_KEEP_SOURCE_ARCHIVES=no
+                    BFS_VERIFY_MD5=yes
+                    BFS_VERIFY_SIGNATURE=yes
+                    BFS_VERIFY_FOOTPRINT=yes
+                    ;;
+                10|"") return 0 ;;
+                *) continue ;;
+            esac
+            BFS_BUILD_SETTINGS_CHANGED=yes
+            save_bootstrap_settings
+        fi
+    done
+}
+
+integrity_verification_settings_menu() {
+    local choice=""
+
+    while true; do
+        if command -v dialog >/dev/null 2>&1 &&
+           [ -r /dev/tty ] && [ -w /dev/tty ]; then
+            if ! choice="$(
+                dialog --stdout --clear \
+                    --backtitle "BFS Linux Bootstrap" \
+                    --title "Integrity Verification" \
+                    --ok-label "Select" \
+                    --cancel-label "Back" \
+                    --menu \
+                    "Verification is secure-by-default. Disable individual checks only for deliberate development/testing.\n\nMD5/checksums: $BFS_VERIFY_MD5\nSignatures: $BFS_VERIFY_SIGNATURE\nFootprints: $BFS_VERIFY_FOOTPRINT" \
+                    19 88 7 \
+                    md5 "Verify source MD5/checksums" \
+                    signature "Verify source signatures" \
+                    footprint "Verify package footprints" \
+                    defaults "Restore secure defaults (all enabled)" \
+                    </dev/tty 2>/dev/tty
+            )"; then
+                return 0
+            fi
+
+            case "$choice" in
+                md5) case "$BFS_VERIFY_MD5" in yes) BFS_VERIFY_MD5=no ;; *) BFS_VERIFY_MD5=yes ;; esac ;;
+                signature) case "$BFS_VERIFY_SIGNATURE" in yes) BFS_VERIFY_SIGNATURE=no ;; *) BFS_VERIFY_SIGNATURE=yes ;; esac ;;
+                footprint) case "$BFS_VERIFY_FOOTPRINT" in yes) BFS_VERIFY_FOOTPRINT=no ;; *) BFS_VERIFY_FOOTPRINT=yes ;; esac ;;
+                defaults)
+                    BFS_VERIFY_MD5=yes
+                    BFS_VERIFY_SIGNATURE=yes
+                    BFS_VERIFY_FOOTPRINT=yes
+                    ;;
+                *) continue ;;
+            esac
+        else
+            printf '\nIntegrity Verification\n======================\n'
+            printf '1) Verify MD5/checksums : %s\n' "$BFS_VERIFY_MD5"
+            printf '2) Verify signatures   : %s\n' "$BFS_VERIFY_SIGNATURE"
+            printf '3) Verify footprints   : %s\n' "$BFS_VERIFY_FOOTPRINT"
+            printf '4) Restore secure defaults\n'
+            printf '5) Back\n'
+            printf 'Choose [1-5]: '
+            read -r choice </dev/tty 2>/dev/null || read -r choice
+            case "$choice" in
+                1) case "$BFS_VERIFY_MD5" in yes) BFS_VERIFY_MD5=no ;; *) BFS_VERIFY_MD5=yes ;; esac ;;
+                2) case "$BFS_VERIFY_SIGNATURE" in yes) BFS_VERIFY_SIGNATURE=no ;; *) BFS_VERIFY_SIGNATURE=yes ;; esac ;;
+                3) case "$BFS_VERIFY_FOOTPRINT" in yes) BFS_VERIFY_FOOTPRINT=no ;; *) BFS_VERIFY_FOOTPRINT=yes ;; esac ;;
+                4)
+                    BFS_VERIFY_MD5=yes
+                    BFS_VERIFY_SIGNATURE=yes
+                    BFS_VERIFY_FOOTPRINT=yes
+                    ;;
+                5|"") return 0 ;;
+                *) continue ;;
+            esac
+        fi
+
+        BFS_BUILD_SETTINGS_CHANGED=yes
+        save_bootstrap_settings
+    done
 }
 
 write_dialog_theme_classic() {
@@ -475,19 +878,47 @@ bootstrap_theme_settings_menu() {
 
 
 bootstrap_settings_menu() {
-    local choice=""
+    local choice="" status=0
+
     while true; do
-        echo
-        echo "Bootstrap Settings"
-        echo "  1) Interface theme"
-        echo "  2) Compiler / build settings"
-        echo "  3) Back"
-        printf "Choose [1-3]: "
-        read -r choice </dev/tty 2>/dev/null || read -r choice
+        if command -v dialog >/dev/null 2>&1 &&
+           [ -r /dev/tty ] &&
+           [ -w /dev/tty ]; then
+            set +e
+            choice="$(
+                dialog --stdout --clear \
+                    --backtitle "BFS Linux Bootstrap" \
+                    --title "Bootstrap Settings" \
+                    --ok-label "Select" \
+                    --cancel-label "Back" \
+                    --menu \
+                    "Choose a settings category." \
+                    17 76 7 \
+                    1 "Interface theme" \
+                    2 "Compiler / build settings" \
+                    3 "Integrity verification" \
+                    </dev/tty 2>/dev/tty
+            )"
+            status=$?
+            set -e
+            [ "$status" -eq 0 ] || return 0
+        else
+            clear 2>/dev/null || true
+            echo "Bootstrap Settings"
+            echo "  1) Interface theme"
+            echo "  2) Compiler / build settings"
+            echo "  3) Integrity verification"
+            echo "  4) Back"
+            printf "Choose [1-4]: "
+            read -r choice </dev/tty 2>/dev/null || read -r choice
+        fi
+
         case "$choice" in
             1) bootstrap_theme_settings_menu ;;
             2) compiler_build_settings_menu ;;
-            3|"") return 0 ;;
+            3) integrity_verification_settings_menu ;;
+            4|"") return 0 ;;
+            *) continue ;;
         esac
     done
 }
@@ -518,6 +949,8 @@ ACTIVE_LOG_STDOUT_FD=7
 ACTIVE_LOG_STDERR_FD=8
 CURRENT_BASE_LOGS=()
 STAGE_OPERATION_STARTED_EPOCH=0
+LAST_FAILED_LOG_FILE=""
+STAGE_PREFLIGHT_LOG=""
 
 mkdir -p "$TOOLCHAIN_LOG_DIR" "$BASE_LOG_DIR"
 
@@ -526,12 +959,14 @@ if [ -t 1 ] && [ "${TERM:-dumb}" != dumb ]; then
     COLOR_GREEN=$'\033[1;32m'
     COLOR_YELLOW=$'\033[1;33m'
     COLOR_CYAN=$'\033[1;36m'
+    COLOR_BOLD_WHITE=$'\033[1;37m'
     COLOR_RESET=$'\033[0m'
 else
     COLOR_RED=""
     COLOR_GREEN=""
     COLOR_YELLOW=""
     COLOR_CYAN=""
+    COLOR_BOLD_WHITE=""
     COLOR_RESET=""
 fi
 
@@ -542,6 +977,42 @@ _sanitize_log_name() {
     printf '%s\n' "$name"
 }
 
+_start_stage_preflight_log() {
+    local stage="$1" directory="" timestamp=""
+
+    case "$stage" in
+        1) directory="$TOOLCHAIN_LOG_DIR" ;;
+        2|3|4|5) directory="$BASE_LOG_DIR" ;;
+        *) directory="$LOG_DIR" ;;
+    esac
+
+    mkdir -p "$directory" || return 1
+    timestamp="$(date +%Y%m%d-%H%M%S)"
+    STAGE_PREFLIGHT_LOG="$directory/stage${stage}-preflight-${timestamp}.log"
+    : > "$STAGE_PREFLIGHT_LOG" || return 1
+
+    # Until a package-specific log replaces this pointer, a pre-package failure
+    # must show this transcript rather than the useless 'no package log' text.
+    LAST_FAILED_LOG_FILE="$STAGE_PREFLIGHT_LOG"
+
+    {
+        printf '============================================================\n'
+        printf 'BFS bootstrap Stage %s preflight\n' "$stage"
+        printf 'Started: %s\n' "$(date --iso-8601=seconds 2>/dev/null || date)"
+        printf 'User: %s (uid=%s gid=%s)\n' "$(id -un)" "$(id -u)" "$(id -g)"
+        printf 'LFS: %s\n' "${LFS:-<unset>}"
+        printf 'TOOLS: %s\n' "${TOOLS:-<unset>}"
+        printf 'Project: %s\n' "$SCRIPT_DIR"
+        printf '============================================================\n\n'
+    } >> "$STAGE_PREFLIGHT_LOG"
+}
+
+_stage_preflight_note() {
+    local message="$*"
+    [ -z "${STAGE_PREFLIGHT_LOG:-}" ] || printf '%s\n' "$message" >> "$STAGE_PREFLIGHT_LOG"
+    printf '%s\n' "$message" >&2
+}
+
 _close_active_package_log() {
     local status="${1:-0}"
 
@@ -549,6 +1020,9 @@ _close_active_package_log() {
 
     printf '\nBuild finished: %s\n' "$(date --iso-8601=seconds 2>/dev/null || date)"
     printf 'Exit status: %s\n' "$status"
+    if [ "$status" -ne 0 ]; then
+        LAST_FAILED_LOG_FILE="$ACTIVE_LOG_FILE"
+    fi
 
     exec 1>&"$ACTIVE_LOG_STDOUT_FD" 2>&"$ACTIVE_LOG_STDERR_FD"
     exec 7>&- 8>&-
@@ -652,15 +1126,40 @@ _latest_rootfs_archive() {
 }
 
 _find_latest_installer() {
-    local dir="$SCRIPT_DIR/scripts" file="" best=""
+    local dir="$SCRIPT_DIR/scripts" file="" candidate="" mtime=""
     [ -d "$dir" ] || return 1
-    while IFS= read -r file; do
-        [ -f "$file" ] && [ -x "$file" ] || continue
-        case "$(basename "$file")" in *backup*|*old*|*disabled*|*~) continue ;; esac
-        best="$file"
-    done < <(find "$dir" -maxdepth 1 -type f -name 'install-bfs-menu-v*.sh' -print 2>/dev/null | sort -V)
-    [ -n "$best" ] || return 1
-    printf '%s\n' "$best"
+
+    # Select by actual filesystem modification time, not version-like filename
+    # sorting and not the install-bfs-menu-current.sh symlink. This makes the
+    # handoff resilient to stale/broken convenience symlinks and arbitrary
+    # descriptive revision suffixes.
+    while IFS= read -r candidate; do
+        [ -n "$candidate" ] || continue
+        file="${candidate#* }"
+        [ -f "$file" ] && [ -r "$file" ] || continue
+
+        case "$(basename "$file")" in
+            install-bfs-menu-current.sh|*backup*|*old*|*disabled*|*~)
+                continue
+                ;;
+        esac
+
+        # Never silently launch a syntactically broken newest revision. Skip it
+        # with a warning and continue to the next-newest valid real installer.
+        if ! bash -n "$file" >/dev/null 2>&1; then
+            printf 'WARNING: Skipping installer with shell syntax errors: %s\n' "$file" >&2
+            continue
+        fi
+
+        printf '%s\n' "$file"
+        return 0
+    done < <(
+        find "$dir" -maxdepth 1 -type f -name 'install-bfs-menu-v*.sh' \
+            -printf '%T@ %p\n' 2>/dev/null |
+            sort -nr -k1,1 -k2,2
+    )
+
+    return 1
 }
 
 _installer_available() {
@@ -679,9 +1178,12 @@ _launch_bfs_installer() {
         echo "  $SCRIPT_DIR/scripts" >&2
         return 1
     }
+    local installer_mtime=""
+    installer_mtime="$(stat -c '%y' "$installer" 2>/dev/null || printf 'unknown')"
     echo
     echo "Launching BFSOS installer:"
     echo "  Installer: $installer"
+    echo "  Modified : $installer_mtime"
     echo "  Base file: $archive"
     echo
     set +e
@@ -692,6 +1194,305 @@ _launch_bfs_installer() {
     set -e
     _reset_terminal_ui
     return "$status"
+}
+
+_launch_iso_builder() {
+    local builder="$SCRIPT_DIR/scripts/bfs-build-iso.sh"
+    local target_user="" target_home=""
+
+    if [ ! -f "$builder" ] || [ ! -r "$builder" ]; then
+        echo "ERROR: BFSOS ISO builder is missing or unreadable:" >&2
+        echo "  $builder" >&2
+        return 1
+    fi
+
+    # The ISO builder deliberately runs as a regular user and elevates only the
+    # rootfs operations that need sudo.  If bootstrap itself was started with
+    # sudo, hand the builder back to the original invoking user instead of
+    # launching it as root (which the builder correctly refuses to do).
+    if [ "$(id -u)" -eq 0 ]; then
+        target_user="${SUDO_USER:-}"
+        if [ -z "$target_user" ] || [ "$target_user" = root ]; then
+            echo "ERROR: The ISO builder must run as a regular user." >&2
+            echo "Run bootstrap as your normal user, or invoke it through sudo from that user." >&2
+            return 1
+        fi
+
+        target_home="$(getent passwd "$target_user" 2>/dev/null | awk -F: 'NR == 1 { print $6 }')"
+        if [ -z "$target_home" ] || [ ! -d "$target_home" ]; then
+            echo "ERROR: Could not determine a valid home directory for ISO builder user: $target_user" >&2
+            return 1
+        fi
+
+        sudo -u "$target_user" -- \
+            env \
+                HOME="$target_home" \
+                USER="$target_user" \
+                LOGNAME="$target_user" \
+                BFS_ISO_ASSUME_YES="${BFS_ISO_ASSUME_YES:-}" \
+                BFS_ISO_SKIP_BOOTSTRAP="${BFS_ISO_SKIP_BOOTSTRAP:-}" \
+                BFS_ISO_WORK_DIR="${BFS_ISO_WORK_DIR:-}" \
+                BFS_ISO_OUTPUT_DIR="${BFS_ISO_OUTPUT_DIR:-}" \
+                BFS_ISO_KERNEL="${BFS_ISO_KERNEL:-}" \
+                BFS_ISO_LIVE_MEDIA_WAIT="${BFS_ISO_LIVE_MEDIA_WAIT:-}" \
+                BFS_KEEP_SOURCE_ARCHIVES="${BFS_KEEP_SOURCE_ARCHIVES:-}" \
+                bash "$builder" "$@"
+        return $?
+    fi
+
+    # Invoke through bash so the bootstrap handoff does not depend on the
+    # executable bit surviving an archive extraction or source-tree copy.
+    bash "$builder" "$@"
+}
+
+_confirm_full_bootstrap() {
+    local status=0 answer=""
+    local message="Full Bootstrap will run every build stage in order:\n\n  1. Temporary toolchain\n  2. Base system\n  3. Final-toolchain rebuild\n  4. Base verification\n  5. Base archive compression\n\nFull Bootstrap starts Stage 1 from a CLEAN build state. It removes old /tmp/lfs build trees, package/build-work contents, and previous BFS bootstrap archives. Downloaded source archives are retained.\n\nStage 3 is intentionally included even though it remains optional when stages are run manually.\n\nThe workflow stops immediately if any stage fails.\n\nStart Full Bootstrap now?"
+
+    if [ "${BFS_FULL_BOOTSTRAP_ASSUME_YES:-no}" = yes ]; then
+        return 0
+    fi
+
+    if command -v dialog >/dev/null 2>&1 &&
+       [ -r /dev/tty ] && [ -w /dev/tty ]; then
+        if dialog --clear \
+            --backtitle "BFS Linux Bootstrap" \
+            --title "Run Full Bootstrap" \
+            --yes-label "Start" \
+            --no-label "Cancel" \
+            --defaultno \
+            --yesno "$message" 23 88 </dev/tty >/dev/tty 2>&1; then
+            return 0
+        fi
+        return 1
+    fi
+
+    printf '\n%s\n' "Full Bootstrap will run Stages 1 -> 2 -> 3 -> 4 -> 5 and stop on the first failure."
+    printf 'Start Full Bootstrap? [y/N]: '
+    read -r answer </dev/tty 2>/dev/null || read -r answer || true
+    case "$answer" in
+        y|Y|yes|YES|Yes) return 0 ;;
+        *) return 1 ;;
+    esac
+}
+
+_finish_full_bootstrap() {
+    local archive="" status=0 answer=""
+    archive="$(_latest_rootfs_archive 2>/dev/null || true)"
+
+    if [ "${BFS_FULL_BOOTSTRAP_NO_INSTALL_PROMPT:-no}" = yes ]; then
+        printf '\nFull Bootstrap completed successfully.\n'
+        printf 'Base archive: %s\n' "${archive:-<unknown>}"
+        return 0
+    fi
+
+    if _installer_available; then
+        if command -v dialog >/dev/null 2>&1 &&
+           [ -r /dev/tty ] && [ -w /dev/tty ]; then
+            if dialog --clear \
+                --backtitle "BFS Linux Bootstrap" \
+                --title "Full Bootstrap Complete" \
+                --yes-label "Launch installer" \
+                --no-label "Done" \
+                --defaultno \
+                --yesno \
+                "Stages 1 through 5 completed successfully.\n\nBase archive:\n${archive:-<unknown>}\n\nLaunch the BFSOS installer now?" \
+                17 82 </dev/tty >/dev/tty 2>&1; then
+                status=0
+            else
+                status=$?
+            fi
+            _reset_terminal_ui
+            if [ "$status" -eq 0 ]; then
+                _launch_bfs_installer
+                return $?
+            fi
+            return 0
+        fi
+
+        printf '\nFull Bootstrap completed successfully.\n'
+        printf 'Base archive: %s\n' "${archive:-<unknown>}"
+        printf 'Launch the BFSOS installer now? [y/N]: '
+        read -r answer </dev/tty 2>/dev/null || read -r answer || true
+        case "$answer" in
+            y|Y|yes|YES|Yes) _launch_bfs_installer ;;
+            *) return 0 ;;
+        esac
+        return $?
+    fi
+
+    _show_menu_success "Full Bootstrap Complete" \
+        "Stages 1 through 5 completed successfully.\n\nBase archive:\n${archive:-<unknown>}\n\nNo usable installer is currently available, so Bootstrap will return to the main menu."
+    return 0
+}
+
+_run_full_bootstrap() {
+    local stage=0 status=0 label=""
+
+    if [ "$(id -u)" -eq 0 ]; then
+        echo "ERROR: Full Bootstrap must be started as a regular user because Stage 1 must not run as root." >&2
+        return 1
+    fi
+
+    _confirm_full_bootstrap || return 0
+
+    command -v sudo >/dev/null 2>&1 || {
+        echo "ERROR: Full Bootstrap requires sudo for clean-start and root stages." >&2
+        return 1
+    }
+    if ! sudo -v; then
+        echo "ERROR: sudo authentication failed; Full Bootstrap was not started." >&2
+        return 1
+    fi
+
+    echo
+    echo "========================================"
+    echo " BFS FULL BOOTSTRAP: STAGES 1 -> 5"
+    echo "========================================"
+    echo "Stage 3 final-toolchain rebuild is included."
+    echo "Any failure stops the workflow immediately."
+    echo
+
+    for stage in 1 2 3 4 5; do
+        case "$stage" in
+            1) label="Temporary toolchain" ;;
+            2) label="Base system" ;;
+            3) label="Final-toolchain rebuild" ;;
+            4) label="Base verification" ;;
+            5) label="Base archive compression" ;;
+        esac
+
+        STAGE_OPERATION_STARTED_EPOCH="$(date +%s)"
+        LAST_FAILED_LOG_FILE=""
+
+        _show_menu_progress "Full Bootstrap - Stage $stage of 5" \
+            "Running Stage $stage: $label\n\nThe workflow will continue automatically after this stage passes."
+        _reset_terminal_ui
+
+        case "$stage" in
+            1)
+                if BFS_FULL_BOOTSTRAP=yes BFS_MENU_STAGE=yes _buildtoolchain; then
+                    status=0
+                else
+                    status=$?
+                fi
+                ;;
+            2|3|4|5)
+                if BFS_FULL_BOOTSTRAP=yes BFS_MENU_STAGE=yes _run_root_stage "$stage"; then
+                    status=0
+                else
+                    status=$?
+                fi
+                ;;
+        esac
+
+        if [ "$status" -ne 0 ]; then
+            echo
+            echo "Full Bootstrap stopped: Stage $stage ($label) failed with status $status." >&2
+            _show_stage_failure_dialog "$stage" "$status"
+            return "$status"
+        fi
+
+        echo
+        echo "Full Bootstrap: Stage $stage ($label) PASSED."
+        echo
+    done
+
+    _reset_terminal_ui
+    _finish_full_bootstrap
+}
+
+_next_resume_full_stage() {
+    if _rootfs_archive_complete; then
+        printf '%s\n' 6
+    elif _verification_complete; then
+        printf '%s\n' 5
+    elif _base_stage3_complete; then
+        printf '%s\n' 4
+    elif _base_stage2_complete; then
+        printf '%s\n' 3
+    elif _toolchain_complete; then
+        printf '%s\n' 2
+    else
+        printf '%s\n' 1
+    fi
+}
+
+_run_resume_full_bootstrap() {
+    local start=0 stage=0 status=0 label="" answer=""
+
+    if [ "$(id -u)" -eq 0 ]; then
+        echo "ERROR: Resume Full Bootstrap must be started as a regular user; root stages are elevated internally." >&2
+        return 1
+    fi
+
+    if ! command -v sudo >/dev/null 2>&1; then
+        echo "ERROR: Resume Full Bootstrap requires sudo for root stages." >&2
+        return 1
+    fi
+    if ! sudo -v; then
+        echo "ERROR: sudo authentication failed; resume was not started." >&2
+        return 1
+    fi
+
+    start="$(_next_resume_full_stage)"
+    if [ "$start" -eq 1 ]; then
+        echo "ERROR: No completed Stage-1 toolchain archive was found. Use Full Bootstrap for a clean 1 -> 5 build." >&2
+        return 1
+    fi
+    if [ "$start" -gt 5 ]; then
+        echo "Full Bootstrap is already complete; a base archive exists."
+        _finish_full_bootstrap
+        return $?
+    fi
+
+    if [ "${BFS_FULL_BOOTSTRAP_ASSUME_YES:-no}" != yes ]; then
+        if command -v dialog >/dev/null 2>&1 && [ -r /dev/tty ] && [ -w /dev/tty ]; then
+            if ! dialog --clear \
+                --backtitle "BFS Linux Bootstrap" \
+                --title "Resume Full Bootstrap" \
+                --yes-label "Resume" --no-label "Cancel" --defaultno \
+                --yesno "Resume the existing build at Stage $start and continue automatically through Stage 5?\n\nExisting successful work will be preserved. The workflow stops on the first failure." \
+                14 78 </dev/tty >/dev/tty 2>&1; then
+                return 0
+            fi
+        else
+            printf 'Resume existing build at Stage %s and continue through Stage 5? [y/N]: ' "$start"
+            read -r answer </dev/tty 2>/dev/null || read -r answer || true
+            case "$answer" in y|Y|yes|YES|Yes) ;; *) return 0 ;; esac
+        fi
+    fi
+
+    for ((stage=start; stage<=5; stage++)); do
+        case "$stage" in
+            2) label="Base system" ;;
+            3) label="Final-toolchain rebuild" ;;
+            4) label="Base verification" ;;
+            5) label="Base archive compression" ;;
+        esac
+
+        STAGE_OPERATION_STARTED_EPOCH="$(date +%s)"
+        LAST_FAILED_LOG_FILE=""
+        _show_menu_progress "Resume Full Bootstrap - Stage $stage of 5" \
+            "Running Stage $stage: $label\n\nExisting successful work is being preserved."
+        _reset_terminal_ui
+
+        if BFS_FULL_BOOTSTRAP=yes BFS_MENU_STAGE=yes _run_root_stage "$stage"; then
+            status=0
+        else
+            status=$?
+        fi
+
+        if [ "$status" -ne 0 ]; then
+            echo "Resume Full Bootstrap stopped: Stage $stage ($label) failed with status $status." >&2
+            _show_stage_failure_dialog "$stage" "$status"
+            return "$status"
+        fi
+        echo "Resume Full Bootstrap: Stage $stage ($label) PASSED."
+    done
+
+    _reset_terminal_ui
+    _finish_full_bootstrap
 }
 
 _stage_complete_text() {
@@ -778,6 +1579,11 @@ _latest_failure_log() {
 
     [ -d "$directory" ] || return 1
 
+    if [ -n "${LAST_FAILED_LOG_FILE:-}" ] && [ -r "$LAST_FAILED_LOG_FILE" ]; then
+        printf '%s\n' "$LAST_FAILED_LOG_FILE"
+        return 0
+    fi
+
     newest="$(
         find "$directory" -type f -name '*.log' -printf '%T@ %p
 ' 2>/dev/null |
@@ -800,6 +1606,9 @@ _latest_failure_log() {
 _show_stage_failure_dialog() {
     local stage="$1" status="$2" logfile="" details="" failed_url=""
     logfile="$(_latest_failure_log "$stage" 2>/dev/null || true)"
+    if [ -z "$logfile" ] && [ -n "${STAGE_PREFLIGHT_LOG:-}" ] && [ -r "$STAGE_PREFLIGHT_LOG" ]; then
+        logfile="$STAGE_PREFLIGHT_LOG"
+    fi
     if [ -n "$logfile" ] && [ -r "$logfile" ]; then
         details="$(tail -n 18 "$logfile" 2>/dev/null || true)"
         failed_url="$(grep -Eo 'https?://[^[:space:]'\"'<>]+' "$logfile" 2>/dev/null | tail -n1 || true)"
@@ -862,7 +1671,9 @@ _run_root_stage() {
     local stage="$1"
 
     if [ "$(id -u)" -eq 0 ]; then
-        BFS_SKIP_TIME_SYNC=yes "$0" "$stage"
+        BFS_SKIP_TIME_SYNC=yes \
+            BFS_FULL_BOOTSTRAP="${BFS_FULL_BOOTSTRAP:-no}" \
+            "$0" "$stage"
         return $?
     fi
 
@@ -878,7 +1689,11 @@ _run_root_stage() {
         echo
     fi
 
-    sudo -- env BFS_SKIP_TIME_SYNC=yes BFS_MENU_STAGE="${BFS_MENU_STAGE:-no}" "$0" "$stage"
+    sudo -- env \
+        BFS_SKIP_TIME_SYNC=yes \
+        BFS_MENU_STAGE="${BFS_MENU_STAGE:-no}" \
+        BFS_FULL_BOOTSTRAP="${BFS_FULL_BOOTSTRAP:-no}" \
+        "$0" "$stage"
 }
 
 _enter_bfs_chroot() {
@@ -938,7 +1753,15 @@ _dialog_stage3_status() {
     if _base_stage3_complete; then
         printf '%s' '\Z2COMPLETE\Zn'
     elif _base_stage2_complete; then
-        printf '%s' '\Z2AVAILABLE\Zn'
+        printf '%s' '\Zb\Z3AVAILABLE\Zn'
+    else
+        printf '%s' '\Z1PENDING\Zn'
+    fi
+}
+
+_dialog_verification_status() {
+    if _required_stage_complete _verification_complete; then
+        printf '%s' '\Zb\Z7PASSED!\Zn'
     else
         printf '%s' '\Z1PENDING\Zn'
     fi
@@ -946,7 +1769,7 @@ _dialog_stage3_status() {
 
 _dialog_action_status() {
     if "$@"; then
-        printf '%s' '\Z2AVAILABLE\Zn'
+        printf '%s' '\Zb\Z3AVAILABLE\Zn'
     else
         printf '%s' '\Z1PENDING\Zn'
     fi
@@ -966,21 +1789,25 @@ _show_bootstrap_menu() {
     printf '  %s2)%s %-54s [%s]\n' "$COLOR_CYAN" "$COLOR_RESET" \
         'Build base system with temporary toolchain (required)' "$(_required_stage_complete _base_stage2_complete && printf '%sCOMPLETE%s' "$COLOR_GREEN" "$COLOR_RESET" || printf '%sPENDING%s' "$COLOR_RED" "$COLOR_RESET")"
     printf '  %s3)%s %-54s [%s]\n' "$COLOR_CYAN" "$COLOR_RESET" \
-        'Rebuild base system with final toolchain (optional)' "$(_base_stage3_complete && printf '%sCOMPLETE%s' "$COLOR_GREEN" "$COLOR_RESET" || { _base_stage2_complete && printf '%sAVAILABLE%s' "$COLOR_GREEN" "$COLOR_RESET" || printf '%sPENDING%s' "$COLOR_RED" "$COLOR_RESET"; })"
+        'Rebuild base system with final toolchain (optional)' "$(_base_stage3_complete && printf '%sCOMPLETE%s' "$COLOR_GREEN" "$COLOR_RESET" || { _base_stage2_complete && printf '%sAVAILABLE%s' "$COLOR_YELLOW" "$COLOR_RESET" || printf '%sPENDING%s' "$COLOR_RED" "$COLOR_RESET"; })"
     printf '  %s4)%s %-54s [%s]\n' "$COLOR_CYAN" "$COLOR_RESET" \
-        'Verify completed base system (required)' "$(_required_stage_complete _verification_complete && printf '%sCOMPLETE%s' "$COLOR_GREEN" "$COLOR_RESET" || printf '%sPENDING%s' "$COLOR_RED" "$COLOR_RESET")"
+        'Verify completed base system (required)' "$(_required_stage_complete _verification_complete && printf '%sPASSED!%s' "$COLOR_BOLD_WHITE" "$COLOR_RESET" || printf '%sPENDING%s' "$COLOR_RED" "$COLOR_RESET")"
     printf '  %s5)%s %-54s [%s]\n' "$COLOR_CYAN" "$COLOR_RESET" \
         'Create/compress base rootfs archive (required)' "$(_rootfs_archive_complete && printf '%sCOMPLETE%s' "$COLOR_GREEN" "$COLOR_RESET" || printf '%sPENDING%s' "$COLOR_RED" "$COLOR_RESET")"
     printf '  %s6)%s %-54s [%s]\n' "$COLOR_CYAN" "$COLOR_RESET" \
-        'Restore newest base rootfs archive' "$(_rootfs_archive_complete && printf '%sAVAILABLE%s' "$COLOR_GREEN" "$COLOR_RESET" || printf '%sPENDING%s' "$COLOR_RED" "$COLOR_RESET")"
+        'Restore newest base rootfs archive' "$(_rootfs_archive_complete && printf '%sAVAILABLE%s' "$COLOR_YELLOW" "$COLOR_RESET" || printf '%sPENDING%s' "$COLOR_RED" "$COLOR_RESET")"
     printf '  %s7)%s %-54s [%s]\n' "$COLOR_CYAN" "$COLOR_RESET" \
-        'Restore newest temporary toolchain archive' "$(_toolchain_complete && printf '%sAVAILABLE%s' "$COLOR_GREEN" "$COLOR_RESET" || printf '%sPENDING%s' "$COLOR_RED" "$COLOR_RESET")"
+        'Restore newest temporary toolchain archive' "$(_toolchain_complete && printf '%sAVAILABLE%s' "$COLOR_YELLOW" "$COLOR_RESET" || printf '%sPENDING%s' "$COLOR_RED" "$COLOR_RESET")"
     printf '  %s8)%s %-54s [%s]\n' "$COLOR_CYAN" "$COLOR_RESET" \
-        'Chroot into BFS rootfs (sudo/root)' "$(_chroot_available && printf '%sAVAILABLE%s' "$COLOR_GREEN" "$COLOR_RESET" || printf '%sNOT AVAILABLE%s' "$COLOR_RED" "$COLOR_RESET")"
+        'Chroot into BFS rootfs (sudo/root)' "$(_chroot_available && printf '%sAVAILABLE%s' "$COLOR_YELLOW" "$COLOR_RESET" || printf '%sNOT AVAILABLE%s' "$COLOR_RED" "$COLOR_RESET")"
     printf '  %s9)%s %-54s [%s]\n' "$COLOR_CYAN" "$COLOR_RESET" \
-        'Launch BFSOS installer' "$(_installer_available && printf '%sAVAILABLE%s' "$COLOR_GREEN" "$COLOR_RESET" || printf '%sPENDING%s' "$COLOR_RED" "$COLOR_RESET")"
-    printf '  %s10)%s %s\n' "$COLOR_CYAN" "$COLOR_RESET" 'Settings' 
-    printf '  %s11)%s %s\n\n' "$COLOR_CYAN" "$COLOR_RESET" 'Quit'
+        'Launch BFSOS installer' "$(_installer_available && printf '%sAVAILABLE%s' "$COLOR_YELLOW" "$COLOR_RESET" || printf '%sPENDING%s' "$COLOR_RED" "$COLOR_RESET")"
+    printf '  %s10)%s %-54s [%s]\n' "$COLOR_CYAN" "$COLOR_RESET" \
+        'Run Full Bootstrap (Stages 1 -> 2 -> 3 -> 4 -> 5)' "$(printf '%sAVAILABLE%s' "$COLOR_YELLOW" "$COLOR_RESET")"
+    printf '  %s11)%s %-54s [%s]\n' "$COLOR_CYAN" "$COLOR_RESET" \
+        'Build BFSOS bootable ISO' "$(printf '%sAVAILABLE%s' "$COLOR_YELLOW" "$COLOR_RESET")"
+    printf '  %s12)%s %s\n' "$COLOR_CYAN" "$COLOR_RESET" 'Settings'
+    printf '  %s13)%s %s\n\n' "$COLOR_CYAN" "$COLOR_RESET" 'Quit'
 }
 
 
@@ -994,7 +1821,7 @@ _dialog_stage_status() {
 
 _dialog_chroot_status() {
     if _chroot_available; then
-        printf '%s' '\Z2AVAILABLE\Zn'
+        printf '%s' '\Zb\Z3AVAILABLE\Zn'
     else
         printf '%s' '\Z1NOT AVAILABLE\Zn'
     fi
@@ -1021,18 +1848,20 @@ _select_bootstrap_menu_choice() {
                 --extra-button --extra-label "Settings" \
                 --cancel-label "Quit" \
                 --menu \
-                "Required normal path: 1 -> 2 -> 4 -> 5. Stage 3 is optional.\n\nA valid existing base archive satisfies installer readiness automatically." \
-                26 100 14 \
+                "Manual path: 1 -> 2 -> 4 -> 5; Stage 3 is optional.\nFull Bootstrap runs 1 -> 2 -> 3 -> 4 -> 5 automatically and stops on the first failure.\n\nA valid existing base archive satisfies installer readiness automatically." \
+                28 104 15 \
                 1 "$(_dialog_menu_description 'Build temporary toolchain (required)' "$(_dialog_required_status _toolchain_complete)")" \
                 2 "$(_dialog_menu_description 'Build base system with temporary toolchain (required)' "$(_dialog_required_status _base_stage2_complete)")" \
                 3 "$(_dialog_menu_description 'Rebuild base system with final toolchain (optional)' "$(_dialog_stage3_status)")" \
-                4 "$(_dialog_menu_description 'Verify completed base system (required)' "$(_dialog_required_status _verification_complete)")" \
+                4 "$(_dialog_menu_description 'Verify completed base system (required)' "$(_dialog_verification_status)")" \
                 5 "$(_dialog_menu_description 'Create/compress base rootfs archive (required)' "$(_dialog_stage_status _rootfs_archive_complete)")" \
                 6 "$(_dialog_menu_description 'Restore newest base rootfs archive' "$(_dialog_action_status _rootfs_archive_complete)")" \
                 7 "$(_dialog_menu_description 'Restore newest temporary toolchain archive' "$(_dialog_action_status _toolchain_complete)")" \
                 8 "$(_dialog_menu_description 'Chroot into BFS rootfs' "$(_dialog_chroot_status)")" \
                 9 "$(_dialog_menu_description 'Launch BFSOS installer' "$(_dialog_action_status _installer_available)")" \
-                11 "$(_dialog_menu_description 'Quit' '\Z3EXIT\Zn')" \
+                10 "$(_dialog_menu_description 'Run Full Bootstrap (Stages 1 -> 2 -> 3 -> 4 -> 5)' '\Zb\Z3AVAILABLE\Zn')" \
+                11 "$(_dialog_menu_description 'Build BFSOS bootable ISO' '\Zb\Z3AVAILABLE\Zn')" \
+                13 "$(_dialog_menu_description 'Quit' '\Z3EXIT\Zn')" \
                 --stdout </dev/tty 2>/dev/tty
         )"
         dialog_status=$?
@@ -1040,15 +1869,15 @@ _select_bootstrap_menu_choice() {
         clear </dev/tty >/dev/tty 2>/dev/null || true
         case "$dialog_status" in
             0) printf '%s\n' "$choice" ;;
-            3) printf '%s\n' 10 ;;
-            *) printf '%s\n' 11 ;;
+            3) printf '%s\n' 12 ;;
+            *) printf '%s\n' 13 ;;
         esac
         return 0
     fi
     _show_bootstrap_menu >&2
-    printf '%sChoose [1-11]: %s' "$COLOR_YELLOW" "$COLOR_RESET" >&2
+    printf '%sChoose [1-13]: %s' "$COLOR_YELLOW" "$COLOR_RESET" >&2
     read -r choice </dev/tty 2>/dev/null || read -r choice
-    case "$choice" in q|Q|quit|Quit|QUIT) choice=11 ;; esac
+    case "$choice" in q|Q|quit|Quit|QUIT) choice=13 ;; esac
     printf '%s\n' "$choice"
 }
 
@@ -1063,6 +1892,7 @@ _bootstrap_menu() {
         # during preflight before opening a new package log, do not display an
         # unrelated log from an earlier failure.
         STAGE_OPERATION_STARTED_EPOCH="$(date +%s)"
+        LAST_FAILED_LOG_FILE=""
 
         case "$choice" in
             1) set +e; BFS_MENU_STAGE=yes _buildtoolchain; status=$?; set -e ;;
@@ -1098,8 +1928,26 @@ _bootstrap_menu() {
                 _reset_terminal_ui
                 continue
                 ;;
-            10) bootstrap_settings_menu; continue ;;
-            11|q|Q|quit|Quit|QUIT) echo "BFS bootstrap exited."; return 0 ;;
+            10)
+                # Full Bootstrap owns its per-stage failure handling and final
+                # Done/Launch-installer prompt.  It deliberately includes the
+                # otherwise-optional Stage 3 final-toolchain rebuild.
+                set +e
+                BFS_MENU_STAGE=yes _run_full_bootstrap
+                status=$?
+                set -e
+                _reset_terminal_ui
+                continue
+                ;;
+            11)
+                set +e
+                _launch_iso_builder
+                status=$?
+                set -e
+                _reset_terminal_ui
+                ;;
+            12) bootstrap_settings_menu; continue ;;
+            13|q|Q|quit|Quit|QUIT) echo "BFS bootstrap exited."; return 0 ;;
             *) echo "Invalid selection."; sleep 1; continue ;;
         esac
         # Stages 2, 3, and 5 already report their successful result.  Return
@@ -1305,8 +2153,17 @@ _clean_start() {
     echo "  $TOOLCHAIN_ARCHIVE_DIR/bfs-toolchain-*.tar.xz"
     echo "  $BASE_ARCHIVE_DIR/bfs-rootfs-*.tar.xz"
     echo
-    printf "Type YES to continue, or press Enter to keep existing files: "
-    read -r answer
+
+    if [ "${BFS_FULL_BOOTSTRAP:-no}" = yes ]; then
+        # The Full Bootstrap workflow is explicitly a from-scratch 1->5 run.
+        # Do not drop from Dialog into an easy-to-miss raw-terminal YES prompt:
+        # the Full Bootstrap confirmation already authorizes this cleanup.
+        answer=YES
+        echo "Full Bootstrap: clean start confirmed; removing prior build state."
+    else
+        printf "Type YES to continue, or press Enter to keep existing files: "
+        read -r answer
+    fi
 
     if [ "$answer" != "YES" ]; then
         echo
@@ -1795,7 +2652,9 @@ EOF_CPP
 
     if [ "$failed" -eq 0 ]; then
         summary="64-bit C: PASS\n32-bit C: PASS\n64-bit C++: PASS\n32-bit C++: PASS\nStartup files: PASS\nlib32 link: PASS\n\nTemporary toolchain verification PASSED."
-        if command -v dialog >/dev/null 2>&1 && [ -t 0 ] && [ -t 1 ]; then
+        if [ "${BFS_FULL_BOOTSTRAP:-no}" = yes ]; then
+            printf '\n%s\n' "Temporary toolchain verification PASSED."
+        elif command -v dialog >/dev/null 2>&1 && [ -t 0 ] && [ -t 1 ]; then
             dialog \
                 --clear \
                 --backtitle "BFS Linux Bootstrap" \
@@ -1809,7 +2668,10 @@ EOF_CPP
     fi
 
     summary="One or more 32/64-bit toolchain checks FAILED.\n\nSee:\n$log_file\n\nStep 1 will not be archived or marked successful."
-    if command -v dialog >/dev/null 2>&1 && [ -t 0 ] && [ -t 1 ]; then
+    if [ "${BFS_FULL_BOOTSTRAP:-no}" = yes ]; then
+        printf '\nERROR: Temporary toolchain verification FAILED.\n' >&2
+        printf 'See: %s\n' "$log_file" >&2
+    elif command -v dialog >/dev/null 2>&1 && [ -t 0 ] && [ -t 1 ]; then
         dialog \
             --clear \
             --backtitle "BFS Linux Bootstrap" \
@@ -1826,13 +2688,25 @@ EOF_CPP
 
 _buildtoolchain() {
     _ensure_archive_dirs
+    _start_stage_preflight_log 1 || {
+        echo "ERROR: Could not create the Stage-1 preflight log." >&2
+        return 1
+    }
 
     if [ "$(id -u)" = 0 ]; then
-        echo "temporary toolchain needs to be built as a regular user" >&2
+        _stage_preflight_note "ERROR: Temporary toolchain needs to be built as a regular user."
         return 1
     fi
 
-    _clean_start
+    if ! _clean_start; then
+        _stage_preflight_note "ERROR: Stage-1 clean-start preparation failed."
+        return 1
+    fi
+
+    # Full-bootstrap clean-start can remove a previously populated /tmp/lfs-tools
+    # while Bash still has commands from that directory cached in its hash table.
+    # Flush those stale command paths before Stage 1 recreates the toolchain.
+    hash -r
 
     export PATCH="$SCRIPT_DIR/sources/"
     export BOOTSTRAP=1
@@ -1850,7 +2724,7 @@ _buildtoolchain() {
         /tmp/lfs-tools)
             ;;
         *)
-            echo "ERROR: Refusing to replace unexpected tools path: $TOOLS" >&2
+            _stage_preflight_note "ERROR: Refusing to replace unexpected tools path: $TOOLS"
             return 1
             ;;
     esac
@@ -1859,58 +2733,107 @@ _buildtoolchain() {
         /tmp/lfs-rootfs/tmp/lfs-tools)
             ;;
         *)
-            echo "ERROR: Unexpected rooted toolchain path: ${LFS}${TOOLS}" >&2
+            _stage_preflight_note "ERROR: Unexpected rooted toolchain path: ${LFS}${TOOLS}"
             return 1
             ;;
     esac
 
-    rm -rf -- "$TOOLS"
-    mkdir -p "${LFS}${TOOLS}" "$sourcedir"
-    ln -s "${LFS}${TOOLS}" "$TOOLS"
+    # A prior root-stage or interrupted build can leave /tmp/lfs-tools owned
+    # by root.  Stage 1 itself must still build as the regular user, but removing
+    # the stale link/directory may require sudo.
+    if [ -e "$TOOLS" ] || [ -L "$TOOLS" ]; then
+        if ! /usr/bin/rm -rf -- "$TOOLS" 2>>"$STAGE_PREFLIGHT_LOG"; then
+            _stage_preflight_note "Stage 1: regular-user removal of $TOOLS failed; retrying cleanup with sudo."
+            if ! sudo /usr/bin/rm -rf -- "$TOOLS" >>"$STAGE_PREFLIGHT_LOG" 2>&1; then
+                _stage_preflight_note "ERROR: Could not remove stale toolchain path: $TOOLS"
+                return 1
+            fi
+        fi
+    fi
+
+    if ! /usr/bin/mkdir -p "${LFS}${TOOLS}" "$sourcedir" 2>>"$STAGE_PREFLIGHT_LOG"; then
+        _stage_preflight_note "ERROR: Could not create Stage-1 toolchain directories."
+        _stage_preflight_note "       If $LFS survived an older root build, use Full Bootstrap clean-start or remove that stale tree with sudo."
+        return 1
+    fi
+    if ! /usr/bin/ln -s "${LFS}${TOOLS}" "$TOOLS" 2>>"$STAGE_PREFLIGHT_LOG"; then
+        _stage_preflight_note "ERROR: Could not create $TOOLS -> ${LFS}${TOOLS}."
+        return 1
+    fi
 
     if [ ! -L "$TOOLS" ]; then
-        echo "ERROR: $TOOLS was not created as a symlink." >&2
+        _stage_preflight_note "ERROR: $TOOLS was not created as a symlink."
         return 1
     fi
 
-    if [ "$(readlink -f "$TOOLS")" != "${LFS}${TOOLS}" ]; then
-        echo "ERROR: $TOOLS points to the wrong location." >&2
-        echo "  Expected: ${LFS}${TOOLS}" >&2
-        echo "  Actual:   $(readlink -f "$TOOLS" 2>/dev/null || echo '<unresolved>')" >&2
+    if [ "$(/usr/bin/readlink -f "$TOOLS")" != "${LFS}${TOOLS}" ]; then
+        _stage_preflight_note "ERROR: $TOOLS points to the wrong location."
+        _stage_preflight_note "  Expected: ${LFS}${TOOLS}"
+        _stage_preflight_note "  Actual:   $(/usr/bin/readlink -f "$TOOLS" 2>/dev/null || echo '<unresolved>')"
         return 1
     fi
+
+    # The toolchain directory now exists again. Flush command hashing once more
+    # so early Stage-1 orchestration falls back to host tools until each target
+    # utility is actually built into $TOOLS/bin.
+    hash -r
 
     echo "Temporary toolchain path verified:"
     echo "  $TOOLS -> ${LFS}${TOOLS}"
 
     cat > /tmp/bootstrap.conf <<EOF
-export LANG=C
-export LC_ALL=C
-export LANGUAGE=C
+# Do not override LC_ALL here.
+# The temporary pkgmk dynamically selects C.UTF-8/C.utf8 when available
+# so libarchive can extract UTF-8 source pathnames, falling back to C
+# only when the host has no UTF-8 C locale.
 export MAKEFLAGS=-j$(nproc)
 
-PKGMK_SOURCE_DIR=$sourcedir
+# Stage 1 temporary toolchain is deliberately uncached.  Never inherit a
+# live-host /usr/lib/ccache wrapper path into the bootstrap compiler chain.
+export BFS_CCACHE=no
+
+# Keep the Stage-1 source cache in the same package-namespaced layout used
+# by the installed BFSOS pkgmk configuration.  Later bootstrap stages bind
+# this same root at /var/cache/pkg/sources, so unchanged archives are reused
+# instead of being downloaded again merely because the cache layout changed.
+PKGMK_SOURCE_ROOT="$sourcedir"
+PKGMK_SOURCE_DIR="\$PKGMK_SOURCE_ROOT/\$name"
+mkdir -p "\$PKGMK_SOURCE_DIR" || exit 1
 PKGMK_PACKAGE_DIR=/tmp/lfs-pkg
 
 . $PWD/files/pkgmk.bootstrap
 EOF
 
     if [ ! "$(PATH=$TOOLS/bin command -v pkgmk)" ]; then
-        if [ ! -f "$sourcedir/pkgutils-5.40.12.tar.xz" ]; then
-            curl -o "$sourcedir/pkgutils-5.40.12.tar.xz" \
-                https://crux.nu/files/pkgutils-5.40.12.tar.xz
+        # The first pkgutils build happens before pkgmk exists, so seed its
+        # source into the same package namespace normal pkgmk will use later.
+        mkdir -p "$sourcedir/pkgutils" || return 1
+        if [ ! -f "$sourcedir/pkgutils/pkgutils-5.40.12.tar.xz" ]; then
+            curl --fail --location --retry 3 \
+                -o "$sourcedir/pkgutils/pkgutils-5.40.12.tar.xz" \
+                https://crux.nu/files/pkgutils-5.40.12.tar.xz || return 1
         fi
 
         rm -rf /tmp/pkgutils-5.40.12
-        tar -xf "$sourcedir/pkgutils-5.40.12.tar.xz" -C /tmp
+        tar -xf "$sourcedir/pkgutils/pkgutils-5.40.12.tar.xz" -C /tmp || return 1
 
         # The initial pkgutils bootstrap bypasses ports/core/pkgutils/Pkgfile.
         # Prefer a UTF-8 C locale when the live host provides one (GCC 16.2
         # contains UTF-8 pathnames), but fall back to plain C when it does not.
         sed -i '/^export LC_ALL=C\.UTF-8$/c\
 _bfs_utf8_locale=""\
+_bfs_locale_cmd=""\
+_bfs_pkgmk_path="$(readlink -f "$0" 2>/dev/null || printf "%s" "$0")"\
+case "$_bfs_pkgmk_path" in\
+    */tmp/lfs-tools/*) [ -x /tmp/lfs-tools/bin/locale ] && _bfs_locale_cmd=/tmp/lfs-tools/bin/locale ;;\
+    *) [ -x /usr/bin/locale ] && _bfs_locale_cmd=/usr/bin/locale ;;\
+esac\
+[ -n "$_bfs_locale_cmd" ] || [ ! -x /usr/bin/locale ] || _bfs_locale_cmd=/usr/bin/locale\
+[ -n "$_bfs_locale_cmd" ] || _bfs_locale_cmd="$(command -v locale 2>/dev/null || true)"\
 for _bfs_locale in C.UTF-8 C.utf8; do\
-    if locale -a 2>/dev/null | grep -Fxiq "$_bfs_locale"; then\
+    if [ -n "$_bfs_locale_cmd" ] && \
+       "$_bfs_locale_cmd" -a 2>/dev/null | grep -Fxiq "$_bfs_locale" && \
+       LC_ALL="$_bfs_locale" "$_bfs_locale_cmd" charmap 2>/dev/null | grep -Fxiq UTF-8; then\
         _bfs_utf8_locale="$_bfs_locale"\
         break\
     fi\
@@ -1920,7 +2843,7 @@ if [ -n "$_bfs_utf8_locale" ]; then\
 else\
     export LC_ALL=C\
 fi\
-unset _bfs_utf8_locale _bfs_locale' \
+unset _bfs_utf8_locale _bfs_locale _bfs_locale_cmd _bfs_pkgmk_path' \
             /tmp/pkgutils-5.40.12/pkgmk.in
 
         sed -i \
@@ -1943,7 +2866,10 @@ unset _bfs_utf8_locale _bfs_locale' \
     echo
     echo "Resolving temporary-toolchain ports across all collections..."
     # shellcheck disable=SC2086
-    _validate_package_ports $toolchainpkg
+    if ! _validate_package_ports $toolchainpkg 2> >(tee -a "$STAGE_PREFLIGHT_LOG" >&2); then
+        _stage_preflight_note "ERROR: Temporary-toolchain port validation failed before the first package build."
+        return 1
+    fi
     echo
 
     for i in $toolchainpkg; do
@@ -1960,10 +2886,11 @@ unset _bfs_utf8_locale _bfs_locale' \
 
         _start_package_log toolchain "$i"
 
-        set +e
-        pkgmk -d -is -if -cf /tmp/bootstrap.conf
-        status=$?
-        set -e
+        if pkgmk -d -is -if -cf /tmp/bootstrap.conf; then
+            status=0
+        else
+            status=$?
+        fi
 
         _close_active_package_log "$status"
 
@@ -1984,6 +2911,17 @@ unset _bfs_utf8_locale _bfs_locale' \
     done
 
     rm -f /tmp/bootstrap.conf
+
+    echo
+    echo "Verifying temporary-toolchain UTF-8 locale..."
+    if [ ! -s "$TOOLS/lib/locale/locale-archive" ]; then
+        echo "ERROR: Temporary glibc locale archive is missing: $TOOLS/lib/locale/locale-archive" >&2
+        return 1
+    fi
+    if ! LC_ALL=C.utf8 "$TOOLS/bin/locale" charmap 2>/dev/null | grep -Fxiq UTF-8; then
+        echo "ERROR: Temporary glibc cannot use C.utf8." >&2
+        return 1
+    fi
 
     echo
     echo "Running 32-bit and 64-bit temporary-toolchain verification..."
@@ -2037,7 +2975,86 @@ unset _bfs_utf8_locale _bfs_locale' \
         return 1
     fi
 
-    _show_menu_success "Toolchain build complete"         "Toolchain build completed.\n\nArchive created and verified:\n$toolchain_archive"
+    if ! tar -tJf "$toolchain_archive" | grep -q '^\./tmp/lfs-tools/lib/locale/locale-archive$'; then
+        rm -f "$toolchain_archive"
+        echo "ERROR: Temporary toolchain archive is missing the UTF-8 locale archive." >&2
+        return 1
+    fi
+
+    # Return directly to the main menu after the archive passes validation.
+}
+
+_finalize_account_database() {
+    if [ "$(id -u)" -ne 0 ]; then
+        echo "ERROR: Account-database finalization must be run as root." >&2
+        return 1
+    fi
+
+    for account_file in "$LFS/etc/passwd" "$LFS/etc/group"; do
+        if [ ! -f "$account_file" ]; then
+            echo "ERROR: Cannot finalize account database; missing: $account_file" >&2
+            return 1
+        fi
+    done
+
+    if [ ! -x "$LFS/usr/sbin/pwconv" ] || [ ! -x "$LFS/usr/sbin/grpconv" ]; then
+        echo "ERROR: Shadow account-conversion tools are missing from the target root." >&2
+        echo "Expected:" >&2
+        echo "  $LFS/usr/sbin/pwconv" >&2
+        echo "  $LFS/usr/sbin/grpconv" >&2
+        return 1
+    fi
+
+    echo "Finalizing shadow password/group databases..."
+
+    # Shadow's pwconv/grpconv expect the destination files to exist.  The base
+    # bootstrap seeds /etc/passwd and /etc/group before shadow is installed, so
+    # create the protected databases explicitly before converting the completed
+    # target account database.  Never run these target-finalization commands from
+    # the shadow package build itself.
+    touch "$LFS/etc/shadow" "$LFS/etc/gshadow"
+    chown 0:0 "$LFS/etc/shadow" "$LFS/etc/gshadow"
+    chmod 0600 "$LFS/etc/shadow" "$LFS/etc/gshadow"
+
+    chroot "$LFS" \
+        /usr/bin/env -i \
+        HOME=/root \
+        TERM="${TERM:-dumb}" \
+        LANG=C \
+        LC_ALL=C \
+        LANGUAGE=C \
+        PATH=/usr/bin:/usr/sbin:/bin:/sbin \
+        /usr/sbin/pwconv || {
+            echo "ERROR: pwconv failed while finalizing the BFSOS target root." >&2
+            return 1
+        }
+
+    chroot "$LFS" \
+        /usr/bin/env -i \
+        HOME=/root \
+        TERM="${TERM:-dumb}" \
+        LANG=C \
+        LC_ALL=C \
+        LANGUAGE=C \
+        PATH=/usr/bin:/usr/sbin:/bin:/sbin \
+        /usr/sbin/grpconv || {
+            echo "ERROR: grpconv failed while finalizing the BFSOS target root." >&2
+            return 1
+        }
+
+    chown 0:0 "$LFS/etc/shadow" "$LFS/etc/gshadow"
+    chmod 0600 "$LFS/etc/shadow" "$LFS/etc/gshadow"
+
+    if ! grep -q '^root:' "$LFS/etc/shadow"; then
+        echo "ERROR: /etc/shadow was created without a root entry." >&2
+        return 1
+    fi
+    if ! grep -q '^root:' "$LFS/etc/gshadow"; then
+        echo "ERROR: /etc/gshadow was created without a root entry." >&2
+        return 1
+    fi
+
+    echo "Shadow account databases finalized successfully."
 }
 
 _verifybase() {
@@ -2058,6 +3075,14 @@ _verifybase() {
     # Never leave a stale success marker behind after a failed verification.
     rm -f "$marker"
 
+    # Finalize the completed target account database before validating or
+    # archiving it.  A base with passwd/group but no shadow/gshadow cannot
+    # authenticate users and must never receive a verification marker.
+    if ! _finalize_account_database; then
+        echo "ERROR: Base account-database finalization failed." >&2
+        return 1
+    fi
+
     _verify_path() {
         if [ -e "$1" ] || [ -L "$1" ]; then
             printf '  [PASS] %s\n' "$1"
@@ -2075,6 +3100,10 @@ _verifybase() {
     _verify_path "$LFS/usr/bin/make"
     _verify_path "$LFS/usr/bin/pkgmk"
     _verify_path "$LFS/var/lib/pkg/db"
+    _verify_path "$LFS/etc/passwd"
+    _verify_path "$LFS/etc/group"
+    _verify_path "$LFS/etc/shadow"
+    _verify_path "$LFS/etc/gshadow"
     _verify_path "$LFS/etc"
     _verify_path "$LFS/var"
     _verify_path "$LFS/usr"
@@ -2145,6 +3174,22 @@ _verifybase() {
             echo "Checking package database..."
             pkginfo -i >/dev/null 2>&1 || fail "package database is not readable"
             pass "package database"
+
+            echo
+            echo "Checking account databases..."
+            for file in /etc/passwd /etc/group /etc/shadow /etc/gshadow; do
+                [ -f "$file" ] || fail "$file is missing"
+                pass "$file"
+            done
+            grep -q "^root:" /etc/passwd || fail "/etc/passwd has no root entry"
+            grep -q "^root:" /etc/group || fail "/etc/group has no root entry"
+            grep -q "^root:" /etc/shadow || fail "/etc/shadow has no root entry"
+            grep -q "^root:" /etc/gshadow || fail "/etc/gshadow has no root entry"
+            [ "$(stat -c %a /etc/shadow)" = 600 ] || fail "/etc/shadow mode is not 0600"
+            [ "$(stat -c %a /etc/gshadow)" = 600 ] || fail "/etc/gshadow mode is not 0600"
+            [ "$(grep "^root:" /etc/passwd | cut -d: -f2)" = x ] ||
+                fail "/etc/passwd root password field is not shadowed"
+            pass "shadow account database"
 
             echo
             echo "Compiling and running a C test..."
@@ -2225,6 +3270,22 @@ _compressrootfs() {
         return 1
     fi
 
+    # Defense in depth: never archive a base whose account databases became
+    # incomplete after Stage 4.  Stage 4 performs the conversion; Stage 5 only
+    # verifies the invariant before creating the release artifact.
+    for account_file in passwd group shadow gshadow; do
+        if [ ! -f "$LFS/etc/$account_file" ]; then
+            echo "ERROR: Refusing to archive base with missing /etc/$account_file." >&2
+            rm -f "$LFS/.bfs-verified"
+            return 1
+        fi
+    done
+    if ! grep -q '^root:' "$LFS/etc/shadow" || ! grep -q '^root:' "$LFS/etc/gshadow"; then
+        echo "ERROR: Refusing to archive incomplete shadow account databases." >&2
+        rm -f "$LFS/.bfs-verified"
+        return 1
+    fi
+
     # Never archive active bootstrap bind mounts.  In particular, sources,
     # packages, and build-work are bind-mounted during Stages 2/3.
     if ! umountfs; then
@@ -2248,6 +3309,18 @@ _compressrootfs() {
             return 1
         fi
     done
+
+    # Source-cache retention is an explicit base-build policy. During normal
+    # stages this path is a bind mount, so materialize it only after unmounting.
+    rm -rf "$LFS/$pkgmksrc"
+    mkdir -p "$LFS/$pkgmksrc"
+    if [ "${BFS_KEEP_SOURCE_ARCHIVES:-no}" = yes ]; then
+        echo "Including downloaded package source archives in the base rootfs..."
+        cp -a "$sourcedir"/. "$LFS/$pkgmksrc"/
+        du -sh "$LFS/$pkgmksrc" 2>/dev/null || true
+    else
+        echo "Excluding downloaded package source archives from the base rootfs (default)."
+    fi
 
     _ensure_archive_dirs
 
@@ -2301,7 +3374,12 @@ _compressrootfs() {
         chown "$owner_uid:$owner_gid" "$rootfs_archive" 2>/dev/null || true
     fi
 
-    _show_menu_success "Base archive complete"         "Base rootfs compressed successfully.\n\nArchive created and verified:\n$rootfs_archive"
+    if [ "${BFS_FULL_BOOTSTRAP:-no}" = yes ]; then
+        printf '\nBase rootfs compressed successfully.\nArchive created and verified:\n  %s\n' "$rootfs_archive"
+    else
+        _show_menu_success "Base archive complete" \
+            "Base rootfs compressed successfully.\n\nArchive created and verified:\n$rootfs_archive"
+    fi
 }
 
 _buildbase() {
@@ -2375,6 +3453,15 @@ _buildbase() {
 
     cp -r ports/ "$LFS/usr/"
 
+    # Apply the selected non-systemd recipe overlay after importing the
+    # upstream Pkgfile tree. The systemd profile intentionally uses the
+    # upstream recipes unchanged.
+    if [ "$BFS_INIT_SYSTEM" != systemd ] &&
+       [ -d "$SCRIPT_DIR/profiles/init/overlays/$BFS_INIT_SYSTEM" ]; then
+        cp -a "$SCRIPT_DIR/profiles/init/overlays/$BFS_INIT_SYSTEM/." \
+            "$LFS/usr/ports/"
+    fi
+
     mkdir -p "$LFS/tmp/lfs-tools/bin"
     cp files/pkgin "$LFS/tmp/lfs-tools/bin/pkgin"
     chmod +x "$LFS/tmp/lfs-tools/bin/pkgin"
@@ -2388,10 +3475,18 @@ _buildbase() {
     cp ports/core/pkgutils/extension \
         "$LFS/var/lib/pkgmk"
 
+    # Create the target ccache configuration now.  During Stage 2 the compiler
+    # wrapper path remains inactive until the BFSOS ccache package is actually
+    # installed.  Stage 3 can use the already-installed target ccache from its
+    # first normal package build.
+    _prepare_target_ccache
+
+    resolved_ccache_size="$(_resolve_ccache_size)"
+
     cat > "$LFS/tmp/pkgmk.conf" <<EOF
-export LANG=C
-export LC_ALL=C
-export LANGUAGE=C
+# Do not force LC_ALL=C here.
+# pkgmk selects a UTF-8-capable C locale when available so libarchive can
+# extract source archives containing UTF-8 pathnames.
 
 export CPPFLAGS="-I/usr/include"
 export CFLAGS="$CFLAGS"
@@ -2402,19 +3497,61 @@ export LIBRARY_PATH="/usr/lib"
 export PKG_CONFIG_PATH="/usr/lib/pkgconfig:/usr/share/pkgconfig"
 export PKG_CONFIG_LIBDIR="/usr/lib/pkgconfig:/usr/share/pkgconfig"
 
+# BFSOS X.Org build policy. Do not rely on login-shell profile.d loading.
+export XORG_PREFIX="/usr"
+export XORG_CONFIG="--prefix=/usr --sysconfdir=/etc --localstatedir=/var --disable-static"
+
 export JOBS=${BFS_BUILD_JOBS/auto/$(nproc)}
 export MAKEFLAGS="-j \$JOBS"
 
-PKGMK_SOURCE_DIR="/$pkgmksrc"
+# Bootstrap-safe ccache policy.  The live host is never used.  This condition
+# becomes true only after the BFSOS ccache package has installed both ccache
+# itself and its compiler-wrapper directory inside the target rootfs.
+export BFS_CCACHE="$BFS_CCACHE"
+export BFS_CCACHE_SIZE="$resolved_ccache_size"
+export CCACHE_DIR="/var/cache/ccache"
+if [ "\$BFS_CCACHE" = yes ] &&
+   [ -x /usr/bin/ccache ] &&
+   [ -x /usr/lib/ccache/gcc ]; then
+    export PATH="/usr/lib/ccache:\$PATH"
+fi
+
+PKGMK_SOURCE_ROOT="/$pkgmksrc"
+PKGMK_SOURCE_DIR="\$PKGMK_SOURCE_ROOT/\$name"
+mkdir -p "\$PKGMK_SOURCE_DIR" || exit 1
 PKGMK_PACKAGE_DIR="/$pkgmkpkg"
 PKGMK_WORK_DIR="/$pkgmkwork/pkgmk-\$name"
+
+# Bootstrap integrity policy. All checks default to enabled; development
+# bypasses require an explicit settings change and are visible in this file/log.
+PKGMK_IGNORE_MD5SUM="$([ "$BFS_VERIFY_MD5" = yes ] && echo no || echo yes)"
+PKGMK_IGNORE_SIGNATURE="$([ "$BFS_VERIFY_SIGNATURE" = yes ] && echo no || echo yes)"
+PKGMK_IGNORE_FOOTPRINT="$([ "$BFS_VERIFY_FOOTPRINT" = yes ] && echo no || echo yes)"
+
+# Match the installed BFSOS downloader policy during Stage 2/3: go directly
+# to Pkgfile sources, resume partial downloads, and detect dead/stalled links.
+PKGMK_SOURCE_MIRRORS=()
+PKGMK_SOURCE_FLAT_FALLBACKS=(
+    "https://mirror.math.princeton.edu/pub/redcorelinux/amd64/distfiles"
+)
+PKGMK_SOURCE_FALLBACKS=(
+    "https://xorg.freedesktop.org/releases/|https://www.x.org/archive/"
+    "https://www.x.org/releases/|https://www.x.org/archive/"
+    "https://ftp.gnu.org/gnu/|https://ftpmirror.gnu.org/"
+    "https://download.savannah.gnu.org/releases/|https://mirror.fi.ossplanet.net/nongnu/"
+    "https://cdn.kernel.org/pub/|https://mirrors.edge.kernel.org/pub/"
+    "https://www.kernel.org/pub/|https://mirrors.edge.kernel.org/pub/"
+)
+PKGMK_DOWNLOAD_PROG="curl"
+PKGMK_CURL_OPTS="--fail --location --continue-at - --connect-timeout 10 --speed-limit 1024 --speed-time 30 --retry 3 --retry-delay 2 --retry-max-time 180 --retry-connrefused"
 
 . /var/lib/pkgmk/extension
 EOF
 
     # Keep the installed/final pkgmk configuration on the external build-work
-    # bind mount too. Stage 3 uses the installed pkgmk/prt-get configuration,
-    # so without this it falls back to /var/cache/pkg/work inside the small
+    # bind mount too. Stage 3 uses the installed pkgmk configuration for its
+    # exact-package rebuilds, so without this it falls back to
+    # /var/cache/pkg/work inside the small
     # LiveGUI-backed rootfs and GCC can exhaust that filesystem.
     if [ -f "$LFS/etc/pkgmk.conf" ]; then
         if [ "$BFS_BUILD_SETTINGS_CHANGED" = yes ]; then
@@ -2424,9 +3561,53 @@ EOF
                    -e "s|^export JOBS=.*|export JOBS=$jobs|" \
                    -e "s|^export MAKEFLAGS=.*|export MAKEFLAGS=\"-j \$JOBS\"|" \
                    "$LFS/etc/pkgmk.conf"
-            printf '\n# BFSOS inherited build settings\nexport BFS_CCACHE=%s\nexport BFS_CCACHE_SIZE=%s\n' \
-                "$BFS_CCACHE" "$BFS_CCACHE_SIZE" >> "$LFS/etc/pkgmk.conf"
+            # Replace the BFSOS bootstrap-managed ccache block rather than
+            # appending duplicate settings on every Stage 2/3 run.
+            sed -i '/^# BEGIN BFSOS BOOTSTRAP CCACHE$/,/^# END BFSOS BOOTSTRAP CCACHE$/d' \
+                "$LFS/etc/pkgmk.conf"
+            cat >> "$LFS/etc/pkgmk.conf" <<EOF_INSTALLED_CCACHE
+
+# BEGIN BFSOS BOOTSTRAP CCACHE
+export BFS_CCACHE="$BFS_CCACHE"
+export BFS_CCACHE_SIZE="$resolved_ccache_size"
+export CCACHE_DIR="/var/cache/ccache"
+if [ "\$BFS_CCACHE" = yes ] &&
+   [ -x /usr/bin/ccache ] &&
+   [ -x /usr/lib/ccache/gcc ]; then
+    export PATH="/usr/lib/ccache:\$PATH"
+fi
+# END BFSOS BOOTSTRAP CCACHE
+EOF_INSTALLED_CCACHE
         fi
+        # Ensure an existing installed pkgmk.conf has the target-only ccache
+        # policy even when build settings were left at their saved/default values.
+        if ! grep -q '^# BEGIN BFSOS BOOTSTRAP CCACHE$' "$LFS/etc/pkgmk.conf"; then
+            cat >> "$LFS/etc/pkgmk.conf" <<EOF_INSTALLED_CCACHE_DEFAULT
+
+# BEGIN BFSOS BOOTSTRAP CCACHE
+export BFS_CCACHE="$BFS_CCACHE"
+export BFS_CCACHE_SIZE="$resolved_ccache_size"
+export CCACHE_DIR="/var/cache/ccache"
+if [ "\$BFS_CCACHE" = yes ] &&
+   [ -x /usr/bin/ccache ] &&
+   [ -x /usr/lib/ccache/gcc ]; then
+    export PATH="/usr/lib/ccache:\$PATH"
+fi
+# END BFSOS BOOTSTRAP CCACHE
+EOF_INSTALLED_CCACHE_DEFAULT
+        fi
+
+        sed -i '/^# BEGIN BFSOS BOOTSTRAP INTEGRITY$/,/^# END BFSOS BOOTSTRAP INTEGRITY$/d' \
+            "$LFS/etc/pkgmk.conf"
+        cat >> "$LFS/etc/pkgmk.conf" <<EOF_INSTALLED_INTEGRITY
+
+# BEGIN BFSOS BOOTSTRAP INTEGRITY
+PKGMK_IGNORE_MD5SUM="$([ "$BFS_VERIFY_MD5" = yes ] && echo no || echo yes)"
+PKGMK_IGNORE_SIGNATURE="$([ "$BFS_VERIFY_SIGNATURE" = yes ] && echo no || echo yes)"
+PKGMK_IGNORE_FOOTPRINT="$([ "$BFS_VERIFY_FOOTPRINT" = yes ] && echo no || echo yes)"
+# END BFSOS BOOTSTRAP INTEGRITY
+EOF_INSTALLED_INTEGRITY
+
         # Never point pkgmk at the bind-mount root itself.  pkgmk removes its
         # work directory during cleanup; using the mount point directly causes
         # "Device or resource busy".  Give each port a removable child dir.
@@ -2443,9 +3624,8 @@ EOF
     fi
 
     cat > "$LFS/tmp/pkgmk.systemd-bootstrap.conf" <<EOF
-export LANG=C
-export LC_ALL=C
-export LANGUAGE=C
+# Do not force LC_ALL=C here.
+# Preserve pkgmk's archive-safe locale selection.
 
 # systemd needs these before final util-linux exists.
 export CFLAGS="-O2 -march=x86-64 -pipe"
@@ -2460,9 +3640,30 @@ export PKG_CONFIG_LIBDIR="/tmp/systemd-util-linux-pc:/usr/lib/pkgconfig:/usr/sha
 export JOBS=$(nproc)
 export MAKEFLAGS="-j \$JOBS"
 
-PKGMK_SOURCE_DIR="/$pkgmksrc"
+# Keep the special systemd bootstrap transaction uncached.
+export BFS_CCACHE=no
+export CCACHE_DISABLE=1
+
+PKGMK_SOURCE_ROOT="/$pkgmksrc"
+PKGMK_SOURCE_DIR="\$PKGMK_SOURCE_ROOT/\$name"
+mkdir -p "\$PKGMK_SOURCE_DIR" || exit 1
 PKGMK_PACKAGE_DIR="/$pkgmkpkg"
 PKGMK_WORK_DIR="/$pkgmkwork/pkgmk-\$name"
+
+PKGMK_SOURCE_MIRRORS=()
+PKGMK_SOURCE_FLAT_FALLBACKS=(
+    "https://mirror.math.princeton.edu/pub/redcorelinux/amd64/distfiles"
+)
+PKGMK_SOURCE_FALLBACKS=(
+    "https://xorg.freedesktop.org/releases/|https://www.x.org/archive/"
+    "https://www.x.org/releases/|https://www.x.org/archive/"
+    "https://ftp.gnu.org/gnu/|https://ftpmirror.gnu.org/"
+    "https://download.savannah.gnu.org/releases/|https://mirror.fi.ossplanet.net/nongnu/"
+    "https://cdn.kernel.org/pub/|https://mirrors.edge.kernel.org/pub/"
+    "https://www.kernel.org/pub/|https://mirrors.edge.kernel.org/pub/"
+)
+PKGMK_DOWNLOAD_PROG="curl"
+PKGMK_CURL_OPTS="--fail --location --continue-at - --connect-timeout 10 --speed-limit 1024 --speed-time 30 --retry 3 --retry-delay 2 --retry-max-time 180 --retry-connrefused"
 
 . /var/lib/pkgmk/extension
 EOF
@@ -2480,7 +3681,26 @@ EOF
         LFSPATH=$LFSPATH:$TOOLS/bin
     fi
 
+    STAGE_BUILD_PATH="$LFSPATH"
+    if [ "${1:-}" = rebuild ] && [ "${BFS_CCACHE:-yes}" = yes ]; then
+        STAGE_BUILD_PATH="/usr/lib/ccache:$LFSPATH"
+        echo "Stage 3 ccache preflight..."
+        if ! chroot "$LFS" env -i HOME=/root PATH=/usr/bin:/usr/sbin:/bin:/sbin \
+                /bin/sh -c 'test -x /usr/bin/ccache && test -x /usr/lib/ccache/gcc && test -x /usr/lib/ccache/g++'; then
+            echo "ERROR: Stage 3 is configured to use ccache, but the BFSOS ccache binary/compiler wrappers are missing." >&2
+            return 1
+        fi
+        echo "Stage 3 ccache statistics before rebuild:"
+        chroot "$LFS" env -i HOME=/root PATH=/usr/bin:/usr/sbin:/bin:/sbin \
+                CCACHE_DIR=/var/cache/ccache /usr/bin/ccache -s 2>/dev/null || true
+    fi
+
     mountfs
+
+    # Stage 3 is an exact rebuild pass. Stage 2 has already established the
+    # base package set, so Stage 3 must never resolve or install newly declared
+    # dependencies. Normal prt-get update dependency refresh remains useful on
+    # an installed BFSOS system, but it is intentionally bypassed here.
 
     for i in $basepkg; do
         if [ "${1:-}" != rebuild ]; then
@@ -2506,15 +3726,20 @@ EOF
                 echo "Using temporary util-linux libraries for systemd bootstrap."
             fi
 
+            integrity_opts=""
+            [ "$BFS_VERIFY_SIGNATURE" = yes ] || integrity_opts="$integrity_opts -is"
+            [ "$BFS_VERIFY_FOOTPRINT" = yes ] || integrity_opts="$integrity_opts -if"
+            [ "$BFS_VERIFY_MD5" = yes ] || integrity_opts="$integrity_opts -im"
+            if [ -n "$integrity_opts" ]; then
+                echo "WARNING: development integrity bypass active:$integrity_opts"
+            fi
+
             chroot "$LFS" \
                 env -i \
                 HOME=/root \
                 TERM="${TERM:-dumb}" \
-                LANG=C \
-                LC_ALL=C \
-                LANGUAGE=C \
                 PATH="$LFSPATH" \
-                pkgin -d "$i" -is -if -im -cf "$pkgmk_conf" \
+                pkgin -d "$i" $integrity_opts -cf "$pkgmk_conf" \
                 || {
                     status=$?
                     _close_active_package_log "$status"
@@ -2531,8 +3756,47 @@ EOF
                     return "$status"
                 }
 
+            case "$i" in
+                ca-certificates)
+                    if ! chroot "$LFS" /bin/sh -c 'test -s /etc/pki/tls/certs/ca-bundle.crt'; then
+                        echo "ERROR: ca-certificates did not create a non-empty canonical CA bundle." >&2
+                        _close_active_package_log 1
+                        umountfs
+                        return 1
+                    fi
+                    echo "CA trust-store canonical bundle initialized."
+                    ;;
+                curl)
+                    if ! chroot "$LFS" env -i HOME=/root PATH=/usr/bin:/usr/sbin:/bin:/sbin \
+                        /usr/bin/curl -fsSI --connect-timeout 10 https://kernel.org/ >/dev/null; then
+                        echo "ERROR: final BFSOS curl failed HTTPS trust-store sanity check." >&2
+                        _close_active_package_log 1
+                        umountfs
+                        return 1
+                    fi
+                    echo "Final BFSOS curl HTTPS trust-store sanity check passed."
+                    ;;
+            esac
+
             case $i in
                 glibc)
+                    echo "Generating target C.UTF-8 locale before later package extraction..."
+                    if chroot "$LFS" \
+                        env -i \
+                        HOME=/root \
+                        TERM="${TERM:-dumb}" \
+                        PATH="$LFSPATH" \
+                        /bin/sh -c 'mkdir -p /usr/lib/locale && /usr/bin/localedef -i C -f UTF-8 C.UTF-8 && LC_ALL=C.utf8 /usr/bin/locale charmap | grep -Fxiq UTF-8'
+                    then
+                        :
+                    else
+                        status=$?
+                        echo "ERROR: Failed to generate/validate the target C.UTF-8 locale after glibc installation." >&2
+                        _close_active_package_log "$status"
+                        umountfs
+                        return "$status"
+                    fi
+
                     cat << EOF > "$LFS/tmp/glibc-postinstall"
 #!/bin/sh
 set -e
@@ -2672,6 +3936,39 @@ EOF
         else
             _start_package_log base "$i"
 
+            integrity_opts=""
+            [ "$BFS_VERIFY_SIGNATURE" = yes ] || integrity_opts="$integrity_opts -is"
+            [ "$BFS_VERIFY_FOOTPRINT" = yes ] || integrity_opts="$integrity_opts -if"
+            [ "$BFS_VERIFY_MD5" = yes ] || integrity_opts="$integrity_opts -im"
+            if [ -n "$integrity_opts" ]; then
+                echo "WARNING: development integrity bypass active:$integrity_opts"
+            fi
+
+            # Stage 3 may only rebuild packages that Stage 2 already installed.
+            # If basepkg changed after Stage 2, stop and require Stage 2 again
+            # instead of silently growing the base through dependency resolution.
+            if ! chroot "$LFS" \
+                env -i \
+                HOME=/root \
+                PATH=/usr/bin:/usr/sbin:/bin:/sbin \
+                /usr/bin/pkginfo -i | awk '{print $1}' | grep -qx "$i"
+            then
+                echo "ERROR: Stage 3 expected '$i' to already be installed by Stage 2." >&2
+                echo "ERROR: Re-run Stage 2 before Stage 3; Stage 3 will not install new base packages." >&2
+                _close_active_package_log 1
+                umountfs
+                return 1
+            fi
+
+            # Rebuild exactly this base package with the final BFSOS toolchain.
+            # Stage 2 left its package archive in the shared package cache, so
+            # remove cached copies first; otherwise pkgmk may consider the package
+            # already built and Stage 3 would not actually recompile it.
+            rm -f "$packagedir/$i#"*
+
+            # Use pkgin only as the single-port pkgmk wrapper, exactly as Stage 2
+            # does; do not invoke prt-get here because current prt-get update
+            # intentionally discovers and installs newly required dependencies.
             chroot "$LFS" \
                 env -i \
                 HOME=/root \
@@ -2679,8 +3976,30 @@ EOF
                 LANG=C \
                 LC_ALL=C \
                 LANGUAGE=C \
-                PATH="$LFSPATH" \
-                prt-get update -im -fr -if -fi "$i" \
+                PATH="$STAGE_BUILD_PATH" \
+                CCACHE_DIR=/var/cache/ccache \
+                /tmp/lfs-tools/bin/pkgin -d "$i" $integrity_opts -cf /etc/pkgmk.conf \
+                || {
+                    status=$?
+                    _close_active_package_log "$status"
+                    umountfs
+                    return "$status"
+                }
+
+            package_file="$(ls -1 "$packagedir/$i#"* 2>/dev/null | tail -n1)"
+            if [ -z "$package_file" ] || [ ! -f "$package_file" ]; then
+                echo "ERROR: Stage 3 rebuilt $i but no package archive was found in $packagedir." >&2
+                _close_active_package_log 1
+                umountfs
+                return 1
+            fi
+
+            echo "Stage 3: reinstalling exact rebuilt package: $(basename "$package_file")"
+            chroot "$LFS" \
+                env -i \
+                HOME=/root \
+                PATH=/usr/bin:/usr/sbin:/bin:/sbin \
+                /usr/bin/pkgadd -u -f "/$pkgmkpkg/$(basename "$package_file")" \
                 || {
                     status=$?
                     _close_active_package_log "$status"
@@ -2694,6 +4013,12 @@ EOF
 
     if [ "${1:-}" != rebuild ]; then
         _copy_base_logs_into_rootfs
+    fi
+
+    if [ "${1:-}" = rebuild ] && [ "${BFS_CCACHE:-yes}" = yes ]; then
+        echo "Stage 3 ccache statistics after rebuild:"
+        chroot "$LFS" env -i HOME=/root PATH=/usr/bin:/usr/sbin:/bin:/sbin \
+                CCACHE_DIR=/var/cache/ccache /usr/bin/ccache -s 2>/dev/null || true
     fi
 
     umountfs
@@ -2780,6 +4105,7 @@ gcc-pass3
 m4
 ncurses
 bash
+bash-completion
 bison
 bzip2
 coreutils
@@ -2844,18 +4170,23 @@ flex
 pcre2
 grep
 bash
+bash-completion
 libtool
 gdbm
 gperf
 expat
 inetutils
 perl
+perl-class-inspector
+perl-file-sharedir-install
+perl-file-sharedir
 perl-xml-parser
 intltool
 automake
 openssl
 ca-certificates
 curl
+libtasn1
 gettext
 elfutils
 libffi
@@ -2896,8 +4227,12 @@ xxhash
 ccache
 boost
 meson
+p11-kit
+make-ca
 kmod
+cracklib
 linux-pam
+libpwquality
 shadow
 libpng
 which
@@ -2925,9 +4260,11 @@ fakeroot
 pkgutils
 dialog
 prt-get
+git
 httpup
 ports
 prt-utils
+pciutils
 lzo
 btrfs-progs
 dosfstools
@@ -2941,8 +4278,31 @@ liburcu
 xfsprogs
 openssh
 genfstab
+rsync
+traceroute
 signify
 "
+
+case "$BFS_INIT_SYSTEM" in
+    systemd)
+        ;;
+    openrc)
+        basepkg="$(printf '%s\n' "$basepkg" | sed '/^systemd$/d')
+openrc
+openrc-init-scripts"
+        ;;
+    sysvinit)
+        basepkg="$(printf '%s\n' "$basepkg" | sed '/^systemd$/d')
+sysvinit
+lfs-bootscripts"
+        ;;
+    *)
+        echo "ERROR: Unsupported BFS_INIT_SYSTEM: $BFS_INIT_SYSTEM" >&2
+        echo "Choose systemd, openrc, or sysvinit." >&2
+        exit 2
+        ;;
+esac
+
 sourcedir="$PWD/sources"
 packagedir="$PWD/packages"
 
@@ -2956,54 +4316,49 @@ pkgmksrc="var/cache/pkg/sources"
 pkgmkwork="var/cache/pkg/build-work"
 
 
-bootstrap_settings_menu() {
-    local choice=""
-    while true; do
-        echo
-        echo "Bootstrap Settings"
-        echo "  1) Interface theme"
-        echo "  2) Compiler / build settings"
-        echo "  3) Back"
-        printf "Choose [1-3]: "
-        read -r choice </dev/tty 2>/dev/null || read -r choice
-        case "$choice" in
-            1) bootstrap_theme_settings_menu ;;
-            2) compiler_build_settings_menu ;;
-            3|"") return 0 ;;
-        esac
-    done
-}
 
 case "${1:-menu}" in
     menu|"")
         _bootstrap_menu
         ;;
-    1)
+    1|toolchain|build-toolchain)
         _buildtoolchain
         ;;
-    2)
+    2|base|build-base)
         _buildbase
         ;;
-    3)
+    3|rebuild|rebuild-base)
         _buildbase rebuild
         ;;
-    4)
+    4|verify|verify-base)
         _verifybase
         ;;
-    5)
+    5|archive|archive-base)
         _compressrootfs
         ;;
-    6)
+    6|restore-base)
         _restore_rootfs
         ;;
-    7)
+    7|restore-toolchain)
         _restore_toolchain
+        ;;
+    settings|build-settings)
+        compiler_build_settings_menu
+        ;;
+    iso|build-iso|create-iso)
+        _launch_iso_builder "${@:2}"
         ;;
     8|chroot)
         _enter_bfs_chroot
         ;;
     9|install|installer)
         _launch_bfs_installer
+        ;;
+    full|full-bootstrap|all)
+        _run_full_bootstrap
+        ;;
+    resume-full|resume-bootstrap|continue-full)
+        _run_resume_full_bootstrap
         ;;
     0|stop|kill)
         _stop_bootstrap
@@ -3014,8 +4369,21 @@ Usage:
   $0             Open the interactive bootstrap menu
   $0 menu        Open the interactive bootstrap menu
   $0 1-7         Run a bootstrap stage directly
+  $0 toolchain|build-toolchain
+  $0 base|build-base
+  $0 rebuild|rebuild-base
+  $0 verify|verify-base
+  $0 archive|archive-base
+  $0 restore-base|restore-toolchain
+  $0 settings|build-settings
+  $0 iso|build-iso|create-iso
+                  Reuse a verified base (or build one if needed) and create bootable ISO media
   $0 8|chroot    Enter the BFS chroot
   $0 9|installer Launch the newest BFSOS installer from scripts/
+  $0 full|full-bootstrap|all
+                  Run the complete build, verify, and archive workflow
+  $0 resume-full|continue-full
+                  Resume at the first incomplete stage and continue through Stage 5
   $0 0|stop|kill Stop a running bootstrap process group
 EOF
         ;;

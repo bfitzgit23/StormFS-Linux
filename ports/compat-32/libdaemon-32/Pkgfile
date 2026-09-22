@@ -1,25 +1,20 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: a lightweight C library that eases the writing of UNIX daemons
 # URL: http://0pointer.de/lennart/projects/libdaemon/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: libdaemon
 
 name=libdaemon-32
 version=0.14
-release=1
+release=2
 source=(http://0pointer.de/lennart/projects/${name%-*}/${name%-*}-$version.tar.gz)
 
-build() {
-	cd ${name%-*}-$version
+build_opt="--disable-lynx"
 
-	./configure \
-		--prefix=/usr \
-		--libdir=/usr/lib32 \
-		--disable-lynx
-
-	make
-	make DESTDIR=$PKG install
+post_build() {
 
 	rm -r $PKG/usr/{include,share}
+}
+
+pre_build() {
+        _bfs_require_compat32_extension 2 || return $?
 }

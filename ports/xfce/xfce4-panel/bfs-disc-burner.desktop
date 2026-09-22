@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Disc Burner
+Exec=xfburn
+Icon=stock_xfburn
+Terminal=false
+StartupNotify=true

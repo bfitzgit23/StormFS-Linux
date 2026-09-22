@@ -1,17 +1,14 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Set the keyboard using the X Keyboard Extension
 # URL: http://xorg.freedesktop.org
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: libxkbfile
 
 name=smproxy
-version=1.0.7
-release=1
+version=1.0.8
+release=2
 source=(https://www.x.org/releases/individual/app/smproxy-$version.tar.xz)
 
-build() {
-	cd smproxy-$version
+pkg_build() {
 
 	./configure $XORG_CONFIG
 

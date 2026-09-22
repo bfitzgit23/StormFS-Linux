@@ -1,6 +1,6 @@
 # Description: Highly portable C library for encoding and decoding DER/BER data using ASN.1 schemas.
 # URL: https://www.gnu.org/software/libtasn1/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Optional: gtk-doc valgrind
 
 name=libtasn1

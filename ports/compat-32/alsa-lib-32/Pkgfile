@@ -1,22 +1,20 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: ALSA libraries
 # URL: http://www.alsa-project.org
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: alsa-lib
 
 name=alsa-lib-32
-version=1.2.12
-release=1
+version=1.2.16.1
+release=2
 source=(https://www.alsa-project.org/files/pub/lib/alsa-lib-$version.tar.bz2)
 
-build() {
-    cd alsa-lib-$version
+build_opt="--disable-python"
 
-    ./configure      --prefix=/usr --libdir=/usr/lib32 --disable-python --host=i686-pc-linux-gnu
-
-    make
-    make DESTDIR=$PKG install
+post_build() {
 
     rm -r $PKG/usr/{bin,include,share}
+}
+
+pre_build() {
+        _bfs_require_compat32_extension 2 || return $?
 }

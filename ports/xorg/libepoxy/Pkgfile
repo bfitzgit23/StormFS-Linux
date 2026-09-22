@@ -1,8 +1,6 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: A library for handling OpenGL function pointer management
 # URL: https://github.com/anholt/libepoxy
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: mesa
 
 name=libepoxy
@@ -10,8 +8,7 @@ version=1.5.10
 release=1
 source=(https://github.com/anholt/libepoxy/archive/$version/$name-$version.tar.gz)
 
-build() {
-	cd $name-$version
+pkg_build() {
 
 	mkdir build &&
 	cd    build &&

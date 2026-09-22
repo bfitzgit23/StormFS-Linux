@@ -1,8 +1,6 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: pthread dummy implementation
 # URL: https://xcb.freedesktop.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 
 name=libpthread-stubs
 version=0.5

@@ -1,9 +1,10 @@
-# Add your top line text here
-# Your line to add at the top here
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+
 name=attr
 version=2.6.0
-release=1
-source=(https://download.savannah.gnu.org/releases/attr/attr-$version.tar.gz)
+release=2
+source=(https://debian.netcologne.de/savannah/attr/attr-$version.tar.gz)
+
 pkg_build() {
     ./configure \
         --prefix=/usr \
@@ -11,9 +12,11 @@ pkg_build() {
         --libexecdir=/usr/lib \
         --localstatedir=/var \
         --mandir=/usr/share/man \
-        --libdir=/usr/lib
+        --libdir=/usr/lib \
+        --disable-static \
+        || return 1
 
-    make
+    make || return 1
 
-    make DESTDIR="$DESTDIR" install
+    make DESTDIR="$PKG" install || return 1
 }

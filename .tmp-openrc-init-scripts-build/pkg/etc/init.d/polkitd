@@ -1,0 +1,19 @@
+#!/sbin/openrc-run
+
+description="PolicyKit daemon"
+
+depend() {
+	need dbus logger
+}
+
+start() {
+	ebegin "Starting PolicyKit daemon"
+	start-stop-daemon --start --exec /usr/lib/polkit-1/polkitd
+	eend $?
+}
+
+stop() {
+	ebegin "Stopping PolicyKit daemon"
+	start-stop-daemon --stop --exec /usr/lib/polkit-1/polkitd
+	eend $?
+}

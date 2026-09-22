@@ -1,15 +1,19 @@
-# Add your top line text here
-# Your line to add at the top here
-# Description: The pipewire package contains a server and userspace API to handle multimedia pipelines. This includes a universal API to connect to multimedia devices, as well as sharing multimedia files between applications.
-# URL:         https://github.com/PipeWire/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on:  bluez gstreamer gst-plugins-base pulseaudio sbc v4l-util
-# Optional:	alsa-lib avahi fdk-aac ffmpeg libcanberra libdrm libcamera libxcb libsndfile libusb opus sdl2 valgrind xorg-libs doxygen graphviz jack ldacbt libcamera libmysofa vulkan xmltoman
-name=pipewire
-version=1.4.5
-release=1
-source=(https://github.com/PipeWire/$name/archive/$version/$name-$version.tar.gz)
-build_opt=" --prefix=/usr
-      --buildtype=release     
-      -Dsession-managers="[]" "
+# Description: Server and userspace API for handling audio and video multimedia pipelines
+# URL: https://pipewire.org/
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: bluez gstreamer gst-plugins-base pulseaudio sbc v4l-utils
+# Optional: alsa-lib avahi fdk-aac ffmpeg libcanberra libdrm libcamera libxcb libsndfile libusb opus sdl2 valgrind xorg-libs doxygen graphviz jack ldacbt libmysofa vulkan xmltoman
 
+name=pipewire
+version=1.6.8
+release=4
+
+source=(
+    https://github.com/PipeWire/$name/archive/$version/$name-$version.tar.gz
+)
+
+build_opt="-Dtests=disabled \
+-Dinstalled_tests=disabled \
+-Dexamples=disabled \
+-Dsession-managers=[] \
+-Dsystemd-user-service=enabled"

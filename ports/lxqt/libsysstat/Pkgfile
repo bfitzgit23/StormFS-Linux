@@ -1,8 +1,9 @@
-# Add your top line text here
-# Your line to add at the top here
+# Description: Libsysstat component for LXQt
+# URL: https://github.com/lxqt/libsysstat
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: lxqt-build-tools
 
 name=libsysstat
-version=1.0.0
-release=1
+version=1.1.0
+release=2
 source=(https://github.com/lxqt/${name}/releases/download/${version}/${name}-${version}.tar.xz)

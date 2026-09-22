@@ -1,6 +1,6 @@
 # Description: Secure communications library implementing TLS, DTLS, and related protocols
 # URL: https://gnutls.org/
-# Maintainer: Brian Madonna email [bmadonnaster@gmail.com](mailto:bmadonnaster@gmail.com)
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: libunistring nettle p11-kit libtasn1
 # Optional: brotli libidn2
 
@@ -15,13 +15,13 @@ local configure_options=(
 --docdir=/usr/share/doc/$name-$version
 --with-default-trust-store-pkcs11=pkcs11:
 )
-if pkg-config --exists libbrotlienc 2>/dev/null; then
+if pkgconf --exists libbrotlienc 2>/dev/null; then
     configure_options+=(--with-brotli)
 else
     configure_options+=(--without-brotli)
 fi
 
-if pkg-config --exists libidn2 2>/dev/null; then
+if pkgconf --exists libidn2 2>/dev/null; then
     configure_options+=(--with-idn)
 else
     configure_options+=(--without-idn)

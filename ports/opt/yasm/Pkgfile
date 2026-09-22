@@ -1,20 +1,17 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: A complete rewrite of the NASM assembler under the new BSD License
 # URL: https://www.tortall.net/projects/yasm/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Optional: python cython
 
 name=yasm
 version=1.3.0
-release=2
+release=4
 source=(https://www.tortall.net/projects/yasm/releases/$name-$version.tar.gz)
 
-build () {
-	cd $name-$version
+pkg_build() {
 	sed -i 's#) ytasm.*#)#' Makefile.in &&
-	./configure --prefix=/usr
+	CFLAGS="${CFLAGS} -std=gnu17" ./configure --prefix=/usr || return 1
 
-	make
-	make DESTDIR=$PKG install
+	make || return 1
+	make DESTDIR="$PKG" install || return 1
 }

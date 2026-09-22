@@ -1,8 +1,6 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: The Sound Theme Freedesktop package contains sound themes for the desktop.
 # URL:          https://people.freedesktop.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on:  
 
 name=sound-theme-freedesktop
@@ -10,8 +8,7 @@ version=0.8
 release=1
 source=(https://people.freedesktop.org/~mccann/dist/$name-$version.tar.bz2)
 
-build() {
-	cd $name-$version
+pkg_build() {
 
 	./configure --prefix=/usr &&
 make

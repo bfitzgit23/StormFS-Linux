@@ -1,4 +1,3 @@
-livecd /home/gentoo/BFSOS # cat bootstrap.sh
 #!/bin/bash -e
 
 # Bootstrap environments do not necessarily have generated UTF-8 locales.
@@ -419,6 +418,12 @@ _buildbase() {
 
     cp -r ports/ "$LFS/usr/"
 
+    if [ "$BFS_INIT_SYSTEM" != systemd ] &&
+       [ -d "$SCRIPT_DIR/profiles/init/overlays/$BFS_INIT_SYSTEM" ]; then
+        cp -a "$SCRIPT_DIR/profiles/init/overlays/$BFS_INIT_SYSTEM/." \
+            "$LFS/usr/ports/"
+    fi
+
     cp files/pkgin "$TOOLS/bin/pkgin"
     chmod +x "$TOOLS/bin/pkgin"
 
@@ -742,10 +747,8 @@ openssl
 ca-certificates
 curl
 libarchive
-"
-
-basepkg="
-aaa_filesystem
+"basepkg="
+ aaa_filesystem
 linux-headers
 man-pages
 glibc
@@ -783,6 +786,9 @@ gperf
 expat
 inetutils
 perl
+perl-class-inspector
+perl-file-sharedir-install
+perl-file-sharedir
 perl-xml-parser
 intltool
 autoconf
@@ -826,7 +832,9 @@ util-linux
 meson
 ninja
 kmod
+cracklib
 linux-pam
+libpwquality
 shadow
 libpng
 which
@@ -861,8 +869,37 @@ prt-get
 httpup
 ports
 prt-utils
+rsync
+traceroute
 signify
 "
+
+BFS_INIT_SYSTEM="${BFS_INIT_SYSTEM-}"
+BFS_INIT_SYSTEM_ENV="$BFS_INIT_SYSTEM"
+if [ -r "$SCRIPT_DIR/.bfs-init-profile" ]; then
+    # shellcheck disable=SC1090
+    . "$SCRIPT_DIR/.bfs-init-profile"
+fi
+[ -n "$BFS_INIT_SYSTEM_ENV" ] && BFS_INIT_SYSTEM="$BFS_INIT_SYSTEM_ENV"
+[ -n "$BFS_INIT_SYSTEM" ] || BFS_INIT_SYSTEM=systemd
+case "$BFS_INIT_SYSTEM" in
+    systemd)
+        ;;
+    openrc)
+        basepkg="$(printf '%s\n' "$basepkg" | sed '/^systemd$/d')
+openrc
+openrc-init-scripts"
+        ;;
+    sysvinit)
+        basepkg="$(printf '%s\n' "$basepkg" | sed '/^systemd$/d')
+sysvinit
+lfs-bootscripts"
+        ;;
+    *)
+        echo "ERROR: Unsupported BFS_INIT_SYSTEM: $BFS_INIT_SYSTEM" >&2
+        exit 2
+        ;;
+esac
 
 sourcedir="$PWD/sources"
 packagedir="$PWD/packages"

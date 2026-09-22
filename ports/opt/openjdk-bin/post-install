@@ -1,2 +1,0 @@
-#! /bin/sh  
-printf " Run 'venom-java-manager help' to switching between JVM\n"

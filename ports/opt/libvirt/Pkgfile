@@ -1,51 +1,36 @@
-# Description: API for virtualization
+# Description: Toolkit for managing virtualization hosts
 # URL: https://libvirt.org/
-# Maintainer: Venom Linux Team, venomlinux at disroot dot org
-# Depends on: libnl rpcsvc-proto python3-docutils qemu parted swtpm xf86-video-qxl
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: json-c dbus dnsmasq glib gnutls libcap-ng libnl libpcap libseccomp libssh2 libxml2 libxslt nftables parted polkit qemu readline systemd yajl
 
 name=libvirt
-version=12.4.0
-release=1
-source=(https://libvirt.org/sources/$name-$version.tar.xz rc.libvirtd rc.virtlogd libvirtd.conf qemu.conf)
+version=12.7.0
+release=3
+source=(
+    https://download.libvirt.org/libvirt-$version.tar.xz
+    default-network.xml
+)
 
-build() {
-	meson setup $name-$version build \
-		--libexecdir=/usr/lib/$name \
-		-Drunstatedir=/run \
-		-Ddriver_qemu=enabled \
-		-Dqemu_user=libvirt \
-		-Dqemu_group=libvirt \
-		-Dtests=disabled \
-		-Dnetcf=disabled \
-		-Dopenwsman=disabled \
-		-Dapparmor=disabled \
-		-Dapparmor_profiles=disabled \
-		-Dselinux=disabled \
-		-Dwireshark_dissector=disabled \
-		-Ddriver_bhyve=disabled \
-		-Ddriver_hyperv=disabled \
-		-Ddriver_libxl=disabled \
-		-Ddriver_vz=disabled \
-		-Dsanlock=disabled \
-		-Dsecdriver_apparmor=disabled \
-		-Dsecdriver_selinux=disabled \
-		-Dstorage_vstorage=disabled \
-		-Ddtrace=disabled \
-		-Dnumad=disabled \
-		-Dstorage_zfs=disabled\
-		-Dstorage_rbd=disabled
-	meson compile -C build
-	DESTDIR=$PKG meson install --no-rebuild -C build
+# Upstream recommends -Dsystem=true for distro/vendor layouts. Explicitly
+# require the drivers BFSOS needs so a missing dependency fails at configure.
+build_opt=(
+    -Dsystem=true
+    -Ddriver_libvirtd=enabled
+    -Ddriver_qemu=enabled
+    -Ddriver_network=enabled
+    -Ddriver_secrets=enabled
+    -Dstorage_dir=enabled
+    -Dstorage_fs=enabled
+    -Dstorage_disk=enabled
+    -Dstorage_lvm=enabled
+    -Dstorage_scsi=enabled
+    -Dtests=disabled
+)
 
-	install -D -o root -g root -m 0755 $SRC/rc.libvirtd \
-		$PKG/etc/rc.d/libvirtd
-	install -D -o root -g root -m 0755 $SRC/rc.virtlogd \
-		$PKG/etc/rc.d/virtlogd
-	install -D -o root -g root -m 0644 $SRC/libvirtd.conf \
-		$PKG/etc/libvirt/libvirtd.conf
-	install -D -o root -g root -m 0644 $SRC/qemu.conf \
-		$PKG/etc/libvirt/qemu.conf
-
-	rm -fr $PKG/usr/share/locale $PKG/run
-        rm -rf $PKG/usr/lib/systemd
+post_build() {
+    # Ship a deterministic default NAT network instead of relying on an
+    # upstream sample file being present in a particular release.
+    install -Dm644 "$SRC/default-network.xml"         "$PKG/etc/libvirt/qemu/networks/default.xml" || return 1
+    install -d "$PKG/etc/libvirt/qemu/networks/autostart" || return 1
+    ln -sf ../default.xml         "$PKG/etc/libvirt/qemu/networks/autostart/default.xml" || return 1
 }

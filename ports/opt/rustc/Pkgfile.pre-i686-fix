@@ -1,0 +1,75 @@
+# Description: Rust compiler and Cargo toolchain
+# URL: https://www.rust-lang.org/
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: cmake curl ninja python3
+# Optional: git libssh2
+
+name=rustc
+version=1.98.1
+release=2
+source=(https://static.rust-lang.org/dist/rustc-$version-src.tar.xz)
+
+pkg_build() {
+    local prefix="/opt/rustc-$version"
+
+    cat > bootstrap.toml <<EOF_BOOTSTRAP
+change-id = "ignore"
+
+[llvm]
+download-ci-llvm = false
+link-shared = false
+ninja = true
+
+[build]
+docs = false
+locked-deps = true
+tools = ["cargo", "clippy", "rustdoc", "rustfmt"]
+target = ["x86_64-unknown-linux-gnu"]
+
+[install]
+prefix = "$prefix"
+docdir = "share/doc/rustc-$version"
+
+[rust]
+channel = "stable"
+lld = false
+lto = "thin"
+codegen-units = 1
+codegen-tests = false
+
+[target.x86_64-unknown-linux-gnu]
+cc = "/usr/bin/gcc"
+cxx = "/usr/bin/g++"
+ar = "/usr/bin/gcc-ar"
+ranlib = "/usr/bin/gcc-ranlib"
+EOF_BOOTSTRAP
+
+    python3 x.py build || return 1
+
+    DESTDIR="$PKG" python3 x.py install || return 1
+
+    test -x "$PKG$prefix/bin/rustc" || {
+        echo "ERROR: rustc was not installed into package staging tree"
+        return 1
+    }
+
+    test -x "$PKG$prefix/bin/cargo" || {
+        echo "ERROR: cargo was not installed into package staging tree"
+        return 1
+    }
+
+    install -d "$PKG/opt"
+    ln -sfn "rustc-$version" "$PKG/opt/rustc"
+
+    # Expose the Rust toolchain through the normal system PATH.
+    # /opt/rustc is the stable symlink to the currently packaged version.
+    install -d "$PKG/usr/bin"
+
+    for tool in         rustc         cargo         rustdoc         rustfmt         cargo-fmt         cargo-clippy         clippy-driver
+    do
+        if [ -x "$PKG$prefix/bin/$tool" ]; then
+            ln -sfn "/opt/rustc/bin/$tool" "$PKG/usr/bin/$tool"
+        fi
+    done
+
+}

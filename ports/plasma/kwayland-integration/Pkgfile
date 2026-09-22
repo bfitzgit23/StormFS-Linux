@@ -1,14 +1,13 @@
-# Add your top line text here
-# Your line to add at the top here
-# Depends on: 
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: kconfig kcoreaddons kglobalaccel ki18n kio kwayland libplasma plasma5support qt6
 
 name=kwayland-integration
-version=6.3.4
+version=6.7.5
 release=1
-source=(https://download.kde.org/stable/plasma/${version}/$name-$version.tar.xz)
-build_opt="-D CMAKE_INSTALL_PREFIX=$KF6_PREFIX 
-            -D CMAKE_INSTALL_LIBEXECDIR=libexec 
-            -D CMAKE_PREFIX_PATH=$QT6DIR        
-            -D CMAKE_BUILD_TYPE=Release         
-            -D BUILD_TESTING=OFF                
-            -W no-dev .."
+source=(https://download.kde.org/stable/plasma/$version/$name-$version.tar.xz)
+build_opt="-DCMAKE_INSTALL_PREFIX=/opt/kf6 
+            -DCMAKE_INSTALL_LIBEXECDIR=libexec 
+            -DCMAKE_PREFIX_PATH=/opt/qt6;/opt/kf6        
+            -DCMAKE_BUILD_TYPE=Release         
+            -DBUILD_TESTING=OFF                
+            -Wno-author"

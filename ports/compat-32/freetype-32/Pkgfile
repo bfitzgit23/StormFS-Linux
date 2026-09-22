@@ -1,27 +1,20 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: A free and portable TrueType font rendering engine
 # URL: https://www.freetype.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: bzip2-32 freetype libpng-32
 
 name=freetype-32
-version=2.13.3
-release=1
-source=(https://sourceforge.net/projects/freetype/files/freetype2/$version/freetype-$version.tar.xz
-cross-file.txt)
+version=2.14.3
+release=3
+source=(https://sourceforge.net/projects/freetype/files/freetype2/$version/freetype-$version.tar.xz)
 
-build() {
-	meson setup ${name%-*}-$version build --cross-file cross-file.txt  \
-		--prefix=/usr \
-		--libdir=/usr/lib32 \
-		--buildtype=plain \
-		--wrap-mode=nodownload \
-		-D b_lto=true \
-		-D b_pie=true \
-		-D default_library=shared
-	meson compile -C build -j ${JOBS:-1}
-	DESTDIR=$PKG meson install -C build
+build_opt="-D default_library=shared"
 
-	rm -r $PKG/usr/{include,share/aclocal}
+post_build() {
+
+        rm -rf "$PKG/usr/include" "$PKG/usr/share/aclocal"
+}
+
+pre_build() {
+        _bfs_require_compat32_extension 2 || return $?
 }

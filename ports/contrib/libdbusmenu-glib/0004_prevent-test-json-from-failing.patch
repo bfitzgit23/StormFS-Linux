@@ -1,0 +1,14 @@
+Origin: https://bazaar.launchpad.net/~dbusmenu-team/libdbusmenu/trunk.16.10/revision/497/tests/Makefile.am#tests/Makefile.am
+
+=== modified file 'tests/Makefile.am'
+--- a/tests/Makefile.am	2019-09-13 16:53:05 +0000
++++ b/tests/Makefile.am	2022-09-28 21:56:18 +0000
+@@ -219,6 +219,7 @@
+ 	@echo export G_MESSAGES_DEBUG=all >> $@
+ 	@echo $(XVFB_RUN) >> $@
+ 	@echo $(DBUS_RUNNER) --task ./test-json-client --wait-for org.dbusmenu.test --task-name Client --parameter $(top_builddir)/tools/dbusmenu-dumper --parameter test-json-01.output.json --task ./test-json-server --task-name Server --parameter $(srcdir)/test-json-01.json >> $@
++	@echo sed -i \"/Using cross-namespace EXTERNAL authentication \(this will deadlock if server is GDBus \< 2.73.3\)/d\" test-json-01.output.json >> $@
+ 	@echo diff $(srcdir)/test-json-01.json test-json-01.output.json \> /dev/null >> $@
+ 	@chmod +x $@
+ 
+

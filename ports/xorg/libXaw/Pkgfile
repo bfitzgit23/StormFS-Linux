@@ -1,19 +1,16 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: X Athena Widgets toolkit
 # URL: https://xorg.freedesktop.org
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: libXmu libXpm
 
 name=libXaw
 version=1.0.16
-release=1
+release=2
 source=(https://www.x.org/releases/individual/lib/libXaw-$version.tar.xz)
 
-build() {
-	cd libXaw-$version
+pkg_build() {
 
-	  ./configure $XORG_CONFIG $docdir \
+	  ./configure $XORG_CONFIG --docdir=/usr/share/doc/$name-$version \
                   --with-appdefaultdir=/etc/X11/app-defaults
 
 	make

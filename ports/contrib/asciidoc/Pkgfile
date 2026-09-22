@@ -1,21 +1,16 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Text based document generation.
 # URL: https://asciidoc.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on: docbook-xsl python3-build python3-installer
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: docbook-xsl-nons python3-build python3-installer
 
 name=asciidoc
-version=10.2.0
-release=1
+version=10.2.1
+release=4
 source=(https://github.com/$name-py/$name-py/archive/$version/$name-py-$version.tar.gz)
 
-build() {
-  cd $name-py-$version
-  PYTHON='/usr/bin/python3'
-  autoconf
-  ./configure --prefix=/usr --sysconfdir=/usr/etc
+build_opt="--sysconfdir=/etc"
 
-  make
-  make DESTDIR=$PKG install
+pre_build() {
+  export PYTHON=/usr/bin/python3
+  autoconf || return 1
 }

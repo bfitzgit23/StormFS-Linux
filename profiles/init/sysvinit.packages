@@ -1,0 +1,8 @@
+# BFSOS build-time init profile: SysVinit
+sysvinit
+lfs-bootscripts
+dbus
+networkmanager
+acpid
+bluez
+gpm

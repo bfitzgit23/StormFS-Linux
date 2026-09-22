@@ -1,34 +1,36 @@
-# Add your top line text here
-# Your line to add at the top here
-# Description: The Avahi package is a system which facilitates service discovery on a local network.
-# URL:          https://github.com/lathiat/avahi/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on:  glib gobject-introspection gtk gtk3 libdaemon libglade qt6
-# Optional:  D-Bus-Python libevent PyGTK doxygen xmltoman
+# Description: Multicast DNS/DNS-SD service discovery stack
+# URL: https://github.com/avahi/avahi
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: glib gobject-introspection gtk3 libdaemon
+# Optional: dbus-python libevent doxygen xmltoman qt5
 
 name=avahi
-version=0.8
-release=1
-source=(https://github.com/lathiat/$name/releases/download/v$version/$name-$version.tar.gz
-$name-$version-ipv6_race_condition_fix-1.patch)
-build_opt="    --prefix=/usr        
-    --sysconfdir=/etc    
-    --localstatedir=/var 
-    --disable-static     
-    --disable-libevent   
-    --disable-mono       
-    --disable-monodoc    
-    --disable-python     
-    --disable-qt3        
-    --disable-qt4
-    --disable-qt5
-    --enable-qt6        
-    --enable-core-docs   
-    --with-distro=none   
-    --with-dbus-system-address='unix:path=/run/dbus/system_bus_socket'"
+version=0.9-rc5
+release=3
+
+source=(
+    https://github.com/avahi/avahi/archive/v$version/avahi-$version.tar.gz
+    https://www.linuxfromscratch.org/patches/blfs/svn/avahi-$version-ipv6_race_condition_fix-1.patch
+)
+
+build_opt="\
+    --disable-static \
+    --disable-libevent \
+    --disable-mono \
+    --disable-monodoc \
+    --disable-python \
+    --disable-qt3 \
+    --disable-qt4 \
+    --disable-manpages \
+    --enable-core-docs \
+    --with-distro=none"
+
 pre_build() {
-sed -i '426a if (events & AVAHI_WATCH_HUP) { \
-client_free(c); \
-return; \
-}' avahi-daemon/simple-protocol.c
+    autoreconf -fiv || return 1
+
+    if prt-get isinst qt5 >/dev/null 2>&1; then
+        build_opt="$build_opt --enable-qt5"
+    else
+        build_opt="$build_opt --disable-qt5"
+    fi
 }

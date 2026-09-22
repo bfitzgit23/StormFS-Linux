@@ -1,23 +1,22 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Optimized BLAS library
 # URL: https://www.openblas.net/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: gcc-fortran
 
 name=openblas
-version=0.3.28
-release=1
-source=(https://github.com/xianyi/OpenBLAS/archive/v$version/OpenBLAS-$version.tar.gz)
+version=0.3.34
+release=4
+source=(https://github.com/OpenMathLib/OpenBLAS/archive/v$version/OpenBLAS-$version.tar.gz)
 
-build () {
-  cd OpenBLAS-$version
-
+# Custom build required: upstream Make variables and BLAS compatibility links are package-specific
+pkg_build() {
+  (
+    set -e
   export MAKE_NB_JOBS=-1 \
     COMMON_OPT=" " \
     FCOMMON_OPT=" "
 
-  local flags=(
+  local build_opt=(
     PREFIX=$PKG/usr
     NO_LAPACK=1
     NO_LAPACKE=1
@@ -31,12 +30,12 @@ build () {
     CFLAGS="$CFLAGS $CPPFLAGS"
   )
 
-  make "${flags[@]}"
+  make "${build_opt[@]}" || return 1
 
-  make "${flags[@]}" install
+  make "${build_opt[@]}" install || return 1
 
   # Symlink to provide blas & cblas
-  cd $PKG/usr/lib/
+  cd "$PKG/usr/lib" || return 1
   local _lapackver='3.11.0'
   # BLAS
   ln -sf libopenblasp-r$version.so libblas.so
@@ -53,8 +52,8 @@ build () {
   #rm -r $PKG/usr/include/lapack*
 
   # fix paths
-  sed -i 's|'$PKG'||g' $PKG/usr/lib/cmake/$name/*.cmake
-  sed -i 's|'$PKG'||g' $PKG/usr/lib/pkgconfig/openblas.pc
+  sed -i 's|'$PKG'||g' "$PKG"/usr/lib/cmake/$name/*.cmake || return 1
+  sed -i 's|'$PKG'||g' "$PKG/usr/lib/pkgconfig/openblas.pc" || return 1
 
   # remove host CPU info if built with DYNAMIC_ARCH=1
   sed -i '/#define OPENBLAS_NEEDBUNDERSCORE/,/#define OPENBLAS_VERSION/{//!d}' \
@@ -63,4 +62,5 @@ build () {
   # provide pkgconfig files for blas and cblas
   ln -s openblas.pc $PKG/usr/lib/pkgconfig/blas.pc
   ln -s openblas.pc $PKG/usr/lib/pkgconfig/cblas.pc
+  )
 }

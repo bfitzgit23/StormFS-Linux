@@ -1,0 +1,37 @@
+# Description: Mesa 3D Graphics Library
+# URL: https://www.mesa3d.org/
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: elfutils-32 expat-32 libdrm-32 libglvnd-32 llvm-32 mesa libXdamage-32 libXrandr-32 libxshmfence-32 libXvMC-32 libXxf86vm-32 wayland-32
+# Optional: clang-32 glslang libclc libva-32 spirv-llvm-translator-32 vulkan-loader-32 wayland-protocols
+
+name=mesa-32
+version=26.2.2
+release=4
+source=(https://archive.mesa3d.org/mesa-$version.tar.xz
+        x86-linux-gnu
+        x86-linux-gnu-ccache)
+
+# Custom build required: 32-bit cross build plus conditional Mesa drivers/features
+pkg_build() {
+    ./configure "${build_opt[@]}" || return 1
+
+    make || return 1
+
+    (
+        cd python || return 1
+        python3 setup.py build || return 1
+        python3 setup.py install \
+            --root="$PKG" \
+            --prefix=/usr \
+            --skip-build || return 1
+    )
+
+    make DESTDIR="$PKG" install || return 1
+}
+
+pre_build() {
+    sed -i \
+        's/const char \*msg ATTRIBUTE_UNUSED/const char *msg/' \
+        osinfo/osinfo_loader.c || return 1
+}
+

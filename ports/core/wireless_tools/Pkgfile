@@ -1,6 +1,6 @@
 # Description: Legacy Linux Wireless Extensions configuration utilities
 # URL: https://hewlettpackard.github.io/wireless-tools/Tools.html
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on:
 
 name=wireless_tools

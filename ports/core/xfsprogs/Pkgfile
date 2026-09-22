@@ -1,10 +1,10 @@
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 name=xfsprogs
 version=7.1.1
 release=1
 source=(https://www.kernel.org/pub/linux/utils/fs/xfs/xfsprogs/$name-$version.tar.xz)
 
-build() {
-cd "$name-$version"
+pkg_build() {
 
 make configure
 

@@ -1,7 +1,19 @@
 #!/bin/sh
-groupadd -g 64 sddm &&
-useradd  -c "sddm Daemon" \
-         -d /var/lib/sddm \
-         -u 64 -g sddm    \
-         -s /bin/false sddm
-         
+
+set -eu
+
+if ! getent group sddm >/dev/null 2>&1; then
+    groupadd -g 64 sddm
+fi
+
+if ! getent passwd sddm >/dev/null 2>&1; then
+    useradd \
+        -c "sddm Daemon" \
+        -d /var/lib/sddm \
+        -u 64 \
+        -g sddm \
+        -s /bin/false \
+        sddm
+fi
+
+exit 0

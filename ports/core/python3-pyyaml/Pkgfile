@@ -1,18 +1,15 @@
-# Add your top line text here
-# Your line to add at the top here
-# Description: Python bindings for YAML, using fast libYAML library
-# URL: https://pyyaml.org/wiki/PyYAML
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on: libyaml python3-cython
+# Description: Python bindings for YAML with optional LibYAML acceleration
+# URL: https://pyyaml.org/
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: libyaml python3-build python3-cython python3-installer python3-setuptools python3-wheel
 
 name=python3-pyyaml
-version=6.0.2
-release=1
-source=(https://pypi.org/packages/source/p/pyyaml/pyyaml-$version.tar.gz)
+version=6.0.3
+release=3
+source=(https://files.pythonhosted.org/packages/source/p/pyyaml/pyyaml-$version.tar.gz)
 
-build() {
-  cd pyyaml-$version
-
-  /usr/bin/python3 -m build --wheel --skip-dependency-check --no-isolation
-  /usr/bin/python3 -m installer --compile-bytecode 2 --destdir=$PKG dist/*.whl
+pkg_build() {
+    PYYAML_FORCE_CYTHON=1 \
+        python3 -m build --wheel --skip-dependency-check --no-isolation || return $?
+    python3 -m installer --compile-bytecode 2 --destdir="$PKG" dist/*.whl || return $?
 }

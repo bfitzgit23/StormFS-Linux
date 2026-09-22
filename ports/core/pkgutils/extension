@@ -1,11 +1,81 @@
 # extra function for pkgmk
-if [ "$PKGMK_ARCH" = 32 ]; then
+export BFS_PKG_EXTENSION_API=2
+
+_bfs_require_compat32_extension() {
+	local required="${1:-2}"
+
+	if [ "${BFS_PKG_EXTENSION_API:-0}" -lt "$required" ]; then
+		echo "pkgmk: compat-32 recipe requires BFSOS pkgutils extension API $required or newer" >&2
+		echo "pkgmk: update and install the core/pkgutils package before rebuilding compat-32" >&2
+		return 1
+	fi
+}
+
+if [ "${PKGMK_ARCH:-}" = 32 ]; then
+        # pkgmk.conf owns the multilib flags and host policy.  Keep compiler
+        # command names plain here so recipes can safely pass CC/CXX through
+        # build systems without embedding duplicate -m32 options.
+        export BFS_MULTILIB_HOST="${BFS_MULTILIB_HOST:-i686-pc-linux-gnu}"
+        export CHOST="${CHOST:-$BFS_MULTILIB_HOST}"
         export PKG_CONFIG_LIBDIR="/usr/lib32/pkgconfig:/usr/share/pkgconfig"
-        export CC="${CC:-gcc} -m32"
-        export CXX="${CXX:-g++} -m32"
+        export PKG_CONFIG_PATH=""
+        export CC="${CC:-gcc}"
+        export CXX="${CXX:-g++}"
+        export BFS_PKG_LIBDIR=/usr/lib32
+        export BFS_PKG_LIBDIR_NAME=lib32
 else
         unset PKGMK_ARCH
+        export BFS_PKG_LIBDIR=/usr/lib
+        export BFS_PKG_LIBDIR_NAME=lib
 fi
+
+# Make BFSOS non-/usr Qt6/KF6 prefixes visible to all package builds.
+# This is intentionally done by pkgmk rather than relying on the invoking
+# login shell or sudo environment.
+_bfs_prepend_env_path() {
+        local var=$1
+        local dir=$2
+        local current="${!var:-}"
+
+        [ -d "$dir" ] || return 0
+
+        case ":$current:" in
+                *":$dir:"*) return 0 ;;
+        esac
+
+        if [ -n "$current" ]; then
+                printf -v "$var" '%s:%s' "$dir" "$current"
+        else
+                printf -v "$var" '%s' "$dir"
+        fi
+        export "$var"
+}
+
+_bfs_setup_prefix_env() {
+        # Do not contaminate compat32 builds with 64-bit /opt libraries.
+        [ "${PKGMK_ARCH:-}" != 32 ] || return 0
+
+        local qt6_prefix="${QT6DIR:-/opt/qt6}"
+        local kf6_prefix="${KF6_PREFIX:-/opt/kf6}"
+
+        if [ -d "$qt6_prefix" ]; then
+                export QT6DIR="$qt6_prefix"
+                _bfs_prepend_env_path CMAKE_PREFIX_PATH "$qt6_prefix"
+                _bfs_prepend_env_path CPLUS_INCLUDE_PATH "$qt6_prefix/include"
+                _bfs_prepend_env_path LIBRARY_PATH "$qt6_prefix/lib"
+                _bfs_prepend_env_path PKG_CONFIG_PATH "$qt6_prefix/lib/pkgconfig"
+        fi
+
+        if [ -d "$kf6_prefix" ]; then
+                export KF6_PREFIX="$kf6_prefix"
+                _bfs_prepend_env_path CMAKE_PREFIX_PATH "$kf6_prefix"
+                _bfs_prepend_env_path CPLUS_INCLUDE_PATH "$kf6_prefix/include"
+                _bfs_prepend_env_path LIBRARY_PATH "$kf6_prefix/lib"
+                _bfs_prepend_env_path PKG_CONFIG_PATH "$kf6_prefix/lib/pkgconfig"
+        fi
+}
+
+_bfs_setup_prefix_env
 
 # use these only if build() function not exist
 if [ ! "$(command -v build)" ]; then
@@ -37,8 +107,101 @@ if [ ! "$(command -v build)" ]; then
 		fi
 	}
 
+	_bfs_collect_build_opts() {
+		_bfs_build_opts=()
+		case "$(declare -p build_opt 2>/dev/null || true)" in
+			"declare -a "*|"declare -A "*)
+				_bfs_build_opts=("${build_opt[@]}")
+				;;
+			*)
+				# Preserve the historical scalar build_opt behavior: whitespace
+				# separates arguments.  Arrays are preferred when an option itself
+				# needs embedded whitespace.
+				if [ -n "${build_opt:-}" ]; then
+					read -r -a _bfs_build_opts <<< "${build_opt//$'\n'/ }"
+				fi
+				;;
+		esac
+	}
+
+	_bfs_build_opt_has() {
+		local needle=$1 arg
+		_bfs_collect_build_opts
+		for arg in "${_bfs_build_opts[@]}"; do
+			case "$arg" in
+				"$needle"|"$needle="*) return 0 ;;
+			esac
+		done
+		return 1
+	}
+
+	_bfs_cmake_policy_default() {
+		_bfs_cmake_policy_args=()
+		[ "${PKGMK_CMAKE_POLICY_COMPAT:-yes}" != no ] || return 0
+		_bfs_build_opt_has -DCMAKE_POLICY_VERSION_MINIMUM && return 0
+
+		local major
+		major=$(cmake --version 2>/dev/null | awk 'NR==1 {split($3,v,"."); print v[1]+0}')
+		if [ "${major:-0}" -ge 4 ]; then
+			_bfs_cmake_policy_args=(
+				"-DCMAKE_POLICY_VERSION_MINIMUM=${PKGMK_CMAKE_POLICY_VERSION_MINIMUM:-3.5}"
+			)
+		fi
+	}
+
+	_bfs_cmake_test_defaults() {
+		_bfs_cmake_test_args=()
+		[ "${PKGMK_RUN_TESTS:-no}" != yes ] || return 0
+		[ "${run_tests:-no}" != yes ] || return 0
+
+		local opt
+		for opt in BUILD_TESTING BUILD_TESTS ENABLE_TESTS; do
+			_bfs_build_opt_has "-D$opt" && continue
+			if grep -Eiq "(^|[^A-Za-z0-9_])(option[[:space:]]*\\([[:space:]]*$opt([[:space:]]|\\))|set[[:space:]]*\\([[:space:]]*$opt[[:space:]].*CACHE[[:space:]]+BOOL)" ../CMakeLists.txt 2>/dev/null; then
+				_bfs_cmake_test_args+=("-D$opt=OFF")
+			elif [ "$opt" = BUILD_TESTING ] && grep -Eiq 'include[[:space:]]*\\([[:space:]]*CTest[[:space:]]*\\)' ../CMakeLists.txt 2>/dev/null; then
+				_bfs_cmake_test_args+=("-DBUILD_TESTING=OFF")
+			fi
+		done
+	}
+
+	_bfs_configure_test_defaults() {
+		_bfs_configure_test_args=()
+		[ "${PKGMK_RUN_TESTS:-no}" != yes ] || return 0
+		[ "${run_tests:-no}" != yes ] || return 0
+
+		local help opt
+		help=$(./configure --help 2>/dev/null || true)
+		for opt in --disable-tests --disable-test --disable-checks --disable-check; do
+			case "$help" in
+				*"$opt"*) _bfs_configure_test_args+=("$opt"); break ;;
+			esac
+		done
+	}
+
+	_bfs_meson_disable_supported_tests() {
+		[ "${PKGMK_RUN_TESTS:-no}" != yes ] || return 0
+		[ "${run_tests:-no}" != yes ] || return 0
+
+		local cfg opt
+		cfg=$(meson configure _meson_build 2>/dev/null || true)
+		for opt in tests test build_tests build-tests enable_tests enable-tests; do
+			_bfs_build_opt_has "-D$opt" && continue
+			if printf '%s\n' "$cfg" | grep -Eq "^[[:space:]]*$opt[[:space:]]"; then
+				if meson configure _meson_build "-D$opt=disabled" >/dev/null 2>&1; then
+					printf 'pkgmk: disabled supported Meson test option %s\n' "$opt"
+				elif meson configure _meson_build "-D$opt=false" >/dev/null 2>&1; then
+					printf 'pkgmk: disabled supported Meson test option %s\n' "$opt"
+				else
+					echo "pkgmk: warning: detected Meson option '$opt' but could not disable it safely" >&2
+				fi
+			fi
+		done
+	}
+
 	_makefile_build() {
-		make $build_opt || return $?
+		_bfs_collect_build_opts
+		make "${_bfs_build_opts[@]}" || return $?
 		make \
 			PREFIX=/usr \
 			prefix=/usr \
@@ -46,63 +209,98 @@ if [ ! "$(command -v build)" ]; then
 			sysconfdir=/etc \
 			MANDIR=/usr/share/man \
 			mandir=/usr/share/man \
-			LIBDIR=/usr/lib \
-			PKGCONFIGDIR=/usr/lib/pkgconfig \
-			$build_opt \
-			DESTDIR=$PKG install || return $?
+			LIBDIR="$BFS_PKG_LIBDIR" \
+			libdir="$BFS_PKG_LIBDIR" \
+			PKGCONFIGDIR="$BFS_PKG_LIBDIR/pkgconfig" \
+			"${_bfs_build_opts[@]}" \
+			DESTDIR="$PKG" install || return $?
 	}
 
 	_perlmodule_build() {
 		perl Makefile.PL || return $?
 		make || return $?
-		make DESTDIR=$PKG install || return $?
+		make DESTDIR="$PKG" install || return $?
 	}
 
 	_cmake_build() {
-		mkdir -p cmakebuild
-		cd cmakebuild
+		_bfs_collect_build_opts
+		mkdir -p cmakebuild || return $?
+		cd cmakebuild || return $?
+		_bfs_cmake_policy_default
+		_bfs_cmake_test_defaults
 		cmake -DCMAKE_INSTALL_PREFIX=/usr \
 			-DCMAKE_INSTALL_SYSCONFDIR=/etc \
-			-DCMAKE_INSTALL_LIBDIR=lib  \
-			-DCMAKE_INSTALL_LIBEXECDIR=lib  \
+			-DCMAKE_INSTALL_LIBDIR="$BFS_PKG_LIBDIR_NAME" \
+			-DCMAKE_INSTALL_LIBEXECDIR="$BFS_PKG_LIBDIR_NAME" \
 			-DCMAKE_BUILD_TYPE=Release \
 			-DFETCHCONTENT_FULLY_DISCONNECTED=ON \
 			-DCMAKE_C_FLAGS_RELEASE="$CFLAGS" \
 			-DCMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
-			$build_opt \
+			"${_bfs_cmake_policy_args[@]}" \
+			"${_bfs_cmake_test_args[@]}" \
+			"${_bfs_build_opts[@]}" \
 			-G Ninja .. || return $?
-		if [ -f build.ninja ]; then
-			ninja || return $?
-			DESTDIR=$PKG ninja install || return $?
-		else
-			cmake --build build || return $?
-			DESTDIR=$PKG cmake --install build || return $?
-		fi
+		cmake --build . --parallel "${JOBS:-1}" || return $?
+		DESTDIR="$PKG" cmake --install . || return $?
 	}
 
 	_python3_build() {
 		python3 setup.py build || return $?
-		python3 setup.py install --prefix=/usr --root=$PKG --optimize=1 --skip-build || return $?
+		python3 setup.py install --prefix=/usr --root="$PKG" --optimize=1 --skip-build || return $?
 	}
 
 	_configure_build() {
+		_bfs_collect_build_opts
+		_bfs_configure_test_defaults
+		_bfs_configure_host_args=()
+		if [ "${PKGMK_ARCH:-}" = 32 ]; then
+			_bfs_configure_host_args=("--host=${BFS_MULTILIB_HOST:-i686-pc-linux-gnu}")
+		fi
 		./configure \
 			--prefix=/usr \
 			--sysconfdir=/etc \
-			--libexecdir=/usr/lib  \
+			--libexecdir=/usr/lib \
 			--localstatedir=/var \
 			--mandir=/usr/share/man \
-			--libdir=/usr/lib  \
-			$build_opt || return $?
-		make || return $?
-		make DESTDIR=$PKG install || return $?
+			--libdir="$BFS_PKG_LIBDIR" \
+			"${_bfs_configure_host_args[@]}" \
+			"${_bfs_configure_test_args[@]}" \
+			"${_bfs_build_opts[@]}" || return $?
+		make -j"${JOBS:-1}" || return $?
+		make DESTDIR="$PKG" install || return $?
 	}
 
 	_meson_build() {
+		_bfs_collect_build_opts
+		_bfs_meson_arch_args=()
+		if [ "${PKGMK_ARCH:-}" = 32 ]; then
+			# Meson determines host_machine from the compiler triplet, not from
+			# -m32. Supply one centralized cross description so every ordinary
+			# compat port gets i686 feature/assembly selection without carrying
+			# its own stale cross file.
+			cat > .bfsos-compat32.cross <<-EOF || return $?
+			[binaries]
+			c = '${CC:-gcc}'
+			cpp = '${CXX:-g++}'
+			ar = 'ar'
+			strip = 'strip'
+			pkg-config = 'pkg-config'
+
+			[properties]
+			needs_exe_wrapper = false
+
+			[host_machine]
+			system = 'linux'
+			cpu_family = 'x86'
+			cpu = 'i686'
+			endian = 'little'
+			EOF
+			_bfs_meson_arch_args=(--cross-file .bfsos-compat32.cross)
+		fi
 		meson setup _meson_build \
 			--prefix=/usr \
-			--libdir=/usr/lib  \
-			--libexecdir=/usr/lib  \
+			--libdir="$BFS_PKG_LIBDIR" \
+			--libexecdir="$BFS_PKG_LIBDIR" \
 			--includedir=/usr/include \
 			--datadir=/usr/share \
 			--mandir=/usr/share/man \
@@ -117,13 +315,20 @@ if [ ! "$(command -v build)" ]; then
 			-Db_lto=true \
 			-Db_pie=true \
 			-Db_thinlto_cache=true \
-			$build_opt || return $?
-		meson compile -C _meson_build || return $?
-		DESTDIR=$PKG meson install --no-rebuild -C _meson_build || return $?
+			"${_bfs_meson_arch_args[@]}" \
+			"${_bfs_build_opts[@]}" || return $?
+		_bfs_meson_disable_supported_tests || return $?
+		meson compile -C _meson_build -j "${JOBS:-1}" || return $?
+		if [ "${PKGMK_RUN_TESTS:-no}" = yes ] || [ "${run_tests:-no}" = yes ]; then
+			meson test -C _meson_build --print-errorlogs || return $?
+		fi
+		DESTDIR="$PKG" meson install --no-rebuild -C _meson_build || return $?
 	}
 
 	_patch() {
+		# Backward-compatible skip_patch plus explicit Pkgfile control.
 		[ "$skip_patch" ] && return 0
+		[ "${PKGMK_AUTO_PATCH:-yes}" = "no" ] && return 0
 		n=0
 		for i in "${source[@]}"; do
 			if [ "$renames" ]; then
@@ -134,10 +339,35 @@ if [ ! "$(command -v build)" ]; then
 			fi
 			case $i in
 				*.patch|*.diff)
-					patch -t ${patch_opt:--p1} -i $SRC/${i##*/};;
+					patch -t ${patch_opt:--p1} -i "$SRC/${i##*/}" || return $? ;;
+				*.patch.gz|*.diff.gz)
+					gzip -dc "$SRC/${i##*/}" | patch -t ${patch_opt:--p1} || return $? ;;
+				*.patch.xz|*.diff.xz)
+					xz -dc "$SRC/${i##*/}" | patch -t ${patch_opt:--p1} || return $? ;;
+				*.patch.bz2|*.diff.bz2)
+					bzip2 -dc "$SRC/${i##*/}" | patch -t ${patch_opt:--p1} || return $? ;;
 			esac
-			n=$(( $n + 1 ))
+			n=$(( n + 1 ))
 		done
+	}
+
+	_bfs_validate_compat32_payload() {
+		[ "${PKGMK_ARCH:-}" = 32 ] || return 0
+
+		local bad_path
+		bad_path=$(
+			for native_dir in "$PKG/usr/lib" "$PKG/lib"; do
+				[ -d "$native_dir" ] || continue
+				find "$native_dir" -mindepth 1 ! -type d -print
+			done
+		)
+
+		if [ -n "$bad_path" ]; then
+			echo "pkgmk: ERROR: compat-32 payload contains files in native library directories:" >&2
+			printf '%s\n' "$bad_path" >&2
+			echo "pkgmk: expected compat libraries under /usr/lib32 (or /lib32 where explicitly required)" >&2
+			return 1
+		fi
 	}
 
 	build() {
@@ -148,6 +378,8 @@ if [ ! "$(command -v build)" ]; then
 		export INSTALL_ROOT=$PKG # qt5
 		export CARGO_HOME=/tmp
 
+		# Prepare/extract source content when present.  Source-less ports may still
+		# provide pkg_build(), so source=() must not imply a dummy package.
 		if [ "${#source[@]}" -gt 0 ]; then
 			s=""
 			n=0
@@ -157,7 +389,7 @@ if [ ! "$(command -v build)" ]; then
 						s="$candidate"
 						break
 						;;
-					esac
+				esac
 				n=$((n + 1))
 			done
 			[ -n "$s" ] || { s="${source[0]}"; n=0; }
@@ -167,40 +399,78 @@ if [ ! "$(command -v build)" ]; then
 					*) s=${renames[$n]};;
 				esac
 			fi
-			# detect extracted source directory name
-			srcdir=$name-$version
-			if [ ! -d $srcdir ]; then
-				case $s in
-					*.tar|*.tar.gz|*.tar.Z|*.tgz|*.tar.bz2|*.tbz2|*.tar.xz|*.txz|*.tar.zst|*.tzst|*.tar.lz4|*.tar.lzma|*.tar.lz|*.zip|*.rpm|*.7z)
-						srcdir=$(bsdtar -tf $PKGMK_SOURCE_DIR/${s##*/} | cut -d / -f1 | head -n1);;
-				esac
+
+			# Detect the extracted source directory.
+			srcdir="$name-$version"
+
+			if [ ! -d "$srcdir" ]; then
+				srcdir=""
+				for candidate in */; do
+					[ -d "$candidate" ] || continue
+					candidate="${candidate%/}"
+
+					if [ -n "$srcdir" ]; then
+						# More than one directory: do not guess.
+						srcdir=""
+						break
+					fi
+
+					srcdir="$candidate"
+				done
 			fi
-			# cd into extracted source directory
-			if [ "$srcdir" ] && [ -d "$srcdir" ]; then
-				cd $srcdir
+
+			if [ -n "$srcdir" ] && [ -d "$srcdir" ]; then
+				cd "$srcdir" || return 1
 			fi
-			_patch
-			if [ "$(command -v pkg_build)" ]; then
-				# run pkg_build inside Pkgfile if function exist, then ignore pre_build and post_build
-				pkg_build
-			else
-				if [ "$(command -v pre_build)" ]; then
-					pre_build
-				fi
-				if [ ! "$build_type" ]; then
-					detect_buildtype
-				fi
-				# run build
-				_$build_type $@
-				if [ "$(command -v post_build)" ]; then
-					post_build
-				fi
+			_patch || return $?
+		fi
+
+		if command -v pkg_build >/dev/null 2>&1; then
+			# Custom recipes participate in the standard hooks whether or not
+			# they have downloadable/extracted source files.
+			if command -v pre_build >/dev/null 2>&1; then
+				pre_build || return $?
+			fi
+			pkg_build || return $?
+			if command -v post_build >/dev/null 2>&1; then
+				post_build || return $?
+			fi
+		elif [ "${#source[@]}" -gt 0 ]; then
+			if command -v pre_build >/dev/null 2>&1; then
+				pre_build || return $?
+			fi
+			if [ ! "$build_type" ]; then
+				detect_buildtype
+			fi
+			# Run the detected standard build.
+			_$build_type "$@" || return $?
+			if command -v post_build >/dev/null 2>&1; then
+				post_build || return $?
 			fi
 		else
-			# dummy pkg
-			mkdir -p $PKG/usr
+			# Legacy source-less dummy package.  bfs-pkgmk will reject this if it
+			# remains directory-only, so real meta packages should use pkg_build().
+			mkdir -p "$PKG/usr" || return $?
 		fi
-		
+
+		_bfs_validate_compat32_payload || return $?
+
+		# KDE/KF6 is intentionally installed under /opt/kf6, but systemd
+		# user/system units are host integration files and must live in the
+		# standard /usr/lib/systemd hierarchy so systemd can discover them.
+		# Relocate staged units before the package footprint is generated.
+		if [ -d "$PKG/opt/kf6/lib/systemd" ]; then
+			for _bfs_systemd_scope in system user; do
+				_bfs_systemd_src="$PKG/opt/kf6/lib/systemd/$_bfs_systemd_scope"
+				_bfs_systemd_dst="$PKG/usr/lib/systemd/$_bfs_systemd_scope"
+				[ -d "$_bfs_systemd_src" ] || continue
+				mkdir -p "$_bfs_systemd_dst" || return $?
+				cp -a "$_bfs_systemd_src/." "$_bfs_systemd_dst/" || return $?
+				rm -rf -- "$_bfs_systemd_src" || return $?
+			done
+			rmdir "$PKG/opt/kf6/lib/systemd" 2>/dev/null || true
+		fi
+
 		# info dir
 		if [ -d $PKG/usr/share/info ]; then
 			rm -f $PKG/usr/share/info/dir

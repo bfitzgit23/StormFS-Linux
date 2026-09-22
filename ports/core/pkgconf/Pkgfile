@@ -1,11 +1,9 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: A system for managing library compile/link flags.
 # URL: https://github.com/pkgconf/pkgconf/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 
 name=pkgconf
-version=3.0.5
+version=3.0.7
 release=1
 source=(
   https://distfiles.ariadne.space/pkgconf/pkgconf-$version.tar.xz

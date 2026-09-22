@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=BFSOS XFCE first-login defaults
+Comment=Initialize missing BFSOS XFCE defaults without overwriting user customizations
+Exec=/usr/libexec/bfs-xfce-first-login
+OnlyShowIn=XFCE;
+NoDisplay=true
+X-GNOME-Autostart-enabled=true

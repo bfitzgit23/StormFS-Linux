@@ -1,17 +1,14 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: World timezone definitions, modern and historical
 # URL: https://pythonhosted.org/pytz/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: python3-setuptools
 
 name=python3-pytz
-version=2026.2
+version=2026.3.post1
 release=1
 source=(https://pypi.io/packages/source/p/pytz/pytz-$version.tar.gz)
 
-build() {
-  cd pytz-$version
+pkg_build() {
 
   /usr/bin/python3 setup.py build
   /usr/bin/python3 setup.py install --root=$PKG \

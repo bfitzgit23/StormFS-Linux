@@ -1,8 +1,7 @@
-# Add your top line text here
-# Your line to add at the top here
-# Depends on: 
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on:
 
 name=scons
-version=4.9.1
-release=1
+version=4.11.1
+release=2
 source=(https://downloads.sourceforge.net/${name}/SCons-${version}.tar.gz)

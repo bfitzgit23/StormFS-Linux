@@ -1,15 +1,15 @@
-# Description: A virtual 3D GPU library, that allows the guest operating system to use the host GPU to accelerate 3D rendering
+# Description: VirGL virtual OpenGL/Vulkan renderer
 # URL: https://gitlab.freedesktop.org/virgl/virglrenderer
-# Maintainer: Venom Linux Team, venomlinux at disroot dot org
-# Depends on: libepoxy mesa libva
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: libdrm libepoxy mesa
 
 name=virglrenderer
 version=1.3.0
 release=1
-source=(https://gitlab.freedesktop.org/virgl/virglrenderer/-/archive/$version/$name-$version.tar.gz)
+source=(https://gitlab.freedesktop.org/virgl/virglrenderer/-/archive/$version/virglrenderer-$version.tar.bz2)
 
-build() {
-	meson setup $name-$version build -Dvideo=true
-	meson compile -C build
-	DESTDIR=$PKG meson install --no-rebuild -C build
-}
+build_opt=(
+    -Ddefault_library=shared
+    -Dtests=false
+    -Dvenus=true
+)

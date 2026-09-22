@@ -1,34 +1,51 @@
-# Add your top line text here
-# Your line to add at the top here
-# Description: The CrackLib package contains a library used to enforce strong passwords by comparing user selected passwords to words in chosen word lists.
-# URL:          https://github.com/cracklib/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on:  
+# Description: Password-strength checking library and dictionary
+# URL: https://github.com/cracklib/cracklib
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: autoconf automake libtool python3 xz
 
 name=cracklib
-version=2.9.11
-release=1
-source=(https://github.com/$name/$name/releases/download/v$version/$name-$version.tar.xz
-https://github.com/$name/$name/releases/download/v$version/$name-words-$version.xz)
+version=2.10.3
+release=3
+source=(
+    https://github.com/cracklib/cracklib/releases/download/v$version/cracklib-$version.tar.xz
+    https://github.com/cracklib/cracklib/releases/download/v$version/cracklib-words-$version.xz
+)
 
-build() {
-        cd $name-$version
+pkg_build() {
+    autoreconf -fiv || return 1
 
-autoreconf -fiv &&
+    CPPFLAGS="${CPPFLAGS} $(python3-config --includes)" \
+    PYTHON=python3 \
+    ./configure \
+        --prefix=/usr \
+        --disable-static \
+        --with-default-dict=/usr/lib/cracklib/pw_dict || return 1
 
-PYTHON=python3               \
-./configure --prefix=/usr    \
-            --disable-static \
-            --with-default-dict=/usr/lib/cracklib/pw_dict &&
-make
-make DESTDIR=$PKG install
-install -v -m644 -D    ../cracklib-words-$version.xz \
-                         $PKG/usr/share/dict/cracklib-words.xz    &&
+    make || return 1
+    make DESTDIR="$PKG" install || return 1
 
-unxz -v                  $PKG/usr/share/dict/cracklib-words.xz    &&
-ln -v -sf cracklib-words $PKG/usr/share/dict/words                &&
-echo $(hostname) >>      $PKG/usr/share/dict/cracklib-extra-words &&
-install -v -m755 -d      $PKG/usr/lib/cracklib
+    install -d "$PKG/usr/share/dict" "$PKG/usr/lib/cracklib" || return 1
+
+    xzcat "$SRC/cracklib-words-$version.xz" \
+        > "$PKG/usr/share/dict/cracklib-words" || return 1
+
+    ln -sfn cracklib-words "$PKG/usr/share/dict/words" || return 1
+
+    # Keep the site-specific dictionary deterministic in the package.
+    # Administrators can append local words after installation and regenerate it.
+    printf '%s\n' bfs bfsos \
+        > "$PKG/usr/share/dict/cracklib-extra-words" || return 1
+
+    # Build the CrackLib database directly into the package staging tree.
+    # Using the in-tree utilities avoids create-cracklib-dict writing to the
+    # live host's /usr/lib/cracklib during package creation.
+    ./util/cracklib-format \
+        "$PKG/usr/share/dict/cracklib-words" \
+        "$PKG/usr/share/dict/cracklib-extra-words" |
+        ./util/cracklib-packer "$PKG/usr/lib/cracklib/pw_dict" || return 1
+
+    test -s "$PKG/usr/lib/cracklib/pw_dict.pwd" || {
+        echo "cracklib: staged pw_dict database was not created" >&2
+        return 1
+    }
 }
-
-

@@ -1,0 +1,11 @@
+[Unit]
+Description=BFSOS finalize verified kernel boot and prune stale kernel artifacts
+After=local-fs.target
+ConditionPathExistsGlob=/var/lib/bfsos/kernel-state/*/pending
+
+[Service]
+Type=oneshot
+ExecStart=/usr/libexec/bfs-kernel-maintenance finalize-boot
+
+[Install]
+WantedBy=multi-user.target

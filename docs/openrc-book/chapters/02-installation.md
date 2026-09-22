@@ -16,40 +16,71 @@ prt-get install openrc-init-scripts
 
 ### Building from Source
 
-To build OpenRC from source:
+To build OpenRC from source, following the MLFS OpenRC book:
 
 ```bash
-# Download the latest stable version
-wget https://github.com/OpenRC/openrc/archive/refs/tags/0.55.tar.gz
-tar xf 0.55.tar.gz
-cd openrc-0.55
+# Download the latest stable version and the lock patch
+wget https://github.com/OpenRC/openrc/archive/refs/tags/0.63.tar.gz
+wget https://www.linuxfromscratch.org/glfs/view/dev/download/openrc/openrc-0.63-lock-1.patch
+tar xf 0.63.tar.gz
+cd openrc-0.63
 
-# Configure and build
-./configure \
-    --prefix=/usr \
-    --sysconfdir=/etc \
-    --libdir=/usr/lib \
-    --sbindir=/sbin
+# Make the group which manages /run/lock configurable
+patch -Np1 -i ../openrc-0.63-lock-1.patch
 
-make
-sudo make install
+# Fix a script to allow a normal installation
+sed -i '/set -u/d' tools/meson_final.sh
+
+# Prepare OpenRC for compilation
+mkdir build
+cd    build
+
+meson setup --prefix=/usr       \
+            --sysconfdir=/etc   \
+            --buildtype=release \
+            -D uucp_group=root  \
+            -D pam=false ..
+
+ninja
+sudo ninja install
 ```
+
+The meaning of the meson options:
+
+- `-D uucp_group=root`: changes who owns and manages `/run/lock`, as OpenRC
+  will try to use the `uucp` group to manage it. Many distributions today use
+  the `lock` group, but LFS uses `root` instead.
+- `-D pam=false`: disables needing Linux-PAM for the build.
 
 ### Post-Installation Setup
 
 After installing OpenRC, you need to:
 
-1. Create runlevel directories
-2. Configure the default runlevel
-3. Install service scripts
-4. Set up boot scripts
+1. Move `rc-update` into `/usr/bin` so normal users can run it
+2. Create the shorthand symlinks for `init` and `shutdown`
+3. Create the `poweroff` and `reboot` wrappers
+4. Add services to runlevels (see [Chapter 4: Runlevels](chapters/04-runlevels.md))
 
 ```bash
-# Create runlevel directories
-sudo mkdir -p /etc/runlevels/{sysinit,boot,default,nonetwork,single}
+# rc-update is meant to be runnable by normal users as well
+mv -v /sbin/rc-update /usr/bin/rc-update
 
-# Set default runlevel
-sudo sed -i 's/^#DEFAULT_RUNLEVEL=.*/DEFAULT_RUNLEVEL=3/' /etc/conf.d/rc
+# OpenRC provides init and other programs of its own; create the shorthands
+for i in init shutdown; do
+  ln -svf openrc-$i /sbin/$i
+done
+
+cat > /sbin/poweroff << "EOF"
+#!/bin/sh
+/sbin/shutdown --poweroff now
+EOF
+
+cat > /sbin/reboot << "EOF"
+#!/bin/sh
+/sbin/shutdown --reboot now
+EOF
+
+chmod 755 /sbin/poweroff /sbin/reboot
 ```
 
 ## Directory Structure
@@ -61,15 +92,15 @@ After installation, the following directories should exist:
 ├── init.d/              # Service scripts
 ├── conf.d/              # Service configuration
 ├── runlevels/           # Runlevel directories
-├── rc.conf              # Main configuration
-└── env.d/               # Environment variables
+├── local.d/             # Local boot scripts
+└── sysctl.d/            # Sysctl configuration snippets
 
-/lib/
-├── rc/                  # OpenRC core files
+/usr/
+├── libexec/rc/          # OpenRC core files
 │   ├── bin/             # OpenRC binaries
 │   ├── sh/              # OpenRC shell functions
 │   └── scripts/         # OpenRC scripts
-└── systemd/             # Compatibility (optional)
+└── share/openrc/        # OpenRC data files
 ```
 
 ## Verifying Installation

@@ -1,18 +1,17 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: X11 client-side library
 # URL: https://xcb.freedesktop.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: libinput-32 libpthread-stubs-32 libxslt-32 libXau-32 libxcb libXdmcp-32
 
 name=libxcb-32
 version=1.17.0
-release=1
+release=2
 source=(https://xorg.freedesktop.org/archive/individual/lib/libxcb-$version.tar.xz)
 
-build() {
-	cd libxcb-$version
-
+# Custom build required: Python protocol generation and library-only staging are required
+pkg_build() {
+  (
+    set -e
 	export PKG_CONFIG_LIBDIR='/usr/lib32/pkgconfig:/usr/share/pkgconfig'
 	PYTHON=/usr/bin/python3 \
 	./configure \
@@ -24,4 +23,5 @@ build() {
 	make DESTDIR=$PKG install
 
 	rm -r $PKG/usr/{include,share}
+  )
 }

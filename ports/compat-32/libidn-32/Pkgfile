@@ -1,25 +1,16 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Provides support for IETF Internationalized Domain Names (IDN).
 # URL: http://www.gnu.org/software/libidn/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: libidn
 
 name=libidn-32
-version=1.43
-release=1
+version=1.44
+release=2
 source=(https://ftp.gnu.org/gnu/${name%-*}/${name%-*}-$version.tar.gz)
 
-build() {
-	cd ${name%-*}-$version
+build_opt="--disable-nls"
 
-	./configure \
-		--prefix=/usr \
-		--libdir=/usr/lib32 \
-		--disable-nls
-
-	make
-	make DESTDIR=$PKG install
+post_build() {
 
 	rm -r \
 		$PKG/usr/{bin,include,share/man} \
@@ -29,4 +20,8 @@ build() {
 
 	# Remove empty directories
 	find $PKG -depth -empty -exec rm -r {} \;
+}
+
+pre_build() {
+        _bfs_require_compat32_extension 2 || return $?
 }

@@ -1,25 +1,20 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Commandline option parser
 # URL: https://github.com/rpm-software-management/popt
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: popt
 
 name=popt-32
 version=1.19
-release=1
+release=2
 source=(http://ftp.rpm.org/popt/releases/popt-1.x/popt-$version.tar.gz)
 
-build() {
-	cd ${name%-*}-$version
+build_opt="--disable-nls"
 
-	./configure \
-		--prefix=/usr \
-		--libdir=/usr/lib32 \
-		--disable-nls
-
-	make
-	make DESTDIR=$PKG pkgconfigdir='/usr/lib32/pkgconfig' install
+post_build() {
 
 	rm -r $PKG/usr/{share,include}
+}
+
+pre_build() {
+        _bfs_require_compat32_extension 2 || return $?
 }

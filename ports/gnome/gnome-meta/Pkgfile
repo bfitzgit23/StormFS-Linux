@@ -1,0 +1,18 @@
+# Description: Complete BFSOS GNOME desktop meta package
+# URL: https://www.gnome.org/
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: gdm gnome-session gnome-shell gnome-shell-extensions gnome-control-center gnome-settings-daemon gnome-backgrounds gnome-keyring gnome-menus nautilus gnome-terminal gnome-tweaks gnome-user-docs yelp dconf-editor xdg-desktop-portal-gnome gnome-apps-meta pipewire wireplumber alsa-utils rtkit
+
+name=gnome-meta
+version=50.0
+release=1
+
+pkg_build() {
+    install -d "$PKG/usr/share/doc/$name"
+    cat > "$PKG/usr/share/doc/$name/README" <<'EOT'
+BFSOS complete GNOME desktop meta package.
+The dependency set now includes the current BLFS GNOME application coverage,
+help/docs, Tweaks, shell extensions, and DConf Editor. Individual GNOME core
+ports are still being migrated to the GNOME 50 family in build-verified batches.
+EOT
+}

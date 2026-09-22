@@ -1,17 +1,15 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: NVIDIA Linux Display Driver (production branch)
 # URL: https://www.nvidia.com/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: gtk gtk3 libglvnd
 
 name=nvidia
-version=550.127.05
+version=595.99.02
 release=1
 source=(https://us.download.nvidia.com/XFree86/Linux-x86_64/$version/NVIDIA-Linux-x86_64-$version.run \
 	90-nvidia-uvm.rules 10-nvidia-drm-outputclass.conf nvidia-powerd.rc)
 
-build() {
+pkg_build() {
 	sh NVIDIA-Linux-x86_64-$version.run --extract-only
 	cd NVIDIA-Linux-x86_64-$version
 

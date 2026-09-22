@@ -1,12 +1,10 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: A tool for installing and managing Python packages.
 # URL: https://pypi.python.org/pypi/pip/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: python3-setuptools
 
 name=python3-pip
-version=26.1.2
+version=26.2.1
 release=1
 
 source=(
@@ -26,8 +24,7 @@ pkg_build() {
         --root="$PKG" \
         "$wheel"
 
-    # Keep pip3 and versioned pip, but remove the unversioned pip command.
-    rm -f "$PKG/usr/bin/pip"
+    # Keep pip, pip3, and the versioned pip command for compatibility.
 
     # Byte-compile after installation.
     /usr/bin/python3 -m compileall \

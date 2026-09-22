@@ -1,19 +1,23 @@
-# Add your top line text here
-# Your line to add at the top here
-# Description: Qca aims to provide a straightforward and cross-platform crypto API, using Qt datatypes and conventions. Qca separates the API from the implementation, using plugins known as Providers.
-# URL:         https://kde.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on:  make-ca cmake  qt5-alternate which1
-# Optional: cyrus sasl gnupg libgcryptlibgpg-error nss nspr p11-kit doxygen  which  botan
+# Description: Qt cryptographic architecture
+# URL: https://userbase.kde.org/QCA
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: cmake make-ca qt6
+# Optional: botan cyrus-sasl doxygen gnupg libgcrypt nss p11-kit
+
 name=qca
-version=2.3.10
-release=1
-source=(https://download.kde.org/stable/$name/$version/$name-$version.tar.xz)
-build_opt="-DCMAKE_INSTALL_PREFIX=$QT6DIR            
-      -DCMAKE_BUILD_TYPE=Release                
-      -DQT6=ON                                  
-      -DQCA_MAN_INSTALL_DIR:PATH=/usr/share/man 
-      .."
-pre_build() {
-sed -i 's@cert.pem@certs/ca-bundle.crt@' CMakeLists.txt
+version=2.3.12
+release=2
+source=(
+    https://download.kde.org/stable/qca/$version/qca-$version.tar.xz
+    
+)
+
+pkg_build() {
+    cmake -S . -B build -G Ninja \
+        -DCMAKE_INSTALL_PREFIX=/opt/qt6 \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DQT6=ON \
+        -DQCA_MAN_INSTALL_DIR=/usr/share/man
+    cmake --build build -j "${JOBS:-1}"
+    DESTDIR="$PKG" cmake --install build
 }

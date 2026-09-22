@@ -1,8 +1,7 @@
-# Add your top line text here
-# Your line to add at the top here
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 name=findutils
 version=4.11.0
 release=1
-source=(https://ftpmirror.gnu.org/findutils/findutils-$version.tar.xz)
+source=(https://ftp.gnu.org/gnu/findutils/findutils-$version.tar.xz)
 
 build_opt="--localstatedir=/var/lib/locate"

@@ -1,8 +1,6 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: xorg driver xf86-video-dummy
 # URL: http://xorg.freedesktop.org
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: xorg-server
 
 name=xf86-video-dummy
@@ -10,8 +8,7 @@ version=0.4.1
 release=1
 source=(https://xorg.freedesktop.org/archive/individual/driver/xf86-video-dummy-$version.tar.xz)
 
-build() {
-	cd xf86-video-dummy-$version
+pkg_build() {
 	./configure --prefix=/usr
 	make
 	make DESTDIR=$PKG install

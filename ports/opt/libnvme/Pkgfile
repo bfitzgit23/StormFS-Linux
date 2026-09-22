@@ -1,14 +1,12 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: The libnvme package is a library which provides type definitions for NVMe specification structures, enumerations, and bit fields, helper functions to construct, dispatch, and decode commands and payloads, and utilities to connect, scan, and manage NVMe devices on a Linux system.
 # URL:          https://github.com/linux-nvme/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on:  
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on:
 # Optional:   json-c keyutils swig
 
 name=libnvme
-version=1.14
-release=1
+version=1.16.2
+release=2
 source=(https://github.com/linux-nvme/$name/archive/refs/tags/v$version/$name-$version.tar.gz)
 
 pkg_build() {

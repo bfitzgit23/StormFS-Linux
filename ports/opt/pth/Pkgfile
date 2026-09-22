@@ -1,9 +1,7 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: The Pth package contains a very portable POSIX/ANSI-C based library for Unix platforms which provides non-preemptive priority-based scheduling for multiple threads of execution (multithreading) inside event-driven applications. All threads run in the same address space of the server application, but each thread has its own individual program-counter, run-time stack, signal mask and errno variable.
 # URL:         https://ftp.gnu.org/gnu/pth/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on:  
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on:
 # Optional: gcc libnsl
 
 name=pth
@@ -11,8 +9,7 @@ version=2.0.7
 release=1
 source=(https://ftp.gnu.org/gnu/pth/pth-$version.tar.gz)
 
-build() {
-	cd $name-$version
+pkg_build() {
 
 	sed -i 's#$(LOBJS): Makefile#$(LOBJS): pth_p.h Makefile#' Makefile.in &&
 ./configure --prefix=/usr           \

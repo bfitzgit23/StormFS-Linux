@@ -1,25 +1,20 @@
-# Description: Scalable Video Technology AV1 encoder and decoder
+# Description: Scalable Video Technology AV1 encoder
 # URL: https://gitlab.com/AOMediaCodec/SVT-AV1
-# Maintainer: Venom Linux Team, venomlinux at disroot dot org
-# Depends on: nasm
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: cmake ninja nasm
 
 name=svt-av1
-version=4.1.0
+version=4.2.0
 release=1
-source=(https://gitlab.com/AOMediaCodec/SVT-AV1/-/archive/v$version/SVT-AV1-v$version.tar.bz2)
+source=(https://gitlab.com/AOMediaCodec/SVT-AV1/-/archive/v$version/SVT-AV1-v$version.tar.gz)
 
-build() {
-	sed '/CMAKE_BUILD_TYPE Release/d' -i SVT-AV1-v$version/CMakeLists.txt
-	
-	cmake -S SVT-AV1-v$version -B build -G Ninja \
- 		-D CMAKE_INSTALL_PREFIX=/usr \
- 		-D CMAKE_INSTALL_LIBDIR=lib \
- 		-D CMAKE_BUILD_TYPE=Release \
- 		-D CMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
- 		-D CMAKE_C_FLAGS_RELEASE="$CFLAGS" \
-		-D BUILD_SHARED_LIBS=ON \
-		-D NATIVE=OFF \
-		-Wno-dev
-	cmake --build build
-	DESTDIR=$PKG cmake --install build
+pkg_build() {
+    cmake -S . -B build -G Ninja \
+        -DCMAKE_INSTALL_PREFIX=/usr \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DCMAKE_SKIP_INSTALL_RPATH=ON \
+        -DBUILD_SHARED_LIBS=ON \
+        -Wno-dev || return 1
+    ninja -C build || return 1
+    DESTDIR="$PKG" ninja -C build install || return 1
 }

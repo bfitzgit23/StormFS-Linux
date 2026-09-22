@@ -1,0 +1,20 @@
+#!/sbin/openrc-run
+
+description="GNOME Display Manager"
+
+depend() {
+	provide xdm
+	need dbus
+}
+
+start() {
+	ebegin "Starting GDM"
+	start-stop-daemon --start --exec /usr/sbin/gdm
+	eend $?
+}
+
+stop() {
+	ebegin "Stopping GDM"
+	start-stop-daemon --stop --exec /usr/sbin/gdm
+	eend $?
+}

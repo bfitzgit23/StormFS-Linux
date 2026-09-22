@@ -4,8 +4,7 @@
 
 name=aaa_filesystem
 version=1
-release=6
-
+release=15
 # BFS Linux distribution release. Change this value when preparing a new
 # BFS release; the aaa_filesystem package version remains independent.
 bfs_version=0.9.0
@@ -22,7 +21,6 @@ source=(
     shells
     inputrc
     profile
-    bash_completion.sh
     debuginfod.csh
     debuginfod.sh
     dircolors.sh
@@ -33,11 +31,10 @@ source=(
     umask.sh
     i18n.sh
     kf6.sh
-    qt5.sh
-    qt6.sh
-    rustc.sh
-    vte.csh
-    vte.sh
+    bfs-opt.sh
+    60-bfsos-opt.conf
+    kf6.sudoers
+    xorg.sudoers
     xorg.sh
     bashrc
     .bash_profile
@@ -92,7 +89,6 @@ pkg_build() {
 
     ln -sfn usr/lib32 "$PKG/lib32"
 
-    ln -sfn lib "$PKG/lib64"
 
     #
     # /usr and /usr/local directory hierarchy.
@@ -183,15 +179,20 @@ pkg_build() {
 
     install -d -m 0755 \
         "$PKG/etc/profile.d" \
+        "$PKG/usr/lib/environment.d" \
         "$PKG/etc/bash_completion.d" \
-        "$PKG/etc/skel"
+        "$PKG/etc/skel" \
+        "$PKG/etc/sudoers.d"
+
+    # Preserve BFSOS package-build prefix variables through sudo.
+    install -m 0440 kf6.sudoers "$PKG/etc/sudoers.d/kf6"
+    install -m 0440 xorg.sudoers "$PKG/etc/sudoers.d/xorg"
 
     #
     # Profile scripts.
     #
     for file in \
         locale.sh \
-        bash_completion.sh \
         debuginfod.csh \
         debuginfod.sh \
         dircolors.sh \
@@ -200,17 +201,19 @@ pkg_build() {
         gawk.sh \
         i18n.sh \
         kf6.sh \
-        qt5.sh \
-        qt6.sh \
+        bfs-opt.sh \
         readline.sh \
-        rustc.sh \
         umask.sh \
-        vte.csh \
-        vte.sh \
         xorg.sh
     do
         install -m 0644 "$file" "$PKG/etc/profile.d/$file"
     done
+
+    # systemd user managers do not source /etc/profile.  Install the proven
+    # KF6/Qt6 executable/data paths through environment.d so early Plasma
+    # Wayland units receive them deterministically.
+    install -m 0644 60-bfsos-opt.conf \
+        "$PKG/usr/lib/environment.d/60-bfsos-opt.conf"
 
     #
     # Default user skeleton.

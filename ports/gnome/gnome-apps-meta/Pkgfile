@@ -1,13 +1,19 @@
-# Add your top line text here
-# Your line to add at the top here
-# Description: Gnome apps meta package
-# URL:  https://gnome.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on: baobab brasero eog evince evolution file-roller gnome-calculator gnome-color-manager gnome-connections gnome-disk-utility gnome-logs gnome-maps gnome-nettool gnome-power-manager gnome-screenshot gone-system-monitor gnome-terminal gnome-weather gucharmap seahorse snapshot
+# Description: Current BLFS GNOME applications meta package
+# URL: https://www.gnome.org/
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: baobab brasero evince evolution file-roller gnome-calculator gnome-color-manager gnome-connections gnome-disk-utility gnome-logs gnome-maps gnome-nettool gnome-power-manager gnome-system-monitor gnome-terminal gnome-weather gucharmap loupe seahorse showtime snapshot
+# Optional: eog gnome-screenshot
+
 name=gnome-apps-meta
-version=46.0
+version=50.0
 release=1
 source=()
-build() {
-    mkdir $PKG/usr
+
+pkg_build() {
+    install -d "$PKG/usr/share/doc/$name"
+    cat > "$PKG/usr/share/doc/$name/README" <<'EOT'
+This meta package tracks the current BLFS GNOME Applications chapter.
+Legacy EOG and gnome-screenshot remain available as standalone BFSOS ports,
+but are not part of the current default GNOME application set.
+EOT
 }

@@ -1,15 +1,15 @@
-# Add your top line text here
-# Your line to add at the top here
-# Depends on: kpipewire plasma-workspace systemsettings xorg-xf86-input-evdev xorg-xf86-input-libinput libwacom
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: kpipewire plasma-workspace xf86-input-evdev xf86-input-libinput libwacom qt6
 
 name=plasma-desktop
-version=6.3.4
+version=6.7.5
 release=1
 source=(https://download.kde.org/stable/plasma/$version/$name-$version.tar.xz)
-build_opt="-D CMAKE_INSTALL_PREFIX=$KF6_PREFIX 
-             -D CMAKE_INSTALL_LIBEXECDIR=libexec 
-             -D CMAKE_BUILD_TYPE=Release         
-             -D CMAKE_QT6=ON				
-             -D BUILD_QT5=OFF                    
-             -D BUILD_TESTING=OFF                
-             -W no-dev .."
+build_opt="-DCMAKE_INSTALL_PREFIX=/opt/kf6 \
+            -DCMAKE_PREFIX_PATH=/opt/qt6;/opt/kf6 
+             -DCMAKE_INSTALL_LIBEXECDIR=libexec 
+             -DCMAKE_BUILD_TYPE=Release         
+             -DCMAKE_QT6=ON				
+             -DBUILD_QT5=OFF                    
+             -DBUILD_TESTING=OFF                
+             -Wno-author"

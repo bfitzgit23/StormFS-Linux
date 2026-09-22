@@ -1,0 +1,14 @@
+#!/sbin/openrc-run
+
+description="Post-mount udev triggers"
+
+depend() {
+	need udev localmount
+}
+
+start() {
+	ebegin "Triggering udev events"
+	/sbin/udevadm trigger --type=subsystems --action=add
+	/sbin/udevadm settle
+	eend $?
+}

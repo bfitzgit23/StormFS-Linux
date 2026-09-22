@@ -1,6 +1,6 @@
 # Description: Reference implementation of the Argon2 password hashing and key derivation algorithm.
 # URL: https://github.com/P-H-C/phc-winner-argon2
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on:
 
 name=argon2

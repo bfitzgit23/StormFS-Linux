@@ -1,16 +1,14 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Fast & memory efficient hashtable based on robin hood hashing for C++11/14/17/20
 # URL: https://github.com/martinus/robin-hood-hashing
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 
 name=robin-hood-hashing
 version=3.11.5
-release=2
+release=3
 source=(https://github.com/martinus/robin-hood-hashing/archive/$version/$name-$version.tar.gz)
 
-build() {
-	cmake -S $name-$version -B build -G Ninja \
+pkg_build() {
+	cmake -S . -B build -G Ninja \
 		-D CMAKE_INSTALL_PREFIX=/usr \
 		-D CMAKE_INSTALL_LIBDIR=share \
 		-D CMAKE_BUILD_TYPE=Release \

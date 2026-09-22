@@ -1,8 +1,6 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: A library for CD-ROM and CD image access.
 # URL: http://www.gnu.org/software/libcdio/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: ncurses
 # Optional: libcddb
 
@@ -11,8 +9,7 @@ version=2.1.0
 release=1
 source=(https://ftp.gnu.org/gnu/$name/$name-$version.tar.bz2)
 
-build() {
-	cd $name-$version
+pkg_build() {
 
 	./configure --prefix=/usr --disable-static &&
 make

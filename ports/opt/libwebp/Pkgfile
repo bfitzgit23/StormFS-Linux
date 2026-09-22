@@ -1,18 +1,15 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: A library for a new image format comparable to JPEG.
 # URL: https://developers.google.com/speed/webp/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on: 
-# Optional: ibjpeg-turbo libpng libtiff sdl12-compat freeglut giflib
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on:
+# Optional: libjpeg-turbo libpng libtiff sdl12-compat freeglut giflib
 
 name=libwebp
-version=1.5.0
-release=1
+version=1.6.0
+release=2
 source=(https://storage.googleapis.com/downloads.webmproject.org/releases/webp/$name-$version.tar.gz)
 
-build() {
-  cd $name-$version
+pkg_build() {
   ./configure --prefix=/usr           \
             --enable-libwebpmux     \
             --enable-libwebpdemux   \

@@ -1,15 +1,15 @@
 # Description: Free peer-reviewed portable C++ source libraries.
 # URL: https://www.boost.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: bzip2 zstd
 # Optional: icu openmpi python3-numpy
 
 name=boost
-version=1.91.0
-release=1
+version=1.92.0
+release=2
 
 source=(
-    https://archives.boost.io/release/$version/source/boost_1_91_0.tar.bz2
+    https://archives.boost.io/release/$version/source/boost_1_92_0.tar.bz2
 )
 
 pkg_build() {

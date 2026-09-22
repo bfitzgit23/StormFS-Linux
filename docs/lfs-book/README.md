@@ -3,9 +3,10 @@
 A comprehensive Linux From Scratch build guide for StormFS Linux. This book walks through building a complete x86_64 multilib Linux system from source using CRUX-style ports, pkgutils, and prt-get.
 
 > **Version:** 0.9.0 (pre-release)
+> **Based on:** Linux From Scratch 13.1 with the StormFS OpenRC profile — binutils 2.47, gcc 16.2.0, glibc 2.44, Linux 7.1.8
 > **Target architecture:** x86_64 multilib (32-bit and 64-bit libraries)
-> **Init system:** systemd
-> **Package manager:** pkgutils / prt-get (CRUX-based)
+> **Init system:** OpenRC (systemd compatibility material is optional)
+> **Package manager:** Emerald (`.epkg.tar.xz`) with the existing pkgutils/ports bootstrap compatibility layer
 
 ## Table of Contents
 
@@ -25,10 +26,11 @@ A comprehensive Linux From Scratch build guide for StormFS Linux. This book walk
 14. [SSH Server](chapters/14-ssh-server.md)
 15. [Base Utilities](chapters/15-base-utilities.md)
 16. [Final System Adjustments](chapters/16-final-system-adjustments.md)
+17. [Emerald Package Manager and mkinitramfs](chapters/17-emerald-and-mkinitramfs.md)
 
 ## About This Book
 
-This book follows the BLFS (Beyond Linux From Scratch) style and provides detailed, step-by-step instructions for building StormFS Linux from source. Each chapter includes exact commands, configuration file contents, and explanations for every step.
+This book follows the BLFS (Beyond Linux From Scratch) style and provides detailed, step-by-step instructions for building StormFS Linux from source. The historical CRUX-style ports, pkgutils, and prt-get workflow remains documented for bootstrap compatibility; Emerald is the target package-management frontend for new installations. Each chapter includes exact commands, configuration file contents, and explanations for every step.
 
 ## Conventions
 

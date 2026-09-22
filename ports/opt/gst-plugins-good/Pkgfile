@@ -1,18 +1,16 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: A set of good-quality plugins for gstreamer under the LGPL.
 # URL: https://gstreamer.freedesktop.org/modules/gst-plugins-good.html
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on: gst-plugins-base cairo flac gdk-pixbuf lame libsoup libsoup3 libvpx mpg123 nasm pulseAudio
-# Optional: aalib alsa-oss gtk3 libdv qt5-alternate speex taglib valgrind v4l-utils wayland hotdoc jack libcaca libavc1394 libiec61883 libraw1394 libshout orc twolame wavpack
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: gst-plugins-base cairo flac gdk-pixbuf lame libsoup libsoup3 libvpx mpg123 nasm pulseaudio
+# Optional: aalib alsa-oss gtk3 libdv qt5 speex taglib valgrind v4l-utils wayland hotdoc jack libcaca libavc1394 libiec61883 libraw1394 libshout orc twolame wavpack
 
 name=gst-plugins-good
-version=1.26.2
+version=1.28.7
 release=2
-source=(https://gstreamer.freedesktop.org/src/$name/$name-$version.tar.xz)
+source=(https://gstreamer.freedesktop.org/src/$name/$name-$version.tar.xz
+        gst-plugins-good-1.28.7-qt611-qquickwindow.patch)
 
-build() {
-  cd $name-$version
+pkg_build() {
   mkdir build &&
 cd    build &&
 
@@ -20,7 +18,7 @@ meson setup ..            \
       --prefix=/usr       \
       --buildtype=release \
       -Dpackage-origin=https://www.linuxfromscratch.org/blfs/view/systemd/ \
-      -Dpackage-name="GStreamer 1.22.6 BLFS" &&
+      -Dpackage-name="GStreamer 1.28.7 BFSOS" &&
 ninja
   DESTDIR=$PKG ninja install
 }

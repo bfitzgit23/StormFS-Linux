@@ -1,17 +1,14 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: liba52 is a free library for decoding ATSC A/52 (also known as AC-3) streams. The A/52 standard is used in a variety of applications, including digital television and DVD.
 # URL:          https://liba52.sourceforge.net/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on:  
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on:
 # Optional: djbfft
 name=liba52
 version=0.8.0
 release=1
 source=(https://distfiles.adelielinux.org/source/a52dec/a52dec-$version.tar.gz)
 
-build() {
-	cd a52dec-$version
+pkg_build() {
 
 	./configure --prefix=/usr \
             --mandir=/usr/share/man \

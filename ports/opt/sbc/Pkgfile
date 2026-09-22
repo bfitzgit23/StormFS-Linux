@@ -1,17 +1,14 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description:  The SBC is a digital audio encoder and decoder used to transfer data to Bluetooth audio output devices like headphones or loudspeakers.
 # URL:         https://www.kernel.org/pub/linux/bluetooth/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on: libsndfile  
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: libsndfile
 
 name=sbc
-version=2.1
-release=1
+version=2.2
+release=2
 source=(https://www.kernel.org/pub/linux/bluetooth/$name-$version.tar.xz)
 
-build() {
-	cd $name-$version
+pkg_build() {
 ./configure --prefix=/usr --disable-static --disable-tester &&
 make
 

@@ -1,16 +1,13 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Run commands in an environment faking root privileges
 # URL: http://packages.debian.org/unstable/utils/fakeroot
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 
 name=fakeroot
 version=1.37.1.1
 release=1
 source=(https://deb.debian.org/debian/pool/main/f/$name/${name}_${version}.orig.tar.gz)
 
-build() {
-	cd $name-$version
+pkg_build() {
 	sed -i '/^SUBDIRS/d' doc/Makefile.am
 	./bootstrap
 	./configure --prefix=/usr

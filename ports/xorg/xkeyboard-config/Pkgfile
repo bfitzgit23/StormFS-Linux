@@ -1,18 +1,15 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Bitmaps for X
 # URL: http://xorg.freedesktop.org
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on: xorg-libs
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on:
 
 
 name=xkeyboard-config
-version=2.45
-release=1
+version=2.48
+release=3
 source=(https://www.x.org/releases/individual/data/$name/$name-$version.tar.xz)
 
-build() {
-	cd $name-$version
+pkg_build() {
 	mkdir build &&
 cd    build &&
 

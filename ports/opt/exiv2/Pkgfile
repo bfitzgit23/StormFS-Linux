@@ -1,13 +1,11 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Exiv2 is a C++ library and a command line utility for managing image and video metadata.
 # URL:         https://github.com/Exiv2/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on:  cmake brotli curl inih
 # Optional: libssh doxygen graphviz libxslt
 
 name=exiv2
-version=0.28.5
+version=0.28.9
 release=1
 source=(https://github.com/$name/$name/archive/v$version/$name-$version.tar.gz)
 pkg_build() {

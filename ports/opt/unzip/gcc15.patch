@@ -1,0 +1,8 @@
+--- unzip60.orig/unix/unxcfg.h
++++ unzip60/unix/unxcfg.h
+@@ -117,7 +117,6 @@
+ #  endif
+ #else
+ #  include <time.h>
+-   struct tm *gmtime(), *localtime();
+ #endif

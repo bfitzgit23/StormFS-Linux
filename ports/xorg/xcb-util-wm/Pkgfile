@@ -1,18 +1,15 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: XCB utilities library
 # URL: https://xcb.freedesktop.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: libxcb
 
 name=xcb-util-wm
 version=0.4.2
-release=1
+release=2
 source=(https://xcb.freedesktop.org/dist/xcb-util-wm-$version.tar.xz)
 
-build() {
-	cd $name-$version
-	./configure $XORG_CONFIG &&
-	make
-	make DESTDIR=$PKG install
+pkg_build() {
+    ./configure $XORG_CONFIG || return 1
+    make -j "${JOBS:-1}" || return 1
+    make DESTDIR="$PKG" install || return 1
 }

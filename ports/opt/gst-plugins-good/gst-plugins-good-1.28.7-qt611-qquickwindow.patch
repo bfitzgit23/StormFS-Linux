@@ -1,0 +1,10 @@
+--- a/ext/qt6/qt6glitem.h
++++ b/ext/qt6/qt6glitem.h
+@@ -25,6 +25,7 @@
+ #include "gstqt6gl.h"
+ #include <QtCore/QMutex>
+ #include <QtQuick/QQuickItem>
++#include <QtQuick/QQuickWindow>
+ #include <QtGui/QOpenGLContext>
+ #include <QtGui/QOpenGLFunctions>
+ 

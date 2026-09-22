@@ -1,0 +1,26 @@
+[binaries]
+c = '/usr/bin/gcc'
+cpp = '/usr/bin/g++'
+rust = '/usr/bin/rustc'
+cargo = '/usr/bin/cargo'
+pkgconfig = 'i686-pc-linux-gnu-pkg-config'
+llvm-config = 'llvm-config-32'
+
+[built-in options]
+c_args = ['-m32']
+cpp_args = ['-m32']
+c_link_args = ['-m32']
+cpp_link_args = ['-m32']
+rust_args = ['--target=i686-unknown-linux-gnu', '-C', 'link-arg=-m32']
+
+[properties]
+pkg_config_libdir = ['/usr/lib32/pkgconfig', '/usr/share/pkgconfig']
+bindgen_clang_arguments = ['--target', 'i686-unknown-linux-gnu']
+rust_target = 'i686-unknown-linux-gnu'
+needs_exe_wrapper = false
+
+[host_machine]
+system = 'linux'
+cpu_family = 'x86'
+cpu = 'i686'
+endian = 'little'

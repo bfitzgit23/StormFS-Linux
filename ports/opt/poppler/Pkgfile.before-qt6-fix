@@ -1,0 +1,41 @@
+# Description: PDF rendering library
+# URL: https://poppler.freedesktop.org/
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: poppler-data fontconfig gobject-introspection boost cairo lcms2 libjpeg-turbo libpng nss openjpeg2 gpgme gpgmepp
+# Optional: qt6
+
+name=poppler
+version=26.09.0
+release=1
+
+source=(
+    https://$name.freedesktop.org/$name-$version.tar.xz
+)
+
+build_opt="\
+    -DENABLE_UNSTABLE_API_ABI_HEADERS=ON \
+    -DENABLE_QT5=OFF \
+    -DENABLE_GLIB=ON \
+    -DBUILD_GTK_TESTS=OFF \
+    -DBUILD_QT5_TESTS=OFF \
+    -DBUILD_QT6_TESTS=OFF \
+    -DBUILD_CPP_TESTS=OFF \
+    -DBUILD_MANUAL_TESTS=OFF"
+
+pre_build() {
+    if prt-get isinst qt6 >/dev/null 2>&1; then
+        qt6_prefix="${QT6DIR:-$(pkg-config --variable=prefix Qt6Core 2>/dev/null)}"
+
+        if [ -z "$qt6_prefix" ]; then
+            echo "ERROR: qt6 is installed but its CMake prefix could not be determined."
+            return 1
+        fi
+
+        build_opt="$build_opt \
+            -DCMAKE_PREFIX_PATH=$qt6_prefix \
+            -DENABLE_QT6=ON"
+    else
+        build_opt="$build_opt \
+            -DENABLE_QT6=OFF"
+    fi
+}

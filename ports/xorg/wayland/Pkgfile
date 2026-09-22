@@ -1,18 +1,15 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: X compat server to be used with wayland
 # URL: https://wayland.freedesktop.org/xserver.html
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: libxml2
 
 name=wayland
-version=1.23.1
-release=1
+version=1.26.0
+release=2
 source=(https://gitlab.freedesktop.org/$name/$name/-/releases/$version/downloads/$name-$version.tar.xz)
 
-build() {
+pkg_build() {
 
-	cd $name-$version
 	mkdir build &&
 	cd    build &&
 

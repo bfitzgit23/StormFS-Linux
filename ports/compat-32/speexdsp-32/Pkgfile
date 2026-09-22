@@ -1,18 +1,17 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: DSP library derived from speex
 # URL: https://www.speex.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on: speexdsp
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on:
 
 name=speexdsp-32
 version=1.2.1
-release=1
+release=2
 source=(https://ftp.osuosl.org/pub/xiph/releases/speex/speexdsp-$version.tar.gz)
 
-build() {
-	cd speexdsp-$version
-
+# Custom build required: generated Makefile needs documentation pruning after configure
+pkg_build() {
+  (
+    set -e
 	./configure \
 		--prefix=/usr \
 		--libdir=/usr/lib32
@@ -23,4 +22,5 @@ build() {
 	make DESTDIR=$PKG install
 
 	rm -r $PKG/usr/include
+  )
 }

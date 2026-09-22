@@ -1,17 +1,14 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Wrapper library for evdev devices
 # URL: http://xorg.freedesktop.org
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: meson ninja
 
 name=libevdev
-version=1.13.4
+version=1.13.7
 release=1
 source=(https://www.freedesktop.org/software/libevdev/libevdev-$version.tar.xz)
 
-build() {
-	cd $name-$version
+pkg_build() {
 
 	mkdir build &&
 	cd    build &&

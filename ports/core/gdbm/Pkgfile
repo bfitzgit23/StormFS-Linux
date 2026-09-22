@@ -1,7 +1,6 @@
-# Add your top line text here
-# Your line to add at the top here
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 name=gdbm
 version=1.26
 release=1
-source=(https://ftpmirror.gnu.org/gdbm/gdbm-$version.tar.gz)
+source=(https://ftp.gnu.org/gnu/gdbm/gdbm-$version.tar.gz)
 build_opt="--enable-libgdbm-compat"

@@ -8,14 +8,14 @@ Download the latest stable kernel from kernel.org:
 
 ```bash
 cd /sources
-wget https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.10.6.tar.xz
+wget https://cdn.kernel.org/pub/linux/kernel/v7.x/linux-7.1.8.tar.xz
 ```
 
 Extract the archive:
 
 ```bash
-tar -xf linux-6.10.6.tar.xz
-cd linux-6.10.6
+tar -xf linux-7.1.8.tar.xz
+cd linux-7.1.8
 ```
 
 ## 9.2 Kernel Configuration
@@ -93,7 +93,7 @@ This compiles the kernel image (`vmlinuz`), modules, and device tree blobs. On a
 make modules_install
 ```
 
-This copies compiled modules to `/lib/modules/<kernel-version>/`. For StormFS with kernel 6.10.6, the path will be `/lib/modules/6.10.6-stormfs/`.
+This copies compiled modules to `/lib/modules/<kernel-version>/`. For StormFS with kernel 7.1.8, the path will be `/lib/modules/7.1.8-stormfs/`.
 
 ### Install the Kernel Image
 
@@ -104,9 +104,9 @@ make install
 This copies the kernel image and associated files to `/boot/`:
 
 ```
-/boot/vmlinuz-6.10.6-stormfs
-/boot/config-6.10.6-stormfs
-/boot/System.map-6.10.6-stormfs
+/boot/vmlinuz-7.1.8-stormfs
+/boot/config-7.1.8-stormfs
+/boot/System.map-7.1.8-stormfs
 ```
 
 ### Manual Installation (Alternative)
@@ -114,9 +114,9 @@ This copies the kernel image and associated files to `/boot/`:
 If `make install` does not place files where you need them:
 
 ```bash
-cp arch/x86/boot/bzImage /boot/vmlinuz-6.10.6-stormfs
-cp System.map /boot/System.map-6.10.6-stormfs
-cp .config /boot/config-6.10.6-stormfs
+cp arch/x86/boot/bzImage /boot/vmlinuz-7.1.8-stormfs
+cp System.map /boot/System.map-7.1.8-stormfs
+cp .config /boot/config-7.1.8-stormfs
 ```
 
 ## 9.5 Setting Up /boot
@@ -124,19 +124,19 @@ cp .config /boot/config-6.10.6-stormfs
 Verify that the kernel files are in place:
 
 ```bash
-ls -la /boot/vmlinuz-6.10.6-stormfs
-ls -la /boot/System.map-6.10.6-stormfs
-ls -la /boot/config-6.10.6-stormfs
+ls -la /boot/vmlinuz-7.1.8-stormfs
+ls -la /boot/System.map-7.1.8-stormfs
+ls -la /boot/config-7.1.8-stormfs
 ```
 
 Set permissions and create a symlink for convenience:
 
 ```bash
-chmod 644 /boot/vmlinuz-6.10.6-stormfs
-chmod 644 /boot/config-6.10.6-stormfs
-chmod 644 /boot/System.map-6.10.6-stormfs
+chmod 644 /boot/vmlinuz-7.1.8-stormfs
+chmod 644 /boot/config-7.1.8-stormfs
+chmod 644 /boot/System.map-7.1.8-stormfs
 
-ln -sf vmlinuz-6.10.6-stormfs /boot/vmlinuz
+ln -sf vmlinuz-7.1.8-stormfs /boot/vmlinuz
 ```
 
 ### Generating grub.cfg Entry (Preview)
@@ -144,9 +144,9 @@ ln -sf vmlinuz-6.10.6-stormfs /boot/vmlinuz
 For GRUB configuration, see [Chapter 10: Bootloader](chapter-10-bootloader.md). A minimal manual entry for testing:
 
 ```
-menuentry "StormFS Linux 6.10.6" {
-    linux /boot/vmlinuz-6.10.6-stormfs root=/dev/sda2 ro
-    initrd /boot/initramfs-6.10.6-stormfs.img
+menuentry "StormFS Linux 7.1.8" {
+    linux /boot/vmlinuz-7.1.8-stormfs root=/dev/sda2 ro
+    initrd /boot/initramfs-7.1.8-stormfs.img
 }
 ```
 
@@ -160,14 +160,12 @@ If not already installed from the BLFS build:
 
 ```bash
 cd /sources
-tar -xf dracut-060.tar.xz
-cd dracut-060
+tar -xf dracut-ng-111.tar.gz
+cd dracut-ng-111
 
 ./configure --prefix=/usr \
             --sysconfdir=/etc \
-            --sbinddir=/sbin \
-            --libdir=/usr/lib \
-            --hwdbdir=/usr/lib/udev/hwdb.d
+            --disable-documentation
 make
 make install
 ```
@@ -175,25 +173,25 @@ make install
 ### Generating the initramfs
 
 ```bash
-dracut --kver 6.10.6-stormfs /boot/initramfs-6.10.6-stormfs.img
+dracut --kver 7.1.8-stormfs /boot/initramfs-7.1.8-stormfs.img
 ```
 
 For a more minimal initramfs (useful for simple setups):
 
 ```bash
-dracut --kver 6.10.6-stormfs \
+dracut --kver 7.1.8-stormfs \
        --hostonly \
        --compress xz \
-       /boot/initramfs-6.10.6-stormfs.img
+       /boot/initramfs-7.1.8-stormfs.img
 ```
 
 For debugging boot issues, generate an initramfs with a shell:
 
 ```bash
-dracut --kver 6.10.6-stormfs \
+dracut --kver 7.1.8-stormfs \
        --debug \
        --shell \
-       /boot/initramfs-6.10.6-stormfs.img
+       /boot/initramfs-7.1.8-stormfs.img
 ```
 
 ### Regenerating after Module Changes
@@ -201,13 +199,13 @@ dracut --kver 6.10.6-stormfs \
 Any time you add or remove kernel modules (e.g., new hardware support, filesystem drivers), regenerate the initramfs:
 
 ```bash
-dracut --force --kver 6.10.6-stormfs /boot/initramfs-6.10.6-stormfs.img
+dracut --force --kver 7.1.8-stormfs /boot/initramfs-7.1.8-stormfs.img
 ```
 
 ### Verify the initramfs
 
 ```bash
-ls -lh /boot/initramfs-6.10.6-stormfs.img
+ls -lh /boot/initramfs-7.1.8-stormfs.img
 ```
 
 Optionally inspect its contents:
@@ -215,7 +213,7 @@ Optionally inspect its contents:
 ```bash
 mkdir /tmp/initramfs-check
 cd /tmp/initramfs-check
-/usr/lib/dracut/skipcpio /boot/initramfs-6.10.6-stormfs.img | zcat | cpio -idmv 2>/dev/null
+/usr/lib/dracut/skipcpio /boot/initramfs-7.1.8-stormfs.img | zcat | cpio -idmv 2>/dev/null
 ls -la
 cd /
 rm -rf /tmp/initramfs-check
@@ -306,7 +304,7 @@ If the system fails to boot with a kernel panic:
 2. Add `init=/bin/bash` to the kernel command line to get a shell
 3. Verify the initramfs contains necessary modules:
    ```bash
-   dracut --force --kver 6.10.6-stormfs --regenerate-all /boot/initramfs-6.10.6-stormfs.img
+   dracut --force --kver 7.1.8-stormfs --regenerate-all /boot/initramfs-7.1.8-stormfs.img
    ```
 4. Check that `/etc/fstab` entries match your partition layout
 
@@ -314,7 +312,10 @@ If the system fails to boot with a kernel panic:
 
 ```bash
 dmesg | grep -i error
-journalctl -b -p err
+
+# OpenRC/syslog equivalent of journalctl -b -p err
+grep -iE 'err|crit|alert|emerg' /var/log/messages 2>/dev/null || true
+rc-status --all
 ```
 
 ## 9.10 References
@@ -323,4 +324,4 @@ journalctl -b -p err
 - [KernelNewbies](https://kernelnewbies.org/)
 - [dracut Manual](https://man7.org/linux/man-pages/man8/dracut.8.html)
 - [Chapter 10: Bootloader](chapter-10-bootloader.md) — GRUB configuration
-- [Chapter 12: System Initialization](chapter-12-system-initialization.md) — systemd units
+- [Chapter 12: System Initialization](chapter-12-system-initialization.md) — OpenRC services and optional systemd compatibility

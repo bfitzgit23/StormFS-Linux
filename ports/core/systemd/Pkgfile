@@ -5,7 +5,7 @@
 
 name=systemd
 version=261.2
-release=1
+release=2
 
 source=(
     https://github.com/$name/$name/archive/v$version/$name-$version.tar.gz
@@ -18,8 +18,8 @@ pkg_build() {
         -e 's/GROUP="sgx", //' \
         rules.d/50-udev-default.rules.in
 
-    mkdir -v build
-    cd build
+    mkdir -v build || return 1
+    cd build || return 1
 
     meson setup .. \
         --prefix=/usr \
@@ -40,10 +40,10 @@ pkg_build() {
         -D nobody-group=nogroup \
         -D sysupdate=disabled \
         -D ukify=disabled \
-        -D docdir=/usr/share/doc/$name-$version
+        -D docdir=/usr/share/doc/$name-$version || return 1
 
-    ninja
-    DESTDIR="$PKG" ninja install
+    ninja || return 1
+    DESTDIR="$PKG" ninja install || return 1
 
     install -d -m 0755 "$PKG/usr/share/man"
 

@@ -1,18 +1,15 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Audio processing library for changing tempo, pitch and playback rates.
 # URL: https://codeberg.org/soundtouch/soundtouch
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on: 
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on:
 
 name=soundtouch
-version=2.3.3
-release=1
+version=2.4.1
+release=2
 source=(https://codeberg.org/$name/$name/archive/$version.tar.gz)
 renames=($name-$version.tar.gz)
 
-build() {
-	cd $name
+pkg_build() {
 	./bootstrap &&
 ./configure --prefix=/usr \
             --docdir=/usr/share/doc/soundtouch-$version &&

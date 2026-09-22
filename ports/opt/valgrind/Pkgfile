@@ -1,17 +1,14 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: A debugging and profiling system for Linux programs
 # URL: https://valgrind.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Optional: gdb llvm which
 
 name=valgrind
-version=3.24.0
-release=1
+version=3.27.1
+release=2
 source=(https://sourceware.org/pub/$name/$name-$version.tar.bz2)
 
-build() {
-  cd $name-$version
+pkg_build() {
  sed -i 's|/doc/valgrind||' docs/Makefile.in &&
 
 ./configure --prefix=/usr \

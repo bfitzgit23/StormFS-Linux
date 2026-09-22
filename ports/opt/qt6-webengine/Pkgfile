@@ -1,39 +1,26 @@
-# Description: Provides support for web applications using the Chromium browser project
-# URL: https://www.qt.io/
-# Maintainer: Venom Linux Team, venomlinux at disroot dot org
-# Depends on: ffmpeg libevent libva libwebp minizip nodejs nss pciutils python3-html5lib python3-six qt6-tools qt6-webchannel pcre2 libxcomposite libxcursor brotli snappy
+# Description: Qt 6 WebEngine Chromium-based web content module
+# URL: https://doc.qt.io/qt-6/qtwebengine-index.html
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: bison cmake flex gperf ninja nodejs nss python3 python3-html5lib qt6
 
 name=qt6-webengine
-version=6.11.1
+version=6.11.2
 release=1
-source=($name-$version.tar.xz::https://download.qt.io/official_releases/qt/${version%.*}/$version/submodules/qtwebengine-everywhere-src-$version.tar.xz)
+source=(https://download.qt.io/official_releases/qt/6.11/$version/submodules/qtwebengine-everywhere-src-$version.tar.xz)
 
-build() {
-	cd qtwebengine-everywhere-src-$version
+pkg_build() {
+    export PATH=/opt/qt6/bin:$PATH
 
-	#export PYTHON=/usr/bin/python3 
+    unset DESTDIR DEST_DIR INSTALLROOT install_root INSTALL_ROOT
 
-	# fix a build of ffmpeg does not use OpenH264
-#sed -e '189 s/=/& false/' -e '190 d' -i.orig src/3rdparty/chromium/third_party/webrtc/webrtc.gni
+    mkdir -p _build
+    cd _build
+    /opt/qt6/bin/qt-configure-module .. || return 1
+    cmake --build . --parallel "${JOBS:-1}" || return 1
+    DESTDIR="$PKG" cmake --install . || return 1
 
-	cmake -B build -G Ninja \
-		-DCMAKE_INSTALL_PREFIX=/usr \
-		-DCMAKE_INSTALL_LIBDIR=lib \
-		-DCMAKE_INSTALL_LIBEXECDIR=lib \
-		-DCMAKE_BUILD_TYPE=Release \
-		-DCMAKE_C_FLAGS_RELEASE="$CFLAGS" \
-		-DCMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
-		-DQT_USE_CCACHE=$(prt-get isinst ccache && printf "ON" || printf "OFF") \
-		-DCMAKE_MESSAGE_LOG_LEVEL=STATUS \
-		-DCMAKE_TOOLCHAIN_FILE=/usr/lib/cmake/Qt6/qt.toolchain.cmake \
-		-DQT_FEATURE_webengine_system_ffmpeg=ON \
-		-DQT_FEATURE_webengine_system_icu=ON \
-		-DQT_FEATURE_webengine_system_libevent=ON \
-		-DQT_FEATURE_webengine_proprietary_codecs=ON \
-		-DQT_FEATURE_webengine_ozone_x11=ON \
-		-DQT_FEATURE_webengine_system_re2=OFF \
-                -DQT_FEATURE_webengine_webrtc_pipewire=$(prt-get isinst pipewire && printf "ON" || printf "OFF") \
-		-DQT_FEATURE_webengine_kerberos=$(prt-get isinst krb5 && printf "ON" || printf "OFF") 
-	cmake --build build
-	DESTDIR=$PKG cmake --install build
+    test -e "$PKG/opt/qt6/lib/cmake/Qt6WebEngineCore/Qt6WebEngineCoreConfig.cmake" || {
+        echo "ERROR: Qt6 WebEngine CMake metadata was not staged" >&2
+        return 1
+    }
 }

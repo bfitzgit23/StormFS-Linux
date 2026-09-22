@@ -1,18 +1,17 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Secure Sockets Layer and Transport Layer Security tools
 # URL: https://www.openssl.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: zlib-32
 
 name=openssl-32
-version=3.4.1
-release=1
+version=4.0.2
+release=2
 source=(https://github.com/openssl/openssl/releases/download/openssl-$version/openssl-$version.tar.gz)
 
-build() {
-	cd openssl-$version
-CFLAGS+=" -m32" CXXFLAGS+=" -m32" \
+# Custom build required: OpenSSL uses its Configure target and install_sw
+pkg_build() {
+  (
+    set -e
 	./Configure --prefix=/usr \
 		--libdir=/usr/lib32 \
 		--openssldir=/etc/ssl \
@@ -30,4 +29,5 @@ CFLAGS+=" -m32" CXXFLAGS+=" -m32" \
 
 	find $PKG -name "*fips*" -delete
 	rm -r $PKG/usr/{include,bin}
+  )
 }

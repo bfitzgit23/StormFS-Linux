@@ -1,6 +1,5 @@
-# Add your top line text here
-# Your line to add at the top here
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 name=mpc
 version=1.4.1
 release=1
-source=(https://ftpmirror.gnu.org/mpc/mpc-$version.tar.xz)
+source=(https://ftp.gnu.org/gnu/mpc/mpc-$version.tar.xz)

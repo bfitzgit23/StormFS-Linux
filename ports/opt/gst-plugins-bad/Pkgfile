@@ -1,18 +1,15 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: a set of plug-ins that aren't up to par compared to the rest
 # URL: https://gstreamer.freedesktop.org/modules/gst-plugins-bad.html
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: gst-plugins-base libdvdread libdvdnav soundtouch
 # Optional: aom bluez chromaprint ladspa libde265 lv2 musepack openal openh264 soundtouch x265
 
 name=gst-plugins-bad
-version=1.26.2
+version=1.28.7
 release=1
 source=(https://gstreamer.freedesktop.org/src/$name/$name-$version.tar.xz)
 
-build() {
-  cd $name-$version
+pkg_build() {
   mkdir build &&
 cd    build &&
 
@@ -24,6 +21,6 @@ meson  setup ..            \
        -Dpackage-name="GStreamer 1.22.6 BLFS" &&
 ninja
 
-  
+
   DESTDIR=$PKG ninja install
 }

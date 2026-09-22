@@ -1,24 +1,25 @@
-# Add your top line text here
-# Your line to add at the top here
-# Description: Gavl is short for Gmerlin Audio Video Library. It is a low level library that handles the details of audio and video formats like colorspaces, samplerates, multichannel configurations etc. It provides standardized definitions for those formats as well as container structures for carrying audio samples or video images inside an application.
-# URL:         https://downloads.sourceforge.net/gmerlin/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on:  libpng
+# Description: Low-level audio/video support library used by multimedia applications
+# URL: https://github.com/bplaum/gavl
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: gnutls libdrm libglvnd libva nettle libpng
 # Optional: doxygen
 
 name=gavl
-version=1.4.0
-release=1
-source=(https://downloads.sourceforge.net/gmerlin/$name-$version.tar.gz)
+version=2.0.1
+release=2
+source=(https://github.com/bplaum/gavl/archive/refs/tags/v$version.tar.gz
+        gavl-2.0.1-nettle4-md5.patch)
 
-build() {
-	cd $name-$version
-sed -i "/stdio/a #include <string.h>" src/fill_test.c
-	LIBS=-lm                      \
-./configure --prefix=/usr     \
-            --with-doxygen \
-            --with-cpuflags=none \
-            --docdir=/usr/share/doc/gavl-1.4.0 &&
-make
-	make DESTDIR=$PKG install
+pkg_build() {
+    autoreconf -fi
+
+    ./configure \
+        --prefix=/usr \
+        --disable-static \
+        --enable-shared \
+        --without-doxygen \
+        --with-cpuflags=none
+
+    make -j${JOBS:-1}
+    make DESTDIR="$PKG" install
 }

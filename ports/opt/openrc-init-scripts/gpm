@@ -1,0 +1,6 @@
+#!/sbin/openrc-run
+description="General Purpose Mouse daemon"
+command="/usr/sbin/gpm"
+command_args="-m /dev/input/mice -t imps2"
+command_background=true
+pidfile="/run/gpm.pid"

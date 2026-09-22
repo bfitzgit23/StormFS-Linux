@@ -1,13 +1,11 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: SWIG (Simplified Wrapper and Interface Generator) is a compiler that integrates C and C++ with languages including Perl, Python, Tcl, Ruby, PHP, Java, C#, D, Go, Lua, Octave, R, Scheme, and Ocaml. SWIG can also export its parse tree into Lisp s-expressions and XML. SWIG reads annotated C/C++ header files and creates wrapper code (glue code) in order to make the corresponding C/C++ libraries available to the listed languages, or to extend C/C++ programs with a scripting language.
 # URL:         https://downloads.sourceforge.net/swig/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on:  pcre2
 # Optional:    boost
 
 name=swig
-version=4.3.0
+version=4.5.1
 release=1
 source=(https://downloads.sourceforge.net/$name/$name-$version.tar.gz)
 

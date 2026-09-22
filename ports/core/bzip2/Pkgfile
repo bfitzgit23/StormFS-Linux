@@ -1,15 +1,13 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Programs for compressing and decompressing files
 # URL:         
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on:  
 
 name=bzip2
 version=1.0.8
 release=1
 source=(https://www.sourceware.org/pub/bzip2/$name-$version.tar.gz
-https://www.linuxfromscratch.org/patches/lfs/development/bzip2-1.0.8-install_docs-1.patch)
+bzip2-1.0.8-install_docs-1.patch)
 keep_static=1
 
 bootstrap_build() {

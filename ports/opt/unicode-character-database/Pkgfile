@@ -1,17 +1,15 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Unicode Character Database
 # URL: https://www.unicode.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 
 name=unicode-character-database
-version=15.1.0
+version=17.0.0
 release=1
-source=(https://www.unicode.org/Public/zipped/$version/UCD.zip
-  https://www.unicode.org/Public/zipped/$version/Unihan.zip)
+source=(https://www.unicode.org/Public/$version/ucd/UCD.zip
+  https://www.unicode.org/Public/$version/ucd/Unihan.zip)
 renames=(UCD-$version.zip Unihan-$version.zip)
 
-build() {
+pkg_build() {
   cp $PKGMK_SOURCE_DIR/UCD-$version.zip .
   cp $PKGMK_SOURCE_DIR/Unihan-$version.zip .
   for _f in UCD Unihan; do

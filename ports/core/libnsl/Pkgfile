@@ -1,8 +1,6 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: The libnsl package contains the public client interface for NIS(YP). It replaces the NIS library that used to be in glibc.
 # URL:         https://github.com/thkukuk/$name/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on:  libtirpc
 
 name=libnsl

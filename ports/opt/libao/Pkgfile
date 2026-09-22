@@ -1,9 +1,7 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: The libao package contains a cross-platform audio library. This is useful to output audio on a wide variety of platforms. It currently supports WAV files, OSS (Open Sound System), ESD (Enlighten Sound Daemon), ALSA (Advanced Linux Sound Architecture), NAS (Network Audio system), aRTS (analog Real-Time Synthesizer), and PulseAudio (next generation GNOME sound architecture).
 # URL:         https://downloads.xiph.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on:  
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on:
 # Optional: a graphical environment alsa pulseaudio
 
 name=libao
@@ -14,7 +12,7 @@ source=(https://github.com/xiph/${name}/archive/${version}/${name}-${version}.ta
 
 pkg_build() {
 CFLAGS+=' -Wno-error=implicit-function-declaration'
-	autoreconf -fiv	
+	autoreconf -fiv
 	./configure --prefix=/usr --enable-alsa-mmap
 	make -j1
 	make DESTDIR="${PKG}" install
@@ -22,4 +20,3 @@ CFLAGS+=' -Wno-error=implicit-function-declaration'
 	rm -r "${PKG}"/usr/share/doc
 }
 # s-sht-mode
-

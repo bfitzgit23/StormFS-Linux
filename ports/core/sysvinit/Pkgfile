@@ -1,22 +1,18 @@
-# Description: programs for controlling the startup, running, and shutdown of the system
-# URL:         https://savannah.nongnu.org/projects/sysvinit
-# Maintainer:  Emmett1, emmett1 dot 2miligrams at gmail dot com
-# Depends on:  
+# Description: System V init and shutdown utilities
+# URL: https://github.com/slicer69/sysvinit
+# Maintainer: BFSOS maintainers
+# Depends: filesystem
 
 name=sysvinit
-version=3.02
+version=3.15
 release=1
-source=(http://download.savannah.gnu.org/releases/sysvinit/sysvinit-$version.tar.xz)
+source=(https://github.com/slicer69/sysvinit/archive/refs/tags/$version.tar.gz)
 
-build() {
-        cd $name-$version
+pkg_build() {
+    cd "$name-$version" || return 1
+    make -C src || return 1
+    make -C src DESTDIR="$PKG" install || return 1
 
-        make -C src
-        make -C src ROOT=$PKG install
-
-        rm $PKG/usr/bin/{last,lastb,readbootlog,mesg,utmpdump,wall}
-        rm $PKG/bin/pidof
-        rm $PKG/sbin/{sulogin,logsave}
-        rm $PKG/usr/share/man/man1/{last,lastb,readbootlog,mesg,utmpdump,wall}.1
-        rm $PKG/usr/share/man/man8/{pidof,logsave,sulogin}.8
+    install -d -m 0755 "$PKG/etc/inittab.d" "$PKG/etc/rc.d"
+    ln -sfn /usr/lib/sysvinit/init "$PKG/sbin/init"
 }

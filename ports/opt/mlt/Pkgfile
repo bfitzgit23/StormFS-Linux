@@ -1,24 +1,32 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: MLT package is the Media Lovin Toolkit. It is an open source multimedia framework, designed and developed for television broadcasting. It provides a toolkit for broadcasters, video editors, media players, transcoders, web streamers and many more types of applications.
 # URL:          https://github.com/mltframework/mlt/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on:  frei0r-plugins qt6 sdl
-# Optional: doxygen fftw libexif sdl2 jack moveit sox vid.stab
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on:  ffmpeg frei0r-plugins libsamplerate qt6 rnnoise sdl2
+# Optional: doxygen fftw libexif jack moveit sox vid.stab
 
 name=mlt
-version=7.32.0
-release=1
-source=(https://github.com/mltframework/$name/releases/download/v$version/$name-$version.tar.gz)
+version=7.40.0
+release=7
+source=(https://github.com/mltframework/$name/releases/download/v$version/$name-$version.tar.gz
+        https://www.linuxfromscratch.org/patches/blfs/svn/mlt-7.40.0-ffmpeg-9.0.patch)
 pkg_build () {
-mkdir build &&
-cd    build &&
+    mkdir -p build || return 1
+    cd build || return 1
 
-cmake -D CMAKE_INSTALL_PREFIX=/usr \
-      -D CMAKE_BUILD_TYPE=Release  \
-      -D MOD_QT=OFF                \
-      -D MOD_QT6=ON                \
-      -W no-dev .. &&
-make 
-make install
+    cmake \
+        -DCMAKE_INSTALL_PREFIX=/usr \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DMOD_QT=OFF \
+        -DMOD_QT6=ON \
+        -DMOD_SOX=OFF \
+        -DMOD_MOVIT=OFF \
+        -DMOD_VIDSTAB=OFF \
+        -DMOD_JACKRACK=OFF \
+        -DMOD_RUBBERBAND=OFF \
+        -DMOD_RNNOISE=ON \
+        -Wno-author \
+        .. || return 1
+
+    make -j${JOBS:-1} || return 1
+    make DESTDIR="$PKG" install || return 1
 }

@@ -1,11 +1,13 @@
 [Desktop Entry]
-Name=Firefox
-Name[en_US]=Firefox
+Name=Firefox-bin
+Name[en_US]=Firefox-bin
 GenericName=Web Browser
 GenericName[en_US]=Web Browser
-Comment=Free web browser from Mozilla
-Exec=firefox %U
+Comment=Mozilla Firefox vendor binary packaged for BFSOS
+Exec=firefox-bin %U
 Terminal=false
 Type=Application
-Icon=firefox
-Categories=Network;
+Icon=firefox-bin
+Categories=Network;WebBrowser;
+MimeType=text/html;application/xhtml+xml;x-scheme-handler/http;x-scheme-handler/https;
+StartupNotify=true

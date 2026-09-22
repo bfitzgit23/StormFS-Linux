@@ -1,1 +1,0 @@
-url=https://download.gimp.org/pub/$name/v${version%.*}

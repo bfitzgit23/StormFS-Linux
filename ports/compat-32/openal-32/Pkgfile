@@ -1,26 +1,19 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Cross-platform 3D audio.
 # URL: https://github.com/kcat/openal-soft
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: alsa-lib-32 openal
 
 name=openal-32
-version=1.24.3
-release=1
+version=1.25.2
+release=3
 source=(https://github.com/kcat/openal-soft/archive/$version/openal-soft-$version.tar.gz)
 
-build() {
-	cmake -S openal-soft-$version -B build ${PKGMK_OPENAL_32} -G Ninja \
-		-D CMAKE_INSTALL_PREFIX=/usr \
-		-D CMAKE_INSTALL_LIBDIR=lib32 \
-		-D ALSOFT_UTILS=OFF \
-		-D ALSOFT_EXAMPLES=OFF \
-		-D QT_QMAKE_EXECUTABLE=qmake-disabled \
-		-D CMAKE_BUILD_TYPE=Release
+build_opt="-D ALSOFT_UTILS=OFF -D ALSOFT_EXAMPLES=OFF -D QT_QMAKE_EXECUTABLE=qmake-disabled"
 
-	cmake --build build
-	DESTDIR=$PKG cmake --install build
+post_build() {
+  rm -rf "$PKG/usr/include" "$PKG/usr/share"
+}
 
-	rm -r $PKG/usr/{include,share}
+pre_build() {
+        _bfs_require_compat32_extension 2 || return $?
 }

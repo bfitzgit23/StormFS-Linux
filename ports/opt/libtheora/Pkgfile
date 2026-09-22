@@ -1,8 +1,6 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: a free and open video compression format
 # URL: https://www.theora.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: libogg
 # Optional: libvorbis sdl12-compat libpng doxygen texlive tl-unx bibtex transfig valgrind
 
@@ -11,8 +9,7 @@ version=1.2.0
 release=1
 source=(https://downloads.xiph.org/releases/theora/$name-$version.tar.gz)
 
-build() {
-  cd $name-$version
+pkg_build() {
 
   sed -i 's/png_\(sizeof\)/\1/g' examples/png2theora.c &&
 ./configure --prefix=/usr --disable-static &&

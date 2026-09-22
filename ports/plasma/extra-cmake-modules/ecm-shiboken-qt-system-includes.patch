@@ -1,0 +1,10 @@
+--- a/modules/ECMGeneratePythonBindings.cmake
++++ b/modules/ECMGeneratePythonBindings.cmake
+@@ -128,6 +128,7 @@
+     # Set up the options to pass to shiboken.
+     set(shiboken_options --enable-pyside-extensions
+         ${INCLUDES}
++        --force-process-system-include-paths=/opt/qt6/include
+         --include-paths=${CMAKE_SOURCE_DIR}
+         --typesystem-paths=${CMAKE_SOURCE_DIR}
+         --typesystem-paths="${CMAKE_INSTALL_PREFIX}/share/PySide${QT_MAJOR_VERSION}/typesystems"

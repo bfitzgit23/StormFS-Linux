@@ -4,13 +4,16 @@
 
 StormFS Linux is an x86_64 source-built Linux distribution maintained by the StormFS community. It uses an LFS/MLFS-style bootstrap to produce a complete, bootable Linux system entirely from source code.
 
+> **Book basis:** This book tracks **Linux From Scratch 13.1** (released September 2026), the current supported LFS release — toolchain binutils-2.47, gcc-16.2.0, glibc-2.44, and Linux-7.1.8 — while retaining the StormFS-specific additions: the CRUX-style `ports`/pkgutils/prt-get flow, the rootfs-archive workflow, and the OpenRC-first initialization material with optional systemd compatibility.
+
 ### Core Design Principles
 
 - **Source-built**: Every package in the base system is compiled from source on the build host, producing an optimized system tailored to x86_64.
 - **CRUX-based packaging**: Uses CRUX `pkgutils` and `ports` for package builds, extended for StormFS build conventions.
 - **Dependency-aware management**: `prt-get` handles dependency resolution and package installation.
 - **Multilib support**: Full 32-bit and 64-bit library support, with 32-bit libraries installed under `/usr/lib32`.
-- **systemd init**: Uses systemd as the default init system.
+- **OpenRC init**: Uses OpenRC as the default service manager and boot workflow; systemd compatibility is optional.
+- **systemd compatibility reference**: The systemd service, networking, logging, and boot procedures remain documented for installations that select systemd.
 - **UEFI and BIOS**: Supports both legacy BIOS and UEFI boot paths.
 - **Advanced storage**: Installer support for Btrfs subvolumes, LUKS, LVM, md RAID, and combinations thereof.
 
@@ -20,7 +23,7 @@ StormFS builds upon the Linux From Scratch methodology but diverges in several i
 
 1. **CRUX ports system** instead of hand-written build scripts
 2. **prt-get** for dependency-aware package management
-3. **systemd** as the native init system (rather than SysVinit)
+3. **OpenRC** as the default service manager, with systemd compatibility documented separately
 4. **Multilib** as a first-class target (32-bit libraries under `/usr/lib32`)
 5. **PyQt5 graphical installer** for deployment
 6. **Live ISO** with LightDM, XFCE default desktop, and auto-login
@@ -100,7 +103,7 @@ This book is structured as a sequential build guide. Each chapter corresponds to
 
 1. **Chapter 2**: Prepare the host system (create directories, set environment variables)
 2. **Chapter 3**: Build the temporary toolchain (compiler, linker, and essential tools)
-3. **Chapter 4**: Build the base system inside the toolchain (131 packages)
+3. **Chapter 4**: Build the base system inside the toolchain (132 packages)
 4. **Chapter 5**: Rebuild the base system using the final toolchain (self-hosting validation)
 5. **Chapter 6**: Verify the base system (filesystem checks, chroot tests, toolchain leakage)
 6. **Chapter 7**: Create the rootfs archive (XZ compression, exclusions, verification)

@@ -24,3 +24,9 @@ bfs-install*.log
 !/logs/base/.gitkeep
 !/logs/installer/
 !/logs/installer/.gitkeep
+
+
+# Generated book output
+docs/*/html/
+docs/*/*.pdf
+__pycache__/

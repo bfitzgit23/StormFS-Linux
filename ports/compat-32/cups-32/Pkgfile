@@ -1,19 +1,18 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: CUPS - Common UNIX Printing System
 # URL: https://www.cups.org
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on: avahi-32 cups
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: avahi-32 cups libusb-32 zlib-32
 # Optional: dbus-32 gnutls-32
 
 name=cups-32
-version=2.4.11
-release=1
+version=2.4.19
+release=4
 source=(https://github.com/OpenPrinting/cups/releases/download/v$version/${name%-*}-$version-source.tar.gz)
 
-build() {
-	cd ${name%-*}-$version
-
+# Custom build required: only the install-libs target belongs in the compat package
+pkg_build() {
+  (
+    set -e
 	PKGMK_CUPS=' --with-tls=openssl'
 	prt-get isinst gnutls-32 && PKGMK_CUPS=' --with-tls=gnutls'
 
@@ -38,6 +37,7 @@ build() {
 		--disable-{pam,dbus,dnssd,systemd} \
 		--without-systemd
 
-	make
+	make libs
 	make BUILDROOT=$PKG install-libs
+  )
 }

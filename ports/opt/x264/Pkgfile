@@ -1,13 +1,11 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Library for encoding H264/AVC video streams (snapshot).
 # URL: https://www.videolan.org/developers/x264.html
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: nasm
 # Optional: ffms2 gpac liblsmash
 
 name=x264
-version=20250212
+version=20250815
 release=1
 source=(https://anduin.linuxfromscratch.org/BLFS/x264/$name-$version.tar.xz)
 

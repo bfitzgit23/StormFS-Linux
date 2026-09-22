@@ -1,0 +1,22 @@
+#!/sbin/openrc-run
+
+description="Wireless daemon"
+
+pidfile=/run/iwd.pid
+command=/usr/sbin/iwd
+command_background=true
+
+start_pre() {
+	checkpath --directory --mode 0755 /run/iwd
+}
+
+depend() {
+	need dbus
+	need logger
+}
+
+stop() {
+	ebegin "Stopping iwd"
+	start-stop-daemon --stop --pidfile "$pidfile" --exec "$command"
+	eend $?
+}

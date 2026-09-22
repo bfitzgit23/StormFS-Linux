@@ -1,28 +1,27 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Frei0r is a minimalistic plugin API for video effects. Note that the 0 in the name is a zero, not a capital letter o.
-# URL:         https://files.dyne.org/frei0r/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on:  gavl
+# URL: https://github.com/dyne/frei0r
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: gavl
 # Optional: doxygen opencv
 
 name=frei0r-plugins
-version=1.8.0
+version=3.5.0
 release=1
-source=(https://files.dyne.org/frei0r/releases/$name-$version.tar.gz)
+source=(https://github.com/dyne/frei0r/archive/refs/tags/v$version.tar.gz)
 
-build() {
-	cd $name-$version
+pkg_build() {
+    mkdir -p build || return 1
+    cd build || return 1
 
-	mkdir -vp build &&
-cd        build &&
+    cmake \
+        -DCMAKE_INSTALL_PREFIX=/usr \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DBUILD_TESTING=OFF \
+        -DWITHOUT_OPENCV=ON \
+        -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+        -Wno-author \
+        .. || return 1
 
-cmake -DCMAKE_INSTALL_PREFIX=/usr \
-      -DCMAKE_BUILD_TYPE=Release  \
-      -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
-      -Wno-dev ..                 &&
-      
-
-make
-	make DESTDIR=$PKG install
+    make -j${JOBS:-1} || return 1
+    make DESTDIR="$PKG" install || return 1
 }

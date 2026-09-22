@@ -1,17 +1,14 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: ALSA libraries
 # URL: http://www.alsa-project.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # optional: systemd doxygen python2 alsa-ucm-conf
 
 name=alsa-lib
-version=1.2.14
+version=1.2.16.1
 release=1
 source=(https://www.alsa-project.org/files/pub/lib/$name-$version.tar.bz2)
 
-build() {
-	cd $name-$version
+pkg_build() {
 	./configure &&
 make
 #make doc

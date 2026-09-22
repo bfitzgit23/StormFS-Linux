@@ -1,6 +1,6 @@
 # Description: JSON-C implements a reference-counted JSON object model and parser for C.
 # URL: https://github.com/json-c/json-c
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depons on: cmake
 
 name=json-c

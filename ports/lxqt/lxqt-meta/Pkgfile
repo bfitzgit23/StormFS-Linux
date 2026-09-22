@@ -1,16 +1,13 @@
-# Add your top line text here
-# Your line to add at the top here
-# Description: KDE Plasma 6 meta port
-# URL: https://kde.org/plasma-desktop/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on:lxqt-config lxqt-session libdbusmenu-lxqt lxqt-globalkeys lxqt-sudo libfm-extra lxqt-menu-data lxqt-themes libfm-qt menu-cache liblxqt lxqt-openssh-askpass muparser libqtxdg lxqt-panel obconf-qt libsysstat lxqt-policykit pcmanfm-qt lxqt-about lxqt-powermanagement qterminal  lxqt-admin lxqt-qtplugin qtxdg-tools lxqt-build-tools lxqt-runner xdg-desktop-portal-lxqt
+# Description: Complete BFSOS LXQt desktop meta package
+# URL: https://lxqt-project.org/
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: libfm-qt liblxqt libqtxdg lxqt-about lxqt-admin lxqt-archiver lxqt-config lxqt-globalkeys lxqt-menu-data lxqt-notificationd lxqt-openssh-askpass lxqt-panel lxqt-policykit lxqt-powermanagement lxqt-qtplugin lxqt-runner lxqt-session lxqt-sudo lxqt-themes lxqt-wayland-session pcmanfm-qt pavucontrol-qt qterminal qtermwidget qtxdg-tools xdg-desktop-portal-lxqt lximage-qt qps screengrab openbox obconf-qt breeze-icons desktop-file-utils sddm pipewire wireplumber alsa-utils rtkit labwc swaylock
+
 name=lxqt-meta
-version=2.0.0
-release=1
-source=()
+version=2.4.0
+release=5
 
-build() {
-    mkdir $PKG/usr
+pkg_build() {
+    install -d "$PKG/usr/share/doc/$name"
+    printf '%s\n' 'BFSOS LXQt 2.4 desktop meta-package.' > "$PKG/usr/share/doc/$name/README"
 }
-
-# vim: set ts=4 et:

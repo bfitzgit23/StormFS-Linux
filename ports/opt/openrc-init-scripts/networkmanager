@@ -1,0 +1,7 @@
+#!/sbin/openrc-run
+name="NetworkManager"
+description="NetworkManager daemon"
+command="/usr/sbin/NetworkManager"
+command_args="--no-daemon"
+pidfile="/run/${RC_SVCNAME}.pid"
+command_background=true

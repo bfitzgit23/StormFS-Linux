@@ -1,26 +1,20 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Netscape Portable Runtime library
 # URL: https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSPR
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 
 name=nspr
-version=4.36
-release=1
+version=4.40
+release=3
 source=(https://archive.mozilla.org/pub/$name/releases/v$version/src/$name-$version.tar.gz)
 
-build() {
+pkg_build() {
+    cd nspr || return 1
 
+    sed -ri '/^RELEASE/s/^/#/' pr/src/misc/Makefile.in || return 1
+    sed -i 's#$(LIBRARY) ##' config/rules.mk || return 1
 
-	cd $name-$version/nspr
+    ./configure         --prefix=/usr         --with-mozilla         --with-pthreads         $([ "$(uname -m)" = x86_64 ] && echo --enable-64bit) || return 1
 
-	sed -ri '/^RELEASE/s/^/#/' pr/src/misc/Makefile.in &&
-sed -i 's#$(LIBRARY) ##'   config/rules.mk         &&
-
-./configure --prefix=/usr \
-            --with-mozilla \
-            --with-pthreads \
-            $([ $(uname -m) = x86_64 ] && echo --enable-64bit) &&
-make
-	make DESTDIR=$PKG install
+    make || return 1
+    make DESTDIR="$PKG" install || return 1
 }

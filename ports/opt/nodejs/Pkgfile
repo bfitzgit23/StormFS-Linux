@@ -1,22 +1,21 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Evented I/O for V8 javascript.
 # URL: https://nodejs.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on: libnghttp2 libuv openssl zlib
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: libnghttp2 libuv openssl zlib icu
 # Optional: brotli c-ares icu libnghttp3 libngtcp2 simdjson simdutf
 
 name=nodejs
-version=24.2.0
+version=24.21.0
 release=1
 source=(https://nodejs.org/dist/v$version/node-v$version.tar.xz
   unbundle-uv.patch)
 
-build() {
-  cd node-v$version
+PKGMK_AUTO_PATCH=no
 
-  patch -Np1 -i $SRC/unbundle-uv.patch
-  rm deps/uv/uv.gyp deps/zlib/zlib.gyp
+pkg_build() {
+
+  patch -Np1 -i "$SRC/unbundle-uv.patch" || return 1
+  rm deps/uv/uv.gyp deps/zlib/zlib.gyp || return 1
 
   prt-get isinst brotli && PKGMK_NODEJS+=' --shared-brotli'
   prt-get isinst c-ares && PKGMK_NODEJS+=' --shared-cares'
@@ -33,13 +32,12 @@ build() {
     --ninja \
     --without-npm \
     --shared-libuv \
-    --shared-zlib \
-    --shared-openssl \
     --shared-nghttp2 \
-    --experimental-http-parser
+    --shared-zlib \
+    --shared-openssl || return 1
 
-  make
-  make DESTDIR=$PKG install
+  make || return 1
+  make DESTDIR="$PKG" install || return 1
 
   rm -r $PKG/usr/share/doc
 

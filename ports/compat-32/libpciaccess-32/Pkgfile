@@ -1,21 +1,22 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Generic PCI access library
 # URL: https://xorg.freedesktop.org
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on: xorg-libpciaccess zlib-32
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: libpciaccess zlib-32
 # Optional: hwdata
 
 name=libpciaccess-32
-version=0.18.1
-release=1
+version=0.19
+release=3
 source=(https://www.x.org/releases/individual/lib/libpciaccess-$version.tar.xz
 cross-file.txt)
 
-build() {
+# Custom build required: package supplies a source-local Meson cross description
+pkg_build() {
+  (
+    set -e
 	prt-get isinst hwdata && PKGMK_LIBPCIA+=' -D pci-ids=hwdata'
 
-	meson setup libpciaccess-$version build $PKGMK_LIBPCIA --cross-file cross-file.txt  \
+	meson setup build . $PKGMK_LIBPCIA --cross-file ../cross-file.txt  \
 		--prefix=/usr \
 		--libdir=/usr/lib32 \
 		--buildtype=plain \
@@ -27,4 +28,5 @@ build() {
 	DESTDIR=$PKG meson install -C build
 
 	rm -rf $PKG/usr/include
+  )
 }

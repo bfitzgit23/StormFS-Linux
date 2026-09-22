@@ -1,22 +1,24 @@
-# Description: TypeScript is a language for application scale JavaScript development
-# URL: http://typescriptlang.org/
-# Maintainer: Venom Linux Team, venomlinux at disroot dot org
+# Description: TypeScript language compiler
+# URL: https://www.typescriptlang.org/
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: nodejs
 
 name=typescript
-version=6.0.3
+version=5.7.3
 release=1
-source=(https://registry.npmjs.org/$name/-/$name-$version.tgz)
-noextract=($name-$version.tgz)
+source=(https://registry.npmjs.org/typescript/-/typescript-$version.tgz)
 
-build() {
-  npm install -g --prefix "$PKG"/usr $name-$version.tgz
+pkg_build() {
 
-  # Non-deterministic race in npm gives 777 permissions to random directories.
-  # See https://github.com/npm/npm/issues/9359 for details.
-  chmod -R u=rwX,go=rX "$PKG"
+    install -d "$PKG/usr/lib/node_modules/typescript"
+    cp -a bin lib package.json \
+        "$PKG/usr/lib/node_modules/typescript/" || return 1
 
-  # npm installs package.json owned by build user
-  # https://bugs.archlinux.org/task/63396
-  chown -R root:root "$PKG"
+    install -d "$PKG/usr/bin"
+
+    ln -sf ../lib/node_modules/typescript/bin/tsc \
+        "$PKG/usr/bin/tsc"
+
+    ln -sf ../lib/node_modules/typescript/bin/tsserver \
+        "$PKG/usr/bin/tsserver"
 }

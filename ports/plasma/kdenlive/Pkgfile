@@ -1,13 +1,13 @@
-# Add your top line text here
-# Your line to add at the top here
-# Depends on: kde-frameworks-6 mlt v4l-utils breeze-icons
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: kde-frameworks-6 mlt v4l-utils breeze-icons kddockwidgets opentimelineio qt6
 
 name=kdenlive
-version=25.04.0
+version=26.08.1
 release=1
 source=(https://download.kde.org/stable/release-service/$version/src/$name-$version.tar.xz)
-build_opt=" -D CMAKE_INSTALL_PREFIX=$KF6_PREFIX 
-      -D CMAKE_BUILD_TYPE=Release         
-      -D BUILD_TESTING=OFF 
-      -D FETCHCONTENT_FULLY_DISCONNECTED=OFF
-      -W no-dev .."
+build_opt=" -DCMAKE_INSTALL_PREFIX=/opt/kf6 \
+            -DCMAKE_PREFIX_PATH=/opt/qt6;/opt/kf6 
+      -DCMAKE_BUILD_TYPE=Release         
+      -DBUILD_TESTING=OFF 
+      -DFETCHCONTENT_FULLY_DISCONNECTED=OFF
+      -Wno-author"

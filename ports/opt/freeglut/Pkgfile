@@ -1,17 +1,14 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Freeglut is intended to be a 100% compatible, completely opensourced clone of the GLUT library. GLUT is a window system independent toolkit for writing OpenGL programs, implementing a simple windowing API, which makes learning about and exploring OpenGL programming very easy.
 # URL:         https://downloads.sourceforge.net/freeglut/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on:  cmake mesa glu
 
 name=freeglut
-version=3.4.0
-release=1
+version=3.8.0
+release=2
 source=(https://downloads.sourceforge.net/$name/$name-$version.tar.gz)
 
-build() {
-	cd $name-$version
+pkg_build() {
 
 	mkdir build &&
 	cd    build &&

@@ -1,8 +1,8 @@
-# Add your top line text here
-# Your line to add at the top here
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: cmake
 
 name=vulkan-headers
-version=1.4.304
-release=1
-source=(https://github.com/KhronosGroup/Vulkan-Headers/archive/v${version}/Vulkan-Headers-${version}.tar.gz)
+version=1.4.357.0
+release=2
+source=(https://github.com/KhronosGroup/Vulkan-Headers/archive/refs/tags/vulkan-sdk-${version}.tar.gz)
+renames=(vulkan-headers-${version}.tar.gz)

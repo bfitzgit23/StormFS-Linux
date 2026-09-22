@@ -1,11 +1,9 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Specifications of extended Wayland protocols
 # URL: https://wayland.freedesktop.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: wayland
 
 name=wayland-protocols
-version=1.45
-release=1
+version=1.49
+release=2
 source=(https://gitlab.freedesktop.org/wayland/wayland-protocols/-/releases/$version/downloads/$name-$version.tar.xz)

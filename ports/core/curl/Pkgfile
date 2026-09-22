@@ -1,13 +1,16 @@
-# Add your top line text here
-# Your line to add at the top here
+# Description: URL transfer tool
+# URL: https://curl.se/
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: ca-certificates openssl
+
 name=curl
-version=8.21.0
+version=8.22.0
 release=1
 source=(https://$name.se/download/$name-$version.tar.xz)
 build_opt="
 	--with-openssl
 	--enable-threaded-resolver
-	--with-ca-bundle=/etc/ssl/certs/ca-certificates.crt
+	--with-ca-bundle=/etc/pki/tls/certs/ca-bundle.crt
 	--without-brotli
 	--without-libidn2
 	--without-libpsl

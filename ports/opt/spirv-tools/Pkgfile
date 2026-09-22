@@ -1,10 +1,9 @@
-# Add your top line text here
-# Your line to add at the top here
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: cmake spirv-headers
 
 name=spirv-tools
-version=1.4.304.1
-release=1
+version=1.4.357.0
+release=2
 source=(https://github.com/KhronosGroup/SPIRV-Tools/archive/vulkan-sdk-${version}/SPIRV-Tools-${version}.tar.gz)
 pkg_build () {
 mkdir build &&
@@ -18,6 +17,5 @@ cmake -D CMAKE_INSTALL_PREFIX=/usr     \
       -G Ninja .. &&
 
 ninja
-ninja install
+DESTDIR="$PKG" ninja install
 }
-

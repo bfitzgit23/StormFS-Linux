@@ -1,17 +1,14 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Print contents of X events
 # URL: http://xorg.freedesktop.org
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: xrandr
 
 name=xev
-version=1.2.6
-release=1
+version=1.2.7
+release=2
 source=(https://www.x.org/releases/individual/app/xev-$version.tar.xz)
 
-build() {
-	cd xev-$version
+pkg_build() {
 
 	./configure --prefix=/usr
 

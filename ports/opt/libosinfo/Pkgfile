@@ -1,21 +1,20 @@
-# Description: A library for querying the osinfo database
+# Description: Operating-system information database library for virtualization tools
 # URL: https://libosinfo.org/
-# Maintainer: Venom Linux Team, venomlinux at disroot dot org
-# Depends on: meson gobject-introspection hwdata osinfo-db
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: glib gobject-introspection libsoup3 libxml2 libxslt vala
 
 name=libosinfo
 version=1.12.0
-release=2
-source=(https://releases.pagure.org/libosinfo/$name-$version.tar.xz libxml-2.14.patch)
+release=1
+source=(https://releases.pagure.org/libosinfo/libosinfo-$version.tar.xz)
 
-build() {
-	patch -d $name-$version -Np1 -i $SRC/libxml-2.14.patch
+build_opt=(
+    -Denable-gtk-doc=false
+    -Denable-tests=false
+)
 
-	meson setup $name-$version build \
-		-Denable-gtk-doc=false \
-		-Denable-vala=disabled \
-		-Dwith-usb-ids-path=/usr/share/hwdata/usb.ids \
-                -Dwith-pci-ids-path=/usr/share/hwdata/pci.ids
-	meson compile -C build
-	DESTDIR=$PKG meson install --no-rebuild -C build
+pre_build() {
+    sed -i \
+        's/const char \*msg ATTRIBUTE_UNUSED/const char *msg/' \
+        osinfo/osinfo_loader.c || return 1
 }

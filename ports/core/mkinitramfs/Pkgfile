@@ -1,15 +1,16 @@
-# Description: Modular initramfs image creation utility
-# URL:         
-# Maintainer:  Emmett1, emmett1 dot 2miligrams at gmail dot com
-# Depends on:  libarchive bash
+# Description: OpenRC-friendly initramfs generator
+# URL: https://gitlab.com/vylen/mkinitramfs
+# Maintainer: StormFS maintainers
+# Depends: meson ninja cpio gzip xz zstd
 
 name=mkinitramfs
-version=20231218
+version=0.1
 release=1
-commit=4e7dc278f4a8ff1c17e94469a0360887c7f05b8b
-source=($name-$commit.tar.gz::https://github.com/venomlinux/mkinitramfs/archive/$commit.tar.gz
-	mkinitramfs.conf)
+source=(https://gitlab.com/vylen/mkinitramfs/-/archive/main/mkinitramfs-main.tar.gz)
 
 pkg_build() {
-        DESTDIR=$PKG ./INSTALL.sh
+    cd mkinitramfs-main || return 1
+    meson setup build --prefix=/usr --buildtype=release || return 1
+    ninja -C build -j "${JOBS:-1}" || return 1
+    DESTDIR="$PKG" ninja -C build install || return 1
 }

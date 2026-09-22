@@ -1,19 +1,16 @@
-# Add your top line text here
-# Your line to add at the top here
-# Description: X Window System initializer
-# URL: http://xorg.freedesktop.org
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Description: X Window System initializer (xinit/startx)
+# URL: https://www.x.org/
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: xorg-server xorg-libs
-# optional: twm xclock xterm
+# Recommended runtime: twm xclock xterm
+
 name=xinit
-version=1.4.3
-release=1
+version=1.4.4
+release=3
 source=(https://www.x.org/releases/individual/app/$name-$version.tar.xz)
 
-build() {
-	cd $name-$version
-
-	./configure $XORG_CONFIG --with-xinitdir=/etc/X11/app-defaults &&
-	make
-	make DESTDIR=$PKG install
+pkg_build() {
+    ./configure $XORG_CONFIG --with-xinitdir=/etc/X11/app-defaults || return $?
+    make -j "${JOBS:-1}" || return $?
+    make DESTDIR="$PKG" install || return $?
 }

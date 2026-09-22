@@ -99,42 +99,25 @@ greeter-session=lightdm-gtk-greeter
 
 ```bash
 # Enable core KDE services
+sudo rc-update add dbus boot
 sudo rc-update add sddm default
-sudo rc-update add dbus default
 sudo rc-update add polkitd default
 sudo rc-update add upowerd default
 sudo rc-update add accounts-daemon default
 ```
 
-### KDE Service Init Script
+### Session Services
 
-Create an OpenRC init script for KDE services:
+KDE Plasma components such as `plasmashell`, KWin, and PowerDevil belong to the logged-in user session. Do not create a root-owned OpenRC service for them. SDDM starts the selected Plasma session with the correct `DISPLAY`, D-Bus session bus, and user environment.
+
+Use KDE's session configuration for user services:
 
 ```bash
-cat > /etc/init.d/kde-services <<'EOF'
-#!/sbin/openrc-run
+# Open the KDE autostart settings
+kcmshell6 kcm_autostart 2>/dev/null || kcmshell5 kcm_autostart
 
-depend() {
-    need dbus
-    after elogind
-    before sddm
-}
-
-start() {
-    ebegin "Starting KDE services"
-    # Start PowerDevil
-    /usr/libexec/org_kde_powerdevil &
-    eend $?
-}
-
-stop() {
-    ebegin "Stopping KDE services"
-    killall org_kde_powerdevil 2>/dev/null
-    eend $?
-}
-EOF
-
-chmod +x /etc/init.d/kde-services
+# Inspect the user session processes
+pgrep -a 'plasmashell|kwin|powerdevil'
 ```
 
 ### Service Dependencies

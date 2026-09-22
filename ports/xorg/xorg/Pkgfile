@@ -1,13 +1,16 @@
-# Description: Meta port for Xorg
-# URL: https://xorg.freedesktop.org/
-# Maintainer: Venom Linux Team, venomlinux at disroot dot org
-# Depends on: util-macros xorgproto libxau libxdmcp xorg-libraries xcb-util xcb-util-image xcb-util-keysyms xcb-util-renderutil xcb-util-wm xcb-util-cursor mesa xbitmaps xorg-applications xcursor-themes xorg-fonts xkeyboard-config xorg-server xf86-input-evdev libinput twm xterm xclock xinit ttf-dejavu
+# Description: Complete baseline BFSOS X.Org environment
+# URL: https://www.x.org/
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: xorg-server xorg-libs xorg-apps xorg-fonts xorg-driver xinit wayland wayland-protocols xwayland
 
 name=xorg
-version=1.0
-release=2
+version=7x
+release=3
 source=()
 
-build() {
-	mkdir -pv $PKG/etc
+pkg_build() {
+    mkdir -p "$PKG/usr/share/bfsos/meta-packages"
+    printf '%s
+' 'BFSOS xorg meta package' \
+        > "$PKG/usr/share/bfsos/meta-packages/xorg"
 }

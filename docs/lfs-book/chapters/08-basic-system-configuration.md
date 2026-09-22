@@ -273,6 +273,21 @@ nameserver 208.67.222.222
 nameserver 208.67.220.220
 ```
 
+### OpenRC DNS with openresolv
+
+For the OpenRC profile, let `dhcpcd` or NetworkManager update DNS through `openresolv`:
+
+```sh
+# Install the OpenRC resolver integration
+prt-get install openresolv
+
+# Use the generated resolver file
+ln -sf /run/resolvconf/resolv.conf /etc/resolv.conf
+resolvconf -u
+```
+
+Do not use both `openresolv` and `systemd-resolved` as active managers for `/etc/resolv.conf`.
+
 ### Using systemd-resolved
 
 If systemd-resolved is enabled, `/etc/resolv.conf` should be a symlink:
@@ -406,4 +421,4 @@ The following configuration files are installed by the `aaa_filesystem` port:
 | `/etc/lfs-release` | `aaa_filesystem` package (compatibility) |
 | `/etc/os-release` | `aaa_filesystem` package |
 
-These files complete the basic system configuration. For advanced configuration (systemd services, networking, desktop environments), see the StormFS BLFS guides.
+These files complete the basic system configuration. For advanced OpenRC service configuration, see Chapters 12-14 and the StormFS BLFS OpenRC guide. The systemd reference procedures remain available where a systemd installation is explicitly selected.

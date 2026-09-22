@@ -1,0 +1,19 @@
+#!/sbin/openrc-run
+
+description="Avahi DNS configuration daemon"
+
+depend() {
+	need dbus avahi-daemon
+}
+
+start() {
+	ebegin "Starting Avahi DNS configuration daemon"
+	start-stop-daemon --start --exec /usr/sbin/avahi-dnsconfd
+	eend $?
+}
+
+stop() {
+	ebegin "Stopping Avahi DNS configuration daemon"
+	start-stop-daemon --stop --exec /usr/sbin/avahi-dnsconfd
+	eend $?
+}

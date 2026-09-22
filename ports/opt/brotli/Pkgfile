@@ -1,18 +1,15 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Brotli compression library
 # URL: https://github.com/google/brotli
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: cmake
 # Optional: pluggy pytest
 
 name=brotli
-version=1.1.0
-release=1
+version=1.2.0
+release=2
 source=(https://github.com/google/$name/archive/v$version/$name-v$version.tar.gz)
 
-build() {
-  cd $name-$version
+pkg_build() {
   mkdir build &&
 cd    build &&
 
@@ -20,7 +17,7 @@ cmake -DCMAKE_INSTALL_PREFIX=/usr \
       -DCMAKE_BUILD_TYPE=Release  \
       ..  &&
 make
-  make DESTDIR=$PKG install 
+  make DESTDIR=$PKG install
 
   cd $SRC/$name-$version
 

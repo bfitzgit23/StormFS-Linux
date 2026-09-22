@@ -1,17 +1,14 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Synaptics touchpad input driver
 # URL: http://xorg.freedesktop.org
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: xorg-server libevdev
 
 name=xf86-input-synaptics
-version=1.9.2
-release=1
+version=1.10.0
+release=2
 source=(https://www.x.org/releases/individual/driver/xf86-input-synaptics-$version.tar.xz)
 
-build() {
-	cd $name-$version
+pkg_build() {
 
 	./configure $XORG_CONFIG &&
 	make

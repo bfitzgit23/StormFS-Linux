@@ -1,17 +1,14 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Display information utility for X
 # URL: http://xorg.freedesktop.org
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: libXcomposite libXinerama libXrender libXtst libXxf86vm
 
 name=xdpyinfo
-version=1.3.4
-release=1
+version=1.4.0
+release=2
 source=(https://xorg.freedesktop.org/archive/individual/app/xdpyinfo-$version.tar.xz)
 
-build() {
-	cd xdpyinfo-$version
+pkg_build() {
 	./configure $XORG_CONFIG
 	make
 	make DESTDIR=$PKG install

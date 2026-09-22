@@ -1,12 +1,12 @@
 # Description: Filesystem snapshot management tool for Btrfs
 # URL: https://github.com/openSUSE/snapper
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on: acl btrfs-progs dbus json-c libxml2 util-linux zlib
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: acl boost btrfs-progs dbus json-c libxml2 util-linux zlib
 # Optional: linux-pam
 
 name=snapper
 version=0.13.1
-release=1
+release=2
 
 source=(https://github.com/openSUSE/snapper/archive/refs/tags/v$version.tar.gz)
 #snapper-boost-system-header-only.patch)
@@ -26,12 +26,12 @@ build_opt=(
 )
 
 pkg_build() {
-    autoreconf -fi
+    autoreconf -fi || return 1
 
-    ./configure "${build_opt[@]}"
+    ./configure "${build_opt[@]}" || return 1
 
-    make
-    make DESTDIR="$PKG" install
+    make -j${JOBS:-1} || return 1
+    make DESTDIR="$PKG" install || return 1
 }
 
 post_build() {

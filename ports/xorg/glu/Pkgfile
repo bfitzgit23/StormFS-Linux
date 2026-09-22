@@ -1,8 +1,6 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Mesa OpenGL Utility library
 # URL: https://www.mesa3d.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: mesa
 
 name=glu
@@ -10,8 +8,7 @@ version=9.0.3
 release=1
 source=(https://mesa.freedesktop.org/archive/$name/$name-$version.tar.xz)
 
-build() {
-	cd $name-$version
+pkg_build() {
 	mkdir build &&
 	cd    build &&
 

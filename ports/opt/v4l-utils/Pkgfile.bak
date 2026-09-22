@@ -1,0 +1,21 @@
+# Description: v4l-utils provides a series of utilities for media devices, allowing to handle the proprietary formats available at most webcams (libv4l), and providing tools to test V4L devices.
+# URL:          https://www.linuxtv.org
+# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Depends on:  llvm alsa-lib glu libjpeg-turbo qt5
+# Optional: doxygen sdl2
+
+name=v4l-utils
+version=1.32.0
+release=3
+source=(https://www.linuxtv.org/downloads/$name/$name-$version.tar.xz)
+pkg_build() {
+mkdir build &&
+cd    build &&
+
+meson setup --prefix=/usr          \
+            -Ddoxygen-doc=disabled \
+            -Dgconv=disabled       \
+            --buildtype=release    .. &&
+ninja
+DESTDIR=$PKG ninja install
+}

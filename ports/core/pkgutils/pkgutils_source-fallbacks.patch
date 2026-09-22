@@ -1,0 +1,87 @@
+--- a/pkgmk.in
++++ b/pkgmk.in
+@@ -105,6 +105,63 @@
+ 	fi
+ }
+ 
++try_source_fallbacks() {
++	local ORIGINAL_URL="$1"
++	local ENTRY FROM TO FALLBACK_URL
++	local BASENAME CATEGORY REPO
++
++	BASENAME=`get_basename "$ORIGINAL_URL"`
++
++	# Flat distfile repositories.
++	for REPO in "${PKGMK_SOURCE_FLAT_FALLBACKS[@]}"; do
++		REPO="${REPO%/}"
++		FALLBACK_URL="$REPO/$BASENAME"
++		info "Trying flat source fallback for '${name:-unknown}': '$FALLBACK_URL'."
++		$PKGMK_DOWNLOAD_PROG $DOWNLOAD_OPTS $RESUME_OPTS "$FALLBACK_URL"
++		error=$?
++		[ $error -eq 0 ] && return 0
++	done
++
++	# Path-preserving mappings.
++	for ENTRY in "${PKGMK_SOURCE_FALLBACKS[@]}"; do
++		FROM="${ENTRY%%|*}"
++		TO="${ENTRY#*|}"
++
++		[ "$FROM" != "$ENTRY" ] || continue
++		[ -n "$FROM" ] || continue
++		[ -n "$TO" ] || continue
++
++		case "$ORIGINAL_URL" in
++			"$FROM"*)
++				FALLBACK_URL="${TO}${ORIGINAL_URL#"$FROM"}"
++				info "Trying path-preserving source fallback for '${name:-unknown}': '$FALLBACK_URL'."
++				$PKGMK_DOWNLOAD_PROG $DOWNLOAD_OPTS $RESUME_OPTS "$FALLBACK_URL"
++				error=$?
++				[ $error -eq 0 ] && return 0
++				;;
++		esac
++	done
++
++	# Slackware-current X.Org category fallback.
++	case "$ORIGINAL_URL" in
++		*"/individual/"*)
++			CATEGORY="${ORIGINAL_URL#*/individual/}"
++			CATEGORY="${CATEGORY%%/*}"
++			case "$CATEGORY" in
++				app|data|doc|driver|font|lib|proto|util|xcb|xserver)
++					FALLBACK_URL="https://mirrors.slackware.com/slackware/slackware-current/source/x/x11/src/$CATEGORY/$BASENAME"
++					info "Trying Slackware X.Org fallback for '${name:-unknown}': '$FALLBACK_URL'."
++					$PKGMK_DOWNLOAD_PROG $DOWNLOAD_OPTS $RESUME_OPTS "$FALLBACK_URL"
++					error=$?
++					[ $error -eq 0 ] && return 0
++					;;
++			esac
++			;;
++	esac
++
++	return 1
++}
++
+ download_file() {
+ 	info "Downloading '$1'."
+ 
+@@ -162,6 +219,11 @@
+ 		done
+ 	fi
+ 
++	if [ $error != 0 ]; then
++		try_source_fallbacks "$1"
++		error=$?
++	fi
++
+ 	if [ $error != 0 -o ! -f "$LOCAL_FILENAME_PARTIAL" ]; then
+ 		error "Downloading '$1' failed."
+ 		exit $E_DOWNLOAD
+@@ -975,6 +1037,8 @@
+ PKGMK_SIGNATURE=".signature"
+ 
+ PKGMK_SOURCE_MIRRORS=()
++PKGMK_SOURCE_FLAT_FALLBACKS=()
++PKGMK_SOURCE_FALLBACKS=()
+ PKGMK_SOURCE_DIR="$PWD"
+ PKGMK_PACKAGE_DIR="$PWD"
+ PKGMK_WORK_DIR="$PWD/work"

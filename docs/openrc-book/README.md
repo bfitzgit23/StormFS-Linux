@@ -2,6 +2,9 @@
 
 A comprehensive guide to using OpenRC as the init system for StormFS Linux.
 
+> **Based on:** the LFS/BLFS 13.1 release line for the StormFS Linux base, adapted for OpenRC; OpenRC is the default init/service path
+> **Service integration:** OpenRC service scripts are supplied by the StormFS `openrc-init-scripts` port and documented throughout this book.
+
 ## Table of Contents
 
 1. [Introduction to OpenRC](chapters/01-introduction.md)
@@ -32,10 +35,12 @@ A comprehensive guide to using OpenRC as the init system for StormFS Linux.
 26. [Development Tools](chapters/26-development.md)
 27. [System Utilities](chapters/27-utilities.md)
 28. [Communication](chapters/28-communication.md)
+29. [BLFS Package Mappings](chapters/29-package-mappings.md)
+30. [Rootfs Archives and Live ISO Images](chapters/30-rootfs-and-live-iso.md)
 
 ## About This Book
 
-This book follows the BLFS (Beyond Linux From Scratch) style and provides detailed instructions for configuring and using OpenRC on StormFS Linux. It covers everything from basic installation to advanced topics like writing custom init scripts and migrating from systemd.
+This book follows the BLFS (Beyond Linux From Scratch) style and provides detailed instructions for configuring and using OpenRC on StormFS Linux. It covers service installation, dependency ordering, runlevels, desktop integration, remote access, migration from systemd, and rootfs/live-ISO image construction while preserving systemd procedures as reference material where applicable. The Calamares installer is intentionally maintained outside this book.
 
 ## Conventions
 

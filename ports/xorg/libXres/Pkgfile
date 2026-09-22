@@ -1,18 +1,15 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: X Resource extension client library
 # URL: http://xorg.freedesktop.org
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: libXext
 
 name=libXres
-version=1.2.2
-release=1
+version=1.2.3
+release=3
 source=(https://www.x.org/releases/individual/lib/libXres-$version.tar.xz)
 
-build() {
-	cd libXres-$version
-	./configure $XORG_CONFIG $docdir
+pkg_build() {
+	./configure $XORG_CONFIG --docdir=/usr/share/doc/$name-$version
 	make
 	make DESTDIR=$PKG install
 }

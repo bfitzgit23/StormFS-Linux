@@ -1,26 +1,20 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Transport Independent RPC library
 # URL: https://git.linux-nfs.org/?p=steved/libtirpc.git;a=summary
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: libtirpc
 
 name=libtirpc-32
-version=1.3.6
-release=1
+version=1.3.7
+release=2
 source=(https://downloads.sourceforge.net/project/${name%-*}/${name%-*}/$version/${name%-*}-$version.tar.bz2)
 
-build() {
-	cd ${name%-*}-$version
+build_opt="--disable-gssapi"
 
-	./configure \
-		--prefix=/usr \
-		--libdir=/usr/lib32 \
-		--sysconfdir=/etc \
-		--disable-gssapi
-
-	make
-	make DESTDIR=$PKG install
+post_build() {
 
 	rm -r $PKG/etc $PKG/usr/{include,share}
+}
+
+pre_build() {
+        _bfs_require_compat32_extension 2 || return $?
 }

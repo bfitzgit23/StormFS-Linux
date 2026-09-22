@@ -402,7 +402,16 @@ export XDG_CURRENT_DESKTOP=sway
    systemctl --user status xdg-desktop-portal
    ```
 
-2. Check compositor support:
+2. Check the OpenRC user-session and portal processes:
+   ```bash
+   echo "$DBUS_SESSION_BUS_ADDRESS"
+   pgrep -a dbus-daemon
+   pgrep -a xdg-desktop-portal
+   ```
+
+   On an OpenRC desktop, install `dbus`, `consolekit2`, and the matching portal backend. Portals are normally started by the desktop session or its autostart mechanism, not by a systemd user unit.
+
+3. Check compositor support:
    ```bash
    echo $XDG_CURRENT_DESKTOP
    ```

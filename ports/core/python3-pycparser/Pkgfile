@@ -1,16 +1,14 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: C parser and AST generator written in Python.
 # URL: https://github.com/eliben/pycparser
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: python3-setuptools
 
 name=python3-pycparser
-version=2.22
+version=3.0
 release=1
 source=(https://pypi.org/packages/source/p/pycparser/pycparser-$version.tar.gz)
 
-build() {
+pkg_build() {
   ls
   cd pycparser-$version
 

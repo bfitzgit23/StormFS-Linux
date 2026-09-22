@@ -1,8 +1,9 @@
-# Add your top line text here
-# Your line to add at the top here
-# Depends on: cmake libexif menu-cache qt6
+# Description: Libfm Qt component for LXQt
+# URL: https://github.com/lxqt/libfm-qt
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: cmake libexif menu-cache qt6 lxqt-build-tools lxqt-menu-data
 
 name=libfm-qt
-version=2.0.2
-release=1
+version=2.4.0
+release=4
 source=(https://github.com/lxqt/${name}/releases/download/${version}/${name}-${version}.tar.xz)

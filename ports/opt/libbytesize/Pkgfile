@@ -1,19 +1,20 @@
-# Add your top line text here
-# Your line to add at the top here
-# Description: The libbytesize package is a library which facilitates the common operations with sizes in bytes.
-# URL:         https://github.com/storaged-project/$name/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on:  pcre2 python3-pygments
-# Optional:    python3-six gtk-doc polib
+# Description: Library for common operations with sizes in bytes
+# URL: https://github.com/storaged-project/libbytesize
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: pcre2 python3-pygments
+# Optional: python3-six gtk-doc polib
 
 name=libbytesize
-version=2.9
+version=2.12
 release=1
 source=(https://github.com/storaged-project/$name/releases/download/$version/$name-$version.tar.gz)
 
-build() {
-	cd $name-$version
-./configure --prefix=/usr &&
-make
-	make DESTDIR=$PKG install
+pkg_build() {
+    PYTHON=python3 \
+    ./configure \
+        --prefix=/usr || return 1
+
+    make -j "${JOBS:-1}" || return 1
+
+    make DESTDIR="$PKG" install || return 1
 }

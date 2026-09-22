@@ -1,22 +1,23 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Vulkan validation layers, 32bit
 # URL: https://www.khronos.org/vulkan/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: robin-hood-hashing-32 spirv-tools-32 vulkan-utility-libraries-32 vulkan-validation-layers libXrandr-32
 # Optional: wayland-32
 
 name=vulkan-validation-layers-32
 _name=Vulkan-ValidationLayers
-version=1.4.304
+version=1.4.357.0
 _version=vulkan-sdk-$version
-release=1
+release=3
 source=(https://github.com/KhronosGroup/Vulkan-ValidationLayers/archive/$_version/$_name-$version.tar.gz)
 
-build() {
+# Custom build required: WSI selection is conditional
+pkg_build() {
+  (
+    set -e
 	prt-get isinst wayland-32 || PKGMK_VULKAN_VALIDATION_LAYERS+=' -D BUILD_WSI_WAYLAND_SUPPORT=OFF'
 
-	cmake -S $_name-$_version -B build -G Ninja $PKGMK_VULKAN_VALIDATION_LAYERS \
+	cmake -S . -B build -G Ninja $PKGMK_VULKAN_VALIDATION_LAYERS \
 		-D CMAKE_INSTALL_PREFIX=/usr \
 		-D CMAKE_INSTALL_LIBDIR=lib32 \
 		-D CMAKE_BUILD_TYPE=Release \
@@ -31,4 +32,5 @@ build() {
 	DESTDIR=$PKG cmake --install build
 
 	rm -r $PKG/usr/share
+  )
 }

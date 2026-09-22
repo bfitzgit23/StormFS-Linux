@@ -2,7 +2,74 @@
 
 ## Overview
 
-This chapter covers migrating a system from systemd to OpenRC.
+This chapter covers migrating a system from systemd to OpenRC. The systemd commands below are retained as discovery and rollback tools; the replacement configuration uses OpenRC services and runlevels.
+
+## OpenRC Replacement Matrix
+
+| systemd service or feature | OpenRC replacement | Configuration or command |
+|----------------------------|--------------------|--------------------------|
+| `systemd-journald` | `sysklogd` or `syslog-ng` | `/var/log/messages`, `tail -f`, `logrotate` |
+| `systemd-logind` | `consolekit2` (or external elogind) | D-Bus session and seat provider |
+| `systemd-networkd` | `networking` + `dhcpcd`, or NetworkManager | `/etc/conf.d/net`, `rc-update` |
+| `systemd-resolved` | `openresolv` | `/run/resolvconf/resolv.conf` |
+| `systemd-udevd` | `eudev` + `udev` scripts | `sysinit` runlevel |
+| `systemd-timesyncd` | `chronyd` | `boot` runlevel |
+| `systemd-tmpfiles` | `local.d` and package post-install setup | `/etc/local.d/*.start` |
+| `.timer` units | `cronie` | `/etc/cron.d/` or `/etc/cron.daily/` |
+| `.socket` units | daemon-native socket or `socat` | OpenRC service dependency |
+| `multi-user.target` | `default` | `rc default` |
+| `graphical.target` | `default` + display manager | `rc-update add lightdm default` |
+| `getty@.service` | `agetty` in `/etc/inittab` | `respawn` entries |
+
+### Install the OpenRC Runtime
+
+```bash
+prt-get install openrc openrc-init-scripts eudev dbus sysklogd chrony openresolv consolekit2
+mkdir -p /etc/runlevels/{sysinit,boot,default,nonetwork,shutdown}
+
+rc-update add udev sysinit
+rc-update add udev-postmount sysinit
+rc-update add dbus boot
+rc-update add chronyd boot
+rc-update add syslog boot
+rc-update add networking boot
+```
+
+The `syslog`, `crond`, and other service names above refer to the scripts supplied by the StormFS OpenRC profile. `consolekit2` is D-Bus activated and is not added as an OpenRC runlevel service. Check `/etc/init.d/` and use the exact installed name before enabling a service.
+
+### Journald to Syslog
+
+```bash
+install -d -m 0755 /var/log
+cat > /etc/init.d/syslog << 'EOF'
+#!/sbin/openrc-run
+description="System logger"
+command="/usr/sbin/syslogd"
+command_args="-F"
+command_background=true
+pidfile="/run/${RC_SVCNAME}.pid"
+depend() { need localmount; }
+EOF
+chmod 755 /etc/init.d/syslog
+rc-update add syslog boot
+rc-service syslog start
+tail -f /var/log/messages
+```
+
+### Timers and Sockets
+
+OpenRC does not implement systemd timer units. Convert `OnCalendar=daily` jobs to cron files:
+
+```bash
+prt-get install cronie
+rc-update add crond boot 2>/dev/null || true
+cat > /etc/cron.d/stormfs-cleanup << 'EOF'
+17 3 * * * root /usr/local/bin/stormfs-cleanup.sh
+EOF
+chmod 644 /etc/cron.d/stormfs-cleanup
+```
+
+For socket activation, configure the application to create and listen on its own socket, then manage it as a normal OpenRC service. If a separate listener is unavoidable, supervise `socat` and declare the application service with `need socket-listener`.
 
 ## Pre-Migration Checklist
 
@@ -45,28 +112,48 @@ sudo mkdir -p /etc/runlevels/{sysinit,boot,default,nonetwork,single}
 
 | Systemd Service | OpenRC Service | Notes |
 |-----------------|----------------|-------|
-| systemd-networkd | networkmanager | Use NetworkManager instead |
-| systemd-resolved | resolvconf | Use resolvconf for DNS |
-| systemd-journald | syslog | Use syslog-ng or rsyslog |
-| systemd-logind | elogind | Install elogind for session management |
-| systemd-udevd | udev | Use eudev |
+| systemd-networkd | networking / networkmanager | Use `/etc/conf.d/net` with `dhcpcd`, or NetworkManager |
+| systemd-resolved | openresolv | Use `/run/resolvconf/resolv.conf` for generated DNS |
+| systemd-journald | syslog | Use `sysklogd` or syslog-ng with `/var/log` files |
+| systemd-logind | consolekit2 / external elogind | Install a compatible D-Bus session provider |
+| systemd-udevd | udev | Use eudev with the OpenRC `udev` scripts |
+| systemd-timesyncd | chronyd | Enable `chronyd` in `boot` |
+| systemd-tmpfiles | local.d | Use `/etc/local.d/*.start` for site-specific paths |
+| systemd timers | crond | Use `/etc/cron.d/` or `/etc/cron.daily/` |
+| systemd sockets | native listener / socat | Manage the listener and daemon as OpenRC services |
 
 ### Step 4: Enable Services
 
+Enable only the services selected for this installation. The following is a typical laptop/desktop profile using the service names shipped by StormFS:
+
 ```bash
-# Map systemd services to OpenRC
+# Core boot services
 sudo rc-update add dbus boot
+sudo rc-update add syslog boot
 sudo rc-update add udev sysinit
 sudo rc-update add udev-postmount sysinit
-sudo rc-update add cronie boot
+sudo rc-update add crond boot
 sudo rc-update add chronyd boot
-sudo rc-update add alsa boot
 sudo rc-update add acpid boot
-sudo rc-update add NetworkManager default
+
+# Choose one network path: NetworkManager, or dhcpcd plus iwd/wpa_supplicant
+sudo rc-update add networkmanager default
+# sudo rc-update add dhcpcd default
+# sudo rc-update add iwd default
+
+# Choose one display manager
 sudo rc-update add lightdm default
-sudo rc-update add bluetooth default
+# sudo rc-update add sddm default
+# sudo rc-update add lxdm default
+# sudo rc-update add gdm default
+
+# Optional hardware and access services
+sudo rc-update add alsa boot
+sudo rc-update add bluez default
 sudo rc-update add sshd default
 ```
+
+`dbus` must be available before `bluez`, display managers, PolicyKit, UDisks2, AccountsService, UPower, and PipeWire. `networkmanager` and `dhcpcd` should not both manage the same interface.
 
 ### Step 5: Remove Systemd
 
@@ -92,10 +179,12 @@ prt-get depends <package>
 
 ### Issue 2: D-Bus Services
 
-D-Bus services may not work without systemd. Install elogind:
+D-Bus services may need a session/seat provider but do not require systemd. Use the ConsoleKit2 port in this repository:
 
 ```bash
-prt-get install elogind
+prt-get install consolekit2
+# ConsoleKit2 is activated through the D-Bus system bus.
+rc-update add dbus boot 2>/dev/null || true
 ```
 
 ### Issue 3: Logging
@@ -103,8 +192,8 @@ prt-get install elogind
 Systemd uses journald. Switch to syslog:
 
 ```bash
-prt-get install syslog-ng
-sudo rc-update add syslog-ng boot
+prt-get install sysklogd openrc-init-scripts
+sudo rc-update add syslog boot
 ```
 
 ## Testing Migration
@@ -120,7 +209,7 @@ mkdir /tmp/test-system
 chroot /tmp/test-system prt-get install openrc
 
 # Test services
-chroot /tmp/test-system rc-update add NetworkManager default
+chroot /tmp/test-system rc-update add networkmanager default
 ```
 
 ### Test Boot

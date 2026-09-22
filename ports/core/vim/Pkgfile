@@ -1,17 +1,14 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Vi Improved, a highly configurable, improved version of the vi text editor
 # URL:         https://www.vim.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on:  acl gawk
 
 name=vim
-version=9.2.0954
+version=9.2.1036
 release=1
 source=(https://github.com/vim/vim/archive/v$version.tar.gz)
 
-build() {
-        cd vim-$version
+pkg_build() {
 
         echo '#define SYS_VIMRC_FILE "/etc/vimrc"' >> src/feature.h
 

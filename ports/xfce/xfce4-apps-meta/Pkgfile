@@ -1,13 +1,14 @@
-# Add your top line text here
-# Your line to add at the top here
-# Description: Gnome apps meta package
-# URL:  https://gnome.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Description: Xfce applications meta package
+# URL: https://xfce.org/
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: parole xfce4-terminal ristretto xfce4-dev-tools xfce4-notifyd xfce4-pulseaudio-plugin xfburn
 name=xfce4-apps-meta
-version=4.18.4
-release=1
+version=4.20.0
+release=2
 source=()
-build() {
-    mkdir $PKG/usr
+pkg_build() {
+    mkdir -p "$PKG/usr/share/bfsos/meta-packages"
+    printf '%s
+' 'BFSOS xfce4-apps-meta meta package' \
+        > "$PKG/usr/share/bfsos/meta-packages/xfce4-apps-meta"
 }

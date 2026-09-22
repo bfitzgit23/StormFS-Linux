@@ -1,8 +1,6 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: XCB X protocol descriptions
 # URL: https://xcb.freedesktop.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: python3
 
 name=xcb-proto
@@ -10,11 +8,10 @@ version=1.17.0
 release=1
 source=(https://xorg.freedesktop.org/archive/individual/proto/xcb-proto-$version.tar.xz)
 
-build() {
-	cd xcb-proto-$version
+pkg_build() {
 
 		PYTHON=/usr/bin/python3 \
-	       ./configure --prefix= $XORG_CONFIG
+	       ./configure $XORG_CONFIG
 	make
 	make DESTDIR=$PKG install
 #	rm -f $PKG$XORG_PREFIX/lib/pkgconfig/xcb-proto.pc

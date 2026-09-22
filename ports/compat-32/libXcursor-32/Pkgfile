@@ -1,25 +1,20 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: X cursor management library
 # URL: https://cgit.freedesktop.org/xorg/lib/libXcursor/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: libXcursor libXfixes-32 libXrender-32
 
 name=libXcursor-32
-version=1.2.2
-release=1
+version=1.2.3
+release=2
 source=(https://www.x.org/releases/individual/lib/libXcursor-$version.tar.xz)
 
-build() {
-	cd libXcursor-$version
 
-	./configure \
-		--prefix=/usr \
-		--libdir=/usr/lib32
-
-	make
-	make DESTDIR=$PKG install
+post_build() {
 
 	rm -r $PKG/usr/{include,share/man}
 	rmdir $PKG/usr/share
+}
+
+pre_build() {
+        _bfs_require_compat32_extension 2 || return $?
 }

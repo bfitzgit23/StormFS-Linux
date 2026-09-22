@@ -1,16 +1,13 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Asynchronous event notification software library
 # URL:         http://libevent.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 
 name=libevent
-version=2.1.12
-release=1
+version=2.1.13
+release=2
 source=(https://github.com/libevent/libevent/releases/download/release-$version-stable/libevent-$version-stable.tar.gz)
 
-build() {
-	cd $name-$version-stable
+pkg_build() {
 
 	sed -i 's/python/&3/' event_rpcgen.py
 	./configure --prefix=/usr --disable-static

@@ -1,9 +1,8 @@
-# Add your top line text here
-# Your line to add at the top here
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 name=gmp
 version=6.3.0
 release=1
-source=(https://ftpmirror.gnu.org/gmp/gmp-$version.tar.xz)
+source=(https://ftp.gnu.org/gnu/gmp/gmp-$version.tar.xz)
 build_opt="--enable-cxx
 --disable-static"
 bootstrap_opt="$build_opt

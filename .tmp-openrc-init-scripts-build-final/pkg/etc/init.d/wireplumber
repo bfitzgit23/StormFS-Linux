@@ -1,0 +1,19 @@
+#!/sbin/openrc-run
+
+description="WirePlumber user session manager"
+
+# WirePlumber belongs to the logged-in user's PipeWire session. This wrapper
+# is an explicit opt-in system-wide profile and is not enabled by default.
+command=/usr/bin/wireplumber
+command_args=""
+command_background=true
+
+depend() {
+	need pipewire logger
+}
+
+stop() {
+	ebegin "Stopping WirePlumber"
+	start-stop-daemon --stop --exec "$command"
+	eend $?
+}

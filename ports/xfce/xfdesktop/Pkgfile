@@ -1,8 +1,7 @@
-# Add your top line text here
-# Your line to add at the top here
-# Depends on: exo libwnck libnotify startup-notification thunar
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: exo libxfce4windowing libwnck libnotify startup-notification thunar
 
 name=xfdesktop
-version=4.18.1
+version=4.20.2
 release=1
 source=(https://archive.xfce.org/src/xfce/${name}/${version%.*}/${name}-${version}.tar.bz2)

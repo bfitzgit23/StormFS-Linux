@@ -1,25 +1,19 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Kernel multi-touch transformation library
 # URL: https://bitmath.org/code/mtdev/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: mtdev
 
 name=mtdev-32
 version=1.1.7
-release=1
+release=2
 source=(https://bitmath.org/code/mtdev/mtdev-$version.tar.bz2)
 
-build() {
-	cd ${name%-*}-$version
 
-	./configure \
-	    --host=i686-pc-linux-gnu      \
-		--prefix=/usr \
-		--libdir=/usr/lib32
-
-	make
-	make DESTDIR=$PKG install
+post_build() {
 
 	rm -r $PKG/usr/{bin,include}
+}
+
+pre_build() {
+        _bfs_require_compat32_extension 2 || return $?
 }

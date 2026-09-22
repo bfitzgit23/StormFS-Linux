@@ -1,0 +1,23 @@
+# Description: Linux io_uring userspace library
+# URL: https://github.com/axboe/liburing
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+
+name=liburing
+version=2.15
+release=3
+source=(https://github.com/axboe/liburing/archive/refs/tags/liburing-$version.tar.gz)
+
+# Standard prefix/libdir arguments are owned by the BFSOS pkgutils extension.
+
+pkg_build() {
+    ./configure \
+        --prefix=/usr \
+        --includedir=/usr/include \
+        --libdir=/usr/lib \
+        --libdevdir=/usr/lib \
+        --mandir=/usr/share/man \
+        --datadir=/usr/share || return 1
+
+    make || return 1
+    make DESTDIR="$PKG" install || return 1
+}

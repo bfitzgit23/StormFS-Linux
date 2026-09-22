@@ -1,16 +1,13 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Utilities to access MS-DOS disks without mounting them
 # URL:         https://www.gnu.org/software/mtools/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 
 name=mtools
 version=4.0.49
 release=1
 source=(ftp://ftp.gnu.org/gnu/mtools/$name-$version.tar.bz2)
 
-build() {
-	cd $name-$version
+pkg_build() {
 
 	./configure \
 		--prefix=/usr \

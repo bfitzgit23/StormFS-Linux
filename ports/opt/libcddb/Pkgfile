@@ -1,6 +1,5 @@
-# Add your top line text here
-# Your line to add at the top here
-# Depends on: 
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on:
 
 name=libcddb
 version=1.3.2
@@ -20,6 +19,6 @@ CFLAGS+=" -Wno-error=implicit-int -Wno-error=incompatible-pointer-types"
 	./configure --prefix=/usr \
 		--without-cdio
 
-	make 
+	make
 	make DESTDIR=$PKG install
 }

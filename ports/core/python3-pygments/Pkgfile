@@ -1,12 +1,10 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Python syntax highlighter
 # URL: https://pygments.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: python3-build python3-installer python3-wheel python3-hatchling python3-packaging
 
 name=python3-pygments
-version=2.18.0
+version=2.21.0
 release=1
 source=(https://files.pythonhosted.org/packages/source/P/Pygments/pygments-$version.tar.gz)
 

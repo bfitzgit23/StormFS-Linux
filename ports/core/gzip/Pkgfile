@@ -1,6 +1,5 @@
-# Add your top line text here
-# Your line to add at the top here
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 name=gzip
 version=1.14
 release=1
-source=(https://ftpmirror.gnu.org/gzip/gzip-$version.tar.xz)
+source=(https://ftp.gnu.org/gnu/gzip/gzip-$version.tar.xz)

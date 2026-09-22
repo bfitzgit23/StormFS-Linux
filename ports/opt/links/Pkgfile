@@ -1,17 +1,17 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Text and graphics mode WWW browser
 # URL:         http://links.twibright.com/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on:  openssl libevent
 
 name=links
 version=2.30
-release=1
-source=(http://links.twibright.com/download/$name-$version.tar.bz2)
+release=3
+source=(
+    http://links.twibright.com/download/$name-$version.tar.bz2
+    links-2.30-gcc16-const-fix.patch
+)
 
-build() {
-	cd $name-$version
+pkg_build() {
 
 	./configure --prefix=/usr --mandir=/usr/share/man
 	make

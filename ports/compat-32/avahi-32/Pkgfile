@@ -1,49 +1,27 @@
-# Add your top line text here
-# Your line to add at the top here
-# Description: A system which facilitates service discovery on a local network via the mDNS/DNS-SD protocol suite
-# URL: https://www.avahi.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Description: 32-bit Avahi mDNS/DNS-SD compatibility libraries
+# URL: https://github.com/avahi/avahi
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: avahi dbus-32 gdbm-32 glib-32 libcap-32 libdaemon-32 libevent-32
 
 name=avahi-32
-version=0.8
-release=3
-source=(https://github.com/lathiat/avahi/releases/download/v$version/avahi-$version.tar.gz
-	avahi-0.8-ipv6_race_condition_fix-1.patch
-	reverse-move-to-run.patch)
+version=0.9-rc5
+release=8
+source=(
+  https://github.com/avahi/avahi/archive/v$version/avahi-$version.tar.gz
+  https://www.linuxfromscratch.org/patches/blfs/svn/avahi-$version-ipv6_race_condition_fix-1.patch
+)
 
-build() {
-	cd avahi-$version
+build_opt="--with-distro=none --disable-static --disable-gtk --disable-gtk3 --disable-qt3 --disable-qt4 --disable-qt5 --disable-python --disable-pygobject --disable-python-dbus --disable-mono --disable-monodoc --disable-nls --disable-manpages --enable-compat-libdns_sd --disable-libsystemd"
 
-	patch -p1 -i $SRC/reverse-move-to-run.patch
-	patch -p1 -i $SRC/avahi-0.8-ipv6_race_condition_fix-1.patch
+pre_build() {
+        _bfs_require_compat32_extension 2 || return 0
+  autoreconf -fiv || return 1
+}
 
-	NOCONFIGURE=1 ./autogen.sh
+post_build() {
 
-	./configure --prefix=/usr \
-		--libdir=/usr/lib32 \
-		--sysconfdir=/etc \
-		--localstatedir=/var \
-		--with-distro=none \
-		--disable-gtk \
-		--disable-gtk3 \
-		--disable-qt3 \
-		--disable-qt4 \
-		--disable-qt5 \
-		--disable-python \
-		--disable-pygobject \
-		--disable-python-dbus \
-		--disable-mono \
-		--disable-monodoc \
-		--disable-nls \
-		--enable-compat-libdns_sd
-
-	make
-	make DESTDIR=$PKG install
-
-	rm -rf $PKG/usr/{bin,sbin,include,share} $PKG/{etc,var}
-	rm -rf f$PKG/usr/lib/systemd/system/avahi-daemon.service
-	rm -rf $PKG/usr/lib/systemd/system/avahi-daemon.socket
-	rm -rf $PKG/usr/lib/systemd/system/avahi-daemon.service
-	rm -rf $PKG/usr/lib/systemd/system/avahi-dnsconfd.service
+  # compat-32 owns only the 32-bit ABI. Native Avahi owns executables,
+  # configuration, service units, headers and architecture-independent data.
+  rm -rf "$PKG/usr/bin" "$PKG/usr/sbin" "$PKG/usr/include" "$PKG/usr/share" \
+         "$PKG/usr/lib/systemd" "$PKG/etc" "$PKG/var"
 }

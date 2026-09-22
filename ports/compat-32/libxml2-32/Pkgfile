@@ -1,27 +1,21 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: XML library version 2
 # URL: https://gitlab.gnome.org/GNOME/libxml2/-/wikis/home
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: libxml2 xz-32 zlib-32
 
 name=libxml2-32
-version=2.13.7
-release=1
+version=2.15.4
+release=4
 source=(https://download.gnome.org/sources/libxml2/${version:0:4}/libxml2-$version.tar.xz)
 
-build() {
-	cd ${name%-*}-$version
+build_opt="--without-python"
+build_type=configure_build
 
-	./configure \
-	 --host=i686-pc-linux-gnu \
-		--prefix=/usr \
-		--libdir=/usr/lib32 \
-		--sysconfdir=/etc \
-		--without-python
+post_build() {
 
-	make
-	make DESTDIR=$PKG install
+	rm -rf $PKG/usr/{bin,include,share/man,share}
+}
 
-	rm -r $PKG/usr/{bin,include,share/man,share}
+pre_build() {
+        _bfs_require_compat32_extension 2 || return $?
 }

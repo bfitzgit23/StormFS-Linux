@@ -1,21 +1,17 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Expose the kernel's API for use by Glibc
 # URL:         
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on:  
 
 name=linux-api-headers
-version=7.1.8
+version=7.2.6
 release=1
-source=(https://www.kernel.org/pub/linux/kernel/v6.x/linux-$version.tar.xz)
+source=(https://www.kernel.org/pub/linux/kernel/v7.x/linux-$version.tar.xz)
 
-build() {
-        cd linux-$version
-
-        make mrproper
-	make headers
-        find usr/include -type f ! -name '*.h' -delete
-        mkdir -p $PKG/usr/include
-        cp -rv usr/include/* $PKG/usr/include
+pkg_build() {
+        make mrproper || return 1
+        make headers || return 1
+        find usr/include -type f ! -name '*.h' -delete || return 1
+        mkdir -p "$PKG/usr/include" || return 1
+        cp -rv usr/include/* "$PKG/usr/include/" || return 1
 }

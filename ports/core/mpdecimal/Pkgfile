@@ -1,8 +1,6 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Package for correctly-rounded arbitrary precision decimal floating point arithmetic.
 # URL: https://www.bytereef.org/mpdecimal/index.html
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 
 name=mpdecimal
 version=4.0.1

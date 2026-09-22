@@ -1,32 +1,24 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Perl Compatible Regular Expressions
 # URL: https://www.pcre.org
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on: libpcre2
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: pcre2
 
 name=libpcre2-32
-version=10.45
-release=1
+version=10.48
+release=3
 source=(https://github.com/PhilipHazel/pcre2/releases/download/pcre2-$version/pcre2-$version.tar.gz)
 
-build() {
-	cd pcre2-$version
+build_opt="--enable-jit --enable-pcre2-16 --enable-pcre2-32"
 
-	./configure \
-		--prefix=/usr \
-		--host=i686-pc-linux-gnu \
-		--libdir=/usr/lib32 \
-		--enable-jit \
-		--enable-pcre2-16 \
-		--enable-pcre2-32
-
-	make
-	make DESTDIR=$PKG install
+post_build() {
 
 	install -d $PKG/lib32
 	mv $PKG/usr/lib32/libpcre2-8.so.* $PKG/lib32
 	ln -sf ../../lib32/$(readlink $PKG/usr/lib32/libpcre2-8.so) $PKG/usr/lib32/libpcre2-8.so
 
 	rm -r $PKG/usr/{bin,include,share}
+}
+
+pre_build() {
+        _bfs_require_compat32_extension 2 || return $?
 }

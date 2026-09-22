@@ -1,18 +1,15 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: X font rendering client library
 # URL: http://xorg.freedesktop.org
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: harfbuzz util-linux
 
 name=libXft
-version=2.3.8
-release=1
+version=2.3.9
+release=3
 source=(https://www.x.org/releases/individual/lib/libXft-$version.tar.xz)
 
-build() {
-	cd libXft-$version
-	 ./configure $XORG_CONFIG $docdir
+pkg_build() {
+	 ./configure $XORG_CONFIG --docdir=/usr/share/doc/$name-$version
 	make
 	make DESTDIR=$PKG install
 }

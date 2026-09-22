@@ -1,5 +1,0 @@
-url=https://codeberg.org/tenacityteam/libid3tag/tags
-
-port_getver() {
-    getver_github
-}

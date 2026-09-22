@@ -48,9 +48,9 @@ chroot "$LFS" \
 
 During Stage 2, `$TOOLS/bin` is included in the chroot PATH so packages can use the temporary toolchain. During Stage 3 (rebuild), only the system PATH is used.
 
-### systemd Bootstrap Configuration
+### Optional systemd Package Bootstrap
 
-Before systemd is built, temporary util-linux pkg-config files are needed because the final util-linux has not been installed yet:
+If the optional systemd compatibility package is selected, temporary util-linux pkg-config files are needed because the final util-linux has not been installed yet:
 
 ```sh
 mkdir -p $LFS/tmp/systemd-util-linux-pc
@@ -61,7 +61,7 @@ for pc in uuid blkid mount; do
 done
 ```
 
-A special `pkgmk.conf` for systemd is created:
+A special `pkgmk.conf` for the optional systemd compatibility package is created:
 
 ```sh
 cat > $LFS/tmp/pkgmk.systemd-bootstrap.conf << 'EOF'
@@ -90,7 +90,7 @@ EOF
 
 ## 4.2 Building Packages in Order
 
-The base system is built by iterating over the `$basepkg` list. Each package is built inside a chroot using `pkgin -d` (the StormFS wrapper for pkgmk) or `prt-get`.
+The default OpenRC base system is built by iterating over the `$basepkg` list. The optional systemd row below is documented for compatibility but is not part of the default OpenRC package sequence. Each package is built inside a chroot using `pkgin -d` (the StormFS wrapper for pkgmk) or `prt-get`.
 
 ### Package Build Order
 
@@ -201,32 +201,35 @@ The base system is built by iterating over the `$basepkg` list. Each package is 
 | 103 | python3-pytz | Timezone database |
 | 104 | python3-babel | Internationalization |
 | 105 | python3-jinja2 | Template engine |
-| 106 | systemd | System and service manager |
-| 107 | util-linux | Linux utilities |
-| 108 | dbus | D-Bus message bus |
-| 109 | procps-ng | Process utilities |
-| 110 | e2fsprogs | Ext2/3/4 filesystem tools |
-| 111 | fakeroot | Root privilege simulation |
-| 112 | pkgutils | CRUX package management |
-| 113 | dialog | Dialog boxes for shell |
-| 114 | prt-get | Dependency-aware package manager |
-| 115 | httpup | HTTP-based ports update |
-| 116 | ports | Ports tree management |
-| 117 | prt-utils | Port management utilities |
-| 118 | lzo | LZO compression library |
-| 119 | btrfs-progs | Btrfs filesystem tools |
-| 120 | dosfstools | FAT filesystem tools |
-| 121 | exfatprogs | exFAT filesystem tools |
-| 122 | f2fs-tools | F2FS filesystem tools |
-| 123 | mdadm | Software RAID management |
-| 124 | libaio | Asynchronous I/O library |
-| 125 | lvm2 | Logical Volume Manager |
-| 126 | inih | INI file parser |
-| 127 | liburcu | Userspace RCU library |
-| 128 | xfsprogs | XFS filesystem tools |
-| 129 | openssh | SSH implementation |
-| 130 | genfstab | fstab generator |
-| 131 | signify | Signature verification |
+| 106 | openrc | OpenRC init and service manager |
+| 107 | openrc-init-scripts | OpenRC service scripts |
+| 108 | util-linux | Linux utilities |
+| 109 | dbus | D-Bus message bus |
+| 110 | procps-ng | Process utilities |
+| 111 | e2fsprogs | Ext2/3/4 filesystem tools |
+| 112 | fakeroot | Root privilege simulation |
+| 113 | pkgutils | CRUX package management |
+| 114 | dialog | Dialog boxes for shell |
+| 115 | prt-get | Dependency-aware package manager |
+| 116 | httpup | HTTP-based ports update |
+| 117 | ports | Ports tree management |
+| 118 | prt-utils | Port management utilities |
+| 119 | lzo | LZO compression library |
+| 120 | btrfs-progs | Btrfs filesystem tools |
+| 121 | dosfstools | FAT filesystem tools |
+| 122 | exfatprogs | exFAT filesystem tools |
+| 123 | f2fs-tools | F2FS filesystem tools |
+| 124 | mdadm | Software RAID management |
+| 125 | libaio | Asynchronous I/O library |
+| 126 | lvm2 | Logical Volume Manager |
+| 127 | inih | INI file parser |
+| 128 | liburcu | Userspace RCU library |
+| 129 | xfsprogs | XFS filesystem tools |
+| 130 | openssh | SSH implementation |
+| 131 | genfstab | fstab generator |
+| 132 | signify | Signature verification |
+
+The default package sequence above is OpenRC-based. If systemd is selected instead, install the optional `systemd` package using the systemd bootstrap configuration described earlier in this chapter; the systemd package and its service procedures remain available without changing the default OpenRC sequence.
 
 ### Package Build Commands
 
@@ -289,9 +292,9 @@ gcc -dumpspecs | sed \
 
 This adjustment is what allows the final system to compile programs that link against `/usr/lib` instead of the temporary toolchain path.
 
-### systemd Bootstrap
+### Optional systemd Package Bootstrap (reference)
 
-systemd requires util-linux pkg-config files before the final util-linux is installed. The bootstrap provides temporary copies from the toolchain:
+If systemd compatibility is selected, it requires util-linux pkg-config files before the final util-linux is installed. The bootstrap provides temporary copies from the toolchain:
 
 ```sh
 # Temporary pkg-config files for systemd
@@ -301,7 +304,7 @@ for pc in uuid blkid mount; do
 done
 ```
 
-When building systemd during Stage 2, the special `pkgmk.systemd-bootstrap.conf` is used:
+When building the optional systemd package during Stage 2, the special `pkgmk.systemd-bootstrap.conf` is used:
 
 ```sh
 if [ "$i" = systemd ]; then
@@ -349,8 +352,8 @@ On a modern multi-core system (8+ cores, SSD), approximate build times are:
 | Stage | Packages | Estimated Time |
 |-------|----------|---------------|
 | Stage 1 (toolchain) | 40 packages | 1–2 hours |
-| Stage 2 (base) | 131 packages | 3–6 hours |
-| Stage 3 (rebuild) | 131 packages | 3–6 hours |
+| Stage 2 (base) | 132 packages | 3–6 hours |
+| Stage 3 (rebuild) | 132 packages | 3–6 hours |
 | Stage 4 (verify) | — | 5–10 minutes |
 | Stage 5 (archive) | — | 5–15 minutes |
 

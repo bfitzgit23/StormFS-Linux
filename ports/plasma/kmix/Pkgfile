@@ -1,26 +1,22 @@
-# Add your top line text here
-# Your line to add at the top here
-# Description: The KMix package contains a KF5 based Sound Mixer application.
-# URL:          https://kde.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on:  kde-frameworks-5 alsa-lib
+# Description: KDE audio volume and mixer application.
+# URL: https://kde.org/
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: alsa-lib extra-cmake-modules kconfig kconfigwidgets kcoreaddons kcrash kdbusaddons kglobalaccel kdoctools ki18n knotifications kstatusnotifieritem kwidgetsaddons kwindowsystem kxmlgui libcanberra pulseaudio qt6 solid
 # Optional: libcanberra pulseaudio
 
 name=kmix
-version=25.04.0
+version=26.08.1
 release=1
 source=(https://download.kde.org/stable/release-service/$version/src/$name-$version.tar.xz)
 
-build() {
-	cd $name-$version
-
-	mkdir build &&
-cd    build &&
-
-cmake -D CMAKE_INSTALL_PREFIX=$KF6_PREFIX \
-      -D CMAKE_BUILD_TYPE=Release         \
-      -D BUILD_TESTING=OFF                \
-      -W no-dev .. &&
-make
-	make DESTDIR=$PKG install
+pkg_build() {
+    cmake -S . -B build -G Ninja \
+        -DCMAKE_INSTALL_PREFIX=/opt/kf6 \
+        -DCMAKE_INSTALL_LIBEXECDIR=libexec \
+        "-DCMAKE_PREFIX_PATH=/opt/qt6;/opt/kf6" \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DBUILD_TESTING=OFF \
+        -Wno-author || return 1
+    cmake --build build -j "${JOBS:-1}" || return 1
+    DESTDIR="$PKG" cmake --install build || return 1
 }

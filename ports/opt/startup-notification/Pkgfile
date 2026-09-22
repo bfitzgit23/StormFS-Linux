@@ -1,8 +1,6 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Startup notification library.
 # URL: http://freedesktop.org/wiki/Software/startup-notification
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: xorg-libs xcb-util
 
 name=startup-notification
@@ -11,8 +9,7 @@ release=1
 
 source=(http://www.freedesktop.org/software/$name/releases/$name-$version.tar.gz)
 
-build() {
-	cd $name-$version
+pkg_build() {
 	./configure --prefix=/usr --disable-static &&
 make
 	make DESTDIR=$PKG install

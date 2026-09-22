@@ -1,5 +1,0 @@
-url=https://gitlab.gnome.org/GNOME/gedit-plugins/-/tags
-
-port_getver() {
-    getver_github
-    }

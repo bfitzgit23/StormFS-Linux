@@ -121,9 +121,11 @@ This chapter covers common issues and solutions when using OpenRC.
    ping google.com
    ```
 
-3. **Check resolvconf**:
+3. **Check the resolver integration**:
    ```bash
-   rc-service resolvconf status
+   command -v resolvconf
+   readlink -f /etc/resolv.conf
+   cat /etc/resolv.conf
    ```
 
 ## Display Issues

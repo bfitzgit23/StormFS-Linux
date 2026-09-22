@@ -1,0 +1,19 @@
+#!/sbin/openrc-run
+
+description="Console mouse support"
+
+pidfile=/run/gpm.pid
+command=/usr/sbin/gpm
+command_args="-D -m /dev/input/mice -t imps2"
+command_background=true
+
+depend() {
+	need localmount
+	need logger
+}
+
+stop() {
+	ebegin "Stopping gpm"
+	start-stop-daemon --stop --pidfile "$pidfile" --exec "$command"
+	eend $?
+}

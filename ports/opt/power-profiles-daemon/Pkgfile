@@ -1,5 +1,4 @@
-# Add your top line text here
-# Your line to add at the top here
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: polkit python3-gobject upower
 # Optional: gtk-doc dbusmock umockdev
 
@@ -7,7 +6,7 @@ name=power-profiles-daemon
 version=0.30
 release=1
 source=(https://gitlab.freedesktop.org/upower/${name}/-/archive/${version}/${name}-${version}.tar.gz)
-build_opt="--prefix=/usr       
-      --buildtype=release 
-      -Dgtk_doc=false     
+build_opt="--prefix=/usr
+      --buildtype=release
+      -Dgtk_doc=false
       -Dtests=false"

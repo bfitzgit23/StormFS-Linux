@@ -1,26 +1,13 @@
-# Description: A set of scripts to start/stop the LFS system at bootup/shutdown
-# URL:         
-# Maintainer:  Emmett1, emmett1 dot 2miligrams at gmail dot com
-# Depends on:  
+# Description: Linux From Scratch System V initialization scripts
+# URL: https://www.linuxfromscratch.org/lfs/
+# Maintainer: BFSOS maintainers
+# Depends: sysvinit
 
 name=lfs-bootscripts
-version=20220327
+version=20250827
 release=1
-source=(http://www.linuxfromscratch.org/lfs/downloads/development/lfs-bootscripts-$version.tar.xz
-	lfs-bootscripts_add-support-uefi.patch
-	clock
-	console
-	inittab)
+source=(https://www.linuxfromscratch.org/lfs/downloads/12.4/bootscripts-$version.tar.xz)
 
-build() {
-	install -d $PKG/etc/sysconfig
-	install -m0644 clock $PKG/etc/sysconfig
-	install -m0644 console $PKG/etc/sysconfig
-	install -m0644 inittab $PKG/etc
-
-	cd $name-$version
-
-	patch -Np1 -i $SRC/lfs-bootscripts_add-support-uefi.patch
-
-	make DESTDIR=$PKG install
+pkg_build() {
+    make DESTDIR="$PKG" install || return 1
 }

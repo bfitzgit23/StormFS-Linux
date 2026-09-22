@@ -1,8 +1,6 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: xorg driver xf86-input-joystick
 # URL: http://xorg.freedesktop.org
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: xorg-server
 
 name=xf86-input-joystick
@@ -10,8 +8,7 @@ version=1.6.4
 release=1
 source=(https://www.x.org/releases/individual/driver/$name-$version.tar.xz)
 
-build() {
-	cd xf86-input-joystick-$version
+pkg_build() {
 
 	./configure $XORG_CONFIG &&
 	make

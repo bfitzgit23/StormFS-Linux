@@ -1,0 +1,19 @@
+#!/sbin/openrc-run
+
+description="NTP client/server daemon"
+
+pidfile=/run/chronyd.pid
+command=/usr/sbin/chronyd
+command_args="-n"
+command_background=true
+
+depend() {
+	need logger
+	need net
+}
+
+stop() {
+	ebegin "Stopping chronyd"
+	start-stop-daemon --stop --exec /usr/sbin/chronyd
+	eend $?
+}

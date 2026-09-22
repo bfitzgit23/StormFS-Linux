@@ -1,6 +1,6 @@
 # Chapter 16: Final System Adjustments
 
-This chapter covers the final steps to complete a StormFS Linux installation: system identity, environment setup, cleanup, and verification.
+This chapter covers the final steps to complete an OpenRC-based StormFS Linux installation: system identity, environment setup, cleanup, and verification. Systemd-specific cleanup and inspection is optional compatibility material.
 
 ## 16.1 Creating /etc/os-release
 
@@ -68,6 +68,9 @@ ls -la /usr/bin/vim
 ls -la /usr/bin/bash
 ls -la /usr/bin/gcc
 ls -la /usr/local/bin/stormfs-*
+ls -la /sbin/openrc
+
+# On a systemd installation, verify the systemd control binary instead
 ls -la /sbin/systemctl
 ```
 
@@ -277,9 +280,9 @@ find /usr/bin -type f -exec file {} \; | grep -c "stripped"
 
 ```bash
 # Remove extracted source directories
-rm -rf /sources/linux-6.10.6
-rm -rf /sources/gcc-14.2.0
-rm -rf /sources/glibc-2.40
+rm -rf /sources/linux-7.1.8
+rm -rf /sources/gcc-16.2.0
+rm -rf /sources/glibc-2.44
 # ... and all other build directories
 
 # Keep tarballs for reference (optional)
@@ -316,7 +319,20 @@ rm -rf /usr/share/man/{it,ja,ko,zh_CN,zh_TW,fr,de}
 rm -rf /usr/share/info/*
 ```
 
-### Clean systemd Journal
+### Clean OpenRC Logging (default)
+
+```bash
+# Rotate and inspect the syslog files used by OpenRC services
+rc-service syslog reload 2>/dev/null || true
+logrotate -f /etc/logrotate.conf 2>/dev/null || true
+
+# Remove old text logs only after confirming the retention policy
+find /var/log -maxdepth 1 -type f -name '*.log' -size +100M -print
+```
+
+### Clean systemd Journal (reference)
+
+On a systemd installation, use the journal maintenance commands:
 
 ```bash
 # Limit journal size
@@ -409,8 +425,8 @@ chmod 755 /var/log/bfs
 ```
 /var/log/bfs/
 ├── builds/          # Build logs for each package
-│   ├── gcc-14.2.0.log
-│   ├── vim-9.1.log
+│   ├── gcc-16.2.0.log
+│   ├── vim-9.2.1025.log
 │   └── ...
 ├── errors/          # Error logs from failed builds
 │   ├── 2026-08-17_gcc-fail.log
@@ -537,14 +553,20 @@ $(ls -lt /var/log/bfs/builds/ 2>/dev/null | head -10)
 --- Failed Builds ---
 $(ls /var/log/bfs/errors/ 2>/dev/null | wc -l) failures
 
---- Services ---
-$(systemctl list-units --type=service --state=running --no-pager 2>/dev/null | head -20)
+--- Services (OpenRC default) ---
+$(rc-status --all 2>/dev/null | head -20)
 
 ========================================
 EOF
 
 echo "Report saved to: $REPORT"
 REPORT
+```
+
+For a systemd installation, use this service-report command in place of the OpenRC command above:
+
+```bash
+systemctl list-units --type=service --state=running --no-pager 2>/dev/null | head -20
 ```
 
 ## 16.8 Final Verification
@@ -631,7 +653,7 @@ umount /sys 2>/dev/null
 reboot
 ```
 
-### Post-Reboot Verification
+### Post-Reboot Verification with OpenRC (default)
 
 ```bash
 # Check system identity
@@ -639,11 +661,12 @@ cat /etc/os-release
 hostname
 
 # Check services
-systemctl list-units --type=service --state=running
+rc-status --all
+rc-update show
 
 # Check networking
 ip addr show
-resolvectl status
+getent hosts example.com
 
 # Check disk
 df -h
@@ -653,8 +676,16 @@ whoami
 id
 ```
 
+On a systemd installation, the service and resolver checks are:
+
+```bash
+systemctl list-units --type=service --state=running
+resolvectl status
+```
+
 ## 16.10 References
 
+- [OpenRC User Guide](https://github.com/OpenRC/openrc/blob/master/README.md)
 - [os-release(5)](https://www.freedesktop.org/software/systemd/man/os-release.html)
 - [ld.so(8)](https://www.kernel.org/doc/man-pages/man8/ld.so.8.html)
 - [ldconfig(8)](https://www.kernel.org/doc/man-pages/man8/ldconfig.8.html)

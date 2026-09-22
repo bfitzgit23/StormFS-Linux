@@ -1,19 +1,17 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: headers for mingw-w64 toolchain
 # URL: http://mingw-w64.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 
 name=mingw-w64-headers
-version=12.0.0
-release=1
+version=14.0.0
+release=2
 source=(https://sourceforge.net/projects/mingw-w64/files/mingw-w64/mingw-w64-release/mingw-w64-v$version.tar.bz2)
 
-build() {
+pkg_build() {
 	for T in {i686,x86_64}-w64-mingw32; do
 		mkdir build-$T
 		cd build-$T
-		../mingw-w64-v$version/mingw-w64-headers/configure --prefix=/usr/$T --host=$T
+		../mingw-w64-headers/configure --prefix=/usr/$T --host=$T
 		make DESTDIR=$PKG install
 		cd ..
 	done

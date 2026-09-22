@@ -1,0 +1,15 @@
+BFSOS kernel maintenance helper
+===============================
+
+Kernel packages use a two-phase update policy:
+
+1. Before package replacement, preserve the current/known-good rollback kernel.
+2. Install and generate the replacement kernel/initramfs, mark it pending, and
+   atomically regenerate GRUB.
+3. On the first successful boot into the pending kernel,
+   bfs-kernel-finalize.service marks it known-good and removes older artifacts
+   while retaining the immediately previous known-good kernel.
+
+A second update of the same kernel flavor is refused while an earlier update is
+still pending boot verification. This prevents an unbooted kernel from evicting
+the last known-good rollback entry.

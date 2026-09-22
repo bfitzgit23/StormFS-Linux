@@ -1,0 +1,32 @@
+# Description: gcc for mingw-w64 toolchain
+# URL: https://gcc.gnu.org/
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: mingw-w64-binutils mingw-w64-headers mingw-w64-crt
+
+name=mingw-w64-gcc
+version=13.1.0
+release=2
+source=(http://gcc.gnu.org/pub/gcc/releases/gcc-$version/gcc-$version.tar.xz)
+
+pkg_build() {
+	for T in {i686,x86_64}-w64-mingw32; do
+		mkdir build-$T
+		cd build-$T
+		../configure \
+			--prefix=/usr \
+			--libexecdir=/usr/lib/$name \
+			--target=$T \
+			--enable-shared \
+			--enable-static \
+			--disable-multilib
+		make
+		make DESTDIR=$PKG install
+		cd ..
+	done
+
+	rm -rf $PKG/usr/share/{info,locale}
+	rm -f $PKG/usr/share/man/man7/{fsf-funding,gfdl,gpl}.7*
+	rm -f $PKG/usr/lib/libcc1*
+
+	rm -f $PKG/usr/lib/gcc/{i686,x86_64}-w64-mingw32/$version/{include-fixed,install-tools/include}/README
+}

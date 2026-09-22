@@ -1,13 +1,11 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Utility for incremental file transfers over networks
 # URL: https://rsync.samba.org
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: acl openssl zlib zstd
 
 name=rsync
-version=3.4.4
-release=1
+version=3.5.0
+release=2
 source=(https://www.samba.org/ftp/$name/src/$name-$version.tar.gz \
 	rsyncd.conf rsyncd.service rsync.driver)
 

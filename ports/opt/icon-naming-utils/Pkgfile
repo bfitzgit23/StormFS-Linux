@@ -1,6 +1,5 @@
-# Add your top line text here
-# Your line to add at the top here
-# Depends on: perl-xml-simple 
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: perl-xml-simple
 
 name=icon-naming-utils
 version=0.8.90

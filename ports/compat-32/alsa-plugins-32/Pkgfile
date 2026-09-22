@@ -1,25 +1,19 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: ALSA Plugins contains plugins for various audio libraries and sound servers.
 # URL: https://www.alsa-project.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: alsa-lib-32 alsa-plugins
 
 name=alsa-plugins-32
 version=1.2.12
-release=1
+release=3
 source=(ftp://ftp.alsa-project.org/pub/plugins/alsa-plugins-${version}.tar.bz2)
 
-build() {
-	cd alsa-plugins-${version}
 
-	./configure \
-		--prefix=/usr \
-		--libdir=/usr/lib32 \
-		--sysconfdir=/etc
+post_build() {
 
-	make
-	make DESTDIR=$PKG install
+	rm -rf $PKG/{etc,usr/share}
+}
 
-	rm -r $PKG/{etc,usr/share}
+pre_build() {
+        _bfs_require_compat32_extension 2 || return $?
 }

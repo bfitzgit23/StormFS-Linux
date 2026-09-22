@@ -1,0 +1,13 @@
+#!/sbin/openrc-run
+
+description="Cron scheduler daemon"
+
+pidfile=/run/crond.pid
+command=/usr/bin/crond
+command_args="-n"
+command_background=true
+
+depend() {
+	need localmount
+	use logger
+}

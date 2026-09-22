@@ -234,7 +234,33 @@ echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAA..." >> ~/.ssh/revoked_keys
 
 ## 14.4 Enabling and Starting sshd
 
-### Create a systemd Service (if not installed automatically)
+### OpenRC Service (default)
+
+Create the OpenRC service if the OpenSSH package did not install one:
+
+```bash
+cat > /etc/init.d/sshd << 'EOF'
+#!/sbin/openrc-run
+
+description="OpenSSH server daemon"
+command="/usr/sbin/sshd"
+command_args="-D"
+command_background=true
+pidfile="/run/${RC_SVCNAME}.pid"
+
+depend() {
+    need net
+    use dns logger
+    after firewall
+}
+EOF
+chmod 755 /etc/init.d/sshd
+rc-update add sshd default
+rc-service sshd start
+rc-service sshd status
+```
+
+### Optional systemd Service (if not installed automatically)
 
 ```bash
 cat > /etc/systemd/system/sshd.service << 'EOF'
@@ -263,13 +289,39 @@ EOF
 ### Enable and Start
 
 ```bash
+# OpenRC is the default service path; use the optional systemd block above only on systemd installations
+rc-update add sshd default
+rc-service sshd start
+rc-service sshd status
+```
+
+### Enable and Start with systemd (reference)
+
+On a systemd installation, use the service unit created above:
+
+```bash
 systemctl daemon-reload
 systemctl enable sshd.service
 systemctl start sshd.service
 systemctl status sshd.service
 ```
 
-### Verify
+### Verify with OpenRC (default)
+
+```bash
+# Check that sshd is listening
+ss -tlnp | grep :22
+
+# Test connection locally
+ssh -o StrictHostKeyChecking=no user@localhost
+
+# Check logs
+logread 2>/dev/null || tail -n 100 /var/log/messages
+```
+
+### Verify with systemd (reference)
+
+On a systemd installation, the original service log query remains available:
 
 ```bash
 # Check that sshd is listening
@@ -358,6 +410,13 @@ findtime = 600
 banaction = nftables
 EOF
 
+rc-update add fail2ban default
+rc-service fail2ban start
+```
+
+On a systemd installation, use the native unit instead:
+
+```bash
 systemctl enable --now fail2ban
 ```
 
@@ -479,4 +538,4 @@ ssh -S /tmp/stormfs-socket -O exit user@stormfs-box
 - [ssh_config(5)](https://www.openssh.com/man5/ssh_config.html)
 - [sshd_config(5)](https://www.openssh.com/man5/sshd_config.html)
 - [Chapter 13: Networking](chapter-13-networking.md) — Firewall and network
-- [Chapter 12: System Initialization](chapter-12-system-initialization.md) — systemd units
+- [Chapter 12: System Initialization](chapter-12-system-initialization.md) — OpenRC services and optional systemd units

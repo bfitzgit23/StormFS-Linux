@@ -1,26 +1,20 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Pixel manipulation library
 # URL: https://xorg.freedesktop.org
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: pixman
 
 name=pixman-32
-version=0.46.2
-release=1
+version=0.46.4
+release=3
 source=(https://www.x.org/releases/individual/lib/pixman-$version.tar.xz)
 
-build() {
-	meson setup pixman-$version build \
-		--prefix=/usr \
-		--libdir=/usr/lib32 \
-		--buildtype=plain \
-		--wrap-mode nodownload \
-		-D b_lto=true \
-		-D b_pie=true \
-		-D tests=disabled
-	meson compile -C build -j ${JOBS:-1}
-	DESTDIR=$PKG meson install -C build
+build_opt="-D tests=disabled"
+
+post_build() {
 
 	rm -r $PKG/usr/include
+}
+
+pre_build() {
+        _bfs_require_compat32_extension 2 || return $?
 }

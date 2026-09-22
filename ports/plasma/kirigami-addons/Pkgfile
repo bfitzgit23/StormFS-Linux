@@ -1,9 +1,8 @@
-# Add your top line text here
-# Your line to add at the top here
-# Depends on: kde-frameworks-6 vulkan-loader
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: kde-frameworks-6 vulkan-loader qt6
 
 name=kirigami-addons
-version=1.7.0
+version=1.13.1
 release=1
 source=(https://download.kde.org/stable/${name}/$name-$version.tar.xz)
 pkg_build () {
@@ -11,9 +10,10 @@ pkg_build () {
 mkdir build &&
 cd    build &&
 
-cmake -D CMAKE_INSTALL_PREFIX=$KF6_PREFIX  \
-      -D CMAKE_BUILD_TYPE=Release          \
-      -D BUILD_TESTING=OFF                 \
+cmake -DCMAKE_INSTALL_PREFIX=/opt/kf6 \
+            -DCMAKE_PREFIX_PATH="/opt/qt6;/opt/kf6"  \
+      -DCMAKE_BUILD_TYPE=Release          \
+      -DBUILD_TESTING=OFF                 \
        ..                                  &&
 make
 make DESTDIR=$PKG install

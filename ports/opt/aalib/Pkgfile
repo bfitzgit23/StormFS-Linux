@@ -1,6 +1,5 @@
-# Add your top line text here
-# Your line to add at the top here
-# Depends on: 
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on:
 
 name=aalib
 version=1.4rc5
@@ -37,5 +36,5 @@ autoreconf -fi
             --mandir=/usr/share/man   \
             --disable-static          &&
 make
-make install
+make DESTDIR="$PKG" install
 }

@@ -1,18 +1,15 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description:	Uniform Resource Identifiers (absolute and relative)
 # URL:		https://github.com/libwww-perl/URI
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on:	perl
 # Optional:	p5-business-isbn
 
 name=p5-uri
-version=5.29
+version=5.37
 release=1
 source=(http://search.cpan.org/CPAN/authors/id/O/OA/OALDERS/URI-${version}.tar.gz)
 
-build() {
-	cd URI-$version
+pkg_build() {
 
 	PERL_MM_USE_DEFAULT=1 perl Makefile.PL INSTALLDIRS=vendor
 	make OPTIMIZE="$CFLAGS" DESTDIR="$PKG" install

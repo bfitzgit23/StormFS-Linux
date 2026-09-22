@@ -1,0 +1,17 @@
+#!/sbin/openrc-run
+
+description="WirePlumber system session manager"
+
+command=/usr/bin/wireplumber
+command_args="--system"
+command_background=true
+
+depend() {
+	need pipewire logger
+}
+
+stop() {
+	ebegin "Stopping WirePlumber"
+	start-stop-daemon --stop --exec /usr/bin/wireplumber
+	eend $?
+}

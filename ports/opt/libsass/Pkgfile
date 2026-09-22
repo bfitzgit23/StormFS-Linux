@@ -1,16 +1,13 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: SassC is a wrapper around libsass, a CSS pre-processor language.
 # URL:         https://github.com/sass/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on:  libsass
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: autoconf automake libtool
 
 name=libsass
-version=3.6.5
+version=3.6.6
 release=1
 source=(https://github.com/sass/$name/archive/$version/$name-$version.tar.gz)
-build() {
-	cd $name-$version
+pkg_build() {
 	autoreconf -fi
 	./configure --prefix=/usr
 	make

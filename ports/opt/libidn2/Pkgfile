@@ -1,18 +1,15 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Provides support for IETF Internationalized Domain Names (IDN)
 # URL: http://www.gnu.org/software/libidn/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: libunistring
 # Optional: git gtk-doc
 
 name=libidn2
-version=2.3.7
-release=1
+version=2.3.8
+release=2
 source=(https://ftp.gnu.org/gnu/libidn/$name-$version.tar.gz)
 
-build() {
-  cd $name-$version
+pkg_build() {
 
 
   ./configure --prefix=/usr --disable-static &&
@@ -20,4 +17,3 @@ make
   make DESTDIR=$PKG install
 rm -r $PKG/usr/share/{gtk-doc,info}
 }
-

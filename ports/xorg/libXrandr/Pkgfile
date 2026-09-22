@@ -1,19 +1,16 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: X Resize and Rotate extension client library
 # URL: http://xorg.freedesktop.org
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: libXext libXrender
 
 name=libXrandr
-version=1.5.4
-release=1
+version=1.5.5
+release=3
 source=(https://www.x.org/releases/individual/lib/libXrandr-$version.tar.xz)
 
-build() {
-	cd libXrandr-$version
+pkg_build() {
 
-	./configure $XORG_CONFIG $docdir
+	./configure $XORG_CONFIG --docdir=/usr/share/doc/$name-$version
 
 	make
 	make DESTDIR=$PKG install

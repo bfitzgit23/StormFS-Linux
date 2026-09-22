@@ -1,0 +1,72 @@
+#!/bin/sh
+set -eu
+
+config_home=${XDG_CONFIG_HOME:-"$HOME/.config"}
+panel_home="$config_home/xfce4/panel"
+marker="$config_home/xfce4/.bfs-defaults-v1"
+system_panel=/etc/xdg/xfce4/panel
+wallpaper=/usr/share/backgrounds/xfce/xfce-blue.jpg
+
+[ -e "$marker" ] && exit 0
+command -v xfconf-query >/dev/null 2>&1 || exit 0
+
+# Only repair the exact fresh-profile failure proven on BFSOS: launcher plugins
+# 11-15 exist as the distro default, but their item arrays/directories are empty.
+# Any user-owned launcher directory is treated as customization and is never
+# overwritten by this initializer.
+can_seed_launchers=yes
+for id in 11 12 13 14 15; do
+    if [ -d "$panel_home/launcher-$id" ] &&
+       find "$panel_home/launcher-$id" -mindepth 1 -print -quit 2>/dev/null | grep -q .; then
+        can_seed_launchers=no
+        break
+    fi
+    kind=$(xfconf-query -c xfce4-panel -p "/plugins/plugin-$id" 2>/dev/null || true)
+    [ "$kind" = launcher ] || { can_seed_launchers=no; break; }
+done
+
+if [ "$can_seed_launchers" = yes ]; then
+    mkdir -p "$panel_home"
+    for spec in \
+        11:bfs-terminal.desktop \
+        12:bfs-files.desktop \
+        13:bfs-image-viewer.desktop \
+        14:bfs-media-player.desktop \
+        15:bfs-disc-burner.desktop
+    do
+        id=${spec%%:*}
+        file=${spec#*:}
+        src="$system_panel/launcher-$id/$file"
+        dst="$panel_home/launcher-$id/$file"
+        [ -r "$src" ] || continue
+        mkdir -p "${dst%/*}"
+        [ -e "$dst" ] || cp -p "$src" "$dst"
+
+        # Xfce requires a real one-element string array even for one launcher.
+        # This path is reached only for the untouched BFSOS default plugin IDs.
+        xfconf-query -c xfce4-panel -p "/plugins/plugin-$id/items" -r >/dev/null 2>&1 || true
+        xfconf-query -c xfce4-panel -p "/plugins/plugin-$id/items" \
+            -n -a -t string -s "$file" >/dev/null 2>&1 || true
+    done
+fi
+
+# Assign the distro wallpaper only when no wallpaper is already configured.
+# Xfce's key embeds the connector name, so derive connected X11 outputs at
+# runtime instead of hard-coding VM-specific names such as Virtual-1.
+has_wallpaper=no
+for prop in $(xfconf-query -c xfce4-desktop -l 2>/dev/null | grep '/last-image$' || true); do
+    value=$(xfconf-query -c xfce4-desktop -p "$prop" 2>/dev/null || true)
+    [ -n "$value" ] && { has_wallpaper=yes; break; }
+done
+
+if [ "$has_wallpaper" = no ] && [ -r "$wallpaper" ] && command -v xrandr >/dev/null 2>&1; then
+    xrandr --query 2>/dev/null | awk '$2 == "connected" {print $1}' | while IFS= read -r output; do
+        [ -n "$output" ] || continue
+        prop="/backdrop/screen0/monitor${output}/workspace0/last-image"
+        xfconf-query -c xfce4-desktop -p "$prop" -n -t string -s "$wallpaper" >/dev/null 2>&1 || true
+    done
+fi
+
+mkdir -p "${marker%/*}"
+: > "$marker"
+exit 0

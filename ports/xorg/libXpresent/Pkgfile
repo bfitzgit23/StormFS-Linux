@@ -1,19 +1,16 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Xlib-based library for the X Present Extension
 # URL: https://gitlab.freedesktop.org/xorg/lib/libxpresent
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: libXrandr libXrender libXfixes libXext libX11 libxcb libXau libXdmcp
 
 name=libXpresent
-version=1.0.1
-release=1
+version=1.0.2
+release=3
 source=(https://www.x.org/releases/individual/lib/libXpresent-$version.tar.xz)
 
 
-build() {
-	cd libXpresent-$version
-	 ./configure $XORG_CONFIG $docdir
+pkg_build() {
+	 ./configure $XORG_CONFIG --docdir=/usr/share/doc/$name-$version
 	make
 	make DESTDIR=$PKG install
 }

@@ -1,8 +1,6 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: X11 client-side library
 # URL: https://xcb.freedesktop.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: libXau libXdmcp xcb-proto
 
 name=libxcb
@@ -10,13 +8,12 @@ version=1.17.0
 release=1
 source=(https://xorg.freedesktop.org/archive/individual/lib/$name-$version.tar.xz)
 
-build() {
-	cd $name-$version
+pkg_build() {
 
 	./configure $XORG_CONFIG      \
             --without-doxygen \
-            --docdir='${datadir}'/doc/libxcb-1.16 &&
+            --docdir='${datadir}'/doc/libxcb-$version &&
 	make
 	make DESTDIR=$PKG install
-chown -Rv root:root $PKG$XORG_PREFIX/share/doc/libxcb-1.16
+chown -Rv root:root $PKG$XORG_PREFIX/share/doc/libxcb-$version
 }

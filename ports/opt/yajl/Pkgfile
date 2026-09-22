@@ -1,25 +1,34 @@
 # Description: Yet Another JSON Library
-# URL: https://dev.alpinelinux.org/archive/yajl
-# Maintainer: Venom Linux Team, venomlinux at disroot dot org
-# Depends on: cmake ninja
-
+# URL: https://github.com/lloyd/yajl
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 name=yajl
 version=2.1.0
-release=3
-source=(https://dev.alpinelinux.org/archive/yajl/$name-$version.tar.gz cmake4.patch)
+release=1
+source=(https://github.com/lloyd/yajl/archive/refs/tags/$version.tar.gz)
 
-build() {
+build_opt=(
+    -DCMAKE_INSTALL_PREFIX=/usr
+    -DCMAKE_INSTALL_LIBDIR=lib
+    -DCMAKE_BUILD_TYPE=Release
+    -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+    -DBUILD_SHARED_LIBS=ON
+)
 
-	patch -d $name-$version -i $SRC/cmake4.patch -Np1
-	cmake -S $name-$version -B build -G Ninja \
-		-DCMAKE_POLICY_VERSION_MINIMUM=3.5  \
-		-D CMAKE_BUILD_TYPE=Release \
-		-D CMAKE_C_FLAGS_RELEASE="$CFLAGS" \
-		-D CMAKE_INSTALL_PREFIX=/usr \
-		-Wno-dev
-	cmake --build build
-	DESTDIR=$PKG cmake --install build
+pkg_build() {
+    cmake -S . -B build "${build_opt[@]}" || return 1
+    cmake --build build || return 1
+    DESTDIR="$PKG" cmake --install build || return 1
+}
 
-	mv $PKG/usr/share/pkgconfig $PKG/usr/lib
-	rm -r $PKG/usr/share
+
+pre_build() {
+    sed -i \
+        -e '/GET_TARGET_PROPERTY(binPath json_reformat LOCATION)/d' \
+        -e 's|${binPath}|$<TARGET_FILE:json_reformat>|g' \
+        reformatter/CMakeLists.txt || return 1
+
+    sed -i \
+        -e '/GET_TARGET_PROPERTY(binPath json_verify LOCATION)/d' \
+        -e 's|${binPath}|$<TARGET_FILE:json_verify>|g' \
+        verify/CMakeLists.txt || return 1
 }

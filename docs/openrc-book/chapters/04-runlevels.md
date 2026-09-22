@@ -23,7 +23,8 @@ ls /etc/runlevels/sysinit/
 The boot runlevel contains services needed during system boot:
 
 - dbus (message bus)
-- cronie (cron daemon)
+- syslog (system logger)
+- crond (Cronie cron daemon)
 - chronyd (NTP client)
 - acpid (power management)
 - alsa (sound state)
@@ -39,8 +40,9 @@ ls /etc/runlevels/boot/
 The default runlevel contains services for normal operation:
 
 - networkmanager (network management)
+- iwd (wireless daemon, when used)
 - lightdm (display manager)
-- bluetooth (Bluetooth support)
+- bluez (Bluetooth support)
 - sshd (SSH server)
 - smartd (disk monitoring)
 - udisks2 (disk management)
@@ -85,7 +87,7 @@ sudo rc-update add networkmanager default
 
 # Add multiple services
 sudo rc-update add lightdm default
-sudo rc-update add bluetooth default
+sudo rc-update add bluez default
 ```
 
 ### Removing Services from Runlevels
@@ -96,7 +98,7 @@ sudo rc-update delete networkmanager default
 
 # Remove multiple services
 sudo rc-update delete lightdm default
-sudo rc-update delete bluetooth default
+sudo rc-update delete bluez default
 ```
 
 ## Switching Runlevels
@@ -134,9 +136,10 @@ nonetwork
 sudo mkdir -p /etc/runlevels/gui
 
 # Add services
-sudo rc-update add xorg gui
+sudo rc-update add dbus gui
 sudo rc-update add lightdm gui
 sudo rc-update add networkmanager gui
+sudo rc-update add bluez gui
 ```
 
 ### Example: Server Runlevel
@@ -148,8 +151,10 @@ sudo mkdir -p /etc/runlevels/server
 # Add services
 sudo rc-update add sshd server
 sudo rc-update add httpd server
-sudo rc-update add mysqld server
+sudo rc-update add mariadb server
 ```
+
+The `httpd` and `mariadb` examples use the service scripts shipped by their respective StormFS ports. The desktop/session services in the matrix are system services; launch per-user panels, shells, and audio sessions from the graphical session instead of a system runlevel.
 
 ## Runlevel Dependencies
 

@@ -1,24 +1,19 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Little CMS intends to be an small-footprint color management engine
 # URL: https://www.littlecms.com/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: lcms2 libtiff-32
 
 name=lcms2-32
-version=2.17
-release=1
+version=2.19.1
+release=3
 source=(https://downloads.sourceforge.net/project/lcms/lcms/$version/lcms2-$version.tar.gz)
 
-build() {
-	cd lcms2-$version
 
-	./configure \
-		--prefix=/usr \
-		--libdir=/usr/lib32
+post_build() {
 
-	make
-	make DESTDIR=$PKG install
+	rm -rf $PKG/usr/{bin,include,share/man}
+}
 
-	rm -r $PKG/usr/{bin,include,share/man}
+pre_build() {
+        _bfs_require_compat32_extension 2 || return $?
 }

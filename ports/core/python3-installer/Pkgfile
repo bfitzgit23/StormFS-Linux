@@ -1,8 +1,6 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: A low-level library for installing from a Python wheel distribution
 # URL: https://github.com/pypa/installer
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: python3-pip
 
 name=python3-installer
@@ -10,8 +8,7 @@ version=1.0.1
 release=1
 source=(https://pypi.org/packages/source/i/installer/installer-$version.tar.gz)
 
-build() {
-  cd installer-$version
+pkg_build() {
 
   PIP_CONFIG_FILE=/dev/null /usr/bin/pip3 install --isolated --root=$PKG \
     --ignore-installed --no-deps .

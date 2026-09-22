@@ -1,17 +1,15 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Linear Algebra PACKage - F77 routines for Linear Algebra
 # URL: https://github.com/Reference-LAPACK/lapack
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: openblas python3
 
 name=lapack
-version=3.12.0
+version=3.12.1
 release=1
-source=(https://github.com/Reference-LAPACK/lapack/archive/v$version/$name-$version-$release.tar.gz)
+source=(https://github.com/Reference-LAPACK/lapack/archive/v$version/$name-$version.tar.gz)
 
-build() {
-  cmake -S $name-$version -B build -G Ninja \
+pkg_build() {
+  cmake -S . -B build -G Ninja \
     -D CMAKE_INSTALL_PREFIX=/usr \
     -D CMAKE_INSTALL_LIBDIR=lib \
     -D CMAKE_BUILD_TYPE=Release \

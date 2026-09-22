@@ -1,0 +1,12 @@
+#!/sbin/openrc-run
+
+description="Wireless daemon"
+
+pidfile=/run/iwd.pid
+command=/usr/sbin/iwd
+command_background=true
+
+depend() {
+	need dbus logger
+	before networkmanager
+}

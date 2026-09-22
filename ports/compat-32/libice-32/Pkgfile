@@ -1,22 +1,20 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: xorg lib libICE
 # URL: https://xorg.freedesktop.org
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on: libice xorgproto-32 xtrans-32
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: libICE xorgproto-32 xtrans-32
 
 name=libice-32
-version=1.1.1
-release=1
+version=1.1.2
+release=3
 source=(https://www.x.org/releases/individual/lib/libICE-$version.tar.xz)
 
-build() {
-	cd libICE-$version
+build_opt="--disable-docs"
 
-	./configure --prefix=/usr --disable-docs --libdir=/usr/lib32
-
-	make
-	make DESTDIR=$PKG install
+post_build() {
 
 	rm -r $PKG/usr/{include,share}
+}
+
+pre_build() {
+        _bfs_require_compat32_extension 2 || return $?
 }

@@ -1,6 +1,5 @@
-# Add your top line text here
-# Your line to add at the top here
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 name=automake
 version=1.18.1
 release=1
-source=(https://ftpmirror.gnu.org/automake/automake-$version.tar.xz)
+source=(https://ftp.gnu.org/gnu/automake/automake-$version.tar.xz)

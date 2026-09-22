@@ -1,8 +1,7 @@
-# Add your top line text here
-# Your line to add at the top here
-# Depends on: glib gobject-introspection vala
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: glib gobject-introspection
 
 name=libxfce4util
-version=4.18.2
+version=4.20.1
 release=1
 source=(https://archive.xfce.org/src/xfce/${name}/${version%.*}/${name}-${version}.tar.bz2)

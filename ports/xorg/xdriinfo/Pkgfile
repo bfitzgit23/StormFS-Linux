@@ -1,17 +1,14 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Query configuration information of DRI drivers
 # URL: http://xorg.freedesktop.org
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: mesa
 
 name=xdriinfo
-version=1.0.7
-release=1
+version=1.0.8
+release=2
 source=(https://xorg.freedesktop.org/archive/individual/app/xdriinfo-$version.tar.xz)
 
-build() {
-	cd xdriinfo-$version
+pkg_build() {
 	./configure $XORG_CONFIG
 	make
 	make DESTDIR=$PKG install

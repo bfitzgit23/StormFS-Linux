@@ -1,9 +1,8 @@
-# Add your top line text here
-# Your line to add at the top here
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 name=inetutils
 version=2.8
 release=1
-source=(https://ftpmirror.gnu.org/inetutils/inetutils-$version.tar.gz)
+source=(https://ftp.gnu.org/gnu/inetutils/inetutils-$version.tar.gz)
 build_opt="
 	--disable-logger
 	--disable-whois

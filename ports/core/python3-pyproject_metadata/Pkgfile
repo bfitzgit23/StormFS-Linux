@@ -1,9 +1,8 @@
-# Add your top line text here
-# Your line to add at the top here
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: python3-packaging
 
 name=python3-pyproject_metadata
-version=0.8.0
+version=0.12.1
 release=1
 source=(https://files.pythonhosted.org/packages/source/p/pyproject-metadata/pyproject_metadata-${version}.tar.gz)
 pkg_build() {

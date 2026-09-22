@@ -1,17 +1,14 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Lightweight and flexible command-line JSON processor
 # URL: https://stedolan.github.io/jq/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: oniguruma
 
 name=jq
-version=1.7.1
+version=1.8.2
 release=1
 source=(https://github.com/stedolan/jq/releases/download/jq-$version/jq-$version.tar.gz)
 
-build() {
-  cd $name-$version
+pkg_build() {
 
   ./configure --prefix=/usr \
     --with-oniguruma=/usr

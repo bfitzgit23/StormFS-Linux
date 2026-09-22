@@ -1,6 +1,6 @@
 # Description: Cryptsetup configures encrypted block devices using dm-crypt and LUKS.
 # URL: https://gitlab.com/cryptsetup/cryptsetup
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: argon2 json-c keyutils libgcrypt
 # Optional: libpwquality passwdqc
 

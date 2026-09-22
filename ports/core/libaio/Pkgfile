@@ -1,8 +1,9 @@
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 name=libaio
 version=0.3.113
-release=1
+release=2
 
-source=(https://pagure.io/$name/archive/$name-$version/$name-$version.tar.gz)
+source=(https://archive.ubuntu.com/ubuntu/pool/main/liba/libaio/libaio_${version}.orig.tar.gz)
 
 pkg_build() {
         sed -i '/install.*libaio.a/s/^/#/' src/Makefile

@@ -1,15 +1,13 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: X Window System server
 # URL: http://xorg.freedesktop.org
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: libxcvt pixman xorg-fonts xkeyboard-config libepoxy libtirpc libinput systemd xorg-apps
 
 name=xorg-server
-version=21.1.16
-release=1
+version=21.1.24
+release=3
 source=(https://www.x.org/releases/individual/xserver/$name-$version.tar.xz
-https://www.linuxfromscratch.org/patches/blfs/svn/$name-$version-tearfree_backport-1.patch)
+https://www.linuxfromscratch.org/patches/blfs/svn/$name-$version-tearfree_backport-2.patch)
 
 pkg_build() {
 	mkdir build &&

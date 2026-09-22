@@ -1,26 +1,20 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Library of JPEG support functions.
 # URL: https://www.libjpeg-turbo.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: libjpeg-turbo
 
 name=libjpeg-turbo-32
-version=3.1.1
-release=1
+version=3.2.0
+release=3
 source=(https://github.com/libjpeg-turbo/libjpeg-turbo/releases/download/$version/${name%-*}-$version.tar.gz)
 
-build() {
-	cmake -S ${name%-*}-$version -B build -G Ninja \
-		-D CMAKE_INSTALL_PREFIX=/usr \
-		-D CMAKE_INSTALL_LIBDIR=/usr/lib32 \
-		-D CMAKE_BUILD_TYPE=Release \
-		-D CMAKE_C_FLAGS_RELEASE="$CFLAGS" \
-		-D CMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
-		-D WITH_JPEG8=ON
+build_opt="-D WITH_JPEG8=ON"
 
-	cmake --build build
-	DESTDIR=$PKG cmake --install build
+post_build() {
 
 	rm -r $PKG/usr/{bin,include,share/man,share}
+}
+
+pre_build() {
+        _bfs_require_compat32_extension 2 || return $?
 }

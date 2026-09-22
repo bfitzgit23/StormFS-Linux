@@ -1,19 +1,15 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: simple clock for Xorg
 # URL: https://www.x.org/pub/individual/app
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on: xorg-server xorg-libs
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: xorg-libs
 
 name=xclock
-version=1.1.1
+version=1.2.1
 release=1
-source=(https://www.x.org/pub/individual/app/$name-$version.tar.xz)
+source=(https://mirror.freedif.org/pub/blfs/conglomeration/Xorg/$name-$version.tar.xz)
 
-build() {
-    cd "$name-$version"
-
-    ./configure $XORG_CONFIG &&
-make
-    make DESTDIR=$PKG install
+pkg_build() {
+    ./configure $XORG_CONFIG || return $?
+    make -j "${JOBS:-1}" || return $?
+    make DESTDIR="$PKG" install || return $?
 }

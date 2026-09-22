@@ -1,15 +1,9 @@
-# Description: USB traffic redirection protocol
-# URL: https://www.spice-space.org/usbredir.html
-# Maintainer: Venom Linux Team, venomlinux at disroot dot org
-# Depends on: libusb glib
-
+# Description: USB traffic redirection library for virtualization
+# URL: https://gitlab.freedesktop.org/spice/usbredir
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: glib libusb
 name=usbredir
 version=0.15.0
 release=1
-source=(https://spice-space.org/download/usbredir/$name-$version.tar.xz)
-
-build() {
-        meson setup $name-$version build 
-	meson compile -C build
-	DESTDIR=$PKG meson install --no-rebuild -C build
-}
+source=(https://gitlab.freedesktop.org/spice/usbredir/-/archive/usbredir-$version/usbredir-usbredir-$version.tar.bz2)
+build_opt=(-Dtools=enabled -Dtests=disabled)

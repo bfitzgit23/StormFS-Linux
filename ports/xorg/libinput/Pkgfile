@@ -1,18 +1,15 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: library that handles input devices for display servers
 # URL: https://www.freedesktop.org/wiki/Software/libinput/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: systemd mtdev libevdev
 # Optional: wayland-protocols
 
 name=libinput
-version=1.28.1
-release=1
+version=1.31.3
+release=2
 source=(https://gitlab.freedesktop.org/libinput/libinput/-/archive/$version/$name-$version.tar.bz2)
 
-build() {
-	cd $name-$version
+pkg_build() {
 	mkdir build &&
 	cd    build &&
 

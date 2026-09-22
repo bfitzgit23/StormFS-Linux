@@ -13,3 +13,6 @@
 [submodule "tela-circle-icon-theme"]
 	path = tela-circle-icon-theme
 	url = https://github.com/vinceliuice/Tela-circle-icon-theme
+[submodule "scratchpkg"]
+	path = scratchpkg
+	url = https://codeberg.org/venomlinux/scratchpkg.git

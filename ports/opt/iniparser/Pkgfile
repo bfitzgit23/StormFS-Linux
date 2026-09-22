@@ -1,23 +1,35 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: ini file parser
 # URL: https://github.com/ndevilla/iniparser
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on: chrpath
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: chrpath cmake
 
 name=iniparser
-version=4.1
+version=4.2.6
 release=1
 source=(https://github.com/ndevilla/iniparser/archive/v$version/$name-$version.tar.gz)
 
-build() {
-  cd $name-$version
-  make
+pkg_build() {
+    cmake -S . -B build \
+        -DCMAKE_INSTALL_PREFIX=/usr \
+        -DCMAKE_INSTALL_LIBDIR=lib \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DBUILD_TESTING=OFF \
+        -DBUILD_EXAMPLES=OFF \
+        -DBUILD_DOCS=OFF \
+        -DBUILD_SHARED_LIBS=ON \
+        -DBUILD_STATIC_LIBS=OFF \
+        -Wno-dev || return 1
 
-  install -Dm0644 src/iniparser.h $PKG/usr/include/iniparser.h
-  install -Dm0644 src/dictionary.h $PKG/usr/include/dictionary.h
-  install -Dm0644 libiniparser.so.1 $PKG/usr/lib/libiniparser.so.1
+    cmake --build build -j "${JOBS:-1}" || return 1
 
-  ln -sf libiniparser.so.1 $PKG/usr/lib/libiniparser.so
-  chrpath -d $PKG/usr/lib/libiniparser.so
+    DESTDIR="$PKG" cmake --install build || return 1
+
+    # Preserve BFSOS's historical flat-header compatibility.
+    if [ -d "$PKG/usr/include/iniparser" ]; then
+        for h in "$PKG"/usr/include/iniparser/*.h; do
+            [ -e "$h" ] || continue
+            ln -sf "iniparser/$(basename "$h")" \
+                "$PKG/usr/include/$(basename "$h")" || return 1
+        done
+    fi
 }

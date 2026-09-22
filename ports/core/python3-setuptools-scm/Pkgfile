@@ -1,9 +1,8 @@
-# Add your top line text here
-# Your line to add at the top here
-# Depends on: python3-packaging python3-typing_extensions
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: python3-vcs-versioning
 
 name=python3-setuptools-scm
-version=8.2.1
+version=10.2.3
 release=1
 source=(https://pypi.io/packages/source/s/setuptools_scm/setuptools_scm-$version.tar.gz)
 pkg_build() {

@@ -1,8 +1,6 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: xorg font font-adobe-utopia-100dpi
 # URL: https//xorg.freedesktop.org
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: bdftopcf xorg-font-util mkfontscale
 
 name=xorg-font-adobe-utopia-100dpi
@@ -10,8 +8,7 @@ version=1.0.5
 release=1
 source=(https://www.x.org/releases/individual/font/font-adobe-utopia-100dpi-$version.tar.xz)
 
-build() {
-	cd font-adobe-utopia-100dpi-$version
+pkg_build() {
 
 	./configure --prefix=/usr
 

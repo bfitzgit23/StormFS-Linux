@@ -1,10 +1,11 @@
 cription: Pluggable Authentication Modules for Linux
 # URL: https://github.com/linux-pam/linux-pam
 # Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: meson ninja
 
 name=linux-pam
 version=1.7.2
-release=2
+release=4
 
 source=(
     https://github.com/linux-pam/linux-pam/releases/download/v$version/Linux-PAM-$version.tar.xz

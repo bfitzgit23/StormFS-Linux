@@ -1,16 +1,21 @@
-# Add your top line text here
-# Your line to add at the top here
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: rustc llvm
 
 name=rust-bindgen
-version=0.70.1
+version=0.73.2
 release=1
-source=(https://github.com/rust-lang/${name}/archive/v${version}/${name}-${version}.tar.gz)
-build() {
-  prt-get isinst sccache && export RUSTC_WRAPPER=/usr/bin/sccache
-  [[ ! -e $PKGMK_SOURCE_DIR/rust ]] && mkdir $PKGMK_SOURCE_DIR/rust
+source=(https://github.com/rust-lang/${name}/archive/refs/tags/v${version}.tar.gz)
 
-  cargo build --release --manifest-path $name-$version/Cargo.toml
+pkg_build() {
+    prt-get isinst sccache && export RUSTC_WRAPPER=/usr/bin/sccache
 
-  install -Dt $PKG/usr/bin $name-$version/target/release/bindgen
+    mkdir -p "$PKGMK_SOURCE_DIR/rust"
+
+    cargo build \
+        --release \
+        --manifest-path Cargo.toml || return 1
+
+    install -Dm755 \
+        target/release/bindgen \
+        "$PKG/usr/bin/bindgen" || return 1
 }

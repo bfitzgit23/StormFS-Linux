@@ -1,0 +1,19 @@
+#!/sbin/openrc-run
+
+description="LVM2 monitoring"
+
+depend() {
+	need localmount logger
+}
+
+start() {
+	ebegin "Starting LVM2 monitoring"
+	/usr/sbin/lvm2-monitor
+	eend $?
+}
+
+stop() {
+	ebegin "Stopping LVM2 monitoring"
+	/usr/sbin/lvm2-monitor --disable
+	eend $?
+}

@@ -1,20 +1,17 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: X authority file utility
 # URL: http://xorg.freedesktop.org
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on:
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: libX11 libXau libXext libXmu
 
 name=xauth
-version=1.1.3
-release=1
+version=1.1.5
+release=3
 source=(https://www.x.org/releases/individual/app/xauth-$version.tar.xz)
 
-build() {
-	cd xauth-$version
+pkg_build() {
 
-	./configure $XORG_CONFIG
+	./configure $XORG_CONFIG || return $?
 
-	make
-	make DESTDIR=$PKG install
+	make -j "${JOBS:-1}" || return $?
+	make DESTDIR="$PKG" install || return $?
 }

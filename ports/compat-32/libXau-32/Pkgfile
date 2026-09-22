@@ -1,21 +1,18 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: X Authorization routines
 # URL: https://xorg.freedesktop.org
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on: xorg-libxau xorg-xorgproto-32
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: libXau xorgproto-32
 
 name=libXau-32
-version=1.0.11
-release=1
+version=1.0.12
+release=2
 source=(https://www.x.org/releases/individual/lib/libXau-$version.tar.xz)
 
-build() {
-	cd libXau-$version
 
-	./configure --prefix=/usr --libdir=/usr/lib32 --host=i686-pc-linux-gnu
-
-	make
-	make DESTDIR=$PKG install
+post_build() {
 	rm -r $PKG/usr/{include,share}
+}
+
+pre_build() {
+        _bfs_require_compat32_extension 2 || return $?
 }

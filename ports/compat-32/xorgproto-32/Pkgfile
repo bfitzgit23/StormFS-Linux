@@ -1,28 +1,20 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: xorg xorgproto
 # URL: http://xorg.freedesktop.org
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: xorgproto
 
 name=xorgproto-32
-version=2024.1
-release=1
-source=(https://xorg.freedesktop.org/archive/individual/proto/xorgproto-$version.tar.xz
-cross-file.txt)
+version=2025.1
+release=3
+source=(https://xorg.freedesktop.org/archive/individual/proto/xorgproto-$version.tar.xz)
 
-build() {
-	meson setup xorgproto-$version build --cross-file cross-file.txt \
-		--prefix=/usr \
-		--libdir=/usr/lib32 \
-		--datadir=/usr/lib32 \
-		--buildtype=plain \
-		--wrap-mode nodownload \
-		-D b_lto=true \
-		-D b_pie=true \
-		-D legacy=false
-	meson compile -C build
-	DESTDIR=$PKG meson install -C build
+build_opt="--datadir=/usr/lib32 -D legacy=false"
+
+post_build() {
 
 	rm -r $PKG/usr/include $PKG/usr/lib32/doc $PKG/usr/lib32/pkgconfig/applewmproto.pc
+}
+
+pre_build() {
+        _bfs_require_compat32_extension 2 || return $?
 }

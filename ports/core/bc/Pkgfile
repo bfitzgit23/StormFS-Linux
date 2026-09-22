@@ -1,7 +1,6 @@
-# Add your top line text here
-# Your line to add at the top here
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 name=bc
-version=7.0.3
+version=7.1.0
 release=1
 source=(https://github.com/gavinhoward/bc/releases/download/$version/bc-$version.tar.xz)
 

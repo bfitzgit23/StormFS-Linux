@@ -1,16 +1,22 @@
-# Description: dav1d is an AV1 decoder
-# URL: https://code.videolan.org/videolan/dav1d/
-# Maintainer: Venom Linux Team, venomlinux at disroot dot org
-# Depends on: meson nasm
+# Description: Fast and small AV1 video decoder
+# URL: https://code.videolan.org/videolan/dav1d
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: meson ninja
+# Optional: nasm
 
 name=dav1d
-version=1.5.3
+version=1.5.4
 release=1
-source=(https://code.videolan.org/videolan/dav1d/-/archive/$version/$name-$version.tar.gz)
+source=(https://download.videolan.org/pub/videolan/dav1d/${version}/dav1d-${version}.tar.xz)
 
-build() {
-	cd $name-$version
-	meson setup $name-$version build
-	meson compile -C build
-	DESTDIR=$PKG meson install --no-rebuild -C build
+pkg_build() {
+    meson setup build \
+        --prefix=/usr \
+        --buildtype=release \
+        -Denable_tests=false \
+        -Denable_examples=false || return 1
+
+    ninja -C build || return 1
+
+    DESTDIR="$PKG" ninja -C build install || return 1
 }

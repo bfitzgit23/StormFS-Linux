@@ -1,26 +1,21 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: A fast image manipulation library
 # URL: https://sourceforge.net/projects/enlightenment/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on: freetype-32 imlib2 libtiff-32 libSM-32 libXext-32 zstd-32
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: freetype-32 imlib2 libjpeg-turbo-32 libpng-32 libtiff-32 libSM-32 libXext-32 zstd-32
 # Optional: libid3tag-32 giflib-32 libwebp-32
 
 name=imlib2-32
-version=1.12.4
-release=1
+version=1.12.7
+release=3
 source=(https://downloads.sourceforge.net/project/enlightenment/imlib2-src/$version/imlib2-$version.tar.xz)
 
-build() {
-	cd imlib2-$version
+build_opt="--x-libraries=/usr/lib32 --enable-mmx --disable-amd64"
 
-	./configure --prefix=/usr \
-		--libdir=/usr/lib32 \
-		--x-libraries=/usr/lib32 \
-		--enable-mmx \
-		--disable-amd64
-	make
-	make DESTDIR=$PKG install
+post_build() {
 
 	rm -r $PKG/usr/{bin,include,share}
+}
+
+pre_build() {
+        _bfs_require_compat32_extension 2 || return $?
 }

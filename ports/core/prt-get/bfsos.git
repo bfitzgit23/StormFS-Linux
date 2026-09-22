@@ -1,0 +1,6 @@
+# BFSOS maintained ports collections: one Codeberg monorepo, one main branch.
+URL=https://codeberg.org/bmadonnaster/BFSOS.git
+NAME=bfsos
+BRANCH=main
+LOCAL_REPOSITORY=/var/cache/ports-git/bfsos
+COLLECTIONS="compat-32:ports/compat-32 compiz:ports/compiz contrib:ports/contrib core:ports/core gnome:ports/gnome lxqt:ports/lxqt opt:ports/opt plasma:ports/plasma xfce:ports/xfce xorg:ports/xorg"

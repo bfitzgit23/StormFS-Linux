@@ -1,16 +1,13 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: A minimalistic user-space library oriented to Netlink developers.
 # URL: https://netfilter.org/projects/libmnl/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 
 name=libmnl
 version=1.0.5
 release=1
 source=(https://www.netfilter.org/projects/$name/files/$name-$version.tar.bz2)
 
-build() {
-	cd $name-$version
+pkg_build() {
 
 	./configure --prefix=/usr &&
 make

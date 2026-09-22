@@ -1,17 +1,25 @@
-# Add your top line text here
-# Your line to add at the top here
-# Depends on: gtkmm json-glib libsigc++ pulseaudio libcanberra 
+# Description: GTK volume control for PulseAudio-compatible sound servers
+# URL: https://freedesktop.org/software/pulseaudio/pavucontrol/
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: gtkmm json-glib libsigc++ pulseaudio
+# Optional: libcanberra lynx
 
 name=pavucontrol
-version=6.1
-release=1
-source=(https://www.freedesktop.org/software/pulseaudio/${name}/${name}-${version}.tar.xz)
-pkg_build () {
-mkdir build &&
-cd    build &&
+version=6.2
+release=2
 
-meson setup --prefix=/usr --buildtype=release -Dlynx=false .. &&
-ninja
-DESTDIR=$PKG ninja install &&
-mv $PKG/usr/share/doc/$name $PKG/usr/share/doc/$name-$version
+source=(
+    https://www.freedesktop.org/software/pulseaudio/pavucontrol/$name-$version.tar.xz
+)
+
+build_opt=(
+    -Dlynx=disabled
+)
+
+pre_build() {
+    if prt-get isinst libcanberra >/dev/null 2>&1; then
+        build_opt+=( -Daudio-feedback=enabled )
+    else
+        build_opt+=( -Daudio-feedback=disabled )
+    fi
 }

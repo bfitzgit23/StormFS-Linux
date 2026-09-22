@@ -1,9 +1,8 @@
-# Add your top line text here
-# Your line to add at the top here
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: python3-markdown python3-packaging python3-pygments python3-typogrify
 
 name=python3-gi_docgen
-version=2024.1
+version=2026.1
 release=1
 source=(https://files.pythonhosted.org/packages/source/g/gi-docgen/gi_docgen-${version}.tar.gz)
 pkg_build() {

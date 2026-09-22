@@ -1,18 +1,15 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: The VP8/VP9 Codec SDK
 # URL: https://www.webmproject.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: yasm  nasm which
 # Optional: curl doxygen
 
 name=libvpx
-version=1.15.2
-release=2
+version=1.17.0
+release=1
 source=(https://github.com/webmproject/$name/archive/v$version/$name-v$version.tar.gz)
 
-build() {
-  cd $name-$version
+pkg_build() {
 
  sed -i 's/cp -p/cp/' build/make/Makefile &&
 

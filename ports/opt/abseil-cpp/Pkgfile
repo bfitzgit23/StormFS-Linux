@@ -1,12 +1,11 @@
-# Add your top line text here
-# Your line to add at the top here
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: cmake
 
 name=abseil-cpp
-version=20250512.0
+version=20260817.0
 release=1
 source=(https://github.com/abseil/${name}/releases/download/${version}/${name}-${version}.tar.gz)
-build_opt="-DCMAKE_INSTALL_PREFIX=/usr 
-      -DCMAKE_BUILD_TYPE=Release  
-      -DABSL_PROPAGATE_CXX_STD=ON 
+build_opt="-DCMAKE_INSTALL_PREFIX=/usr
+      -DCMAKE_BUILD_TYPE=Release
+      -DABSL_PROPAGATE_CXX_STD=ON
       -DBUILD_SHARED_LIBS=ON"

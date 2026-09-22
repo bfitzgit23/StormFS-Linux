@@ -1,29 +1,28 @@
-# Add your top line text here
-# Your line to add at the top here
-# Description: The Extra Cmake Modules package contains extra CMake modules used by KDE Frameworks 5 and other packages.
-# URL:         https://download.kde.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on:  cmake
-# Optional: sphinxx pyqt
+# Description: Extra CMake modules used by KDE Frameworks and Plasma
+# URL: https://download.kde.org/
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: cmake
+# Optional: sphinx pyqt
 
 name=extra-cmake-modules
-version=6.13.0
+version=6.30.0
 release=1
-source=(https://download.kde.org/stable/frameworks/6.13/$name-$version.tar.xz)
+source=(
+  https://download.kde.org/stable/frameworks/${version%.*}/$name-$version.tar.xz
+  ecm-shiboken-qt-system-includes.patch
+)
 
 pkg_build() {
+    sed -i '/"lib64"/s/64//' kde-modules/KDEInstallDirsCommon.cmake || return 1
 
+    sed -e '/PACKAGE_INIT/i set(SAVE_PACKAGE_PREFIX_DIR "${PACKAGE_PREFIX_DIR}")' \
+        -e '/^include/a set(PACKAGE_PREFIX_DIR "${SAVE_PACKAGE_PREFIX_DIR}")' \
+        -i ECMConfig.cmake.in || return 1
 
-sed -i '/"lib64"/s/64//' kde-modules/KDEInstallDirsCommon.cmake &&
+    cmake -S . -B build \
+        -DCMAKE_INSTALL_PREFIX=/usr \
+        -DBUILD_WITH_QT6=ON || return 1
 
-sed -e '/PACKAGE_INIT/i set(SAVE_PACKAGE_PREFIX_DIR "${PACKAGE_PREFIX_DIR}")' \
-    -e '/^include/a set(PACKAGE_PREFIX_DIR "${SAVE_PACKAGE_PREFIX_DIR}")' \
-    -i ECMConfig.cmake.in &&
-
-mkdir build &&
-cd    build &&
-
-cmake -D CMAKE_INSTALL_PREFIX=/usr -D BUILD_WITH_QT6=ON .. &&
-make
-make install
+    cmake --build build -j "${JOBS:-1}" || return 1
+    DESTDIR="$PKG" cmake --install build || return 1
 }

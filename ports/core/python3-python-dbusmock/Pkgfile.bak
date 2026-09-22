@@ -1,0 +1,7 @@
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: dbus-python
+
+name=python3-python-dbusmock
+version=0.38.1
+release=1
+source=(https://files.pythonhosted.org/packages/source/p/python_dbusmock/python_dbusmock-${version}.tar.gz)

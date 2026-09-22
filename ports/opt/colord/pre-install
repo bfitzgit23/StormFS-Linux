@@ -1,4 +1,17 @@
 #!/bin/sh
-groupadd -g 71 colord &&
-useradd -c "Color Daemon Owner" -d /var/lib/colord -u 71 \
-        -g colord -s /bin/false colord
+
+if ! getent group colord >/dev/null 2>&1; then
+    groupadd -g 71 colord || exit 1
+fi
+
+if ! id colord >/dev/null 2>&1; then
+    useradd \
+        -c "Color Daemon Owner" \
+        -d /var/lib/colord \
+        -u 71 \
+        -g colord \
+        -s /bin/false \
+        colord || exit 1
+fi
+
+exit 0

@@ -1,17 +1,14 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: xorg XKB keyboard description compiler
 # URL: https://xorg.freedesktop.org
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: libxkbfile
 
 name=xkbcomp
-version=1.4.7
-release=1
+version=1.5.0
+release=2
 source=(https://www.x.org/releases/individual/app/xkbcomp-$version.tar.xz)
 
-build() {
-	cd xkbcomp-$version
+pkg_build() {
 
 	./configure $XORG_CONFIG
 

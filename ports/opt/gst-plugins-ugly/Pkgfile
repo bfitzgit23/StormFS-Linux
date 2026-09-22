@@ -1,18 +1,15 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: A set of plugins for gstreamer that may pose distribution problems.
 # URL: https://gstreamer.freedesktop.org/modules/gst-plugins-ugly.html
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on: gst-plugins-base liba52libdvdread x264 liba52 libdvdread 
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: gst-plugins-base liba52 libdvdread x264
 # Optional: libcdio libsidplay libmpeg2 opencore-amr valgrind hotdoc orc twolame
 
 name=gst-plugins-ugly
-version=1.26.2
+version=1.28.7
 release=1
 source=(https://gstreamer.freedesktop.org/src/$name/$name-$version.tar.xz)
 
-build() {
-  cd $name-$version
+pkg_build() {
   mkdir build &&
 cd    build &&
 

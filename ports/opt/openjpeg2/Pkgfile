@@ -1,18 +1,15 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: An open source JPEG 2000 codec.
 # URL: https://github.com/uclouvain/openjpeg
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: lcms2
 # Optional: Little CMS libpng libtiff doxygen
 
 name=openjpeg2
-version=2.5.3
+version=2.5.4
 release=1
 source=(https://github.com/uclouvain/openjpeg/archive/v$version/openjpeg-$version.tar.gz)
 
-build() {
-  cd openjpeg-$version
+pkg_build() {
 mkdir -v build &&
 cd       build &&
 

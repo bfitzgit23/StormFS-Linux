@@ -108,9 +108,9 @@ for p in $PKG; do
     # shellcheck disable=SC2086
     pkgmk $PKGMK_CMD || exit $?
 
-    if [ -x post-install ]; then
-        ./post-install || true
-    fi
+    # Install hooks belong to the package-install transaction.  Do not run a
+    # port post-install script here: pkgin is also used as a build-only helper
+    # by Bootstrap before pkgadd has installed the package payload.
 
     cd "$old_pwd"
 done

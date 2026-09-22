@@ -1,15 +1,12 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: 
 # URL: https://gnome.org         
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on:  at-spi2-core cairo dconf gdk-pixbuf glib glibc gsettings-desktop-schemas gtk3 libcanberra libgtop libICE libSM libX11 libXcomposite libXcursor libXdamage libXext libXfixes libXcursor libXinerama libXpresent libXrandr libXrender libXres pango startup-notification zenity
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: at-spi2-core cairo dconf gdk-pixbuf glib glibc gsettings-desktop-schemas gtk3 libcanberra libgtop libICE libSM libX11 libXcomposite libXcursor libXdamage libXext libXfixes libXinerama libXpresent libXrandr libXrender libXres pango startup-notification zenity
 
 name=metacity
-version=3.52.0
+version=3.58.1
 release=1
-source=(https://download.gnome.org/sources/$name/3.52/$name-$version.tar.xz
-0001-frames-Add-basic-color-scheme-support.patch)
+source=(https://download.gnome.org/sources/$name/${version%.*}/$name-$version.tar.xz)
 
 pkg_build() {
   ./configure \

@@ -1,18 +1,17 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Python interpreter, version 2.7
 # URL:         https://www.python.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on: bzip2-32 db-32 gdbm-32 libtirpc-32 openssl-32 python sqlite3-32 zlib-32
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: bzip2-32 db-32 gdbm-32 libtirpc-32 openssl-32 sqlite3-32 zlib-32
 
 name=python-32
 version=2.7.18
-release=2
+release=4
 source=(https://www.python.org/ftp/python/$version/Python-$version.tar.xz)
 
-build() {
-    cd Python-$version
-
+# Custom build required: legacy Python requires target-specific header relocation
+pkg_build() {
+  (
+    set -e
     # set OPT to the python default without -O3
     # our CFLAGS are used as well
     OPT="-Wall -Wstrict-prototypes -fwrapv" \
@@ -36,4 +35,5 @@ build() {
     mv $PKG/pyconfig.h $PKG/usr/include/python2.7/pyconfig-32.h
 
     install -d $PKG/usr/lib32/python2.7/site-packages
+  )
 }

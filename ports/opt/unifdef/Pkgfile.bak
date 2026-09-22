@@ -1,0 +1,7 @@
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on:
+
+name=unifdef
+version=2.12
+release=2
+source=(https://ftp2.osuosl.org/pub/blfs/svn/u/$name-$version.tar.gz)

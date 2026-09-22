@@ -1,13 +1,11 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: A multi-platform toolkit for creating graphical user interfaces
 # URL: https://www.gtk.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: at-spi2-core gdk-pixbuf hicolor-icon-theme pango xorg-libs
 
 name=gtk
 version=2.24.33
-release=1
+release=2
 source=(https://download.gnome.org/sources/gtk%2B/2.24/gtk%2B-2.24.33.tar.xz
 0001-Lower-severity-of-XID-collision-warnings.patch)
 
@@ -30,3 +28,6 @@ gtk-icon-theme-name = "elementary"
 EOF
 }
 
+post_build() {
+    rm -f "$PKG/usr/bin/gtk-update-icon-cache"
+}

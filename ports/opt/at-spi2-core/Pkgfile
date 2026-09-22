@@ -1,19 +1,16 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Protocol definitions and daemon for D-Bus at-spi
 # URL: https://gitlab.gnome.org/GNOME/at-spi2-core
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on: dbus gobject-introspection intltool libxml2 libxtst xorg-libs
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: dbus gobject-introspection intltool libxml2 libXtst xorg-libs
 # Optional: gi-docgen sphinx
 
 name=at-spi2-core
-version=2.56.1
-release=1
+version=2.60.6
+release=2
 source=(https://download.gnome.org/sources/$name/${version:0:4}/$name-$version.tar.xz)
 
-build() {
+pkg_build() {
 
-        cd $name-$version
         mkdir build &&
         cd    build &&
 

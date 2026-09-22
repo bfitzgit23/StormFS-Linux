@@ -1,9 +1,8 @@
-# Add your top line text here
-# Your line to add at the top here
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: dconf gnome-shell gsettings-desktop-schemas itstool libhandy pcre vte nautilus
 
 name=gnome-terminal
-version=3.52.2
+version=3.60.0
 release=1
 source=(https://gitlab.gnome.org/GNOME/${name}/-/archive/${version}/${name}-${version}.tar.gz)
 pkg_build () {

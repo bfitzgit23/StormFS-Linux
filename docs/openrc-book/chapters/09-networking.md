@@ -2,7 +2,20 @@
 
 ## Overview
 
-This chapter covers network configuration with OpenRC.
+This chapter covers network configuration with OpenRC. The examples use the StormFS service names: `networkmanager`, `dhcpcd`, `iwd`, `wpa_supplicant`, and `nftables`. Run only one primary network manager at a time.
+
+## OpenRC Network Bootstrap
+
+Start the services common to a desktop or laptop installation:
+
+```bash
+prt-get install openrc-init-scripts dbus openresolv
+rc-update add dbus boot
+rc-update add networking boot 2>/dev/null || true
+rc-status --all
+```
+
+Use either NetworkManager, or the lower-level `dhcpcd`/`iwd` path below. Do not enable both NetworkManager and an independent DHCP manager for the same interface.
 
 ## NetworkManager
 
@@ -17,7 +30,7 @@ prt-get install networkmanager
 ### Configuration
 
 ```bash
-# Enable NetworkManager
+# Enable the StormFS OpenRC service
 sudo rc-update add networkmanager default
 
 # Start NetworkManager
@@ -50,8 +63,8 @@ prt-get install dhcpcd
 ### Configuration
 
 ```bash
-# Enable dhcpcd
-sudo rc-update add dhcpcd boot
+# Enable dhcpcd after the network configuration is available
+sudo rc-update add dhcpcd default
 
 # Start dhcpcd
 sudo rc-service dhcpcd start
@@ -79,11 +92,11 @@ prt-get install wpa_supplicant
 
 ### Configuration
 
-Create `/etc/wpa_supplicant/wpa_supplicant.conf`:
+Create `/etc/wpa_supplicant/wpa_supplicant.conf` (the OpenRC port installs this path):
 
 ```bash
-ctrl_interface=/var/run/wpa_supplicant
-ctrl_interface_group=wheel
+ctrl_interface=DIR=/run/wpa_supplicant GROUP=wheel
+update_config=1
 
 network={
     ssid="your-network-name"
@@ -94,8 +107,8 @@ network={
 ### Enable and Start
 
 ```bash
-# Enable wpa_supplicant
-sudo rc-update add wpa_supplicant boot
+# Enable wpa_supplicant (use this instead of iwd)
+sudo rc-update add wpa_supplicant default
 
 # Start wpa_supplicant
 sudo rc-service wpa_supplicant start
@@ -117,14 +130,12 @@ dns_servers_eth0="8.8.8.8 8.8.4.4"
 ### Enable Network Script
 
 ```bash
-# Create symlink for interface
-sudo ln -s /etc/init.d/net.lo /etc/init.d/net.eth0
+# Configure the interface through the OpenRC networking service
+# /etc/conf.d/net contains config_eth0, routes_eth0, and dns_servers_eth0
+sudo rc-update add networking boot
 
-# Add to runlevel
-sudo rc-update add net.eth0 default
-
-# Start interface
-sudo rc-service net.eth0 start
+# Start the configured interface
+sudo rc-service networking restart
 ```
 
 ## Firewall Configuration
@@ -135,7 +146,7 @@ sudo rc-service net.eth0 start
 # Install nftables
 prt-get install nftables
 
-# Enable nftables
+# Enable nftables before the normal network services
 sudo rc-update add nftables boot
 
 # Create ruleset
@@ -185,12 +196,12 @@ table inet filter {
 ### Using resolvconf
 
 ```bash
-# Install resolvconf
-prt-get install resolvconf
+# Install the StormFS resolver framework
+prt-get install openresolv
 
 # Configure DNS servers
-echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf
-echo "nameserver 8.8.4.4" | sudo tee -a /etc/resolv.conf
+sudo ln -sf /run/resolvconf/resolv.conf /etc/resolv.conf
+sudo resolvconf -u
 ```
 
 ### Using /etc/resolv.conf

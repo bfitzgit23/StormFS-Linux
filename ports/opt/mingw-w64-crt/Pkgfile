@@ -1,66 +1,166 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: C runtime (crt) for mingw-w64 toolchain
-# URL: http://mingw-w64.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# URL: https://www.mingw-w64.org/
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 
 name=mingw-w64-crt
-version=12.0.0
-release=1
+version=14.0.0
+release=2
+keep_static=1
+_binutils_version=2.47
+_gcc_version=16.2.0
 source=(https://sourceforge.net/projects/mingw-w64/files/mingw-w64/mingw-w64-release/mingw-w64-v$version.tar.bz2 \
-	https://ftp.gnu.org/gnu/binutils/binutils-2.39.tar.xz \
-	http://gcc.gnu.org/pub/gcc/releases/gcc-13.1.0/gcc-13.1.0.tar.xz)
+        https://ftp.gnu.org/gnu/binutils/binutils-$_binutils_version.tar.xz \
+        https://gcc.gnu.org/pub/gcc/releases/gcc-$_gcc_version/gcc-$_gcc_version.tar.xz)
 
-build() {
+pkg_build() {
+        local bootstrap="$SRC/sysroot"
+        local old_path="$PATH"
+        local T OPTS
 
-	# build a stub sysroot gcc if mingw-w64-gcc isn't already installed; if it is, that will be used instead
-	if [ ! -x /usr/bin/x86_64-w64-mingw32-gcc ]; then
+        # BFSOS pkgmk exports DESTDIR/INSTALLROOT aliases to $PKG globally.
+        # Temporary bootstrap installs MUST NOT inherit those variables or the
+        # private sysroot gets redirected into the package staging tree.
+        bootstrap_make_install() {
+                env -u DESTDIR \
+                    -u DEST_DIR \
+                    -u INSTALLROOT \
+                    -u install_root \
+                    -u INSTALL_ROOT \
+                    "$@"
+        }
 
-		export SYSROOT="--with-sysroot=$SRC/sysroot"
+        # Always build a private bootstrap toolchain.  This keeps the CRT
+        # package reproducible and avoids a circular dependency on an already
+        # installed final mingw-w64-gcc package.  The bootstrap tree is
+        # build-only and must never appear in $PKG.
+        rm -rf "$bootstrap"
+        mkdir -p "$bootstrap" || return 1
 
+        for T in i686-w64-mingw32 x86_64-w64-mingw32; do
+                rm -rf "build-binutils-$T"
+                mkdir -p "build-binutils-$T" || return 1
+                cd "build-binutils-$T" || return 1
 
-		for T in {i686,x86_64}-w64-mingw32; do
-			mkdir build-binutils-$T
-			cd build-binutils-$T
-			../binutils-2.39/configure --target=$T --disable-multilib --prefix=$SRC/sysroot $SYSROOT
-			sed -i -e '/^MAKEINFO/s:=.*:= true:' Makefile
-			make
-			make install
-			cd ..
-		done
+                "../binutils-$_binutils_version/configure" \
+                        --target="$T" \
+                        --disable-multilib \
+                        --prefix="$bootstrap" \
+                        --with-sysroot="$bootstrap" || return 1
 
-		export PATH=$SRC/sysroot/bin:$PATH
+                sed -i -e '/^MAKEINFO/s:=.*:= true:' Makefile || return 1
+                make || return 1
+                bootstrap_make_install make install || return 1
+                cd .. || return 1
+        done
 
-		for T in {i686,x86_64}-w64-mingw32; do
-			mkdir build-headers-$T
-			cd build-headers-$T
-			../mingw-w64-v$version/mingw-w64-headers/configure --host=$T --prefix=$SRC/sysroot/$T
-			make install
-			if [ "$T" = "x86_64-w64-mingw32" ]; then
-				ln -sv $SRC/sysroot/$T $SRC/sysroot/mingw
-				ln -sv $SRC/sysroot/$T/lib $SRC/sysroot/$T/lib64
-			fi
-			cd ..
-		done
+        PATH="$bootstrap/bin:$old_path"
+        export PATH
 
-		for T in {i686,x86_64}-w64-mingw32; do
-			mkdir build-gcc-$T
-			cd build-gcc-$T
-			../gcc-13.1.0/configure --target=$T --disable-multilib --disable-nls --enable-threads=posix --prefix=$SRC/sysroot $SYSROOT
-			make all-gcc
-			make install-gcc
-			cd ..
-		done
-	fi
+        for T in i686-w64-mingw32 x86_64-w64-mingw32; do
+                rm -rf "build-headers-$T"
+                mkdir -p "build-headers-$T" || return 1
+                cd "build-headers-$T" || return 1
 
-	# now build the crt
-	for T in {x86_64,i686}-w64-mingw32; do
-		mkdir build-$T
-		cd build-$T
-		[[ "$T" = "x86_64-w64-mingw32" ]] && OPTS="--enable-lib64 --disable-lib32" || OPTS="--enable-lib32 --disable-lib64"
-		../mingw-w64-v$version/mingw-w64-crt/configure --prefix=/usr/$T --host=$T $OPTS --enable-wildcard $SYSROOT
-		make
-		make DESTDIR=$PKG install
-		cd ..
-	done
+                "../mingw-w64-v$version/mingw-w64-headers/configure" \
+                        --host="$T" \
+                        --prefix="$bootstrap/$T" || return 1
+
+                bootstrap_make_install make install || return 1
+                cd .. || return 1
+        done
+
+        # Retain the conventional /mingw sysroot alias used by the existing
+        # MinGW bootstrap layout.
+        ln -sfn "$bootstrap/x86_64-w64-mingw32" "$bootstrap/mingw" || return 1
+        mkdir -p "$bootstrap/x86_64-w64-mingw32/lib" || return 1
+        ln -sfn lib "$bootstrap/x86_64-w64-mingw32/lib64" || return 1
+
+        for T in i686-w64-mingw32 x86_64-w64-mingw32; do
+                rm -rf "build-gcc-$T"
+                mkdir -p "build-gcc-$T" || return 1
+                cd "build-gcc-$T" || return 1
+
+                "../gcc-$_gcc_version/configure" \
+                        --target="$T" \
+                        --prefix="$bootstrap" \
+                        --with-sysroot="$bootstrap" \
+                        --disable-multilib \
+                        --disable-nls \
+                        --disable-werror \
+                        --enable-languages=c \
+                        --enable-threads=win32 || return 1
+
+                make all-gcc || return 1
+                bootstrap_make_install make install-gcc || return 1
+                cd .. || return 1
+        done
+
+        for T in i686-w64-mingw32 x86_64-w64-mingw32; do
+                test -x "$bootstrap/bin/$T-gcc" || {
+                        echo "ERROR: $name: bootstrap compiler missing: $bootstrap/bin/$T-gcc" >&2
+                        return 1
+                }
+        done
+
+        # Build the real CRT payload into $PKG.
+        for T in x86_64-w64-mingw32 i686-w64-mingw32; do
+                rm -rf "build-$T"
+                mkdir -p "build-$T" || return 1
+                cd "build-$T" || return 1
+
+                if [ "$T" = "x86_64-w64-mingw32" ]; then
+                        OPTS="--enable-lib64 --disable-lib32"
+                else
+                        OPTS="--enable-lib32 --disable-lib64"
+                fi
+
+                CC="$bootstrap/bin/$T-gcc" \
+                AR="$bootstrap/bin/$T-ar" \
+                AS="$bootstrap/bin/$T-as" \
+                LD="$bootstrap/bin/$T-ld" \
+                NM="$bootstrap/bin/$T-nm" \
+                RANLIB="$bootstrap/bin/$T-ranlib" \
+                DLLTOOL="$bootstrap/bin/$T-dlltool" \
+                WINDRES="$bootstrap/bin/$T-windres" \
+                "../mingw-w64-v$version/mingw-w64-crt/configure" \
+                        --prefix="/usr/$T" \
+                        --host="$T" \
+                        $OPTS \
+                        --enable-wildcard \
+                        --with-sysroot="$bootstrap" || return 1
+
+                make || return 1
+                make DESTDIR="$PKG" install || return 1
+                cd .. || return 1
+        done
+
+        PATH="$old_path"
+        export PATH
+
+        # Never allow the private bootstrap tree to become package payload.
+        if [ -e "$PKG/var/cache/pkg/build-work" ]; then
+                echo "ERROR: $name: build-work/sysroot leaked into package staging" >&2
+                return 1
+        fi
+
+        # Require the core CRT/startup/import-library payload for both targets.
+        for T in i686-w64-mingw32 x86_64-w64-mingw32; do
+                for f in \
+                        dllcrt2.o \
+                        crt2.o \
+                        libmingw32.a \
+                        libmingwthrd.a \
+                        libmingwex.a \
+                        libmoldname.a \
+                        libmsvcrt.a \
+                        libkernel32.a \
+                        libuser32.a \
+                        libadvapi32.a \
+                        libshell32.a; do
+                        test -f "$PKG/usr/$T/lib/$f" || {
+                                echo "ERROR: $name: missing /usr/$T/lib/$f" >&2
+                                return 1
+                        }
+                done
+        done
 }

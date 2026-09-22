@@ -1,17 +1,15 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: C++ wrapper for the cairo graphics library.
 # URL: https://cairographics.org/cairomm/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: cairo libsigc++
 
 name=cairomm
-version=1.18.0
-release=1
+version=1.18.1
+release=3
 source=(https://cairographics.org/releases/$name-$version.tar.xz)
 
-build() {
-	meson setup build $name-$version \
+pkg_build() {
+	meson setup build . \
 		--prefix=/usr \
 		--buildtype=plain \
 		-D b_lto=true \

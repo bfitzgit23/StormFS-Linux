@@ -1,27 +1,36 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: SQL database engine
 # URL: https://www.sqlite.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on: readline-32 sqlite3
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: readline-32 sqlite
 
 name=sqlite3-32
-version=3.49.1
-release=1
+version=3.53.4
+release=3
 _version=$(printf "%i%.2i%.2i%.2i" ${version//./ })
 
-source=(https://www.sqlite.org/2025/sqlite-autoconf-${_version}.tar.gz)
+source=(https://www.sqlite.org/2026/sqlite-autoconf-${_version}.tar.gz)
 
-build() {
-	cd sqlite-autoconf-${_version}
+# Custom build required: SQLite feature macros are applied to configure as one environment
+pkg_build() {
+  (
+    set -e
+        CFLAGS="-DSQLITE_SECURE_DELETE=1 -DSQLITE_ENABLE_COLUMN_METADATA=1 \
+                -DSQLITE_ENABLE_UNLOCK_NOTIFY=1 -DSQLITE_ENABLE_DBSTAT_VTAB=1 \
+                -DSQLITE_ENABLE_FTS3=1 $CFLAGS" \
+        ./configure \
+                --host=i686-pc-linux-gnu \
+                --prefix=/usr \
+                --libdir=/usr/lib32 \
+                --enable-readline \
+                --with-readline-inc='-I/usr/include' \
+                --with-readline-lib='-L/usr/lib32 -lreadline' || return 1
 
-	CFLAGS="-DSQLITE_SECURE_DELETE=1 -DSQLITE_ENABLE_COLUMN_METADATA=1 \
-		-DSQLITE_ENABLE_UNLOCK_NOTIFY=1 -DSQLITE_ENABLE_DBSTAT_VTAB=1 \
-		-DSQLITE_ENABLE_FTS3=1 $CFLAGS" \
-	./configure --host=i686-pc-linux-gnu --prefix=/usr --libdir=/usr/lib32 --enable-readline
+        make -j "${JOBS:-1}" || return 1
+        make DESTDIR="$PKG" install || return 1
 
-	make
-	make DESTDIR=$PKG install
-
-	rm -r $PKG/usr/{bin,include,share/man,share}
+        rm -rf \
+                "$PKG/usr/bin" \
+                "$PKG/usr/include" \
+                "$PKG/usr/share"
+  )
 }

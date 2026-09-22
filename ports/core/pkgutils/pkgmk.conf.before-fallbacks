@@ -1,0 +1,95 @@
+#
+# /etc/pkgmk.conf: pkgmk(8) configuration
+#
+
+export CFLAGS="-O2 -march=x86-64 -pipe"
+export CXXFLAGS="${CFLAGS}"
+
+export JOBS=$(nproc)
+export MAKEFLAGS="-j $JOBS"
+
+case ${PKGMK_ARCH} in
+        "64"|"")
+                ;;
+        "32")
+                export CFLAGS="${CFLAGS} -m32"
+                export CXXFLAGS="${CXXFLAGS} -m32"
+                export LDFLAGS="${LDFLAGS} -m32"
+                export PKG_CONFIG_LIBDIR="/usr/lib32/pkgconfig"
+                ;;
+        *)
+                echo "Unknown architecture selected! Exiting."
+                exit 1
+                ;;
+esac
+
+#
+# Source mirrors
+#
+# pkgmk checks these flat distfile mirrors for the source filename.
+# Keep the list short: every mirror miss adds delay before the next source
+# location is tried. A BFSOS-controlled distfiles mirror should eventually
+# be placed first in this list.
+#
+# No global flat mirror is enabled by default.  A flat mirror miss is logged
+# before the real Pkgfile URL and made healthy primary URLs look broken during
+# installer diagnostics.  Configure a BFSOS-controlled flat cache here when
+# one exists; otherwise go directly to the source URL.
+PKGMK_SOURCE_MIRRORS=()
+
+# Optional local/site flat cache example (configure only if it actually exists):
+# PKGMK_SOURCE_MIRRORS=("http://mirror.lan/bfsos-distfiles/")
+#
+# GNU alternate hosts such as ftp.gnu.org/gnu and mirrors.kernel.org/gnu are
+# hierarchical trees, not flat distfile caches. They must be implemented as
+# path-preserving source URL fallbacks in pkgmk itself; do not add them here
+# until that downloader support exists.
+
+PKGMK_SOURCE_DIR="/var/cache/pkg/sources"
+PKGMK_PACKAGE_DIR="/var/cache/pkg/packages"
+PKGMK_WORK_DIR="/var/cache/pkg/build-work/pkgmk-$name"
+# PKGMK_DOWNLOAD="no"
+# PKGMK_IGNORE_MD5SUM="no"
+# PKGMK_IGNORE_FOOTPRINT="no"
+# PKGMK_IGNORE_NEW="no"
+# PKGMK_NO_STRIP="no"
+
+PKGMK_DOWNLOAD_PROG="curl"
+
+#
+# curl behavior
+#
+# --fail                HTTP 4xx/5xx is a download failure.
+# --location            Follow redirects.
+# --continue-at -       Resume partial large downloads when possible.
+# --connect-timeout 10  Do not sit on a dead endpoint for a long time.
+# --speed-limit/time   Treat a transfer below 1 KiB/s for 30s as stalled.
+# --retry 3             Retry interrupted/truncated large downloads.
+# --retry-delay 2       Short pause between retries.
+# --retry-max-time 180  Bound retry time for one source.
+# Do not use --retry-all-errors here: with --fail it also retries permanent
+# HTTP failures such as 404. Normal curl retry handling still retries transient
+# transport/server failures, and --continue-at - resumes partial downloads.
+# There is no default flat mirror, so healthy source URLs no longer incur a
+# misleading mirror 404 before the real download begins.
+#
+PKGMK_CURL_OPTS="--fail --location --continue-at - --connect-timeout 10 --speed-limit 1024 --speed-time 30 --retry 3 --retry-delay 2 --retry-max-time 180 --retry-connrefused"
+
+# PKGMK_WGET_OPTS=""
+# PKGMK_COMPRESSION_MODE="xz"
+
+# ccache
+export PATH="/usr/lib/ccache:$PATH"
+export CCACHE_DIR="${CCACHE_DIR:-/var/cache/ccache}"
+export CCACHE_MAXSIZE="${CCACHE_MAXSIZE:-20G}"
+
+# source custom extension
+. /var/lib/pkgmk/extension
+
+# End of file
+
+# Intentional BFSOS /opt toolchains used by package builds.
+if [ -d /opt/rustc/bin ]; then
+    PATH="/opt/rustc/bin:$PATH"
+    export PATH
+fi

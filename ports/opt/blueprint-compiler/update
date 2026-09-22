@@ -1,5 +1,0 @@
-url=https://gitlab.gnome.org/jwestman/blueprint-compiler/-/tags
-
-port_getver() {
-    getver_github
-}

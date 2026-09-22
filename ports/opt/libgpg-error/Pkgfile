@@ -3,8 +3,8 @@
 # Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 
 name=libgpg-error
-version=1.56
-release=2
+version=1.61
+release=3
 
 source=(
     https://distfiles.icmpv6.org/distfiles/$name-$version.tar.bz2

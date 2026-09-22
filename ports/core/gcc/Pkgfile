@@ -5,10 +5,10 @@
 
 name=gcc
 version=16.2.0
-release=1
+release=2
 
 source=(
-    https://ftpmirror.gnu.org/gcc/gcc-$version/gcc-$version.tar.xz
+    https://ftp.gnu.org/gnu/gcc/gcc-$version/gcc-$version.tar.xz
     c89
     c99)
 
@@ -224,7 +224,7 @@ pkg_build() {
         --disable-bootstrap \
         --disable-libmpx \
         --with-system-zlib \
-        --with-pkgversion="Linux From Scratch" \
+        --with-pkgversion="BFSOS" \
         --disable-fixincludes \
         --enable-threads=posix \
         --enable-__cxa_atexit \

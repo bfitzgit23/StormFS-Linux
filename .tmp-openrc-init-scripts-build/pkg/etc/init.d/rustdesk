@@ -1,0 +1,19 @@
+#!/sbin/openrc-run
+
+description="RustDesk remote desktop"
+
+depend() {
+	need dbus logger
+}
+
+start() {
+	ebegin "Starting RustDesk"
+	start-stop-daemon --start --exec /usr/bin/rustdesk -- --service
+	eend $?
+}
+
+stop() {
+	ebegin "Stopping RustDesk"
+	start-stop-daemon --stop --exec /usr/bin/rustdesk
+	eend $?
+}

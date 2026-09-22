@@ -1,0 +1,18 @@
+#!/sbin/openrc-run
+
+description="PolicyKit daemon"
+
+command=/usr/lib/polkit-1/polkitd
+command_args="--no-debug"
+command_background=true
+
+depend() {
+	need dbus
+	need logger
+}
+
+stop() {
+	ebegin "Stopping PolicyKit daemon"
+	start-stop-daemon --stop --exec "$command"
+	eend $?
+}

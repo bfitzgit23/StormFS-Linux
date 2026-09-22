@@ -1,19 +1,36 @@
-# Add your top line text here
-# Your line to add at the top here
-# Depends on: cmake unzip ffmpeg gst-plugins-base gtk3 python3-jasper libexif libjpeg-turbo libpng libtiff libwebp openjpeg2 v4l-utils xine-lib
+# Description: Open Source Computer Vision Library
+# URL: https://opencv.org/
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: cmake ninja unzip gst-plugins-base gtk3 jasper libexif libjpeg-turbo libpng libtiff libwebp openjpeg2 v4l-utils
 
 name=opencv
-version=4.11.0
+version=5.0.0
 release=1
-source=(https://github.com/${name}/${name}/archive/${version}/${name}-${version}.tar.gz
- https://github.com/opencv/opencv_contrib/archive/4.11.0/opencv_contrib-4.11.0.tar.gz)
-build_opt="-DCMAKE_INSTALL_PREFIX=/usr
-      -DCMAKE_BUILD_TYPE=Release       
-      -DENABLE_CXX11=ON                
-      -DBUILD_PERF_TESTS=OFF           
-      -DWITH_XINE=ON                   
-      -DBUILD_TESTS=OFF                
-      -DENABLE_PRECOMPILED_HEADERS=OFF 
-      -DCMAKE_SKIP_RPATH=ON            
-      -DBUILD_WITH_DEBUG_INFO=OFF
-      -Wno-dev  ..     "
+
+source=(
+  https://github.com/opencv/opencv/archive/$version/$name-$version.tar.gz
+  https://github.com/opencv/opencv_contrib/archive/$version/opencv_contrib-$version.tar.gz
+)
+
+pkg_build() {
+  cmake -S . -B build -G Ninja \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_INSTALL_LIBDIR=lib \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_SKIP_RPATH=ON \
+    -DOPENCV_EXTRA_MODULES_PATH="$SRC/opencv_contrib-$version/modules" \
+    -DBUILD_SHARED_LIBS=ON \
+    -DBUILD_TESTS=OFF \
+    -DBUILD_PERF_TESTS=OFF \
+    -DBUILD_EXAMPLES=OFF \
+    -DBUILD_WITH_DEBUG_INFO=OFF \
+    -DENABLE_PRECOMPILED_HEADERS=OFF \
+    -DWITH_FFMPEG=OFF \
+    -DWITH_GSTREAMER=ON \
+    -DWITH_XINE=OFF || return 1
+
+  cmake --build build -j "${JOBS:-1}" || return 1
+
+  DESTDIR="$PKG" \
+    cmake --install build || return 1
+}

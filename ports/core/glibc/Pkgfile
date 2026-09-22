@@ -4,10 +4,10 @@
 
 name=glibc
 version=2.44
-release=1
+release=3
 
 source=(
-    https://ftpmirror.gnu.org/glibc/glibc-$version.tar.xz
+    https://ftp.gnu.org/gnu/glibc/glibc-$version.tar.xz
     glibc-fhs-1.patch
     glibc-2.44-upstream_fix-1.patch
     genlocales
@@ -67,6 +67,24 @@ bootstrap_build() {
 
     make
     make install
+
+    # GCC 16.2 contains UTF-8 pathnames.  Stage 2 still uses libarchive/bsdtar
+    # linked to this temporary glibc, so the temporary toolchain must have its
+    # own usable UTF-8 locale archive under $TOOLS/lib/locale.
+    mkdir -p "$TOOLS/lib/locale"
+    "$TOOLS/bin/localedef" \
+        --force --quiet \
+        --inputfile="$SRC/$name-$version/localedata/locales/C" \
+        --charmap="$SRC/$name-$version/localedata/charmaps/UTF-8" \
+        C.UTF-8
+
+    # Do not consider the temporary glibc complete if its own locale tools
+    # cannot load the locale.  This catches the mixed-host/target locale bug
+    # before GCC pass 2 or libarchive encounters a UTF-8 archive pathname.
+    if ! LC_ALL=C.utf8 "$TOOLS/bin/locale" charmap 2>/dev/null | grep -Fxiq UTF-8; then
+        echo "ERROR: temporary glibc C.utf8 locale is not usable" >&2
+        return 1
+    fi
 }
 
 pkg_build() {
@@ -200,11 +218,15 @@ pkg_build() {
     #
     # 32-bit dynamic linker compatibility path.
     #
-    install -d -m 0755 "$PKG/lib"
-
+    # BFSOS uses merged /usr:
+    #   /lib -> /usr/lib
+    #
+    # ELF32 binaries request /lib/ld-linux.so.2, so install the
+    # compatibility symlink in /usr/lib where /lib resolves.
+    #
     ln -sfn \
-        ../usr/lib32/ld-linux.so.2 \
-        "$PKG/lib/ld-linux.so.2"
+        ../lib32/ld-linux.so.2 \
+        "$PKG/usr/lib/ld-linux.so.2"
 
     #
     # Locale data is architecture-independent. Both 64-bit and 32-bit

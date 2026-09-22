@@ -1,8 +1,6 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Command line tools for desktop integration tasks.
 # URL: https://www.freedesktop.org/wiki/Software/xdg-utils/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: xmlto links
 # Optional: lynx w3m dbus
 
@@ -11,9 +9,8 @@ version=v1.2.1
 release=1
 source=(https://gitlab.freedesktop.org/xdg/$name/-/archive/$version/$name-$version.tar.gz)
 
-build() {
-  cd $name-$version
- 
+pkg_build() {
+
 
   ./configure --prefix=/usr --mandir=/usr/share/man &&
 make

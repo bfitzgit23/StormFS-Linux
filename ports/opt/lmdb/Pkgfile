@@ -1,19 +1,19 @@
-# Add your top line text here
-# Your line to add at the top here
-# Description: The lmdb package is a fast, compact, key-value embedded data store. It uses memory-mapped files, so it has the read performance of a pure in-memory database while still offering the persistence of standard disk-based databases, and is only limited to the size of the virtual address space
-# URL:        https//github.com/LMDB
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on:  
+# Description: Fast, compact memory-mapped key-value database
+# URL: https://github.com/LMDB/lmdb
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 
 name=lmdb
-version=0.9.31
-release=1
+version=1.0.1
+release=3
 source=(https://github.com/LMDB/lmdb/archive/LMDB_$version.tar.gz)
 
-build() {
-	cd $name-LMDB_$version
-	cd libraries/liblmdb &&
-make                 &&
-sed -i 's| liblmdb.a||' Makefile
-	make prefix=$PKG/usr install
+pkg_build() {
+    cd libraries/liblmdb || return 1
+
+    make || return 1
+
+    # BFSOS does not ship static libraries.
+    sed -i 's| liblmdb.a||' Makefile || return 1
+
+    make prefix=/usr DESTDIR="$PKG" install || return 1
 }

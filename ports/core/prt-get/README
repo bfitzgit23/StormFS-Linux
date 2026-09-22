@@ -7,3 +7,21 @@ printing just nothing.
 
 If you experience strange effects, please try recompiling with 
    CXXFLAGS="-O2 -march=x86-64 -pipe"
+
+BFSOS update dependency policy
+------------------------------
+
+Normal `prt-get update` and `prt-get sysup` transactions detect dependencies
+that were added to already-installed packages and install those new hard
+dependencies automatically.
+
+For bootstrap transactions that must control dependency ordering explicitly,
+BFSOS adds:
+
+    prt-get update --no-new-deps <package>
+    prt-get sysup --no-new-deps
+
+The option reports newly required dependencies but intentionally does not
+auto-install them for that update transaction. The explicitly requested update
+is still attempted. `prt-get depinst` remains an explicit dependency-install
+command and is not changed by this option.

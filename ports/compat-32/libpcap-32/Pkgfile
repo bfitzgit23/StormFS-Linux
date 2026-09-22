@@ -1,26 +1,20 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Packet capture library
 # URL: https://www.tcpdump.org
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: libpcap libusb-32
 
 name=libpcap-32
-version=1.10.5
-release=1
+version=1.10.7
+release=2
 source=(https://www.tcpdump.org/release/${name%-*}-$version.tar.gz)
 
-build() {
-	cd ${name%-*}-$version
+build_opt="--disable-dbus --without-libnl"
 
-	./configure \
-		--prefix=/usr \
-		--libdir=/usr/lib32 \
-		--disable-dbus \
-		--without-libnl
-
-	make
-	make DESTDIR=$PKG install install-shared
+post_build() {
 
 	rm -r $PKG/usr/{bin,include,share/man,share}
+}
+
+pre_build() {
+        _bfs_require_compat32_extension 2 || return $?
 }

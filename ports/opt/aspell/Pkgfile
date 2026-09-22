@@ -1,17 +1,14 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: The Aspell package contains an interactive spell checking program and the Aspell libraries. Aspell can either be used as a library or as an independent spell checker.
 # URL:         https://ftp.gnu.org/gnu/aspell/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on:  which
 
 name=aspell
-version=0.60.8.1
-release=1
+version=0.60.8.2
+release=2
 source=(https://ftp.gnu.org/gnu/$name/$name-$version.tar.gz)
 
-build() {
-	cd $name-$version
+pkg_build() {
 ./configure --prefix=/usr &&
 make
      make DESTDIR=$PKG install &&
@@ -24,7 +21,7 @@ install -v -m644 manual/aspell.html/* \
 
 install -v -m644 manual/aspell-dev.html/* \
     $PKG/usr/share/doc/$name-$version/aspell-dev.html
-	
+
 install -v -m 755 scripts/ispell $PKG/usr/bin/
 install -v -m 755 scripts/spell $PKG/usr/bin/
 rm -rf $PKG/usr/share/info/

@@ -1,0 +1,42 @@
+From: BFSOS diagnostic build
+Subject: [DIAGNOSTIC ONLY] md: allow testing newer v1.x metadata on Linux 6.12
+
+This is a diagnostic-only backport for BFSOS Linux 6.12.101.
+
+Strict checking remains enabled by default.  To test the suspected
+newer-MD-metadata compatibility path, boot once with:
+
+    md.check_new_feature=0
+
+Do not ship with that parameter disabled by default.
+
+diff --git a/drivers/md/md.c b/drivers/md/md.c
+--- a/drivers/md/md.c
++++ b/drivers/md/md.c
+@@ -322,6 +322,9 @@ static int start_readonly;
+  * so all the races disappear.
+  */
+ static bool create_on_open = true;
++static bool check_new_feature = true;
++module_param(check_new_feature, bool, 0600);
++
+
+ /*
+  * We have a system wide 'event count' that is incremented
+@@ -1706,9 +1709,13 @@ static int super_1_load(struct md_rdev *rdev, struct md_rdev *refdev, int minor_
+ 	}
+ 	if (sb->pad0 ||
+ 	    sb->pad3[0] ||
+-	    memcmp(sb->pad3, sb->pad3+1, sizeof(sb->pad3) - sizeof(sb->pad3[1])))
+-		/* Some padding is non-zero, might be a new feature */
+-		return -EINVAL;
++	    memcmp(sb->pad3, sb->pad3+1, sizeof(sb->pad3) - sizeof(sb->pad3[1]))) {
++		pr_warn("Some padding is non-zero on %pg, might be a new feature\n",
++			rdev->bdev);
++		if (check_new_feature)
++			return -EINVAL;
++		pr_warn("check_new_feature is disabled, data corruption possible\n");
++	}
+
+ 	rdev->preferred_minor = 0xffff;
+ 	rdev->data_offset = le64_to_cpu(sb->data_offset);

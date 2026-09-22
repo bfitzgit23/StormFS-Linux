@@ -8,7 +8,7 @@ version=5.4.1
 release=1
 
 source=(
-    https://ftpmirror.gnu.org/gawk/gawk-$version.tar.xz)
+    https://ftp.gnu.org/gnu/gawk/gawk-$version.tar.xz)
 
 pre_build() {
     sed -i 's/extras//' Makefile.in

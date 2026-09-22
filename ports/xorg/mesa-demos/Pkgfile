@@ -1,16 +1,15 @@
-# Add your top line text here
-# Your line to add at the top here
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: mesa libdecor
 
 name=mesa-demos
 version=9.0.0
-release=1
+release=2
 source=(https://archive.mesa3d.org/demos/${name}-${version}.tar.xz)
 
-build() {
+pkg_build() {
 	prt-get isinst libdecor wayland || PKGMK_MESA_DEMOS+=' -D wayland=disabled'
 
-	meson setup build $name-$version $PKGMK_MESA_DEMOS \
+	meson setup build . $PKGMK_MESA_DEMOS \
 		--prefix=/usr \
 		--buildtype=plain \
 		--wrap-mode nodownload \

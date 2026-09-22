@@ -1,9 +1,8 @@
-# Add your top line text here
-# Your line to add at the top here
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: 
 
 name=python3-calver
-version=2022.6.26
+version=2025.10.20
 release=1
 source=(https://files.pythonhosted.org/packages/source/c/calver/calver-${version}.tar.gz)
 

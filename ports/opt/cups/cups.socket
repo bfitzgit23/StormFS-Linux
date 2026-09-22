@@ -1,0 +1,11 @@
+[Unit]
+Description=CUPS Scheduler
+PartOf=cups.service
+
+[Socket]
+ListenStream=/run/cups/cups.sock
+SocketUser=root
+SocketGroup=lp
+
+[Install]
+WantedBy=sockets.target

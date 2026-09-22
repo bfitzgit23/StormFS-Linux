@@ -1,15 +1,14 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Python 3 Module
 # URL:         https://files.pythonhosted.org/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on:  
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: python3-build python3-flit-core python3-installer
 
 name=python3-webencodings
-version=0.5.1
-release=1
-source=(https://files.pythonhosted.org/packages/source/w/webencodings/webencodings-0.5.1.tar.gz)
+version=0.6.1
+release=2
+source=(https://files.pythonhosted.org/packages/source/w/webencodings/webencodings-0.6.1.tar.gz)
 
 pkg_build() {
-python3 setup.py install --root="${PKG}"
+    python3 -m build --wheel --no-isolation || return 1
+    python3 -m installer --destdir="$PKG" dist/*.whl || return 1
 }

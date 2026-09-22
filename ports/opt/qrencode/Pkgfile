@@ -1,23 +1,19 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Qrencode is a fast and compact library for encoding data in a QR Code symbol, a 2D symbology that can be scanned by handheld terminals such as a mobile phone with a CCD sensor.
-# URL:          https://fukuchi.org/works/qrencode/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on:  libpng
-# Optional: doxygen sdl2
+# URL: https://fukuchi.org/works/qrencode/
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: libpng
+# Optional: sdl2
 
 name=qrencode
 version=4.1.1
-release=1
-source=(https://fukuchi.org/works/$name/$name-$version.tar.bz2)
+release=2
+source=(https://distfiles.gentoo.org/distfiles/c8/$name-$version.tar.bz2)
 
-build() {
-	cd $name-$version
+pkg_build() {
+    ./configure \
+        --prefix=/usr || return 1
 
-	./configure --prefix=/usr &&
-make
-doxygen
-	make DESTDIR=$PKG install
-	install -vdm 755 $PKG/usr/share/doc/$name-$version &&
-mv html/* $PKG/usr/share/doc/$name-$version
+    make -j "${JOBS:-1}" || return 1
+
+    make DESTDIR="$PKG" install || return 1
 }

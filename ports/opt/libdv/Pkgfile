@@ -1,6 +1,5 @@
-# Add your top line text here
-# Your line to add at the top here
-# Depends on: sdl12-compat popt 
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: sdl12-compat popt
 
 name=libdv
 version=1.0.0

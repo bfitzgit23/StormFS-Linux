@@ -1,21 +1,18 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: p7zip is the Unix command-line port of 7-Zip, a file archiver that archives with high compression ratios. It handles 7z, ZIP, GZIP, Brotli, BZIP2, XZ, TAR, APM, ARJ, CAB, CHM, CPIO, CramFS, DEB, DMG, FAT, HFS, ISO, Lizard, LZ5, LZFSE, LZH, LZMA, LZMA2, MBR, MSI, MSLZ, NSIS, NTFS, RAR, RPM, SquashFS, UDF, VHD, WIM, XAR, Z, and Zstd formats.
 # URL:          https://github.com/p7zip-project/
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on:  
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on:
 # Optional: Optional
 
 name=p7zip
-version=17.04
+version=17.06
 release=1
 source=(https://github.com/$name-project/$name/archive/v$version/$name-$version.tar.gz)
 
-build() {
-	cd $name-$version
+pkg_build() {
 sed '/^gzip/d' -i install.sh
 sed -i '160a if(_buffer == nullptr || _size == _pos) return E_FAIL;' CPP/7zip/Common/StreamObjects.cpp
-	
+
 	make all3
   mkdir -p $PKG/usr/bin $PKG/usr/share/man $PKG/usr/lib/$name
   install -m 0755 bin/{7za,7zr} $PKG/usr/bin

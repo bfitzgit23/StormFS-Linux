@@ -17,11 +17,11 @@ prt-get install bluez
 ### Configuration
 
 ```bash
-# Enable Bluetooth
-sudo rc-update add bluetooth default
+# Enable the BlueZ OpenRC service
+sudo rc-update add bluez default
 
-# Start Bluetooth
-sudo rc-service bluetooth start
+# Start BlueZ
+sudo rc-service bluez start
 ```
 
 ### Configuration File
@@ -103,10 +103,20 @@ pw-dump | grep bluetooth
 
 ### OBEX
 
+OBEX support is normally provided by the BlueZ/desktop D-Bus services rather than a separate `obex` OpenRC service in this port tree. Start BlueZ and the desktop session bus first:
+
 ```bash
-# Enable OBEX service
-sudo rc-update add obex default
-sudo rc-service obex start
+sudo rc-update add dbus boot
+sudo rc-update add bluez default
+sudo rc-service dbus start
+sudo rc-service bluez start
+```
+
+Check that the OBEX client is available before using it:
+
+```bash
+command -v bluetooth-sendto
+command -v obexctl 2>/dev/null || true
 ```
 
 ### Send Files

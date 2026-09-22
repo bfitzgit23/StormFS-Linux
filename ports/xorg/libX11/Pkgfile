@@ -1,19 +1,16 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: X client library
 # URL: http://xorg.freedesktop.org
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on: libxcb xtrans
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: libxcb xorgproto xtrans
 
 name=libX11
-version=1.8.11
-release=1
+version=1.8.13
+release=3
 source=(https://www.x.org/releases/individual/lib/libX11-$version.tar.xz)
 
-build() {
-	cd libX11-$version
+pkg_build() {
 
-	  ./configure $XORG_CONFIG $docdir \
+	  ./configure $XORG_CONFIG --docdir=/usr/share/doc/$name-$version \
                   --with-appdefaultdir=/etc/X11/app-defaults
 
 	make

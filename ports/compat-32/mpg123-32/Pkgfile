@@ -1,25 +1,20 @@
-# Add your top line text here
-# Your line to add at the top here
 # Description: Commandline MP3 player
 # URL: https://www.mpg123.de
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on: mpg123
-# Optional: alsa-lib-32 flac-32 lame-32 libsdl2-32 pulseaudio-32
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: alsa-lib-32 mpg123 openal-32
+# Optional: flac-32 lame-32 libsdl2-32 pulseaudio-32
 
 name=mpg123-32
-version=1.33.0
-release=1
+version=1.33.7
+release=3
 source=(https://www.mpg123.de/download/${name%-*}-$version.tar.bz2)
 
-build() {
-  cd ${name%-*}-$version
-  ./configure --prefix=/usr \
-      --host=i686-pc-linux-gnu      \
-    --libdir=/usr/lib32 \
-    --host=i686-pc-linux-gnu
 
-  make
-  make DESTDIR=$PKG install
+post_build() {
 
-  rm -r $PKG/usr/{bin,include,share/man,share}
+  rm -rf "$PKG/usr/bin" "$PKG/usr/include" "$PKG/usr/share"
+}
+
+pre_build() {
+        _bfs_require_compat32_extension 2 || return $?
 }

@@ -1,29 +1,28 @@
-# Add your top line text here
-# Your line to add at the top here
-# Description: The GL Vendor-Neutral Dispatch library
+# Description: GL Vendor-Neutral Dispatch library
 # URL: https://github.com/NVIDIA/libglvnd
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
-# Depends on: xorg-libs
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: meson ninja libX11 libXext xorgproto
 
 name=libglvnd
 version=1.7.0
-release=1
-source=(https://github.com/NVIDIA/$name/archive/v$version/$name-$version.tar.gz)
+release=2
+source=(https://github.com/NVIDIA/libglvnd/archive/v${version}/libglvnd-${version}.tar.gz)
 
-build() {
-	## for future references
-	#prt-get isinst xorg-libx11 xorg-libxext xorg-xorgproto && PKGMK_GLVND+=' -D x11=enabled -D glx=enabled'
-	PKGMK_GLVND+=' -D x11=enabled -D glx=enabled'
+pkg_build() {
+    meson setup build \
+        --prefix=/usr \
+        --buildtype=plain \
+        --wrap-mode=nodownload \
+        -Db_lto=true \
+        -Db_pie=true \
+        -Dx11=enabled \
+        -Dglx=enabled \
+        -Dgles1=false \
+        -Degl=true \
+        -Dtls=false || return 1
 
-	meson setup $name-$version build $PKGMK_GLVND \
-		--prefix=/usr \
-		--buildtype=plain \
-		--wrap-mode nodownload \
-		-D b_lto=true \
-		-D b_pie=true \
-		-D gles1=false \
-		-D egl=true \
-		-D tls=false
-	meson compile -C build
-	DESTDIR=$PKG meson install -C build
+    meson compile -C build || return 1
+
+    DESTDIR="$PKG" \
+        meson install -C build || return 1
 }

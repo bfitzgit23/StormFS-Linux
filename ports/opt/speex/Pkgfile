@@ -1,33 +1,24 @@
-# Add your top line text here
-# Your line to add at the top here
-# Description: A free codec library for speech
-# URL: https://www.speex.org
-# Maintainer: Brian Madonna email bmadonnaster@gmail.com
+# Description: Speex speech codec and SpeexDSP library
+# URL: https://www.speex.org/
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: libogg
 # Optional: valgrind
 
 name=speex
 version=1.2.1
-release=2
-source=(https://downloads.xiph.org/releases/$name/$name-$version.tar.gz)
+release=3
+source=(
+    https://downloads.xiph.org/releases/speex/speex-$version.tar.gz
+    https://downloads.xiph.org/releases/speex/speexdsp-$version.tar.gz
+)
 
-build() {
-  cd $name-$version
+pkg_build() {
+    ./configure --prefix=/usr --disable-static --docdir=/usr/share/doc/speex-$version
+    make -j "${JOBS:-1}"
+    make DESTDIR="$PKG" install
 
-  ./configure --prefix=/usr    \
-            --disable-static \
-            --docdir=/usr/share/doc/$name-$version &&
-make
-  make DESTDIR=$PKG install
-cd $SRC
-wget https://downloads.xiph.org/releases/$name/speexdsp-$version.tar.gz
-
-tar -xf speexdsp-$version.tar.gz &&
-cd speexdsp-$version             &&
-
-./configure --prefix=/usr    \
-            --disable-static \
-            --docdir=/usr/share/doc/speexdsp-$version &&
-make
-make DESTDIR=$PKG install
+    cd "$SRC/speexdsp-$version"
+    ./configure --prefix=/usr --disable-static --docdir=/usr/share/doc/speexdsp-$version
+    make -j "${JOBS:-1}"
+    make DESTDIR="$PKG" install
 }

@@ -1,49 +1,46 @@
-# Description: Virtualization for Linux on x86 hardware containing virtualization extensions (Intel VT or AMD-V)
-# URL: https://www.qemu.org
-# Maintainer: Venom Linux Team, venomlinux at disroot dot org
-# Depends on: alsa-lib sdl2-compat coreutils libslirp orc spice usbredir virglrenderer
+# Description: QEMU machine emulator and KVM virtualizer
+# URL: https://www.qemu.org/
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: dtc alsa-lib glib gtk3 libaio libcap-ng libepoxy libseccomp libslirp liburing libusb usbredir libxml2 ncurses pixman sdl2 virglrenderer zlib zstd
+# Optional: pipewire pulseaudio
 
 name=qemu
-version=11.0.1
-release=1
-source=(${name}-$version.tar.gz::https://github.com/qemu/qemu/archive/refs/tags/v$version.tar.gz)
+version=11.1.1
+release=4
+build_work=disk
+source=(https://download.qemu.org/qemu-$version.tar.xz)
 
-build() {
-	cd $name-$version
+build_opt=(
+    --prefix=/usr
+    --libdir=/usr/lib
+    --libexecdir=/usr/lib/qemu
+    --sysconfdir=/etc
+    --localstatedir=/var
+    --disable-download
+    --enable-tools
+    --enable-guest-agent
+    --enable-kvm
+    --enable-linux-aio
+    --enable-linux-io-uring
+    --enable-slirp
+    --enable-gtk
+    --enable-sdl
+    --enable-opengl
+    --enable-virglrenderer
+    --enable-vnc
+    --enable-seccomp
+    --enable-cap-ng
+    --enable-libusb
+    --enable-usb-redir
+    --disable-werror
+)
 
-	# CBUILD: enable o disable CBUILD_QEMU_OPTS, source CBUILD_QEMU_OPTS from "qemu.opt" file
-	CBUILD_QEMU_OPTS="
-	--enable-spice
-	--enable-tpm
-	"
-	cbuild_options
+pkg_build() {
+    mkdir -p build || return 1
+    cd build || return 1
 
-	./configure \
-		--prefix=/usr \
-		--sysconfdir=/etc \
-		--libdir=/usr/lib/$name \
-		--libexecdir=/usr/lib/$name \
-		--localstatedir=/var \
-		--python=/usr/bin/python3 \
-		--disable-docs \
-		--disable-gtk \
-		--enable-kvm \
-                --enable-modules \
-                --enable-sdl \
-		--enable-slirp \
-		--enable-usb-redir \
-		--enable-vhost-net \
-		--enable-virglrenderer $CBUILD_QEMU_OPTS \
-                --smbd=/usr/bin/smbd \
-                --with-coroutine=ucontext
-	make
-	make DESTDIR=$PKG install
+    ../configure "${build_opt[@]}" || return 1
 
-	#cp -r $SRC/man $PKG/usr/share
-
-	install -d $PKG/etc/udev/rules.d/
-	echo 'KERNEL=="kvm", NAME="kvm", OWNER="root", GROUP="kvm", MODE="0660"' > \
-		$PKG/etc/udev/rules.d/60-kvm.rules
-
-	rm -fr $PKG/var/run
+    ninja || return 1
+    DESTDIR="$PKG" ninja install || return 1
 }
