@@ -3,8 +3,8 @@
 # Optional: highlight
 
 name=gtk4
-version=4.22.4
-release=3
+version=4.24.0
+release=1
 source=(https://gitlab.gnome.org/GNOME/gtk/-/archive/$version/gtk-$version.tar.bz2)
 build_opt="--prefix=/usr
             --buildtype=release

@@ -1,7 +1,7 @@
 # Description: BFSOS maintained Compiz Reloaded desktop stack
 # URL: https://gitlab.com/compiz
 # Maintainer: Brian Madonna <bmadonnaster@gmail.com>
-# Depends on: compiz compiz-bcop libcompizconfig compizconfig-python ccsm compiz-plugins-main compiz-plugins-extra compiz-plugins-experimental emerald emerald-themes fusion-icon
+# Depends on: compiz compiz-bcop libcompizconfig compizconfig-python ccsm compiz-plugins-main compiz-plugins-extra compiz-plugins-experimental emerald-decorator emerald-themes fusion-icon
 
 name=compiz-meta
 version=0.8.18

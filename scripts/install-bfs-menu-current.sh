@@ -493,10 +493,11 @@ reset_terminal_ui() {
         # dialog can leave its full-screen background/colors painted on the
         # controlling terminal. Restore attributes, make the cursor visible,
         # and clear/redraw the terminal before returning to the shell.
-        if [[ -e /dev/tty && -w /dev/tty ]]; then
+        if { : </dev/tty; } 2>/dev/null; then
                 printf '\033[0m\033[?25h\033[2J\033[H' >/dev/tty 2>/dev/null || true
-                command -v clear >/dev/null 2>&1 &&
+                if command -v clear >/dev/null 2>&1; then
                         TERM="${TERM:-linux}" clear </dev/tty >/dev/tty 2>/dev/null || true
+                fi
         else
                 printf '\033[0m\033[?25h\033[2J\033[H' 2>/dev/null || true
         fi
@@ -4529,7 +4530,10 @@ newest_base_archive() {
                 find "$directory" -maxdepth 1 -type f \
                         \( -name 'bfs-rootfs-*.tar.xz' -o \
                            -name 'bfs-rootfs-*.tar.zst' -o \
-                           -name 'bfs-rootfs-*.tar.gz' \) \
+                           -name 'bfs-rootfs-*.tar.gz' -o \
+                           -name 'BFSOS-base-*.tar.xz' -o \
+                           -name 'BFSOS-base-*.tar.zst' -o \
+                           -name 'BFSOS-base-*.tar.gz' \) \
                         -print0 2>/dev/null
         )
         [[ -n "$best" ]] || return 1
@@ -4537,13 +4541,14 @@ newest_base_archive() {
 }
 
 browse_base_archive() {
-        local result_var="$1" start_path="$2" selected="" status=0
+        local -n result_ref="$1"
+        local start_path="$2" picked="" status=0
         if command -v dialog >/dev/null 2>&1 &&
            [[ -r /dev/tty && -w /dev/tty ]]; then
                 [[ -d "$start_path" ]] || start_path="$(dirname "$start_path")"
                 [[ -d "$start_path" ]] || start_path="/"
                 set +e
-                selected="$(
+                picked="$(
                         dialog --stdout --clear \
                                 --backtitle "BFS Linux Installer" \
                                 --title "Select BFSOS base rootfs archive" \
@@ -4556,10 +4561,10 @@ browse_base_archive() {
                 set -e
                 ((status == 0)) || return 1
         else
-                read -r -p "Path to BFSOS base rootfs archive: " selected
-                [[ -n "$selected" ]] || return 1
+                read -r -p "Path to BFSOS base rootfs archive: " picked
+                [[ -n "$picked" ]] || return 1
         fi
-        printf -v "$result_var" '%s' "$selected"
+        result_ref="$picked"
 }
 
 confirm_detected_archive() {
@@ -4673,6 +4678,153 @@ configure_zram_menu() {
         done
 }
 
+
+# Dedicated result channel for base-archive selection.  Do not use stdout or
+# nested namerefs here: wget progress and Bash dynamic scoping have both caused
+# the post-download pathname to be lost/contaminated in the live installer.
+BASE_ARCHIVE_RESULT=""
+
+fetch_sourceforge_base() {
+        local archive_dir="$1"
+        local filename="${BFS_INSTALL_BASE_FILENAME:-BFSOS-base-x86_64.tar.zst}"
+        local url="${BFS_INSTALL_BASE_URL:-https://downloads.sourceforge.net/project/bfsos/BFSOS/base/latest/${filename}}"
+        local sha_url="${BFS_INSTALL_BASE_SHA256_URL:-https://downloads.sourceforge.net/project/bfsos/BFSOS/base/latest/${filename}.sha256}"
+        local ca_file="${BFS_INSTALL_CA_FILE:-/etc/pki/tls/certs/ca-bundle.crt}"
+        local archive="$archive_dir/$filename"
+        local sha_file="$archive.sha256"
+        local expected="" actual="" status=0
+        local -a wget_args=()
+
+        BASE_ARCHIVE_RESULT=""
+
+        command -v wget >/dev/null 2>&1 || {
+                dialog_message "Base download failed" \
+                        "wget is required to download the BFSOS base archive."
+                return 1
+        }
+        command -v sha256sum >/dev/null 2>&1 || {
+                dialog_message "Base verification failed" \
+                        "sha256sum is required to verify the BFSOS base archive."
+                return 1
+        }
+
+        mkdir -p "$archive_dir" || return 1
+
+        # BFSOS ships a canonical CA bundle here.  Keep this explicit until
+        # every supported wget build has been verified to discover it by
+        # default; never weaken TLS verification to work around trust lookup.
+        if [[ -r "$ca_file" ]]; then
+                wget_args+=(--ca-certificate="$ca_file")
+        fi
+
+        rm -f "$archive" "$sha_file"
+
+        if { : </dev/tty; } 2>/dev/null; then
+                clear_screen >/dev/tty 2>/dev/null || true
+                printf '\nBFSOS base download\n===================\n\nDownloading: %s\nSource: SourceForge\n\n' \
+                        "$filename" >/dev/tty
+                set +e
+                wget "${wget_args[@]}" -O "$archive" "$url" </dev/tty >/dev/tty 2>/dev/tty
+                status=$?
+                set -e
+        else
+                printf '\nDownloading BFSOS base: %s\n' "$filename" >&2
+                set +e
+                wget "${wget_args[@]}" -O "$archive" "$url" >&2
+                status=$?
+                set -e
+        fi
+        if ((status != 0)); then
+                rm -f "$archive" "$sha_file"
+                dialog_message "Base download failed" \
+                        "The BFSOS base archive download failed.\n\nSource: $url\n\nYou may retry, browse for a local archive, or go back."
+                return 1
+        fi
+
+        if { : </dev/tty; } 2>/dev/null; then
+                printf '\nArchive download complete.\n\nDownloading SHA256 verification file...\n\n' >/dev/tty
+                set +e
+                wget "${wget_args[@]}" -O "$sha_file" "$sha_url" </dev/tty >/dev/tty 2>/dev/tty
+                status=$?
+                set -e
+        else
+                printf 'Downloading SHA256 verification file...\n' >&2
+                set +e
+                wget "${wget_args[@]}" -O "$sha_file" "$sha_url" >&2
+                status=$?
+                set -e
+        fi
+        if ((status != 0)); then
+                rm -f "$archive" "$sha_file"
+                dialog_message "Base verification failed" \
+                        "The BFSOS SHA256 file could not be downloaded.\n\nSource: $sha_url"
+                return 1
+        fi
+
+        expected="$(awk 'NR == 1 { print $1 }' "$sha_file")"
+        actual="$(sha256sum "$archive" | awk '{ print $1 }')"
+
+        if [[ ! "$expected" =~ ^[[:xdigit:]]{64}$ ]]; then
+                rm -f "$archive" "$sha_file"
+                dialog_message "Base verification failed" \
+                        "The downloaded SHA256 file did not contain a valid checksum."
+                return 1
+        fi
+
+        if [[ "$actual" != "$expected" ]]; then
+                rm -f "$archive" "$sha_file"
+                dialog_message "Base verification failed" \
+                        "SHA256 verification FAILED for:\n\n$filename\n\nThe downloaded archive was removed."
+                return 1
+        fi
+
+        if ! supported_base_archive "$archive"; then
+                dialog_message "Base verification failed" \
+                        "The verified download exists but the installer cannot use its pathname:\n\n$archive"
+                return 1
+        fi
+
+        dialog_message "Base archive verified" \
+                "Download complete and SHA256 verification passed.\n\n$archive"
+        BASE_ARCHIVE_RESULT="$archive"
+        return 0
+}
+
+choose_missing_base_archive() {
+        local archive_dir="$1" choice="" chosen=""
+        BASE_ARCHIVE_RESULT=""
+
+        while true; do
+                themed_menu choice \
+                        "Base archive" \
+                        "No local BFSOS base archive was detected.\n\nChoose how to provide the base filesystem." \
+                        16 94 5 \
+                        1 "Download current BFSOS base from SourceForge" \
+                        2 "Browse for local base archive" \
+                        3 "Back"
+
+                case "$choice" in
+                        1)
+                                if fetch_sourceforge_base "$archive_dir"; then
+                                        if [[ -n "$BASE_ARCHIVE_RESULT" ]] && supported_base_archive "$BASE_ARCHIVE_RESULT"; then
+                                                return 0
+                                        fi
+                                        dialog_message "Base archive handoff failed" \
+                                                "The SourceForge download verified, but its local pathname was not handed back correctly.\n\nValue: ${BASE_ARCHIVE_RESULT:-<empty>}"
+                                fi
+                                ;;
+                        2)
+                                chosen=""
+                                if browse_base_archive chosen "$archive_dir"; then
+                                        BASE_ARCHIVE_RESULT="$chosen"
+                                        return 0
+                                fi
+                                ;;
+                        3|"") return 1 ;;
+                esac
+        done
+}
+
 configure_archive() {
         local installer_dir="" project_dir="" archive_dir=""
         local default_archive="" selected="" action_status=0
@@ -4712,9 +4864,10 @@ configure_archive() {
                                 2) return 0 ;;
                         esac
                 else
-                        dialog_message "Base rootfs archive" \
-                                "No usable BFSOS base archive was found in:\n$archive_dir\n\nBrowse to the archive you want to install."
-                        browse_base_archive selected "$archive_dir" || return 0
+                        if ! choose_missing_base_archive "$archive_dir"; then
+                                return 0
+                        fi
+                        selected="$BASE_ARCHIVE_RESULT"
                 fi
 
                 if ! supported_base_archive "$selected"; then
@@ -7552,13 +7705,13 @@ URL=https://codeberg.org/bmadonnaster/BFSOS.git
 NAME=bfsos
 BRANCH=main
 LOCAL_REPOSITORY=/var/cache/ports-git/bfsos
-COLLECTIONS="compat-32:ports/compat-32 compiz:ports/compiz contrib:ports/contrib core:ports/core gnome:ports/gnome lxqt:ports/lxqt opt:ports/opt plasma:ports/plasma xfce:ports/xfce xorg:ports/xorg"
+COLLECTIONS="compat-32:ports/compat-32 compiz:ports/compiz contrib:ports/contrib core:ports/core gnome:ports/gnome iso:ports/iso lxqt:ports/lxqt opt:ports/opt plasma:ports/plasma xfce:ports/xfce xorg:ports/xorg"
 EOF_BFSOS_GIT
 
         # Retire only BFSOS-owned legacy HttpUp definitions. Third-party *.httpup
         # files remain untouched and continue to use the generic HttpUp driver.
         local collection
-        for collection in compat-32 compiz contrib core gnome lxqt opt plasma xfce xorg; do
+        for collection in compat-32 compiz contrib core gnome iso lxqt opt plasma xfce xorg; do
                 rm -f "/etc/ports/$collection.httpup"
         done
 }

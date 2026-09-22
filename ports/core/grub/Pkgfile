@@ -5,7 +5,7 @@ cription: GNU GRand Unified Bootloader
 
 name=grub
 version=2.14
-release=2
+release=3
 
 source=(
     https://ftp.gnu.org/gnu/grub/grub-$version.tar.xz
@@ -37,7 +37,16 @@ pre_build() {
     unset CFLAGS
     unset CXXFLAGS
 
+    #
+    # GRUB 2.14 i386-pc regression: --image-base can produce a
+    # kernel.img starting at 0x9074 instead of the required 0x9000.
+    #
+    export ax_cv_check_ldflags___Wl___image_base_0x400000=no
+
     install -m 0644 \
         "$SRC/extra_deps.lst" \
         grub-core/extra_deps.lst
+}
+post_build() {
+    rm -rf "$PKG/usr/share/bash-completion/completions"
 }

@@ -1,25 +1,19 @@
-# Description: Generates an fstab from the current system
-# URL:         https://github.com/glacion/genfstab
-# Maintainer:  Brian Madonna <bmadonnaster@gmail.com>
+# Description: Generate an fstab from the current system
+# URL: https://gitlab.archlinux.org/archlinux/arch-install-scripts
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: bash coreutils gawk grep util-linux
 
 name=genfstab
-version=1.0
-release=1
+version=31
+release=2
+source=(https://gitlab.archlinux.org/archlinux/arch-install-scripts/-/archive/v$version/arch-install-scripts-v$version.tar.gz)
 
-source=(
-    COPYING
-    LICENSE
-    genfstab
-)
-
+# Custom build required: BFSOS intentionally packages only genfstab from the
+# upstream arch-install-scripts suite; pacstrap/arch-chroot require Arch pacman.
 pkg_build() {
-    install -d "$PKG/usr/bin"
-    install -m755 "$SRC/genfstab" "$PKG/usr/bin/genfstab"
+    make genfstab || return 1
 
-    install -d "$PKG/usr/share/licenses/$name"
-    install -m644 "$SRC/COPYING" "$PKG/usr/share/licenses/$name/"
-
-    install -d "$PKG/usr/share/doc/$name"
-    install -m644 "$SRC/LICENSE" "$PKG/usr/share/doc/$name/"
+    install -d "$PKG/usr/bin" "$PKG/usr/share/licenses/$name" || return 1
+    install -m755 genfstab "$PKG/usr/bin/genfstab" || return 1
+    install -m644 COPYING "$PKG/usr/share/licenses/$name/COPYING" || return 1
 }
-

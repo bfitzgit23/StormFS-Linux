@@ -21,7 +21,7 @@ die() { printf 'ERROR: %s\n' "$*" >&2; exit 1; }
 echo "Synchronizing installed /usr/ports back into $DST_PORTS"
 echo "BFSOS collections are Git-backed; HttpUp REPO metadata is not generated."
 
-for collection in compat-32 compiz contrib core gnome lxqt opt plasma xfce xorg; do
+for collection in compat-32 compiz contrib core gnome iso lxqt opt plasma xfce xorg; do
     [[ -d "$SRC_PORTS/$collection" ]] || continue
     rm -rf "$DST_PORTS/$collection"
     cp -a "$SRC_PORTS/$collection" "$DST_PORTS/$collection"

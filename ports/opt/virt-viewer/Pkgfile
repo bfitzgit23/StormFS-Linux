@@ -1,0 +1,18 @@
+# Description: Graphical console client for libvirt virtual machines
+# URL: https://virt-manager.org/
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: gtk3 gtk-vnc libvirt libvirt-glib libxml2 spice-gtk spice-protocol vte
+
+name=virt-viewer
+version=11.0
+release=1
+source=(https://gitlab.com/virt-viewer/virt-viewer/-/archive/v$version/virt-viewer-v$version.tar.gz)
+
+build_opt=(
+    -Dlibvirt=enabled
+    -Dvnc=enabled
+    -Dspice=enabled
+    -Dovirt=disabled
+    -Dvte=enabled
+    -Dgit_werror=disabled
+)

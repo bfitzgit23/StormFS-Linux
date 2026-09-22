@@ -1,7 +1,7 @@
 # Description: Themes for the Emerald Compiz decorator
 # URL: https://gitlab.com/compiz/emerald-themes
 # Maintainer: Brian Madonna <bmadonnaster@gmail.com>
-# Depends on: emerald
+# Depends on: emerald-decorator
 
 name=emerald-themes
 version=0.8.18

@@ -1,7 +1,7 @@
 # Description: Tray icon to launch and manage Compiz Reloaded
 # URL: https://gitlab.com/compiz/fusion-icon
 # Maintainer: Brian Madonna <bmadonnaster@gmail.com>
-# Depends on: compiz compizconfig-python ccsm emerald gtk3 python3 python3-gobject python3-setuptools xorg-apps
+# Depends on: compiz compizconfig-python ccsm emerald-decorator gtk3 python3 python3-gobject python3-setuptools xorg-apps
 
 name=fusion-icon
 version=0.2.4

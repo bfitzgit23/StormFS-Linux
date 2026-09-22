@@ -17,15 +17,19 @@ ports/core/shadow/Pkgfile	build/runtime
 ports/core/systemd/Pkgfile	build/runtime
 ports/core/util-linux/Pkgfile	build/runtime
 ports/core/wpa_supplicant/Pkgfile	build/runtime,service-path
+ports/gnome/gdm/Pkgfile	build/runtime
 ports/gnome/gnome-keyring/Pkgfile	build/runtime
 ports/gnome/gnome-session/Pkgfile	build/runtime
 ports/gnome/gvfs/Pkgfile	build/runtime
+ports/iso/networkmanager-iso/Pkgfile	build/runtime
 ports/opt/accountsservice/Pkgfile	build/runtime
 ports/opt/alsa-lib/Pkgfile	build/runtime
 ports/opt/calamares/Pkgfile	build/runtime
 ports/opt/chromium/Pkgfile	build/runtime
+ports/opt/chrony/Pkgfile	build/runtime,service-path
 ports/opt/colord/Pkgfile	build/runtime
 ports/opt/cups/Pkgfile	build/runtime,service-path
+ports/opt/flatpak/Pkgfile	build/runtime,service-path
 ports/opt/gpm/Pkgfile	build/runtime,service-path
 ports/opt/gst-plugins-bad/Pkgfile	build/runtime
 ports/opt/gst-plugins-good/Pkgfile	build/runtime
@@ -35,6 +39,7 @@ ports/opt/libvirt/Pkgfile	build/runtime
 ports/opt/lightdm/Pkgfile	build/runtime,service-path
 ports/opt/ndctl/Pkgfile	build/runtime
 ports/opt/networkmanager/Pkgfile	build/runtime
+ports/opt/ostree/Pkgfile	build/runtime,service-path
 ports/opt/p11-kit/Pkgfile	build/runtime
 ports/opt/pipewire/Pkgfile	build/runtime
 ports/opt/polkit/Pkgfile	build/runtime

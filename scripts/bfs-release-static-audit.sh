@@ -22,12 +22,13 @@ grep -q 'BFS_FULL_BOOTSTRAP="${BFS_FULL_BOOTSTRAP:-no}"' bootstrap.sh || say_fai
 grep -q '^integrity_verification_settings_menu()' bootstrap.sh || say_fail "dedicated Bootstrap integrity-verification settings menu missing"
 grep -Fq '3 "Integrity verification"' bootstrap.sh || say_fail "Integrity verification is not exposed as its own Bootstrap Settings category"
 
-# Current installer must be the newest maintained implementation.
-current_target="$(readlink scripts/install-bfs-menu-current.sh 2>/dev/null || true)"
-case "$current_target" in
-  *r74-pre-rc-source-fixes.sh) ;;
-  *) say_fail "current installer does not point at r74: $current_target" ;;
-esac
+# The RC1 runtime installer has one authoritative entry point.  Do not
+# require or select historical versioned snapshots at runtime.
+[ -f scripts/install-bfs-menu-current.sh ] || say_fail "authoritative current installer missing"
+[ -x scripts/install-bfs-menu-current.sh ] || say_fail "authoritative current installer is not executable"
+grep -Fq 'install-bfs-menu-current.sh' bootstrap.sh || say_fail "bootstrap does not reference authoritative current installer"
+grep -Fq 'install-bfs-menu-current.sh' scripts/bfs-build-iso.sh || say_fail "ISO live menu does not reference authoritative current installer"
+! grep -Eq 'install-bfs-menu-v50-r[0-9]+' bootstrap.sh || say_fail "bootstrap still references a versioned installer at runtime"
 
 # Base diagnostics and trust stack.
 [ -f ports/core/traceroute/Pkgfile ] || say_fail "traceroute diagnostic port missing"

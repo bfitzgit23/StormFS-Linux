@@ -5,10 +5,11 @@
 
 name=wayland-32
 version=1.26.0
-release=3
+release=4
 source=(https://gitlab.freedesktop.org/wayland/wayland/-/releases/$version/downloads/wayland-$version.tar.xz)
 
-build_opt="-D documentation=false"
+build_opt="-D documentation=false
+-Dbuild.pkg_config_path=/usr/lib/pkgconfig:/usr/share/pkgconfig"
 
 post_build() {
 	rm -r $PKG/usr/{bin,include,share}

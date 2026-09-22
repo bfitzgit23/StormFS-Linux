@@ -1,10 +1,10 @@
 # Maintainer: Brian Madonna <bmadonnaster@gmail.com>
-# Depends on: accountsservice dconf libcanberra gtk3 linux-pam
+# Depends on: accountsservice dconf gnome-session gnome-shell json-glib libcanberra libgudev linux-pam polkit systemd upower
 
 name=gdm
-version=50.3
-release=2
-source=(https://download.gnome.org/sources/${name}/${version%.*}/${name}-${version}.tar.xz)
+version=51.0
+release=1
+source=(https://gitlab.gnome.org/GNOME/gdm/-/archive/$version/gdm-$version.tar.bz2)
 build_opt="--prefix=/usr
       --buildtype=release  
       -D gdm-xsession=true 

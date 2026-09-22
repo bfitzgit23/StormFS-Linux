@@ -3,10 +3,10 @@
 # Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: compiz gtk3 libwnck libXres shared-mime-info xdg-utils desktop-file-utils hicolor-icon-theme
 
-name=emerald
+name=emerald-decorator
 version=0.8.18
 release=2
-source=(https://gitlab.com/compiz/$name/-/archive/v$version/$name-v$version.tar.bz2)
+source=(https://gitlab.com/compiz/emerald/-/archive/v$version/emerald-v$version.tar.bz2)
 
 pkg_build() {
     NOCONFIGURE=1 LIBS+=" -lm -ldl" ./autogen.sh || return 1

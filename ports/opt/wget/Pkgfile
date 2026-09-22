@@ -1,11 +1,11 @@
 # Description: Modern multi-threaded file and website downloader based on GNU Wget2.
 # URL: https://gitlab.com/gnuwget/wget2
 # Maintainer: Brian Madonna <bmadonnaster@gmail.com>
-# Depends on: gnutls libidn2 libpsl libunistring pcre2 zlib
+# Depends on: ca-certificates gnutls libidn2 libpsl libunistring pcre2 zlib
 
 name=wget
 version=2.2.1
-release=1
+release=2
 
 source=(
     https://ftp.gnu.org/gnu/wget/wget2-$version.tar.gz
@@ -27,6 +27,12 @@ pkg_build() {
     # Preserve wget2 while also providing /usr/bin/wget.
     if [[ -x "$PKG/usr/bin/wget2" ]]; then
         ln -sf wget2 "$PKG/usr/bin/wget"
+        install -d "$PKG/etc"
+        cat > "$PKG/etc/wgetrc" <<'EOF'
+# BFSOS system trust store. Wget2 reads /etc/wgetrc and otherwise may not
+# discover the distro CA bundle on every TLS backend/build configuration.
+ca_certificate = /etc/pki/tls/certs/ca-bundle.crt
+EOF
     else
         echo "ERROR: wget2 binary was not installed." >&2
         return 1

@@ -4,7 +4,7 @@
 
 name=mtools
 version=4.0.49
-release=1
+release=2
 source=(ftp://ftp.gnu.org/gnu/mtools/$name-$version.tar.bz2)
 
 pkg_build() {
@@ -15,6 +15,6 @@ pkg_build() {
 		--disable-floppyd
 	make
 	sed -i Makefile -e 's|install-scripts install-info|install-scripts|'
-	make -j1 prefix=$PKG/usr install
+	make -j1 DESTDIR="$PKG" prefix=/usr install
 }
 

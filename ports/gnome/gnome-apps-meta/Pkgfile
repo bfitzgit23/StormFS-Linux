@@ -5,15 +5,16 @@
 # Optional: eog gnome-screenshot
 
 name=gnome-apps-meta
-version=50.0
-release=1
+version=51.0
+release=2
 source=()
 
 pkg_build() {
     install -d "$PKG/usr/share/doc/$name"
     cat > "$PKG/usr/share/doc/$name/README" <<'EOT'
-This meta package tracks the current BLFS GNOME Applications chapter.
-Legacy EOG and gnome-screenshot remain available as standalone BFSOS ports,
-but are not part of the current default GNOME application set.
+This meta package tracks the BFSOS GNOME 51 application set.
+Applications with GNOME 51 final releases are aligned to that cycle; independent
+or not-yet-51 applications remain at their current stable upstream versions.
+Legacy EOG and gnome-screenshot remain available as standalone BFSOS ports.
 EOT
 }

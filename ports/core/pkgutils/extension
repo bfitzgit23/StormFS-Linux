@@ -256,7 +256,17 @@ if [ ! "$(command -v build)" ]; then
 		if [ "${PKGMK_ARCH:-}" = 32 ]; then
 			_bfs_configure_host_args=("--host=${BFS_MULTILIB_HOST:-i686-pc-linux-gnu}")
 		fi
-		./configure \
+
+		_bfs_configure_cmd=./configure
+		if [ "${configure_out_of_tree:-no}" = yes ]; then
+			_bfs_configure_src="$PWD"
+			_bfs_configure_dir="${configure_build_dir:-_configure_build}"
+			mkdir -p "$_bfs_configure_dir" || return $?
+			cd "$_bfs_configure_dir" || return $?
+			_bfs_configure_cmd="$_bfs_configure_src/configure"
+		fi
+
+		"$_bfs_configure_cmd" \
 			--prefix=/usr \
 			--sysconfdir=/etc \
 			--libexecdir=/usr/lib \
@@ -266,8 +276,21 @@ if [ ! "$(command -v build)" ]; then
 			"${_bfs_configure_host_args[@]}" \
 			"${_bfs_configure_test_args[@]}" \
 			"${_bfs_build_opts[@]}" || return $?
-		make -j"${JOBS:-1}" || return $?
-		make DESTDIR="$PKG" install || return $?
+
+		case "${configure_build_tool:-make}" in
+			ninja)
+				ninja -j"${JOBS:-1}" || return $?
+				DESTDIR="$PKG" ninja install || return $?
+				;;
+			make)
+				make -j"${JOBS:-1}" || return $?
+				make DESTDIR="$PKG" install || return $?
+				;;
+			*)
+				echo "unsupported configure_build_tool: ${configure_build_tool}" >&2
+				return 1
+				;;
+		esac
 	}
 
 	_meson_build() {

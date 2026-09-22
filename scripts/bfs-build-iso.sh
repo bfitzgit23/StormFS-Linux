@@ -3,29 +3,39 @@ set -Eeuo pipefail
 
 # BFSOS ISO builder - reusable verified-base workflow and local-package/repository implementation.
 # Includes USB live-media discovery retry, live console accessibility, and
-# current pre-RC live-session policy. Boot/install acceptance still requires
+# current RC1 live-session policy. Boot/install acceptance still requires
 # fresh VM + USB-emulation + bare-metal validation.
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-VERSION="$(tr -d '[:space:]' < "$PROJECT_DIR/VERSION" 2>/dev/null || printf '0.9.0')"
+BUILD_PROJECT_DIR="$PROJECT_DIR"
 ARCH="x86_64"
 BUILD_DATE="$(date +%Y%m%d)"
-GIT_COMMIT="$(git -C "$PROJECT_DIR" rev-parse --short=12 HEAD 2>/dev/null || printf 'unknown')"
-ISO_LABEL="BFSOS_${VERSION//./_}_${ARCH}"
 WORK_DIR="${BFS_ISO_WORK_DIR:-/var/tmp/bfsos-iso-${USER:-builder}}"
 OUTPUT_DIR="${BFS_ISO_OUTPUT_DIR:-$HOME/BFSOS-ISO}"
-ISO_NAME="BFSOS-${VERSION}-${ARCH}-${BUILD_DATE}-${GIT_COMMIT}.iso"
-ISO_PATH="$OUTPUT_DIR/$ISO_NAME"
+BASE_CACHE_DIR="${BFS_ISO_BASE_CACHE_DIR:-${XDG_CACHE_HOME:-$HOME/.cache}/bfsos/iso}"
+BASE_FILENAME="${BFS_ISO_BASE_FILENAME:-BFSOS-base-${ARCH}.tar.zst}"
+BASE_URL="${BFS_ISO_BASE_URL:-https://downloads.sourceforge.net/project/bfsos/BFSOS/base/latest/${BASE_FILENAME}}"
+BASE_SHA256_URL="${BFS_ISO_BASE_SHA256_URL:-https://downloads.sourceforge.net/project/bfsos/BFSOS/base/latest/${BASE_FILENAME}.sha256}"
+BASE_MODE="${BFS_ISO_BASE_MODE:-sourceforge}"
+REFRESH_BASE="${BFS_ISO_REFRESH_BASE:-no}"
+GIT_URL="${BFS_ISO_GIT_URL:-https://codeberg.org/bmadonnaster/BFSOS.git}"
+GIT_REF="${BFS_ISO_GIT_REF:-main}"
+VERSION="0.9.0-rc1"
+GIT_COMMIT="unknown"
+GIT_COMMIT_FULL="unknown"
+ISO_LABEL=""
+ISO_NAME=""
+ISO_PATH=""
 ASSUME_YES="${BFS_ISO_ASSUME_YES:-no}"
 SKIP_BOOTSTRAP="${BFS_ISO_SKIP_BOOTSTRAP:-no}"
 LIVE_MEDIA_WAIT="${BFS_ISO_LIVE_MEDIA_WAIT:-15}"
 
-required_tools=(bash git sudo tar xz zstd rsync sha256sum find awk sed grep mount umount chroot mksquashfs xorriso grub-mkrescue mformat)
+required_tools=(bash git sudo tar xz zstd rsync wget sha256sum find awk sed grep mount umount chroot mksquashfs xorriso grub-mkrescue mformat)
 optional_tools=(qemu-system-x86_64)
 
 declare -A tool_packages=(
-    [git]=git [zstd]=zstd [rsync]=rsync [mksquashfs]=squashfs-tools
+    [git]=git [zstd]=zstd [rsync]=rsync [wget]=wget [mksquashfs]=squashfs-tools
     [xorriso]=libisoburn [grub-mkrescue]=grub [mformat]=mtools [qemu-system-x86_64]=qemu
 )
 
@@ -33,13 +43,137 @@ declare -A tool_packages=(
 # the live-media services/tools. Dependencies are resolved by prt-get.
 iso_packages=(
     linux-firmware dracut
-    networkmanager openssh git sudo wget wpa_supplicant wireless_tools gpm lynx links chrony kbd
+    networkmanager-iso openssh git sudo wget wpa_supplicant wireless-regdb gpm lynx-iso chrony kbd
     cryptsetup lvm2 mdadm snapper pciutils
     dialog squashfs-tools grub grub-efi dosfstools mtools efibootmgr libisoburn syslinux
 )
 
 log() { printf '[BFSOS ISO] %s\n' "$*"; }
 die() { printf '[BFSOS ISO] ERROR: %s\n' "$*" >&2; exit 1; }
+
+usage() {
+    cat <<EOF
+Usage: $(basename "$0") [--refresh-base] [--git-ref REF] [--local-base]
+
+  --refresh-base  Force a fresh SourceForge base archive download.
+  --git-ref REF   Build from this Codeberg branch, tag, or commit (default: main).
+  --local-base    Use the legacy local base/rebuild selection instead of SourceForge.
+EOF
+}
+
+parse_args() {
+    while (($#)); do
+        case "$1" in
+            --refresh-base) REFRESH_BASE=yes ;;
+            --git-ref)
+                shift
+                (($#)) || die "--git-ref requires a value"
+                GIT_REF="$1"
+                ;;
+            --git-ref=*) GIT_REF="${1#*=}" ;;
+            --local-base) BASE_MODE=local ;;
+            -h|--help) usage; exit 0 ;;
+            *) die "Unknown ISO builder argument: $1" ;;
+        esac
+        shift
+    done
+}
+
+load_project_metadata() {
+    local project="$1" label_version=""
+    VERSION="$(tr -d '[:space:]' < "$project/VERSION" 2>/dev/null || printf '0.9.0-rc1')"
+    GIT_COMMIT_FULL="$(git -C "$project" rev-parse HEAD 2>/dev/null || printf 'unknown')"
+    GIT_COMMIT="${GIT_COMMIT_FULL:0:12}"
+    label_version="${VERSION//[.-]/_}"
+    ISO_LABEL="BFSOS_${label_version}_${ARCH}"
+    ISO_NAME="BFSOS-${VERSION}-${ARCH}-${BUILD_DATE}-${GIT_COMMIT}.iso"
+    ISO_PATH="$OUTPUT_DIR/$ISO_NAME"
+}
+
+verify_sha256_file() {
+    local archive="$1" sumfile="$2" expected="" actual=""
+    [ -s "$archive" ] && [ -s "$sumfile" ] || return 1
+    expected="$(awk 'NF {print $1; exit}' "$sumfile")"
+    case "$expected" in
+        [0-9A-Fa-f][0-9A-Fa-f]*) ;;
+        *) return 1 ;;
+    esac
+    [ "${#expected}" -eq 64 ] || return 1
+    actual="$(sha256sum "$archive" | awk '{print $1}')"
+    [ "${actual,,}" = "${expected,,}" ]
+}
+
+fetch_sourceforge_base() {
+    local -n result_ref="$1"
+    local archive="$BASE_CACHE_DIR/$BASE_FILENAME"
+    local sumfile="$archive.sha256"
+    local tmp_sum="$sumfile.tmp" tmp_archive="$archive.tmp"
+    result_ref=""
+    mkdir -p "$BASE_CACHE_DIR"
+
+    log "Checking SourceForge for current BFSOS base: $BASE_URL"
+    rm -f "$tmp_sum" "$tmp_archive"
+    if ! wget --max-redirect=20 -O "$tmp_sum" "$BASE_SHA256_URL" >&2; then
+        if validate_base_archive "$archive" && verify_sha256_file "$archive" "$sumfile"; then
+            log "SourceForge checksum check unavailable; reusing verified cached base: $archive"
+            result_ref="$archive"
+            return 0
+        fi
+        die "Could not download SourceForge base checksum and no verified cached base is available"
+    fi
+    grep -Eq '^[[:space:]]*[0-9A-Fa-f]{64}([[:space:]]|$)' "$tmp_sum" || \
+        die "SourceForge checksum download did not contain a SHA256 digest"
+
+    if [ "$REFRESH_BASE" != yes ] && verify_sha256_file "$archive" "$tmp_sum" && validate_base_archive "$archive"; then
+        mv -f "$tmp_sum" "$sumfile"
+        log "Cached SourceForge base is current and verified: $archive"
+        result_ref="$archive"
+        return 0
+    fi
+
+    log "Downloading current BFSOS base archive from SourceForge"
+    log "Progress from wget follows; this can take a while on slower mirrors."
+    if ! wget --show-progress --max-redirect=20 -O "$tmp_archive" "$BASE_URL" >&2; then
+        rm -f "$tmp_archive" "$tmp_sum"
+        die "Failed to download BFSOS base archive from SourceForge"
+    fi
+    verify_sha256_file "$tmp_archive" "$tmp_sum" || {
+        rm -f "$tmp_archive" "$tmp_sum"
+        die "SourceForge BFSOS base SHA256 verification failed"
+    }
+    validate_base_archive "$tmp_archive" || {
+        log "Downloaded file size: $(du -h "$tmp_archive" 2>/dev/null | awk '{print $1}')"
+        log "Archive path retained for diagnosis: $tmp_archive"
+        die "Downloaded SourceForge file passed transfer but failed BFSOS base-content validation"
+    }
+    mv -f "$tmp_archive" "$archive"
+    mv -f "$tmp_sum" "$sumfile"
+    result_ref="$archive"
+}
+
+prepare_build_project() {
+    local dest="$WORK_DIR/source-tree"
+    log "Fetching authoritative BFSOS Git tree: $GIT_URL ($GIT_REF)"
+    rm -rf "$dest"
+    git clone --no-tags "$GIT_URL" "$dest" >/dev/null 2>&1 || die "Failed to clone BFSOS Git repository"
+    git -C "$dest" fetch --force --tags origin >/dev/null 2>&1 || die "Failed to fetch BFSOS Git refs"
+    if git -C "$dest" rev-parse --verify "origin/$GIT_REF^{commit}" >/dev/null 2>&1; then
+        git -C "$dest" checkout --detach "origin/$GIT_REF" >/dev/null 2>&1 || die "Failed to checkout origin/$GIT_REF"
+    elif git -C "$dest" rev-parse --verify "$GIT_REF^{commit}" >/dev/null 2>&1; then
+        git -C "$dest" checkout --detach "$GIT_REF" >/dev/null 2>&1 || die "Failed to checkout $GIT_REF"
+    else
+        die "Requested BFSOS Git ref cannot be resolved: $GIT_REF"
+    fi
+    BUILD_PROJECT_DIR="$dest"
+    load_project_metadata "$BUILD_PROJECT_DIR"
+    log "BFSOS build source resolved to $GIT_COMMIT_FULL"
+
+    bash -n "$BUILD_PROJECT_DIR/bootstrap.sh" || die "Fetched bootstrap.sh has shell syntax errors"
+    bash -n "$BUILD_PROJECT_DIR/scripts/install-bfs-menu-current.sh" || die "Fetched installer has shell syntax errors"
+    if [ -x "$BUILD_PROJECT_DIR/scripts/bfs-release-static-audit.sh" ]; then
+        "$BUILD_PROJECT_DIR/scripts/bfs-release-static-audit.sh" || die "Fetched BFSOS release static audit failed"
+    fi
+}
 
 preflight() {
     local t pkg
@@ -112,14 +246,15 @@ validate_base_archive() {
     [ -n "$archive" ] && [ -s "$archive" ] || return 1
 
     listing="$(archive_list "$archive" 2>/dev/null)" || return 1
+    # Match the canonical archive producer in bootstrap.sh.  Account shadow
+    # files are deliberately not used as archive-validity sentinels because
+    # older published bases may regenerate them during installation.
     for required in \
         ./usr/bin/bash \
         ./usr/bin/pkgmk \
         ./etc/os-release \
         ./etc/passwd \
-        ./etc/group \
-        ./etc/shadow \
-        ./etc/gshadow
+        ./etc/group
     do
         # Do not pipe the full archive listing into `grep -q` while pipefail is
         # enabled.  Once grep finds a match it exits early; printf can then take
@@ -260,7 +395,8 @@ build_iso_package_set() {
     log "Building/installing complete ISO live + installer package set in isolated root"
     rm -rf "$root/usr/ports"
     mkdir -p "$root/usr/ports"
-    cp -a "$PROJECT_DIR/ports/." "$root/usr/ports/"
+    cp -a "$BUILD_PROJECT_DIR/ports/." "$root/usr/ports/"
+    grep -Fqx 'prtdir /usr/ports/iso' "$root/etc/prt-get.conf" || echo 'prtdir /usr/ports/iso' >> "$root/etc/prt-get.conf"
     cp -a /etc/resolv.conf "$root/etc/resolv.conf" 2>/dev/null || true
 
     mount_chroot_fs "$root"
@@ -350,7 +486,7 @@ install_live_runtime() {
     rsync -a --delete \
         --exclude '/iso-work/' \
         --exclude '/iso-output/' \
-        "$PROJECT_DIR/" "$root/home/bfs/BFSOS/"
+        "$BUILD_PROJECT_DIR/" "$root/home/bfs/BFSOS/"
 
     chroot "$root" /bin/bash -lc '
         getent group bfs >/dev/null 2>&1 || groupadd bfs
@@ -433,8 +569,21 @@ find_any_font() {
 }
 
 apply_font() {
-    local path="$1"
-    if setfont "$path" 2>/dev/null; then
+    local path="$1" current_tty="" rc=0
+    current_tty="$(tty 2>/dev/null || true)"
+
+    if [[ "$current_tty" != /dev/tty[0-9]* ]]; then
+        printf 'Console font changes only apply to a local Linux virtual console.\n'
+        return 0
+    fi
+
+    if [ "${EUID:-$(id -u)}" -eq 0 ]; then
+        setfont -C "$current_tty" "$path" 2>/dev/null || rc=$?
+    else
+        sudo setfont -C "$current_tty" "$path" 2>/dev/null || rc=$?
+    fi
+
+    if [ "$rc" -eq 0 ]; then
         basename "$path" | sed -E 's/\.(psfu?|psfu?\.gz)$//' > "$STATE_FILE"
         printf 'Applied console font: %s\n' "$(cat "$STATE_FILE")"
         return 0
@@ -489,6 +638,10 @@ printf '  sudo ssh-keygen -A\n'
 printf '  sudo systemctl start sshd.service\n'
 printf 'If this system uses ssh.service instead, start that unit instead.\n\n'
 
+if command -v ssh-keygen >/dev/null 2>&1; then
+    ssh-keygen -A >/dev/null 2>&1 || true
+fi
+
 # Accessibility choice must happen before the normal live menu appears.
 /usr/local/sbin/bfs-live-console-font || true
 
@@ -506,7 +659,7 @@ if command -v nm-online >/dev/null 2>&1 && nm-online -q --timeout=20; then
 
     printf '\nRefreshing the bundled BFSOS project tree...\n'
     if [ -d /home/bfs/BFSOS/.git ]; then
-        su - bfs -c 'cd ~/BFSOS && if git diff --quiet && git diff --cached --quiet; then git pull --ff-only || true; else echo "Local BFSOS tree has changes; automatic pull skipped."; fi'
+        runuser -u bfs -- bash -c 'cd /home/bfs/BFSOS && if git diff --quiet && git diff --cached --quiet; then git pull --ff-only || true; else echo "Local BFSOS tree has changes; automatic pull skipped."; fi'
     fi
 else
     printf '\nNo network detected; using the BFSOS project tree shipped on the ISO.\n'
@@ -520,7 +673,7 @@ EOS
 [Unit]
 Description=BFSOS live-session initialization
 After=NetworkManager.service
-Before=getty@tty1.service sshd.service ssh.service
+Before=getty@tty1.service
 ConditionKernelCommandLine=bfs.live=1
 
 [Service]
@@ -545,8 +698,22 @@ while true; do
     printf '  1) Bootstrap BFSOS\n  2) Run BFSOS installer\n  3) Shell\n  4) Change console font\n  5) Quit menu\n\nChoice: '
     read -r choice
     case "$choice" in
-        1) cd "$PROJECT" && ./bootstrap.sh ;;
-        2) cd "$PROJECT" && sudo ./scripts/install-bfs-menu-current.sh ;;
+        1)
+            cd "$PROJECT" || continue
+            if command -v script >/dev/null 2>&1; then
+                script -qec './bootstrap.sh' /dev/null
+            else
+                ./bootstrap.sh
+            fi
+            ;;
+        2)
+            cd "$PROJECT" || continue
+            if command -v script >/dev/null 2>&1; then
+                script -qec 'sudo ./scripts/install-bfs-menu-current.sh' /dev/null
+            else
+                sudo ./scripts/install-bfs-menu-current.sh
+            fi
+            ;;
         3)
             printf 'Type exit to return to the BFSOS live menu.\n'
             if command -v script >/dev/null 2>&1; then
@@ -714,54 +881,89 @@ create_live_initramfs() {
     printf '%s\n%s\n' "$kernel" "$initrd"
 }
 
+audit_live_root() {
+    local root="$1" bad=""
+    # gettext ships this compressed development archive as package data.
+    # It is not needed by the BFSOS live environment and would trip the
+    # no-source-archives ISO audit.
+    rm -f "$root/usr/share/gettext/archive.dir.tar.xz"
+
+    log "Auditing live root for forbidden source/package archives"
+    bad="$(find "$root" -xdev -type f \( \
+        -name '*.tar' -o -name '*.tar.gz' -o -name '*.tar.bz2' -o -name '*.tar.xz' -o -name '*.tar.zst' -o \
+        -name '*.tgz' -o -name '*.tbz2' -o -name '*.txz' -o -name '*.pkg.tar.*' \
+        \) -print 2>/dev/null | head -n 50)"
+    if [ -n "$bad" ]; then
+        printf '%s\n' "$bad" >&2
+        die "Forbidden tar/package archives remain in live root; ISO creation stopped"
+    fi
+}
+
+write_build_info() {
+    local root="$1" base_archive="$2" base_sha=""
+    base_sha="$(sha256sum "$base_archive" | awk '{print $1}')"
+    cat > "$root/etc/bfs-build-info" <<EOF_INFO
+BFSOS_VERSION=$VERSION
+ARCH=$ARCH
+BUILD_DATE=$BUILD_DATE
+ISO_LABEL=$ISO_LABEL
+GIT_URL=$GIT_URL
+GIT_REF=$GIT_REF
+GIT_COMMIT=$GIT_COMMIT_FULL
+BASE_ARCHIVE=$(basename "$base_archive")
+BASE_SHA256=$base_sha
+BASE_URL=$BASE_URL
+SQUASHFS_COMPRESSION=xz
+SQUASHFS_BLOCK_SIZE=1M
+SQUASHFS_X86_BCJ=yes
+EOF_INFO
+}
+
 stage_iso() {
     local root="$1" base_archive="$2" kernel="$3" initrd="$4"
     local stage="$WORK_DIR/iso-tree"
-    local pkgdir="$stage/bfsos/packages/$ARCH"
+    local root_bytes squash_bytes iso_bytes base_sha
     rm -rf "$stage"
-    mkdir -p "$stage/boot/grub" "$stage/bfsos" "$pkgdir"
+    mkdir -p "$stage/boot/grub" "$stage/bfsos"
 
-    # Preserve one copy of package archives outside the squashfs for offline installs.
-    if [ -d "$root/var/cache/pkg/packages" ]; then
-        sudo cp -a "$root/var/cache/pkg/packages/." "$pkgdir/"
-    fi
+    log "Removing all package/source/build archives and caches from live root"
+    sudo rm -rf "$root/var/cache/pkg/sources" "$root/var/cache/pkg/packages" \
+        "$root/var/cache/pkg/build-work" "$root/var/cache/pkg/build-work-disk"
+    sudo mkdir -p "$root/var/cache/pkg/sources" "$root/var/cache/pkg/packages" "$root/var/cache/pkg/build-work"
+    sudo bash -c "$(declare -f audit_live_root die log); audit_live_root '$root'"
+    sudo bash -c "$(declare -f write_build_info); VERSION='$VERSION'; ARCH='$ARCH'; BUILD_DATE='$BUILD_DATE'; ISO_LABEL='$ISO_LABEL'; GIT_URL='$GIT_URL'; GIT_REF='$GIT_REF'; GIT_COMMIT_FULL='$GIT_COMMIT_FULL'; BASE_URL='$BASE_URL'; write_build_info '$root' '$base_archive'"
 
-    # Do not ship downloaded package sources, duplicate package archives,
-    # or temporary package build trees inside the compressed live root.
-    # Keep /usr/src intact; removing it saved little space and can be useful
-    # for development/debugging on the live media.
-    log "Cleaning package/build caches from live root before squashfs creation"
-    sudo rm -rf "$root/var/cache/pkg/sources/"*
-    sudo rm -rf "$root/var/cache/pkg/packages/"*
-    sudo rm -rf "$root/var/cache/pkg/build-work/"*
-    sudo rm -rf "$root/var/cache/pkg/build-work-disk/"*
-
+    root_bytes="$(sudo du -sb "$root" | awk '{print $1}')"
     sudo cp "$root/boot/$kernel" "$stage/bfsos/vmlinuz"
     sudo cp "$root/boot/$initrd" "$stage/bfsos/initramfs.img"
-    sudo mksquashfs "$root" "$stage/bfsos/rootfs.squashfs" -comp xz -noappend -wildcards \
-        -e 'tmp/*'
-    cp "$base_archive" "$stage/bfsos/$(basename "$base_archive")"
+    log "Creating size-optimized SquashFS (xz, 1 MiB blocks, x86 BCJ)"
+    sudo mksquashfs "$root" "$stage/bfsos/rootfs.squashfs" \
+        -comp xz -b 1M -Xdict-size 100% -Xbcj x86 -noappend -wildcards -e 'tmp/*'
     sudo chown -R "$(id -u):$(id -g)" "$stage"
-
-    if compgen -G "$pkgdir/*.pkg.tar.*" >/dev/null; then
-        (cd "$pkgdir" && sha256sum *.pkg.tar.* > packages.sha256)
-    else
-        : > "$pkgdir/packages.sha256"
-    fi
+    squash_bytes="$(stat -c %s "$stage/bfsos/rootfs.squashfs")"
+    base_sha="$(sha256sum "$base_archive" | awk '{print $1}')"
 
     cat > "$stage/bfsos/build-info" <<EOF_INFO
 BFSOS_VERSION=$VERSION
 ARCH=$ARCH
 BUILD_DATE=$BUILD_DATE
-GIT_COMMIT=$GIT_COMMIT
+ISO_LABEL=$ISO_LABEL
+GIT_URL=$GIT_URL
+GIT_REF=$GIT_REF
+GIT_COMMIT=$GIT_COMMIT_FULL
 BASE_ARCHIVE=$(basename "$base_archive")
+BASE_SHA256=$base_sha
+BASE_URL=$BASE_URL
+SQUASHFS_COMPRESSION=xz
+SQUASHFS_BLOCK_SIZE=1M
+SQUASHFS_X86_BCJ=yes
+LIVE_ROOT_BYTES=$root_bytes
+SQUASHFS_BYTES=$squash_bytes
 EOF_INFO
-    (cd "$stage/bfsos" && find packages -type f -name '*.pkg.tar.*' -printf '%P\n' | sort > packages.list)
 
     cat > "$stage/boot/grub/grub.cfg" <<EOF_GRUB
 set default=0
 set timeout=5
-# Prefer a readable graphics mode while retaining firmware fallback.
 set gfxmode=1024x768,800x600,auto
 set gfxpayload=keep
 terminal_output gfxterm
@@ -772,22 +974,25 @@ menuentry "BFSOS $VERSION Live / Installer" {
 EOF_GRUB
 
     mkdir -p "$OUTPUT_DIR"
-    rm -f "$ISO_PATH" "$ISO_PATH.sha256"
+    rm -f "$ISO_PATH" "$ISO_PATH.sha256" "$ISO_PATH.build-info"
     log "Mastering hybrid GRUB ISO: $ISO_PATH"
-    grub-mkrescue \
-        -o "$ISO_PATH" \
-        -iso-level 3 \
-        -volid "$ISO_LABEL" \
-        "$stage"
+    grub-mkrescue -o "$ISO_PATH" -iso-level 3 -volid "$ISO_LABEL" "$stage"
     sha256sum "$ISO_PATH" > "$ISO_PATH.sha256"
+    iso_bytes="$(stat -c %s "$ISO_PATH")"
+    cat "$stage/bfsos/build-info" > "$ISO_PATH.build-info"
+    printf 'ISO_BYTES=%s\n' "$iso_bytes" >> "$ISO_PATH.build-info"
+
+    log "ISO size report: live-root=$root_bytes bytes squashfs=$squash_bytes bytes iso=$iso_bytes bytes"
     log "ISO complete: $ISO_PATH"
     log "Checksum: $ISO_PATH.sha256"
+    log "Build provenance: $ISO_PATH.build-info"
 }
 
 main() {
-    local base_action=""
+    local base_action="" base_archive=""
 
     [ "$(id -u)" -ne 0 ] || die "Run the ISO creator as a regular user; it uses sudo when root access is required."
+    parse_args "$@"
     case "$LIVE_MEDIA_WAIT" in
         ''|*[!0-9]*) die "BFS_ISO_LIVE_MEDIA_WAIT must be an integer number of seconds" ;;
     esac
@@ -795,49 +1000,39 @@ main() {
         die "BFS_ISO_LIVE_MEDIA_WAIT must be between 1 and 60 seconds"
     preflight
 
-    base_action="$(choose_base_action)"
-    case "$base_action" in
-        use-existing)
-            ;;
-        rebuild)
-            run_full_bootstrap
-            ;;
-        cancel)
-            log "ISO build cancelled"
-            exit 0
-            ;;
-        *)
-            die "Internal error: unknown base action '$base_action'"
-            ;;
-    esac
-
-    base_archive="$(latest_usable_base_archive 2>/dev/null || true)"
-    validate_base_archive "$base_archive" || die "No usable verified base archive is available after bootstrap selection"
-    log "Using base archive: $base_archive"
+    if [ "$BASE_MODE" = sourceforge ]; then
+        fetch_sourceforge_base base_archive
+    else
+        base_action="$(choose_base_action)"
+        case "$base_action" in
+            use-existing) ;;
+            rebuild) run_full_bootstrap ;;
+            cancel) log "ISO build cancelled"; exit 0 ;;
+            *) die "Internal error: unknown base action '$base_action'" ;;
+        esac
+        base_archive="$(latest_usable_base_archive 2>/dev/null || true)"
+    fi
+    validate_base_archive "$base_archive" || die "No usable verified base archive is available"
+    log "Using verified base archive: $base_archive"
 
     case "$WORK_DIR" in
-        /var/tmp/bfsos-iso-*)
-            ;;
-        *)
-            die "Refusing to remove unsafe ISO work directory: $WORK_DIR"
-            ;;
+        /var/tmp/bfsos-iso-*) ;;
+        *) die "Refusing to remove unsafe ISO work directory: $WORK_DIR" ;;
     esac
-
     if [ -d "$WORK_DIR/live-root" ]; then
         sudo bash -c "$(declare -f umount_chroot_fs); umount_chroot_fs '$WORK_DIR/live-root'" || true
     fi
-
     sudo rm -rf -- "$WORK_DIR"
     mkdir -p "$WORK_DIR"
+
+    prepare_build_project
+
     sudo mkdir -p "$WORK_DIR/live-root"
     sudo chown root:root "$WORK_DIR/live-root"
     log "Extracting verified base into isolated ISO live root"
-    sudo bash -c "$(declare -f extract_archive); extract_archive '$base_archive' '$WORK_DIR/live-root'"
-    sudo cp -a "$PROJECT_DIR/ports" "$WORK_DIR/live-root/usr/ports"
+    sudo bash -c "$(declare -f extract_archive die); extract_archive '$base_archive' '$WORK_DIR/live-root'"
 
-    # Remaining rootfs operations are deliberately performed as root while the
-    # top-level builder itself remains a regular-user bootstrap operation.
-    sudo env PROJECT_DIR="$PROJECT_DIR" WORK_DIR="$WORK_DIR" BFS_ISO_KERNEL="${BFS_ISO_KERNEL:-lts}" bash -c "$(declare -f log die mount_chroot_fs umount_chroot_fs build_iso_package_set install_live_runtime install_dracut_live_module); $(declare -p iso_packages); build_iso_package_set '$WORK_DIR/live-root'; install_live_runtime '$WORK_DIR/live-root'; install_dracut_live_module '$WORK_DIR/live-root'"
+    sudo env BUILD_PROJECT_DIR="$BUILD_PROJECT_DIR" WORK_DIR="$WORK_DIR" BFS_ISO_KERNEL="${BFS_ISO_KERNEL:-lts}" bash -c "$(declare -f log die mount_chroot_fs umount_chroot_fs build_iso_package_set install_live_runtime install_dracut_live_module); $(declare -p iso_packages); build_iso_package_set '$WORK_DIR/live-root'; install_live_runtime '$WORK_DIR/live-root'; install_dracut_live_module '$WORK_DIR/live-root'"
 
     mapfile -t boot_files < <(sudo env WORK_DIR="$WORK_DIR" BFS_ISO_KERNEL="${BFS_ISO_KERNEL:-lts}" bash -c "$(declare -f log die mount_chroot_fs umount_chroot_fs create_live_initramfs); create_live_initramfs '$WORK_DIR/live-root'" | tail -n2)
     ((${#boot_files[@]} == 2)) || die "Could not determine generated live kernel/initramfs"

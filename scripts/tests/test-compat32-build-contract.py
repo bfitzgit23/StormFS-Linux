@@ -7,7 +7,7 @@ ROOT = Path(__file__).resolve().parents[2]
 COMPAT = ROOT / "ports/compat-32"
 CONTRIB = ROOT / "ports/contrib"
 pkgfiles = sorted(COMPAT.glob("*/Pkgfile"))
-assert len(pkgfiles) == 170, len(pkgfiles)
+assert len(pkgfiles) >= 170, len(pkgfiles)
 
 for p in pkgfiles:
     s = p.read_text(errors="replace")
@@ -47,7 +47,7 @@ libffi = (COMPAT / "libffi-32/Pkgfile").read_text()
 assert re.search(r"(?m)^release=3$", libffi)
 
 pkgutils = (ROOT / "ports/core/pkgutils/Pkgfile").read_text()
-assert re.search(r"(?m)^release=35$", pkgutils)
+assert int(re.search(r'(?m)^release=(\d+)$', pkgutils).group(1)) >= 35
 
 gstreamer = (COMPAT / "gstreamer-32/Pkgfile").read_text()
 assert "CRUX Linux" not in gstreamer

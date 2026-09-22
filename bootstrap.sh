@@ -1126,40 +1126,20 @@ _latest_rootfs_archive() {
 }
 
 _find_latest_installer() {
-    local dir="$SCRIPT_DIR/scripts" file="" candidate="" mtime=""
-    [ -d "$dir" ] || return 1
+    local installer="$SCRIPT_DIR/scripts/install-bfs-menu-current.sh"
 
-    # Select by actual filesystem modification time, not version-like filename
-    # sorting and not the install-bfs-menu-current.sh symlink. This makes the
-    # handoff resilient to stale/broken convenience symlinks and arbitrary
-    # descriptive revision suffixes.
-    while IFS= read -r candidate; do
-        [ -n "$candidate" ] || continue
-        file="${candidate#* }"
-        [ -f "$file" ] && [ -r "$file" ] || continue
-
-        case "$(basename "$file")" in
-            install-bfs-menu-current.sh|*backup*|*old*|*disabled*|*~)
-                continue
-                ;;
-        esac
-
-        # Never silently launch a syntactically broken newest revision. Skip it
-        # with a warning and continue to the next-newest valid real installer.
-        if ! bash -n "$file" >/dev/null 2>&1; then
-            printf 'WARNING: Skipping installer with shell syntax errors: %s\n' "$file" >&2
-            continue
-        fi
-
-        printf '%s\n' "$file"
-        return 0
-    done < <(
-        find "$dir" -maxdepth 1 -type f -name 'install-bfs-menu-v*.sh' \
-            -printf '%T@ %p\n' 2>/dev/null |
-            sort -nr -k1,1 -k2,2
-    )
-
-    return 1
+    # RC1 policy: there is one authoritative runtime installer entry point.
+    # Historical revisions belong in Git and must never be selected at runtime
+    # by filename sorting or mtime.
+    [ -f "$installer" ] && [ -r "$installer" ] && [ -x "$installer" ] || {
+        printf 'ERROR: Authoritative BFSOS installer is missing or not executable: %s\n' "$installer" >&2
+        return 1
+    }
+    if ! bash -n "$installer" >/dev/null 2>&1; then
+        printf 'ERROR: Authoritative BFSOS installer has shell syntax errors: %s\n' "$installer" >&2
+        return 1
+    fi
+    printf '%s\n' "$installer"
 }
 
 _installer_available() {
@@ -2017,13 +1997,17 @@ esac
 CURRENT_PGID="$(ps -o pgid= -p "$$" | tr -d '[:space:]')"
 
 if [ "$$" != "$CURRENT_PGID" ]; then
-    exec setsid "$0" "$@"
+    if { : </dev/tty; } 2>/dev/null; then
+        exec setsid --ctty "$0" "$@"
+    else
+        exec setsid "$0" "$@"
+    fi
 fi
 
 printf '%s %s\n' "$$" "$CURRENT_PGID" > "$PID_FILE"
 
 _reset_terminal_ui() {
-    if [ -e /dev/tty ] && [ -w /dev/tty ]; then
+    if { : </dev/tty; } 2>/dev/null; then
         printf '\033[0m\033[?25h\033[2J\033[H' >/dev/tty 2>/dev/null || true
         if command -v clear >/dev/null 2>&1; then
             TERM="${TERM:-linux}" clear </dev/tty >/dev/tty 2>/dev/null || true
@@ -2082,7 +2066,7 @@ trap _cleanup_on_exit EXIT
 if [ -f "$SCRIPT_DIR/VERSION" ]; then
     BFS_VERSION="$(tr -d '[:space:]' < "$SCRIPT_DIR/VERSION")"
 else
-    BFS_VERSION="0.9.0"
+    BFS_VERSION="0.9.0-rc1"
 fi
 
 BUILD_DATE="$(date +%Y%m%d)"

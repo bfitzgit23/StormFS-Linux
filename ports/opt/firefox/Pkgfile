@@ -84,6 +84,7 @@ ac_add_options --without-wasm-sandboxed-libraries
 unset MOZ_TELEMETRY_REPORTING
 mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/firefox-build-dir
 MOZ_APP_REMOTINGNAME=firefox
+MOZ_APP_PROFILE=firefox
 EOF_MOZ
 
     # Keep one recipe usable for Xorg-only, Wayland-only, and combined desktop

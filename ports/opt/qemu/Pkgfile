@@ -1,21 +1,20 @@
 # Description: QEMU machine emulator and KVM virtualizer
 # URL: https://www.qemu.org/
 # Maintainer: Brian Madonna <bmadonnaster@gmail.com>
-# Depends on: dtc alsa-lib glib gtk3 libaio libcap-ng libepoxy libseccomp libslirp liburing libusb usbredir libxml2 ncurses pixman sdl2 virglrenderer zlib zstd
+# Depends on: dtc alsa-lib glib gtk3 libaio libcap-ng libepoxy libseccomp libslirp liburing libusb spice spice-protocol usbredir libxml2 ncurses pixman sdl2 virglrenderer zlib zstd
 # Optional: pipewire pulseaudio
 
 name=qemu
 version=11.1.1
-release=4
+release=6
 build_work=disk
+configure_out_of_tree=yes
+configure_build_tool=ninja
 source=(https://download.qemu.org/qemu-$version.tar.xz)
 
 build_opt=(
-    --prefix=/usr
-    --libdir=/usr/lib
     --libexecdir=/usr/lib/qemu
-    --sysconfdir=/etc
-    --localstatedir=/var
+    --target-list=x86_64-softmmu,i386-softmmu
     --disable-download
     --enable-tools
     --enable-guest-agent
@@ -28,19 +27,10 @@ build_opt=(
     --enable-opengl
     --enable-virglrenderer
     --enable-vnc
+    --enable-spice
     --enable-seccomp
     --enable-cap-ng
     --enable-libusb
     --enable-usb-redir
     --disable-werror
 )
-
-pkg_build() {
-    mkdir -p build || return 1
-    cd build || return 1
-
-    ../configure "${build_opt[@]}" || return 1
-
-    ninja || return 1
-    DESTDIR="$PKG" ninja install || return 1
-}

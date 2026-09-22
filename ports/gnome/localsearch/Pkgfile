@@ -2,18 +2,8 @@
 # Depends on: exempi gexiv2 gst-plugins-base tinysparql giflib gst-plugins-good gst-libav icu libgxps libseccomp poppler upower
 
 name=localsearch
-version=3.11.2
-release=3
+version=3.12.0
+release=1
 source=(https://download.gnome.org/sources/${name}/${version%.*}/${name}-${version}.tar.xz)
-pkg_build () {
-mkdir build &&
-cd    build &&
 
-meson setup --prefix=/usr       \
-            --buildtype=release \
-            -D man=false        \
-              \
-            ..                  &&
-ninja
-ninja install
-}
+build_opt="-Dman=false"

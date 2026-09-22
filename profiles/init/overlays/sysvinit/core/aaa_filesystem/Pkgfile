@@ -6,10 +6,10 @@
 
 name=aaa_filesystem
 version=1
-release=15
+release=16
 # BFS Linux distribution release. Change this value when preparing a new
 # BFS release; the aaa_filesystem package version remains independent.
-bfs_version=0.9.0
+bfs_version=0.9.0-rc1
 
 source=(
     fstab
