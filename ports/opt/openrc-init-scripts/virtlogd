@@ -1,0 +1,12 @@
+#!/sbin/openrc-run
+name="virtlogd"
+description="Libvirt log daemon"
+command="/usr/sbin/virtlogd"
+command_background=true
+pidfile="/run/${RC_SVCNAME}.pid"
+
+depend() {
+    need localmount
+    after bootmisc modules
+    use logger
+}

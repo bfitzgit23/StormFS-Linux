@@ -1,0 +1,57 @@
+#!/bin/sh
+########################################################################
+# Begin virtlogd
+#
+# Description : Libvirt log daemon
+#
+# StormFS Linux service script; virtlogd stays in the foreground unless
+# -d is given, so the supervisor backgrounds it.
+#
+########################################################################
+
+### BEGIN INIT INFO
+# Provides:            virtlogd
+# Required-Start:      $local_fs
+# Should-Start:        $syslog
+# Required-Stop:       $local_fs
+# Should-Stop:         $syslog
+# Default-Start:       2 3 4 5
+# Default-Stop:        0 1 6
+# Short-Description:   Starts the libvirt log daemon.
+# Description:         Starts virtlogd, required by libvirtd logging.
+### END INIT INFO
+
+. /lib/lsb/init-functions
+
+case "$1" in
+   start)
+      log_info_msg "Starting virtlogd..."
+      start_daemon /usr/sbin/virtlogd
+      evaluate_retval
+      ;;
+
+   stop)
+      log_info_msg "Stopping virtlogd..."
+      killproc /usr/sbin/virtlogd
+      evaluate_retval
+      ;;
+
+   restart)
+      ${0} stop
+      sleep 1
+      ${0} start
+      ;;
+
+   status)
+      statusproc /usr/sbin/virtlogd
+      ;;
+
+   *)
+      echo "Usage: $0 {start|stop|restart|status}"
+      exit 1
+      ;;
+esac
+
+exit 0
+
+# End virtlogd

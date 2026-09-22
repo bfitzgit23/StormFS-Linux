@@ -1,0 +1,67 @@
+#!/bin/sh
+########################################################################
+# Begin rsyncd
+#
+# Description : Start the rsync daemon
+#
+# Derived from BLFS bootscripts (BLFS 20250225) for StormFS Linux.  The
+# stop path signals through the pid file written from /etc/rsyncd.conf
+# instead of matching every process named rsync, so active transfers are
+# never killed.
+#
+########################################################################
+
+### BEGIN INIT INFO
+# Provides:            rsyncd
+# Required-Start:      $local_fs $network
+# Should-Start:        networkmanager
+# Required-Stop:       $network
+# Should-Stop:         networkmanager
+# Default-Start:       2 3 4 5
+# Default-Stop:        0 1 6
+# Short-Description:   Starts rsync daemon.
+# Description:         Starts rsync daemon which is used to copy
+#                      files from and to remote machines.
+### END INIT INFO
+
+. /lib/lsb/init-functions
+
+pidfile=/run/rsyncd.pid
+
+case "$1" in
+   start)
+      if [ ! -f /etc/rsyncd.conf ]; then
+         log_failure_msg "/etc/rsyncd.conf is missing"
+         exit 2
+      fi
+      log_info_msg "Starting RSYNC Server..."
+      start_daemon /usr/bin/rsync --daemon
+      evaluate_retval
+      ;;
+
+   stop)
+      log_info_msg "Stopping RSYNC Server..."
+      killproc -p "${pidfile}" /usr/bin/rsync
+      evaluate_retval
+      rm -f "${pidfile}"
+      ;;
+
+   restart)
+      $0 stop
+      sleep 1
+      $0 start
+      ;;
+
+   status)
+      statusproc -p "${pidfile}" /usr/bin/rsync
+      ;;
+
+   *)
+      echo "Usage: $0 {start|stop|restart|status}"
+      exit 1
+      ;;
+esac
+
+exit 0
+
+# End rsyncd

@@ -1,0 +1,17 @@
+#!/sbin/openrc-run
+name="sddm"
+description="SDDM display manager"
+command="/usr/bin/sddm"
+command_background=true
+pidfile="/run/${RC_SVCNAME}.pid"
+
+depend() {
+    need localmount
+    after bootmisc modules dbus
+    use logger
+}
+
+# SDDM claims the first free virtual terminal.  Make sure no agetty line in
+# /etc/inittab owns that console before enabling (see the dm note in
+# /etc/inittab), then run:  rc-update add sddm default
+# Activating a display manager is always an explicit admin action in BFSOS.

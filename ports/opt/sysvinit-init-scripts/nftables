@@ -1,0 +1,71 @@
+#!/bin/sh
+########################################################################
+# Begin nftables
+#
+# Description : Load the nftables ruleset at boot
+#
+# StormFS Linux service script; mirrors nftables.service start, reload
+# and stop semantics (oneshot load, flush on stop).
+#
+########################################################################
+
+### BEGIN INIT INFO
+# Provides:            nftables
+# Required-Start:      $local_fs
+# Should-Start:        $network
+# Required-Stop:       $local_fs
+# Should-Stop:         $network
+# Default-Start:       2 3 4 5
+# Default-Stop:        0 1 6
+# Short-Description:   Loads the nftables ruleset from /etc/nftables.nft.
+# Description:         Loads the nftables ruleset from /etc/nftables.nft
+#                      and flushes it on stop.
+### END INIT INFO
+
+. /lib/lsb/init-functions
+
+case "$1" in
+   start)
+      if [ ! -f /etc/nftables.nft ]; then
+         log_failure_msg "/etc/nftables.nft is missing; create a ruleset first"
+         exit 2
+      fi
+      log_info_msg "Loading nftables ruleset..."
+      /usr/bin/nft -f /etc/nftables.nft
+      evaluate_retval
+      ;;
+
+   stop)
+      log_info_msg "Flushing nftables ruleset..."
+      /usr/bin/nft flush ruleset
+      evaluate_retval
+      ;;
+
+   reload)
+      $0 start
+      ;;
+
+   restart)
+      $0 stop
+      sleep 1
+      $0 start
+      ;;
+
+   status)
+      /usr/bin/nft list ruleset >/dev/null 2>&1
+      if [ "${?}" = "0" ]; then
+         log_success_msg "nftables ruleset is loaded"
+      else
+         log_failure_msg "nftables ruleset is not loaded"
+      fi
+      ;;
+
+   *)
+      echo "Usage: $0 {start|stop|reload|restart|status}"
+      exit 1
+      ;;
+esac
+
+exit 0
+
+# End nftables

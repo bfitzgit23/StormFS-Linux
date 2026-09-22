@@ -1,0 +1,16 @@
+#!/sbin/openrc-run
+name="lightdm"
+description="LightDM display manager"
+command="/usr/bin/lightdm"
+command_background=true
+pidfile="/run/${RC_SVCNAME}.pid"
+
+depend() {
+    need localmount
+    after bootmisc modules dbus
+    use logger
+}
+
+# LightDM normally takes tty7, which carries no agetty in /etc/inittab.
+# Enable with:  rc-update add lightdm default
+# Activating a display manager is always an explicit admin action in BFSOS.

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=PipeWire Multimedia Service
+Comment=Start the PipeWire media server when the desktop session starts
+Exec=/usr/bin/pipewire
+Terminal=false
+Type=Application
+NoDisplay=true
+NotShowIn=none

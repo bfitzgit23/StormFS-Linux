@@ -5,8 +5,11 @@
 
 name=sysvinit
 version=3.15
-release=1
-source=(https://github.com/slicer69/sysvinit/archive/refs/tags/$version.tar.gz)
+release=2
+source=(
+    https://github.com/slicer69/sysvinit/archive/refs/tags/$version.tar.gz
+    inittab
+)
 
 pkg_build() {
     cd "$name-$version" || return 1
@@ -15,4 +18,8 @@ pkg_build() {
 
     install -d -m 0755 "$PKG/etc/inittab.d" "$PKG/etc/rc.d"
     ln -sfn /usr/lib/sysvinit/init "$PKG/sbin/init"
+
+    # Ship a working default inittab (runlevels, console logins, commented
+    # dm line); admins edit it directly as directed by the LFS book.
+    install -m 0644 inittab "$PKG/etc/inittab" || return 1
 }

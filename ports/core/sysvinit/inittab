@@ -1,0 +1,37 @@
+# Begin /etc/inittab (StormFS SysVinit profile, LFS layout)
+
+# Current runlevel: multi-user with a text console (5 = graphical; see the
+# dm line at the bottom of this file).
+id:3:initdefault:
+
+si::sysinit:/etc/rc.d/init.d/rc S
+
+l0:0:wait:/etc/rc.d/init.d/rc 0
+l1:1:wait:/etc/rc.d/init.d/rc 1
+l2:2:wait:/etc/rc.d/init.d/rc 2
+l3:3:wait:/etc/rc.d/init.d/rc 3
+l4:4:wait:/etc/rc.d/init.d/rc 4
+l5:5:wait:/etc/rc.d/init.d/rc 5
+l6:6:wait:/etc/rc.d/init.d/rc 6
+
+# What to do when the user presses ctrl-alt-del
+ca::ctrlaltdel:/sbin/shutdown -t1 -r now
+
+# Single-user maintenance shell (entered with: init 1).  Stop services with
+# the l1 entry above, then hand over the console to sulogin.
+su:1:wait:/sbin/sulogin
+
+# Console logins (add more consoles as needed)
+tty1:2345:respawn:/sbin/agetty --noclear tty1  linux
+tty2:2345:respawn:/sbin/agetty tty2  linux
+tty3:2345:respawn:/sbin/agetty tty3  linux
+tty4:2345:respawn:/sbin/agetty tty4  linux
+tty5:2345:respawn:/sbin/agetty tty5  linux
+tty6:2345:respawn:/sbin/agetty tty6  linux
+
+# Display manager: after installing a display manager package, set
+# DISPLAY_MANAGER in /etc/sysconfig/xdm and uncomment the line below,
+# then reload with:  init q
+#dm:5:respawn:/etc/rc.d/init.d/xdm
+
+# End /etc/inittab

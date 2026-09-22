@@ -1,0 +1,19 @@
+#!/sbin/openrc-run
+name="plasmalogin"
+description="KDE Plasma Login Manager"
+# Same greeter handshake as plasmalogin.service shipped by the port.
+export PLASMALOGIN_GREETER_EXEC=/opt/kf6/bin/startplasma-login-wayland
+command="/opt/kf6/bin/plasmalogin"
+command_background=true
+pidfile="/run/${RC_SVCNAME}.pid"
+
+depend() {
+    need localmount
+    after bootmisc modules dbus
+    use logger
+}
+
+# Plasma Login Manager claims the first free virtual terminal.  Make sure no
+# agetty line in /etc/inittab owns that console before enabling (see the dm
+# note in /etc/inittab), then run:  rc-update add plasmalogin default
+# Activating a display manager is always an explicit admin action in BFSOS.

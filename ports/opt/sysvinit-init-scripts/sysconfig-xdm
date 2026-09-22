@@ -1,0 +1,10 @@
+# StormFS Linux display manager selection for /etc/rc.d/init.d/xdm.
+# Used by the SysVinit profile; the dm:5 line in /etc/inittab activates it.
+#
+# Which display manager to use (full path):
+# DISPLAY_MANAGER=/usr/bin/lightdm
+# DISPLAY_MANAGER=/usr/bin/sddm
+# DISPLAY_MANAGER=/opt/kf6/bin/plasmalogin
+#
+# Options to pass to the display manager:
+DM_OPTIONS=""

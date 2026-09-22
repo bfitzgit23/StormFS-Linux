@@ -1,0 +1,16 @@
+#!/sbin/openrc-run
+name="krb5-kdc"
+description="Kerberos 5 Key Distribution Center"
+command="/usr/sbin/krb5kdc"
+# Runs the same command line as krb5-kdc.service shipped by the kerberos
+# port, so every init profile executes an identical daemon invocation.
+command_args="-n"
+command_background=true
+pidfile="/run/${RC_SVCNAME}.pid"
+required_files="/etc/krb5.conf"
+
+depend() {
+    need localmount
+    after bootmisc modules
+    use net logger
+}

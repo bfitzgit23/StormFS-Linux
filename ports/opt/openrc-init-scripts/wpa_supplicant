@@ -1,0 +1,18 @@
+#!/sbin/openrc-run
+name="wpa_supplicant"
+description="Global IEEE 802.1X/WPA supplicant"
+command="/usr/sbin/wpa_supplicant"
+# Global (interface-less) instance driven over D-Bus, matching the unit
+# files shipped by the wpa_supplicant port.  Only start it manually when
+# NetworkManager is not managing the wireless interface; otherwise the
+# fi.w1.wpa_supplicant1 D-Bus activation already starts it on demand.
+command_args="-c /etc/wpa_supplicant.conf"
+command_background=true
+pidfile="/run/${RC_SVCNAME}.pid"
+required_files="/etc/wpa_supplicant.conf"
+
+depend() {
+    need localmount
+    after bootmisc modules
+    use net logger
+}

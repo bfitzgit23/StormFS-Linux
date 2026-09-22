@@ -1,0 +1,83 @@
+#!/bin/sh
+########################################################################
+# Begin samba
+#
+# Description : Start the Samba SMB server
+#
+# Derived from BLFS bootscripts (BLFS 20250225) for StormFS Linux.
+#
+########################################################################
+
+### BEGIN INIT INFO
+# Provides:            samba
+# Required-Start:      $network
+# Should-Start:        networkmanager ntpd
+# Required-Stop:       $network
+# Should-Stop:         networkmanager ntpd
+# Default-Start:       2 3 4 5
+# Default-Stop:        0 1 6
+# Short-Description:   Provides SMB (Windows) networking.
+# Description:         Starts Samba smbd and nmbd processes which provide
+#                      connectivity to SMB (Windows) networks.
+### END INIT INFO
+
+. /lib/lsb/init-functions
+
+case "$1" in
+   start)
+      mkdir -p /run/samba
+
+      if [ ! -f /etc/samba/smb.conf ]; then
+         log_failure_msg "/etc/samba/smb.conf is missing (provisioned by the samba port's post-install)"
+         exit 2
+      fi
+
+      log_info_msg "Starting nmbd..."
+      start_daemon /usr/sbin/nmbd -D
+      evaluate_retval
+
+      log_info_msg "Starting smbd..."
+      start_daemon /usr/sbin/smbd -D
+      evaluate_retval
+      ;;
+
+   stop)
+      log_info_msg "Stopping smbd..."
+      killproc /usr/sbin/smbd
+      evaluate_retval
+
+      log_info_msg "Stopping nmbd..."
+      killproc /usr/sbin/nmbd
+      evaluate_retval
+      ;;
+
+   reload)
+      log_info_msg "Reloading smbd..."
+      killproc /usr/sbin/smbd -HUP
+      evaluate_retval
+
+      log_info_msg "Reloading nmbd..."
+      killproc /usr/sbin/nmbd -HUP
+      evaluate_retval
+      ;;
+
+   restart)
+      $0 stop
+      sleep 1
+      $0 start
+      ;;
+
+   status)
+      statusproc /usr/sbin/nmbd
+      statusproc /usr/sbin/smbd
+      ;;
+
+   *)
+      echo "Usage: $0 {start|stop|reload|restart|status}"
+      exit 1
+      ;;
+esac
+
+exit 0
+
+# End samba

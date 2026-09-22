@@ -1,0 +1,35 @@
+#!/bin/sh
+########################################################################
+# Begin xdm
+#
+# Description : Start the selected display manager
+#
+# Derived from BLFS bootscripts (BLFS 20250225) for StormFS Linux.
+#
+# Notes       : This script is not a bootscript with dependency
+#               information.  It is supposed to be run directly from
+#               inittab, with:
+#                  dm:5:respawn:/etc/rc.d/init.d/xdm
+#               Uncomment that line in /etc/inittab after setting
+#               DISPLAY_MANAGER in /etc/sysconfig/xdm, then run: init q
+#               Activating a display manager is an explicit admin action
+#               in BFSOS.
+########################################################################
+
+if [ -r /etc/sysconfig/xdm ]; then
+    . /etc/sysconfig/xdm
+fi
+
+if [ -z "${DISPLAY_MANAGER}" ]; then
+    echo "Please set DISPLAY_MANAGER in /etc/sysconfig/xdm before running /etc/rc.d/init.d/xdm"
+    exit 1
+fi
+
+if [ ! -x "${DISPLAY_MANAGER}" ]; then
+    echo "${DISPLAY_MANAGER} is not executable; install the matching display manager package"
+    exit 1
+fi
+
+exec ${DISPLAY_MANAGER} ${DM_OPTIONS}
+
+# End xdm

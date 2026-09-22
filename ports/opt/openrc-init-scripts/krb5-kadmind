@@ -1,0 +1,16 @@
+#!/sbin/openrc-run
+name="krb5-kadmind"
+description="Kerberos 5 Administration Server"
+command="/usr/sbin/kadmind"
+# Runs the same command line as krb5-kadmind.service shipped by the kerberos
+# port (it expects the KDC to be running).
+command_args="-nofork"
+command_background=true
+pidfile="/run/${RC_SVCNAME}.pid"
+required_files="/etc/krb5.conf"
+
+depend() {
+    need localmount
+    after bootmisc modules krb5-kdc
+    use net logger
+}

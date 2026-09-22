@@ -1,0 +1,14 @@
+#!/sbin/openrc-run
+name="rsyncd"
+description="Rsync daemon"
+command="/usr/bin/rsync"
+command_args="--daemon --no-detach"
+command_background=true
+pidfile="/run/rsyncd.pid"
+required_files="/etc/rsyncd.conf"
+
+depend() {
+    need localmount
+    after bootmisc modules
+    use net logger
+}

@@ -1,0 +1,82 @@
+#!/bin/sh
+########################################################################
+# Begin krb5
+#
+# Description : MIT Kerberos KDC, admin and propagation servers
+#
+# Derived from BLFS bootscripts (BLFS 20250225) for StormFS Linux.  The
+# daemons self-daemonize here; the OpenRC profile instead runs them with
+# the foreground flags used by the packaged unit files.
+#
+########################################################################
+
+### BEGIN INIT INFO
+# Provides:          krb5
+# Required-Start:    $local_fs $network
+# Should-Start:      networkmanager
+# Required-Stop:     $local_fs $network
+# Should-Stop:       networkmanager
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: MIT Kerberos KDC and Admin Server
+# Description:       Starts, stops or restarts the MIT Kerberos KDC,
+#                    Admin Server and Database Propagation Server.
+### END INIT INFO
+
+. /lib/lsb/init-functions
+
+case "${1}" in
+   start)
+      if [ ! -f /etc/krb5.conf ]; then
+         log_failure_msg "/etc/krb5.conf is missing"
+         exit 2
+      fi
+
+      log_info_msg "Starting Kerberos KDC krb5kdc"
+      start_daemon /usr/sbin/krb5kdc
+      evaluate_retval
+
+      log_info_msg "Starting Kerberos administrative server kadmind"
+      start_daemon /usr/sbin/kadmind
+      evaluate_retval
+
+      log_info_msg "Starting Kerberos database propagation server kpropd"
+      start_daemon /usr/sbin/kpropd -S
+      evaluate_retval
+      ;;
+
+   stop)
+      log_info_msg "Stopping Kerberos database propagation server kpropd"
+      killproc /usr/sbin/kpropd
+      evaluate_retval
+
+      log_info_msg "Stopping Kerberos administrative server kadmind"
+      killproc /usr/sbin/kadmind
+      evaluate_retval
+
+      log_info_msg "Stopping Kerberos KDC krb5kdc"
+      killproc /usr/sbin/krb5kdc
+      evaluate_retval
+      ;;
+
+   restart)
+      ${0} stop
+      sleep 1
+      ${0} start
+      ;;
+
+   status)
+      statusproc /usr/sbin/krb5kdc
+      statusproc /usr/sbin/kadmind
+      statusproc /usr/sbin/kpropd
+      ;;
+
+   *)
+      echo "Usage: ${0} {start|stop|restart|status}"
+      exit 1
+      ;;
+esac
+
+exit 0
+
+# End krb5

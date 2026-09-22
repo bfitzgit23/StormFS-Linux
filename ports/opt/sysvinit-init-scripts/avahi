@@ -1,0 +1,70 @@
+#!/bin/sh
+########################################################################
+# Begin avahi
+#
+# Description : Avahi mDNS/DNS-SD daemon boot script
+#
+# Derived from BLFS bootscripts (BLFS 20250225) for StormFS Linux; only
+# avahi-daemon is managed because the StormFS Avahi port does not build
+# avahi-dnsconfd.
+#
+########################################################################
+
+### BEGIN INIT INFO
+# Provides:            avahi
+# Required-Start:      $local_fs $network
+# Should-Start:        networkmanager
+# Required-Stop:       $network
+# Should-Stop:         networkmanager
+# Default-Start:       2 3 4 5
+# Default-Stop:        0 1 6
+# Short-Description:   Service discovery on a local network
+# Description:         Service discovery on a local network
+### END INIT INFO
+
+. /lib/lsb/init-functions
+
+case "${1}" in
+   start)
+      if [ ! -f /etc/avahi/avahi-daemon.conf ]; then
+         log_failure_msg "/etc/avahi/avahi-daemon.conf is missing"
+         exit 2
+      fi
+      log_info_msg "Starting the Avahi Daemon..."
+      start_daemon /usr/sbin/avahi-daemon -D
+      evaluate_retval
+      ;;
+
+   stop)
+      log_info_msg "Stopping the Avahi Daemon..."
+      if pidofproc /usr/sbin/avahi-daemon >/dev/null; then
+         /usr/sbin/avahi-daemon -k
+      fi
+      evaluate_retval
+      ;;
+
+   reload)
+      log_info_msg "Reloading the Avahi Daemon..."
+      /usr/sbin/avahi-daemon -r
+      evaluate_retval
+      ;;
+
+   restart)
+      ${0} stop
+      sleep 1
+      ${0} start
+      ;;
+
+   status)
+      statusproc /usr/sbin/avahi-daemon
+      ;;
+
+   *)
+      echo "Usage: ${0} {start|stop|reload|restart|status}"
+      exit 1
+      ;;
+esac
+
+exit 0
+
+# End avahi

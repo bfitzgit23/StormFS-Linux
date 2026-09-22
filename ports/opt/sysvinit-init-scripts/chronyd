@@ -1,0 +1,70 @@
+#!/bin/sh
+########################################################################
+# Begin chronyd
+#
+# Description : Start the chrony NTP client/server
+#
+# StormFS Linux service script; matches the chronyd OpenRC script
+# (foreground -n mode plus the runtime directories systemd-tmpfiles
+# would otherwise create).
+#
+########################################################################
+
+### BEGIN INIT INFO
+# Provides:            chronyd
+# Required-Start:      $local_fs $network
+# Should-Start:        $syslog
+# Required-Stop:       $local_fs $network
+# Should-Stop:         $syslog
+# Default-Start:       2 3 4 5
+# Default-Stop:        0 1 6
+# Short-Description:   Starts the chrony NTP client/server.
+# Description:         Starts chronyd before it drops privileges to the
+#                      chrony user (the package is built with
+#                      --with-user=chrony).
+### END INIT INFO
+
+. /lib/lsb/init-functions
+
+pidfile=/run/chronyd.pid
+
+case "$1" in
+   start)
+      if [ ! -f /etc/chrony.conf ]; then
+         log_failure_msg "/etc/chrony.conf is missing"
+         exit 2
+      fi
+
+      log_info_msg "Starting chronyd..."
+      install -d -o chrony -g chrony -m 750 /var/lib/chrony
+      install -d -o chrony -g chrony -m 755 /run/chrony-dhcp
+      start_daemon -p "${pidfile}" /usr/sbin/chronyd -n
+      evaluate_retval
+      ;;
+
+   stop)
+      log_info_msg "Stopping chronyd..."
+      killproc -p "${pidfile}" /usr/sbin/chronyd
+      evaluate_retval
+      rm -f "${pidfile}"
+      ;;
+
+   restart)
+      ${0} stop
+      sleep 1
+      ${0} start
+      ;;
+
+   status)
+      statusproc -p "${pidfile}" /usr/sbin/chronyd
+      ;;
+
+   *)
+      echo "Usage: $0 {start|stop|restart|status}"
+      exit 1
+      ;;
+esac
+
+exit 0
+
+# End chronyd

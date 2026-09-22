@@ -1,0 +1,65 @@
+#!/bin/sh
+########################################################################
+# Begin bfs-kernel-finalize
+#
+# Description : Apply pending BFSOS kernel configuration updates at boot
+#
+# StormFS Linux service script; mirrors bfs-kernel-finalize.service
+# including its condition glob.
+#
+########################################################################
+
+### BEGIN INIT INFO
+# Provides:            bfs-kernel-finalize
+# Required-Start:      $local_fs
+# Should-Start:
+# Required-Stop:
+# Should-Stop:
+# Default-Start:       2 3 4 5
+# Default-Stop:        0 1 6
+# Short-Description:   Finalizes pending BFSOS kernel updates at boot.
+# Description:         Runs bfs-kernel-maintenance finalize-boot only when
+#                      /var/lib/bfsos/kernel-state/*/pending exists.
+### END INIT INFO
+
+. /lib/lsb/init-functions
+
+case "$1" in
+   start)
+      pending=$(echo /var/lib/bfsos/kernel-state/*/pending)
+      if [ ! -e "${pending}" ]; then
+         exit 0
+      fi
+      log_info_msg "Applying pending BFSOS kernel updates..."
+      /usr/libexec/bfs-kernel-maintenance finalize-boot
+      evaluate_retval
+      ;;
+
+   stop)
+      # One-shot operation; nothing to stop.
+      exit 0
+      ;;
+
+   restart)
+      $0 start
+      ;;
+
+   status)
+      # Informational: report whether updates are pending.
+      pending=$(echo /var/lib/bfsos/kernel-state/*/pending)
+      if [ -e "${pending}" ]; then
+         log_failure_msg "Pending BFSOS kernel updates exist (run finalize-boot)"
+      else
+         log_success_msg "No pending BFSOS kernel updates"
+      fi
+      ;;
+
+   *)
+      echo "Usage: $0 {start|stop|restart|status}"
+      exit 1
+      ;;
+esac
+
+exit 0
+
+# End bfs-kernel-finalize

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=PipeWire PulseAudio Replacement
+Comment=Start the PulseAudio-compatible PipeWire bridge when the desktop session starts
+Exec=/usr/bin/pipewire-pulse
+Terminal=false
+Type=Application
+NoDisplay=true
+NotShowIn=none

@@ -1,0 +1,19 @@
+# Begin /etc/inittab (StormFS OpenRC profile, openrc-init)
+
+# Run the OpenRC states in order; gettys start after 'default' is reached.
+::sysinit:/sbin/openrc sysinit
+::sysinit:/sbin/openrc boot
+::wait:/sbin/openrc default
+
+# Console logins (see chapter 12 of the LFS book; add more as needed)
+tty1:2345:respawn:/sbin/agetty --noclear tty1  linux
+tty2:2345:respawn:/sbin/agetty tty2  linux
+tty3:2345:respawn:/sbin/agetty tty3  linux
+
+# Key handling and shutdown cleanup
+::ctrlaltdel:/sbin/reboot
+::shutdown:/sbin/umount -a -r
+
+# Reload after editing:  init q
+
+# End /etc/inittab

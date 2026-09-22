@@ -1,0 +1,64 @@
+#!/bin/sh
+########################################################################
+# Begin wpa_supplicant
+#
+# Description : Global IEEE 802.1X/WPA supplicant
+#
+# StormFS Linux service script; matches the wpa_supplicant OpenRC script
+# and the unit files shipped by the wpa_supplicant port.  Only enable it
+# when NetworkManager is not managing the wireless interface, otherwise
+# D-Bus activation (fi.w1.wpa_supplicant1) starts it on demand.
+#
+########################################################################
+
+### BEGIN INIT INFO
+# Provides:            wpa_supplicant
+# Required-Start:      $local_fs
+# Should-Start:        networkmanager
+# Required-Stop:       $local_fs
+# Should-Stop:         networkmanager
+# Default-Start:       2 3 4 5
+# Default-Stop:        0 1 6
+# Short-Description:   Starts the global wpa_supplicant instance.
+# Description:         Starts the global (interface-less) wpa_supplicant
+#                      instance driven over D-Bus.
+### END INIT INFO
+
+. /lib/lsb/init-functions
+
+case "$1" in
+   start)
+      if [ ! -f /etc/wpa_supplicant.conf ]; then
+         log_failure_msg "/etc/wpa_supplicant.conf is missing"
+         exit 2
+      fi
+      log_info_msg "Starting global wpa_supplicant..."
+      start_daemon /usr/sbin/wpa_supplicant -c /etc/wpa_supplicant.conf
+      evaluate_retval
+      ;;
+
+   stop)
+      log_info_msg "Stopping global wpa_supplicant..."
+      killproc /usr/sbin/wpa_supplicant
+      evaluate_retval
+      ;;
+
+   restart)
+      ${0} stop
+      sleep 1
+      ${0} start
+      ;;
+
+   status)
+      statusproc /usr/sbin/wpa_supplicant
+      ;;
+
+   *)
+      echo "Usage: $0 {start|stop|restart|status}"
+      exit 1
+      ;;
+esac
+
+exit 0
+
+# End wpa_supplicant

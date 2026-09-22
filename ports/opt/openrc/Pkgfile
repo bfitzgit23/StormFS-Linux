@@ -5,8 +5,11 @@
 
 name=openrc
 version=0.63
-release=1
-source=(https://github.com/OpenRC/openrc/archive/$version/openrc-$version.tar.gz)
+release=2
+source=(
+    https://github.com/OpenRC/openrc/archive/$version/openrc-$version.tar.gz
+    inittab
+)
 
 pkg_build() {
     cd "$name-$version" || return 1
@@ -20,4 +23,8 @@ pkg_build() {
 
     install -d -m 0755 "$PKG/etc/runlevels" "$PKG/etc/init.d"
     ln -sfn /sbin/openrc-init "$PKG/sbin/init"
+
+    # openrc-init reads /etc/inittab for the sysinit/wait states and the
+    # console gettys; without it the system never reaches a login prompt.
+    install -m 0644 inittab "$PKG/etc/inittab" || return 1
 }

@@ -1,0 +1,58 @@
+#!/bin/sh
+########################################################################
+# Begin libvirtd
+#
+# Description : Libvirt daemon
+#
+# StormFS Linux service script; libvirtd stays in the foreground unless
+# -d is given, so the supervisor backgrounds it.
+#
+########################################################################
+
+### BEGIN INIT INFO
+# Provides:            libvirtd
+# Required-Start:      $local_fs virtlogd
+# Should-Start:        $syslog network
+# Required-Stop:       $local_fs
+# Should-Stop:         $syslog
+# Default-Start:       2 3 4 5
+# Default-Stop:        0 1 6
+# Short-Description:   Starts the libvirt daemon.
+# Description:         Starts libvirtd, the virtualization management
+#                      daemon.
+### END INIT INFO
+
+. /lib/lsb/init-functions
+
+case "$1" in
+   start)
+      log_info_msg "Starting libvirtd..."
+      start_daemon /usr/sbin/libvirtd
+      evaluate_retval
+      ;;
+
+   stop)
+      log_info_msg "Stopping libvirtd..."
+      killproc /usr/sbin/libvirtd
+      evaluate_retval
+      ;;
+
+   restart)
+      ${0} stop
+      sleep 1
+      ${0} start
+      ;;
+
+   status)
+      statusproc /usr/sbin/libvirtd
+      ;;
+
+   *)
+      echo "Usage: $0 {start|stop|restart|status}"
+      exit 1
+      ;;
+esac
+
+exit 0
+
+# End libvirtd

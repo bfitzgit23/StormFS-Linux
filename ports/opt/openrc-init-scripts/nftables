@@ -1,0 +1,29 @@
+#!/sbin/openrc-run
+description="nftables firewall ruleset"
+
+extra_started_commands="reload"
+
+start() {
+    [ -f /etc/nftables.nft ] || {
+        eerror "/etc/nftables.nft is missing; create a ruleset first"
+        return 1
+    }
+    ebegin "Loading nftables ruleset"
+    /usr/bin/nft -f /etc/nftables.nft
+    eend $? "nft reported errors"
+}
+
+stop() {
+    ebegin "Flushing nftables ruleset"
+    /usr/bin/nft flush ruleset
+    eend $?
+}
+
+reload() {
+    start
+}
+
+depend() {
+    need localmount
+    after bootmisc modules
+}
