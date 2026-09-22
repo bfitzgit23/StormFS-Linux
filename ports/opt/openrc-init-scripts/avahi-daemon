@@ -1,0 +1,20 @@
+#!/sbin/openrc-run
+name="avahi-daemon"
+description="Avahi mDNS/DNS-SD daemon"
+command="/usr/sbin/avahi-daemon"
+command_args="-s"
+command_background=true
+pidfile="/run/avahi-daemon/pid"
+required_files="/etc/avahi/avahi-daemon.conf"
+
+depend() {
+    need localmount
+    after bootmisc modules dbus
+    use net logger
+}
+
+start_pre() {
+    # avahi-daemon chroots here and drops to the avahi user created by the
+    # avahi port's pre-install hook.
+    checkpath -d -m 0755 /run/avahi-daemon || return 1
+}

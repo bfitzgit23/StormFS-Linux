@@ -1,0 +1,43 @@
+#!/sbin/openrc-run
+name="samba"
+description="Samba SMB and NetBIOS daemons"
+
+depend() {
+    need localmount
+    after bootmisc modules
+    use net logger dns
+}
+
+start_pre() {
+    # The samba port's post-install guarantees a minimal smb.conf.
+    [ -f /etc/samba/smb.conf ] || {
+        eerror "missing /etc/samba/smb.conf (reinstall the samba package)"
+        return 1
+    }
+    checkpath -d -m 0755 /run/samba || return 1
+}
+
+start() {
+    # smbd and nmbd both support explicit foreground mode (-F), so the
+    # supervised processes are managed here with pidfiles written by
+    # start-stop-daemon instead of by the daemons themselves.
+    ebegin "Starting smbd"
+    start-stop-daemon --start --quiet --background \
+        --make-pidfile --pidfile /run/samba/smbd.pid \
+        --exec /usr/sbin/smbd -- -F --no-process-group
+    eend $?
+    ebegin "Starting nmbd"
+    start-stop-daemon --start --quiet --background \
+        --make-pidfile --pidfile /run/samba/nmbd.pid \
+        --exec /usr/sbin/nmbd -- -F --no-process-group
+    eend $?
+}
+
+stop() {
+    ebegin "Stopping nmbd"
+    start-stop-daemon --stop --quiet --pidfile /run/samba/nmbd.pid
+    eend $?
+    ebegin "Stopping smbd"
+    start-stop-daemon --stop --quiet --pidfile /run/samba/smbd.pid
+    eend $?
+}

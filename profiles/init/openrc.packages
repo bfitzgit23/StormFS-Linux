@@ -9,3 +9,5 @@ gpm
 chrony
 pipewire
 wireplumber
+cups
+avahi

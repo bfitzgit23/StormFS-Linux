@@ -1,0 +1,20 @@
+#!/sbin/openrc-run
+name="cups"
+description="CUPS printing daemon"
+command="/usr/sbin/cupsd"
+command_args="-f"
+command_background=true
+pidfile="/run/cups/cupsd.pid"
+required_files="/etc/cups/cupsd.conf"
+
+depend() {
+    need localmount
+    after bootmisc modules
+    use net logger dbus
+}
+
+start_pre() {
+    # cupsd keeps its scheduler pid and client socket in RunDir
+    # (configured as /run/cups by the BFSOS port).
+    checkpath -d -m 0755 /run/cups || return 1
+}
