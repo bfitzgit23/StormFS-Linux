@@ -1,12 +1,9 @@
 #!/bin/sh
-cat > /etc/geoclue/conf.d/90-lfs-google.conf << "EOF"
-# Begin /etc/geoclue/conf.d/90-lfs-google.conf
+set -eu
 
-# This configuration applies for the WiFi source.
-[wifi]
+# BFSOS no longer ships a distro/maintainer Google Geolocation API key.
+# Remove the legacy BFSOS override created by older package releases. Users who
+# need a provider-specific key should create a separate local conf.d override.
+rm -f /etc/geoclue/conf.d/90-lfs-google.conf
 
-# Set the URL to Google's Geolocation Service.
-url=https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyDxKL42zsPjbke5O8_rPVpVrLrJ8aeE9rQ
-
-# End /etc/geoclue/conf.d/90-lfs-google.conf
-EOF
+exit 0

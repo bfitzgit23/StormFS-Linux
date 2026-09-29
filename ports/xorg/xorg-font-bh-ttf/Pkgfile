@@ -1,12 +1,12 @@
 # Description: xorg font font-bh-ttf
-# URL: http://xorg.freedesktop.org
+# URL: https://xorg.freedesktop.org
 # Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: fontconfig mkfontscale
 
 name=xorg-font-bh-ttf
 version=1.0.3
 release=2
-source=(https://www.x.org/releases/individual/font/font-bh-ttf-$version.tar.bz2)
+source=(https://xorg.freedesktop.org/archive/individual/font/font-bh-ttf-$version.tar.bz2)
 
 pkg_build() {
 

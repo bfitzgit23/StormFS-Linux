@@ -1,12 +1,12 @@
 # Description: xorg driver xf86-video-siliconmotion
-# URL: http://xorg.freedesktop.org
+# URL: https://xorg.freedesktop.org
 # Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: xorg-server
 
 name=xf86-video-siliconmotion
 version=1.7.9
 release=1
-source=(https://www.x.org/releases/individual/driver/xf86-video-siliconmotion-$version.tar.bz2)
+source=(https://xorg.freedesktop.org/archive/individual/driver/xf86-video-siliconmotion-$version.tar.bz2)
 
 pkg_build() {
 

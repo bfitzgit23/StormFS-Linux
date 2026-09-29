@@ -6,7 +6,7 @@
 name=xorg-font-misc-ethiopic
 version=1.0.5
 release=1
-source=(https://www.x.org/releases/individual/font/font-misc-ethiopic-$version.tar.xz)
+source=(https://xorg.freedesktop.org/archive/individual/font/font-misc-ethiopic-$version.tar.xz)
 
 pkg_build() {
 

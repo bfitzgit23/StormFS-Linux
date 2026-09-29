@@ -2,7 +2,7 @@
 #
 # chroot.sh
 #
-# Mount or reuse a BFS Linux target at /mnt/bfs and enter its chroot.
+# Mount or reuse a BFSOS target at /mnt/bfs and enter its chroot.
 # Intended location: ~/BFSOS/scripts/chroot.sh
 #
 

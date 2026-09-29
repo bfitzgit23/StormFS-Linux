@@ -28,7 +28,7 @@ grep -q -- '-Dnmtui=true' "$ROOT/ports/iso/networkmanager-iso/Pkgfile" || fail '
 grep -q 'downloads.sourceforge.net/project/bfsos/BFSOS/base/latest' "$iso" || fail 'SourceForge base URL is missing'
 grep -q 'BASE_SHA256_URL' "$iso" || fail 'SourceForge base checksum verification is missing'
 grep -q 'verify_sha256_file' "$iso" || fail 'base SHA256 verifier is missing'
-grep -q 'codeberg.org/bmadonnaster/BFSOS.git' "$iso" || fail 'canonical Codeberg Git URL is missing'
+grep -q 'github.com/bmadonnaster/BFSOS.git' "$iso" || fail 'canonical GitHub Git URL is missing'
 grep -q 'prepare_build_project' "$iso" || fail 'automatic clean Git checkout is missing'
 grep -q 'GIT_COMMIT_FULL' "$iso" || fail 'full Git commit provenance is missing'
 grep -q '/etc/bfs-build-info' "$iso" || fail 'embedded build provenance is missing'
@@ -45,7 +45,7 @@ grep -q -- '-comp xz -b 1M -Xdict-size 100% -Xbcj x86' "$iso" || fail 'size-orie
 grep -q 'audit_live_root' "$iso" || fail 'live-root archive audit is missing'
 grep -q "Forbidden tar/package archives remain" "$iso" || fail 'forbidden-archive failure policy is missing'
 
-# The new RC1 policy must not copy base/package tar archives onto release media.
+# The RC2 policy must not copy base/package tar archives onto release media.
 if grep -Eq 'cp .*base_archive.*stage/bfsos|packages\.sha256|packages\.list|Preserve one copy of package archives' "$iso"; then
     fail 'old offline tar/package-archive staging policy is still present'
 fi

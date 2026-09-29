@@ -1,11 +1,11 @@
-# Description: Linux 6.18 LTS compatibility kernel with broad x86_64 hardware support
+# Description: BFSOS default Linux 6.18 LTS kernel with broad x86_64 hardware support
 # URL: https://www.kernel.org/
 # Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: bc bfs-kernel-maintenance bison cpio dracut elfutils flex linux-firmware openssl zstd
 # Optional: pahole
 
 name=linux-lts
-version=6.18.52
+version=6.18.54
 release=1
 
 # Keep the LTS package on the current upstream 6.18.y point release.  Do not

@@ -5,7 +5,8 @@
 
 name=llvm-32
 version=23.1.1
-release=4
+release=5
+keep_static=1
 
 source=(https://github.com/llvm/llvm-project/releases/download/llvmorg-$version/llvm-project-$version.src.tar.xz)
 
@@ -23,6 +24,7 @@ pkg_build() {
                 -D CMAKE_C_FLAGS_RELEASE="$CFLAGS" \
                 -D CMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
                 -D LLVM_BUILD_32_BITS=ON \
+                -D LLVM_ENABLE_PROJECTS=clang \
                 -D LLVM_LIBDIR_SUFFIX=32 \
                 -D LLVM_TARGET_ARCH=i686 \
                 -D LLVM_DEFAULT_TARGET_TRIPLE=i686-pc-linux-gnu \
@@ -63,6 +65,7 @@ pkg_build() {
                 "$PKG/usr/bin" \
                 "$PKG/usr/include" \
                 "$PKG/usr/share/opt-viewer"
+                rm -rf     "$PKG/usr/lib/libear"     "$PKG/usr/lib/libscanbuild"     "$PKG/usr/libexec"     "$PKG/usr/share/clang"     "$PKG/usr/share/scan-build"     "$PKG/usr/share/scan-view"     "$PKG/usr/share/man/man1/scan-build.1"
 
         install -Dm0755 \
                 "$SRC/keep/llvm-config" \

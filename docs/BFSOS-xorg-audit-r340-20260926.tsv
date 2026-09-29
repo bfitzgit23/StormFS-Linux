@@ -1,0 +1,181 @@
+port	name	version	release	depends	unresolved_deps	build_opt	sources	http_source	syntax
+bdftopcf	bdftopcf	1.1.2	1	harfbuzz			https://xorg.freedesktop.org/archive/individual/util/bdftopcf-$version.tar.xz	no	ok
+fontconfig	fontconfig	2.18.3	2	expat freetype			https://ftp2.osuosl.org/pub/blfs/conglomeration/fontconfig/fontconfig-$version.tar.xz	no	ok
+glew	glew	2.3.1	1	glu libXi libXmu			https://downloads.sourceforge.net/project/glew/glew/$version/glew-$version.tgz	no	ok
+glu	glu	9.0.3	1	mesa			https://mesa.freedesktop.org/archive/$name/$name-$version.tar.xz	no	ok
+iceauth	iceauth	1.0.11	2	libICE			https://xorg.freedesktop.org/archive/individual/app/iceauth-$version.tar.xz	no	ok
+libdrm	libdrm	2.4.134	3	xorg-libs valgrind			https://ftp.debian.org/debian/pool/main/libd/libdrm/libdrm_$version.orig.tar.xz	no	ok
+libepoxy	libepoxy	1.5.10	1	mesa			https://github.com/anholt/libepoxy/archive/$version/$name-$version.tar.gz	no	ok
+libevdev	libevdev	1.13.7	1	meson ninja			https://www.freedesktop.org/software/libevdev/libevdev-$version.tar.xz	no	ok
+libfontenc	libfontenc	1.1.9	3	xorgproto zlib			https://xorg.freedesktop.org/archive/individual/lib/libfontenc-$version.tar.xz	no	ok
+libFS	libFS	1.0.10	3	xorgproto xtrans			https://xorg.freedesktop.org/archive/individual/lib/libFS-$version.tar.xz	no	ok
+libglvnd	libglvnd	1.7.0	2	meson ninja libX11 libXext xorgproto			https://github.com/NVIDIA/libglvnd/archive/v${version}/libglvnd-${version}.tar.gz	no	ok
+libICE	libICE	1.1.2	2	xorgproto xtrans			https://xorg.freedesktop.org/archive/individual/lib/libICE-$version.tar.xz	no	ok
+libinput	libinput	1.31.3	2	systemd mtdev libevdev			https://gitlab.freedesktop.org/libinput/libinput/-/archive/$version/$name-$version.tar.bz2	no	ok
+libpciaccess	libpciaccess	0.19	2				https://xorg.freedesktop.org/archive/individual/lib/libpciaccess-$version.tar.xz	no	ok
+libpthread-stubs	libpthread-stubs	0.5	1				https://xorg.freedesktop.org/archive/individual/lib/$name-$version.tar.xz	no	ok
+libSM	libSM	1.2.6	3	util-linux libICE			https://xorg.freedesktop.org/archive/individual/lib/libSM-$version.tar.xz	no	ok
+libunwind	libunwind	1.8.3	3				https://github.com/libunwind/$name/releases/download/v$version/$name-$version.tar.gz	no	ok
+libva	libva	2.24.1	2	libdrm libglvnd libXfixes			https://github.com/intel/libva/archive/$version/$name-$version.tar.gz	no	ok
+libvdpau	libvdpau	1.5	2	xorg-libs			https://gitlab.freedesktop.org/vdpau/$name/-/archive/$version//$name-$version.tar.bz2	no	ok
+libvdpau-va-gl	libvdpau-va-gl	0.4.2	1	cmake libvdpau libva mesa		"""-D CMAKE_BUILD_TYPE=Release -D CMAKE_INSTALL_PREFIX=$XORG_PREFIX"""	https://github.com/i-rinat/${name}/archive/v${version}/${name}-${version}.tar.gz	no	ok
+libX11	libX11	1.8.13	3	libxcb xorgproto xtrans			https://xorg.freedesktop.org/archive/individual/lib/libX11-$version.tar.xz	no	ok
+libXau	libXau	1.0.12	1	xorgproto			https://xorg.freedesktop.org/archive/individual/lib/libXau-$version.tar.xz	no	ok
+libXaw	libXaw	1.0.16	2	libXmu libXpm			https://xorg.freedesktop.org/archive/individual/lib/libXaw-$version.tar.xz	no	ok
+libxcb	libxcb	1.17.0	1	libXau libXdmcp xcb-proto			https://xorg.freedesktop.org/archive/individual/lib/$name-$version.tar.xz	no	ok
+libXcomposite	libXcomposite	0.4.7	3	libXext libXfixes			https://xorg.freedesktop.org/archive/individual/lib/libXcomposite-$version.tar.xz	no	ok
+libXcursor	libXcursor	1.2.3	2	libXfixes libXrender			https://xorg.freedesktop.org/archive/individual/lib/libXcursor-$version.tar.xz	no	ok
+libxcvt	libxcvt	0.1.3	1	meson ninja			https://xorg.freedesktop.org/archive/individual/lib/libxcvt-$version.tar.xz	no	ok
+libXdamage	libXdamage	1.1.7	3	libXfixes			https://xorg.freedesktop.org/archive/individual/lib/libXdamage-$version.tar.xz	no	ok
+libXdmcp	libXdmcp	1.1.5	1	xorgproto			https://xorg.freedesktop.org/archive/individual/lib/libXdmcp-$version.tar.xz	no	ok
+libXext	libXext	1.3.7	3	libX11			https://xorg.freedesktop.org/archive/individual/lib/libXext-$version.tar.xz	no	ok
+libXfixes	libXfixes	6.0.2	3	libX11			https://xorg.freedesktop.org/archive/individual/lib/libXfixes-$version.tar.xz	no	ok
+libXfont2	libXfont2	2.0.9	3	bzip2 freetype libfontenc xtrans			https://xorg.freedesktop.org/archive/individual/lib/libXfont2-$version.tar.xz	no	ok
+libXft	libXft	2.3.9	3	harfbuzz util-linux			https://xorg.freedesktop.org/archive/individual/lib/libXft-$version.tar.xz	no	ok
+libXi	libXi	1.8.3	3	libXext libXfixes			https://xorg.freedesktop.org/archive/individual/lib/libXi-$version.tar.xz	no	ok
+libXinerama	libXinerama	1.1.6	3	libXext			https://xorg.freedesktop.org/archive/individual/lib/libXinerama-$version.tar.xz	no	ok
+libxkbcommon	libxkbcommon	1.13.2	8	xkeyboard-config			https://github.com/xkbcommon/libxkbcommon/archive/xkbcommon-$version.tar.gz	no	ok
+libxkbfile	libxkbfile	1.2.0	3	libX11 xorgproto meson ninja			https://xorg.freedesktop.org/archive/individual/lib/libxkbfile-$version.tar.xz	no	ok
+libXmu	libXmu	1.3.1	3	libXext libXt			https://xorg.freedesktop.org/archive/individual/lib/libXmu-$version.tar.xz	no	ok
+libXpm	libXpm	3.5.19	3	libXext libXt			https://xorg.freedesktop.org/archive/individual/lib/libXpm-$version.tar.xz	no	ok
+libXpresent	libXpresent	1.0.2	3	libXrandr libXrender libXfixes libXext libX11 libxcb libXau libXdmcp			https://xorg.freedesktop.org/archive/individual/lib/libXpresent-$version.tar.xz	no	ok
+libXrandr	libXrandr	1.5.5	3	libXext libXrender			https://xorg.freedesktop.org/archive/individual/lib/libXrandr-$version.tar.xz	no	ok
+libXrender	libXrender	0.9.12	2	libX11			https://xorg.freedesktop.org/archive/individual/lib/libXrender-$version.tar.xz	no	ok
+libXres	libXres	1.2.3	3	libXext			https://xorg.freedesktop.org/archive/individual/lib/libXres-$version.tar.xz	no	ok
+libXScrnSaver	libXScrnSaver	1.2.5	3	libXext			https://xorg.freedesktop.org/archive/individual/lib/libXScrnSaver-$version.tar.xz	no	ok
+libxshmfence	libxshmfence	1.3.3	2	util-macros xorgproto			https://xorg.freedesktop.org/archive/individual/lib/libxshmfence-$version.tar.xz	no	ok
+libXt	libXt	1.3.1	2	libSM libX11			https://xorg.freedesktop.org/archive/individual/lib/libXt-$version.tar.xz	no	ok
+libXtst	libXtst	1.2.5	3	libXi			https://xorg.freedesktop.org/archive/individual/lib/libXtst-$version.tar.xz	no	ok
+libXv	libXv	1.0.13	2	libXext			https://xorg.freedesktop.org/archive/individual/lib/libXv-$version.tar.xz	no	ok
+libXvMC	libXvMC	1.0.15	4	libXv			https://xorg.freedesktop.org/archive/individual/lib/libXvMC-$version.tar.xz	no	ok
+libXxf86dga	libXxf86dga	1.1.7	3	libXext			https://xorg.freedesktop.org/archive/individual/lib/libXxf86dga-$version.tar.xz	no	ok
+libXxf86vm	libXxf86vm	1.1.7	3	libXext			https://xorg.freedesktop.org/archive/individual/lib/libXxf86vm-$version.tar.xz	no	ok
+luit	luit	20250912	2				https://invisible-mirror.net/archives/$name/$name-$version.tgz	no	ok
+mesa	mesa	26.2.3	1	cbindgen glslang libclc libdrm libglvnd llvm lua python3-mako python3-ply python3-pyyaml rust-bindgen rustc spirv-llvm-translator vulkan-loader wayland-protocols xorg-libs			https://archive.mesa3d.org/mesa-$version.tar.xz	no	ok
+mesa-demos	mesa-demos	9.0.0	2	mesa libdecor			https://archive.mesa3d.org/demos/${name}-${version}.tar.xz	no	ok
+mkfontscale	mkfontscale	1.2.4	2	freetype libfontenc libX11			https://xorg.freedesktop.org/archive/individual/app/mkfontscale-$version.tar.xz	no	ok
+mtdev	mtdev	1.1.7	1				https://launchpad.net/$name/trunk/$version/+download/$name-$version.tar.gz	no	ok
+pixman	pixman	0.46.4	2				https://xorg.freedesktop.org/archive/individual/lib/$name-$version.tar.xz	no	ok
+sessreg	sessreg	1.1.4	2	libX11			https://xorg.freedesktop.org/archive/individual/app/sessreg-$version.tar.xz	no	ok
+setxkbmap	setxkbmap	1.3.5	2	libxkbfile			https://xorg.freedesktop.org/archive/individual/app/setxkbmap-$version.tar.xz	no	ok
+smproxy	smproxy	1.0.8	2	libxkbfile			https://xorg.freedesktop.org/archive/individual/app/smproxy-$version.tar.xz	no	ok
+twm	twm	1.0.13.1	1	xorg-libs			https://mirror.freedif.org/pub/blfs/conglomeration/Xorg/$name-$version.tar.xz	no	ok
+util-macros	util-macros	1.20.2	2				https://xorg.freedesktop.org/archive/individual/util/util-macros-$version.tar.xz	no	ok
+wayland	wayland	1.26.0	2	libxml2			https://gitlab.freedesktop.org/$name/$name/-/releases/$version/downloads/$name-$version.tar.xz	no	ok
+wayland-protocols	wayland-protocols	1.49	2	wayland			https://gitlab.freedesktop.org/wayland/wayland-protocols/-/releases/$version/downloads/$name-$version.tar.xz	no	ok
+x11perf	x11perf	1.7.0	1	libXft libXmu			https://xorg.freedesktop.org/archive/individual/test/x11perf-$version.tar.xz	no	ok
+xauth	xauth	1.1.5	3	libX11 libXau libXext libXmu			https://xorg.freedesktop.org/archive/individual/app/xauth-$version.tar.xz	no	ok
+xbacklight	xbacklight	1.2.4	1	xcb-util			https://xorg.freedesktop.org/archive/individual/app/xbacklight-$version.tar.xz	no	ok
+xbitmaps	xbitmaps	1.1.4	2				https://xorg.freedesktop.org/archive/individual/data/$name-$version.tar.xz	no	ok
+xcb-proto	xcb-proto	1.17.0	1	python3			https://xorg.freedesktop.org/archive/individual/proto/xcb-proto-$version.tar.xz	no	ok
+xcb-util	xcb-util	0.4.1	2	libxcb			https://xorg.freedesktop.org/archive/individual/lib/xcb-util-$version.tar.xz	no	ok
+xcb-util-cursor	xcb-util-cursor	0.1.6	1	xcb-util-image xcb-util-renderutil			https://xcb.freedesktop.org/dist/xcb-util-cursor-$version.tar.xz	no	ok
+xcb-util-image	xcb-util-image	0.4.1	2	xcb-util			https://xcb.freedesktop.org/dist/xcb-util-image-$version.tar.xz	no	ok
+xcb-util-keysyms	xcb-util-keysyms	0.4.1	2	libxcb			https://xcb.freedesktop.org/dist/xcb-util-keysyms-$version.tar.xz	no	ok
+xcb-util-renderutil	xcb-util-renderutil	0.3.10	2	libxcb			https://xcb.freedesktop.org/dist/xcb-util-renderutil-$version.tar.xz	no	ok
+xcb-util-wm	xcb-util-wm	0.4.2	2	libxcb			https://xcb.freedesktop.org/dist/xcb-util-wm-$version.tar.xz	no	ok
+xclip	xclip	0.13	3	libXmu			https://github.com/astrand/$name/archive/$version/$name-$version.tar.gz	no	ok
+xclock	xclock	1.2.1	1	xorg-libs			https://mirror.freedif.org/pub/blfs/conglomeration/Xorg/$name-$version.tar.xz	no	ok
+xcmsdb	xcmsdb	1.0.7	2	xcb-util			https://xorg.freedesktop.org/archive/individual/app/xcmsdb-$version.tar.xz	no	ok
+xcursor-themes	xcursor-themes	1.0.7	1	pkgconf xcursorgen util-macros			https://xorg.freedesktop.org/archive/individual/data/$name-$version.tar.xz	no	ok
+xcursorgen	xcursorgen	1.0.9	2	libpng libXcursor			https://xorg.freedesktop.org/archive/individual/app/xcursorgen-$version.tar.xz	no	ok
+xdg-utils	xdg-utils	v1.2.1	1	xmlto links			https://gitlab.freedesktop.org/xdg/$name/-/archive/$version/$name-$version.tar.gz	no	ok
+xdpyinfo	xdpyinfo	1.4.0	2	libXcomposite libXinerama libXrender libXtst libXxf86vm			https://xorg.freedesktop.org/archive/individual/app/xdpyinfo-$version.tar.xz	no	ok
+xdriinfo	xdriinfo	1.0.8	2	mesa			https://xorg.freedesktop.org/archive/individual/app/xdriinfo-$version.tar.xz	no	ok
+xev	xev	1.2.7	2	xrandr			https://xorg.freedesktop.org/archive/individual/app/xev-$version.tar.xz	no	ok
+xf86-input-elographics	xf86-input-elographics	1.4.4	1	xorg-server			https://xorg.freedesktop.org/archive/individual/driver/$name-$version.tar.xz	no	ok
+xf86-input-evdev	xf86-input-evdev	2.11.0	1	mtdev libevdev xorg-server			https://xorg.freedesktop.org/archive/individual/driver/xf86-input-evdev-$version.tar.gz	no	ok
+xf86-input-joystick	xf86-input-joystick	1.6.4	1	xorg-server			https://xorg.freedesktop.org/archive/individual/driver/$name-$version.tar.xz	no	ok
+xf86-input-libinput	xf86-input-libinput	1.5.0	1	libinput xorg-server			https://xorg.freedesktop.org/archive/individual/driver/xf86-input-libinput-$version.tar.xz	no	ok
+xf86-input-synaptics	xf86-input-synaptics	1.10.0	2	xorg-server libevdev			https://xorg.freedesktop.org/archive/individual/driver/xf86-input-synaptics-$version.tar.xz	no	ok
+xf86-input-vmmouse	xf86-input-vmmouse	13.2.0	1	xorg-server			https://xorg.freedesktop.org/archive/individual/driver/$name-$version.tar.xz	no	ok
+xf86-input-wacom	xf86-input-wacom	1.2.4	2	libinput xorg-server			https://github.com/linuxwacom/$name/releases/download/$name-$version/$name-$version.tar.bz2	no	ok
+xf86-video-amdgpu	xf86-video-amdgpu	25.0.0	1	xorg-server meson			https://xorg.freedesktop.org/archive/individual/driver/xf86-video-amdgpu-$version.tar.xz	no	ok
+xf86-video-ast	xf86-video-ast	1.2.1	1	xorg-server			https://xorg.freedesktop.org/archive/individual/driver/xf86-video-ast-$version.tar.xz	no	ok
+xf86-video-ati	xf86-video-ati	22.0.0	1	xorg-server			https://xorg.freedesktop.org/archive/individual/driver/xf86-video-ati-$version.tar.xz	no	ok
+xf86-video-cirrus	xf86-video-cirrus	1.6.0	1	xorg-server			https://xorg.freedesktop.org/archive/individual/driver/xf86-video-cirrus-$version.tar.xz	no	ok
+xf86-video-dummy	xf86-video-dummy	0.4.1	1	xorg-server			https://xorg.freedesktop.org/archive/individual/driver/xf86-video-dummy-$version.tar.xz	no	ok
+xf86-video-fbdev	xf86-video-fbdev	0.5.1	1	xorg-server			https://xorg.freedesktop.org/archive/individual/driver/xf86-video-fbdev-$version.tar.xz	no	ok
+xf86-video-intel	xf86-video-intel	2.99.917-931	1	libXScrnSaver xorg-server			https://crux.nu/files/distfiles/xf86-video-intel-$version.tar.xz	no	ok
+xf86-video-mga	xf86-video-mga	2.1.0	1	xorg-server			https://xorg.freedesktop.org/archive/individual/driver/xf86-video-mga-$version.tar.xz	no	ok
+xf86-video-neomagic	xf86-video-neomagic	1.3.1	1	xorg-server			https://xorg.freedesktop.org/archive/individual/driver/xf86-video-neomagic-$version.tar.xz	no	ok
+xf86-video-nouveau	xf86-video-nouveau	1.0.18	2	xorg-server			https://xorg.freedesktop.org/archive/individual/driver/xf86-video-nouveau-$version.tar.xz	no	ok
+xf86-video-openchrome	xf86-video-openchrome	0.6.0	3	xorg-server			https://xorg.freedesktop.org/archive/individual/driver/xf86-video-openchrome-$version.tar.bz2	no	ok
+xf86-video-siliconmotion	xf86-video-siliconmotion	1.7.9	1	xorg-server			https://xorg.freedesktop.org/archive/individual/driver/xf86-video-siliconmotion-$version.tar.bz2	no	ok
+xf86-video-sis	xf86-video-sis	0.12.0	1	xorg-server			https://xorg.freedesktop.org/archive/individual/driver/xf86-video-sis-$version.tar.bz2	no	ok
+xf86-video-vboxvideo	xf86-video-vboxvideo	1.0.0	2	xorg-server			https://xorg.freedesktop.org/archive/individual/driver/xf86-video-vboxvideo-$version.tar.bz2	no	ok
+xf86-video-vesa	xf86-video-vesa	2.6.0	1	xorg-server			https://xorg.freedesktop.org/archive/individual/driver/xf86-video-vesa-$version.tar.xz	no	ok
+xf86-video-vmware	xf86-video-vmware	13.4.0	1	xorg-server			https://xorg.freedesktop.org/archive/individual/driver/xf86-video-vmware-$version.tar.xz	no	ok
+xgamma	xgamma	1.0.8	2	libXxf86vm			https://xorg.freedesktop.org/archive/individual/app/xgamma-$version.tar.xz	no	ok
+xhost	xhost	1.0.10	1	libXmu			https://xorg.freedesktop.org/archive/individual/app/xhost-$version.tar.xz	no	ok
+xinit	xinit	1.4.4	3	xorg-server xorg-libs			https://xorg.freedesktop.org/archive/individual/app/$name-$version.tar.xz	no	ok
+xinput	xinput	1.6.4	1	libXi libXinerama libXrandr			https://xorg.freedesktop.org/archive/individual/app/xinput-$version.tar.xz	no	ok
+xkbcomp	xkbcomp	1.5.0	2	libxkbfile			https://xorg.freedesktop.org/archive/individual/app/xkbcomp-$version.tar.xz	no	ok
+xkbevd	xkbevd	1.1.6	2	libxkbfile			https://xorg.freedesktop.org/archive/individual/app/xkbevd-$version.tar.xz	no	ok
+xkbutils	xkbutils	1.0.7	3	libxkbfile libXaw			https://xorg.freedesktop.org/archive/individual/app/xkbutils-$version.tar.xz	no	ok
+xkeyboard-config	xkeyboard-config	2.48	3				https://xorg.freedesktop.org/archive/individual/data/$name/$name-$version.tar.xz	no	ok
+xkill	xkill	1.0.7	2	libXmu			https://xorg.freedesktop.org/archive/individual/app/xkill-$version.tar.xz	no	ok
+xlsatoms	xlsatoms	1.1.5	2	libXmu			https://xorg.freedesktop.org/archive/individual/app/xlsatoms-$version.tar.xz	no	ok
+xlsclients	xlsclients	1.1.6	2	libXmu			https://xorg.freedesktop.org/archive/individual/app/xlsclients-$version.tar.xz	no	ok
+xmessage	xmessage	1.0.7	2	libXaw			https://xorg.freedesktop.org/archive/individual/app/xmessage-$version.tar.xz	no	ok
+xmodmap	xmodmap	1.0.12	2	libX11			https://xorg.freedesktop.org/archive/individual/app/xmodmap-$version.tar.xz	no	ok
+xorg	xorg	7x	3	xorg-server xorg-libs xorg-apps xorg-fonts xorg-driver xinit wayland wayland-protocols xwayland				no	ok
+xorg-apps	xorg-apps	7x	3	libpng mesa xbitmaps xcb-util iceauth luit mkfontscale sessreg setxkbmap smproxy x11perf xauth xbacklight xcmsdb xcursorgen xdpyinfo xdriinfo xev xgamma xhost xinput xkbcomp xkbevd xkbutils xkill xlsatoms xlsclients xmessage xmodmap xpr xprop xrandr xrdb xrefresh xset xsetroot xvinfo xwd xwininfo xwud bdftopcf twm xclock xterm				no	ok
+xorg-driver	xorg-driver	7x	5	libevdev xf86-video-amdgpu xf86-video-neomagic xf86-input-elographics xf86-video-ast xf86-input-evdev xf86-video-ati xf86-input-joystick xf86-video-cirrus xf86-video-siliconmotion xf86-input-libinput xf86-video-dummy xf86-video-sis xf86-input-synaptics xf86-video-fbdev xf86-input-vmmouse xf86-video-intel xf86-video-vesa xf86-input-wacom xf86-video-mga xf86-video-vmware xf86-video-nouveau xf86-video-openchrome xf86-video-vboxvideo				no	ok
+xorg-font-adobe-100dpi	xorg-font-adobe-100dpi	1.0.4	1	bdftopcf xorg-font-util mkfontscale			https://xorg.freedesktop.org/archive/individual/font/font-adobe-100dpi-$version.tar.xz	no	ok
+xorg-font-adobe-75dpi	xorg-font-adobe-75dpi	1.0.4	1	bdftopcf xorg-font-util mkfontscale			https://xorg.freedesktop.org/archive/individual/font/font-adobe-75dpi-$version.tar.xz	no	ok
+xorg-font-adobe-utopia-100dpi	xorg-font-adobe-utopia-100dpi	1.0.5	1	bdftopcf xorg-font-util mkfontscale			https://xorg.freedesktop.org/archive/individual/font/font-adobe-utopia-100dpi-$version.tar.xz	no	ok
+xorg-font-adobe-utopia-75dpi	xorg-font-adobe-utopia-75dpi	1.0.5	1	bdftopcf xorg-font-util mkfontscale			https://xorg.freedesktop.org/archive/individual/font/font-adobe-utopia-75dpi-$version.tar.xz	no	ok
+xorg-font-adobe-utopia-type1	xorg-font-adobe-utopia-type1	1.0.5	1	fontconfig mkfontscale			https://xorg.freedesktop.org/archive/individual/font/font-adobe-utopia-type1-$version.tar.xz	no	ok
+xorg-font-alias	xorg-font-alias	1.0.6	1				https://xorg.freedesktop.org/archive/individual/font/font-alias-$version.tar.xz	no	ok
+xorg-font-arabic-misc	xorg-font-arabic-misc	1.0.4	1	bdftopcf xorg-font-util mkfontscale			https://xorg.freedesktop.org/archive/individual/font/font-arabic-misc-$version.tar.xz	no	ok
+xorg-font-bh-100dpi	xorg-font-bh-100dpi	1.0.4	1	bdftopcf xorg-font-util mkfontscale			https://xorg.freedesktop.org/archive/individual/font/font-bh-100dpi-$version.tar.xz	no	ok
+xorg-font-bh-75dpi	xorg-font-bh-75dpi	1.0.4	1	bdftopcf xorg-font-util mkfontscale			https://xorg.freedesktop.org/archive/individual/font/font-bh-75dpi-$version.tar.xz	no	ok
+xorg-font-bh-lucidatypewriter-100dpi	xorg-font-bh-lucidatypewriter-100dpi	1.0.4	1	bdftopcf xorg-font-util mkfontscale			https://xorg.freedesktop.org/archive/individual/font/font-bh-lucidatypewriter-100dpi-$version.tar.xz	no	ok
+xorg-font-bh-lucidatypewriter-75dpi	xorg-font-bh-lucidatypewriter-75dpi	1.0.4	1	bdftopcf xorg-font-util mkfontscale			https://xorg.freedesktop.org/archive/individual/font/font-bh-lucidatypewriter-75dpi-$version.tar.xz	no	ok
+xorg-font-bh-ttf	xorg-font-bh-ttf	1.0.3	2	fontconfig mkfontscale			https://xorg.freedesktop.org/archive/individual/font/font-bh-ttf-$version.tar.bz2	no	ok
+xorg-font-bh-type1	xorg-font-bh-type1	1.0.4	1	fontconfig mkfontscale			https://xorg.freedesktop.org/archive/individual/font/font-bh-type1-$version.tar.xz	no	ok
+xorg-font-bitstream-100dpi	xorg-font-bitstream-100dpi	1.0.4	1	bdftopcf mkfontscale			https://xorg.freedesktop.org/archive/individual/font/font-bitstream-100dpi-$version.tar.xz	no	ok
+xorg-font-bitstream-75dpi	xorg-font-bitstream-75dpi	1.0.4	1	bdftopcf mkfontscale			https://xorg.freedesktop.org/archive/individual/font/font-bitstream-75dpi-$version.tar.xz	no	ok
+xorg-font-bitstream-type1	xorg-font-bitstream-type1	1.0.4	1	fontconfig mkfontscale			https://xorg.freedesktop.org/archive/individual/font/font-bitstream-type1-$version.tar.xz	no	ok
+xorg-font-bitstream-vera	xorg-font-bitstream-vera	1.10	3				https://download.gnome.org/pub/GNOME/sources/ttf-bitstream-vera/1.10/ttf-bitstream-vera-$version.tar.bz2	no	ok
+xorg-font-cronyx-cyrillic	xorg-font-cronyx-cyrillic	1.0.4	1	bdftopcf xorg-font-util mkfontscale			https://xorg.freedesktop.org/archive/individual/font/font-cronyx-cyrillic-$version.tar.xz	no	ok
+xorg-font-cursor-misc	xorg-font-cursor-misc	1.0.3	1	bdftopcf mkfontscale			https://xorg.freedesktop.org/archive/individual/font/font-cursor-misc-$version.tar.bz2	no	ok
+xorg-font-daewoo-misc	xorg-font-daewoo-misc	1.0.3	1	bdftopcf xorg-font-util mkfontscale			https://xorg.freedesktop.org/archive/individual/font/font-daewoo-misc-$version.tar.bz2	no	ok
+xorg-font-dec-misc	xorg-font-dec-misc	1.0.3	1	bdftopcf xorg-font-util mkfontscale			https://xorg.freedesktop.org/archive/individual/font/font-dec-misc-$version.tar.bz2	no	ok
+xorg-font-dejavu-ttf	xorg-font-dejavu-ttf	2.37	1	fontconfig mkfontscale			https://downloads.sourceforge.net/project/dejavu/dejavu/$version/dejavu-fonts-ttf-$version.tar.bz2	no	ok
+xorg-font-ibm-type1	xorg-font-ibm-type1	1.0.4	1	fontconfig mkfontscale			https://xorg.freedesktop.org/archive/individual/font/font-ibm-type1-$version.tar.xz	no	ok
+xorg-font-isas-misc	xorg-font-isas-misc	1.0.4	1	bdftopcf xorg-font-util mkfontscale			https://xorg.freedesktop.org/archive/individual/font/font-isas-misc-$version.tar.xz	no	ok
+xorg-font-jis-misc	xorg-font-jis-misc	1.0.3	1	bdftopcf xorg-font-util mkfontscale			https://xorg.freedesktop.org/archive/individual/font/font-jis-misc-$version.tar.bz2	no	ok
+xorg-font-micro-misc	xorg-font-micro-misc	1.0.4	1	bdftopcf xorg-font-util mkfontscale			https://xorg.freedesktop.org/archive/individual/font/font-micro-misc-$version.tar.xz	no	ok
+xorg-font-misc-cyrillic	xorg-font-misc-cyrillic	1.0.4	1	bdftopcf xorg-font-util mkfontscale			https://xorg.freedesktop.org/archive/individual/font/font-misc-cyrillic-$version.tar.xz	no	ok
+xorg-font-misc-ethiopic	xorg-font-misc-ethiopic	1.0.5	1	fontconfig mkfontscale			https://xorg.freedesktop.org/archive/individual/font/font-misc-ethiopic-$version.tar.xz	no	ok
+xorg-font-misc-meltho	xorg-font-misc-meltho	1.0.3	1	fontconfig mkfontscale			https://xorg.freedesktop.org/archive/individual/font/font-misc-meltho-$version.tar.bz2	no	ok
+xorg-font-misc-misc	xorg-font-misc-misc	1.1.2	1	bdftopcf xorg-font-util mkfontscale			https://xorg.freedesktop.org/archive/individual/font/font-misc-misc-$version.tar.bz2	no	ok
+xorg-font-mutt-misc	xorg-font-mutt-misc	1.0.4	1	bdftopcf xorg-font-util mkfontscale			https://xorg.freedesktop.org/archive/individual/font/font-mutt-misc-$version.tar.xz	no	ok
+xorg-font-schumacher-misc	xorg-font-schumacher-misc	1.1.2	1	bdftopcf xorg-font-util mkfontscale			https://xorg.freedesktop.org/archive/individual/font/font-schumacher-misc-$version.tar.bz2	no	ok
+xorg-font-screen-cyrillic	xorg-font-screen-cyrillic	1.0.5	1	bdftopcf xorg-font-util mkfontscale			https://xorg.freedesktop.org/archive/individual/font/font-screen-cyrillic-$version.tar.xz	no	ok
+xorg-font-sony-misc	xorg-font-sony-misc	1.0.3	1	bdftopcf xorg-font-util mkfontscale			https://xorg.freedesktop.org/archive/individual/font/font-sony-misc-$version.tar.bz2	no	ok
+xorg-font-sun-misc	xorg-font-sun-misc	1.0.3	1	bdftopcf xorg-font-util mkfontscale			https://xorg.freedesktop.org/archive/individual/font/font-sun-misc-$version.tar.bz2	no	ok
+xorg-font-util	xorg-font-util	1.4.2	1				https://xorg.freedesktop.org/archive/individual/font/font-util-$version.tar.xz	no	ok
+xorg-font-winitzki-cyrillic	xorg-font-winitzki-cyrillic	1.0.4	1	bdftopcf xorg-font-util mkfontscale			https://xorg.freedesktop.org/archive/individual/font/font-winitzki-cyrillic-$version.tar.xz	no	ok
+xorg-font-xfree86-type1	xorg-font-xfree86-type1	1.0.5	1	fontconfig mkfontscale			https://xorg.freedesktop.org/archive/individual/font/font-xfree86-type1-$version.tar.xz	no	ok
+xorg-fonts	xorg-fonts	7x	2	xcursor-themes xorg-font-adobe-100dpi xorg-font-daewoo-misc xorg-font-adobe-75dpi xorg-font-dec-misc xorg-font-adobe-utopia-100dpi xorg-font-dejavu-ttf xorg-font-adobe-utopia-75dpi xorg-font-ibm-type1 xorg-font-adobe-utopia-type1 xorg-font-isas-misc xorg-font-alias xorg-font-jis-misc xorg-font-arabic-misc xorg-font-micro-misc xorg-font-bh-100dpi xorg-font-misc-cyrillic xorg-font-bh-75dpi xorg-font-misc-ethiopic xorg-font-bh-lucidatypewriter-100dpi xorg-font-misc-meltho xorg-font-bh-lucidatypewriter-75dpi xorg-font-misc-misc xorg-font-bh-ttf xorg-font-mutt-misc xorg-font-bh-type1 xorg-font-schumacher-misc xorg-font-bitstream-100dpi xorg-font-screen-cyrillic xorg-font-bitstream-75dpi xorg-font-sony-misc xorg-font-bitstream-type1 xorg-font-sun-misc xorg-font-bitstream-vera xorg-font-util xorg-font-cronyx-cyrillic xorg-font-winitzki-cyrillic xorg-font-cursor-misc xorg-font-xfree86-type1				no	ok
+xorg-libs	xorg-libs	7x	4	xtrans libX11 libXext libFS libICE libSM libXScrnSaver libXt libXmu libXpm libXaw libXfixes libXcomposite libXrender libXcursor libXdamage libfontenc libXfont2 libXft libXi libXinerama libXrandr libXres libXtst libXv libXvMC libXxf86dga libXxf86vm libpciaccess libxkbfile libxshmfence libXpresent libxcb xcb-util xcb-util-renderutil xcb-util-image xcb-util-keysyms xcb-util-wm xcb-util-cursor libxkbcommon				no	ok
+xorg-server	xorg-server	21.1.24	3	libxcvt pixman xorg-fonts xkeyboard-config libepoxy libtirpc libinput systemd xorg-apps			https://xorg.freedesktop.org/archive/individual/xserver/$name-$version.tar.xz https://www.linuxfromscratch.org/patches/blfs/svn/$name-$version-tearfree_backport-2.patch	no	ok
+xorgproto	xorgproto	2025.1	3	meson ninja			https://xorg.freedesktop.org/archive/individual/proto/$name-$version.tar.xz	no	ok
+xpr	xpr	1.2.1	1	libX11 libXmu			https://xorg.freedesktop.org/archive/individual/app/xpr-$version.tar.xz	no	ok
+xprop	xprop	1.2.8	2	libXmu			https://xorg.freedesktop.org/archive/individual/app/xprop-$version.tar.xz	no	ok
+xrandr	xrandr	1.5.4	2	libXrandr			https://xorg.freedesktop.org/archive/individual/app/xrandr-$version.tar.xz	no	ok
+xrdb	xrdb	1.2.3	2	libXmu			https://xorg.freedesktop.org/archive/individual/app/xrdb-$version.tar.xz	no	ok
+xrefresh	xrefresh	1.1.1	2	libXmu			https://xorg.freedesktop.org/archive/individual/app/xrefresh-$version.tar.xz	no	ok
+xscreensaver	xscreensaver	6.15	7	gtk3 xorg-apps glu linux-pam ffmpeg kerberos			https://ftp.ludd.ltu.se/pub/blfs/conglomeration/xscreensaver/${name}-${version}.tar.gz	no	ok
+xset	xset	1.2.6	2	libXmu			https://xorg.freedesktop.org/archive/individual/app/xset-$version.tar.xz	no	ok
+xsetroot	xsetroot	1.1.4	4	libXcursor libXmu xbitmaps			https://xorg.freedesktop.org/archive/individual/app/xsetroot-$version.tar.xz	no	ok
+xterm	xterm	411	1	luit xorg-libs xorg-fonts			https://invisible-mirror.net/archives/xterm/$name-$version.tgz	no	ok
+xtrans	xtrans	1.6.0	3	util-macros			https://xorg.freedesktop.org/archive/individual/lib/xtrans-$version.tar.xz	no	ok
+xvinfo	xvinfo	1.1.6	2	libXv			https://xorg.freedesktop.org/archive/individual/app/xvinfo-$version.tar.xz	no	ok
+xwayland	xwayland	24.1.13	2	libxcvt pixman wayland-protocols xorg-apps xorg-fonts libepoxy libtirpc			https://xorg.freedesktop.org/archive/individual/xserver/$name-$version.tar.xz	no	ok
+xwd	xwd	1.0.10	2	libXv			https://xorg.freedesktop.org/archive/individual/app/xwd-$version.tar.xz	no	ok
+xwininfo	xwininfo	1.1.7	2	libXmu			https://xorg.freedesktop.org/archive/individual/app/xwininfo-$version.tar.xz	no	ok
+xwud	xwud	1.0.8	2	libXmu			https://xorg.freedesktop.org/archive/individual/app/xwud-$version.tar.xz	no	ok

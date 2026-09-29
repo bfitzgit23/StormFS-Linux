@@ -1,12 +1,12 @@
 # Description: X11 Testing resource extension library
-# URL: http://xorg.freedesktop.org
+# URL: https://xorg.freedesktop.org
 # Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: libXi
 
 name=libXtst
 version=1.2.5
 release=3
-source=(https://www.x.org/releases/individual/lib/libXtst-$version.tar.xz)
+source=(https://xorg.freedesktop.org/archive/individual/lib/libXtst-$version.tar.xz)
 
 pkg_build() {
 

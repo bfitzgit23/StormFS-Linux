@@ -1,5 +1,5 @@
 # Description: Popt libraries which are used by some programs to parse command-line options
-# URL:          http://ftp.rpm.org/popt/
+# URL: https://github.com/rpm-software-management/popt
 # Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on:   
 # Optional:  doxygen
@@ -7,7 +7,7 @@
 name=popt
 version=1.19
 release=1
-source=(http://ftp.rpm.org/popt/releases/$name-1.x/$name-$version.tar.gz)
+source=(https://ftp.osuosl.org/pub/rpm/popt/releases/popt-1.x/popt-$version.tar.gz)
 
 pkg_build() {
 	

@@ -1,12 +1,12 @@
 # Description: X driver based on libinput
-# URL: http://xorg.freedesktop.org
+# URL: https://xorg.freedesktop.org
 # Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: libinput xorg-server
 
 name=xf86-input-libinput
 version=1.5.0
 release=1
-source=(https://www.x.org/releases/individual/driver/xf86-input-libinput-$version.tar.xz)
+source=(https://xorg.freedesktop.org/archive/individual/driver/xf86-input-libinput-$version.tar.xz)
 
 pkg_build() {
 	./configure $XORG_CONFIG &&

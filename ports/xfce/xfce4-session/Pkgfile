@@ -15,7 +15,7 @@ pkg_build() {
 
 post_build() {
     # Xfce 4.20 Wayland support is experimental and xfwm4 is still X11-only.
-    # BFSOS RC1 does not ship a supported wlroots compositor by default, so do
+    # BFSOS RC2 does not ship a supported wlroots compositor by default, so do
     # not advertise a login-manager session that cannot be completed safely.
     rm -f "$PKG/usr/share/wayland-sessions/xfce-wayland.desktop" \
           "$PKG/usr/share/wayland-sessions/xfce.desktop" 2>/dev/null || true

@@ -1,5 +1,5 @@
 # Description: Bitmaps for X
-# URL: http://xorg.freedesktop.org
+# URL: https://xorg.freedesktop.org
 # Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on:
 
@@ -7,7 +7,7 @@
 name=xkeyboard-config
 version=2.48
 release=3
-source=(https://www.x.org/releases/individual/data/$name/$name-$version.tar.xz)
+source=(https://xorg.freedesktop.org/archive/individual/data/$name/$name-$version.tar.xz)
 
 pkg_build() {
 	mkdir build &&

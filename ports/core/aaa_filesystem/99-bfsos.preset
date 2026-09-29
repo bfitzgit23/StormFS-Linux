@@ -1,0 +1,7 @@
+# BFSOS systemd preset policy
+#
+# Packages may install systemd units, but installation alone does not imply
+# that the service should start at boot. Explicit earlier preset rules (for
+# example systemd's own 90-systemd.preset) take precedence; everything else
+# defaults to disabled until the installer or administrator enables it.
+disable *

@@ -4,13 +4,13 @@
 # Depends on:
 
 name=xxhash
-version=0.8.3
+version=0.8.4
 release=1
 source=(https://github.com/Cyan4973/xxHash/archive/v$version/$name-$version.tar.gz)
 
 pkg_build() {
   ls
-  cmake -S cmake_unofficial -B build -G Ninja \
+  cmake -S build/cmake -B build -G Ninja \
     -D CMAKE_INSTALL_PREFIX=/usr \
     -D CMAKE_INSTALL_LIBDIR=lib \
     -D CMAKE_BUILD_TYPE=Release \

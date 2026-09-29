@@ -1,5 +1,5 @@
 # Description: X driver based on libinput
-# URL: http://xorg.freedesktop.org
+# URL: https://xorg.freedesktop.org
 # Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: libinput xorg-server
 

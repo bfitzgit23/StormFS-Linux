@@ -4,8 +4,8 @@
 # Depends on: bzip2-32 eudev-32 sqlite3-32 xz-32 zlib-32
 
 name=util-linux-32
-version=2.42.3
-release=3
+version=2.42.4
+release=4
 source=(https://www.kernel.org/pub/linux/utils/util-linux/v${version:0:4}/util-linux-$version.tar.xz)
 
 build_opt="--bindir=/usr/bin --sbindir=/sbin --auto-features disabled -D build-libblkid=enabled -D build-libuuid=enabled -D build-libmount=enabled -D build-libsmartcols=enabled -D build-libfdisk=enabled -D build-python=disabled -D nls=disabled"

@@ -1,12 +1,12 @@
 # Description: Library of code to handle network protocol transport
-# URL: http://xorg.freedesktop.org
+# URL: https://xorg.freedesktop.org
 # Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: util-macros
 
 name=xtrans
 version=1.6.0
 release=3
-source=(https://www.x.org/releases/individual/lib/xtrans-$version.tar.xz)
+source=(https://xorg.freedesktop.org/archive/individual/lib/xtrans-$version.tar.xz)
 
 pkg_build() {
 

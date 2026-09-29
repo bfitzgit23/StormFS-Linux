@@ -4,7 +4,7 @@
 name=nautilus
 version=51.0.1
 release=1
-source=(https://download.gnome.org/sources/${name}/${version%.*}/${name}-${version}.tar.xz)
+source=(https://download.gnome.org/sources/${name}/${version%%.*}/${name}-${version}.tar.xz)
 build_opt="--prefix=/usr       
             --buildtype=release 
             -Dselinux=false     

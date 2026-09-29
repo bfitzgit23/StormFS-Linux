@@ -2,4 +2,4 @@
 name=libpipeline
 version=1.5.8
 release=1
-source=(https://download-mirror.savannah.gnu.org/releases/libpipeline/libpipeline-$version.tar.gz)
+source=(https://nongnu.uib.no/libpipeline/libpipeline-$version.tar.gz)

@@ -5,7 +5,7 @@
 
 name=virt-viewer
 version=11.0
-release=1
+release=2
 source=(https://gitlab.com/virt-viewer/virt-viewer/-/archive/v$version/virt-viewer-v$version.tar.gz)
 
 build_opt=(
@@ -16,3 +16,12 @@ build_opt=(
     -Dvte=enabled
     -Dgit_werror=disabled
 )
+
+
+pre_build() {
+    sed -i \
+        -e "/^[[:space:]]*desktop,$/d" \
+        -e "/^[[:space:]]*mimetypes,$/d" \
+        -e "/^[[:space:]]*metainfo,$/d" \
+        data/meson.build
+}

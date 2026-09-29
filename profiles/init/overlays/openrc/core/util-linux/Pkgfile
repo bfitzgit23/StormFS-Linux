@@ -5,7 +5,7 @@ cription: Essential Linux system utilities
 # Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 
 name=util-linux
-version=2.42.3
+version=2.42.4
 release=1
 
 source=(

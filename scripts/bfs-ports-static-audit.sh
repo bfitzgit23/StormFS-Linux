@@ -130,10 +130,9 @@ check_version() {
     [ "$got" = "$expected" ] || report "$file version is $got; expected $expected"
 }
 
-check_version ports/core/linux/Pkgfile 7.2.6
-check_version ports/core/linux-headers/Pkgfile 7.2.6
-check_version ports/core/linux-api-headers/Pkgfile 7.2.6
-check_version ports/core/linux-lts/Pkgfile 6.18.52
+check_version ports/core/linux/Pkgfile 7.2.8
+check_version ports/core/linux-headers/Pkgfile 6.18.54
+check_version ports/core/linux-lts/Pkgfile 6.18.54
 if grep -q 'debian_patch_base\|sources.debian.org/data/main/l/linux/6.18.9' ports/core/linux-lts/Pkgfile; then
     report "linux-lts still carries the obsolete cross-version Debian 6.18.9 patch bundle"
 fi

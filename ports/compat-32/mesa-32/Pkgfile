@@ -1,12 +1,12 @@
 # Description: Mesa 3D Graphics Library (32-bit)
 # URL: https://www.mesa3d.org/
 # Maintainer: Brian Madonna <bmadonnaster@gmail.com>
-# Depends on: elfutils-32 expat-32 libdrm-32 libglvnd-32 llvm-32 mesa libXdamage-32 libXrandr-32 libxshmfence-32 libXxf86vm-32 wayland-32
-# Optional: cbindgen clang-32 directx-headers-32 glslang libclc libunwind-32 libva-32 lm_sensors-32 lua python3-ply rust-bindgen rustc spirv-llvm-translator-32 vulkan-loader-32 wayland-protocols
+# Depends on: cbindgen elfutils-32 expat-32 glslang libclc libdrm-32 libglvnd-32 llvm-32 mesa libXdamage-32 libXrandr-32 libxshmfence-32 libXxf86vm-32 lua python3-ply rust-bindgen rustc spirv-llvm-translator-32 vulkan-loader-32 wayland-32 wayland-protocols
+# Optional: directx-headers-32 libunwind-32 libva-32 lm_sensors-32
 
 name=mesa-32
-version=26.2.2
-release=8
+version=26.2.3
+release=11
 source=(https://archive.mesa3d.org/mesa-$version.tar.xz
         x86-linux-gnu
         x86-linux-gnu-ccache)
@@ -23,8 +23,17 @@ build_opt="-Db_lto=false \
 -Dvideo-codecs=all \
 -Dglvnd=enabled"
 
-# Custom build required: Mesa-32 conditionally composes Gallium/Vulkan/Rusticl\n
+# Custom build required: Mesa-32 conditionally composes Gallium/Vulkan/Rusticl
 # feature sets from the installed 32-bit toolchain and uses package-local cross files.
+pkg_is_installed() {
+    prt-get isinst "$1" >/dev/null 2>&1
+}
+
+pc32_has() {
+    PKG_CONFIG_LIBDIR="/usr/lib32/pkgconfig:/usr/share/pkgconfig" \
+        i686-pc-linux-gnu-pkg-config --exists "$1" >/dev/null 2>&1
+}
+
 pkg_build() {
     (
         set -e
@@ -53,7 +62,8 @@ pkg_build() {
         # Iris and Crocus require Mesa's CLC compiler support.
         # Do not enable them unless the complete 32-bit compiler stack exists.
         #
-        if prt-get isinst clang-32 libclc spirv-llvm-translator-32 >/dev/null 2>&1; then
+        if pc32_has libclc &&
+           pc32_has LLVMSPIRVLib; then
             _gallium_drivers="iris,crocus,${_gallium_drivers}"
         fi
 
@@ -62,7 +72,9 @@ pkg_build() {
         #
         # Only enable it when the complete 32-bit toolchain is present.
         #
-        if prt-get isinst clang-32 libclc rust-bindgen spirv-llvm-translator-32 >/dev/null 2>&1 &&
+        if pc32_has libclc &&
+           pc32_has LLVMSPIRVLib &&
+           pkg_is_installed rust-bindgen &&
            command -v rustc >/dev/null 2>&1 &&
            _rustlib="$(rustc --print target-libdir --target i686-unknown-linux-gnu 2>/dev/null)" &&
            ls "$_rustlib"/libstd-*.rlib >/dev/null 2>&1; then
@@ -123,7 +135,11 @@ pkg_build() {
             #
             # ANV.
             #
-            if prt-get isinst clang-32 glslang libclc lua python3-ply spirv-llvm-translator-32 >/dev/null 2>&1; then
+            if pkg_is_installed glslang &&
+               pc32_has libclc &&
+               pc32_has LLVMSPIRVLib &&
+               pkg_is_installed lua &&
+               pkg_is_installed python3-ply; then
                 _vulkan_drivers+="intel,"
                 _vulkan_layers+="intel-nullhw,"
             fi
@@ -134,7 +150,10 @@ pkg_build() {
             # Mesa 26.2 requires Rust for vulkan-drivers=nouveau.
             # BFSOS rustc release 3 provides the i686 Rust stdlib.
             #
-            if prt-get isinst cbindgen clang-32 libclc rust-bindgen spirv-llvm-translator-32 >/dev/null 2>&1 &&
+            if pkg_is_installed cbindgen &&
+               pc32_has libclc &&
+               pc32_has LLVMSPIRVLib &&
+               pkg_is_installed rust-bindgen &&
                command -v rustc >/dev/null 2>&1 &&
                _rustlib="$(rustc --print target-libdir --target i686-unknown-linux-gnu 2>/dev/null)" &&
                ls "$_rustlib"/libstd-*.rlib >/dev/null 2>&1; then
@@ -144,7 +163,7 @@ pkg_build() {
             #
             # HasVK, VirtIO and Lavapipe.
             #
-            if prt-get isinst clang-32 spirv-llvm-translator-32 >/dev/null 2>&1; then
+            if pc32_has LLVMSPIRVLib; then
                 _vulkan_drivers+="intel_hasvk,"
             fi
 

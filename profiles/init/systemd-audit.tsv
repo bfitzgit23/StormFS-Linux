@@ -5,7 +5,7 @@ ports/compat-32/eudev-32/Pkgfile	build/runtime
 ports/compat-32/libcanberra-32/Pkgfile	build/runtime,service-path
 ports/compat-32/libnm-32/Pkgfile	build/runtime
 ports/compat-32/pulseaudio-32/Pkgfile	build/runtime
-ports/core/aaa_filesystem/Pkgfile	build/runtime
+ports/core/aaa_filesystem/Pkgfile	build/runtime,service-path
 ports/core/bfs-kernel-maintenance/Pkgfile	build/runtime,service-path
 ports/core/dbus/Pkgfile	build/runtime
 ports/core/lvm2/Pkgfile	build/runtime
@@ -43,6 +43,7 @@ ports/opt/ostree/Pkgfile	build/runtime,service-path
 ports/opt/p11-kit/Pkgfile	build/runtime
 ports/opt/pipewire/Pkgfile	build/runtime
 ports/opt/polkit/Pkgfile	build/runtime
+ports/opt/rpcbind/Pkgfile	build/runtime,service-path
 ports/opt/rtkit/Pkgfile	build/runtime
 ports/opt/samba/Pkgfile	build/runtime,service-path
 ports/opt/seatd/Pkgfile	build/runtime

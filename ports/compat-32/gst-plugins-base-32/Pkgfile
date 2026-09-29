@@ -17,7 +17,7 @@ build_opt=(
   "-Dexamples=disabled"
   "-Dqt5=disabled"
   "-Dpackage-name=GStreamer Plugins Base (BFSOS)"
-  "-Dpackage-origin=https://codeberg.org/bmadonnaster/BFSOS"
+  "-Dpackage-origin=https://github.com/bmadonnaster/BFSOS"
 )
 
 pre_build() {

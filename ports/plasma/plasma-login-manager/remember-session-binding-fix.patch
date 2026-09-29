@@ -1,0 +1,19 @@
+--- a/src/frontend/greeter/qml/SessionButton.qml
++++ b/src/frontend/greeter/qml/SessionButton.qml
+@@ -53,7 +53,7 @@
+ 
+                 text: model.display
+                 onTriggered: {
+-                    root.currentIndex = model.index
++                    PlasmaLogin.GreeterState.sessionIndex = model.index
+                     sessionChanged()
+                 }
+             }
+@@ -70,7 +70,4 @@
+         }
+     }
+ 
+-    onCurrentIndexChanged: {
+-        PlasmaLogin.GreeterState.sessionIndex = root.currentIndex;
+-    }
+ }

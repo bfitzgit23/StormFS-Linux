@@ -1,0 +1,212 @@
+port	name	version	release	deps	optional	mode	build_opt	hooks	http	remote_patch	custom_note
+aaa_filesystem	aaa_filesystem	1	16			custom	no	pkg_build	no	no	no
+acl	acl	2.4.0	2	attr		extension	no	post_build	no	no	-
+attr	attr	2.6.0	2			custom	no	pkg_build	no	no	no
+autoconf	autoconf	2.73	1			extension	no	-	no	no	-
+automake	automake	1.18.1	1			extension	no	-	no	no	-
+bash	bash	5.3	1			extension	yes	bootstrap_build,post_build	no	no	-
+bash-completion	bash-completion	2.18.0	1	bash		custom	no	pkg_build	no	no	no
+bc	bc	7.1.0	1			custom	no	pkg_build	no	no	no
+bfs-kernel-maintenance	bfs-kernel-maintenance	1.0	3	coreutils findutils gawk grep sed systemd		custom	no	pkg_build	no	no	no
+binutils	binutils	2.47	1			custom	no	bootstrap_build,pkg_build	no	no	no
+bison	bison	3.8.2	1			extension	no	-	no	no	-
+btrfs-progs	btrfs-progs	7.1	1	lzo util-linux		extension	yes	post_build	no	no	-
+bzip2	bzip2	1.0.8	1			custom	no	bootstrap_build,pkg_build	no	no	no
+ca-certificates	ca-certificates	20260813	1	coreutils		custom	no	bootstrap_build,pkg_build	no	no	no
+ccache	ccache	4.14	1	fmt xxhash zstd	asciidoctor clang-ccache-bindings gcc-fortran-ccache-bindings hiredis mingw-ccache-bindings	custom	no	pkg_build	no	no	no
+check	check	0.15.2	1			extension	no	-	no	no	-
+cmake	cmake	4.4.3	1	curl expat libarchive ncurses openssl xz zlib libuv		custom	yes	pkg_build	no	no	no
+coreutils	coreutils	9.11	1			extension	yes	bootstrap_build,post_build	no	yes	-
+cracklib	cracklib	2.10.3	3	autoconf automake libtool python3 xz		custom	no	pkg_build	no	no	no
+curl	curl	8.22.0	1	ca-certificates openssl		extension	yes	bootstrap_build	no	no	-
+dash	dash	0.5.13.5	1			extension	yes	post_build	no	no	-
+dbus	dbus	1.16.2	2			custom	no	pkg_build	no	no	no
+dialog	dialog	1.3-20260721	1	ncurses		extension	yes	-	no	no	-
+diffutils	diffutils	3.12	1			extension	no	-	no	no	-
+dosfstools	dosfstools	4.2	1			extension	yes	post_build	no	no	-
+dracut	dracut	112	1	bash cpio kmod util-linux	cryptsetup lvm2 mdadm	custom	yes	pkg_build	no	no	no
+e2fsprogs	e2fsprogs	1.47.4	2			custom	no	pkg_build	no	no	no
+efibootmgr	efibootmgr	18	2	efivar pciutils		custom	no	pkg_build	no	no	no
+efivar	efivar	39	2	popt		custom	no	pkg_build	no	no	no
+elfutils	elfutils	0.195	2	bzip2 xz zlib		custom	no	pkg_build	no	no	no
+exfatprogs	exfatprogs	1.4.3	1			custom	no	pkg_build	no	no	no
+expat	expat	2.8.4	1			extension	no	-	no	no	-
+f2fs-tools	f2fs-tools	1.16.0	1			extension	yes	pre_build	no	no	-
+fakeroot	fakeroot	1.37.1.1	1			custom	no	pkg_build	no	no	no
+file	file	5.48	1			extension	no	-	no	no	-
+findutils	findutils	4.11.0	1			extension	yes	-	no	no	-
+flex	flex	2.6.4	1			extension	no	post_build	no	no	-
+fmt	fmt	12.2.0	3			custom	no	pkg_build	no	no	no
+freetype	freetype	2.14.3	1	libpng which		custom	no	pkg_build	no	no	no
+fuse	fuse	3.18.3	1			extension	no	post_build	no	no	-
+gawk	gawk	5.4.1	1			extension	no	pre_build,post_build	no	no	-
+gcc	gcc	16.2.0	2			custom	no	bootstrap_build,pkg_build	no	no	no
+gdbm	gdbm	1.26	1			extension	yes	-	no	no	-
+genfstab	genfstab	31	2	bash coreutils gawk grep util-linux		custom	no	pkg_build	no	no	yes
+gettext	gettext	1.0	1			custom	no	bootstrap_build,pkg_build	no	no	no
+glibc	glibc	2.44	4			custom	no	bootstrap_build,pkg_build	no	no	no
+gmp	gmp	6.3.0	1			extension	yes	bootstrap_build,pre_build	no	no	-
+gperf	gperf	3.3	1			extension	no	-	no	no	-
+gptfdisk	gptfdisk	1.0.10	1	popt	icu	custom	no	pkg_build	no	yes	no
+grep	grep	3.12	1			extension	no	-	no	no	-
+groff	groff	1.24.1	1			extension	yes	-	no	no	-
+grub	grub	2.14	3	freetype fuse2		extension	yes	pre_build,post_build	no	no	-
+grub-efi	grub-efi	2.14	1			extension	yes	pre_build,post_build	no	no	-
+gzip	gzip	1.14	1			extension	no	-	no	no	-
+httpup	httpup	0.5.1	1			custom	no	pkg_build	no	no	no
+iana-etc	iana-etc	20260817	1			custom	no	pkg_build	no	no	no
+inetutils	inetutils	2.8	1			extension	yes	pre_build,post_build	no	no	-
+inih	inih	62	1			extension	no	-	no	no	-
+intltool	intltool	0.51.0	1			extension	no	-	no	no	-
+iproute2	iproute2	7.2.0	1			extension	no	-	no	no	-
+iptables	iptables	1.8.13	1			extension	yes	-	no	no	-
+kbd	kbd	2.10.0	1			custom	no	pkg_build	no	no	no
+kmod	kmod	34.2	1			extension	yes	post_build	no	no	-
+less	less	704	1			extension	no	-	no	no	-
+libaio	libaio	0.3.113	2			custom	no	pkg_build	no	no	no
+libarchive	libarchive	3.8.9	2			extension	yes	-	no	no	-
+libcap	libcap	2.78	1			custom	no	pkg_build	no	no	no
+libevent	libevent	2.1.13	2			custom	no	pkg_build	no	no	no
+libffi	libffi	3.8.0	1			extension	yes	-	no	no	-
+libmnl	libmnl	1.0.5	1			custom	no	pkg_build	no	no	no
+libnftnl	libnftnl	1.3.2	1	libmnl		custom	no	pkg_build	no	no	no
+libnl	libnl	3.12.0	2			custom	no	pkg_build	no	no	no
+libnsl	libnsl	2.0.1	1	libtirpc		custom	no	pkg_build	no	no	no
+libpipeline	libpipeline	1.5.8	1			extension	no	-	no	no	-
+libpng	libpng	1.6.58	3			custom	no	pkg_build	no	no	no
+libpwquality	libpwquality	1.4.5	2	cracklib linux-pam python3-pip		custom	no	pkg_build	no	no	no
+libtirpc	libtirpc	1.3.7	1			extension	yes	-	no	no	-
+libtool	libtool	2.6.2	1			extension	no	-	no	no	-
+liburcu	liburcu	0.15.6	1			custom	no	pkg_build	no	no	no
+libuv	libuv	1.52.1	2	autoconf automake libtool		custom	no	pkg_build,post_build	no	no	no
+libxcrypt	libxcrypt	4.5.2	1			extension	yes	bootstrap_build,pre_build,post_build	no	no	-
+libyaml	libyaml	0.2.5	1			custom	no	pkg_build	no	no	no
+linux	linux	7.2.7	1	bc bfs-kernel-maintenance bison cpio dracut elfutils flex linux-firmware openssl zstd	pahole	custom	no	pkg_build	no	no	no
+linux-api-headers	linux-api-headers	6.18.53	1			custom	no	pkg_build	no	no	no
+linux-firmware	linux-firmware	20260810	1	rdfind		custom	no	pkg_build	no	no	no
+linux-headers	linux-headers	6.18.53	1			custom	no	bootstrap_build,pkg_build	no	no	no
+linux-lts	linux-lts	6.18.53	1	bc bfs-kernel-maintenance bison cpio dracut elfutils flex linux-firmware openssl zstd	pahole	custom	no	pkg_build	no	no	no
+linux-pam	linux-pam	1.7.2	4	meson ninja		extension	yes	post_build	no	no	-
+lvm2	lvm2	2.03.42	2			custom	yes	pkg_build,post_build	no	no	no
+lz4	lz4	1.10.0	1			custom	no	pkg_build	no	no	no
+lzo	lzo	2.10	1			extension	yes	-	no	no	-
+m4	m4	1.4.21	1			extension	no	-	no	no	-
+make	make	4.4.1	1			extension	no	-	no	no	-
+make-ca	make-ca	1.16.1	6	ca-certificates p11-kit		custom	no	pkg_build	no	no	no
+man-db	man-db	2.13.1	1			extension	yes	-	no	no	-
+man-pages	man-pages	6.19	1			custom	no	pkg_build	no	no	no
+mandoc	mandoc	1.14.6	1	popt		custom	no	pkg_build	no	no	no
+mdadm	mdadm	4.6	2		mta	custom	no	pkg_build	no	no	no
+meson	meson	1.12.0	2	ninja python3-pip python3-setuptools		custom	no	pkg_build	no	no	no
+mpc	mpc	1.4.1	1			extension	no	-	no	no	-
+mpdecimal	mpdecimal	4.0.1	1			custom	no	pkg_build	no	no	no
+mpfr	mpfr	4.2.2	1			extension	yes	-	no	no	-
+mtools	mtools	4.0.49	2			custom	no	pkg_build	no	no	no
+nano	nano	9.2	1	file ncurses bzip2 xz		custom	no	pkg_build	no	no	no
+nasm	nasm	3.02	4		asciidoc xmlto	custom	no	pkg_build	no	no	no
+ncurses	ncurses	6.6	1			extension	yes	bootstrap_build,post_build	no	no	-
+nftables	nftables	1.1.7	1	jansson libedit python3 libmnl libnftnl		custom	no	pkg_build	no	no	no
+ninja	ninja	1.13.2	1		bash-completion zsh	custom	no	pkg_build	no	no	no
+openssh	openssh	10.5p1	2	linux-pam openssl zlib		extension	yes	pre_build,post_build	no	no	-
+openssl	openssl	4.0.2	1			custom	no	bootstrap_build,pkg_build	no	no	no
+patch	patch	2.8	1			extension	no	-	no	no	-
+pciutils	pciutils	3.15.0	1		curl wget lynx	custom	no	pkg_build	no	no	no
+pcre2	pcre2	10.48	1			custom	no	pkg_build	no	no	no
+perl	perl	5.44.0	1			custom	no	bootstrap_build,pkg_build	no	no	no
+perl-class-inspector	perl-class-inspector	1.36	1	perl		extension	no	-	no	no	-
+perl-file-sharedir	perl-file-sharedir	1.118	1	perl perl-class-inspector perl-file-sharedir-install		extension	no	-	no	no	-
+perl-file-sharedir-install	perl-file-sharedir-install	0.14	1	perl		extension	no	-	no	no	-
+perl-xml-parser	perl-xml-parser	2.59	1	perl perl-file-sharedir-install perl-class-inspector perl-file-sharedir		extension	no	-	no	no	-
+pkgconf	pkgconf	3.0.7	1			custom	no	pkg_build	no	no	no
+pkgutils	pkgutils	5.40.12	38	zstd		extension	no	bootstrap_build,post_build	no	no	-
+popt	popt	1.19	1		doxygen	custom	no	pkg_build	no	no	no
+ports	ports	1.6	3			custom	no	pkg_build	no	no	no
+procps-ng	procps-ng	4.0.7	1			custom	no	pkg_build	no	no	no
+prt-get	prt-get	5.19.10	2			extension	no	post_build	no	no	-
+prt-utils	prt-utils	1.3.7	4	elfutils dialog		extension	no	post_build	no	no	-
+psmisc	psmisc	23.7	1			extension	no	-	no	no	-
+python3	python3	3.14.7	1			extension	yes	bootstrap_build,pre_build,post_build	no	yes	-
+python3-attrs	python3-attrs	26.1.0	1	python3-hatch-fancy-pypi-readme python3-hatch-vcs		custom	no	pkg_build	no	no	no
+python3-babel	python3-babel	2.18.0	1			custom	no	pkg_build	no	no	no
+python3-build	python3-build	1.6.0	1	python3-packaging python3-pyproject-hooks		custom	no	pkg_build	no	no	no
+python3-cairo	python3-cairo	1.29.1	2	cairo		custom	no	pkg_build	no	no	no
+python3-calver	python3-calver	2025.10.20	1			custom	no	pkg_build	no	no	no
+python3-certifi	python3-certifi	2026.7.22	2			custom	no	pkg_build	no	no	no
+python3-chardet	python3-chardet	7.6.0	3	python3-build python3-hatchling python3-hatch-vcs python3-installer		custom	no	pkg_build	no	no	no
+python3-charset-normalizer	python3-charset-normalizer	3.5.1	1			custom	no	pkg_build	no	no	no
+python3-cython	python3-cython	3.3.0	1	python3-build python3-installer python3-setuptools python3-wheel		custom	no	pkg_build	no	no	no
+python3-docutils	python3-docutils	0.23	1	python3-setuptools		custom	no	pkg_build	no	no	no
+python3-doxypypy	python3-doxypypy	0.8.8.7	1	python3-chardet doxygen		custom	no	pkg_build	no	no	no
+python3-doxyqml	python3-doxyqml	0.5.3	1	python3-chardet doxygen		custom	no	pkg_build	no	no	no
+python3-editables	python3-editables	0.6	1			custom	no	pkg_build	no	no	no
+python3-flit-core	python3-flit-core	4.0.2	1	python3		custom	no	pkg_build	no	no	no
+python3-gi_docgen	python3-gi_docgen	2026.1	1	python3-markdown python3-packaging python3-pygments python3-typogrify		custom	no	pkg_build	no	no	no
+python3-gobject	python3-gobject	3.58.0	1	gobject-introspection python3-cairo		custom	no	pkg_build	no	no	no
+python3-hatch-fancy-pypi-readme	python3-hatch-fancy-pypi-readme	25.1.0	2	python3-build python3-hatchling		custom	no	pkg_build	no	no	no
+python3-hatch-vcs	python3-hatch-vcs	0.5.0	1	python3-hatchling		custom	no	pkg_build	no	no	no
+python3-hatchling	python3-hatchling	1.32.0	2	python3-editables python3-packaging python3-pathspec python3-pluggy python3-trove-classifiers python3-tomlkit		custom	no	pkg_build	no	no	no
+python3-html5lib	python3-html5lib	1.1	5	python3-six python3-webencodings python3-packaging		custom	no	pkg_build	no	no	no
+python3-idna	python3-idna	3.19	1	python3 python3-build python3-installer python3-flit-core		custom	no	pkg_build	no	no	no
+python3-installer	python3-installer	1.0.1	1	python3-pip		custom	no	pkg_build	no	no	no
+python3-jinja2	python3-jinja2	3.1.6	1	python3-babel python3-markupsafe python3-build python3-wheel python3-installer		custom	no	pkg_build	no	no	no
+python3-lxml	python3-lxml	6.1.3	1	libxslt		custom	no	pkg_build	no	no	no
+python3-mako	python3-mako	1.4.1	1	python3-setuptools python3-markupsafe		custom	no	pkg_build	no	no	no
+python3-markdown	python3-markdown	3.10.3	1	python3-pip		custom	no	pkg_build	no	no	no
+python3-markupsafe	python3-markupsafe	3.0.3	1			custom	no	pkg_build	no	no	no
+python3-meson_python	python3-meson_python	0.20.0	1	python3-pyproject_metadata patchelf		custom	no	pkg_build	no	no	no
+python3-numpy	python3-numpy	2.5.2	1	lapack python3-cython python3-meson_python		custom	no	pkg_build	no	no	no
+python3-packaging	python3-packaging	26.3	1	python3-flit-core		custom	no	pkg_build	no	no	no
+python3-pathspec	python3-pathspec	1.1.1	1			custom	no	pkg_build	no	no	no
+python3-pip	python3-pip	26.2.1	1	python3-setuptools		custom	no	pkg_build	no	no	no
+python3-pluggy	python3-pluggy	1.6.0	1	python3-setuptools-scm		custom	no	pkg_build	no	no	no
+python3-ply	python3-ply	3.11	1			extension	no	-	no	no	-
+python3-poetry-core	python3-poetry-core	2.4.1	1	python3-build python3-installer		custom	no	pkg_build	no	no	no
+python3-psutil	python3-psutil	7.2.2	1			custom	no	pkg_build	no	no	no
+python3-pycparser	python3-pycparser	3.0	1	python3-setuptools		custom	no	pkg_build	no	no	no
+python3-pygdbmi	python3-pygdbmi	0.11.0.0	1			custom	no	pkg_build	no	no	no
+python3-pygments	python3-pygments	2.21.0	1	python3-build python3-installer python3-wheel python3-hatchling python3-packaging		custom	no	pkg_build	no	no	no
+python3-pyparsing	python3-pyparsing	3.3.3	1	python3-build python3-installer python3-setuptools python3-wheel		custom	no	pkg_build	no	no	no
+python3-pyproject-hooks	python3-pyproject-hooks	1.2.0	1	python3-tomli		custom	no	pkg_build	no	no	no
+python3-pyproject_metadata	python3-pyproject_metadata	0.12.1	1	python3-packaging		custom	no	pkg_build	no	no	no
+python3-python-dbusmock	python3-python-dbusmock	0.38.1	2	dbus-python python3-setuptools python3-setuptools-scm		custom	no	pkg_build	no	no	no
+python3-pytz	python3-pytz	2026.3.post1	1	python3-setuptools		custom	no	pkg_build	no	no	no
+python3-pyxdg	python3-pyxdg	0.28	1			extension	no	-	no	no	-
+python3-pyyaml	python3-pyyaml	6.0.3	3	libyaml python3-build python3-cython python3-installer python3-setuptools python3-wheel		custom	no	pkg_build	no	no	no
+python3-requests	python3-requests	2.34.2	2	python3-charset-normalizer python3-idna python3-urllib3 make-ca p11-kit		custom	no	pkg_build	no	no	no
+python3-setuptools	python3-setuptools	84.0.0	1	python3		extension	no	-	no	no	-
+python3-setuptools-scm	python3-setuptools-scm	10.2.3	1	python3-vcs-versioning		custom	no	pkg_build	no	no	no
+python3-six	python3-six	1.17.0	2	python3-setuptools		custom	no	pkg_build	no	no	no
+python3-tomli	python3-tomli	2.4.1	1	python3-pip		custom	no	pkg_build	no	no	no
+python3-tomlkit	python3-tomlkit	0.15.1	1	python3-build python3-installer python3-poetry-core		custom	no	pkg_build	no	no	no
+python3-trove-classifiers	python3-trove-classifiers	2026.6.1.19	1	python3-calver		custom	no	pkg_build	no	no	no
+python3-typing_extensions	python3-typing_extensions	4.16.0	1			custom	no	pkg_build	no	no	no
+python3-typogrify	python3-typogrify	2.1.0	1	smartypants python3-build python3-installer python3-hatchling		custom	no	pkg_build	no	no	no
+python3-urllib3	python3-urllib3	2.7.0	1	python3-hatchling python3-hatch-vcs		custom	no	pkg_build	no	no	no
+python3-vcs-versioning	python3-vcs-versioning	2.3.4	1	python3-packaging python3-typing_extensions		custom	no	pkg_build	no	no	no
+python3-webencodings	python3-webencodings	0.6.1	2	python3-build python3-flit-core python3-installer		custom	no	pkg_build	no	no	no
+python3-wheel	python3-wheel	0.48.0	1	python3-setuptools		custom	no	pkg_build	no	no	no
+rdfind	rdfind	1.8.0	1	nettle		custom	no	pkg_build	no	no	no
+readline	readline	8.3	1			custom	no	bootstrap_build,pkg_build	no	no	no
+rsync	rsync	3.5.0	2	acl openssl zlib zstd		custom	no	pkg_build	no	no	no
+sed	sed	4.10	1			extension	no	-	no	no	-
+shadow	shadow	4.20.2	2	libpwquality libxcrypt linux-pam		custom	no	pre_build,pkg_build,post_build	no	no	no
+signify	signify	0.14	1			custom	no	pkg_build	no	no	no
+sqlite	sqlite	3.53.4	1			custom	no	pkg_build	no	no	no
+squashfs-tools	squashfs-tools	4.7.5	2	zlib lzo xz lz4		custom	no	pkg_build	no	no	no
+stripping	stripping	1.0	1			custom	no	pkg_build	no	no	no
+sudo	sudo	1.9.17p2	1			custom	yes	pkg_build	no	no	no
+systemd	systemd	261.2	2	linux-pam polkit		custom	no	pkg_build	no	no	no
+tar	tar	1.35	1			extension	no	-	no	no	-
+texinfo	texinfo	7.3	1			extension	no	-	no	no	-
+traceroute	traceroute	2.1.6	1			custom	no	pkg_build	no	no	no
+tzdata	tzdata	2026c	2			custom	no	pkg_build	no	no	no
+util-linux	util-linux	2.42.3	1			extension	yes	bootstrap_build	no	no	-
+vim	vim	9.2.1036	1	acl gawk		custom	no	pkg_build	no	no	no
+which	which	2.25	1			custom	no	pkg_build	no	no	no
+wireless_tools	wireless_tools	30.pre9	4			custom	no	pkg_build	no	no	no
+wpa_supplicant	wpa_supplicant	2.12	6	libnl openssl dbus libxml2 wireless-regdb		custom	no	pkg_build	no	no	no
+xfsprogs	xfsprogs	7.1.1	1			custom	no	pkg_build	no	no	no
+xxhash	xxhash	0.8.3	1			custom	no	pkg_build	no	no	no
+xz	xz	5.8.4	1			extension	no	-	no	no	-
+zlib	zlib	1.3.2	1			custom	no	pkg_build	no	yes	no
+zstd	zstd	1.5.7	1			extension	no	-	no	no	-

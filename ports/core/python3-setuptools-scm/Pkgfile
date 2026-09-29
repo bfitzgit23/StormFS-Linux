@@ -2,7 +2,7 @@
 # Depends on: python3-vcs-versioning
 
 name=python3-setuptools-scm
-version=10.2.3
+version=10.3.4
 release=1
 source=(https://pypi.io/packages/source/s/setuptools_scm/setuptools_scm-$version.tar.gz)
 pkg_build() {

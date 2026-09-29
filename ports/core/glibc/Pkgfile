@@ -1,10 +1,11 @@
 # Description: GNU C Library
 # URL: https://www.gnu.org/software/libc/
 # Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: linux-headers
 
 name=glibc
 version=2.44
-release=3
+release=4
 
 source=(
     https://ftp.gnu.org/gnu/glibc/glibc-$version.tar.xz

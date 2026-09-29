@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 ROOT=$(cd "$(dirname "$0")/../.." && pwd)
-INSTALLER="$ROOT/scripts/install-bfs-menu-v50-r72-tracker-maintenance.sh"
+INSTALLER="$ROOT/scripts/install-bfs-menu-current.sh"
 
 # Extract exactly the implementation under test without sourcing the full
 # interactive/root installer.

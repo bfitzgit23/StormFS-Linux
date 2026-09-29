@@ -6,7 +6,7 @@
 name=libxkbfile
 version=1.2.0
 release=3
-source=(https://www.x.org/releases/individual/lib/libxkbfile-$version.tar.xz)
+source=(https://xorg.freedesktop.org/archive/individual/lib/libxkbfile-$version.tar.xz)
 
 pkg_build() {
     meson setup build \

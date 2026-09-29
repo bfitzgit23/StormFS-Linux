@@ -4,7 +4,20 @@
 
 name=liburing
 version=2.15
-release=4
+release=5
 source=(https://github.com/axboe/liburing/archive/refs/tags/liburing-$version.tar.gz)
 
-# Standard prefix/libdir arguments are owned by the BFSOS pkgutils extension.
+# liburing's configure is intentionally minimal and rejects generic
+# Autoconf options such as --sysconfdir and --libexecdir.
+pkg_build() {
+    ./configure \
+        --prefix=/usr \
+        --includedir=/usr/include \
+        --libdir=/usr/lib \
+        --libdevdir=/usr/lib \
+        --mandir=/usr/share/man \
+        --datadir=/usr/share || return 1
+
+    make || return 1
+    make DESTDIR="$PKG" install || return 1
+}

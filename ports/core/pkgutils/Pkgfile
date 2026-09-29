@@ -5,7 +5,7 @@
 
 name=pkgutils
 version=5.40.12
-release=38
+release=39
 source=(https://crux.nu/files/$name-$version.tar.xz
         pkgadd.conf
         pkgmk.conf
@@ -76,6 +76,33 @@ fix_pkgmk_cli_precedence() {
         rm -f "$tmp"
 }
 
+# BFSOS curl-compatible downloader support.
+# pkgmk normally enables curl DOWNLOAD_OPTS only when PKGMK_DOWNLOAD_PROG is
+# literally "curl".  BFSOS prefetch uses bfs-prefetch-curl, which accepts the
+# same curl arguments and must receive pkgmk's -o <file>.partial destination.
+fix_pkgmk_curl_compatible_downloader() {
+        local target="$1"
+
+        sed -i \
+                's/case ${PKGMK_DOWNLOAD_PROG} in/case ${PKGMK_DOWNLOAD_PROG##*\/} in/' \
+                "$target"
+
+        sed -i \
+                's/^[[:space:]]*curl)/        curl|bfs-prefetch-curl)/' \
+                "$target"
+
+        grep -Fq 'case ${PKGMK_DOWNLOAD_PROG##*/} in' "$target" || {
+                echo "pkgutils: failed to enable downloader basename matching" >&2
+                return 1
+        }
+
+        grep -Eq '^[[:space:]]*curl\|bfs-prefetch-curl\)' "$target" || {
+                echo "pkgutils: failed to register bfs-prefetch-curl as curl-compatible" >&2
+                return 1
+        }
+}
+
+
 # r152: retire the r148 download_source wrapper experiment. Live sysup
 # testing proved that rewriting the core function could leave pkgmk calling
 # download_source() without defining it. Keep CRUX pkgmk download logic intact;
@@ -111,6 +138,7 @@ fi\
 unset _bfs_utf8_locale _bfs_locale _bfs_locale_cmd _bfs_pkgmk_path' pkgmk.in
 
         fix_pkgmk_cli_precedence pkgmk.in
+        fix_pkgmk_curl_compatible_downloader pkgmk.in
 
         sed -i -e 's/ --static//' \
                -e 's/ -static//' Makefile
@@ -122,6 +150,7 @@ unset _bfs_utf8_locale _bfs_locale _bfs_locale_cmd _bfs_pkgmk_path' pkgmk.in
 post_build() {
         harden_pkgmk_work_cleanup "$PKG/usr/bin/pkgmk"
         fix_pkgmk_cli_precedence "$PKG/usr/bin/pkgmk"
+        fix_pkgmk_curl_compatible_downloader "$PKG/usr/bin/pkgmk"
 
         # Final/installed pkgmk needs a UTF-8-capable C locale for archives
         # containing non-ASCII pathnames (notably GCC). Support both common

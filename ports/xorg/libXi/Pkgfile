@@ -1,12 +1,12 @@
 # Description: X Input client library
-# URL: http://xorg.freedesktop.org
+# URL: https://xorg.freedesktop.org
 # Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: libXext libXfixes
 
 name=libXi
 version=1.8.3
 release=3
-source=(https://www.x.org/releases/individual/lib/libXi-$version.tar.xz)
+source=(https://xorg.freedesktop.org/archive/individual/lib/libXi-$version.tar.xz)
 
 pkg_build() {
 

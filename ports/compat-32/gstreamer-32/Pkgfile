@@ -12,7 +12,7 @@ build_opt=(
   "-Dnls=disabled"
   "-Dintrospection=disabled"
   "-Dpackage-name=GStreamer (BFSOS)"
-  "-Dpackage-origin=https://codeberg.org/bmadonnaster/BFSOS"
+  "-Dpackage-origin=https://github.com/bmadonnaster/BFSOS"
 )
 
 post_build() {

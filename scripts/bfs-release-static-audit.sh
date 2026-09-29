@@ -22,7 +22,7 @@ grep -q 'BFS_FULL_BOOTSTRAP="${BFS_FULL_BOOTSTRAP:-no}"' bootstrap.sh || say_fai
 grep -q '^integrity_verification_settings_menu()' bootstrap.sh || say_fail "dedicated Bootstrap integrity-verification settings menu missing"
 grep -Fq '3 "Integrity verification"' bootstrap.sh || say_fail "Integrity verification is not exposed as its own Bootstrap Settings category"
 
-# The RC1 runtime installer has one authoritative entry point.  Do not
+# The RC2 runtime installer has one authoritative entry point.  Do not
 # require or select historical versioned snapshots at runtime.
 [ -f scripts/install-bfs-menu-current.sh ] || say_fail "authoritative current installer missing"
 [ -x scripts/install-bfs-menu-current.sh ] || say_fail "authoritative current installer is not executable"

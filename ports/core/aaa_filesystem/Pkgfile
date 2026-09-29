@@ -4,10 +4,10 @@
 
 name=aaa_filesystem
 version=1
-release=16
-# BFS Linux distribution release. Change this value when preparing a new
-# BFS release; the aaa_filesystem package version remains independent.
-bfs_version=0.9.0-rc1
+release=22
+# BFSOS distribution release. Change this value when preparing a new
+# BFSOS release; the aaa_filesystem package version remains independent.
+bfs_version=0.9.0
 
 source=(
     fstab
@@ -21,8 +21,6 @@ source=(
     shells
     inputrc
     profile
-    debuginfod.csh
-    debuginfod.sh
     dircolors.sh
     extrapaths.sh
     gawk.csh
@@ -33,6 +31,7 @@ source=(
     kf6.sh
     bfs-opt.sh
     60-bfsos-opt.conf
+    99-bfsos.preset
     kf6.sudoers
     xorg.sudoers
     xorg.sh
@@ -180,6 +179,7 @@ pkg_build() {
     install -d -m 0755 \
         "$PKG/etc/profile.d" \
         "$PKG/usr/lib/environment.d" \
+        "$PKG/usr/lib/systemd/system-preset" \
         "$PKG/etc/bash_completion.d" \
         "$PKG/etc/skel" \
         "$PKG/etc/sudoers.d"
@@ -193,8 +193,6 @@ pkg_build() {
     #
     for file in \
         locale.sh \
-        debuginfod.csh \
-        debuginfod.sh \
         dircolors.sh \
         extrapaths.sh \
         gawk.csh \
@@ -214,6 +212,11 @@ pkg_build() {
     # Wayland units receive them deterministically.
     install -m 0644 60-bfsos-opt.conf \
         "$PKG/usr/lib/environment.d/60-bfsos-opt.conf"
+
+    # BFSOS service policy: explicit distro/vendor presets win first; any
+    # unit not explicitly covered remains disabled until deliberately enabled.
+    install -m 0644 99-bfsos.preset \
+        "$PKG/usr/lib/systemd/system-preset/99-bfsos.preset"
 
     #
     # Default user skeleton.
@@ -245,18 +248,18 @@ pkg_build() {
     printf '%s\n' "$bfs_version" > "$PKG/etc/lfs-release"
 
     cat > "$PKG/etc/os-release" <<EOF
-NAME="BFS Linux"
-PRETTY_NAME="BFS Linux $bfs_version"
+NAME="BFSOS"
+PRETTY_NAME="BFSOS $bfs_version"
 ID=bfs
 VERSION="$bfs_version"
 VERSION_ID="$bfs_version"
-HOME_URL="https://codeberg.org/bmadonnaster/BFSOS"
-SUPPORT_URL="https://codeberg.org/bmadonnaster/BFSOS/issues"
-BUG_REPORT_URL="https://codeberg.org/bmadonnaster/BFSOS/issues"
+HOME_URL="https://github.com/bmadonnaster/BFSOS"
+SUPPORT_URL="https://github.com/bmadonnaster/BFSOS/issues"
+BUG_REPORT_URL="https://github.com/bmadonnaster/BFSOS/issues"
 EOF
 
     cat > "$PKG/etc/issue" <<EOF
-BFS Linux $bfs_version \\n \\l
+BFSOS $bfs_version \\n \\l
 
 EOF
 

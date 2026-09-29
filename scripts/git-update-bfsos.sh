@@ -2,8 +2,8 @@
 set -Eeuo pipefail
 
 REPO_ROOT="${BFSOS_REPO_ROOT:-$HOME/BFSOS}"
-REMOTE_HTTPS="https://codeberg.org/bmadonnaster/BFSOS.git"
-REMOTE_SSH="git@codeberg.org:bmadonnaster/BFSOS.git"
+REMOTE_HTTPS="https://github.com/bmadonnaster/BFSOS.git"
+REMOTE_SSH="git@github.com:bmadonnaster/BFSOS.git"
 
 die() { printf 'ERROR: %s\n' "$*" >&2; exit 1; }
 warn() { printf 'WARNING: %s\n' "$*" >&2; }
@@ -27,10 +27,8 @@ if [[ -d "$REPO_ROOT/ports" ]]; then
 fi
 
 remote="$(git -C "$REPO_ROOT" remote get-url origin 2>/dev/null || true)"
-case "$remote" in
-    git@codeberg.org:*|ssh://git@codeberg.org/*) desired="$REMOTE_SSH" ;;
-    *) desired="$REMOTE_HTTPS" ;;
-esac
+desired="$REMOTE_SSH"
+
 if [[ -z "$remote" ]]; then
     git -C "$REPO_ROOT" remote add origin "$desired"
 elif [[ "$remote" != "$desired" ]]; then

@@ -39,9 +39,9 @@ need_grep '^version=51\.0$' ports/gnome/gnome-control-center/Pkgfile
 need_grep '^version=51\.0$' ports/gnome/gdm/Pkgfile
 need_grep '^version=51\.0\.1$' ports/gnome/nautilus/Pkgfile
 
-need_grep 'BFSOS-base-\$\{ARCH\}\.tar\.zst' scripts/bfs-build-iso.sh
+need_grep 'BFSOS-base-\$\{VERSION\}-\$\{ARCH\}\.tar\.zst' scripts/bfs-build-iso.sh
 need_grep 'downloads\.sourceforge\.net/project/bfsos/BFSOS/base/latest' scripts/bfs-build-iso.sh
-need_grep 'codeberg\.org/bmadonnaster/BFSOS\.git' scripts/bfs-build-iso.sh
+need_grep 'github\.com/bmadonnaster/BFSOS\.git' scripts/bfs-build-iso.sh
 need_grep 'Xbcj x86' scripts/bfs-build-iso.sh
 need_grep 'required_tools=.*wget' scripts/bfs-build-iso.sh
 

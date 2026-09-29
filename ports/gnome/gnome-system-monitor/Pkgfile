@@ -10,5 +10,4 @@ pre_build() {
     # Catch2 is only required for the upstream unit tests.
     # Normal BFSOS package builds do not build/run the test suite.
     find . -name meson.build -exec sed -i '/catch2/d' {} +
-    sed -i '141,151d' src/meson.build
 }

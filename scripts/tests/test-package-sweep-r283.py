@@ -112,7 +112,7 @@ if '_commit=' not in rapid or re.search(r'/archive/(?:refs/heads/)?master',rapid
 
 # Compat synchronization must be exact after the native sweep.
 out=subprocess.check_output([str(ROOT/'scripts/multilibvercheck.sh')], cwd=ROOT, text=True)
-needle='compat-32 summary: matched=157 special=15 drift=0 unexplained=0'
+needle='compat-32 summary: matched=158 special=15 drift=0 unexplained=0'
 if needle not in out:
     raise AssertionError(f'compat summary changed:\n{out}')
 

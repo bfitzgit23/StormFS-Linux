@@ -2,7 +2,7 @@
 set -Eeuo pipefail
 
 REPO_ROOT="${BFSOS_REPO_ROOT:-$HOME/BFSOS}"
-REMOTE_HTTPS="https://codeberg.org/bmadonnaster/BFSOS.git"
+REMOTE_HTTPS="https://github.com/bmadonnaster/BFSOS.git"
 REMOTE_SSH="git@codeberg.org:bmadonnaster/BFSOS.git"
 
 die() { printf 'ERROR: %s\n' "$*" >&2; exit 1; }

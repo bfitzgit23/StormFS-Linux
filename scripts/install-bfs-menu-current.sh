@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Revision: r74-pre-rc-source-fixes
+# Revision: r77-0.9.0-release-hardening
+# r75: preflight BIOS+GPT GRUB validation - require a BIOS Boot partition before installation starts
 # r73: tracker source fixes - root ownership postflight, serial/LUKS console order, safe GRUB alias handling
 # r71: deterministic equal /home + /var LVM split from one initial free-extent snapshot
 # r70: GLib two-pass footprint lifecycle + early integrity setting propagation + r69 fixes
@@ -129,7 +130,7 @@ ADDITIONAL_USERS=()
 ADDITIONAL_USER_TYPES=()
 ADDITIONAL_USER_GROUPS=()
 STANDARD_USER_GROUPS="users,wheel,audio,video,optical,cdrom,plugdev,storage,input,render"
-ROOT_ACCOUNT_CONFIGURED=yes
+ROOT_PASSWORD_POLICY="${BFS_ROOT_PASSWORD_POLICY:-locked}"  # locked (default) or prompt during install
 SSH_CONFIGURED=yes
 BOOT_MODE="${BFS_BOOT_MODE:-}"
 BOOT_DISK="${BFS_BOOT_DISK:-}"
@@ -143,7 +144,7 @@ EFI_FORMAT="keep"
 SWAP_FORMAT="keep"
 HOME_FORMAT="keep"
 
-KERNEL_PACKAGE="${BFS_KERNEL_PACKAGE:-linux}"
+KERNEL_PACKAGE="${BFS_KERNEL_PACKAGE:-linux-lts}"
 INSTALL_GRUB="${BFS_INSTALL_GRUB:-yes}"
 SAVE_BASE_ARCHIVE="${BFS_SAVE_BASE_ARCHIVE:-yes}"
 BASE_ARCHIVE_DIR="${BFS_BASE_ARCHIVE_DIR:-/var/cache/bfs/archives/base}"
@@ -639,7 +640,7 @@ select_installer_theme() {
            [[ -r /dev/tty && -w /dev/tty ]]; then
                 if choice="$(
                         dialog --stdout --clear \
-                                --backtitle "BFS Linux Installer" \
+                                --backtitle "BFSOS Installer" \
                                 --title "Interface Theme" \
                                 --cancel-label "Back" \
                                 --radiolist \
@@ -858,7 +859,7 @@ save_installer_profile() {
         capture_recovery_storage_topology
         {
                 echo '# BFSOS installer profile v3 - no passwords or LUKS passphrases are stored.'
-                for name in HOSTNAME TIMEZONE LOCALE USERNAME BOOT_MODE BOOT_DISK NETWORK_IFACE NETWORK_MAC NETWORK_TARGET_NAME KERNEL_PACKAGE INSTALL_GRUB GRUB_FALLBACK SAVE_BASE_ARCHIVE BASE_ARCHIVE_DIR ENABLE_OPENSSH INSTALL_GIT INSTALL_SUDO SUDO_MODE INSTALL_WGET INSTALL_WPA_SUPPLICANT INSTALL_WIRELESS_TOOLS INSTALL_GPM INSTALL_LYNX INSTALL_LINKS INSTALL_NETWORKMANAGER CONSOLE_VIDEO_MODE SERIAL_CONSOLE ZRAM_SIZE_SPEC BUILD_JOBS BUILD_OPT BUILD_CCACHE BUILD_CCACHE_SIZE BUILD_TMPFS BUILD_TMPFS_SIZE ARCHIVE ROOT_DEV ROOT_FORMAT BOOT_DEV BOOT_FORMAT EFI_DEV EFI_FORMAT SWAP_DEV SWAP_FORMAT HOME_DEV HOME_FORMAT ZRAM_SWAP; do
+                for name in HOSTNAME TIMEZONE LOCALE USERNAME ROOT_PASSWORD_POLICY BOOT_MODE BOOT_DISK NETWORK_IFACE NETWORK_MAC NETWORK_TARGET_NAME KERNEL_PACKAGE INSTALL_GRUB GRUB_FALLBACK SAVE_BASE_ARCHIVE BASE_ARCHIVE_DIR ENABLE_OPENSSH INSTALL_GIT INSTALL_SUDO SUDO_MODE INSTALL_WGET INSTALL_WPA_SUPPLICANT INSTALL_WIRELESS_TOOLS INSTALL_GPM INSTALL_LYNX INSTALL_LINKS INSTALL_NETWORKMANAGER CONSOLE_VIDEO_MODE SERIAL_CONSOLE ZRAM_SIZE_SPEC BUILD_JOBS BUILD_OPT BUILD_CCACHE BUILD_CCACHE_SIZE BUILD_TMPFS BUILD_TMPFS_SIZE ARCHIVE ROOT_DEV ROOT_FORMAT BOOT_DEV BOOT_FORMAT EFI_DEV EFI_FORMAT SWAP_DEV SWAP_FORMAT HOME_DEV HOME_FORMAT ZRAM_SWAP; do
                         printf '%s=' "$name"; profile_quote "${!name:-}"; printf '\n'
                 done
                 for ((i=0;i<${#ADDITIONAL_USERS[@]};i++)); do
@@ -1227,7 +1228,7 @@ load_installer_profile() {
                 [[ "$raw" != *'$('* && "$raw" != *'`'* ]] || continue
                 eval "value=$raw"
                 case "$key" in
-                        HOSTNAME|TIMEZONE|LOCALE|USERNAME|BOOT_MODE|BOOT_DISK|NETWORK_IFACE|NETWORK_MAC|NETWORK_TARGET_NAME|KERNEL_PACKAGE|INSTALL_GRUB|GRUB_FALLBACK|SAVE_BASE_ARCHIVE|BASE_ARCHIVE_DIR|ENABLE_OPENSSH|INSTALL_GIT|INSTALL_SUDO|SUDO_MODE|INSTALL_WGET|INSTALL_WPA_SUPPLICANT|INSTALL_GPM|INSTALL_LYNX|INSTALL_LINKS|INSTALL_NETWORKMANAGER|CONSOLE_VIDEO_MODE|SERIAL_CONSOLE|ZRAM_SIZE_SPEC|BUILD_JOBS|BUILD_OPT|BUILD_CCACHE|BUILD_CCACHE_SIZE|BUILD_TMPFS|BUILD_TMPFS_SIZE|ARCHIVE|ROOT_DEV|ROOT_FORMAT|BOOT_DEV|BOOT_FORMAT|EFI_DEV|EFI_FORMAT|SWAP_DEV|SWAP_FORMAT|HOME_DEV|HOME_FORMAT|ZRAM_SWAP)
+                        HOSTNAME|TIMEZONE|LOCALE|USERNAME|ROOT_PASSWORD_POLICY|BOOT_MODE|BOOT_DISK|NETWORK_IFACE|NETWORK_MAC|NETWORK_TARGET_NAME|KERNEL_PACKAGE|INSTALL_GRUB|GRUB_FALLBACK|SAVE_BASE_ARCHIVE|BASE_ARCHIVE_DIR|ENABLE_OPENSSH|INSTALL_GIT|INSTALL_SUDO|SUDO_MODE|INSTALL_WGET|INSTALL_WPA_SUPPLICANT|INSTALL_GPM|INSTALL_LYNX|INSTALL_LINKS|INSTALL_NETWORKMANAGER|CONSOLE_VIDEO_MODE|SERIAL_CONSOLE|ZRAM_SIZE_SPEC|BUILD_JOBS|BUILD_OPT|BUILD_CCACHE|BUILD_CCACHE_SIZE|BUILD_TMPFS|BUILD_TMPFS_SIZE|ARCHIVE|ROOT_DEV|ROOT_FORMAT|BOOT_DEV|BOOT_FORMAT|EFI_DEV|EFI_FORMAT|SWAP_DEV|SWAP_FORMAT|HOME_DEV|HOME_FORMAT|ZRAM_SWAP)
                                 printf -v "$key" '%s' "$value"
                                 ;;
                         ADDITIONAL_USER)
@@ -1365,8 +1366,108 @@ persistent_installation_complete() {
         return 0
 }
 
+clear_previous_install_state() {
+        local device="" status=0
+
+        log "Clearing previous installer state for a fresh start"
+        mkdir -p "$TARGET"
+
+        # Read the saved non-secret selections without entering recovery mode.
+        # This gives us the exact target/swap devices to clean up without
+        # reactivating MD/LUKS/LVM merely to tear them down again.
+        PROFILE_RECOVERY_MODE=no
+        if ! load_installer_profile "$INSTALLER_RESUME_FILE" yes; then
+                log "Warning: resume profile could not be fully parsed; continuing with target-mount cleanup"
+        fi
+
+        if findmnt -Rrn "$TARGET" 2>/dev/null | grep -q .; then
+                log "Unmounting all previous installer target mounts below $TARGET"
+                umount -R "$TARGET" 2>/dev/null || umount -Rl "$TARGET" 2>/dev/null || status=1
+        fi
+
+        # Disable only swap recorded by this installer profile. Never use
+        # swapoff -a here because unrelated host/live swap is not installer state.
+        if [[ -n "$SWAP_DEV" ]]; then
+                log "Disabling previous installer swap: $SWAP_DEV"
+                swapoff "$SWAP_DEV" 2>/dev/null || true
+        fi
+        for device in "${STORAGE_DEVICES[@]}"; do
+                [[ -n "$device" ]] || continue
+                if swapon --noheadings --raw --show=NAME 2>/dev/null | grep -Fxq -- "$device"; then
+                        log "Disabling previous installer swap: $device"
+                        swapoff "$device" 2>/dev/null || status=1
+                fi
+        done
+
+        command -v udevadm >/dev/null 2>&1 && udevadm settle || true
+
+        # Never remove through a still-mounted target. If even lazy unmount did
+        # not detach everything, keep the tree intact and require review.
+        if findmnt -Rrn "$TARGET" 2>/dev/null | grep -q .; then
+                log "Previous installer target still has mounted filesystems; leaving $TARGET intact"
+                status=1
+        else
+                rm -rf --one-file-system "$TARGET" 2>/dev/null || status=1
+                mkdir -p "$TARGET" || status=1
+        fi
+
+        rm -rf "$INSTALL_CHECKPOINT_DIR" 2>/dev/null || true
+        clear_resume_state
+
+        # Reset in-memory selections so the next menu pass cannot silently
+        # inherit values from the abandoned installation.
+        STORAGE_DEVICES=(); STORAGE_FORMATS=(); STORAGE_MOUNTPOINTS=(); STORAGE_SUBVOLUMES=()
+        RECOVERY_MD_ARRAYS=(); RECOVERY_MD_MEMBERS=(); RECOVERY_MD_UUIDS=()
+        RECOVERY_LUKS_DEVICES=(); RECOVERY_LUKS_MAPPINGS=(); RECOVERY_VGS=()
+        ROOT_DEV=""; ROOT_FORMAT=keep; BOOT_DEV=""; BOOT_FORMAT=keep
+        EFI_DEV=""; EFI_FORMAT=keep; SWAP_DEV=""; SWAP_FORMAT=keep
+        HOME_DEV=""; HOME_FORMAT=keep
+        DISKS_CONFIGURED=no
+        INSTALLATION_ALREADY_COMPLETE=no
+
+        if ((status != 0)); then
+                dialog_message "Clear previous install state" \
+                        "The cached installer state was cleared, but one or more target mounts/swap devices could not be cleanly released.\n\nNo filesystem signatures were erased and no partition was formatted. Use Storage maintenance to review/deactivate the remaining stack before continuing."
+        else
+                dialog_message "Clear previous install state" \
+                        "Previous installer cache/checkpoints were cleared, all installer target mounts were unmounted, and recorded target swap was disabled.\n\nNo filesystem signatures were erased. The installer will start fresh."
+        fi
+        return 0
+}
+
+choose_previous_install_action() {
+        local choice=""
+        themed_menu choice "Previous installation detected" \
+                "A previous BFSOS installer state exists. Resume it, clear the cached state and unmount/deactivate its target storage, or cancel." \
+                17 92 6 \
+                1 "Resume previous installation" \
+                2 "Clear previous install state and start fresh" \
+                3 "Cancel"
+        case "$choice" in
+                1) printf '%s\n' resume ;;
+                2)
+                        confirm "Clear the previous installer cache/checkpoints and unmount/deactivate installer-managed target storage?\n\nThis does NOT format, wipe, or repartition storage." || { printf '%s\n' cancel; return 0; }
+                        printf '%s\n' clear
+                        ;;
+                *) printf '%s\n' cancel ;;
+        esac
+}
+
 load_resume_state_if_present() {
+        local previous_action=""
         [[ -s "$INSTALLER_RESUME_FILE" ]] || return 0
+
+        previous_action="$(choose_previous_install_action)"
+        case "$previous_action" in
+                clear)
+                        clear_previous_install_state
+                        return 0
+                        ;;
+                cancel)
+                        log "Previous installation recovery cancelled by user"
+                        exit 0
+                        ;;
+        esac
 
         RESUME_STATE_PRESENT=yes
         INSTALLATION_ALREADY_COMPLETE=no
@@ -1423,7 +1524,7 @@ profile_path_dialog() {
         local result_variable="$1" title="$2" value status=0
         value="$INSTALLER_PROFILE_FILE"
         if command -v dialog >/dev/null 2>&1 && [[ -r /dev/tty && -w /dev/tty ]]; then
-                value="$(dialog --stdout --clear --backtitle "BFS Linux Installer" --title "$title" --inputbox "Configuration profile path:" 12 82 "$value" </dev/tty)" || status=$?
+                value="$(dialog --stdout --clear --backtitle "BFSOS Installer" --title "$title" --inputbox "Configuration profile path:" 12 82 "$value" </dev/tty)" || status=$?
                 ((status==0)) || return 1
         else
                 read -r -p "Configuration profile [$value]: " value; value="${value:-$INSTALLER_PROFILE_FILE}"
@@ -1664,7 +1765,7 @@ storage_reset_destroy_metadata() {
                         checklist+=("${candidates[$i]}" "${candidates[$((i+1))]}" off)
                 done
                 choice="$(dialog --stdout --separate-output --clear \
-                        --backtitle "BFS Linux Installer" --title "Destroy storage metadata" \
+                        --backtitle "BFSOS Installer" --title "Destroy storage metadata" \
                         --checklist "Select only devices whose old RAID/LUKS/LVM/filesystem metadata should be erased.\n\nActive MD arrays are kept assembled so array-level signatures can be selected safely. Active MD member partitions are hidden until the array is stopped.\n\nThe live root and BFSOS project filesystem are excluded automatically." \
                         26 112 15 "${checklist[@]}" </dev/tty)" || return 0
         else
@@ -1718,7 +1819,7 @@ storage_reset_menu() {
         tmp="$(mktemp /tmp/bfs-storage-reset-preview.XXXXXX)"
         storage_reset_preview "$tmp"
         if command -v dialog >/dev/null 2>&1 && [[ -r /dev/tty && -w /dev/tty ]]; then
-                dialog --clear --backtitle "BFS Linux Installer" --title "Existing storage state" \
+                dialog --clear --backtitle "BFSOS Installer" --title "Existing storage state" \
                         --textbox "$tmp" 26 116 </dev/tty >/dev/tty 2>/dev/tty || true
         fi
         rm -f "$tmp"
@@ -1926,6 +2027,52 @@ dialog_menu_description() {
         printf '%-45s [%b]' "$label" "$rendered"
 }
 
+show_installer_help() {
+        local topic="${1:-general}" text=""
+        case "$topic" in
+                storage)
+                        text="Storage setup controls the target disk layout. Partitioning, RAID, LUKS, LVM, and formatting can destroy data. Existing partitions may be reused without formatting. Review the Filesystem plan before continuing and confirm that every device marked FORMAT is safe to erase."
+                        ;;
+                raid)
+                        text="Software RAID combines multiple block devices into one /dev/md* device. Assemble existing arrays when you want to reuse them. Creating a new array can overwrite RAID metadata on selected members. Build the array first, then place LUKS, LVM, or a filesystem on the resulting /dev/md* device as needed."
+                        ;;
+                luks)
+                        text="LUKS encrypts a block device and exposes an unlocked mapping under /dev/mapper. Creating a new LUKS container is destructive. Opening an existing container is non-destructive when the correct passphrase is supplied. Assign filesystems to the unlocked mapper device, not to the encrypted backing device."
+                        ;;
+                lvm)
+                        text="LVM layers logical storage on top of physical volumes (PV), volume groups (VG), and logical volumes (LV). Typical order: create PVs, create a VG, then create LVs. Filesystems are assigned to the LV devices. Do not initialize a device as a PV unless its existing contents may be replaced."
+                        ;;
+                filesystem)
+                        text="Each selected device needs a mount/use role and an action. Keep preserves the existing filesystem. Any Format action erases the selected device. A root filesystem mounted at / is required. UEFI installs normally use a FAT32 /boot/efi partition. Review the Filesystem plan before accepting it."
+                        ;;
+                zram)
+                        text="ZRAM creates compressed swap in RAM. A percentage is the virtual ZRAM device size relative to physical RAM, not an immediate allocation of that amount of memory. Compression means values above 100% can be useful, but workloads and RAM size differ. ZRAM is optional and can be disabled."
+                        ;;
+                kernel)
+                        text="linux-lts is the BFSOS default and prioritizes long-term stability. linux is the newer current kernel and may contain newer hardware support. Do not install a kernel only when you deliberately plan to provide and configure a kernel yourself."
+                        ;;
+                sudo)
+                        text="Sudo lets authorized wheel-group users run administrative commands. Password mode requires the user's password and is the normal safer default. Passwordless wheel sudo is convenient but grants immediate root-level command access to wheel users. You may also choose not to install sudo."
+                        ;;
+                serial)
+                        text="The serial troubleshooting console adds early-boot/kernel console output for debugging systems without a usable local display. Leave it disabled unless you use a serial console or need low-level boot diagnostics."
+                        ;;
+                base)
+                        text="The base archive provides the BFSOS root filesystem. Download current fetches the active versioned base from the BFSOS SourceForge base/latest path and verifies its SHA256. Browse local is useful for offline installs or a maintainer-supplied archive."
+                        ;;
+                accounts)
+                        text="A primary Standard user is required. Standard users receive the centralized BFSOS group policy. Root password login stays locked by default; choose the root password policy entry only if you want the installer to prompt for an optional root password. Blank password prompts always keep the account locked and never create an empty-password login."
+                        ;;
+                reset-storage)
+                        text="Reset/deactivate existing storage is a maintenance/recovery action. It may unmount installer-managed filesystems and deactivate storage mappings. It must not format or wipe unrelated storage. Use it when stale installer state prevents a clean new installation."
+                        ;;
+                *)
+                        text="Use Back to return one logical level. Destructive storage actions require confirmation. Review selections before installing."
+                        ;;
+        esac
+        dialog_message "Help" "$text"
+}
+
 themed_menu() {
         local result_variable="$1"
         local title="$2"
@@ -1945,7 +2092,7 @@ themed_menu() {
            [[ -r /dev/tty && -w /dev/tty ]]; then
                 if selected_value="$(
                         dialog --stdout --clear \
-                                --backtitle "BFS Linux Installer" \
+                                --backtitle "BFSOS Installer" \
                                 --title "$title" \
                                 --cancel-label "Back" \
                                 --menu "$prompt" \
@@ -2012,7 +2159,7 @@ pause_screen() {
 dialog_message() {
         local title="$1" message="$2"
         if command -v dialog >/dev/null 2>&1 && [[ -r /dev/tty && -w /dev/tty ]]; then
-                dialog --clear --backtitle "BFS Linux Installer" --title "$title" \
+                dialog --clear --backtitle "BFSOS Installer" --title "$title" \
                         --msgbox "$message" 18 84 </dev/tty >/dev/tty 2>/dev/tty || true
         else
                 printf '\n%s\n%s\n\n%s\n' "$title" "$(printf '%*s' "${#title}" '' | tr ' ' '=')" "$message"
@@ -2024,7 +2171,7 @@ dialog_password() {
         local result_variable="$1" title="$2" prompt="$3" value="" status=0
         if command -v dialog >/dev/null 2>&1 && [[ -r /dev/tty && -w /dev/tty ]]; then
                 set +e
-                value="$(dialog --stdout --clear --insecure --backtitle "BFS Linux Installer" \
+                value="$(dialog --stdout --clear --insecure --backtitle "BFSOS Installer" \
                         --title "$title" --cancel-label "Back" --passwordbox "$prompt" 12 72 </dev/tty)"
                 status=$?
                 set -e
@@ -2068,7 +2215,7 @@ ask() {
            [[ -r /dev/tty && -w /dev/tty ]]; then
                 if answer="$(
                         dialog --stdout --clear \
-                                --backtitle "BFS Linux Installer" \
+                                --backtitle "BFSOS Installer" \
                                 --title "BFS configuration" \
                                 --cancel-label "Back" \
                                 --inputbox "$prompt" \
@@ -2103,7 +2250,7 @@ ask_default() {
            [[ -r /dev/tty && -w /dev/tty ]]; then
                 if answer="$(
                         dialog --stdout --clear \
-                                --backtitle "BFS Linux Installer" \
+                                --backtitle "BFSOS Installer" \
                                 --title "BFS configuration" \
                                 --cancel-label "Back" \
                                 --inputbox "$prompt" \
@@ -2136,7 +2283,7 @@ ask_yes_no() {
                 [[ "$default" == no ]] && default_button=(--defaultno)
 
                 if dialog --clear \
-                        --backtitle "BFS Linux Installer" \
+                        --backtitle "BFSOS Installer" \
                         --title "BFS configuration" \
                         "${default_button[@]}" \
                         --yesno "$prompt" \
@@ -2173,7 +2320,7 @@ confirm() {
         if command -v dialog >/dev/null 2>&1 &&
            [[ -r /dev/tty && -w /dev/tty ]]; then
                 dialog --clear \
-                        --backtitle "BFS Linux Installer" \
+                        --backtitle "BFSOS Installer" \
                         --title "Confirm" \
                         --defaultno \
                         --yesno "$prompt" \
@@ -2190,7 +2337,7 @@ confirm_continue() {
         local prompt="$1" answer=""
         if command -v dialog >/dev/null 2>&1 && [[ -r /dev/tty && -w /dev/tty ]]; then
                 dialog --clear \
-                        --backtitle "BFS Linux Installer" \
+                        --backtitle "BFSOS Installer" \
                         --title "Ready to install" \
                         --yes-label "Continue" \
                         --no-label "Back" \
@@ -2205,7 +2352,7 @@ confirm_continue() {
 
 usage() {
         cat <<'USAGE'
-Usage: install-bfs-menu-v50.sh [options]
+Usage: install-bfs-menu-current.sh [options]
 
 The installer may be started as a regular user. It authenticates with sudo
 once, then re-executes the full installer as root.
@@ -2288,7 +2435,7 @@ setup_logging() {
         exec > "$LOG_FIFO" 2>&1
 
         printf '%s\n' '============================================================'
-        printf '%s\n' 'BFS Linux Installer'
+        printf '%s\n' 'BFSOS Installer'
         printf 'Started:        %s\n' "$(date --iso-8601=seconds 2>/dev/null || date)"
         printf 'Script:         %s\n' "${BASH_SOURCE[0]}"
         printf 'Script path:    %s\n' "$(readlink -f "${BASH_SOURCE[0]}" 2>/dev/null || printf '%s' "${BASH_SOURCE[0]}")"
@@ -2556,8 +2703,11 @@ select_partition() {
 
         while true; do
                 get_available_partitions
-                ((${#AVAILABLE_PATHS[@]} > 0)) ||
-                        die "No unassigned partitions are available."
+                if ((${#AVAILABLE_PATHS[@]} == 0)); then
+                        dialog_message "No usable partitions" \
+                                "No usable partitions are currently available.\n\nCreate a partition table and partitions from the storage/partitioning menu, then rescan and try again."
+                        return 2
+                fi
 
                 menu_items=()
 
@@ -2571,6 +2721,7 @@ select_partition() {
                                 "${AVAILABLE_PATHS[$index]}  ${AVAILABLE_SIZES[$index]}  ${AVAILABLE_FSTYPES[$index]}  ${AVAILABLE_LABELS[$index]}"
                         )
                 done
+                menu_items+=(h "Help: filesystem assignment and formatting")
 
                 set +e
                 themed_menu answer \
@@ -2586,7 +2737,14 @@ select_partition() {
                 fi
 
                 if [[ -z "$answer" ]]; then
+                        # Explicit Back/Cancel is a normal navigation event, not
+                        # an installer failure.  Caller returns to Storage setup.
                         return 2
+                fi
+
+                if [[ "$answer" == h ]]; then
+                        show_installer_help filesystem
+                        continue
                 fi
 
                 if [[ "$optional" == yes && "$answer" == 0 ]]; then
@@ -2706,7 +2864,7 @@ collect_additional_partitions() {
                    [[ -r /dev/tty && -w /dev/tty ]]; then
                         set +e
                         dialog --clear \
-                                --backtitle "BFS Linux Installer" \
+                                --backtitle "BFSOS Installer" \
                                 --title "Additional filesystem" \
                                 --yesno "Add another filesystem partition?" \
                                 9 54 \
@@ -2827,6 +2985,9 @@ select_network_interface() {
 get_whole_disks() {
         lsblk -dpno NAME,SIZE,MODEL,TYPE |
         awk '$NF == "disk" {
+                name=$1
+                if (name ~ /^\/dev\/(fd|sr|loop)[0-9]+$/)
+                        next
                 type=$NF
                 $NF=""
                 sub(/[[:space:]]+$/, "")
@@ -2855,7 +3016,7 @@ refresh_storage_state() {
                                 failed=1
                         }
                 fi
-        done < <(lsblk -dnpo NAME,TYPE 2>/dev/null | awk '$2=="disk" {print $1}')
+        done < <(lsblk -dnpo NAME,TYPE 2>/dev/null | awk '$2=="disk" && $1 !~ /^\/dev\/(fd|sr|loop)[0-9]+$/ {print $1}')
 
         command -v udevadm >/dev/null 2>&1 && udevadm settle || true
         command -v pvscan >/dev/null 2>&1 && pvscan --cache >/dev/null 2>&1 || true
@@ -3094,7 +3255,7 @@ choose_raid_members() {
                         set +e
                         choice="$(
                                 dialog --stdout --clear \
-                                        --backtitle "BFS Linux Installer" \
+                                        --backtitle "BFSOS Installer" \
                                         --title "Select RAID member partitions" \
                                         --cancel-label "Cancel" \
                                         --separate-output \
@@ -3117,7 +3278,7 @@ choose_raid_members() {
 
                         if ((${#selected_members[@]} < minimum)); then
                                 dialog --clear \
-                                        --backtitle "BFS Linux Installer" \
+                                        --backtitle "BFSOS Installer" \
                                         --title "Not enough RAID members" \
                                         --msgbox \
                                         "This RAID level requires at least $minimum member(s).\n\nYou selected ${#selected_members[@]}." \
@@ -3441,7 +3602,7 @@ show_raid_details() {
         if command -v dialog >/dev/null 2>&1 &&
            [[ -r /dev/tty && -w /dev/tty ]]; then
                 dialog --clear \
-                        --backtitle "BFS Linux Installer" \
+                        --backtitle "BFSOS Installer" \
                         --title "Software RAID status" \
                         --textbox "$tmp" 28 110 \
                         </dev/tty >/dev/tty 2>/dev/tty || true
@@ -3465,7 +3626,8 @@ raid_menu() {
                         1 "Assemble existing arrays" \
                         2 "Create a new array" \
                         3 "Show array status and details" \
-                        4 "Return to Storage setup"
+                        4 "Help" \
+                        5 "Return to Storage setup"
                 status=$?
                 set -e
                 [[ -n "$choice" ]] || return 0
@@ -3474,7 +3636,8 @@ raid_menu() {
                         1) assemble_raid_arrays ;;
                         2) create_raid_array ;;
                         3) show_raid_details ;;
-                        4) return 0 ;;
+                        4) show_installer_help raid ;;
+                        5) return 0 ;;
                         *) warn "Choose a valid RAID option."; sleep 1 ;;
                 esac
         done
@@ -3588,7 +3751,7 @@ luks_menu() {
         local choice="" device="" mapping="" pass1="" pass2="" status=0 default_mapping="cryptroot"
         while true; do
                 themed_menu choice "LUKS encryption" "Create, open, or close encrypted block-device mappings." 17 74 7 \
-                        1 "Create a new LUKS container" 2 "Open an existing LUKS container" 3 "Close a mapped LUKS container" 4 "Return to Storage setup"
+                        1 "Create a new LUKS container" 2 "Open an existing LUKS container" 3 "Close a mapped LUKS container" 4 "Help" 5 "Return to Storage setup"
                 [[ -n "$choice" ]] || return 0
                 case "$choice" in
                         1)
@@ -3642,7 +3805,8 @@ luks_menu() {
                                         dialog_message "LUKS error" "Could not close $mapping."
                                 fi
                                 ;;
-                        4) return 0 ;;
+                        4) show_installer_help luks ;;
+                        5) return 0 ;;
                 esac
         done
 }
@@ -3674,7 +3838,7 @@ select_pv_devices() {
 
         if command -v dialog >/dev/null 2>&1 && [[ -r /dev/tty && -w /dev/tty ]]; then
                 if choice="$(dialog --stdout --clear \
-                        --backtitle "BFS Linux Installer" \
+                        --backtitle "BFSOS Installer" \
                         --title "LVM physical volume" \
                         --cancel-label "Back" --separate-output --checklist \
                         "Use Up/Down to move and Space to select one or more devices." \
@@ -3743,7 +3907,7 @@ select_existing_pvs() {
 
         if command -v dialog >/dev/null 2>&1 && [[ -r /dev/tty && -w /dev/tty ]]; then
                 if choice="$(dialog --stdout --clear \
-                        --backtitle "BFS Linux Installer" \
+                        --backtitle "BFSOS Installer" \
                         --title "Select physical volumes" \
                         --cancel-label "Back" --separate-output --checklist \
                         "Select one or more existing, unassigned physical volumes for the new volume group." \
@@ -3950,7 +4114,8 @@ lvm_menu() {
                         3 "Create a logical volume" \
                         4 "Create equal /home + /var LVs" \
                         5 "Show LVM devices" \
-                        6 "Return to Storage setup"
+                        6 "Help" \
+                        7 "Return to Storage setup"
                 status=$?
                 set -e
                 [[ -n "$choice" ]] || return 0
@@ -4089,7 +4254,8 @@ lvm_menu() {
                         5)
                                 show_lvm_status_dialog
                                 ;;
-                        6) return 0 ;;
+                        6) show_installer_help lvm ;;
+                        7) return 0 ;;
                         *) warn "Choose a valid LVM option."; sleep 1 ;;
                 esac
         done
@@ -4114,8 +4280,8 @@ show_current_storage_dialog() {
                 fi
         } >"$tmp"
         if command -v dialog >/dev/null 2>&1 && [[ -r /dev/tty && -w /dev/tty ]]; then
-                dialog --clear --backtitle "BFS Linux Installer" \
-                        --title "Current storage devices" --textbox "$tmp" 24 110 \
+                dialog --clear --backtitle "BFSOS Installer" \
+                        --title "Current storage devices" --exit-label "Return" --textbox "$tmp" 24 110 \
                         </dev/tty >/dev/tty 2>/dev/tty || true
         else
                 cat "$tmp"
@@ -4139,7 +4305,8 @@ storage_menu() {
                         5 "Assign filesystems and mount points (required)" \
                         6 "Configure ZRAM swap (optional) [$ZRAM_SWAP, $ZRAM_SIZE_SPEC]" \
                         7 "Show current storage devices" \
-                        8 "Return to main menu"
+                        8 "Help / storage safety" \
+                        9 "Return to main menu"
                 status=$?
                 set -e
                 [[ -n "$choice" ]] || return 0
@@ -4152,7 +4319,8 @@ storage_menu() {
                         5) configure_disks ;;
                         6) configure_zram_menu ;;
                         7) show_current_storage_dialog ;;
-                        8) return 0 ;;
+                        8) show_installer_help storage ;;
+                        9) return 0 ;;
                         *) warn "Choose a valid storage option."; sleep 1 ;;
                 esac
         done
@@ -4234,7 +4402,7 @@ ask_mountpoint_dialog() {
                    [[ -r /dev/tty && -w /dev/tty ]]; then
                         if value="$(
                                 dialog --stdout --clear \
-                                        --backtitle "BFS Linux Installer" \
+                                        --backtitle "BFSOS Installer" \
                                         --title "Mount point" \
                                         --cancel-label "Back" \
                                         --inputbox \
@@ -4308,7 +4476,7 @@ confirm_storage_selection_plan() {
         storage_selection_summary_text >"$tmp"
 
         if command -v dialog >/dev/null 2>&1 && [[ -r /dev/tty && -w /dev/tty ]]; then
-                dialog --clear --backtitle "BFS Linux Installer" \
+                dialog --clear --backtitle "BFSOS Installer" \
                         --title "Filesystem plan" \
                         --yes-label "Continue" \
                         --no-label "Back" \
@@ -4330,7 +4498,7 @@ show_storage_selection_summary() {
         local text
         text="$(storage_selection_summary_text)"
         if command -v dialog >/dev/null 2>&1 && [[ -r /dev/tty && -w /dev/tty ]]; then
-                dialog --clear --backtitle "BFS Linux Installer" \
+                dialog --clear --backtitle "BFSOS Installer" \
                         --title "Filesystem plan" --msgbox "$text" 22 100 \
                         </dev/tty >/dev/tty 2>/dev/tty || true
         else
@@ -4423,8 +4591,12 @@ configure_disks() {
                         get_available_partitions
 
                         if ((${#AVAILABLE_PATHS[@]} == 0)); then
-                                [[ ${#STORAGE_DEVICES[@]} -gt 0 ]] ||
-                                        die "No unassigned partitions are available."
+                                if [[ ${#STORAGE_DEVICES[@]} -eq 0 ]]; then
+                                        dialog_message "No usable partitions" \
+                                                "No usable partitions were found.\n\nThis is normal for a blank or freshly wiped disk. Return to the storage menu, create a partition table and partitions, then rescan."
+                                        log "No usable partitions found; returning to the previous storage menu"
+                                        return 0
+                                fi
                                 break
                         fi
 
@@ -4516,10 +4688,17 @@ archive_timestamp_key() {
 }
 
 newest_base_archive() {
-        local directory="$1" file="" key="" best="" best_key=""
+        local directory="$1" file="" key="" best="" best_key="" release=""
         [[ -d "$directory" ]] || return 1
+        release="${BFS_INSTALL_RELEASE:-$(bfs_release_version)}"
         while IFS= read -r -d '' file; do
                 supported_base_archive "$file" || continue
+                # Automatic discovery must never silently cross release candidates.
+                # A maintainer can still choose another archive explicitly via Browse.
+                case "$(basename "$file")" in
+                        "BFSOS-base-${release}-"*.tar.*|"bfs-rootfs-${release}-"*.tar.*) ;;
+                        *) continue ;;
+                esac
                 key="$(archive_timestamp_key "$file")"
                 if [[ -z "$best" || "$key" > "$best_key" ||
                       ( "$key" == "$best_key" && "$file" > "$best" ) ]]; then
@@ -4550,7 +4729,7 @@ browse_base_archive() {
                 set +e
                 picked="$(
                         dialog --stdout --clear \
-                                --backtitle "BFS Linux Installer" \
+                                --backtitle "BFSOS Installer" \
                                 --title "Select BFSOS base rootfs archive" \
                                 --cancel-label "Back" \
                                 --fselect "${start_path%/}/" \
@@ -4576,7 +4755,7 @@ confirm_detected_archive() {
                 set +e
                 choice="$(
                         dialog --stdout --clear \
-                                --backtitle "BFS Linux Installer" \
+                                --backtitle "BFSOS Installer" \
                                 --title "Base rootfs archive" \
                                 --cancel-label "Back" \
                                 --menu \
@@ -4647,7 +4826,8 @@ configure_zram_menu() {
                         4 "$label150" \
                         5 "$label200" \
                         6 "$labelcustom" \
-                        7 "Return to Storage setup"
+                        7 "Help" \
+                        8 "Return to Storage setup"
                 [[ -n "$choice" ]] || return 0
                 case "$choice" in
                         1) [[ "$ZRAM_SWAP" == yes ]] && ZRAM_SWAP=no || ZRAM_SWAP=yes ;;
@@ -4673,7 +4853,8 @@ configure_zram_menu() {
                                         dialog_message "ZRAM size" "Invalid size '$custom'. Use values such as 8G or 4096M."
                                 fi
                                 ;;
-                        7) return 0 ;;
+                        7) show_installer_help zram ;;
+                        8) return 0 ;;
                 esac
         done
 }
@@ -4684,9 +4865,21 @@ configure_zram_menu() {
 # the post-download pathname to be lost/contaminated in the live installer.
 BASE_ARCHIVE_RESULT=""
 
+bfs_release_version() {
+        local release=""
+        if [[ -r "$PROJECT_DIR/VERSION" ]]; then
+                release="$(tr -d '[:space:]' < "$PROJECT_DIR/VERSION")"
+        fi
+        if [[ -z "$release" && -r /etc/os-release ]]; then
+                release="$(awk -F= '$1 == "VERSION_ID" {gsub(/^['"']|['"']$/, "", $2); print $2; exit}' /etc/os-release)"
+        fi
+        printf '%s\n' "${release:-0.9.0}"
+}
+
 fetch_sourceforge_base() {
         local archive_dir="$1"
-        local filename="${BFS_INSTALL_BASE_FILENAME:-BFSOS-base-x86_64.tar.zst}"
+        local release="${BFS_INSTALL_RELEASE:-$(bfs_release_version)}"
+        local filename="${BFS_INSTALL_BASE_FILENAME:-BFSOS-base-${release}-x86_64.tar.zst}"
         local url="${BFS_INSTALL_BASE_URL:-https://downloads.sourceforge.net/project/bfsos/BFSOS/base/latest/${filename}}"
         local sha_url="${BFS_INSTALL_BASE_SHA256_URL:-https://downloads.sourceforge.net/project/bfsos/BFSOS/base/latest/${filename}.sha256}"
         local ca_file="${BFS_INSTALL_CA_FILE:-/etc/pki/tls/certs/ca-bundle.crt}"
@@ -4721,8 +4914,8 @@ fetch_sourceforge_base() {
 
         if { : </dev/tty; } 2>/dev/null; then
                 clear_screen >/dev/tty 2>/dev/null || true
-                printf '\nBFSOS base download\n===================\n\nDownloading: %s\nSource: SourceForge\n\n' \
-                        "$filename" >/dev/tty
+                printf '\nBFSOS base download\n===================\n\nRelease: %s\nFile:    %s\nSource:  %s\n\n' \
+                        "$release" "$filename" "$url" >/dev/tty
                 set +e
                 wget "${wget_args[@]}" -O "$archive" "$url" </dev/tty >/dev/tty 2>/dev/tty
                 status=$?
@@ -4784,8 +4977,9 @@ fetch_sourceforge_base() {
                 return 1
         fi
 
+        log "Verified BFSOS base artifact: release=$release file=$filename sha256=$actual source=$url"
         dialog_message "Base archive verified" \
-                "Download complete and SHA256 verification passed.\n\n$archive"
+                "Download complete and SHA256 verification passed.\n\nRelease: $release\nFile: $filename\nSHA256: $actual\nSource: $url"
         BASE_ARCHIVE_RESULT="$archive"
         return 0
 }
@@ -4801,7 +4995,8 @@ choose_missing_base_archive() {
                         16 94 5 \
                         1 "Download current BFSOS base from SourceForge" \
                         2 "Browse for local base archive" \
-                        3 "Back"
+                        3 "Help" \
+                        4 "Back"
 
                 case "$choice" in
                         1)
@@ -4820,7 +5015,8 @@ choose_missing_base_archive() {
                                         return 0
                                 fi
                                 ;;
-                        3|"") return 1 ;;
+                        3) show_installer_help base ;;
+                        4|"") return 1 ;;
                 esac
         done
 }
@@ -4917,13 +5113,12 @@ recalculate_system_settings_status() {
         BASIC_SYSTEM_CONFIGURED=$([[ -n "$HOSTNAME" && -n "$TIMEZONE" && -n "$LOCALE" ]] && echo yes || echo no)
         USERS_CONFIGURED=$([[ "$USERNAME" =~ ^[a-z_][a-z0-9_-]*$ ]] && echo yes || echo no)
         NETWORK_CONFIGURED=$([[ -n "$NETWORK_IFACE" && -n "$NETWORK_TARGET_NAME" ]] && echo yes || echo no)
-        ROOT_ACCOUNT_CONFIGURED=yes
         SSH_CONFIGURED=yes
+        [[ "$ROOT_PASSWORD_POLICY" == locked || "$ROOT_PASSWORD_POLICY" == prompt ]] || ROOT_PASSWORD_POLICY=locked
 
         if [[ "$BASIC_SYSTEM_CONFIGURED" == yes &&
               "$USERS_CONFIGURED" == yes &&
               "$NETWORK_CONFIGURED" == yes &&
-              "$ROOT_ACCOUNT_CONFIGURED" == yes &&
               "$SSH_CONFIGURED" == yes ]]; then
                 SYSTEM_CONFIGURED=yes
         else
@@ -4932,11 +5127,23 @@ recalculate_system_settings_status() {
 }
 
 configure_basic_system() {
-        ask_default HOSTNAME "Hostname" "$HOSTNAME" || return 0
-        ask_default TIMEZONE "Timezone" "$TIMEZONE" || return 0
-        ask_default LOCALE "Locale, for example en_US.UTF-8" "$LOCALE" || return 0
-        BASIC_SYSTEM_CONFIGURED=yes
-        recalculate_system_settings_status
+        local choice=""
+        while true; do
+                recalculate_system_settings_status
+                themed_menu choice "Hostname / timezone / locale" \
+                        "Review the current defaults below. Leave any value as-is or select only the field you want to change." \
+                        20 92 9 \
+                        1 "Hostname: $HOSTNAME" \
+                        2 "Timezone: $TIMEZONE" \
+                        3 "Locale: $LOCALE" \
+                        4 "Done [$(completion_status "$BASIC_SYSTEM_CONFIGURED")]"
+                case "$choice" in
+                        1) ask_default HOSTNAME "Hostname" "$HOSTNAME" || true ;;
+                        2) ask_default TIMEZONE "Timezone" "$TIMEZONE" || true ;;
+                        3) ask_default LOCALE "Locale, for example en_US.UTF-8" "$LOCALE" || true ;;
+                        4|"") recalculate_system_settings_status; return 0 ;;
+                esac
+        done
 }
 
 valid_username() {
@@ -5219,17 +5426,21 @@ configure_users() {
                         "Standard users receive the centralized BFSOS group policy automatically. System/service accounts receive only their private primary group unless supplementary groups are explicitly requested. Passwords are optional; blank means locked, never passwordless login." \
                         23 100 12 \
                         1 "Primary Standard user: ${USERNAME:-not configured} [$(completion_status "$USERS_CONFIGURED")]" \
-                        2 "Add Standard or System/service account" \
-                        3 "Modify additional account" \
-                        4 "Remove additional account" \
-                        5 "Review configured accounts" \
-                        6 "Back to System Settings"
+                        2 "Root password login: $ROOT_PASSWORD_POLICY" \
+                        3 "Add Standard or System/service account" \
+                        4 "Modify additional account" \
+                        5 "Remove additional account" \
+                        6 "Review configured accounts" \
+                        7 "Help / account policy" \
+                        8 "Back to System Settings"
                 case "$choice" in
                         1) configure_primary_standard_user ;;
-                        2) add_configured_account ;;
-                        3) modify_configured_account ;;
-                        4) remove_configured_account ;;
-                        5) show_accounts_review ;;
+                        2) configure_root_password_policy ;;
+                        3) add_configured_account ;;
+                        4) modify_configured_account ;;
+                        5) remove_configured_account ;;
+                        6) show_accounts_review ;;
+                        7) show_installer_help accounts ;;
                         *) return 0 ;;
                 esac
         done
@@ -5251,19 +5462,30 @@ configure_console_settings() {
                         18 88 8 \
                         1 "Console font: $(console_font_display_name)" \
                         2 "Serial troubleshooting console: $SERIAL_CONSOLE" \
-                        3 "Back to System Settings"
+                        3 "Help: serial troubleshooting console" \
+                        4 "Back to System Settings"
                 case "$choice" in
                         1) select_console_font_size ;;
                         2) toggle_setting SERIAL_CONSOLE ;;
+                        3) show_installer_help serial ;;
                         *) return 0 ;;
                 esac
         done
 }
 
-show_root_account_policy() {
-        dialog_message "Root account" \
-                "Root password configuration is handled during installation.\n\nThe password is OPTIONAL. Leave it blank to keep root password login locked. A blank response never creates an empty-password login.\n\nNo password is stored in the installer profile or logs."
-        ROOT_ACCOUNT_CONFIGURED=yes
+configure_root_password_policy() {
+        local choice=""
+        themed_menu choice "Root password policy" \
+                "Root password login is locked by default. Choose Prompt only if you want the installer to offer an optional root password during installation. Passwords are never stored in profiles or logs." \
+                17 96 7 \
+                1 "Keep root password login locked (recommended/default)" \
+                2 "Prompt for an optional root password during installation" \
+                3 "Back"
+        case "$choice" in
+                1) ROOT_PASSWORD_POLICY=locked ;;
+                2) ROOT_PASSWORD_POLICY=prompt ;;
+                *) return 0 ;;
+        esac
         recalculate_system_settings_status
 }
 
@@ -5277,17 +5499,15 @@ system_settings_menu() {
                         1 "Hostname / timezone / locale [$(completion_status "$BASIC_SYSTEM_CONFIGURED")]" \
                         2 "Console / font [$(console_font_display_name); serial=$SERIAL_CONSOLE]" \
                         3 "Networking [$(completion_status "$NETWORK_CONFIGURED")]" \
-                        4 "Root account [$(completion_status "$ROOT_ACCOUNT_CONFIGURED")]" \
-                        5 "Users and Groups [$(completion_status "$USERS_CONFIGURED")]" \
-                        6 "SSH: $ENABLE_OPENSSH [$(completion_status "$SSH_CONFIGURED")]" \
-                        7 "Back to main menu"
+                        4 "Users and Groups [$(completion_status "$USERS_CONFIGURED")]" \
+                        5 "SSH: $ENABLE_OPENSSH [$(completion_status "$SSH_CONFIGURED")]" \
+                        6 "Back to main menu"
                 case "$choice" in
                         1) configure_basic_system ;;
                         2) configure_console_settings ;;
                         3) configure_networking ;;
-                        4) show_root_account_policy ;;
-                        5) configure_users ;;
-                        6) configure_ssh_setting ;;
+                        4) configure_users ;;
+                        5) configure_ssh_setting ;;
                         *) return 0 ;;
                 esac
         done
@@ -5315,24 +5535,25 @@ configure_kernel() {
         linux_version="$(kernel_pkgfile_version linux)"
         lts_version="$(kernel_pkgfile_version linux-lts)"
 
-        themed_menu choice \
-                "Kernel selection" \
-                "Choose the kernel package for the installed system." \
-                16 72 7 \
-                1 "linux $linux_version" \
-                2 "linux-lts $lts_version — Linux 6.18 LTS compatibility kernel" \
-                3 "Do not install a kernel"
+        while true; do
+                themed_menu choice \
+                        "Kernel selection" \
+                        "Choose the kernel package for the installed system." \
+                        18 82 9 \
+                        1 "linux-lts $lts_version — BFSOS default LTS kernel" \
+                        2 "linux $linux_version — optional current kernel" \
+                        3 "Do not install a kernel" \
+                        4 "Help"
 
-        [[ -n "$choice" ]] || return 0
-
-        case "$choice" in
-                1) KERNEL_PACKAGE=linux ;;
-                2) KERNEL_PACKAGE=linux-lts ;;
-                3) KERNEL_PACKAGE=none ;;
-                *) return 0 ;;
-        esac
-
-        KERNEL_CONFIGURED=yes
+                [[ -n "$choice" ]] || return 0
+                case "$choice" in
+                        1) KERNEL_PACKAGE=linux-lts; KERNEL_CONFIGURED=yes; return 0 ;;
+                        2) KERNEL_PACKAGE=linux; KERNEL_CONFIGURED=yes; return 0 ;;
+                        3) KERNEL_PACKAGE=none; KERNEL_CONFIGURED=yes; return 0 ;;
+                        4) show_installer_help kernel ;;
+                        *) return 0 ;;
+                esac
+        done
 }
 
 configure_networking() {
@@ -5367,7 +5588,7 @@ configure_packages() {
                    [[ -r /dev/tty && -w /dev/tty ]]; then
                         if choice="$(
                                 dialog --stdout --clear \
-                                        --backtitle "BFS Linux Installer" \
+                                        --backtitle "BFSOS Installer" \
                                         --title "Optional software" \
                                         --cancel-label "Back" \
                                         --checklist \
@@ -5445,34 +5666,25 @@ EOF_PACKAGES
 
 configure_sudo() {
         local choice=""
+        while true; do
+                themed_menu choice \
+                        "Sudo configuration" \
+                        "Choose how sudo should be configured for wheel-group users." \
+                        19 86 9 \
+                        1 "Do not install sudo" \
+                        2 "Install sudo; require the user's password (recommended)" \
+                        3 "Install sudo; allow wheel users without a password" \
+                        4 "Help"
 
-        themed_menu choice \
-                "Sudo configuration" \
-                "Choose how sudo should be configured for wheel-group users." \
-                17 78 8 \
-                1 "Do not install sudo" \
-                2 "Install sudo; require the user's password" \
-                3 "Install sudo; allow wheel users without a password"
-
-        [[ -n "$choice" ]] || return 0
-
-        case "$choice" in
-                1)
-                        INSTALL_SUDO=no
-                        SUDO_MODE=disabled
-                        ;;
-                2)
-                        INSTALL_SUDO=yes
-                        SUDO_MODE=password
-                        ;;
-                3)
-                        INSTALL_SUDO=yes
-                        SUDO_MODE=nopasswd
-                        ;;
-                *) return 0 ;;
-        esac
-
-        SUDO_CONFIGURED=yes
+                [[ -n "$choice" ]] || return 0
+                case "$choice" in
+                        1) INSTALL_SUDO=no; SUDO_MODE=disabled; SUDO_CONFIGURED=yes; return 0 ;;
+                        2) INSTALL_SUDO=yes; SUDO_MODE=password; SUDO_CONFIGURED=yes; return 0 ;;
+                        3) INSTALL_SUDO=yes; SUDO_MODE=nopasswd; SUDO_CONFIGURED=yes; return 0 ;;
+                        4) show_installer_help sudo ;;
+                        *) return 0 ;;
+                esac
+        done
 }
 
 configure_bootloader() {
@@ -5638,7 +5850,7 @@ show_main_menu() {
 
         cat <<EOF_MENU
 ============================================================
-                  BFS Linux Installer
+                  BFSOS Installer
 ============================================================
 
 $(if [[ "$INSTALLATION_ALREADY_COMPLETE" == yes ]]; then printf "%s\n" "Recovered installation is already complete; use Chroot for inspection or Quit."; else printf "%s\n" "Configure each section, then select Install BFS." "The installer authenticates once and all installation actions run as root."; fi)
@@ -5751,8 +5963,8 @@ installer_menu() {
 
                         if SELECTED_MENU_CHOICE="$(
                                 dialog --stdout --clear --colors \
-                                        --backtitle "BFS Linux Installer" \
-                                        --title "BFS Linux Installer" \
+                                        --backtitle "BFSOS Installer" \
+                                        --title "BFSOS Installer" \
                                         --ok-label "Select" \
                                         --cancel-label "Quit" \
                                         --extra-button \
@@ -5802,12 +6014,12 @@ installer_menu() {
                                         )" \
                                         9 "$(
                                                 dialog_menu_description \
-                                                        "$(install_menu_label) (root)" \
+                                                        "$(install_menu_label)" \
                                                         "$(install_menu_status)"
                                         )" \
                                         10 "$(
                                                 dialog_menu_description \
-                                                        'Chroot into target (root)' \
+                                                        'Enter installed system (chroot)' \
                                                         "$(available_status target_chroot_available)"
                                         )" \
                                         11 "$(
@@ -5868,14 +6080,12 @@ installer_menu() {
                         8)
                                 show_summary
                                 if installer_ready; then
-                                        while true; do
-                                                if confirm_continue "Begin the BFS installation?"; then
-                                                        INSTALL_CONFIRMED=yes
-                                                        return 0
-                                                fi
-                                                # Back from Ready to install returns directly to Review.
-                                                show_summary
-                                        done
+                                        if confirm_continue "Begin the BFS installation?"; then
+                                                INSTALL_CONFIRMED=yes
+                                                return 0
+                                        fi
+                                        # Back from Ready to install returns to the main installer menu.
+                                        continue
                                 fi
                                 ;;
                         9)
@@ -6084,6 +6294,27 @@ generate_crypttab() {
         chmod 0600 "$crypttab"
 }
 
+bios_gpt_has_boot_partition() {
+        local disk="${1:-}"
+        local pttype=""
+        local bios_guid="21686148-6449-6e6f-744e-656564454649"
+
+        [[ -b "$disk" ]] || return 1
+
+        pttype="$(
+                lsblk -dn -o PTTYPE "$disk" 2>/dev/null |
+                        tr '[:upper:]' '[:lower:]' |
+                        head -n1
+        )"
+
+        # DOS/MBR BIOS installs do not require a dedicated BIOS Boot partition.
+        [[ "$pttype" == gpt ]] || return 0
+
+        lsblk -lnpo PARTTYPE "$disk" 2>/dev/null |
+                tr '[:upper:]' '[:lower:]' |
+                grep -Fxq "$bios_guid"
+}
+
 validate_settings() {
         detect_storage_requirements
         validate_zram_settings
@@ -6122,6 +6353,20 @@ validate_settings() {
         if [[ "$INSTALL_GRUB" == yes ]]; then
                 [[ "$BOOT_MODE" != uefi || -n "$EFI_DEV" ]] || die "UEFI GRUB requires an EFI partition."
                 [[ "$BOOT_MODE" != bios || -b "$BOOT_DISK" ]] || die "BIOS GRUB requires a whole-disk target."
+
+                if [[ "$BOOT_MODE" == bios ]]; then
+                        local boot_pttype=""
+                        boot_pttype="$(
+                                lsblk -dn -o PTTYPE "$BOOT_DISK" 2>/dev/null |
+                                        tr '[:upper:]' '[:lower:]' |
+                                        head -n1
+                        )"
+
+                        if [[ "$boot_pttype" == gpt ]] &&
+                           ! bios_gpt_has_boot_partition "$BOOT_DISK"; then
+                                die "BIOS GRUB on GPT requires a BIOS Boot partition on $BOOT_DISK. Return to disk setup, create a small (~2 MiB) unformatted partition in cfdisk, and set its type to 'BIOS boot'."
+                        fi
+                fi
         fi
 }
 
@@ -6156,6 +6401,26 @@ mdraid_review_text() {
         done < <(list_active_md_arrays | sed 's#^/dev/##')
 
         [[ "$found" == yes ]] || printf 'none\n'
+}
+
+review_device_size() {
+        local device="${1:-}" size=""
+        [[ -n "$device" ]] || { printf '%s' "unknown"; return 0; }
+        size="$(lsblk -dn -o SIZE "$device" 2>/dev/null | head -n1 | xargs 2>/dev/null || true)"
+        [[ -n "$size" ]] || size="unknown"
+        printf '%s' "$size"
+}
+
+review_device_type() {
+        local device="${1:-}" requested="${2:-keep}" fstype=""
+        if [[ -n "$requested" && "$requested" != keep ]]; then
+                printf '%s' "$requested"
+                return 0
+        fi
+        [[ -n "$device" ]] || { printf '%s' "unknown"; return 0; }
+        fstype="$(lsblk -dn -o FSTYPE "$device" 2>/dev/null | head -n1 | xargs 2>/dev/null || true)"
+        [[ -n "$fstype" ]] || fstype="keep"
+        printf '%s' "$fstype"
 }
 
 show_additional_partitions() {
@@ -6213,40 +6478,42 @@ show_summary() {
 
         {
                 cat <<'SUMMARY_HEADER'
-BFS Installation Review
+BFSOS Installation Review
 =======================
 
 Filesystem Layout
 -----------------
-Mount Point      Device                          Action
------------      ------------------------------  ------------
+Mount/Use        Device                          Type     Size       Action
+---------        ------------------------------  -------  ---------  ------------
 SUMMARY_HEADER
 
-                printf '%-16s %-30s %s\n' \
-                        "/" "$ROOT_DEV" "$ROOT_FORMAT"
+                printf '%-16s %-30s %-7s %-9s %s\n' \
+                        "/" "$ROOT_DEV" "$(review_device_type "$ROOT_DEV" "$ROOT_FORMAT")" "$(review_device_size "$ROOT_DEV")" "$ROOT_FORMAT"
 
                 [[ -z "$BOOT_DEV" ]] || \
-                        printf '%-16s %-30s %s\n' \
-                                "/boot" "$BOOT_DEV" "$BOOT_FORMAT"
+                        printf '%-16s %-30s %-7s %-9s %s\n' \
+                                "/boot" "$BOOT_DEV" "$(review_device_type "$BOOT_DEV" "$BOOT_FORMAT")" "$(review_device_size "$BOOT_DEV")" "$BOOT_FORMAT"
 
                 [[ -z "$EFI_DEV" ]] || \
-                        printf '%-16s %-30s %s\n' \
-                                "/boot/efi" "$EFI_DEV" "$EFI_FORMAT"
+                        printf '%-16s %-30s %-7s %-9s %s\n' \
+                                "/boot/efi" "$EFI_DEV" "$(review_device_type "$EFI_DEV" "$EFI_FORMAT")" "$(review_device_size "$EFI_DEV")" "$EFI_FORMAT"
 
                 [[ -z "$HOME_DEV" ]] || \
-                        printf '%-16s %-30s %s\n' \
-                                "/home" "$HOME_DEV" "$HOME_FORMAT"
+                        printf '%-16s %-30s %-7s %-9s %s\n' \
+                                "/home" "$HOME_DEV" "$(review_device_type "$HOME_DEV" "$HOME_FORMAT")" "$(review_device_size "$HOME_DEV")" "$HOME_FORMAT"
 
                 for ((index=0; index<${#EXTRA_DEVICES[@]}; index++)); do
-                        printf '%-16s %-30s %s\n' \
+                        printf '%-16s %-30s %-7s %-9s %s\n' \
                                 "${EXTRA_MOUNTPOINTS[$index]}" \
                                 "${EXTRA_DEVICES[$index]}" \
+                                "$(review_device_type "${EXTRA_DEVICES[$index]}" "${EXTRA_FORMATS[$index]}")" \
+                                "$(review_device_size "${EXTRA_DEVICES[$index]}")" \
                                 "${EXTRA_FORMATS[$index]}"
                 done
 
                 [[ -z "$SWAP_DEV" ]] || \
-                        printf '%-16s %-30s %s\n' \
-                                "swap" "$SWAP_DEV" "$SWAP_FORMAT"
+                        printf '%-16s %-30s %-7s %-9s %s\n' \
+                                "swap" "$SWAP_DEV" "swap" "$(review_device_size "$SWAP_DEV")" "$SWAP_FORMAT"
 
                 cat <<SUMMARY
 
@@ -6264,7 +6531,7 @@ Users
 Primary user:         $USERNAME (Standard user)
 Primary groups:       Standard BFSOS groups ($STANDARD_USER_GROUPS)
 Password login:       optional; blank keeps account locked
-Root password:        optional; blank keeps root password login locked
+Root password login:  $ROOT_PASSWORD_POLICY
 SUMMARY
 
                 show_additional_users_review
@@ -6349,7 +6616,7 @@ SUMMARY
 
                 if [[ "$INSTALL_GRUB" == yes &&
                       "$KERNEL_PACKAGE" == none ]]; then
-                        echo "- GRUB will be configured, but BFS will not install a kernel."
+                        echo "- GRUB will be configured, but BFSOS will not install a kernel."
                         warning_count=$((warning_count + 1))
                 fi
 
@@ -6368,7 +6635,7 @@ SUMMARY
         if command -v dialog >/dev/null 2>&1 &&
            [[ -r /dev/tty && -w /dev/tty ]]; then
                 dialog --clear \
-                        --backtitle "BFS Linux Installer" \
+                        --backtitle "BFSOS Installer" \
                         --title "Review selections" \
                         --exit-label "Continue" \
                         --textbox "$summary_file" \
@@ -6402,6 +6669,18 @@ format_device() {
         [[ -n "$device" && "$format" != keep ]] || return 0
         unmount_device_everywhere "$device"
         swapoff "$device" 2>/dev/null || true
+
+        # A destructive format must remove stale filesystem signatures first.
+        # Some mkfs tools do not erase metadata from a previous filesystem at
+        # every offset. For example, mkfs.btrfs -f can leave an old ext4
+        # signature behind, causing blkid to report the device as ambiguous
+        # and preventing UUID detection.
+        log "Clearing stale filesystem signatures from $device"
+        wipefs -a "$device" ||
+                die "Could not clear stale filesystem signatures from $device."
+        command -v udevadm >/dev/null 2>&1 && udevadm settle || true
+        sync
+
         log "Formatting $device as $format for $role"
         case "$format" in
                 ext2) mkfs.ext2 -F "$device" ;;
@@ -6491,7 +6770,27 @@ prepare_btrfs_subvolumes() {
                 snapshot_subvol="${BTRFS_SNAPSHOT_SUBVOLUMES[$index]}"
                 temp_mount="$(mktemp -d /tmp/bfs-btrfs.XXXXXX)"
 
-                mount "$device" "$temp_mount"
+                local mount_attempt=0 mount_status=1
+                for mount_attempt in 1 2 3 4 5; do
+                        if mount -t btrfs "$device" "$temp_mount"; then
+                                mount_status=0
+                                break
+                        fi
+                        warn "Btrfs first-mount attempt $mount_attempt/5 failed for $device; settling storage state before retry."
+                        command -v udevadm >/dev/null 2>&1 && udevadm settle || true
+                        sync
+                        sleep 1
+                done
+                if ((mount_status != 0)); then
+                        {
+                                echo "Btrfs mount diagnostics for $device:"
+                                command -v btrfs >/dev/null 2>&1 && btrfs filesystem show "$device" 2>&1 || true
+                                command -v btrfs >/dev/null 2>&1 && btrfs inspect-internal dump-super -f "$device" 2>&1 | head -80 || true
+                                dmesg 2>/dev/null | grep -i -E "btrfs|${device##*/}" | tail -80 || true
+                        } >&2
+                        rmdir "$temp_mount" 2>/dev/null || true
+                        die "Could not mount newly formatted Btrfs filesystem $device after 5 attempts."
+                fi
                 [[ -e "$temp_mount/$data_subvol" ]] ||
                         btrfs subvolume create "$temp_mount/$data_subvol"
                 [[ -e "$temp_mount/$snapshot_subvol" ]] ||
@@ -6848,8 +7147,8 @@ fix_installed_bfsos_branding() {
         for file in "$TARGET/etc/os-release" "$TARGET/usr/lib/os-release"; do
                 [[ -f "$file" ]] || continue
                 sed -i \
-                        -e 's|https://codeberg.org/bmadonnaster/BFS-Linux/issues|https://codeberg.org/bmadonnaster/BFSOS/issues|g' \
-                        -e 's|https://codeberg.org/bmadonnaster/BFS-Linux|https://codeberg.org/bmadonnaster/BFSOS|g' \
+                        -e 's|https://codeberg.org/bmadonnaster/BFS-Linux/issues|https://github.com/bmadonnaster/BFSOS/issues|g' \
+                        -e 's|https://codeberg.org/bmadonnaster/BFS-Linux|https://github.com/bmadonnaster/BFSOS|g' \
                         "$file"
         done
 }
@@ -7105,6 +7404,7 @@ HOSTNAME_VALUE="__HOSTNAME__"
 TIMEZONE_VALUE="__TIMEZONE__"
 LOCALE_VALUE="__LOCALE__"
 USERNAME_VALUE="__USERNAME__"
+ROOT_PASSWORD_POLICY_VALUE="__ROOT_PASSWORD_POLICY__"
 ADDITIONAL_USERS_VALUE="__ADDITIONAL_USERS__"
 ADDITIONAL_USER_ENTRIES_VALUE="__ADDITIONAL_USER_ENTRIES__"
 STANDARD_USER_GROUPS_VALUE="__STANDARD_USER_GROUPS__"
@@ -7478,7 +7778,7 @@ prompt_optional_password() {
                 password_two=""
                 if command -v dialog >/dev/null 2>&1 && [[ -r /dev/tty && -w /dev/tty ]]; then
                         set +e
-                        password_one="$(dialog --stdout --clear --backtitle "BFS Linux Installer" \
+                        password_one="$(dialog --stdout --clear --backtitle "BFSOS Installer" \
                                 --title "Password for $label" --cancel-label "Back" \
                                 --passwordbox "Password is optional. Leave this blank and select OK to keep password login LOCKED. A blank value never creates an empty-password login." \
                                 14 78 </dev/tty)"
@@ -7502,7 +7802,7 @@ prompt_optional_password() {
                 # warn about a short password yet still return success.
                 if (( ${#password_one} < 8 )); then
                         if command -v dialog >/dev/null 2>&1 && [[ -r /dev/tty && -w /dev/tty ]]; then
-                                dialog --clear --backtitle "BFS Linux Installer" \
+                                dialog --clear --backtitle "BFSOS Installer" \
                                         --title "Password too short" \
                                         --msgbox "Password must be at least 8 characters, or leave it blank to keep password login locked." \
                                         10 72 </dev/tty
@@ -7515,7 +7815,7 @@ prompt_optional_password() {
 
                 if command -v dialog >/dev/null 2>&1 && [[ -r /dev/tty && -w /dev/tty ]]; then
                         set +e
-                        password_two="$(dialog --stdout --clear --backtitle "BFS Linux Installer" \
+                        password_two="$(dialog --stdout --clear --backtitle "BFSOS Installer" \
                                 --title "Confirm password for $label" --cancel-label "Back" \
                                 --passwordbox "Retype the password." 11 70 </dev/tty)"
                         status=$?
@@ -7528,7 +7828,7 @@ prompt_optional_password() {
 
                 if [[ "$password_one" != "$password_two" ]]; then
                         if command -v dialog >/dev/null 2>&1 && [[ -r /dev/tty && -w /dev/tty ]]; then
-                                dialog --clear --backtitle "BFS Linux Installer" --title "Passwords do not match" \
+                                dialog --clear --backtitle "BFSOS Installer" --title "Passwords do not match" \
                                         --msgbox "The passwords did not match. Try again." 9 60 </dev/tty
                         else
                                 echo "Passwords do not match."
@@ -7552,7 +7852,7 @@ prompt_optional_password() {
                 fi
 
                 if command -v dialog >/dev/null 2>&1 && [[ -r /dev/tty && -w /dev/tty ]]; then
-                        dialog --clear --backtitle "BFS Linux Installer" \
+                        dialog --clear --backtitle "BFSOS Installer" \
                                 --title "Password rejected" \
                                 --msgbox "The password was rejected by the installed BFSOS password policy. Choose a different password, or leave it blank to keep password login locked." \
                                 11 76 </dev/tty
@@ -7591,7 +7891,12 @@ for entry in "${ADDITIONAL_USER_ENTRIES_ARRAY[@]}"; do
         esac
 done
 
-prompt_optional_password root root || exit 1
+if [[ "$ROOT_PASSWORD_POLICY_VALUE" == prompt ]]; then
+        prompt_optional_password root root || exit 1
+else
+        passwd -l root >/dev/null 2>&1 || usermod -L root
+        printf 'Root password login remains locked by installer policy.\n'
+fi
 touch "$STATE_DIR/accounts_configured"
 else
         log "Account/password checkpoint already complete; preserving configured accounts"
@@ -7701,7 +8006,7 @@ ensure_bfsos_git_ports() {
         [[ -x "$driver" ]] || { echo "CRUX/BFSOS Git ports driver is missing after Git installation." >&2; return 1; }
 
         cat > "$config" <<'EOF_BFSOS_GIT'
-URL=https://codeberg.org/bmadonnaster/BFSOS.git
+URL=https://github.com/bmadonnaster/BFSOS.git
 NAME=bfsos
 BRANCH=main
 LOCAL_REPOSITORY=/var/cache/ports-git/bfsos
@@ -7720,6 +8025,51 @@ ensure_bfsos_git_ports || exit 1
 log "Synchronizing BFSOS ports tree through Git"
 run_package_operation "ports synchronization (ports -u)" ports -u
 
+# GLib/GObject-Introspection bootstrap ordering.
+#
+# A bootstrap GLib without introspection is valid before gobject-introspection
+# exists. Generated/final GLib metadata must not reject that pass. Once GI is
+# installed, rebuild GLib once so its GIR files exist before Polkit is built.
+ensure_glib_introspection_ready() {
+        local closure="${1:-}"
+        local glib_port="/usr/ports/opt/glib"
+        local glib_footprint="$glib_port/.footprint"
+        local gir=""
+
+        case " $closure " in
+                *" gobject-introspection "*|*" polkit "*) ;;
+                *) return 0 ;;
+        esac
+
+        if ! prt-get isinst gobject-introspection >/dev/null 2>&1; then
+                log "Preparing GObject Introspection before Polkit"
+                rm -f "$glib_footprint"
+                rm -f /var/cache/pkg/packages/glib#*.pkg.tar.*
+                run_package_operation "gobject-introspection bootstrap installation" \
+                        prt-get depinst gobject-introspection
+        fi
+
+        if [[ ! -r /usr/share/gir-1.0/Gio-2.0.gir || \
+              ! -r /usr/share/gir-1.0/GLib-2.0.gir || \
+              ! -r /usr/share/gir-1.0/GObject-2.0.gir ]]; then
+                log "Rebuilding GLib once with introspection enabled"
+                rm -f "$glib_footprint"
+                rm -f /var/cache/pkg/packages/glib#*.pkg.tar.*
+                run_package_operation "GLib introspection rebuild" \
+                        prt-get -fr update glib
+        fi
+
+        for gir in GLib-2.0.gir GObject-2.0.gir Gio-2.0.gir GioUnix-2.0.gir GModule-2.0.gir GLibUnix-2.0.gir; do
+                if [[ ! -r "/usr/share/gir-1.0/$gir" ]]; then
+                        echo "ERROR: required GLib introspection file is still missing: /usr/share/gir-1.0/$gir" >&2
+                        return 1
+                fi
+        done
+
+        log "GObject Introspection is installed and GLib GIR files are ready for Polkit"
+}
+
+
 log "Running mandatory installed-system upgrade"
 # prt-get update/sysup intentionally do not install dependencies newly added
 # since a package was first installed. Resolve those missing dependencies first
@@ -7728,6 +8078,7 @@ outdated_packages="$(prt-get quickdiff 2>/dev/null || true)"
 if [[ -n "$outdated_packages" ]]; then
         dependency_closure="$(prt-get quickdep $outdated_packages 2>/dev/null || true)"
         if [[ -n "$dependency_closure" ]]; then
+                ensure_glib_introspection_ready "$dependency_closure" || exit 1
                 missing_dependencies="$(prt-get isinst $dependency_closure 2>/dev/null | awk '/not installed/ {print $2}' | sort -u | tr '\n' ' ')"
                 if [[ -n "$missing_dependencies" ]]; then
                         read -r -a missing_dependency_array <<< "$missing_dependencies"
@@ -7742,64 +8093,6 @@ run_package_operation "mandatory package upgrade (prt-get sysup)" prt-get sysup
 log "Ensuring BFSOS package-build safety/cache tooling is installed"
 run_package_operation "mandatory build tooling (fakeroot/ccache)" prt-get depinst fakeroot fmt xxhash ccache
 
-# GLib and gobject-introspection have a deliberate bootstrap cycle: GLib must
-# initially build without introspection so gobject-introspection itself can be
-# built.  Desktop packages such as polkit subsequently require GLib's GIR files.
-# If the selected dependency closure needs gobject-introspection, complete the
-# second pass before entering the main prt-get transaction.
-ensure_glib_introspection_ready() {
-        local closure="${1:-}"
-        local glib_port="/usr/ports/opt/glib"
-        local glib_footprint="$glib_port/.footprint"
-
-        case " $closure " in
-                *" gobject-introspection "*|*" polkit "*) ;;
-                *) return 0 ;;
-        esac
-
-        if ! prt-get isinst gobject-introspection >/dev/null 2>&1; then
-                log "Preparing GObject Introspection bootstrap dependency"
-                run_package_operation "gobject-introspection bootstrap installation" \
-                        prt-get depinst gobject-introspection
-        fi
-
-        # A first-pass GLib build without introspection can cause pkgmk to create
-        # a temporary .footprint.  That footprint must never become authoritative:
-        # the normal/final GLib package includes GIR and typelib files.  If the
-        # current footprint lacks Gio-2.0.gir, discard it before the second pass so
-        # pkgmk can create/validate the final introspection-enabled footprint.
-        if [[ -f "$glib_footprint" ]] &&
-           ! grep -Fq 'usr/share/gir-1.0/Gio-2.0.gir' "$glib_footprint"; then
-                log "Removing bootstrap-only GLib footprint before introspection-enabled second pass"
-                rm -f "$glib_footprint"
-        fi
-
-        if [[ ! -r /usr/share/gir-1.0/Gio-2.0.gir || \
-              ! -r /usr/share/gir-1.0/GLib-2.0.gir || \
-              ! -r /usr/share/gir-1.0/GObject-2.0.gir ]]; then
-                log "Rebuilding GLib with introspection enabled (second bootstrap pass)"
-                rm -f /var/cache/pkg/packages/glib#*.pkg.tar.*
-                run_package_operation "GLib introspection second-pass rebuild" \
-                        prt-get -fr update glib
-        fi
-
-        for gir in GLib-2.0.gir GObject-2.0.gir Gio-2.0.gir; do
-                if [[ ! -r "/usr/share/gir-1.0/$gir" ]]; then
-                        echo "ERROR: required GLib introspection file is still missing: /usr/share/gir-1.0/$gir" >&2
-                        return 1
-                fi
-        done
-
-        # With footprint verification enabled, the authoritative GLib footprint
-        # must describe the final package, not the bootstrap pass.
-        if [[ "$VERIFY_FOOTPRINT_VALUE" == yes && -f "$glib_footprint" ]] &&
-           ! grep -Fq 'usr/share/gir-1.0/Gio-2.0.gir' "$glib_footprint"; then
-                echo "ERROR: final GLib footprint does not contain Gio-2.0.gir" >&2
-                return 1
-        fi
-
-        log "GLib introspection bootstrap cycle complete"
-}
 
 if [[ -n "$PACKAGE_LIST_VALUE" ]]; then
         read -r -a PACKAGE_LIST_ARRAY <<< "$PACKAGE_LIST_VALUE"
@@ -9311,6 +9604,7 @@ CHROOT
                 -e "s|__TIMEZONE__|$(printf '%s' "$TIMEZONE" | sed 's/[&|]/\\&/g')|g" \
                 -e "s|__LOCALE__|$(printf '%s' "$LOCALE" | sed 's/[&|]/\\&/g')|g" \
                 -e "s|__USERNAME__|$(printf '%s' "$USERNAME" | sed 's/[&|]/\\&/g')|g" \
+                -e "s|__ROOT_PASSWORD_POLICY__|$ROOT_PASSWORD_POLICY|g" \
                 -e "s|__ADDITIONAL_USERS__|$(printf '%s' "$(additional_users_text)" | sed 's/[&|]/\\&/g')|g" \
                 -e "s|__ADDITIONAL_USER_ENTRIES__|$(printf '%s' "$(additional_user_entries_text)" | sed 's/[&|]/\\&/g')|g" \
                 -e "s|__STANDARD_USER_GROUPS__|$(printf '%s' "$STANDARD_USER_GROUPS" | sed 's/[&|]/\\&/g')|g" \
@@ -9519,13 +9813,13 @@ show_installation_success_dialog() {
                 installed_log="/var/log/bfs/installer/$(basename "$LOG_FILE")"
         fi
 
-        message="Congratulations!\n\nYour BFS Linux system installation is complete!\n\nInstallation summary\n--------------------\nHostname:          $HOSTNAME\nKernel package:    $KERNEL_PACKAGE\nBoot mode:         ${BOOT_MODE:-unknown}\nBootloader:        $bootloader_status\nRoot filesystem:   $root_fs\nBtrfs snapshots:   $snapshot_status\nPrimary user:      ${USERNAME:-none}\nAdditional users:  $additional_count\nInstaller log:     $installed_log\n\nWelcome to BFS Linux!"
+        message="Congratulations!\n\nYour BFSOS installation is complete.\n\nInstallation summary\n--------------------\nHostname:          $HOSTNAME\nKernel package:    $KERNEL_PACKAGE\nBoot mode:         ${BOOT_MODE:-unknown}\nBootloader:        $bootloader_status\nRoot filesystem:   $root_fs\nBtrfs snapshots:   $snapshot_status\nPrimary user:      ${USERNAME:-none}\nAdditional users:  $additional_count\nInstaller log:     $installed_log\n\nWelcome to BFSOS!"
 
         if command -v dialog >/dev/null 2>&1 &&
            [[ -r /dev/tty && -w /dev/tty ]]; then
                 dialog --clear \
-                        --backtitle "BFS Linux Installer" \
-                        --title "BFS Linux Installation Complete" \
+                        --backtitle "BFSOS Installer" \
+                        --title "BFSOS Installation Complete" \
                         --ok-label "Continue" \
                         --msgbox "$message" \
                         24 76 \
@@ -9533,7 +9827,7 @@ show_installation_success_dialog() {
         else
                 clear_screen
                 printf '%s\n' '============================================================'
-                printf '%s\n' '            BFS Linux Installation Complete'
+                printf '%s\n' '            BFSOS Installation Complete'
                 printf '%s\n' '============================================================'
                 printf '\n%b\n\n' "$message"
                 pause_screen
@@ -9546,10 +9840,10 @@ post_install_menu() {
         while true; do
                 set +e
                 themed_menu choice \
-                        "BFS installation complete" \
-                        "The installation completed successfully. You may enter the installed system again or finish and return to the live environment." \
+                        "BFSOS installation complete" \
+                        "The installation completed successfully. You may enter the installed BFSOS system for maintenance or finish and return to the live environment." \
                         16 82 6 \
-                        1 "Chroot into the installed BFS system" \
+                        1 "Enter installed BFSOS system (chroot)" \
                         2 "Finish and unmount the installed system"
                 status=$?
                 set -e

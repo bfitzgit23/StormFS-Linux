@@ -1,5 +1,5 @@
 # Description: BFSOS safe kernel upgrade, rollback retention, and boot finalization helper
-# URL: https://codeberg.org/bmadonnaster/BFSOS
+# URL: https://github.com/bmadonnaster/BFSOS
 # Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: coreutils findutils gawk grep sed systemd
 

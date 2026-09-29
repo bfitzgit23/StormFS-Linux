@@ -12,6 +12,7 @@ source=(
     plasmalogin.pam
     plasmalogin-autologin.pam
     plasmalogin-greeter.pam
+    remember-session-binding-fix.patch
 )
 
 pkg_build() {

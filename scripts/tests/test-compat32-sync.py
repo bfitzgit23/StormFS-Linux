@@ -6,7 +6,7 @@ import subprocess
 ROOT = Path(__file__).resolve().parents[2]
 compat = ROOT / "ports" / "compat-32"
 pkgfiles = sorted(compat.glob("*/Pkgfile"))
-assert len(pkgfiles) == 172, len(pkgfiles)
+assert len(pkgfiles) == 173, len(pkgfiles)
 assert all((p.parent / ".32bit").is_file() for p in pkgfiles)
 
 custom = []
@@ -27,7 +27,7 @@ for p in pkgfiles:
         assert "_bfs_require_compat32_extension 2" in s, p
 
 assert len(automatic) >= 125, len(automatic)
-assert len(custom) <= 45, len(custom)
+assert len(custom) <= 46, len(custom)
 
 conf = (ROOT / "ports/core/pkgutils/pkgmk.conf").read_text()
 extension = (ROOT / "ports/core/pkgutils/extension").read_text()
@@ -42,5 +42,5 @@ assert '_bfs_meson_arch_args=(--cross-file .bfsos-compat32.cross)' in extension
 
 cp = subprocess.run([str(ROOT / "scripts/multilibvercheck.sh")], capture_output=True, text=True)
 assert cp.returncode == 0, cp.stdout + cp.stderr
-assert "matched=157 special=15 drift=0 unexplained=0" in cp.stdout, cp.stdout
-print(f"compat-32 synchronization regression: PASS (172 ports; {len(automatic)} generic; {len(custom)} documented custom)")
+assert "matched=158 special=15 drift=0 unexplained=0" in cp.stdout, cp.stdout
+print(f"compat-32 synchronization regression: PASS (173 ports; {len(automatic)} generic; {len(custom)} documented custom)")

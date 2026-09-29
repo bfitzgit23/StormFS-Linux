@@ -6,7 +6,7 @@
 name=xwayland
 version=24.1.13
 release=2
-source=(https://www.x.org/pub/individual/xserver/$name-$version.tar.xz)
+source=(https://xorg.freedesktop.org/archive/individual/xserver/$name-$version.tar.xz)
 
 pkg_build() {
 

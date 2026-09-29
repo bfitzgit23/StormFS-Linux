@@ -4,8 +4,8 @@
 # Depends on: bzip2 xz zlib
 
 name=elfutils
-version=0.195
-release=2
+version=0.196
+release=1
 source=(https://sourceware.org/ftp/elfutils/$version/elfutils-$version.tar.bz2
 	libeu.patch)
 keep_static=1

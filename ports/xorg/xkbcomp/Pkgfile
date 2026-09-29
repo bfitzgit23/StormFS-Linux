@@ -6,7 +6,7 @@
 name=xkbcomp
 version=1.5.0
 release=2
-source=(https://www.x.org/releases/individual/app/xkbcomp-$version.tar.xz)
+source=(https://xorg.freedesktop.org/archive/individual/app/xkbcomp-$version.tar.xz)
 
 pkg_build() {
 

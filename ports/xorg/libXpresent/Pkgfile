@@ -6,7 +6,7 @@
 name=libXpresent
 version=1.0.2
 release=3
-source=(https://www.x.org/releases/individual/lib/libXpresent-$version.tar.xz)
+source=(https://xorg.freedesktop.org/archive/individual/lib/libXpresent-$version.tar.xz)
 
 
 pkg_build() {

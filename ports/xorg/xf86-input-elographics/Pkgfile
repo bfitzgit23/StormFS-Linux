@@ -6,7 +6,7 @@
 name=xf86-input-elographics
 version=1.4.4
 release=1
-source=(https://www.x.org/releases/individual/driver/$name-$version.tar.xz)
+source=(https://xorg.freedesktop.org/archive/individual/driver/$name-$version.tar.xz)
 
 pkg_build() {
 

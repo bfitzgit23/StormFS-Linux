@@ -5,9 +5,11 @@
 
 name=compiz-meta
 version=0.8.18
-release=3
+release=4
 
 pkg_build() {
-    install -d "$PKG/usr/share/doc/$name"
-    printf '%s\n' 'BFSOS Compiz Reloaded 0.8.18 meta-package.' > "$PKG/usr/share/doc/$name/README"
+    install -d "$PKG/usr/share/bfsos/meta"
+    printf '%s\n' \
+        'BFSOS Compiz Reloaded 0.8.18 meta-package.' \
+        > "$PKG/usr/share/bfsos/meta/$name"
 }

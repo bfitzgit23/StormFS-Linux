@@ -1,8 +1,8 @@
 # Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 name=prt-get
 version=5.19.10
-release=2
-source=(http://crux.nu/files/prt-get-$version.tar.xz
+release=3
+source=(https://crux.nu/files/prt-get-$version.tar.xz
 	prt-get.conf
 	prt-get.aliases
 	bfsos.git

@@ -1,0 +1,89 @@
+#!/usr/bin/env bash
+set -u
+
+health_file="${BFS_PREFETCH_HEALTH_FILE:-}"
+prefixes="${BFS_PREFETCH_SOURCE_PREFIXES:-}"
+url="${!#:-}"
+
+{
+    printf 'cwd=%q\n' "$PWD"
+    printf 'argc=%s\n' "$#"
+    printf 'arg=%q\n' "$@"
+    printf '%s\n' '---'
+} >> /tmp/bfs-prefetch-args.log
+
+matched_prefix=""
+has_output=no
+expect_output_value=no
+
+# curl may be given an explicit output destination (-o/-O), or pkgmk may
+# intentionally redirect curl stdout into its own destination file.
+#
+# What must never happen is an archive being written directly to an
+# interactive terminal.
+for arg in "$@"; do
+    if [[ "$expect_output_value" == yes ]]; then
+        has_output=yes
+        expect_output_value=no
+        continue
+    fi
+
+    case "$arg" in
+        -o|--output)
+            expect_output_value=yes
+            ;;
+        -o?*|--output=*|-O|--remote-name|--remote-name-all)
+            has_output=yes
+            ;;
+    esac
+done
+
+if [[ "$expect_output_value" == yes ]]; then
+    printf 'pkgmk prefetch: curl output option is missing its destination\n' >&2
+    exit 2
+fi
+
+# pkgmk normally captures downloader stdout itself.  Permit that when stdout
+# is redirected, but refuse to dump an archive onto an interactive terminal.
+if [[ "$has_output" != yes && -t 1 ]]; then
+    printf 'pkgmk prefetch: refusing to write archive data to an interactive terminal: %s\n' \
+        "$url" >&2
+    exit 2
+fi
+
+while IFS= read -r prefix; do
+    [[ -n "$prefix" ]] || continue
+    case "$url" in
+        "$prefix"*)
+            matched_prefix="$prefix"
+            break
+            ;;
+    esac
+done <<<"$prefixes"
+
+if [[ -n "$matched_prefix" && -n "$health_file" && -f "$health_file" ]] &&
+   grep -Fxq -- "$matched_prefix" "$health_file"; then
+    printf 'pkgmk prefetch: skipping unhealthy primary for this run: %s\n' \
+        "$matched_prefix" >&2
+    exit 7
+fi
+
+curl "$@"
+status=$?
+
+# Mark only transport/TLS/stall failures. HTTP status failures (curl 22),
+# local file/write errors, and resume/range errors remain source-specific
+# and do not poison an otherwise healthy origin.
+case "$status" in
+    5|6|7|18|28|35|52|55|56|92)
+        if [[ -n "$matched_prefix" && -n "$health_file" ]]; then
+            if ! grep -Fxq -- "$matched_prefix" "$health_file" 2>/dev/null; then
+                printf '%s\n' "$matched_prefix" >>"$health_file"
+                printf 'pkgmk prefetch: marked primary unavailable for this run: %s (curl %s)\n' \
+                    "$matched_prefix" "$status" >&2
+            fi
+        fi
+        ;;
+esac
+
+exit "$status"

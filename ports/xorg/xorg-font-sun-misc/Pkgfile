@@ -1,12 +1,12 @@
 # Description: xorg font font-sun-misc
-# URL: http://xorg.freedesktop.org
+# URL: https://xorg.freedesktop.org
 # Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: bdftopcf xorg-font-util mkfontscale
 
 name=xorg-font-sun-misc
 version=1.0.3
 release=1
-source=(https://www.x.org/releases/individual/font/font-sun-misc-$version.tar.bz2)
+source=(https://xorg.freedesktop.org/archive/individual/font/font-sun-misc-$version.tar.bz2)
 
 pkg_build() {
 

@@ -1,12 +1,12 @@
 # Description: xorg lib libXpm
-# URL: http://xorg.freedesktop.org
+# URL: https://xorg.freedesktop.org
 # Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: libXext libXt
 
 name=libXpm
 version=3.5.19
 release=3
-source=(https://www.x.org/releases/individual/lib/libXpm-$version.tar.xz)
+source=(https://xorg.freedesktop.org/archive/individual/lib/libXpm-$version.tar.xz)
 
 pkg_build() {
 	   ./configure $XORG_CONFIG --docdir=/usr/share/doc/$name-$version --disable-open-zfile

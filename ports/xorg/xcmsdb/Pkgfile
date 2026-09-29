@@ -1,12 +1,12 @@
 # Description: Utility to set a display's backlight level
-# URL: http://xorg.freedesktop.org
+# URL: https://xorg.freedesktop.org
 # Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: xcb-util
 
 name=xcmsdb
 version=1.0.7
 release=2
-source=(https://www.x.org/pub/individual/app/xcmsdb-$version.tar.xz)
+source=(https://xorg.freedesktop.org/archive/individual/app/xcmsdb-$version.tar.xz)
 
 pkg_build() {
 

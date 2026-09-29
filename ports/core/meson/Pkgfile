@@ -4,8 +4,8 @@
 # Depends on: ninja python3-pip python3-setuptools
 
 name=meson
-version=1.12.0
-release=2
+version=1.12.1
+release=1
 source=(https://github.com/mesonbuild/meson/releases/download/$version/$name-$version.tar.gz
         lib32)
 

@@ -6,7 +6,7 @@
 
 name=lightdm
 version=1.33.1
-release=2
+release=3
 
 source=(
     https://github.com/ubuntu/lightdm/archive/$version/$name-$version.tar.gz
@@ -77,4 +77,5 @@ BusName=org.freedesktop.DisplayManager
 [Install]
 Alias=display-manager.service
 UNIT
+rm -f "$PKG/usr/share/dbus-1/system.d/org.freedesktop.DisplayManager.conf"
 }

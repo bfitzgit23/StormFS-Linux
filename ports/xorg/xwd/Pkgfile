@@ -1,12 +1,12 @@
 # Description: X-Video information utility
-# URL: http://xorg.freedesktop.org
+# URL: https://xorg.freedesktop.org
 # Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: libXv
 
 name=xwd
 version=1.0.10
 release=2
-source=(https://www.x.org/releases/individual/app/xwd-$version.tar.xz)
+source=(https://xorg.freedesktop.org/archive/individual/app/xwd-$version.tar.xz)
 
 pkg_build() {
 

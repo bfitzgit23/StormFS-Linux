@@ -17,9 +17,12 @@ for needle in ['--disable-download', '--enable-tools', '--enable-guest-agent',
                '--enable-kvm', '--enable-linux-io-uring', '--enable-slirp',
                '--enable-cap-ng', '--enable-libusb', '--enable-usb-redir']:
     assert needle in qemu, needle
-for duplicated in ['--prefix=/usr', '--sysconfdir=/etc', '--localstatedir=/var']:
-    assert duplicated not in qemu, f'qemu duplicates extension-owned {duplicated}'
-assert '\npkg_build() {' not in qemu
+# QEMU is a documented exception: its supported feature interface is the
+# upstream ./configure wrapper, so the package owns the configure invocation.
+assert "QEMU's ./configure wrapper" in qemu
+assert '\npkg_build() {' in qemu
+for required in ['--prefix=/usr', '--sysconfdir=/etc', '--localstatedir=/var']:
+    assert required in qemu, f'qemu configure wrapper missing {required}'
 
 libvirt = text('ports/opt/libvirt/Pkgfile')
 assert int(re.search(r'^release=(\d+)$', libvirt, re.M).group(1)) >= 2
@@ -39,8 +42,10 @@ for dep in ['python3-argcomplete', 'libisoburn', 'gtk-vnc', 'libvirt-python']:
 
 uring = text('ports/opt/liburing/Pkgfile')
 assert int(re.search(r'^release=(\d+)$', uring, re.M).group(1)) >= 2
-assert '--prefix=/usr' not in uring
-assert '--libdir=/usr/lib' not in uring
+assert 'pkg_build()' in uring
+assert "liburing's configure is intentionally minimal" in uring
+assert '--prefix=/usr' in uring
+assert '--libdir=/usr/lib' in uring
 
 chromium = text('ports/opt/chromium/Pkgfile')
 assert int(re.search(r'^release=(\d+)$', chromium, re.M).group(1)) >= 2

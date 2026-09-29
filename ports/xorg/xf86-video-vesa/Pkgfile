@@ -6,7 +6,7 @@
 name=xf86-video-vesa
 version=2.6.0
 release=1
-source=(https://www.x.org/releases/individual/driver/xf86-video-vesa-$version.tar.xz)
+source=(https://xorg.freedesktop.org/archive/individual/driver/xf86-video-vesa-$version.tar.xz)
 
 pkg_build() {
 	./configure --prefix=/usr

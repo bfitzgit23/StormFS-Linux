@@ -1,5 +1,5 @@
 # BFSOS maintained ports collections: one Codeberg monorepo, one main branch.
-URL=https://codeberg.org/bmadonnaster/BFSOS.git
+URL=https://github.com/bmadonnaster/BFSOS.git
 NAME=bfsos
 BRANCH=main
 LOCAL_REPOSITORY=/var/cache/ports-git/bfsos

@@ -1,11 +1,11 @@
 # Description: xorg font bitstream vera
-# URL: http://xorg.freedesktop.org
+# URL: https://xorg.freedesktop.org
 # Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 
 name=xorg-font-bitstream-vera
 version=1.10
 release=3
-source=(http://ftp.gnome.org/pub/GNOME/sources/ttf-bitstream-vera/1.10/ttf-bitstream-vera-$version.tar.bz2)
+source=(https://download.gnome.org/pub/GNOME/sources/ttf-bitstream-vera/1.10/ttf-bitstream-vera-$version.tar.bz2)
 
 pkg_build() {
 

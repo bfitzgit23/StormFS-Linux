@@ -4,7 +4,7 @@
 # Depends on: python3-packaging python3-typing_extensions
 
 name=python3-vcs-versioning
-version=2.3.4
+version=2.4.1
 release=1
 source=(https://files.pythonhosted.org/packages/source/v/vcs_versioning/vcs_versioning-$version.tar.gz)
 

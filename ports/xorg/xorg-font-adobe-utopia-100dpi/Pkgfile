@@ -6,7 +6,7 @@
 name=xorg-font-adobe-utopia-100dpi
 version=1.0.5
 release=1
-source=(https://www.x.org/releases/individual/font/font-adobe-utopia-100dpi-$version.tar.xz)
+source=(https://xorg.freedesktop.org/archive/individual/font/font-adobe-utopia-100dpi-$version.tar.xz)
 
 pkg_build() {
 

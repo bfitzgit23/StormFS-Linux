@@ -3,7 +3,7 @@ set -Eeuo pipefail
 
 # BFSOS ISO builder - reusable verified-base workflow and local-package/repository implementation.
 # Includes USB live-media discovery retry, live console accessibility, and
-# current RC1 live-session policy. Boot/install acceptance still requires
+# current 0.9.0 live-session policy. Boot/install acceptance still requires
 # fresh VM + USB-emulation + bare-metal validation.
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -14,14 +14,16 @@ BUILD_DATE="$(date +%Y%m%d)"
 WORK_DIR="${BFS_ISO_WORK_DIR:-/var/tmp/bfsos-iso-${USER:-builder}}"
 OUTPUT_DIR="${BFS_ISO_OUTPUT_DIR:-$HOME/BFSOS-ISO}"
 BASE_CACHE_DIR="${BFS_ISO_BASE_CACHE_DIR:-${XDG_CACHE_HOME:-$HOME/.cache}/bfsos/iso}"
-BASE_FILENAME="${BFS_ISO_BASE_FILENAME:-BFSOS-base-${ARCH}.tar.zst}"
+VERSION="$(tr -d '[:space:]' < "$PROJECT_DIR/VERSION" 2>/dev/null || printf '0.9.0')"
+BASE_FILENAME="${BFS_ISO_BASE_FILENAME:-BFSOS-base-${VERSION}-${ARCH}.tar.zst}"
 BASE_URL="${BFS_ISO_BASE_URL:-https://downloads.sourceforge.net/project/bfsos/BFSOS/base/latest/${BASE_FILENAME}}"
 BASE_SHA256_URL="${BFS_ISO_BASE_SHA256_URL:-https://downloads.sourceforge.net/project/bfsos/BFSOS/base/latest/${BASE_FILENAME}.sha256}"
-BASE_MODE="${BFS_ISO_BASE_MODE:-sourceforge}"
+BASE_MODE="${BFS_ISO_BASE_MODE:-auto}"
 REFRESH_BASE="${BFS_ISO_REFRESH_BASE:-no}"
-GIT_URL="${BFS_ISO_GIT_URL:-https://codeberg.org/bmadonnaster/BFSOS.git}"
+LOCAL_BASE_PATH="${BFS_ISO_LOCAL_BASE:-}"
+BASE_SOURCE="unknown"
+GIT_URL="${BFS_ISO_GIT_URL:-https://github.com/bmadonnaster/BFSOS.git}"
 GIT_REF="${BFS_ISO_GIT_REF:-main}"
-VERSION="0.9.0-rc1"
 GIT_COMMIT="unknown"
 GIT_COMMIT_FULL="unknown"
 ISO_LABEL=""
@@ -44,7 +46,7 @@ declare -A tool_packages=(
 iso_packages=(
     linux-firmware dracut
     networkmanager-iso openssh git sudo wget wpa_supplicant wireless-regdb gpm lynx-iso chrony kbd
-    cryptsetup lvm2 mdadm snapper pciutils
+    cryptsetup lvm2 mdadm snapper pciutils parted
     dialog squashfs-tools grub grub-efi dosfstools mtools efibootmgr libisoburn syslinux
 )
 
@@ -53,25 +55,39 @@ die() { printf '[BFSOS ISO] ERROR: %s\n' "$*" >&2; exit 1; }
 
 usage() {
     cat <<EOF
-Usage: $(basename "$0") [--refresh-base] [--git-ref REF] [--local-base]
+Usage: $(basename "$0") [--refresh-base] [--sourceforge-base] [--local-base PATH] [--git-ref REF]
 
-  --refresh-base  Force a fresh SourceForge base archive download.
-  --git-ref REF   Build from this Codeberg branch, tag, or commit (default: main).
-  --local-base    Use the legacy local base/rebuild selection instead of SourceForge.
+  (default)         Prefer a verified maintainer-generated base under archives/base.
+                    If none exists, offer rebuild/download/cancel instead of silently downloading.
+  --local-base PATH Use exactly the supplied verified local base archive.
+  --sourceforge-base
+                    Explicitly use the SourceForge release base/cache path.
+  --refresh-base    Force a fresh SourceForge base download (implies --sourceforge-base).
+  --git-ref REF     Build from this GitHub branch, tag, or commit (default: main).
 EOF
 }
 
 parse_args() {
     while (($#)); do
         case "$1" in
-            --refresh-base) REFRESH_BASE=yes ;;
+            --refresh-base) REFRESH_BASE=yes; BASE_MODE=sourceforge ;;
+            --sourceforge-base) BASE_MODE=sourceforge ;;
+            --local-base)
+                shift
+                (($#)) || die "--local-base requires a path"
+                LOCAL_BASE_PATH="$1"
+                BASE_MODE=local-path
+                ;;
+            --local-base=*)
+                LOCAL_BASE_PATH="${1#*=}"
+                BASE_MODE=local-path
+                ;;
             --git-ref)
                 shift
                 (($#)) || die "--git-ref requires a value"
                 GIT_REF="$1"
                 ;;
             --git-ref=*) GIT_REF="${1#*=}" ;;
-            --local-base) BASE_MODE=local ;;
             -h|--help) usage; exit 0 ;;
             *) die "Unknown ISO builder argument: $1" ;;
         esac
@@ -81,7 +97,7 @@ parse_args() {
 
 load_project_metadata() {
     local project="$1" label_version=""
-    VERSION="$(tr -d '[:space:]' < "$project/VERSION" 2>/dev/null || printf '0.9.0-rc1')"
+    VERSION="$(tr -d '[:space:]' < "$project/VERSION" 2>/dev/null || printf '0.9.0')"
     GIT_COMMIT_FULL="$(git -C "$project" rev-parse HEAD 2>/dev/null || printf 'unknown')"
     GIT_COMMIT="${GIT_COMMIT_FULL:0:12}"
     label_version="${VERSION//[.-]/_}"
@@ -109,6 +125,7 @@ fetch_sourceforge_base() {
     local sumfile="$archive.sha256"
     local tmp_sum="$sumfile.tmp" tmp_archive="$archive.tmp"
     result_ref=""
+    BASE_SOURCE="sourceforge:$BASE_URL"
     mkdir -p "$BASE_CACHE_DIR"
 
     log "Checking SourceForge for current BFSOS base: $BASE_URL"
@@ -157,9 +174,15 @@ prepare_build_project() {
     rm -rf "$dest"
     git clone --no-tags "$GIT_URL" "$dest" >/dev/null 2>&1 || die "Failed to clone BFSOS Git repository"
     git -C "$dest" fetch --force --tags origin >/dev/null 2>&1 || die "Failed to fetch BFSOS Git refs"
-    if git -C "$dest" rev-parse --verify "origin/$GIT_REF^{commit}" >/dev/null 2>&1; then
-        git -C "$dest" checkout --detach "origin/$GIT_REF" >/dev/null 2>&1 || die "Failed to checkout origin/$GIT_REF"
+    if git -C "$dest" show-ref --verify --quiet "refs/remotes/origin/$GIT_REF"; then
+        # A normal branch build must leave the copy shipped in the live ISO on
+        # a real tracking branch. bfs-live-init can then safely use
+        # `git pull --ff-only` instead of failing on a detached HEAD.
+        git -C "$dest" checkout -B "$GIT_REF" "origin/$GIT_REF" >/dev/null 2>&1 ||             die "Failed to checkout tracking branch origin/$GIT_REF"
+        git -C "$dest" branch --set-upstream-to="origin/$GIT_REF" "$GIT_REF" >/dev/null 2>&1 ||             die "Failed to set upstream for $GIT_REF"
     elif git -C "$dest" rev-parse --verify "$GIT_REF^{commit}" >/dev/null 2>&1; then
+        # Explicit tags/commit IDs are immutable build inputs and intentionally
+        # remain detached for reproducibility.
         git -C "$dest" checkout --detach "$GIT_REF" >/dev/null 2>&1 || die "Failed to checkout $GIT_REF"
     else
         die "Requested BFSOS Git ref cannot be resolved: $GIT_REF"
@@ -173,6 +196,45 @@ prepare_build_project() {
     if [ -x "$BUILD_PROJECT_DIR/scripts/bfs-release-static-audit.sh" ]; then
         "$BUILD_PROJECT_DIR/scripts/bfs-release-static-audit.sh" || die "Fetched BFSOS release static audit failed"
     fi
+}
+
+
+sync_host_time() {
+    log "Synchronizing host clock before BFSOS base/ISO build"
+
+    # The ISO builder intentionally runs as a regular user, so time correction
+    # must be requested through sudo. Prefer chrony when available because it
+    # can step a badly skewed clock immediately; otherwise fall back to
+    # timedatectl/systemd-timesyncd where available.
+    if command -v chronyc >/dev/null 2>&1; then
+        sudo systemctl start chronyd.service 2>/dev/null || \
+            sudo systemctl start chrony.service 2>/dev/null || true
+
+        if sudo chronyc -a makestep >/dev/null 2>&1; then
+            sudo chronyc -a waitsync 10 0.5 >/dev/null 2>&1 || true
+            log "Host clock synchronized with chrony"
+            return 0
+        fi
+    fi
+
+    if command -v timedatectl >/dev/null 2>&1; then
+        sudo timedatectl set-ntp true >/dev/null 2>&1 || true
+        sudo systemctl start systemd-timesyncd.service >/dev/null 2>&1 || true
+
+        # Give the service a short opportunity to acquire time. Do not block a
+        # release build forever if the configured NTP service is unavailable.
+        local i synced=""
+        for i in {1..20}; do
+            synced="$(timedatectl show -p NTPSynchronized --value 2>/dev/null || true)"
+            [ "$synced" = yes ] && {
+                log "Host clock synchronized with systemd time service"
+                return 0
+            }
+            sleep 0.5
+        done
+    fi
+
+    die "Unable to synchronize host clock. Check network/time service before building the BFSOS base/ISO."
 }
 
 preflight() {
@@ -225,18 +287,29 @@ preflight() {
     return 0
 }
 
+project_base_candidates() {
+    local dir=""
+    # Automatic/local reuse is release-scoped. A base from another BFSOS
+    # release is never eligible merely because it is newer on disk.
+    for dir in "$PROJECT_DIR/archives/base" "$PROJECT_DIR/archive/base"; do
+        [ -d "$dir" ] || continue
+        find "$dir" -maxdepth 1 -type f \
+            \( -name "bfs-rootfs-${VERSION}-*.tar.zst" -o -name "bfs-rootfs-${VERSION}-*.tar.xz" -o -name "bfs-rootfs-${VERSION}-*.tar.gz" \
+               -o -name "BFSOS-base-${VERSION}-${ARCH}.tar.zst" -o -name "BFSOS-base-${VERSION}-${ARCH}.tar.xz" -o -name "BFSOS-base-${VERSION}-${ARCH}.tar.gz" \) \
+            -printf '%T@ %p\n' 2>/dev/null
+    done | sort -nr
+}
+
 latest_base_archive() {
-    find "$PROJECT_DIR/archives/base" -maxdepth 1 -type f \
-        \( -name 'bfs-rootfs-*.tar.xz' -o -name 'bfs-rootfs-*.tar.zst' -o -name 'bfs-rootfs-*.tar.gz' \) \
-        -printf '%T@ %p\n' 2>/dev/null | sort -nr | head -n1 | cut -d' ' -f2-
+    project_base_candidates | head -n1 | cut -d' ' -f2-
 }
 
 archive_list() {
     local archive="$1"
     case "$archive" in
-        *.tar.xz) tar -tJf "$archive" ;;
-        *.tar.zst) tar --zstd -tf "$archive" ;;
-        *.tar.gz) tar -tzf "$archive" ;;
+        *.tar.xz|*.tar.xz.tmp) tar -tJf "$archive" ;;
+        *.tar.zst|*.tar.zst.tmp) tar --zstd -tf "$archive" ;;
+        *.tar.gz|*.tar.gz.tmp) tar -tzf "$archive" ;;
         *) return 1 ;;
     esac
 }
@@ -279,11 +352,7 @@ latest_usable_base_archive() {
             printf '%s\n' "$candidate"
             return 0
         fi
-    done < <(
-        find "$PROJECT_DIR/archives/base" -maxdepth 1 -type f \
-            \( -name 'bfs-rootfs-*.tar.xz' -o -name 'bfs-rootfs-*.tar.zst' -o -name 'bfs-rootfs-*.tar.gz' \) \
-            -printf '%T@ %p\n' 2>/dev/null | sort -nr | cut -d' ' -f2-
-    )
+    done < <(project_base_candidates | cut -d' ' -f2-)
     return 1
 }
 
@@ -330,20 +399,86 @@ choose_base_action() {
     fi
 
     printf '\nNo usable verified BFSOS base archive is available.\n' >&2
-    printf 'Rebuild the complete base now? [y/N]: ' >&2
+    printf 'Choose: [R]ebuild local base, [S]ourceForge download, or [C]ancel: ' >&2
     read -r answer
     case "$answer" in
-        y|Y|yes|YES|Yes) printf '%s\n' rebuild ;;
+        r|R|rebuild|REBUILD|Rebuild) printf '%s\n' rebuild ;;
+        s|S|sourceforge|SOURCEFORGE|SourceForge) printf '%s\n' sourceforge ;;
+        *) printf '%s\n' cancel ;;
+    esac
+}
+
+bootstrap_resume_stage_hint() {
+    local root=/tmp/lfs-rootfs
+    if [ -f "$root/.bfs-verification-passed" ]; then printf '%s\n' 5
+    elif [ -f "$root/.bfs-stage3-complete" ]; then printf '%s\n' 4
+    elif [ -f "$root/.bfs-stage2-complete" ]; then printf '%s\n' 3
+    elif [ -f "$PROJECT_DIR/archives/toolchain/toolchain.tar.zst" ] || \
+         [ -f "$PROJECT_DIR/toolchain.tar.zst" ]; then printf '%s\n' 2
+    else printf '%s\n' 1
+    fi
+}
+
+choose_bootstrap_recovery_action() {
+    local stage answer
+    stage="$(bootstrap_resume_stage_hint)"
+    [ "$stage" -gt 1 ] || { printf '%s\n' restart; return 0; }
+
+    if [ "$ASSUME_YES" = yes ]; then
+        printf '%s\n' resume
+        return 0
+    fi
+
+    printf '\nAn incomplete BFSOS bootstrap is present; Stage %s is the first incomplete stage.\n' "$stage" >&2
+    printf 'Choose: [R]esume existing work, re[S]tart clean, or [C]ancel: ' >&2
+    read -r answer
+    case "$answer" in
+        r|R|resume|RESUME|Resume) printf '%s\n' resume ;;
+        s|S|restart|RESTART|Restart) printf '%s\n' restart ;;
         *) printf '%s\n' cancel ;;
     esac
 }
 
 run_full_bootstrap() {
-    log "Rebuilding complete BFSOS base (bootstrap stages 1 -> 5)"
-    BFS_FULL_BOOTSTRAP_ASSUME_YES=yes \
-    BFS_FULL_BOOTSTRAP_NO_INSTALL_PROMPT=yes \
-    BFS_ISO_BUILD=yes \
-        "$PROJECT_DIR/bootstrap.sh" full
+    local requested_mode="${1:-auto}" recovery_action bootstrap_mode=full
+
+    if [ "$requested_mode" = rebuild ]; then
+        recovery_action=restart
+        log "Rebuild selected: ignoring all existing base archives and cached base images"
+    else
+        recovery_action="$(choose_bootstrap_recovery_action)"
+    fi
+    case "$recovery_action" in
+        resume)
+            bootstrap_mode=resume-full
+            log "Resuming BFSOS base bootstrap at the first incomplete stage"
+            ;;
+        restart)
+            bootstrap_mode=full
+            log "Rebuilding complete BFSOS base (bootstrap stages 1 -> 5)"
+            ;;
+        cancel)
+            log "Fresh-base rebuild cancelled"
+            return 130
+            ;;
+    esac
+
+    # The bootstrap uses terminal/session handling internally. When launched
+    # directly from the ISO builder, allocate a pseudo-terminal when possible.
+    if command -v script >/dev/null 2>&1; then
+        (
+            cd "$PROJECT_DIR"
+            export BFS_FULL_BOOTSTRAP_ASSUME_YES=yes
+            export BFS_FULL_BOOTSTRAP_NO_INSTALL_PROMPT=yes
+            export BFS_ISO_BUILD=yes
+            script -qec "./bootstrap.sh $bootstrap_mode" /dev/null
+        )
+    else
+        BFS_FULL_BOOTSTRAP_ASSUME_YES=yes \
+        BFS_FULL_BOOTSTRAP_NO_INSTALL_PROMPT=yes \
+        BFS_ISO_BUILD=yes \
+            "$PROJECT_DIR/bootstrap.sh" "$bootstrap_mode"
+    fi
 }
 
 extract_archive() {
@@ -502,7 +637,16 @@ install_live_runtime() {
         fi
 
         passwd -l bfs >/dev/null 2>&1 || true
-        chown -R bfs:bfs /home/bfs
+
+        # The source checkout is staged while the ISO root is assembled as
+        # root. Normalize the complete live checkout to the normal live user
+        # immediately afterward so git/edit/copy workflows never require sudo.
+        chown -R bfs:bfs /home/bfs/BFSOS
+        chown bfs:bfs /home/bfs
+        if find /home/bfs/BFSOS \( ! -user bfs -o ! -group bfs \) -print -quit | grep -q .; then
+            echo "BFSOS live checkout ownership normalization failed" >&2
+            exit 1
+        fi
     '
     cat > "$root/etc/sudoers.d/90-bfs-live" <<'EOS'
 # Disposable live-media account. Local console auto-login is enabled.
@@ -632,15 +776,10 @@ set -u
 exec </dev/tty1 >/dev/tty1 2>&1
 printf '\nBFSOS live environment\n======================\n'
 printf 'Local console: automatic login as bfs with passwordless sudo.\n'
-printf 'SSH is disabled by default. To enable password-based SSH for this boot:\n'
-printf '  sudo passwd bfs\n'
-printf '  sudo ssh-keygen -A\n'
-printf '  sudo systemctl start sshd.service\n'
-printf 'If this system uses ssh.service instead, start that unit instead.\n\n'
+printf 'SSH is disabled by default. Enter 3) Shell from the live menu for manual SSH setup instructions.\n\n'
 
-if command -v ssh-keygen >/dev/null 2>&1; then
-    ssh-keygen -A >/dev/null 2>&1 || true
-fi
+# SSH host keys are intentionally not generated during normal live boot.
+# Users who need SSH explicitly generate keys and start the service from Shell.
 
 # Accessibility choice must happen before the normal live menu appears.
 /usr/local/sbin/bfs-live-console-font || true
@@ -695,7 +834,7 @@ set -u
 PROJECT=/home/bfs/BFSOS
 while true; do
     printf '\nBFSOS Live Menu\n===============\n'
-    printf '  1) Bootstrap BFSOS\n  2) Run BFSOS installer\n  3) Shell\n  4) Change console font\n  5) Quit menu\n\nChoice: '
+    printf '  1) Bootstrap BFSOS\n  2) Run BFSOS installer\n  3) Shell\n  4) Change console font\n\nChoice: '
     read -r choice
     case "$choice" in
         1)
@@ -715,7 +854,14 @@ while true; do
             fi
             ;;
         3)
-            printf 'Type exit to return to the BFSOS live menu.\n'
+            printf '\nBFSOS Live Shell\n================\n\n'
+            printf 'You are in the disposable BFSOS live environment.\n'
+            printf 'Type exit to return to the BFSOS Live Menu.\n\n'
+            printf 'The live bfs account has passwordless sudo for this live session only.\n\n'
+            printf 'SSH is disabled by default. To enable it for this live session:\n'
+            printf '  sudo passwd bfs\n'
+            printf '  sudo ssh-keygen -A\n'
+            printf '  sudo systemctl start sshd.service  # or ssh.service if that is the installed unit\n\n'
             if command -v script >/dev/null 2>&1; then
                 script -qec 'bash -il' /dev/null
             else
@@ -723,7 +869,6 @@ while true; do
             fi
             ;;
         4) /usr/local/sbin/bfs-live-console-font ;;
-        5) exit 0 ;;
         *) printf 'Invalid choice.\n' ;;
     esac
 done
@@ -737,6 +882,7 @@ if [ -z "${BFS_LIVE_MENU_STARTED:-}" ] && [ -t 0 ]; then
 fi
 EOS
     chown 0:0 "$root/etc/systemd/system/bfs-live-init.service"
+    rm -f "$root"/etc/ssh/ssh_host_*
     chroot "$root" /bin/bash -lc '
         mkdir -p /etc/systemd/system/multi-user.target.wants
         ln -sfn /etc/systemd/system/bfs-live-init.service /etc/systemd/system/multi-user.target.wants/bfs-live-init.service
@@ -747,8 +893,45 @@ EOS
         # systemd-timesyncd instance on live media. bfs-live-init starts chrony
         # only after NetworkManager reports usable connectivity.
         systemctl disable systemd-timesyncd.service 2>/dev/null || true
-        systemctl disable sshd.service ssh.service 2>/dev/null || true
     ' || true
+
+    # BFSOS preset policy must keep package-provided network daemons disabled
+    # unless explicitly enabled by the administrator/installer. This is the
+    # primary policy; the checks below are a live-media release invariant.
+    local preset_file="$root/usr/lib/systemd/system-preset/99-bfsos.preset"
+    local unit state
+
+    [ -r "$preset_file" ] || \
+        die "BFSOS preset policy missing from live root: /usr/lib/systemd/system-preset/99-bfsos.preset"
+    grep -Eq '^[[:space:]]*disable[[:space:]]+\*[[:space:]]*$' "$preset_file" || \
+        die "BFSOS preset policy does not contain the required default-disable rule"
+
+    for unit in \
+        sshd.service ssh.service sshd.socket ssh.socket \
+        rsyncd.service rsync.service rsyncd.socket rsync.socket
+    do
+        # Remove stale enablement from reused bases/live roots, but only from
+        # wants/requires directories. Do not delete canonical unit aliases.
+        systemctl --root="$root" disable "$unit" 2>/dev/null || true
+        find "$root/etc/systemd/system" "$root/usr/lib/systemd/system" \
+            -type l \
+            \( -path "*/system/*.wants/$unit" -o -path "*/system/*.requires/$unit" \) \
+            -delete 2>/dev/null || true
+
+        state="$(systemctl --root="$root" is-enabled "$unit" 2>/dev/null || true)"
+        case "$state" in
+            enabled|enabled-runtime|linked|linked-runtime)
+                die "Live ISO policy violation: $unit is enabled ($state)"
+                ;;
+        esac
+    done
+
+    # Verify the BFSOS default-disable preset policy itself.
+    # Explicit rules in earlier preset files still take precedence.
+    grep -Eq '^[[:space:]]*disable[[:space:]]+\*[[:space:]]*$' "$preset_file" || \
+        die "Live ISO preset policy violation: BFSOS default-disable rule is missing"
+
+    log "Verified: BFSOS default-disable preset policy is installed and SSH/rsync have no boot enablement"
 }
 
 install_dracut_live_module() {
@@ -913,6 +1096,7 @@ GIT_COMMIT=$GIT_COMMIT_FULL
 BASE_ARCHIVE=$(basename "$base_archive")
 BASE_SHA256=$base_sha
 BASE_URL=$BASE_URL
+BASE_SOURCE=$BASE_SOURCE
 SQUASHFS_COMPRESSION=xz
 SQUASHFS_BLOCK_SIZE=1M
 SQUASHFS_X86_BCJ=yes
@@ -931,7 +1115,7 @@ stage_iso() {
         "$root/var/cache/pkg/build-work" "$root/var/cache/pkg/build-work-disk"
     sudo mkdir -p "$root/var/cache/pkg/sources" "$root/var/cache/pkg/packages" "$root/var/cache/pkg/build-work"
     sudo bash -c "$(declare -f audit_live_root die log); audit_live_root '$root'"
-    sudo bash -c "$(declare -f write_build_info); VERSION='$VERSION'; ARCH='$ARCH'; BUILD_DATE='$BUILD_DATE'; ISO_LABEL='$ISO_LABEL'; GIT_URL='$GIT_URL'; GIT_REF='$GIT_REF'; GIT_COMMIT_FULL='$GIT_COMMIT_FULL'; BASE_URL='$BASE_URL'; write_build_info '$root' '$base_archive'"
+    sudo bash -c "$(declare -f write_build_info); VERSION='$VERSION'; ARCH='$ARCH'; BUILD_DATE='$BUILD_DATE'; ISO_LABEL='$ISO_LABEL'; GIT_URL='$GIT_URL'; GIT_REF='$GIT_REF'; GIT_COMMIT_FULL='$GIT_COMMIT_FULL'; BASE_URL='$BASE_URL'; BASE_SOURCE='$BASE_SOURCE'; write_build_info '$root' '$base_archive'"
 
     root_bytes="$(sudo du -sb "$root" | awk '{print $1}')"
     sudo cp "$root/boot/$kernel" "$stage/bfsos/vmlinuz"
@@ -954,6 +1138,7 @@ GIT_COMMIT=$GIT_COMMIT_FULL
 BASE_ARCHIVE=$(basename "$base_archive")
 BASE_SHA256=$base_sha
 BASE_URL=$BASE_URL
+BASE_SOURCE=$BASE_SOURCE
 SQUASHFS_COMPRESSION=xz
 SQUASHFS_BLOCK_SIZE=1M
 SQUASHFS_X86_BCJ=yes
@@ -999,20 +1184,46 @@ main() {
     [ "$LIVE_MEDIA_WAIT" -ge 1 ] && [ "$LIVE_MEDIA_WAIT" -le 60 ] || \
         die "BFS_ISO_LIVE_MEDIA_WAIT must be between 1 and 60 seconds"
     preflight
+    sync_host_time
 
-    if [ "$BASE_MODE" = sourceforge ]; then
-        fetch_sourceforge_base base_archive
-    else
-        base_action="$(choose_base_action)"
-        case "$base_action" in
-            use-existing) ;;
-            rebuild) run_full_bootstrap ;;
-            cancel) log "ISO build cancelled"; exit 0 ;;
-            *) die "Internal error: unknown base action '$base_action'" ;;
-        esac
-        base_archive="$(latest_usable_base_archive 2>/dev/null || true)"
-    fi
+    case "$BASE_MODE" in
+        local-path)
+            base_archive="$LOCAL_BASE_PATH"
+            validate_base_archive "$base_archive" || die "Explicit --local-base archive is missing or invalid: $base_archive"
+            BASE_SOURCE="local-explicit:$base_archive"
+            ;;
+        sourceforge)
+            fetch_sourceforge_base base_archive
+            ;;
+        auto|local)
+            base_archive="$(latest_usable_base_archive 2>/dev/null || true)"
+            if validate_base_archive "$base_archive"; then
+                BASE_SOURCE="local-project:$base_archive"
+                log "Using maintainer-generated local base: $base_archive"
+            else
+                base_action="$(choose_base_action)"
+                case "$base_action" in
+                    use-existing)
+                        base_archive="$(latest_usable_base_archive 2>/dev/null || true)"
+                        BASE_SOURCE="local-project:$base_archive"
+                        ;;
+                    rebuild)
+                        run_full_bootstrap rebuild
+                        base_archive="$(latest_usable_base_archive 2>/dev/null || true)"
+                        BASE_SOURCE="local-rebuilt:$base_archive"
+                        ;;
+                    sourceforge)
+                        fetch_sourceforge_base base_archive
+                        ;;
+                    cancel) log "ISO build cancelled"; exit 0 ;;
+                    *) die "Internal error: unknown base action '$base_action'" ;;
+                esac
+            fi
+            ;;
+        *) die "Unknown BFS_ISO_BASE_MODE='$BASE_MODE' (expected auto, local, local-path, or sourceforge)" ;;
+    esac
     validate_base_archive "$base_archive" || die "No usable verified base archive is available"
+    log "Base source: $BASE_SOURCE"
     log "Using verified base archive: $base_archive"
 
     case "$WORK_DIR" in

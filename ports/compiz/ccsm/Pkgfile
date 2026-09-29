@@ -5,10 +5,10 @@
 
 name=ccsm
 version=0.8.18
-release=1
+release=2
 source=(https://gitlab.com/compiz/$name/-/archive/v$version/$name-v$version.tar.bz2)
 
 pkg_build() {
     python3 setup.py build || return 1
-    python3 setup.py install --root="$PKG" --optimize=1 || return 1
+    python3 setup.py install --root="$PKG" --prefix=/usr --optimize=1 || return 1
 }

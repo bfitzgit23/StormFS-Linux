@@ -1,12 +1,12 @@
 # Description: X Video Motion Compensation extension client library
-# URL: http://xorg.freedesktop.org
+# URL: https://xorg.freedesktop.org
 # Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: libXv
 
 name=libXvMC
 version=1.0.15
 release=4
-source=(https://www.x.org/releases/individual/lib/libXvMC-$version.tar.xz)
+source=(https://xorg.freedesktop.org/archive/individual/lib/libXvMC-$version.tar.xz)
 
 pkg_build() {
 	./configure $XORG_CONFIG --docdir=/usr/share/doc/$name-$version

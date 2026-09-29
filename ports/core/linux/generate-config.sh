@@ -120,7 +120,7 @@ main() {
     host_config="$(find_host_config)" ||
         die "No kernel configuration was found for the running kernel: $host_release"
 
-    echo "BFS Linux kernel config generator"
+    echo "BFSOS kernel config generator"
     echo "================================="
     echo
     echo "Running kernel: $host_release"

@@ -1,12 +1,12 @@
 # Description: xorg driver xf86-video-fbdev
-# URL: http://xorg.freedesktop.org
+# URL: https://xorg.freedesktop.org
 # Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: xorg-server
 
 name=xf86-video-fbdev
 version=0.5.1
 release=1
-source=(https://www.x.org/releases/individual/driver/xf86-video-fbdev-$version.tar.xz)
+source=(https://xorg.freedesktop.org/archive/individual/driver/xf86-video-fbdev-$version.tar.xz)
 
 pkg_build() {
 

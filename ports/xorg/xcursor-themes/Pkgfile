@@ -1,5 +1,5 @@
 # Description: Bitmaps for X
-# URL: http://xorg.freedesktop.org
+# URL: https://xorg.freedesktop.org
 # Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: pkgconf xcursorgen util-macros
 
@@ -7,7 +7,7 @@
 name=xcursor-themes
 version=1.0.7
 release=1
-source=(https://www.x.org/pub/individual/data/$name-$version.tar.xz)
+source=(https://xorg.freedesktop.org/archive/individual/data/$name-$version.tar.xz)
 
 pkg_build() {
 	./configure --prefix=/usr &&

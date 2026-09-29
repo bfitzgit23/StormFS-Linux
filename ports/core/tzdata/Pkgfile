@@ -1,10 +1,10 @@
-cription: Time zone database and related utilities
+# Description: Time zone database and related utilities
 # URL: https://www.iana.org/time-zones
 # Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 
 name=tzdata
-version=2026c
-release=2
+version=2026d
+release=1
 
 source=(
     https://www.iana.org/time-zones/repository/releases/${name}${version}.tar.gz

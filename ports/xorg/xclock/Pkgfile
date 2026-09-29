@@ -1,5 +1,5 @@
 # Description: simple clock for Xorg
-# URL: https://www.x.org/pub/individual/app
+# URL: https://xorg.freedesktop.org/archive/individual/app
 # Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 # Depends on: xorg-libs
 
