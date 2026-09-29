@@ -79,6 +79,36 @@ pkg_build() {
     scripts/config --enable DRM_SIMPLEDRM
     scripts/config --enable FRAMEBUFFER_CONSOLE
 
+    # Hybrid laptop GPU stack — Raptor Lake iGPU + Blackwell dGPU (Gigabyte Gaming A16 CVH).
+    # Keep i915/xe/nouveau as modules so GuC/HuC/DMC and (on GB206) GSP firmware load
+    # from the initramfs instead of racing a built-in probe before /lib/firmware is
+    # visible. DRM_ACCEL_IVPU is the Raptor Lake VPU; PCI_PWRCTRL powers the ACPI handle
+    # for the dGPU; MEI GSC/PXP/CSC/VSC provides the GSC channel HuC needs.
+    scripts/config --module DRM_I915
+    scripts/config --module DRM_XE
+    scripts/config --enable DRM_XE_DISPLAY
+    scripts/config --module DRM_NOUVEAU
+    scripts/config --enable DRM_NOUVEAU_BACKLIGHT
+    scripts/config --enable DRM_ACCEL
+    scripts/config --module DRM_ACCEL_IVPU
+    scripts/config --module PCI_PWRCTRL
+    scripts/config --module PCI_PWRCTRL_GENERIC
+    scripts/config --module PCI_PWRCTRL_TC9563
+    scripts/config --module INTEL_MEI_GSC
+    scripts/config --module INTEL_MEI_GSC_PROXY
+    scripts/config --module INTEL_MEI_CSC
+    scripts/config --module INTEL_MEI_VSC
+    scripts/config --module INTEL_MEI_PXP
+    scripts/config --module INTEL_MEI_HDCP
+    scripts/config --module INTEL_PMC_CORE
+    scripts/config --module INTEL_PMT_CLASS
+    scripts/config --module INTEL_PMT_TELEMETRY
+    scripts/config --module INTEL_PMT_CRASHLOG
+    scripts/config --module INTEL_PMT_DISCOVERY
+    scripts/config --module INTEL_VSEC
+    scripts/config --module THUNDERBOLT
+    scripts/config --module USB4
+
     scripts/config --enable INOTIFY_USER
     scripts/config --enable TMPFS
     scripts/config --enable TMPFS_POSIX_ACL
@@ -167,6 +197,20 @@ pkg_build() {
     for console_option in VT VT_CONSOLE SERIAL_8250 SERIAL_8250_CONSOLE AGP FB DRM DRM_SIMPLEDRM FRAMEBUFFER_CONSOLE; do
         grep -q "^CONFIG_${console_option}=y$" .config || {
             echo "Kernel configuration error: CONFIG_${console_option} is not built in." >&2
+            return 1
+        }
+    done
+    # Hybrid GPU stack must survive Kconfig reconciliation: i915/xe/nouveau as
+    # modules, XE display + IVPU enabled, PCI power control and MEI GSC present.
+    for hybrid_mod in DRM_I915 DRM_XE DRM_NOUVEAU PCI_PWRCTRL PCI_PWRCTRL_GENERIC PCI_PWRCTRL_TC9563 INTEL_MEI_GSC INTEL_MEI_GSC_PROXY INTEL_MEI_CSC INTEL_MEI_VSC INTEL_MEI_PXP INTEL_MEI_HDCP INTEL_PMC_CORE INTEL_PMT_CLASS INTEL_PMT_TELEMETRY INTEL_PMT_CRASHLOG INTEL_PMT_DISCOVERY THUNDERBOLT USB4 DRM_ACCEL_IVPU INTEL_VSEC; do
+        grep -q "^CONFIG_${hybrid_mod}=m$" .config || {
+            echo "Kernel configuration error: CONFIG_${hybrid_mod} is not modular (hybrid GPU)." >&2
+            return 1
+        }
+    done
+    for hybrid_y in DRM_XE_DISPLAY DRM_NOUVEAU_BACKLIGHT DRM_ACCEL; do
+        grep -q "^CONFIG_${hybrid_y}=y$" .config || {
+            echo "Kernel configuration error: CONFIG_${hybrid_y} is not enabled (hybrid GPU)." >&2
             return 1
         }
     done
