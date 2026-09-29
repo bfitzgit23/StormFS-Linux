@@ -98,9 +98,6 @@ BOOTSTRAP_SETTINGS_FILE="$SCRIPT_DIR/.bfs-bootstrap-settings"
 DIALOGRC_FILE=""
 ORIGINAL_DIALOGRC="${DIALOGRC-}"
 BFS_THEME="${BFS_BOOTSTRAP_THEME:-slackware}"
-# Select the service manager at build time: systemd, openrc, or sysvinit.
-BFS_INIT_SYSTEM="${BFS_INIT_SYSTEM-}"
-BFS_INIT_SYSTEM_ENV="$BFS_INIT_SYSTEM"
 
 BFS_BUILD_JOBS="auto"
 BFS_BUILD_OPT="portable"
@@ -189,17 +186,10 @@ _apply_build_settings() {
 
 load_bootstrap_settings() {
     BFS_THEME="${BFS_BOOTSTRAP_THEME:-slackware}"
-    BFS_INIT_SYSTEM="${BFS_INIT_SYSTEM-}"
     if [ -r "$BOOTSTRAP_SETTINGS_FILE" ]; then
         # shellcheck disable=SC1090
         . "$BOOTSTRAP_SETTINGS_FILE"
     fi
-    if [ -r "$SCRIPT_DIR/.bfs-init-profile" ]; then
-        # shellcheck disable=SC1090
-        . "$SCRIPT_DIR/.bfs-init-profile"
-    fi
-    [ -n "$BFS_INIT_SYSTEM_ENV" ] && BFS_INIT_SYSTEM="$BFS_INIT_SYSTEM_ENV"
-    [ -n "$BFS_INIT_SYSTEM" ] || BFS_INIT_SYSTEM=systemd
     _apply_build_settings
 }
 
@@ -214,7 +204,6 @@ BFS_VERIFY_MD5='$BFS_VERIFY_MD5'
 BFS_VERIFY_SIGNATURE='$BFS_VERIFY_SIGNATURE'
 BFS_VERIFY_FOOTPRINT='$BFS_VERIFY_FOOTPRINT'
 BFS_BUILD_SETTINGS_CHANGED='$BFS_BUILD_SETTINGS_CHANGED'
-BFS_INIT_SYSTEM='$BFS_INIT_SYSTEM'
 EOF_SETTINGS
     _apply_build_settings
 }
@@ -1137,18 +1126,6 @@ _find_latest_installer() {
     }
     if ! bash -n "$installer" >/dev/null 2>&1; then
         printf 'ERROR: Authoritative BFSOS installer has shell syntax errors: %s\n' "$installer" >&2
-        return 1
-    fi
-    # CRLF guard: a Windows checkout can put \r on disk, producing a shebang
-    # like "#!/usr/bin/env bash\r". That fails at exec time with a confusing
-    # crash, and `bash -n` above still passes because CR hides inside tokens.
-    # grep -q $'\r' "$file" is unreliable here: some greps (notably Git-Bash
-    # on NTFS mounts) strip CR before matching, and literal \r text in the
-    # script would false-positive anyway. Scan a hex dump for the 0d byte:
-    # byte-exact, no text-mode translation, identical on Linux and Git-Bash.
-    if od -An -v -tx1 "$installer" 2>/dev/null | grep -qw 0d; then
-        printf 'ERROR: Authoritative BFSOS installer has Windows CRLF line endings: %s\n' "$installer" >&2
-        printf '       Fix on the host, then retry:  dos2unix %s\n' "$installer" >&2
         return 1
     fi
     printf '%s\n' "$installer"
@@ -3665,15 +3642,6 @@ _buildbase() {
 
     cp -r ports/ "$LFS/usr/"
 
-    # Apply the selected non-systemd recipe overlay after importing the
-    # upstream Pkgfile tree. The systemd profile intentionally uses the
-    # upstream recipes unchanged.
-    if [ "$BFS_INIT_SYSTEM" != systemd ] &&
-       [ -d "$SCRIPT_DIR/profiles/init/overlays/$BFS_INIT_SYSTEM" ]; then
-        cp -a "$SCRIPT_DIR/profiles/init/overlays/$BFS_INIT_SYSTEM/." \
-            "$LFS/usr/ports/"
-    fi
-
     mkdir -p "$LFS/tmp/lfs-tools/bin"
     cp files/pkgin "$LFS/tmp/lfs-tools/bin/pkgin"
     chmod +x "$LFS/tmp/lfs-tools/bin/pkgin"
@@ -4496,27 +4464,6 @@ rsync
 traceroute
 signify
 "
-
-case "$BFS_INIT_SYSTEM" in
-    systemd)
-        ;;
-    openrc)
-        basepkg="$(printf '%s\n' "$basepkg" | sed '/^systemd$/d')
-openrc
-openrc-init-scripts"
-        ;;
-    sysvinit)
-        basepkg="$(printf '%s\n' "$basepkg" | sed '/^systemd$/d')
-sysvinit
-lfs-bootscripts"
-        ;;
-    *)
-        echo "ERROR: Unsupported BFS_INIT_SYSTEM: $BFS_INIT_SYSTEM" >&2
-        echo "Choose systemd, openrc, or sysvinit." >&2
-        exit 2
-        ;;
-esac
-
 sourcedir="$PWD/sources"
 packagedir="$PWD/packages"
 
