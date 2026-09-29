@@ -1139,6 +1139,18 @@ _find_latest_installer() {
         printf 'ERROR: Authoritative BFSOS installer has shell syntax errors: %s\n' "$installer" >&2
         return 1
     fi
+    # CRLF guard: a Windows checkout can put \r on disk, producing a shebang
+    # like "#!/usr/bin/env bash\r". That fails at exec time with a confusing
+    # crash, and `bash -n` above still passes because CR hides inside tokens.
+    # grep -q $'\r' "$file" is unreliable here: some greps (notably Git-Bash
+    # on NTFS mounts) strip CR before matching, and literal \r text in the
+    # script would false-positive anyway. Scan a hex dump for the 0d byte:
+    # byte-exact, no text-mode translation, identical on Linux and Git-Bash.
+    if od -An -v -tx1 "$installer" 2>/dev/null | grep -qw 0d; then
+        printf 'ERROR: Authoritative BFSOS installer has Windows CRLF line endings: %s\n' "$installer" >&2
+        printf '       Fix on the host, then retry:  dos2unix %s\n' "$installer" >&2
+        return 1
+    fi
     printf '%s\n' "$installer"
 }
 
