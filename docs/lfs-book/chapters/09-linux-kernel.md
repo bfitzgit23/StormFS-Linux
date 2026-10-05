@@ -261,6 +261,58 @@ blacklist snd_pcsp
 EOF
 ```
 
+### Hybrid Laptops: Forcing NVIDIA-Only Display
+
+On hybrid laptops (Intel iGPU or AMD APU plus an NVIDIA dGPU), the
+integrated GPU's DRM driver binds first and the NVIDIA GPU runs as an
+offload device (PRIME). To make the NVIDIA GPU the only display adapter,
+block the integrated driver. The `nvidia` port ships
+`/etc/modprobe.d/nvidia-hybrid-blacklist.conf` with the integrated-GPU
+blocks commented out.
+
+1. Edit the file and uncomment the block matching the hardware:
+
+   ```bash
+   # Intel iGPU (Raptor Lake and similar):
+   install i915 /bin/false
+   install xe /bin/false
+
+   # AMD APU (Ryzen hybrid laptops):
+   install amdgpu /bin/false
+   ```
+
+   The `install <module> /bin/false` form is a hard block: even an explicit
+   `modprobe` fails. This matters on StormFS because the BFSOS initramfs
+   force-loads `i915` and `xe` (`ports/core/dracut/bfsos-gpu.conf`), and a
+   plain `blacklist` line only prevents *automatic* alias-based loading —
+   the initramfs would load the module anyway.
+
+2. Regenerate the initramfs so the block applies during early boot:
+
+   ```bash
+   dracut --force --regenerate-all
+   ```
+
+3. Reboot and verify the integrated driver is gone and the NVIDIA GPU is
+   the only bound display adapter:
+
+   ```bash
+   lspci -k | grep -A3 -E 'VGA|3D'
+   lsmod | grep -E 'i915|xe|amdgpu' || echo "integrated driver not loaded"
+   ```
+
+> **Warning:** on MUX-less laptops the internal panel is wired to the
+> integrated GPU. Forcing NVIDIA-only can leave the internal display dark
+> after the KMS handoff. Test the effect first from the GRUB prompt with
+> `modprobe.blacklist=i915,xe` (automatic loading only — it is reversible
+> but may be overridden by the initramfs `force_drivers`), and keep the
+> hard block out of the initramfs until the result is confirmed. On open
+> MUX laptops, prefer the firmware/embedded-controller MUX switch if one
+> exists.
+
+The shipped file also hard-blocks `nouveau` unconditionally: the open
+nouveau driver must never bind when the proprietary driver is installed.
+
 ### Module Options
 
 To pass options to a module at load time:
@@ -284,6 +336,7 @@ Add kernel parameters in GRUB (see [Chapter 10](chapter-10-bootloader.md)) or vi
 | `quiet` | Suppress most kernel messages |
 | `loglevel=3` | Only show errors and warnings |
 | `nvidia.modeset=1` | Enable NVIDIA kernel mode-setting |
+| `modprobe.blacklist=i915,xe` | Test-block integrated-GPU auto-load on hybrid NVIDIA (see 9.7) |
 | `pcie_aspm=force` | Force PCIe power management |
 | `mitigations=off` | Disable Spectre/Meltdown mitigations (not recommended for production) |
 

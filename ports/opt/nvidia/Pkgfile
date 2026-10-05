@@ -5,9 +5,10 @@
 
 name=nvidia
 version=595.99.02
-release=1
+release=2
 source=(https://us.download.nvidia.com/XFree86/Linux-x86_64/$version/NVIDIA-Linux-x86_64-$version.run \
-	90-nvidia-uvm.rules 10-nvidia-drm-outputclass.conf nvidia-powerd.rc)
+	90-nvidia-uvm.rules 10-nvidia-drm-outputclass.conf nvidia-powerd.rc \
+	nvidia-hybrid-blacklist.conf)
 
 pkg_build() {
 	sh NVIDIA-Linux-x86_64-$version.run --extract-only
@@ -172,6 +173,10 @@ pkg_build() {
 
 	# nvidia-uvm udev rules file
 	install -D -m 0644 $SRC/90-nvidia-uvm.rules $PKG/lib/udev/rules.d/90-nvidia-uvm.rules
+
+	# hybrid GPU module policy (commented iGPU/APU blocks + nouveau hard-block)
+	install -D -m 0644 $SRC/nvidia-hybrid-blacklist.conf \
+		$PKG/etc/modprobe.d/nvidia-hybrid-blacklist.conf
 
 	# kernel modules
 	cd kernel

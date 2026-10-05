@@ -9,3 +9,13 @@ NOTE about wayland and eglstream:
 
 If wayland is installed and eglstream support is desired/needed,
 additionally install the 'egl-wayland' port.
+
+
+NOTE about hybrid laptops (Intel iGPU / AMD APU + NVIDIA):
+
+The port installs /etc/modprobe.d/nvidia-hybrid-blacklist.conf. The
+integrated-GPU blocks are commented out; uncomment the block matching the
+hardware to make the NVIDIA GPU the only display adapter, then run
+'dracut --force --regenerate-all' and reboot. See the BLFS book,
+chapter 9 ("Hybrid Laptops: Forcing NVIDIA-Only Display"), for details
+and verification steps.
