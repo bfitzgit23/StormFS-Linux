@@ -1,0 +1,48 @@
+# lfs-mkstage3.sh configuration (optional).
+#
+# Copy this file to lfs-mkstage3.conf next to the script and edit what you need:
+# the script sources it before parsing its own arguments, so anything set here
+# is a default that the command line (and the environment) can still override.
+#
+# It replaces the `config` file of the Vylen/emerald make_tarball.sh this script
+# was adapted from.
+
+# Which package manager the target root uses: scratchpkg or pacman.
+# Leave empty to autodetect from the rootfs database, then from $PATH.
+#PKGMGR="scratchpkg"
+
+# The root filesystem to assemble and/or pack.  For the LFS book workflow this
+# is the build mount point.
+#ROOTFS="/mnt/lfs"
+
+# Where the built packages live.  Defaults to the manager's own cache:
+# /var/cache/scratchpkg/packages or /var/cache/pacman/pkg.
+#PKG_DIR="/var/cache/scratchpkg/packages"
+
+# Package list for assembly mode: one package per line, in install order.
+# Generate it from the system being copied, for example:
+#   scratch installed | awk '{print $1}' > lfs-packages.txt
+#   pacman -Qq                        > lfs-packages.txt
+#PACKAGES="/path/to/lfs-packages.txt"
+
+# Names to mark as explicitly installed (scratchpkg world file / pacman
+# %REASON%=0).  Defaults to every name in PACKAGES.
+#WORLD="/path/to/lfs-world.txt"
+
+# The archive to write.  Defaults to
+# lfs-stage3-<version>-<YYYYmmdd>-<arch>.tar.<ext> in the current directory.
+#TARBALL_IMG="/var/tmp/lfs-stage3.tar.zst"
+
+# Packing defaults.
+#COMPRESSOR="xz"        # xz | zstd | gzip | none
+#LEVEL="6"              # default: 6 xz, 19 zstd, 9 gzip
+#THREADS="0"            # 0 = all CPUs
+#LOCALES="C.UTF-8 en_US.ISO-8859-1 en_US.UTF-8"
+#CHECKSUM="sha256sum"   # sha256sum | sha512sum | b3sum | none
+
+# Extra tar excludes, relative to the root (the built-in list already covers the
+# pseudo-filesystems, the LFS build trees and the package manager's caches).
+#EXCLUDES=("./opt/src" "./var/log/*")
+
+# Only needed when the target root has no /etc/pacman.conf yet.
+#HOST_PACMAN_CONF="/etc/pacman.conf"
