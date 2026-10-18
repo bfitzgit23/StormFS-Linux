@@ -1,0 +1,221 @@
+# Description: BFSOS default Linux 6.18 LTS kernel with broad x86_64 hardware support
+# URL: https://www.kernel.org/
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: bc bfs-kernel-maintenance bison cpio dracut elfutils flex linux-firmware openssl zstd
+# Optional: pahole
+
+pkgname=linux-lts
+pkgver=6.18.54
+pkgrel=1
+
+source=(
+    https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-$pkgver.tar.xz
+    config
+    md-check-new-feature-6.18.patch
+)
+
+options=(!strip !clean)
+
+build() {
+    cd "$srcdir/linux-$pkgver"
+
+    # Apply the upstream source patches shipped in source=()
+    for patch in "$srcdir"/*.patch; do
+        [ -f "$patch" ] || continue
+        patch -p1 < "$patch" || true
+    done
+
+    # Verify MD compatibility backport is present
+    grep -q 'module_param(check_new_feature, bool, 0600);' drivers/md/md.c || {
+        echo "linux-lts patch error: MD check_new_feature backport is missing" >&2
+        return 1
+    }
+
+    make mrproper
+    cp "$srcdir/config" .config
+
+    scripts/config --set-str CONFIG_LOCALVERSION "-BFS-LTS"
+    scripts/config --disable CONFIG_LOCALVERSION_AUTO
+    scripts/config --disable WERROR
+    scripts/config --disable DEBUG_INFO
+    scripts/config --disable DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
+    scripts/config --disable DEBUG_KERNEL
+    scripts/config --disable KASAN
+    scripts/config --disable KCSAN
+    scripts/config --disable UBSAN
+    scripts/config --disable CMDLINE_BOOL
+
+    scripts/config --enable PSI
+    scripts/config --disable PSI_DEFAULT_DISABLED
+    scripts/config --disable IKHEADERS
+
+    scripts/config --enable KERNEL_ZSTD
+    scripts/config --disable KERNEL_GZIP
+    scripts/config --enable MODULE_COMPRESS
+    scripts/config --enable MODULE_COMPRESS_ZSTD
+    scripts/config --enable MODULE_COMPRESS_ALL
+    scripts/config --disable MODULE_COMPRESS_GZIP
+    scripts/config --disable MODULE_COMPRESS_XZ
+
+    scripts/config --enable CGROUPS
+    scripts/config --enable MEMCG
+    scripts/config --enable CGROUP_SCHED
+    scripts/config --disable RT_GROUP_SCHED
+    scripts/config --disable EXPERT
+
+    scripts/config --enable STACKPROTECTOR
+    scripts/config --enable STACKPROTECTOR_STRONG
+
+    scripts/config --disable UEVENT_HELPER
+    scripts/config --disable FW_LOADER_USER_HELPER
+
+    scripts/config --enable DMIID
+    scripts/config --enable SYSFB_SIMPLEFB
+
+    scripts/config --enable INOTIFY_USER
+    scripts/config --enable TMPFS
+    scripts/config --enable TMPFS_POSIX_ACL
+
+    scripts/config --enable 64BIT
+    scripts/config --enable X86_64
+    scripts/config --enable RELOCATABLE
+    scripts/config --enable RANDOMIZE_BASE
+    scripts/config --enable EFI
+    scripts/config --enable EFI_STUB
+    scripts/config --enable EFI_PARTITION
+    scripts/config --enable BLK_DEV_INITRD
+    scripts/config --enable DEVTMPFS
+    scripts/config --enable DEVTMPFS_MOUNT
+    scripts/config --enable PCI
+    scripts/config --enable PCI_MSI
+    scripts/config --enable IOMMU_SUPPORT
+    scripts/config --enable IRQ_REMAP
+    scripts/config --enable X86_X2APIC
+    scripts/config --enable IA32_EMULATION
+    scripts/config --disable IA32_EMULATION_DEFAULT_DISABLED
+
+    scripts/config --enable EXT4_FS
+    scripts/config --enable XFS_FS
+    scripts/config --enable BTRFS_FS
+    scripts/config --enable F2FS_FS
+    scripts/config --enable VFAT_FS
+    scripts/config --enable EFIVAR_FS
+    scripts/config --enable NLS
+    scripts/config --enable NLS_CODEPAGE_437
+    scripts/config --enable NLS_ISO8859_1
+
+    scripts/config --enable SCSI
+    scripts/config --enable BLK_DEV_SD
+    scripts/config --enable ATA
+    scripts/config --enable SATA_AHCI
+    scripts/config --enable BLK_DEV_NVME
+
+    scripts/config --enable MD
+    scripts/config --module MD_LINEAR
+    scripts/config --module MD_RAID0
+    scripts/config --module MD_RAID1
+    scripts/config --module MD_RAID10
+    scripts/config --module MD_RAID456
+    scripts/config --module BLK_DEV_DM
+    scripts/config --module DM_CRYPT
+    scripts/config --module DM_INTEGRITY
+    scripts/config --module DM_VERITY
+    scripts/config --module DM_SNAPSHOT
+    scripts/config --module DM_THIN_PROVISIONING
+    scripts/config --module DM_CACHE
+    scripts/config --module DM_WRITECACHE
+    scripts/config --module DM_MIRROR
+    scripts/config --module DM_RAID
+    scripts/config --module DM_MULTIPATH
+    scripts/config --module DM_DELAY
+    scripts/config --module DM_ZERO
+    scripts/config --module ZRAM
+
+    scripts/config --enable VT
+    scripts/config --enable VT_CONSOLE
+    scripts/config --enable SERIAL_8250
+    scripts/config --enable SERIAL_8250_CONSOLE
+    scripts/config --enable AGP
+    scripts/config --enable FB
+    scripts/config --enable FB_EFI
+    scripts/config --enable DRM
+    scripts/config --enable DRM_PANIC
+    scripts/config --enable DRM_SIMPLEDRM
+    scripts/config --enable DRM_FBDEV_EMULATION
+    scripts/config --enable FRAMEBUFFER_CONSOLE
+    scripts/config --enable FRAMEBUFFER_CONSOLE_DEFERRED_TAKEOVER
+
+    scripts/config --module DRM_I915
+    scripts/config --module DRM_XE
+    scripts/config --enable DRM_XE_DISPLAY
+    scripts/config --module DRM_NOUVEAU
+    scripts/config --enable DRM_NOUVEAU_BACKLIGHT
+    scripts/config --enable DRM_ACCEL
+    scripts/config --module DRM_ACCEL_IVPU
+    scripts/config --module PCI_PWRCTRL
+    scripts/config --module PCI_PWRCTRL_GENERIC
+    scripts/config --module PCI_PWRCTRL_TC9563
+    scripts/config --module INTEL_MEI_GSC
+    scripts/config --module INTEL_MEI_GSC_PROXY
+    scripts/config --module INTEL_MEI_CSC
+    scripts/config --module INTEL_MEI_VSC
+    scripts/config --module INTEL_MEI_PXP
+    scripts/config --module INTEL_MEI_HDCP
+    scripts/config --module INTEL_MEI_HDCP
+    scripts/config --module INTEL_MEI_PXP
+    scripts/config --module INTEL_MEI_HDCP
+    scripts/config --module INTEL_PMC_CORE
+    scripts/config --module INTEL_PMT_CLASS
+    scripts/config --module INTEL_PMT_TELEMETRY
+    scripts/config --module INTEL_PMT_CRASHLOG
+    scripts/config --module INTEL_PMT_DISCOVERY
+    scripts/config --module INTEL_VSEC
+    scripts/config --module THUNDERBOLT
+    scripts/config --module USB4
+
+    scripts/config --enable VIRTIO
+    scripts/config --enable VIRTIO_PCI
+    scripts/config --enable VIRTIO_PCI_LIB
+    scripts/config --enable VIRTIO_PCI_LIB_LEGACY
+    scripts/config --enable VIRTIO_BLK
+    scripts/config --enable VIRTIO_CONSOLE
+
+    scripts/config --enable NET
+    scripts/config --enable INET
+    scripts/config --enable IPV6
+
+    make olddefconfig
+    make syncconfig
+
+    kernver="$(make -s kernelrelease)"
+    if [ "$kernver" != "$pkgver-BFS-LTS" ]; then
+        echo "Unexpected LTS kernel release: $kernver" >&2
+        return 1
+    fi
+
+    echo "Building broad-support LTS kernel release: $kernver"
+    make bzImage modules
+    make INSTALL_MOD_PATH="$pkgdir" modules_install
+
+    install -Dm644 arch/x86/boot/bzImage "$pkgdir/boot/vmlinuz-$kernver"
+    ln -sfn "vmlinuz-$kernver" "$pkgdir/boot/vmlinuz-lts"
+    install -Dm644 System.map "$pkgdir/boot/System.map-$kernver"
+    install -Dm644 .config "$pkgdir/boot/config-$kernver"
+
+    rm -rf "$pkgdir/lib/firmware"
+
+    make clean
+    make prepare scripts
+    install -d "$pkgdir/usr/src"
+    mv "$srcdir/linux-$pkgver" "$pkgdir/usr/src/linux-$kernver"
+    ln -sfn "linux-$kernver" "$pkgdir/usr/src/linux-lts"
+
+    rm -f "$pkgdir/lib/modules/$kernver/build" "$pkgdir/lib/modules/$kernver/source"
+    ln -s "/usr/src/linux-$kernver" "$pkgdir/lib/modules/$kernver/build"
+    ln -s "/usr/src/linux-$kernver" "$pkgdir/lib/modules/$kernver/source"
+}
+
+post_install() {
+    # Kernel package post-install steps can go here if needed
+    :
+}

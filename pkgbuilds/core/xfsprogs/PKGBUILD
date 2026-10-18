@@ -1,0 +1,31 @@
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+pkgname=xfsprogs
+pkgver=7.2.0
+pkgrel=1
+source=(https://www.kernel.org/pub/linux/utils/fs/xfs/xfsprogs/$pkgname-$pkgver.tar.xz)
+
+options=(!strip !clean)
+
+build() {
+    cd "$srcdir/$pkgname-$pkgver"
+
+    make configure
+    export DEBUG=-DNDEBUG
+    export OPTIMIZER="$CFLAGS"
+
+    ./configure \
+        --prefix=/usr \
+        --localstatedir=/var \
+        --libexecdir=/usr/lib \
+        --disable-gettext \
+        --disable-libicu
+
+    make
+    make -j1 DIST_ROOT="$pkgdir" install install-dev
+
+    install -d "$pkgdir/sbin"
+    mv "$pkgdir/usr/sbin/fsck.xfs" "$pkgdir/sbin/"
+    mv "$pkgdir/usr/sbin/xfs_repair" "$pkgdir/sbin/"
+
+    rm -rf "$pkgdir/usr/share/doc"
+}

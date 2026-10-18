@@ -1,0 +1,17 @@
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+pkgname=bash
+pkgver=5.3
+pkgrel=1
+source=(https://ftp.gnu.org/gnu/bash/bash-$pkgver.tar.gz)
+build() {
+    cd "$srcdir/bash-$pkgver"
+    ./configure --prefix=/usr --without-bash-malloc \
+        --with-installed-readline \
+        --docdir=/usr/share/doc/$pkgname-$pkgver
+    make
+    make DESTDIR="$pkgdir" install
+}
+post_install() {
+    mkdir -p "$pkgdir/bin"
+    mv "$pkgdir/usr/bin/bash" "$pkgdir/bin"
+}

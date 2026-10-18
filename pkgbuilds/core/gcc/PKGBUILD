@@ -1,0 +1,80 @@
+# Description: GNU Compiler Collection
+# URL: https://gcc.gnu.org/
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on:
+
+pkgname=gcc
+pkgver=16.2.0
+pkgrel=2
+
+source=(
+    https://ftp.gnu.org/gnu/gcc/gcc-$pkgver/gcc-$pkgver.tar.xz
+    c89
+    c99
+)
+
+export LANG=C
+
+options=(!strip !clean !makeflags)
+
+build() {
+    cd "$srcdir/gcc-$pkgver"
+
+    # Use /usr/lib as the 64-bit library directory.
+    sed -i -e '/m64=/s/lib64/lib/' gcc/config/i386/t-linux64
+
+    mkdir -v build
+    cd build
+
+    SED=sed \
+    ../configure \
+        --prefix=/usr \
+        --libexecdir=/usr/lib \
+        --enable-languages=c,c++,objc,obj-c++,lto \
+        --enable-lto \
+        --disable-bootstrap \
+        --disable-libmpx \
+        --with-system-zlib \
+        --with-pkgversion="BFSOS" \
+        --disable-fixincludes \
+        --enable-threads=posix \
+        --enable-__cxa_atexit \
+        --enable-default-pie \
+        --enable-default-ssp \
+        --enable-multilib
+
+    make
+    make DESTDIR="$pkgdir" -j1 install
+
+    # Compatibility compiler links.
+    install -d -m 0755 "$pkgdir/usr/lib"
+    ln -sf ../bin/cpp "$pkgdir/usr/lib/cpp"
+    ln -sf gcc "$pkgdir/usr/bin/cc"
+
+    # Install the GCC LTO plugin link for binutils.
+    gcc_triplet="$(./gcc/xgcc -B./gcc/ -dumpmachine)"
+    install -d -m 0755 "$pkgdir/usr/lib/bfd-plugins"
+    ln -sf ../../lib/gcc/$gcc_triplet/$pkgver/liblto_plugin.so \
+        "$pkgdir/usr/lib/bfd-plugins/liblto_plugin.so"
+
+    # Move GDB auto-load scripts to their proper location.
+    install -d -m 0755 "$pkgdir/usr/share/gdb/auto-load/usr/lib"
+    for gdb_script in "$pkgdir/usr/lib/"*gdb.py; do
+        [ -e "$gdb_script" ] || continue
+        mv -v "$gdb_script" "$pkgdir/usr/share/gdb/auto-load/usr/lib/"
+    done
+
+    # Install the POSIX C89 and C99 compiler wrappers.
+    install -D -m 0755 "$srcdir/c89" "$pkgdir/usr/bin/c89"
+    install -D -m 0755 "$srcdir/c99" "$pkgdir/usr/bin/c99"
+
+    rm -rf "$pkgdir/usr/share/$pkgname-$pkgver"
+}
+
+# Toolchain bootstrap passes are handled by the stage builder, not by makepkg.
+# The functions below document the original pkgmk bootstrap_build behavior for
+# reference when adapting the LFS bootstrap to pacman.
+#
+# build_phase_pass1() { ... }
+# build_phase_pass2() { ... }
+# build_phase_pass3() { ... }

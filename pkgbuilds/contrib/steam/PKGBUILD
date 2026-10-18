@@ -1,0 +1,46 @@
+# Description: Digital distribution client bootstrap package.
+# URL: https://store.steampowered.com/
+# Maintainer: Brian Madonna <bmadonnaster@gmail.com>
+# Depends on: alsa-plugins-32 curl dbus desktop-file-utils fontconfig-32 gtk-32 libX11-32 libXinerama-32 libXScrnSaver-32 libgcrypt-32 libglvnd-32 libgpg-error-32 libnm-32 libva-32 mesa-32 nss-32 openal-32 pipewire-32 vulkan-loader-32 xdg-user-dirs zenity
+# Optional: pulseaudio-32
+
+pkgname=steam
+pkgver=1.0.0.87
+pkgrel=5
+
+source=(
+    https://repo.steampowered.com/steam/archive/stable/steam_$pkgver.tar.gz
+    steam-runtime.sh
+)
+
+options=(!strip !clean)
+
+build() {
+    cd "$srcdir/steam-$pkgver"
+
+    # apply roundups for udev rules
+    sed -ri 's|("0666")|"0660", TAG+="uaccess"|g' subprojects/steam-devices/60-steam-input.rules
+    sed -ri 's|("misc")|\\1, OPTIONS+="static_node=uinput"|g' subprojects/steam-devices/60-steam-input.rules
+    sed -ri 's|(, TAG\+="uaccess")|, MODE="0660"\1|g' subprojects/steam-devices/60-steam-vr.rules
+
+    # separated runtime/native desktop files
+    sed -ri 's|(Name=Steam)|\1 (Runtime)|' steam.desktop
+    sed -ri 's|(/usr/bin/steam)|\1-runtime|' steam.desktop
+
+    make DESTDIR="$pkgdir" install
+
+    mv "$pkgdir/usr/bin/steam" "$pkgdir/usr/lib/steam/steam"
+    install -Dm755 "$srcdir/steam-runtime.sh" "$pkgdir/usr/bin/steam-runtime"
+
+    # blank steamdeps because apt-get
+    ln -sf /bin/true "$pkgdir/usr/bin/steamdeps"
+
+    install -d "$pkgdir/etc/ssl/certs"
+
+    install -Dm644 subprojects/steam-devices/60-steam-input.rules \
+        "$pkgdir/usr/lib/udev/rules.d/70-steam-input.rules"
+    install -Dm644 subprojects/steam-devices/60-steam-vr.rules \
+        "$pkgdir/usr/lib/udev/rules.d/70-steam-vr.rules"
+
+    rm -rf "$pkgdir/usr/share/doc"
+}
