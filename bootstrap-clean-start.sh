@@ -881,7 +881,7 @@ if [ -r "$SCRIPT_DIR/.bfs-init-profile" ]; then
     . "$SCRIPT_DIR/.bfs-init-profile"
 fi
 [ -n "$BFS_INIT_SYSTEM_ENV" ] && BFS_INIT_SYSTEM="$BFS_INIT_SYSTEM_ENV"
-[ -n "$BFS_INIT_SYSTEM" ] || BFS_INIT_SYSTEM=systemd
+[ -n "$BFS_INIT_SYSTEM" ] || BFS_INIT_SYSTEM=openrc
 case "$BFS_INIT_SYSTEM" in
     systemd)
         ;;

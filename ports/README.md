@@ -14,8 +14,8 @@ The current baseline is imported from:
 
 The bootstrap supports one selected init system per build:
 
-- `systemd` — the upstream default;
-- `openrc` — OpenRC plus SysVinit compatibility and BFSOS OpenRC service scripts;
+- `systemd` — the upstream systemd profile;
+- `openrc` — OpenRC plus SysVinit compatibility and BFSOS OpenRC service scripts (the default);
 - `sysvinit` — SysVinit plus the LFS boot scripts.
 
 Select interactively or non-interactively before building:
