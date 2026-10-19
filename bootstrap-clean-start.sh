@@ -863,6 +863,7 @@ procps-ng
 util-linux
 e2fsprogs
 libarchive
+pacman
 pkgutils
 dialog
 prt-get
