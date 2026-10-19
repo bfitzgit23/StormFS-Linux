@@ -20,7 +20,7 @@ build_opt="
 	--disable-rsh
 	--disable-servers
 "
-source="https://ftp.gnu.org/gnu/inetutils/inetutils-$version.tar.gz"
+source="https://ftp2.osuosl.org/pub/blfs/conglomeration/inetutils/inetutils-$version.tar.gz"
 
 build() {
 	# scratchpkg calls build() from $SRC; enter the unpacked source tree.

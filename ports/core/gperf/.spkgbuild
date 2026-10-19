@@ -11,7 +11,7 @@
 name=gperf
 version=3.3
 release=1
-source="https://ftp.gnu.org/gnu/gperf/gperf-$version.tar.gz"
+source="https://ftp2.osuosl.org/pub/blfs/conglomeration/gperf/gperf-$version.tar.gz"
 
 build() {
 	# scratchpkg calls build() from $SRC; enter the unpacked source tree.

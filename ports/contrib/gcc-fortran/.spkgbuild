@@ -13,7 +13,7 @@ name=gcc-fortran
 version=16.2.0
 release=4
 build_opt="--prefix=/usr --libexecdir=/usr/lib --enable-languages=fortran --disable-bootstrap --disable-libmpx --with-system-zlib --with-pkgversion=BFSOS --disable-fixincludes --enable-threads=posix --enable-__cxa_atexit --enable-default-pie --enable-default-ssp --enable-multilib"
-source="https://ftp.gnu.org/gnu/gcc/gcc-$version/gcc-$version.tar.xz"
+source="https://ftp2.osuosl.org/pub/blfs/conglomeration/gcc/gcc-$version/gcc-$version.tar.xz"
 options="libtool"
 
 build() {

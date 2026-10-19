@@ -18,7 +18,7 @@ build_opt="--disable-efiemu
         --with-platform=efi
         --target=x86_64
         --disable-werror"
-source="https://ftp.gnu.org/gnu/grub/grub-$version.tar.xz unifont-17.0.05.pcf.noextract::https://ftp.gnu.org/gnu/unifont/unifont-17.0.05/unifont-17.0.05.pcf.gz extra_deps.lst"
+source="https://ftp2.osuosl.org/pub/blfs/conglomeration/grub/grub-$version.tar.xz unifont-17.0.05.pcf.noextract::https://ftp.gnu.org/gnu/unifont/unifont-17.0.05/unifont-17.0.05.pcf.gz extra_deps.lst"
 
 build() {
 	# scratchpkg calls build() from $SRC; enter the unpacked source tree.

@@ -16,7 +16,7 @@ build_opt="--enable-cxx
 bootstrap_opt="$build_opt
 --enable-cxx
 --disable-static"
-source="https://ftp.gnu.org/gnu/gmp/gmp-$version.tar.xz"
+source="https://ftp2.osuosl.org/pub/blfs/conglomeration/gmp/gmp-$version.tar.xz"
 
 build() {
 	# scratchpkg calls build() from $SRC; enter the unpacked source tree.

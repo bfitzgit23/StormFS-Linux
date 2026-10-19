@@ -23,7 +23,7 @@ name=libidn2-32
 version=2.3.8
 release=2
 build_opt="--disable-nls"
-source="https://ftp.gnu.org/gnu/libidn/${name%-*}-$version.tar.gz"
+source="https://ftp2.osuosl.org/pub/blfs/conglomeration/libidn/${name%-*}-$version.tar.gz"
 
 build() {
 	# scratchpkg calls build() from $SRC; enter the unpacked source tree.

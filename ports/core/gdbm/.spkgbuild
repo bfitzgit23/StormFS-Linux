@@ -12,7 +12,7 @@ name=gdbm
 version=1.26
 release=1
 build_opt="--enable-libgdbm-compat"
-source="https://ftp.gnu.org/gnu/gdbm/gdbm-$version.tar.gz"
+source="https://ftp2.osuosl.org/pub/blfs/conglomeration/gdbm/gdbm-$version.tar.gz"
 
 build() {
 	# scratchpkg calls build() from $SRC; enter the unpacked source tree.

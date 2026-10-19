@@ -12,7 +12,7 @@
 name=gcc
 version=16.2.0
 release=2
-source="https://ftp.gnu.org/gnu/gcc/gcc-$version/gcc-$version.tar.xz c89 c99"
+source="https://ftp2.osuosl.org/pub/blfs/conglomeration/gcc/gcc-$version/gcc-$version.tar.xz c89 c99"
 options="libtool"
 
 build() {

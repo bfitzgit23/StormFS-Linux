@@ -11,7 +11,7 @@
 name=libcdio-paranoia
 version=10.2+2.0.2
 release=1
-source="https://ftp.gnu.org/gnu/libcdio/$name-$version.tar.gz"
+source="https://ftp2.osuosl.org/pub/blfs/conglomeration/libcdio/$name-$version.tar.gz"
 
 build() {
 	# scratchpkg calls build() from $SRC; enter the unpacked source tree.
