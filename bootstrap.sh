@@ -4403,6 +4403,7 @@ python3-pyproject-hooks
 python3-wheel
 libuv
 libarchive
+pacman
 cmake
 fmt
 xxhash
