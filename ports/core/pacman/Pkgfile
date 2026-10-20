@@ -1,7 +1,7 @@
 # Description: Package manager utility for the pacman package format
 # URL: https://gitlab.archlinux.org/pacman/pacman
 # Maintainer: Brian Madonna <bmadonnaster@gmail.com>
-# Depends on: libarchive curl openssl
+# Depends on: libarchive curl openssl meson ninja
 
 name=pacman
 version=6.0.2

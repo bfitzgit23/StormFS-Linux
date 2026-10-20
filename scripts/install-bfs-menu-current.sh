@@ -8091,7 +8091,7 @@ fi
 run_package_operation "mandatory package upgrade (prt-get sysup)" prt-get sysup
 
 log "Ensuring BFSOS package-build safety/cache tooling is installed"
-run_package_operation "mandatory build tooling (fakeroot/ccache)" prt-get depinst fakeroot fmt xxhash ccache
+run_package_operation "mandatory build tooling (fakeroot/ccache/meson/ninja)" prt-get depinst fakeroot fmt xxhash ccache meson ninja
 
 
 if [[ -n "$PACKAGE_LIST_VALUE" ]]; then

@@ -48,7 +48,7 @@ iso_packages=(
     networkmanager-iso openssh git sudo wget wpa_supplicant wireless-regdb gpm lynx-iso chrony kbd
     cryptsetup lvm2 mdadm snapper pciutils parted
     dialog squashfs-tools grub grub-efi dosfstools mtools efibootmgr libisoburn syslinux
-    pacman
+    meson ninja pacman
 )
 
 log() { printf '[BFSOS ISO] %s\n' "$*"; }
