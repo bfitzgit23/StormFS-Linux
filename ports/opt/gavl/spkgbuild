@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: doxygen
 
+description="Low-level audio/video support library used by multimedia applications"
 name=gavl
 version=2.0.1
 release=2

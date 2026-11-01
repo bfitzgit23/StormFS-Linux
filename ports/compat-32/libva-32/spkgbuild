@@ -2,6 +2,7 @@
 # homepage	: https://github.com/intel/libva
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Video Acceleration API to enable hardware accelerated video decode/encode."
 name=libva-32
 version=2.24.1
 release=3

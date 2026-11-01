@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: gpm
 
+description="Newt is a programming library for color text mode, widget based user interfaces."
 name=newt
 version=0.52.25
 release=2

@@ -1,6 +1,7 @@
 # description	: xfce4-session package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="xfce4-session package"
 name=xfce4-session
 version=4.20.4
 release=2

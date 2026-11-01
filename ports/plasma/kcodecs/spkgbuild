@@ -1,6 +1,7 @@
 # description	: kcodecs package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kcodecs package"
 name=kcodecs
 version=6.30.0
 release=1

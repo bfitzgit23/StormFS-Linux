@@ -2,6 +2,7 @@
 # homepage	: https://github.com/AcademySoftwareFoundation/OpenTimelineIO
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Editorial timeline interchange format and API"
 name=opentimelineio
 version=0.18.1
 release=4

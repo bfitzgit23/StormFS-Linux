@@ -2,6 +2,7 @@
 # homepage	: https://labwc.github.io/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Lightweight Wayland stacking compositor inspired by Openbox"
 name=labwc
 version=0.20.2
 release=1

@@ -1,6 +1,7 @@
 # description	: libkexiv2 package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="libkexiv2 package"
 name=libkexiv2
 version=26.08.1
 release=1

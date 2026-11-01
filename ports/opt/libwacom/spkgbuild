@@ -1,6 +1,7 @@
 # description	: libwacom package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="libwacom package"
 name=libwacom
 version=2.19.1
 release=2

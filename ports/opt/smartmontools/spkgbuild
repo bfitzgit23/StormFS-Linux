@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: curl lynx wget gnupg
 
+description="The smartmontools package contains utility programs (smartctl, smartd) to control/monitor storage systems using the Self-Monitoring, Analysis and Reporting Technology System (S.M.A.R.T.) built into most modern ATA and SCSI disks."
 name=smartmontools
 version=7.5
 release=2

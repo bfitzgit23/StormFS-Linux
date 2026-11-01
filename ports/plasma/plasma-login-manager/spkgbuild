@@ -2,6 +2,7 @@
 # homepage	: https://invent.kde.org/plasma/plasma-login-manager
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="KDE Plasma integrated display/login manager and configuration KCM"
 name=plasma-login-manager
 version=6.7.5
 release=2

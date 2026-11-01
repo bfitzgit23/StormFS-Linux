@@ -1,6 +1,7 @@
 # description	: nautilus package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="nautilus package"
 name=nautilus
 version=51.0.1
 release=1

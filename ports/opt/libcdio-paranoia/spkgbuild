@@ -2,6 +2,7 @@
 # homepage	: https://github.com/rocky/libcdio-paranoia
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="CD paranoia libraries from libcdio"
 name=libcdio-paranoia
 version=10.2+2.0.2
 release=1

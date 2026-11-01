@@ -2,6 +2,7 @@
 # homepage	: http://libevent.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Asynchronous event notification software library"
 name=libevent
 version=2.1.13
 release=2

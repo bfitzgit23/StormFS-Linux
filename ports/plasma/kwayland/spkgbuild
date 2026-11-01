@@ -1,6 +1,7 @@
 # description	: kwayland package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kwayland package"
 name=kwayland
 version=6.7.5
 release=1

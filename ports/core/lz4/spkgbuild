@@ -2,6 +2,7 @@
 # homepage	: https://github.com/lz4/lz4
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Extremely fast compression algorithm"
 name=lz4
 version=1.10.0
 release=1

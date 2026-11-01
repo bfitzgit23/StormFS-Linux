@@ -2,6 +2,7 @@
 # homepage	: https://virt-manager.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Graphical console client for libvirt virtual machines"
 name=virt-viewer
 version=11.0
 release=2

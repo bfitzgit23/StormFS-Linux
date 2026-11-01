@@ -1,6 +1,7 @@
 # description	: kinit package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kinit package"
 name=kinit
 version=5.115.0
 release=1

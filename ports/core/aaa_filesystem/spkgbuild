@@ -2,6 +2,7 @@
 # homepage	: https://www.linuxfromscratch.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Base filesystem hierarchy and default system configuration"
 name=aaa_filesystem
 version=1
 release=22

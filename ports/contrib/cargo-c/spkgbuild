@@ -2,6 +2,7 @@
 # homepage	: https://github.com/lu-zero/cargo-c/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Cargo subcommand to build and install C-ABI compatible dynamic and static libraries"
 name=cargo-c
 version=0.10.24
 release=2

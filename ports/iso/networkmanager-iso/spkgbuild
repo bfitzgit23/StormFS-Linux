@@ -2,6 +2,7 @@
 # homepage	: https://networkmanager.dev/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Minimal NetworkManager daemon plus nmcli/nmtui for BFSOS live media"
 name=networkmanager-iso
 version=1.58.1
 release=1

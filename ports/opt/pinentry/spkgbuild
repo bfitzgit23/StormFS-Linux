@@ -1,6 +1,7 @@
 # description	: pinentry package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="pinentry package"
 name=pinentry
 version=1.3.3
 release=1

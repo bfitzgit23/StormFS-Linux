@@ -1,6 +1,7 @@
 # description	: print-manager package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="print-manager package"
 name=print-manager
 version=6.7.5
 release=1

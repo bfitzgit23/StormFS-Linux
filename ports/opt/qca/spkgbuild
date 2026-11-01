@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: botan cyrus-sasl doxygen gnupg libgcrypt nss p11-kit
 
+description="Qt cryptographic architecture"
 name=qca
 version=2.3.12
 release=2

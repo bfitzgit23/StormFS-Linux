@@ -1,6 +1,7 @@
 # description	: gnome-screenshot package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="gnome-screenshot package"
 name=gnome-screenshot
 version=41.0
 release=1

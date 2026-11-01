@@ -1,6 +1,7 @@
 # description	: python3-chardet package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="python3-chardet package"
 name=python3-chardet
 version=7.6.0
 release=3

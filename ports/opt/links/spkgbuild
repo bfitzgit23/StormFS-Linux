@@ -2,6 +2,7 @@
 # homepage	: http://links.twibright.com/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Text and graphics mode WWW browser"
 name=links
 version=2.30
 release=3

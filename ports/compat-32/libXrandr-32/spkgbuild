@@ -2,6 +2,7 @@
 # homepage	: http://xorg.freedesktop.org
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="X Resize and Rotate extension client library"
 name=libxrandr-32
 version=1.5.5
 release=2

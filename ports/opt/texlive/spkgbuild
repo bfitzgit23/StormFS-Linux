@@ -2,6 +2,7 @@
 # homepage	: https://www.tug.org/texlive/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="TeX Live typesetting system built from source"
 name=texlive
 version=20260301
 release=3

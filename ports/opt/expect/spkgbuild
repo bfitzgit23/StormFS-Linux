@@ -1,6 +1,7 @@
 # description	: A stream oriented C library for parsing XML
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="A stream oriented C library for parsing XML"
 name=expect
 version=5.45.4
 release=1

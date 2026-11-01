@@ -1,6 +1,7 @@
 # description	: muparser package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="muparser package"
 name=muparser
 version=2.3.5
 release=1

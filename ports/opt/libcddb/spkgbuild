@@ -1,6 +1,7 @@
 # description	: libcddb package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="libcddb package"
 name=libcddb
 version=1.3.2
 release=1

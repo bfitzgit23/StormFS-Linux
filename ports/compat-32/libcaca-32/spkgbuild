@@ -2,6 +2,7 @@
 # homepage	: http://caca.zoy.org/wiki/libcaca
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Color AsCii Art library (32-bit)"
 name=libcaca-32
 version=0.99.beta20
 release=2

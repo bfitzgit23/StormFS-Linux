@@ -1,6 +1,7 @@
 # description	: python3-attrs package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="python3-attrs package"
 name=python3-attrs
 version=26.1.0
 release=1

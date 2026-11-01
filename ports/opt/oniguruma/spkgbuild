@@ -2,6 +2,7 @@
 # homepage	: https://github.com/kkos/oniguruma
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Regular expressions library"
 name=oniguruma
 version=6.9.10
 release=1

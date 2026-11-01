@@ -2,6 +2,7 @@
 # homepage	: https://github.com/pypa/build
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="A simple, correct PEP517 package builder"
 name=python3-build
 version=1.6.1
 release=1

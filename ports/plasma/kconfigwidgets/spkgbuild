@@ -1,6 +1,7 @@
 # description	: kconfigwidgets package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kconfigwidgets package"
 name=kconfigwidgets
 version=6.30.0
 release=1

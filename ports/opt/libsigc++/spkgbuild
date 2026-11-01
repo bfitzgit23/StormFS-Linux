@@ -2,6 +2,7 @@
 # homepage	: https://libsigcplusplus.github.io/libsigcplusplus/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="A callback framework for C++."
 name=libsigc++
 version=3.6.0
 release=2

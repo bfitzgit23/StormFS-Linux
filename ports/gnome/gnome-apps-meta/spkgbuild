@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: eog gnome-screenshot
 
+description="Current BLFS GNOME applications meta package"
 name=gnome-apps-meta
 version=51.0
 release=2

@@ -1,6 +1,7 @@
 # description	: python3-calver package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="python3-calver package"
 name=python3-calver
 version=2025.10.20
 release=1

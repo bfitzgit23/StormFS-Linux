@@ -2,6 +2,7 @@
 # homepage	: https://github.com/libsdl-org/sdl12-compat
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="SDL 1.2 compatibility layer implemented on top of SDL2"
 name=sdl12-compat
 version=1.2.76
 release=1

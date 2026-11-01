@@ -2,6 +2,7 @@
 # homepage	: https://xcb.freedesktop.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="pthread dummy implementation"
 name=libpthread-stubs
 version=0.5
 release=1

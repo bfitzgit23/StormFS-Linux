@@ -1,6 +1,7 @@
 # description	: automake package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="automake package"
 name=automake
 version=1.18.1
 release=1

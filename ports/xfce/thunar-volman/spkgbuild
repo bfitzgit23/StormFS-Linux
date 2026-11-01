@@ -1,6 +1,7 @@
 # description	: thunar-volman package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="thunar-volman package"
 name=thunar-volman
 version=4.20.0
 release=1

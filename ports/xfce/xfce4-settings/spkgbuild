@@ -1,6 +1,7 @@
 # description	: xfce4-settings package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="xfce4-settings package"
 name=xfce4-settings
 version=4.20.5
 release=1

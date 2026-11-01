@@ -2,6 +2,7 @@
 # homepage	: https://lynx.invisible-island.net/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Minimal HTTPS-capable Lynx text browser for BFSOS live media"
 name=lynx-iso
 version=2.9.3
 release=1

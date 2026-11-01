@@ -2,6 +2,7 @@
 # homepage	: https://ccache.dev/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Masquerade directory to use ccache with mingw"
 name=mingw-ccache-bindings
 version=10.2.0
 release=1

@@ -2,6 +2,7 @@
 # homepage	: https://libuv.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Support library with a focus on asynchronous I/O"
 name=libuv
 version=1.52.1
 release=2

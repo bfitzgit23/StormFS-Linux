@@ -2,6 +2,7 @@
 # homepage	: https://www.theora.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="A free and open video compression format from the Xiph.org Foundation."
 name=libtheora-32
 version=1.2.0
 release=3

@@ -2,6 +2,7 @@
 # homepage	: https://gitlab.com/compiz/compiz-bcop
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Compiz option code generator"
 name=compiz-bcop
 version=0.8.18
 release=1

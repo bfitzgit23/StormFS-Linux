@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: gnuplot	doxygen
 
+description="The libqalculate package contains a library that provides functions for a multi-purpose calculator."
 name=libqalculate
 version=5.12.0
 release=2

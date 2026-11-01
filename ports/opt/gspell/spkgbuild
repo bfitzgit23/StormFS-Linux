@@ -1,6 +1,7 @@
 # description	: gspell package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="gspell package"
 name=gspell
 version=1.14.4
 release=2

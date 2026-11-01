@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: asciidoctor
 
+description="A collection of tools, libraries and tests for shader compilation"
 name=shaderc
 version=2026.3
 release=1

@@ -1,6 +1,7 @@
 # description	: Collection of boot loaders for the Linux operating system
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Collection of boot loaders for the Linux operating system"
 name=syslinux
 version=6.03
 release=1

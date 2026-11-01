@@ -2,6 +2,7 @@
 # homepage	: https://github.com/pantoniou/libfyaml
 # maintainer	: Brian
 
+description="Fully-featured YAML parser and emitter library"
 name=libfyaml
 version=0.9.6
 release=1

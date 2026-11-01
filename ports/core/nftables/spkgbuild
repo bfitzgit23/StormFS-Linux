@@ -2,6 +2,7 @@
 # homepage	: https://netfilter.org/projects/nftables/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="firewalling, NAT, and packet mangling for linux"
 name=nftables
 version=1.1.7
 release=1

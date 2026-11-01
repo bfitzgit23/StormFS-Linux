@@ -1,6 +1,7 @@
 # description	: geoclue package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="geoclue package"
 name=geoclue
 version=2.8.2
 release=3

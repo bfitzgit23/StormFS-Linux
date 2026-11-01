@@ -2,6 +2,7 @@
 # homepage	: https://xorg.freedesktop.org
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="xorg driver xf86-input-vmmouse"
 name=xf86-input-vmmouse
 version=13.2.0
 release=1

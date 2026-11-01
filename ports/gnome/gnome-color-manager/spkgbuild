@@ -1,6 +1,7 @@
 # description	: gnome-color-manager package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="gnome-color-manager package"
 name=gnome-color-manager
 version=3.36.2
 release=1

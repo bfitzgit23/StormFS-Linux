@@ -2,6 +2,7 @@
 # homepage	: https://cairographics.org/cairomm/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="C++ wrapper for the cairo graphics library."
 name=cairomm
 version=1.18.1
 release=3

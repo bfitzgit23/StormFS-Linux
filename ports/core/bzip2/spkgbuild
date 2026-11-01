@@ -1,6 +1,7 @@
 # description	: Programs for compressing and decompressing files
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Programs for compressing and decompressing files"
 name=bzip2
 version=1.0.8
 release=1

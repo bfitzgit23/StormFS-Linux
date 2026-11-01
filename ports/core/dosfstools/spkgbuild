@@ -2,6 +2,7 @@
 # homepage	: https://github.com/dosfstools/dosfstools
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Tools for creating and checking DOS/FAT filesystems"
 name=dosfstools
 version=4.2
 release=1

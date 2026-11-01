@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: wayland
 
+description="Vulkan validation layers"
 name=vulkan-validation-layers
 _name=Vulkan-ValidationLayers
 version=1.4.357.0

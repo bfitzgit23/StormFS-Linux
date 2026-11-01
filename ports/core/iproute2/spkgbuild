@@ -1,6 +1,7 @@
 # description	: iproute2 package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="iproute2 package"
 name=iproute2
 version=7.2.0
 release=1

@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: sphinx pyqt
 
+description="Extra CMake modules used by KDE Frameworks and Plasma"
 name=extra-cmake-modules
 version=6.30.0
 release=1

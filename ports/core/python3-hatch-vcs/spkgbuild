@@ -2,6 +2,7 @@
 # homepage	: https://github.com/ofek/hatch-vcs
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Hatch plugin for versioning with your preferred VCS"
 name=python3-hatch-vcs
 version=0.5.0
 release=1

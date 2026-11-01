@@ -1,6 +1,7 @@
 # description	: spirv-tools package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="spirv-tools package"
 name=spirv-tools
 version=1.4.357.0
 release=2

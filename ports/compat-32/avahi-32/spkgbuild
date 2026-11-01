@@ -2,6 +2,7 @@
 # homepage	: https://github.com/avahi/avahi
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="32-bit Avahi mDNS/DNS-SD compatibility libraries"
 name=avahi-32
 version=0.9-rc5
 release=8

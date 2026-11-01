@@ -1,6 +1,7 @@
 # description	: groff package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="groff package"
 name=groff
 version=1.24.1
 release=1

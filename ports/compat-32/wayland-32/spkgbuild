@@ -2,6 +2,7 @@
 # homepage	: https://wayland.freedesktop.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Wayland is intended as a simpler replacement for X"
 name=wayland-32
 version=1.26.0
 release=4

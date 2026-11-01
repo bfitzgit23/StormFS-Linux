@@ -2,6 +2,7 @@
 # homepage	: https://pypi.org/project/flit-core/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Core build backend for Flit"
 name=python3-flit-core
 version=4.1.0
 release=1

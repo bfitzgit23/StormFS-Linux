@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: alsa-lib pulseaudio
 
+description="Qt 5 WebEngine module"
 name=qtwebengine5
 version=5.15.19
 release=1

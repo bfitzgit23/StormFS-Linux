@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: qt6 gnome-keyring kdialog
 
+description="Open-source Chromium web browser"
 name=chromium
 version=153.0.8010.36
 release=3

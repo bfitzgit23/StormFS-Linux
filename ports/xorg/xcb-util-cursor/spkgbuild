@@ -2,6 +2,7 @@
 # homepage	: https://xcb.freedesktop.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="XCB utilities library"
 name=xcb-util-cursor
 version=0.1.6
 release=1

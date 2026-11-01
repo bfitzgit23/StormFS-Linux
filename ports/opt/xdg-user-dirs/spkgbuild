@@ -1,6 +1,7 @@
 # description	: xdg-user-dirs package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="xdg-user-dirs package"
 name=xdg-user-dirs
 version=0.20
 release=3

@@ -2,6 +2,7 @@
 # homepage	: http://www.gnu.org/software/libidn/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Provides support for IETF Internationalized Domain Names (IDN)."
 name=libidn-32
 version=1.44
 release=2

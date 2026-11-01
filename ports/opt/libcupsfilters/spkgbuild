@@ -1,6 +1,7 @@
 # description	: libcupsfilters package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="libcupsfilters package"
 name=libcupsfilters
 version=2.2.1
 release=1

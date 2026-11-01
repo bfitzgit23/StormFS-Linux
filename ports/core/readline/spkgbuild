@@ -1,6 +1,7 @@
 # description	: readline package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="readline package"
 name=readline
 version=8.3
 release=1

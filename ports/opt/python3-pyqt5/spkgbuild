@@ -2,6 +2,7 @@
 # homepage	: https://www.riverbankcomputing.com/software/pyqt/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Python 3 bindings for Qt 5"
 name=python3-pyqt5
 version=5.15.11
 release=3

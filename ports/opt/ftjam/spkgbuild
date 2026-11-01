@@ -2,6 +2,7 @@
 # homepage	: https://freetype.sourceforge.net/jam/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Small Jam-compatible build tool used by ArgyllCMS"
 name=ftjam
 version=2.5.3rc2
 release=1

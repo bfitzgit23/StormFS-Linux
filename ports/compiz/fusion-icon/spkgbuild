@@ -2,6 +2,7 @@
 # homepage	: https://gitlab.com/compiz/fusion-icon
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Tray icon to launch and manage Compiz Reloaded"
 name=fusion-icon
 version=0.2.4
 release=3

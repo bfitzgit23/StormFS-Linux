@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: freeglut openjpeg2 jbig2dec gumbo-parser
 
+description="Lightweight PDF and XPS viewer"
 name=mupdf
 version=1.28.3
 release=1

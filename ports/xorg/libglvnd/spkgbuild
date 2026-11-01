@@ -2,6 +2,7 @@
 # homepage	: https://github.com/NVIDIA/libglvnd
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="GL Vendor-Neutral Dispatch library"
 name=libglvnd
 version=1.7.0
 release=2

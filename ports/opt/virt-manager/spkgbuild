@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: gtksourceview4
 
+description="Graphical virtual machine manager for libvirt"
 name=virt-manager
 version=5.1.0
 release=5

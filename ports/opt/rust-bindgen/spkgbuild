@@ -1,6 +1,7 @@
 # description	: rust-bindgen package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="rust-bindgen package"
 name=rust-bindgen
 version=0.73.2
 release=1

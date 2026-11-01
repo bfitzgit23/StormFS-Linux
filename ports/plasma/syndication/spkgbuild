@@ -1,6 +1,7 @@
 # description	: syndication package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="syndication package"
 name=syndication
 version=6.30.0
 release=1

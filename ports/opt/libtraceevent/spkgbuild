@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: asciidoc xmlto
 
+description="Linux kernel trace event library"
 name=libtraceevent
 version=1.9.0
 release=1

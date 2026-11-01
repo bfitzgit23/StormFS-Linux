@@ -2,6 +2,7 @@
 # homepage	: https://dotat.at/prog/unifdef/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Utility for removing preprocessor conditionals from code"
 name=unifdef
 version=2.12
 release=3

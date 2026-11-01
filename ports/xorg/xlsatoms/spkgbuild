@@ -2,6 +2,7 @@
 # homepage	: https://xorg.freedesktop.org
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="x window sniper"
 name=xlsatoms
 version=1.1.5
 release=2

@@ -1,6 +1,7 @@
 # description	: kxmlrpcclient package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kxmlrpcclient package"
 name=kxmlrpcclient
 version=5.115.0
 release=1

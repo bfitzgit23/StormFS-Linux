@@ -2,6 +2,7 @@
 # homepage	: https://gitlab.com/compiz/ccsm
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="CompizConfig graphical Settings Manager (GTK3/Python3)"
 name=ccsm
 version=0.8.18
 release=2

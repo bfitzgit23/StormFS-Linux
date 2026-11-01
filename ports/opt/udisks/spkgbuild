@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: gobject-introspection dbus-python gtk-doc lvm2 python3-gobject exFAT libiscsi btrfs-progs dosfstools gptfdisk mdadm xfsprogs
 
+description="The UDisks package provides a daemon, tools and libraries to access and manipulate disks and storage devices."
 name=udisks
 version=2.11.2
 release=2

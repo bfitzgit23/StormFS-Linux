@@ -2,6 +2,7 @@
 # homepage	: https://github.com/google/highway
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Performance-portable SIMD library"
 name=highway
 version=1.4.0
 release=3

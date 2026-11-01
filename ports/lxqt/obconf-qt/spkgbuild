@@ -2,6 +2,7 @@
 # homepage	: https://github.com/lxqt/obconf-qt
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Obconf Qt component for LXQt"
 name=obconf-qt
 version=0.16.6
 release=2

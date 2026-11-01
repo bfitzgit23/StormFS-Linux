@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: linux-pam
 
+description="Filesystem snapshot management tool for Btrfs"
 name=snapper
 version=0.13.1
 release=2

@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: icu openmpi python3-numpy
 
+description="Free peer-reviewed portable C++ source libraries."
 name=boost
 version=1.92.0
 release=2

@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: bluez gtk3 ibus libproxy mariadb pulseaudio unixodbc wayland-protocols
 
+description="Qt 6 framework (base/modules excluding QtWebEngine)"
 name=qt6
 version=6.11.2
 release=9

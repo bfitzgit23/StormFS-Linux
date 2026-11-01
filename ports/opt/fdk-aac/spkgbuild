@@ -2,6 +2,7 @@
 # homepage	: https://sourceforge.net/projects/opencore-amr/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Fraunhofer Advanced Audio Coding, extracted from the Android Open Source Project"
 name=fdk-aac
 version=2.0.3
 release=2

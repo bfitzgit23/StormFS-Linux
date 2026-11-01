@@ -1,6 +1,7 @@
 # description	: kguiaddons package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kguiaddons package"
 name=kguiaddons
 version=6.30.0
 release=1

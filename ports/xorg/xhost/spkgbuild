@@ -2,6 +2,7 @@
 # homepage	: https://xorg.freedesktop.org
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="x server access control program"
 name=xhost
 version=1.0.10
 release=1

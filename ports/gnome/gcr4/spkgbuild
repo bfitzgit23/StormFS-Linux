@@ -1,6 +1,7 @@
 # description	: gcr4 package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="gcr4 package"
 name=gcr4
 version=4.4.0.1
 release=1

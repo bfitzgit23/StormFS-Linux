@@ -2,6 +2,7 @@
 # homepage	: https://people.freedesktop.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="The Sound Theme Freedesktop package contains sound themes for the desktop."
 name=sound-theme-freedesktop
 version=0.8
 release=1

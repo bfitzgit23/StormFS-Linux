@@ -2,6 +2,7 @@
 # homepage	: https://pypi.org/project/PyQt5-sip/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="The SIP extension module for PyQt5"
 name=pyqt5-sip
 version=12.19.0
 release=1

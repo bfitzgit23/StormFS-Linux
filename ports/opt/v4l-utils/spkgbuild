@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: qt6 qt5 doxygen sdl2 llvm libbpf
 
+description="Video4Linux utilities and libraries for media devices"
 name=v4l-utils
 version=1.32.0
 release=5

@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: libcanberra lynx
 
+description="GTK volume control for PulseAudio-compatible sound servers"
 name=pavucontrol
 version=6.2
 release=2

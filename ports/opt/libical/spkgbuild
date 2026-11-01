@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: db doxygen graphviz gtk-doc icu pygobject
 
+description="The libical package contains an implementation of the iCalendar protocols and data formats."
 name=libical
 version=4.0.5
 release=3

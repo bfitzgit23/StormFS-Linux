@@ -2,6 +2,7 @@
 # homepage	: https://www.x.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="XKB file handling library"
 name=libxkbfile
 version=1.2.0
 release=3

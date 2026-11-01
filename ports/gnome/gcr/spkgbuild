@@ -1,6 +1,7 @@
 # description	: gcr package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="gcr package"
 name=gcr
 version=3.41.2
 release=1

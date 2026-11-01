@@ -2,6 +2,7 @@
 # homepage	: http://$name.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="The libndp package provides a wrapper for IPv6 Neighbor Discovery Protocol. It also provides a tool named ndptool for sending and receiving NDP messages."
 name=libndp
 version=1.9
 release=1

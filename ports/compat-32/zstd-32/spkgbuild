@@ -2,6 +2,7 @@
 # homepage	: https://facebook.github.io/zstd/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Real-time compression with high compression ratios."
 name=zstd-32
 version=1.5.7
 release=2

@@ -3,6 +3,7 @@
 # maintainer	: BFSOS maintainers
 # optional	: cups openssh samba avahi nftables rsync kerberos wpa_supplicant lightdm sddm plasma-login-manager libvirt bfs-kernel-maintenance
 
+description="LFS/BLFS SysVinit service scripts"
 name=sysvinit-init-scripts
 version=1
 release=1

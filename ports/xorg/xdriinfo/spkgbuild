@@ -2,6 +2,7 @@
 # homepage	: https://xorg.freedesktop.org
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Query configuration information of DRI drivers"
 name=xdriinfo
 version=1.0.8
 release=2

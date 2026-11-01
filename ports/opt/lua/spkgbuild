@@ -2,6 +2,7 @@
 # homepage	: https://www.lua.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Lightweight embeddable scripting language (Lua 5.4 compatibility line)"
 name=lua
 version=5.4.9
 release=3

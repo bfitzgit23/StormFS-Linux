@@ -2,6 +2,7 @@
 # homepage	: https://gitlab.gnome.org/GNOME/libxml2
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Libraries and utilities used for parsing XML files."
 name=libxml2
 version=2.15.4
 release=4

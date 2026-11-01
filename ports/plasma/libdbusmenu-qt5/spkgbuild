@@ -2,6 +2,7 @@
 # homepage	: https://launchpad.net/libdbusmenu-qt
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="A library that provides a Qt implementation of the DBusMenu spec"
 name=libdbusmenu-qt5
 version=0.9.3+16.04.20160218
 release=2

@@ -1,6 +1,7 @@
 # description	: kglobalacceld package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kglobalacceld package"
 name=kglobalacceld
 version=6.7.5
 release=1

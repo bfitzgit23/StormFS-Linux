@@ -2,6 +2,7 @@
 # homepage	: https://gitlab.gnome.org/GNOME/at-spi2-core
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Protocol definitions and daemon for D-Bus at-spi"
 name=at-spi2-core-32
 version=2.60.6
 release=3

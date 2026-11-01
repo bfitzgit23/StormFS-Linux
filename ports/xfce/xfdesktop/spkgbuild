@@ -1,6 +1,7 @@
 # description	: xfdesktop package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="xfdesktop package"
 name=xfdesktop
 version=4.20.2
 release=1

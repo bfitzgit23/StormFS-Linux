@@ -2,6 +2,7 @@
 # homepage	: https://github.com/tesseract-ocr/tesseract
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="OCR engine used by KDE Spectacle text recognition"
 name=tesseract
 version=5.5.3
 release=5

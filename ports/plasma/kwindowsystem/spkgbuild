@@ -1,6 +1,7 @@
 # description	: kwindowsystem package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kwindowsystem package"
 name=kwindowsystem
 version=6.30.0
 release=1

@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: bash-completion scdoc zsh
 
+description="A cross-platform, GPU-accelerated terminal emulator"
 name=alacritty
 version=0.17.0
 release=4

@@ -1,6 +1,7 @@
 # description	: plasma-disks package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="plasma-disks package"
 name=plasma-disks
 version=6.7.5
 release=1

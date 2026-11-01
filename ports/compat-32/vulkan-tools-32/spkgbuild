@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: wayland-32
 
+description="Vulkan tools"
 name=vulkan-tools-32
 _name=Vulkan-Tools
 version=1.4.357.0

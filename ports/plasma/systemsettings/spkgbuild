@@ -1,6 +1,7 @@
 # description	: systemsettings package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="systemsettings package"
 name=systemsettings
 version=6.7.5
 release=1

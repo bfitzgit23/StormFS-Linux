@@ -2,6 +2,7 @@
 # homepage	: https://netfilter.org/projects/libnftnl/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="libnftnl is a userspace library providing a low-level netlink programming interface (API) to the in-kernel nf_tables subsystem"
 name=libnftnl
 version=1.3.2
 release=1

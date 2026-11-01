@@ -2,6 +2,7 @@
 # homepage	: https://hewlettpackard.github.io/wireless-tools/Tools.html
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Legacy Linux Wireless Extensions configuration utilities"
 name=wireless_tools
 version=30.pre9
 release=4

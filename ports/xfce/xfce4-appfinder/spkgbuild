@@ -1,6 +1,7 @@
 # description	: xfce4-appfinder package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="xfce4-appfinder package"
 name=xfce4-appfinder
 version=4.20.0
 release=1

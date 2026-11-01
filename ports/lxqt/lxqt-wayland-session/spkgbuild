@@ -2,6 +2,7 @@
 # homepage	: https://github.com/lxqt/lxqt-wayland-session
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Lxqt Wayland Session for LXQt"
 name=lxqt-wayland-session
 version=0.4.1
 release=1

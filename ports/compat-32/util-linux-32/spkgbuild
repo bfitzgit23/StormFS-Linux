@@ -2,6 +2,7 @@
 # homepage	: https://github.com/karelzak/util-linux
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Miscellaneous system utilities"
 name=util-linux-32
 version=2.42.4
 release=4

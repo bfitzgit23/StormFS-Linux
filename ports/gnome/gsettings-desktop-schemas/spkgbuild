@@ -2,6 +2,7 @@
 # homepage	: https://gitlab.gnome.org/GNOME/gsettings-desktop-schemas
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Shared GSettings schemas for the GNOME desktop"
 name=gsettings-desktop-schemas
 version=51.0
 release=1

@@ -5,6 +5,7 @@
 # GECKO_VERSION: 2.47.4
 # MONO_VERSION:  11.3.0
 
+description="WINE with staging patches"
 name=wine-staging
 version=11.17
 release=4

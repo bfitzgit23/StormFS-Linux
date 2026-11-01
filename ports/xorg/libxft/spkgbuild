@@ -2,6 +2,7 @@
 # homepage	: https://xorg.freedesktop.org
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="X font rendering client library"
 name=libxft
 version=2.3.9
 release=3

@@ -2,6 +2,7 @@
 # homepage	: https://www.intel.com/content/www/us/en/developer/topic-technology/open/acpica/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="ACPI Component Architecture iASL compiler"
 name=acpica
 version=20260408
 release=3

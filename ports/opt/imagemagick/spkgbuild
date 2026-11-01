@@ -1,6 +1,7 @@
 # description	: imagemagick package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="imagemagick package"
 name=imagemagick
 version=7.1.2_31
 srcver=7.1.2-31

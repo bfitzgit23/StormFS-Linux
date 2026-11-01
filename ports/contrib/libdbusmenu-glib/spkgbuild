@@ -2,6 +2,7 @@
 # homepage	: https://launchpad.net/libdbusmenu
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="GLib core library for passing menus over D-Bus"
 name=libdbusmenu-glib
 version=18.10
 release=3

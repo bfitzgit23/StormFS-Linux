@@ -1,6 +1,7 @@
 # description	: kjs package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kjs package"
 name=kjs
 version=5.115.0
 release=1

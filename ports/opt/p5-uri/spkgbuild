@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: p5-business-isbn
 
+description="Uniform Resource Identifiers (absolute and relative)"
 name=p5-uri
 version=5.37
 release=1

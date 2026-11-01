@@ -2,6 +2,7 @@
 # homepage	: https://palletsprojects.com/p/jinja/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="A simple pythonic template language written in Python"
 name=python3-jinja2
 version=3.1.6
 release=1

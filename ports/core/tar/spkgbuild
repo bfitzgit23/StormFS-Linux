@@ -1,6 +1,7 @@
 # description	: tar package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="tar package"
 name=tar
 version=1.35
 release=1

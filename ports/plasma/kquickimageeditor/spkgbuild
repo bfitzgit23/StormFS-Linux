@@ -2,6 +2,7 @@
 # homepage	: https://invent.kde.org/libraries/kquickimageeditor
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Qt Quick image editing components used by KDE applications"
 name=kquickimageeditor
 version=0.6.2.1
 release=3

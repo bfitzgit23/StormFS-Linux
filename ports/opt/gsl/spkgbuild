@@ -1,6 +1,7 @@
 # description	: gsl package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="gsl package"
 name=gsl
 version=2.8
 release=1

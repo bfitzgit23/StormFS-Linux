@@ -1,6 +1,7 @@
 # description	: libkscreen package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="libkscreen package"
 name=libkscreen
 version=6.7.5
 release=1

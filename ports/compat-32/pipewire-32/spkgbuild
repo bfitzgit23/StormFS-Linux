@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: avahi-32 jack-32 libsdl2-32 libsndfile-32 pulseaudio-32 vulkan-loader-32 libxcb-32
 
+description="Low-latency audio/video router and processor - 32-bit client library"
 name=pipewire-32
 version=1.6.8
 release=3

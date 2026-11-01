@@ -1,6 +1,7 @@
 # description	: findutils package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="findutils package"
 name=findutils
 version=4.11.0
 release=1

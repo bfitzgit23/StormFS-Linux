@@ -2,6 +2,7 @@
 # homepage	: https://xiph.org/paranoia/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="CDDA extraction tool with jitter correction"
 name=cdparanoia-32
 version=10.2
 release=5

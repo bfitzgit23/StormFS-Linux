@@ -1,6 +1,7 @@
 # description	: xfwm4 package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="xfwm4 package"
 name=xfwm4
 version=4.20.0
 release=1

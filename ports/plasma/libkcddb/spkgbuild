@@ -2,6 +2,7 @@
 # homepage	: https://kde.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Library used to retrieve audio CD metadata from the internet"
 name=libkcddb
 version=26.08.1
 release=1

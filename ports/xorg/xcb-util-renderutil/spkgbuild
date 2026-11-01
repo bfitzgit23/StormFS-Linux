@@ -2,6 +2,7 @@
 # homepage	: https://xcb.freedesktop.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="XCB utilities library"
 name=xcb-util-renderutil
 version=0.3.10
 release=2

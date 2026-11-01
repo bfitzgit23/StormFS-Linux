@@ -2,6 +2,7 @@
 # homepage	: https://libproxy.github.io/libproxy/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Automatic proxy configuration management library"
 name=libproxy
 version=0.5.12
 release=3

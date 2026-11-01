@@ -2,6 +2,7 @@
 # homepage	: https://github.com/bmadonnaster/BFSOS
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="BFSOS safe kernel upgrade, rollback retention, and boot finalization helper"
 name=bfs-kernel-maintenance
 version=1.0
 release=3

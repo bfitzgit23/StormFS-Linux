@@ -1,6 +1,7 @@
 # description	: polkit-qt-1 package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="polkit-qt-1 package"
 name=polkit-qt-1
 version=0.201.1
 release=3

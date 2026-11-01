@@ -2,6 +2,7 @@
 # homepage	: https://github.com/flatpak/flatpak-xdg-utils
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Sandboxed desktop utilities (xdg-open, portals) for Flatpak containers"
 name=flatpak-xdg-utils
 version=1.0.6
 release=1

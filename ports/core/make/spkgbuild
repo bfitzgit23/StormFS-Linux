@@ -1,6 +1,7 @@
 # description	: make package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="make package"
 name=make
 version=4.4.1
 release=1

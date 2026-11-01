@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: pahole
 
+description="Optional BFSOS current/mainline Linux kernel, sources and modules"
 name=linux
 version=7.2.8
 release=1

@@ -2,6 +2,7 @@
 # homepage	: http://www.simplesystems.org/libtiff/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Library for manipulation of TIFF (Tag Image File Format) images"
 name=libtiff4-32
 version=3.9.7
 release=3

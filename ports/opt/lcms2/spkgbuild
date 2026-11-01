@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: libjpeg-turbo
 
+description="Little CMS intends to be an small-footprint color management engine"
 name=lcms2
 version=2.19.1
 release=3

@@ -2,6 +2,7 @@
 # homepage	: https://www.cairographics.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="A 2D graphics library with support for multiple output devices"
 name=cairo-32
 version=1.18.4
 release=3

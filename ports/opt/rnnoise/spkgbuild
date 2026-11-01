@@ -2,6 +2,7 @@
 # homepage	: https://github.com/xiph/rnnoise
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Recurrent neural network based audio noise suppression library"
 name=rnnoise
 version=0.2
 release=1

@@ -2,6 +2,7 @@
 # homepage	: https://github.com/lxqt/xdg-desktop-portal-lxqt
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Xdg Desktop Portal Lxqt component for LXQt"
 name=xdg-desktop-portal-lxqt
 version=1.4.0
 release=2

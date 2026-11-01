@@ -1,6 +1,7 @@
 # description	: gtkmm package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="gtkmm package"
 name=gtkmm
 version=4.24.0
 release=1

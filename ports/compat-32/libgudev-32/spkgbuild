@@ -2,6 +2,7 @@
 # homepage	: https://wiki.gnome.org/Projects/libgudev
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="GObject bindings for libudev"
 name=libgudev-32
 version=238
 release=3

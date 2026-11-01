@@ -1,6 +1,7 @@
 # description	: gnome-user-docs package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="gnome-user-docs package"
 name=gnome-user-docs
 version=51.0
 release=1

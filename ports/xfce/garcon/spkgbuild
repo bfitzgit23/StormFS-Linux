@@ -1,6 +1,7 @@
 # description	: garcon package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="garcon package"
 name=garcon
 version=4.20.0
 release=1

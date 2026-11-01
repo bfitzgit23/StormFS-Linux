@@ -2,6 +2,7 @@
 # homepage	: https://libvirt.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Python bindings for libvirt"
 name=libvirt-python
 version=12.7.0
 release=1

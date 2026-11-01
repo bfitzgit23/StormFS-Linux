@@ -1,6 +1,7 @@
 # description	: kpeople package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kpeople package"
 name=kpeople
 version=6.30.0
 release=1

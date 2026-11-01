@@ -1,6 +1,7 @@
 # description	: menu-cache package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="menu-cache package"
 name=menu-cache
 version=1.1.1
 release=1

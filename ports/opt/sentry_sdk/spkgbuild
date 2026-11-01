@@ -1,6 +1,7 @@
 # description	: sentry_sdk package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="sentry_sdk package"
 name=sentry_sdk
 version=2.68.1
 release=1

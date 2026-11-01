@@ -1,6 +1,7 @@
 # description	: libgxps package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="libgxps package"
 name=libgxps
 version=0.3.2
 release=1

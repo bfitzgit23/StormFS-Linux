@@ -1,6 +1,7 @@
 # description	: perl-xml-parser package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="perl-xml-parser package"
 name=perl-xml-parser
 version=2.59
 release=1

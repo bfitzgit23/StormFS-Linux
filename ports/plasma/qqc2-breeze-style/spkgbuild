@@ -1,6 +1,7 @@
 # description	: qqc2-breeze-style package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="qqc2-breeze-style package"
 name=qqc2-breeze-style
 version=6.7.5
 release=1

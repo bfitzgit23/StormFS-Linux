@@ -1,6 +1,7 @@
 # description	: libaio package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="libaio package"
 name=libaio
 version=0.3.113
 release=2

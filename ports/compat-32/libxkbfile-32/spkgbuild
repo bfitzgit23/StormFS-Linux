@@ -2,6 +2,7 @@
 # homepage	: https://xorg.freedesktop.org
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="xorg lib libxkbfile"
 name=libxkbfile-32
 version=1.2.0
 release=3

@@ -2,6 +2,7 @@
 # homepage	: https://www.rarlab.com/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="The UnRar package contains a RAR extraction utility used for extracting files from RAR archives. RAR archives are usually created with WinRAR, primarily in a Windows environment."
 name=unrar
 version=7.2.7
 release=1

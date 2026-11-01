@@ -1,6 +1,7 @@
 # description	: mpc package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="mpc package"
 name=mpc
 version=1.4.1
 release=1

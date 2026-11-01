@@ -1,6 +1,7 @@
 # description	: gexiv2 package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="gexiv2 package"
 name=gexiv2
 version=0.16.2
 release=1

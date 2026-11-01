@@ -2,6 +2,7 @@
 # homepage	: https://github.com/Tencent/rapidjson
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Fast JSON parser and generator for C++"
 name=rapidjson
 version=20250205.24b5e7a
 _commit=24b5e7a8b27f42fa16b96fc70aade9106cf7102f

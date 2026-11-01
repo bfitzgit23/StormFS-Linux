@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: bluez dbus-python gnutls gtk-doc jansson libaudit libbpf libnvme libteam modemmanager upower valgrind dnsmasq firewalld
 
+description="Core NetworkManager daemon, nmcli, nm-online and nmtui"
 name=networkmanager
 version=1.58.1
 release=2

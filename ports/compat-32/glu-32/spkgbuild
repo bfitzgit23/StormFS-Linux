@@ -2,6 +2,7 @@
 # homepage	: https://www.mesa3d.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Mesa OpenGL Utility library"
 name=glu-32
 version=9.0.3
 release=3

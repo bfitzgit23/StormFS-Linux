@@ -2,6 +2,7 @@
 # homepage	: https://www.gnu.org/software/autoconf-archive/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="A collection of freely re-usable Autoconf macros"
 name=autoconf-archive
 version=2024.10.16
 release=1

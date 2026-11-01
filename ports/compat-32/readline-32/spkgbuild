@@ -2,6 +2,7 @@
 # homepage	: https://tiswww.case.edu/php/chet/readline/rltop.html
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Lets users edit command lines as they are typed in"
 name=readline-32
 version=8.3
 release=3

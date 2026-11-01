@@ -2,6 +2,7 @@
 # homepage	: https://www.khronos.org/vulkan/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Utility libraries for Vulkan developers"
 name=vulkan-utility-libraries
 version=1.4.357.0
 _commit=5a88b6042edb8f03eefc8de73bd73a899989373f

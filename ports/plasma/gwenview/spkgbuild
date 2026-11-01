@@ -1,6 +1,7 @@
 # description	: gwenview package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="gwenview package"
 name=gwenview
 version=26.08.1
 release=1

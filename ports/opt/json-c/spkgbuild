@@ -4,6 +4,7 @@
 #
 # Depons on: cmake
 
+description="JSON-C implements a reference-counted JSON object model and parser for C."
 name=json-c
 version=0.19
 release=1

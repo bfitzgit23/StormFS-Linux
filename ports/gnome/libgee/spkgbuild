@@ -1,6 +1,7 @@
 # description	: libgee package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="libgee package"
 name=libgee
 version=0.20.8
 release=1

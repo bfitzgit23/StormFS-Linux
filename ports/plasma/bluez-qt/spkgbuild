@@ -1,6 +1,7 @@
 # description	: bluez-qt package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="bluez-qt package"
 name=bluez-qt
 version=6.30.0
 release=1

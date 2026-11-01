@@ -2,6 +2,7 @@
 # homepage	: https://gtkmm.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Common build files of the C++ bindings."
 name=mm-common
 version=1.0.8
 release=1

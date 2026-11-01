@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: docutils librsvg libtiff gobject-introspection gi-docgen libavif webp-pixbuf-loader
 
+description="An image loading library for GTK+"
 name=gdk-pixbuf
 version=2.44.8
 release=1

@@ -1,6 +1,7 @@
 # description	: kwallet package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kwallet package"
 name=kwallet
 version=6.30.0
 release=1

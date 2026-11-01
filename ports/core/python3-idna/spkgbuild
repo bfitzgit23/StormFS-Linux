@@ -2,6 +2,7 @@
 # homepage	: https://pypi.org/project/idna/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Internationalized Domain Names in Applications (IDNA)"
 name=python3-idna
 version=3.20
 release=1

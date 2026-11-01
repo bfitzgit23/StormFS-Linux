@@ -2,6 +2,7 @@
 # homepage	: https://www.vim.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Vi Improved, a highly configurable, improved version of the vi text editor"
 name=vim
 version=9.2.1119
 release=1

@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: wayland-32
 
+description="Vulkan validation layers, 32bit"
 name=vulkan-validation-layers-32
 _name=Vulkan-ValidationLayers
 version=1.4.357.0

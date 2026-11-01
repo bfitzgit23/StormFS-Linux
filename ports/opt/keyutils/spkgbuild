@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: lsb-tools
 
+description="Utilities and library for managing the Linux kernel key retention facility."
 name=keyutils
 version=1.6.3
 release=1

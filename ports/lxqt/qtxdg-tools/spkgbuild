@@ -2,6 +2,7 @@
 # homepage	: https://github.com/lxqt/qtxdg-tools
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Qtxdg Tools component for LXQt"
 name=qtxdg-tools
 version=4.4.0
 release=2

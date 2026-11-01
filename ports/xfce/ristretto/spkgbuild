@@ -1,6 +1,7 @@
 # description	: ristretto package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="ristretto package"
 name=ristretto
 version=0.14.0
 release=1

@@ -2,6 +2,7 @@
 # homepage	: https://wiki.gnome.org/Projects/NetworkManager/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Network configuration tool"
 name=libnm-32
 version=1.58.1
 release=7

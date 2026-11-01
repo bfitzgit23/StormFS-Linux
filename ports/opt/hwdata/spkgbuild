@@ -1,6 +1,7 @@
 # description	: hwdata package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="hwdata package"
 name=hwdata
 version=0.411
 release=1

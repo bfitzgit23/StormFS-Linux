@@ -2,6 +2,7 @@
 # homepage	: https://pypi.org/project/PyQt6-sip/
 # maintainer	: StormFS maintainers
 
+description="The SIP extension module for PyQt6"
 name=pyqt6-sip
 version=13.13.0
 release=1

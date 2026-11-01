@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: doxygen lynx
 
+description="The libdaemon package is a lightweight C library that eases the writing of UNIX daemons."
 name=libdaemon
 version=0.14
 release=1

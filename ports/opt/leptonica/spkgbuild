@@ -2,6 +2,7 @@
 # homepage	: http://www.leptonica.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Image processing library required by Tesseract OCR"
 name=leptonica
 version=1.87.0
 release=2

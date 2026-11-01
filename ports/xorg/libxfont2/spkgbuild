@@ -2,6 +2,7 @@
 # homepage	: https://xorg.freedesktop.org
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="X font handling library version 2 for server & utilities"
 name=libxfont2
 version=2.0.9
 release=3

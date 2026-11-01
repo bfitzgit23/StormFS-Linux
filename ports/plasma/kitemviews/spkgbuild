@@ -1,6 +1,7 @@
 # description	: kitemviews package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kitemviews package"
 name=kitemviews
 version=6.30.0
 release=1

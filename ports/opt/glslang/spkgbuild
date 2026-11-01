@@ -1,6 +1,7 @@
 # description	: glslang package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="glslang package"
 name=glslang
 version=16.5.0
 release=2

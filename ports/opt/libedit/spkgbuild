@@ -2,6 +2,7 @@
 # homepage	: https://thrysoee.dk/editline/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Command line editor library providing generic line editing, history, and tokenization functions"
 name=libedit
 version=20260512_3.1
 release=1

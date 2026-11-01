@@ -2,6 +2,7 @@
 # homepage	: https://wayland.freedesktop.org/xserver.html
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="X compat server to be used with wayland"
 name=wayland
 version=1.26.0
 release=2

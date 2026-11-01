@@ -1,6 +1,7 @@
 # description	: subversion package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="subversion package"
 name=subversion
 version=1.14.5
 release=1

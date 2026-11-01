@@ -1,6 +1,7 @@
 # description	: A stream oriented C library for parsing XML
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="A stream oriented C library for parsing XML"
 name=python3-markupsafe
 version=3.0.3
 release=1

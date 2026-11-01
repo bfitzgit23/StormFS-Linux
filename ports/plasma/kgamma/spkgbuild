@@ -1,6 +1,7 @@
 # description	: kgamma package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kgamma package"
 name=kgamma
 version=6.7.5
 release=1

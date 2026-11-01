@@ -2,6 +2,7 @@
 # homepage	: https://github.com/pyparsing/pyparsing
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Python parsing library used by SPICE build-time code generation"
 name=python3-pyparsing
 version=3.3.3
 release=1

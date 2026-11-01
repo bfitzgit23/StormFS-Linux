@@ -1,6 +1,7 @@
 # description	: plasma-workspace-wallpapers package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="plasma-workspace-wallpapers package"
 name=plasma-workspace-wallpapers
 version=6.7.5
 release=1

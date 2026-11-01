@@ -1,6 +1,7 @@
 # description	: python3-requests package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="python3-requests package"
 name=python3-requests
 version=2.34.2
 release=2

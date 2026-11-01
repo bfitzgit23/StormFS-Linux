@@ -2,6 +2,7 @@
 # homepage	: https://github.com/kislyuk/argcomplete
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Bash and Zsh tab completion for Python argparse"
 name=python3-argcomplete
 version=3.7.1
 release=1

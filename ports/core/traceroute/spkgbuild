@@ -2,6 +2,7 @@
 # homepage	: https://sourceforge.net/projects/traceroute/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Network route tracing diagnostic utility"
 name=traceroute
 version=2.1.6
 release=1

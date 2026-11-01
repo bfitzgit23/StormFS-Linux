@@ -2,6 +2,7 @@
 # homepage	: https://savannah.nongnu.org/projects/acl
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Utilities and libraries for managing POSIX Access Control Lists."
 name=acl
 version=2.4.0
 release=2

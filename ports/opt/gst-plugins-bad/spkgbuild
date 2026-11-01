@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: aom bluez chromaprint ladspa libde265 lv2 musepack openal openh264 soundtouch x265
 
+description="a set of plug-ins that aren't up to par compared to the rest"
 name=gst-plugins-bad
 version=1.28.7
 release=1

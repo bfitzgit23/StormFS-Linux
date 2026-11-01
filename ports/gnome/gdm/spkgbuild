@@ -1,6 +1,7 @@
 # description	: gdm package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="gdm package"
 name=gdm
 version=51.0
 release=1

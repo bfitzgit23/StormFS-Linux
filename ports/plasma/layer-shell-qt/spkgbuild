@@ -1,6 +1,7 @@
 # description	: layer-shell-qt package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="layer-shell-qt package"
 name=layer-shell-qt
 version=6.7.5
 release=1

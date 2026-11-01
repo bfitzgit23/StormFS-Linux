@@ -2,6 +2,7 @@
 # homepage	: https://packages.debian.org/unstable/utils/fakeroot
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Run commands in an environment faking root privileges"
 name=fakeroot
 version=2.1.4
 release=1

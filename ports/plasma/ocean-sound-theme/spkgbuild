@@ -1,6 +1,7 @@
 # description	: ocean-sound-theme package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="ocean-sound-theme package"
 name=ocean-sound-theme
 version=6.7.5
 release=1

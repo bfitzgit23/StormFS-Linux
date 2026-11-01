@@ -2,6 +2,7 @@
 # homepage	: https://numpy.org
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Array processing for numbers, strings, records, and objects with Python"
 name=python3-numpy
 version=2.5.3
 release=1

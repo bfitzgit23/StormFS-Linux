@@ -1,6 +1,7 @@
 # description	: zstd package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="zstd package"
 name=zstd
 version=1.5.7
 release=1

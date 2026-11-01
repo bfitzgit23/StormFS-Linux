@@ -2,6 +2,7 @@
 # homepage	: https://www.openldap.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Lightweight Directory Access Protocol (LDAP) Toolkit"
 name=openldap-32
 version=2.7.1
 release=2

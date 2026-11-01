@@ -2,6 +2,7 @@
 # homepage	: https://xorg.freedesktop.org
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="X11 server performance test program"
 name=x11perf
 version=1.7.0
 release=1

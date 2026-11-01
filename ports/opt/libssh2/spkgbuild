@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: cmake libcrypt openssh docker
 
+description="A library implementing the SSH2 protocol as defined by Internet Drafts"
 name=libssh2
 version=1.11.1
 release=1

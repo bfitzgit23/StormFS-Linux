@@ -2,6 +2,7 @@
 # homepage	: https://xorg.freedesktop.org
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="xorg driver xf86-input-joystick"
 name=xf86-input-joystick
 version=1.6.4
 release=1

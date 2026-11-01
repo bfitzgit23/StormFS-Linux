@@ -1,6 +1,7 @@
 # description	: gjs package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="gjs package"
 name=gjs
 version=1.90.0
 release=1

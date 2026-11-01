@@ -1,6 +1,7 @@
 # description	: parole package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="parole package"
 name=parole
 version=4.20.0
 release=1

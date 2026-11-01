@@ -2,6 +2,7 @@
 # homepage	: https://xfce.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Xfce applications meta package"
 name=xfce4-apps-meta
 version=4.20.0
 release=2

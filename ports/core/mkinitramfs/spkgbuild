@@ -2,6 +2,7 @@
 # homepage	: https://gitlab.com/vylen/mkinitramfs
 # maintainer	: StormFS maintainers
 
+description="OpenRC-friendly initramfs generator"
 name=mkinitramfs
 version=0.1
 release=1

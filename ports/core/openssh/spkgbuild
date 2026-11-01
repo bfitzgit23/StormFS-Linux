@@ -2,6 +2,7 @@
 # homepage	: https://www.openssh.com/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="OpenSSH secure shell client and server"
 name=openssh
 version=10.5p1
 release=2

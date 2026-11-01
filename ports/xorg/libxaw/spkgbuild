@@ -2,6 +2,7 @@
 # homepage	: https://xorg.freedesktop.org
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="X Athena Widgets toolkit"
 name=libxaw
 version=1.0.16
 release=2

@@ -1,6 +1,7 @@
 # description	: python3-certifi package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="python3-certifi package"
 name=python3-certifi
 version=2026.7.22
 release=2

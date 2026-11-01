@@ -2,6 +2,7 @@
 # homepage	: https://github.com/slicer69/sysvinit
 # maintainer	: BFSOS maintainers
 
+description="System V init and shutdown utilities"
 name=sysvinit
 version=3.15
 release=2

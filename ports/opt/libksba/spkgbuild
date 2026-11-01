@@ -2,6 +2,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: valgrind
 
+description="libksba package"
 name=libksba
 version=1.8.1
 release=1

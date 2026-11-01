@@ -2,6 +2,7 @@
 # homepage	: https://xorg.freedesktop.org
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="xorg driver xf86-video-siliconmotion"
 name=xf86-video-siliconmotion
 version=1.7.9
 release=1

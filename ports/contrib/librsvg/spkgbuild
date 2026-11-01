@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: object-introspection vala docutils gi-docgen xorg-fonts
 
+description="SVG rendering library with cairo backend"
 name=librsvg
 version=2.63.0
 release=3

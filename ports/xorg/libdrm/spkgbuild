@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: cairo cmake docbook-xml docbook-xsl-nons docutils libxslt libatomic_ops valgrind cunit
 
+description="Userspace interface to kernel DRM services"
 name=libdrm
 version=2.4.134
 release=3

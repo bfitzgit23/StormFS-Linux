@@ -2,6 +2,7 @@
 # homepage	: https://sites.google.com/site/fullycapable/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="POSIX.1e capabilities library"
 name=libcap-32
 version=2.78
 release=3

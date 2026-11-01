@@ -2,6 +2,7 @@
 # homepage	: http://libndp.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Library for Neighbor Discovery Protocol"
 name=libndp-32
 version=1.9
 release=2

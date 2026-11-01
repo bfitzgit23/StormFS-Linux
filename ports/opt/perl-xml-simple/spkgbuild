@@ -1,6 +1,7 @@
 # description	: perl-xml-simple package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="perl-xml-simple package"
 name=perl-xml-simple
 version=2.25
 release=1

@@ -1,6 +1,7 @@
 # description	: json-glib package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="json-glib package"
 name=json-glib
 version=1.10.8
 release=2

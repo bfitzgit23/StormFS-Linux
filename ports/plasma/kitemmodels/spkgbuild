@@ -1,6 +1,7 @@
 # description	: kitemmodels package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kitemmodels package"
 name=kitemmodels
 version=6.30.0
 release=1

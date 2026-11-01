@@ -1,6 +1,7 @@
 # description	: gnome-weather package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="gnome-weather package"
 name=gnome-weather
 version=50.0
 release=2

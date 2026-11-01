@@ -2,6 +2,7 @@
 # homepage	: https://github.com/lloyd/yajl
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Yet Another JSON Library"
 name=yajl
 version=2.1.0
 release=1

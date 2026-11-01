@@ -2,6 +2,7 @@
 # homepage	: https://openprinting.github.io/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Backends and filters for CUPS"
 name=cups-filters
 version=2.0.1
 release=1

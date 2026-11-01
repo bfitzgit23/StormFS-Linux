@@ -1,6 +1,7 @@
 # description	: icon-naming-utils package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="icon-naming-utils package"
 name=icon-naming-utils
 version=0.8.90
 release=1

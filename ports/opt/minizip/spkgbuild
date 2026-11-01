@@ -2,6 +2,7 @@
 # homepage	: https://github.com/zlib-ng/minizip-ng
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Modern Minizip library"
 name=minizip
 version=4.2.2
 release=2

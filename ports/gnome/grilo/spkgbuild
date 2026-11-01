@@ -1,6 +1,7 @@
 # description	: grilo package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="grilo package"
 name=grilo
 version=0.3.19
 release=1

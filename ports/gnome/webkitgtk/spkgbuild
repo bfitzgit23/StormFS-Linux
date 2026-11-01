@@ -1,6 +1,7 @@
 # description	: webkitgtk package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="webkitgtk package"
 name=webkitgtk
 version=2.52.6
 release=4

@@ -2,6 +2,7 @@
 # homepage	: https://w1.fi/wpa_supplicant/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="WPA/WPA2/WPA3 supplicant and IEEE 802.1X client"
 name=wpa_supplicant
 version=2.12
 release=6

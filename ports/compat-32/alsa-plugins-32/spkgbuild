@@ -2,6 +2,7 @@
 # homepage	: https://www.alsa-project.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="ALSA Plugins contains plugins for various audio libraries and sound servers."
 name=alsa-plugins-32
 version=1.2.12
 release=3

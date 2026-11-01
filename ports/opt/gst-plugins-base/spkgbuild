@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: alsa-lib cdparanoia-iii gobject-introspection ISO-codes libgudev libjpeg-turbo libogg libpng libtheora pango wayland-protocols xorg-libs graphene gtk3 qt5 sdl2 valgrind hotdoc libvisual orc tremor
 
+description="An essential exemplary set of plugins for GStreamer"
 name=gst-plugins-base
 version=1.28.7
 release=1

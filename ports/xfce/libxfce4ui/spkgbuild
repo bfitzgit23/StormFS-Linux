@@ -1,6 +1,7 @@
 # description	: libxfce4ui package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="libxfce4ui package"
 name=libxfce4ui
 version=4.20.2
 release=1

@@ -1,6 +1,7 @@
 # description	: enchant package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="enchant package"
 name=enchant
 version=2.8.21
 release=1

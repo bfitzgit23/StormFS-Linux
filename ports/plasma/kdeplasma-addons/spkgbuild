@@ -1,6 +1,7 @@
 # description	: kdeplasma-addons package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kdeplasma-addons package"
 name=kdeplasma-addons
 version=6.7.5
 release=1

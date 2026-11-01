@@ -2,6 +2,7 @@
 # homepage	: http://www.digip.org/jansson/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="C library for encoding, decoding and manipulating JSON data."
 name=jansson-32
 version=2.15.1
 release=2

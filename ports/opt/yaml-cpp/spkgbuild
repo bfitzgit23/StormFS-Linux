@@ -3,6 +3,7 @@
 # maintainer	: StormFS maintainers
 # optional	: gtest
 
+description="YAML parser and emitter for C++"
 name=yaml-cpp
 version=0.9.0
 release=1

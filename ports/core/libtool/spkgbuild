@@ -1,6 +1,7 @@
 # description	: libtool package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="libtool package"
 name=libtool
 version=2.6.2
 release=1

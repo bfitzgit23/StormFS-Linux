@@ -2,6 +2,7 @@
 # homepage	: https://github.com/lxqt/lxqt-openssh-askpass
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Lxqt Openssh Askpass component for LXQt"
 name=lxqt-openssh-askpass
 version=2.4.0
 release=2

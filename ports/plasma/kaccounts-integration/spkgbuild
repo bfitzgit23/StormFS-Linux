@@ -2,6 +2,7 @@
 # homepage	: https://www.kde.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Integration library and QML module for Accounts-SSO and SignOn-SSO"
 name=kaccounts-integration
 version=26.08.1
 release=1

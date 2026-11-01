@@ -2,6 +2,7 @@
 # homepage	: https://github.com/hukkin/tomli
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="A lil' TOML parser"
 name=python3-tomli
 version=2.4.1
 release=1

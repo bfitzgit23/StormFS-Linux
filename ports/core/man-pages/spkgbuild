@@ -1,6 +1,7 @@
 # description	: man-pages package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="man-pages package"
 name=man-pages
 version=6.19
 release=1

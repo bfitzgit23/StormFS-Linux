@@ -1,6 +1,7 @@
 # description	: apr package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="apr package"
 name=apr
 version=1.7.6
 release=1

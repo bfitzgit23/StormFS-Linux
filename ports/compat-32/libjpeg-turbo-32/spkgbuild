@@ -2,6 +2,7 @@
 # homepage	: https://www.libjpeg-turbo.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Library of JPEG support functions."
 name=libjpeg-turbo-32
 version=3.2.0
 release=3

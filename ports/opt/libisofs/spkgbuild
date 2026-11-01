@@ -1,6 +1,7 @@
 # description	: libisofs package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="libisofs package"
 name=libisofs
 version=1.5.8.pl02
 release=1

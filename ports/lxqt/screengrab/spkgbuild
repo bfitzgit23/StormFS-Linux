@@ -2,6 +2,7 @@
 # homepage	: https://github.com/lxqt/screengrab
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Screengrab for LXQt"
 name=screengrab
 version=3.2.0
 release=3

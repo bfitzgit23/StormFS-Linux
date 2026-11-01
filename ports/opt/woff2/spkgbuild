@@ -1,6 +1,7 @@
 # description	: woff2 package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="woff2 package"
 name=woff2
 version=1.0.2
 release=2

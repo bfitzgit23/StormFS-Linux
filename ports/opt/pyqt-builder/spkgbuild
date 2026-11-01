@@ -2,6 +2,7 @@
 # homepage	: https://pypi.org/project/PyQt-builder/
 # maintainer	: StormFS maintainers
 
+description="PEP 517 build system for PyQt and SIP based projects"
 name=pyqt-builder
 version=1.20.3
 release=1

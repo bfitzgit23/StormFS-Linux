@@ -2,6 +2,7 @@
 # homepage	: https://ebassi.github.io/graphene/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="A thin layer of graphic data types - 32-bit"
 name=graphene-32
 version=1.10.8
 release=4

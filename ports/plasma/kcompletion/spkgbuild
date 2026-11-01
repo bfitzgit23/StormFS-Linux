@@ -1,6 +1,7 @@
 # description	: kcompletion package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kcompletion package"
 name=kcompletion
 version=6.30.0
 release=1

@@ -2,6 +2,7 @@
 # homepage	: https://github.com/thkukuk/$name/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="The libnsl package contains the public client interface for NIS(YP). It replaces the NIS library that used to be in glibc."
 name=libnsl
 version=2.0.1
 release=1

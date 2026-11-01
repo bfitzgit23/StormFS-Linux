@@ -2,6 +2,7 @@
 # homepage	: http://www.gnu.org/software/libtool/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="A generic library support script"
 name=libtool-32
 version=2.6.2
 release=2

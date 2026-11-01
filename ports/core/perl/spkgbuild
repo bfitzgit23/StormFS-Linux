@@ -1,6 +1,7 @@
 # description	: perl package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="perl package"
 name=perl
 version=5.44.0
 release=1

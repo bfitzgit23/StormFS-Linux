@@ -1,6 +1,7 @@
 # description	: Collection of libraries providing APIs to netlink protocol based Linux kernel interfaces
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Collection of libraries providing APIs to netlink protocol based Linux kernel interfaces"
 name=libnl
 version=3.12.0
 release=2

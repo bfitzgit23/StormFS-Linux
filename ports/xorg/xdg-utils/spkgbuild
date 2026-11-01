@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: lynx w3m dbus
 
+description="Command line tools for desktop integration tasks."
 name=xdg-utils
 version=v1.2.1
 release=1

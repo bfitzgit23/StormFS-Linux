@@ -1,6 +1,7 @@
 # description	: faad2 package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="faad2 package"
 name=faad2
 version=2.11.3
 release=2

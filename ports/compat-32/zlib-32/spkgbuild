@@ -2,6 +2,7 @@
 # homepage	: https://www.zlib.net/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="A compression/decompression Library"
 name=zlib-32
 version=1.3.2
 release=2

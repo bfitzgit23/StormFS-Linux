@@ -2,6 +2,7 @@
 # homepage	: https://github.com/festvox/flite
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Small fast portable speech synthesis engine"
 name=flite
 version=2.2
 release=1

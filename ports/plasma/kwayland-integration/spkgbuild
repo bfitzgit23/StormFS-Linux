@@ -1,6 +1,7 @@
 # description	: kwayland-integration package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kwayland-integration package"
 name=kwayland-integration
 version=6.7.5
 release=1

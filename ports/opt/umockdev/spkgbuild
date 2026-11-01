@@ -1,6 +1,7 @@
 # description	: umockdev package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="umockdev package"
 name=umockdev
 version=0.19.8
 release=1

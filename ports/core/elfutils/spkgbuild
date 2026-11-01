@@ -2,6 +2,7 @@
 # homepage	: https://sourceware.org/elfutils/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="A collection of utilities to handle ELF objects."
 name=elfutils
 version=0.196
 release=1

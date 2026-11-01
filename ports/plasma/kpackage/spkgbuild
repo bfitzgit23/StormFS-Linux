@@ -1,6 +1,7 @@
 # description	: kpackage package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kpackage package"
 name=kpackage
 version=6.30.0
 release=1

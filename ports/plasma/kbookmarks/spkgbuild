@@ -1,6 +1,7 @@
 # description	: kbookmarks package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kbookmarks package"
 name=kbookmarks
 version=6.30.0
 release=1

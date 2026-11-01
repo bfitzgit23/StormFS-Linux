@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: dbus libxslt  help2man jing weasyprint
 
+description="self-hosting compiler that translates Vala source code into C"
 name=vala
 version=0.56.19
 release=1

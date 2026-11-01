@@ -1,6 +1,7 @@
 # description	: scons package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="scons package"
 name=scons
 version=4.11.1
 release=2

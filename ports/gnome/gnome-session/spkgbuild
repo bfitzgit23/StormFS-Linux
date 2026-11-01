@@ -1,6 +1,7 @@
 # description	: gnome-session package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="gnome-session package"
 name=gnome-session
 version=51.0
 release=2

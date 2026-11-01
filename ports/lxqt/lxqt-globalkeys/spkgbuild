@@ -2,6 +2,7 @@
 # homepage	: https://github.com/lxqt/lxqt-globalkeys
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Lxqt Globalkeys component for LXQt"
 name=lxqt-globalkeys
 version=2.4.0
 release=2

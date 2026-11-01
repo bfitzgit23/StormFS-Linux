@@ -1,6 +1,7 @@
 # description	: gnome-icon-theme package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="gnome-icon-theme package"
 name=gnome-icon-theme
 version=3.12.0
 release=1

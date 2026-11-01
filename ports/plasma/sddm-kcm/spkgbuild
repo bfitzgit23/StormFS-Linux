@@ -1,6 +1,7 @@
 # description	: sddm-kcm package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="sddm-kcm package"
 name=sddm-kcm
 version=6.7.5
 release=1

@@ -1,6 +1,7 @@
 # description	: kemoticons package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kemoticons package"
 name=kemoticons
 version=5.115.0
 release=1

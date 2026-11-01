@@ -1,6 +1,7 @@
 # description	: highlight package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="highlight package"
 name=highlight
 version=4.21
 release=5

@@ -1,6 +1,7 @@
 # description	: bc package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="bc package"
 name=bc
 version=7.1.0
 release=1

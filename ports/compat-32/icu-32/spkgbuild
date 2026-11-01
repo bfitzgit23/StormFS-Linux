@@ -2,6 +2,7 @@
 # homepage	: https://icu.unicode.org
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Widely used set of C/C++ libraries providing Unicode and Globalization support."
 name=icu-32
 version=78.3
 release=3

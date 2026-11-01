@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: libxcb wayland wayland-protocols doxygen
 
+description="A library to handle keyboard descriptions."
 name=libxkbcommon
 version=1.13.2
 release=8

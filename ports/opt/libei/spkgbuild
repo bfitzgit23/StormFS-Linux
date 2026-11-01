@@ -1,6 +1,7 @@
 # description	: libei package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="libei package"
 name=libei
 version=1.6.0
 release=1

@@ -1,6 +1,7 @@
 # description	: python3-meson_python package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="python3-meson_python package"
 name=python3-meson_python
 version=0.20.0
 release=1

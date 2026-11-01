@@ -2,6 +2,7 @@
 # homepage	: https://metacpan.org/pod/JSON
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="JSON (JavaScript Object Notation) encoder/decoder for Perl"
 name=p5-json
 version=4.11
 release=1

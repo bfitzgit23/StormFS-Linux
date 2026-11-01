@@ -2,6 +2,7 @@
 # homepage	: https://calamares.io/
 # maintainer	: StormFS maintainers
 
+description="Graphical installer configured for StormFS and selectable init profiles"
 name=calamares
 version=3.4.3
 release=3

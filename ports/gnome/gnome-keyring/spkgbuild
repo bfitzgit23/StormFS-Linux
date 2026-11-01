@@ -2,6 +2,7 @@
 # homepage	: https://gitlab.gnome.org/GNOME/gnome-keyring
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="GNOME daemon and tools for storing passwords and encryption keys"
 name=gnome-keyring
 version=51.1
 release=1

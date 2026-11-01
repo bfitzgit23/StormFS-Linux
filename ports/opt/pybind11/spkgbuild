@@ -2,6 +2,7 @@
 # homepage	: https://github.com/pybind/pybind11
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Seamless operability between C++11 and Python"
 name=pybind11
 version=3.1.0
 release=1

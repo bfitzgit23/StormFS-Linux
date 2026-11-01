@@ -1,6 +1,7 @@
 # description	: kiconthemes package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kiconthemes package"
 name=kiconthemes
 version=6.30.0
 release=1

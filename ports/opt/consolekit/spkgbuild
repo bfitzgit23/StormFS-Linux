@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: polkit
 
+description="Framework for defining and tracking users, login sessions, and seats"
 name=consolekit
 version=1.2.6
 release=1

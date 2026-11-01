@@ -2,6 +2,7 @@
 # homepage	: https://github.com/GNOME/mobile-broadband-provider-info
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Mobile broadband settings for various service providers"
 name=mobile-broadband-provider-info
 version=20240407
 release=1

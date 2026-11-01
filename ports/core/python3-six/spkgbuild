@@ -2,6 +2,7 @@
 # homepage	: https://pypi.python.org/pypi/six/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Python 2 and 3 compatibility utilities"
 name=python3-six
 version=1.17.0
 release=2

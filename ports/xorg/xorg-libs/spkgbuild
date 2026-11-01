@@ -2,6 +2,7 @@
 # homepage	: https://www.x.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="The Xorg libraries provide library routines that are used within all X Window applications."
 name=xorg-libs
 version=7x
 release=4

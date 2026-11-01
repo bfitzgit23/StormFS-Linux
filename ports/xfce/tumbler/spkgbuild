@@ -1,6 +1,7 @@
 # description	: tumbler package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="tumbler package"
 name=tumbler
 version=4.20.2
 release=1

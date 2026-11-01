@@ -2,6 +2,7 @@
 # homepage	: https://wgetpaste.zlin.dk/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="A script that automates pasting to a number of pastebin services"
 name=wgetpaste
 version=2.34
 release=1

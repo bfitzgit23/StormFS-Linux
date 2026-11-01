@@ -2,6 +2,7 @@
 # homepage	: https://github.com/flatpak/xdg-desktop-portal
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Desktop integration portal for Flatpak and other sandboxed applications"
 name=xdg-desktop-portal
 version=1.22.1
 release=3

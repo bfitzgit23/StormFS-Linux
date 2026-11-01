@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: texlive install-tl-unx
 
+description="Functions for manipulating Unicode strings and C strings"
 name=libunistring
 version=1.4.2
 release=2

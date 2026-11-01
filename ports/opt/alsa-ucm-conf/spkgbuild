@@ -2,6 +2,7 @@
 # homepage	: https://github.com/alsa-project/alsa-ucm-conf
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="ALSA Use Case Manager configuration files"
 name=alsa-ucm-conf
 version=1.2.15.3
 release=2

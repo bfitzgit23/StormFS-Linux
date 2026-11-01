@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: gobject-introspection gtk-doc help2man
 
+description="GLib-based library for talking to WWAN modems using the Mobile Broadband Interface Model (MBIM) protocol."
 name=libmbim
 version=1.34.0
 release=1

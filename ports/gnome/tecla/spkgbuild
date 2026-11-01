@@ -1,6 +1,7 @@
 # description	: tecla package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="tecla package"
 name=tecla
 version=50.0
 release=1

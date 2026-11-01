@@ -1,6 +1,7 @@
 # description	: uchardet package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="uchardet package"
 name=uchardet
 version=0.0.8
 release=1

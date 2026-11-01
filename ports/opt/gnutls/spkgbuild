@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: brotli libidn2
 
+description="Secure communications library implementing TLS, DTLS, and related protocols"
 name=gnutls
 version=3.8.13
 release=1

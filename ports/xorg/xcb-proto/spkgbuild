@@ -2,6 +2,7 @@
 # homepage	: https://xcb.freedesktop.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="XCB X protocol descriptions"
 name=xcb-proto
 version=1.17.0
 release=1

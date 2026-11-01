@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: libid3tag-32 giflib-32 libwebp-32
 
+description="A fast image manipulation library"
 name=imlib2-32
 version=1.12.7
 release=3

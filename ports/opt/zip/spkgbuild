@@ -2,6 +2,7 @@
 # homepage	: https://downloads.sourceforge.net/infozip/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="The Zip package contains Zip utilities. These are useful for compressing files into ZIP archives."
 name=zip
 version=3.0
 release=1

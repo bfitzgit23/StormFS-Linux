@@ -2,6 +2,7 @@
 # homepage	: https://xorg.freedesktop.org
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Tool for modifying keymaps and pointer button mappings in X"
 name=xpr
 version=1.2.1
 release=1

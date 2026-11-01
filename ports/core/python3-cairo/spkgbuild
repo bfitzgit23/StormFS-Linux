@@ -2,6 +2,7 @@
 # homepage	: https://pypi.org/project/pycairo/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="A set of python bindings for cairo."
 name=python3-cairo
 version=1.29.1
 release=2

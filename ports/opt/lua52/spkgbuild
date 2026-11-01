@@ -2,6 +2,7 @@
 # homepage	: https://www.lua.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="A programming language designed for extending applications"
 name=lua52
 version=5.2.4
 release=4

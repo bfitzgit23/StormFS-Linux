@@ -2,6 +2,7 @@
 # homepage	: https://sourceware.org/libffi/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Portable Foreign Function Interface Library"
 name=libffi-32
 version=3.8.0
 release=3

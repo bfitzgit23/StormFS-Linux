@@ -1,6 +1,7 @@
 # description	: gtksourceview package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="gtksourceview package"
 name=gtksourceview
 version=5.20.0
 release=1

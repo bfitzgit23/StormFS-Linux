@@ -1,6 +1,7 @@
 # description	: aalib package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="aalib package"
 name=aalib
 version=1.4rc5
 release=1

@@ -2,6 +2,7 @@
 # homepage	: https://www.x.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="X.Org protocol headers"
 name=xorgproto
 version=2025.1
 release=3

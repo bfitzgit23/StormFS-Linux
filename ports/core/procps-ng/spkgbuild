@@ -1,6 +1,7 @@
 # description	: procps-ng package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="procps-ng package"
 name=procps-ng
 version=4.0.7
 release=1

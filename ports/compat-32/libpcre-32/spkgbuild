@@ -2,6 +2,7 @@
 # homepage	: https://www.pcre.org
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Perl Compatible Regular Expressions"
 name=libpcre-32
 version=8.45
 release=3

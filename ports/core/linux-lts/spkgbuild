@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: pahole
 
+description="BFSOS default Linux 6.18 LTS kernel with broad x86_64 hardware support"
 name=linux-lts
 version=6.18.54
 release=1

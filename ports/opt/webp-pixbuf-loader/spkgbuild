@@ -1,6 +1,7 @@
 # description	: webp-pixbuf-loader package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="webp-pixbuf-loader package"
 name=webp-pixbuf-loader
 version=0.2.7
 release=1

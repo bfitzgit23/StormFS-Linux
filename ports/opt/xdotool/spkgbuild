@@ -1,6 +1,7 @@
 # description	: xdotool package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="xdotool package"
 name=xdotool
 version=4.20260303.1
 release=1

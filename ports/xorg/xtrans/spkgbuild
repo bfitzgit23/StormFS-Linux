@@ -2,6 +2,7 @@
 # homepage	: https://xorg.freedesktop.org
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Library of code to handle network protocol transport"
 name=xtrans
 version=1.6.0
 release=3

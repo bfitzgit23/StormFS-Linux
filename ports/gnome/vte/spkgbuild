@@ -1,6 +1,7 @@
 # description	: vte package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="vte package"
 name=vte
 version=0.84.1
 release=1

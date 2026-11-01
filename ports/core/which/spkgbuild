@@ -2,6 +2,7 @@
 # homepage	: https://savannah.gnu.org/projects/which
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="A utility to show the full path of commands"
 name=which
 version=2.25
 release=1

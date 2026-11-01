@@ -2,6 +2,7 @@
 # homepage	: https://gnome.org
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="metacity package"
 name=metacity
 version=3.58.1
 release=1

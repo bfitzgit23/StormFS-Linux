@@ -1,6 +1,7 @@
 # description	: libvdpau-va-gl package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="libvdpau-va-gl package"
 name=libvdpau-va-gl
 version=0.4.2
 release=1

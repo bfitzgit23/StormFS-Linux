@@ -2,6 +2,7 @@
 # homepage	: https://curl.se/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="URL transfer tool"
 name=curl
 version=8.22.0
 release=1

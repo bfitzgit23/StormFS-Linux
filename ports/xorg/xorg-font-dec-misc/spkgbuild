@@ -2,6 +2,7 @@
 # homepage	: https://xorg.freedesktop.org
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="xorg font font-dec-misc"
 name=xorg-font-dec-misc
 version=1.0.3
 release=1

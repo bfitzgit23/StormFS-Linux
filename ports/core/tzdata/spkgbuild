@@ -2,6 +2,7 @@
 # homepage	: https://www.iana.org/time-zones
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Time zone database and related utilities"
 name=tzdata
 version=2026d
 release=1

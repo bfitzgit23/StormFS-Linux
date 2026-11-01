@@ -2,6 +2,7 @@
 # homepage	: http://docbook.sourceforge.net/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="A collection of XSL stylesheets that are useful for performing transformations on XML DocBook files."
 name=docbook-xsl-nons
 version=1.79.2
 release=4

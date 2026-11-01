@@ -2,6 +2,7 @@
 # homepage	: https://www.gnupg.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="A general purpose cryptographic library based on GnuPG"
 name=libgcrypt-32
 version=1.12.3
 release=2

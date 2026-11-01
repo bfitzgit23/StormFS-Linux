@@ -2,6 +2,7 @@
 # homepage	: https://invent.kde.org/frameworks/kapidox
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="KDE API documentation generation tools"
 name=kapidox
 version=6.30.0
 release=1

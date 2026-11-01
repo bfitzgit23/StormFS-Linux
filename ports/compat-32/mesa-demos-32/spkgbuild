@@ -2,6 +2,7 @@
 # homepage	: https://www.mesa3d.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Mesa 3D demos"
 name=mesa-demos-32
 version=9.0.0
 release=3

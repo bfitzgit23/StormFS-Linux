@@ -2,6 +2,7 @@
 # homepage	: https://xorg.freedesktop.org
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="xorg XKB keyboard description compiler"
 name=xkbcomp
 version=1.5.0
 release=2

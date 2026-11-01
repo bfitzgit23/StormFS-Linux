@@ -1,6 +1,7 @@
 # description	: libidn package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="libidn package"
 name=libidn
 version=1.44
 release=2

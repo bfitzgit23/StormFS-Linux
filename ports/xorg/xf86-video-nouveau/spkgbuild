@@ -2,6 +2,7 @@
 # homepage	: https://nouveau.freedesktop.org/wiki/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Nouveau graphics video driver"
 name=xf86-video-nouveau
 version=1.0.18
 release=2

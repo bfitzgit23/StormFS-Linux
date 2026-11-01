@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: libxkbcommon wayland-protocols xorg-libs alsa ibus libsamplerate nasm pipewire pulseaudio directfb fcitx jack sndio
 
+description="SDL version 2, Simple DirectMedia Layer"
 name=sdl2
 version=2.32.10
 release=1

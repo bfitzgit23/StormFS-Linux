@@ -1,6 +1,7 @@
 # description	: mesa-demos package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="mesa-demos package"
 name=mesa-demos
 version=9.0.0
 release=2

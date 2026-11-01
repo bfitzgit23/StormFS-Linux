@@ -2,6 +2,7 @@
 # homepage	: https://doc.qt.io/qt-6/qttools-index.html
 # maintainer	: StormFS maintainers
 
+description="Qt 6 assistant/designer/linguist tools (provided by the qt6 port)"
 name=qt6-tools
 version=6.11.2
 release=1

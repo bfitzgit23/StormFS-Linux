@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: libtracefs bash-completion asciidoctor
 
+description="Utility library for managing the libnvdimm and CXL subsystems in the Linux kernel"
 name=ndctl
 version=85
 release=1

@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: brotli c-ares icu libnghttp3 libngtcp2 simdjson simdutf
 
+description="Evented I/O for V8 javascript."
 name=nodejs
 version=24.21.0
 release=1

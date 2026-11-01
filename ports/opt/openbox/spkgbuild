@@ -1,6 +1,7 @@
 # description	: openbox package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="openbox package"
 name=openbox
 version=3.6.1
 release=1

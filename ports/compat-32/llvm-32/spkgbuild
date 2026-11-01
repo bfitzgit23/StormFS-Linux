@@ -2,6 +2,7 @@
 # homepage	: https://llvm.org
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="LLVM compiler backend (32-bit compatibility libraries)"
 name=llvm-32
 version=23.1.1
 release=5

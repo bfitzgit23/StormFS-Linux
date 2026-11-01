@@ -1,6 +1,7 @@
 # description	: xdg-dbus-proxy package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="xdg-dbus-proxy package"
 name=xdg-dbus-proxy
 version=0.1.8
 release=1

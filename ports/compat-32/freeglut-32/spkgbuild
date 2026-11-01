@@ -2,6 +2,7 @@
 # homepage	: https://freeglut.sourceforge.net/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="a free alternative to the OpenGL Utility Toolkit (GLUT) library"
 name=freeglut-32
 version=3.8.0
 release=4

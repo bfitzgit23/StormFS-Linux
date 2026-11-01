@@ -1,6 +1,7 @@
 # description	: gettext package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="gettext package"
 name=gettext
 version=1.0
 release=1

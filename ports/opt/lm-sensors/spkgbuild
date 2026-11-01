@@ -2,6 +2,7 @@
 # homepage	: https://github.com/lm-sensors/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="The lm_sensors package provides userspace support for the hardware monitoring drivers in the Linux kernel. This is useful for monitoring the temperature of the CPU and adjusting the performance of some hardware (such as cooling fans)."
 name=lm-sensors
 version=3_6_2
 srcver=3-6-2

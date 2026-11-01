@@ -1,6 +1,7 @@
 # description	: brasero package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="brasero package"
 name=brasero
 version=3.12.3
 release=3

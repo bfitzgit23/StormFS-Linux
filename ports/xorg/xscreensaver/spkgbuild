@@ -2,6 +2,7 @@
 # homepage	: https://ftp.ludd.ltu.se/pub/blfs/conglomeration/xscreensaver/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="X11 screen saver collection and locker"
 name=xscreensaver
 version=6.15
 release=7

@@ -1,6 +1,7 @@
 # description	: python3-typogrify package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="python3-typogrify package"
 name=python3-typogrify
 version=2.1.0
 release=1

@@ -2,6 +2,7 @@
 # homepage	: https://github.com/python-poetry/poetry-core
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Poetry core utilities for Python packaging"
 name=python3-poetry-core
 version=2.5.0
 release=2

@@ -1,6 +1,7 @@
 # description	: libgusb package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="libgusb package"
 name=libgusb
 version=0.4.9
 release=1

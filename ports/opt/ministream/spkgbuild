@@ -2,6 +2,7 @@
 # homepage	: https://gitlab.gnome.org/GNOME/ministream
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Lightweight AppStream metadata reader for libadwaita"
 name=ministream
 version=0.99.1
 release=1

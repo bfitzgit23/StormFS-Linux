@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: gtk envy24control gtk3
 
+description="The ALSA Tools package contains advanced tools for certain sound cards."
 name=alsa-tools
 version=1.2.15
 release=1

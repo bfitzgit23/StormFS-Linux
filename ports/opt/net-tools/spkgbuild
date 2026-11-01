@@ -1,6 +1,7 @@
 # description	: net-tools package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="net-tools package"
 name=net-tools
 version=2.10
 release=1

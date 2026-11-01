@@ -2,6 +2,7 @@
 # homepage	: https://www.videolan.org/developers/libdvdnav.html
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="DVD reading library."
 name=libdvdread
 version=7.1.1
 release=4

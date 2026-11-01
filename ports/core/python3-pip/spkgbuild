@@ -2,6 +2,7 @@
 # homepage	: https://pypi.python.org/pypi/pip/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="A tool for installing and managing Python packages."
 name=python3-pip
 version=26.2.1
 release=1

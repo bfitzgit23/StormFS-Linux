@@ -1,6 +1,7 @@
 # description	: libppd package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="libppd package"
 name=libppd
 version=2.1.1
 release=1

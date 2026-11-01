@@ -1,6 +1,7 @@
 # description	: eog package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="eog package"
 name=eog
 version=50.3
 release=1

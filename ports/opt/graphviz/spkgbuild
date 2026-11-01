@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: cairo fontconfig ghostscript gtk3 libgd libpng librsvg pango poppler swig tcl
 
+description="Graph visualization software"
 name=graphviz
 version=16.1.0
 release=1

@@ -2,6 +2,7 @@
 # homepage	: https://www.riverbankcomputing.com/software/sip/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="SIP bindings generator used by PyQt"
 name=python3-sip
 version=6.10.0
 release=2

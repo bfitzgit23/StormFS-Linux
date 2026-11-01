@@ -1,6 +1,7 @@
 # description	: ksvg package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="ksvg package"
 name=ksvg
 version=6.30.0
 release=1

@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: make-ca
 
+description="Network-related giomodules for glib"
 name=glib-networking
 version=2.80.1
 release=2

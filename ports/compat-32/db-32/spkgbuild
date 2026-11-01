@@ -2,6 +2,7 @@
 # homepage	: http://www.oracle.com/database/berkeley-db/index.html
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Berkeley DB"
 name=db-32
 version=5.3.28
 release=4

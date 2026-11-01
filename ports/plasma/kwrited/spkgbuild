@@ -1,6 +1,7 @@
 # description	: kwrited package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kwrited package"
 name=kwrited
 version=6.7.5
 release=1

@@ -1,6 +1,7 @@
 # description	: libgtop package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="libgtop package"
 name=libgtop
 version=2.41.3
 release=1

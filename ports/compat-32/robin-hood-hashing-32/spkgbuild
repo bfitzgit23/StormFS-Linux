@@ -2,6 +2,7 @@
 # homepage	: https://github.com/martinus/robin-hood-hashing
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Fast & memory efficient hashtable based on robin hood hashing for C++11/14/17/20"
 name=robin-hood-hashing-32
 version=3.11.5
 release=3

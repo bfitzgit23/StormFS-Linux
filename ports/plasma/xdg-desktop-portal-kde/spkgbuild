@@ -1,6 +1,7 @@
 # description	: xdg-desktop-portal-kde package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="xdg-desktop-portal-kde package"
 name=xdg-desktop-portal-kde
 version=6.7.5
 release=1

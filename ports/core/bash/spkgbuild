@@ -1,6 +1,7 @@
 # description	: bash package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="bash package"
 name=bash
 version=5.3
 release=1

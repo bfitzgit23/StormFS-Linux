@@ -1,6 +1,7 @@
 # description	: utfcpp package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="utfcpp package"
 name=utfcpp
 version=4.2.0
 release=1

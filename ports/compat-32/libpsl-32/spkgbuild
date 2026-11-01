@@ -2,6 +2,7 @@
 # homepage	: https://github.com/rockdaboot/libpsl
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Public Suffix List library."
 name=libpsl-32
 version=0.23.3
 release=4

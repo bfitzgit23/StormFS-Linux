@@ -1,6 +1,7 @@
 # description	: seahorse package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="seahorse package"
 name=seahorse
 version=47.0.1
 release=3

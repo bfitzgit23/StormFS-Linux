@@ -1,6 +1,7 @@
 # description	: python3-gi_docgen package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="python3-gi_docgen package"
 name=python3-gi_docgen
 version=2026.1
 release=1

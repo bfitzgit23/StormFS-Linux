@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: polkit appstream-glib avahi libxslt xmlto docbook-xml docbook-xsl-nons malcontent
 
+description="Application deployment and sandboxing framework for Linux desktops"
 name=flatpak
 version=1.18.2
 release=1

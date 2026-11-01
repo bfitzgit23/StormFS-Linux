@@ -2,6 +2,7 @@
 # homepage	: https://gnome.org
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="The Graphene package provides a thin layer of types for graphics libraries."
 name=graphene
 version=1.10.8
 release=1

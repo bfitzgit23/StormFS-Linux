@@ -2,6 +2,7 @@
 # homepage	: https://www.x.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="The twm package contains a very minimal window manager."
 name=twm
 version=1.0.13.1
 release=1

@@ -1,6 +1,7 @@
 # description	: kross package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kross package"
 name=kross
 version=5.115.0
 release=1

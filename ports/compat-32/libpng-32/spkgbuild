@@ -2,6 +2,7 @@
 # homepage	: http://www.libpng.org/pub/png/libpng.html
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Library of PNG support functions"
 name=libpng-32
 version=1.6.58
 _base=${_base/./}

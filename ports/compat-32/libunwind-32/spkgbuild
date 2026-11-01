@@ -2,6 +2,7 @@
 # homepage	: https://github.com/libunwind/libunwind
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Portable and efficient API to determine the call-chain of a program"
 name=libunwind-32
 version=1.8.3
 release=3

@@ -1,6 +1,7 @@
 # description	: yelp-xsl package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="yelp-xsl package"
 name=yelp-xsl
 version=49.0
 release=1

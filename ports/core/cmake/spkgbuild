@@ -2,6 +2,7 @@
 # homepage	: https://cmake.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Cross-platform build-system generator."
 name=cmake
 version=4.4.3
 release=1

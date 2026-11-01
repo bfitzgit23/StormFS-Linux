@@ -2,6 +2,7 @@
 # homepage	: https://www.gtk.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="An image loading library for GTK+"
 name=gdk-pixbuf-32
 version=2.44.8
 release=4

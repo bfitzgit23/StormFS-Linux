@@ -2,6 +2,7 @@
 # homepage	: https://github.com/kcat/openal-soft
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Cross-platform 3D audio."
 name=openal-32
 version=1.25.2
 release=3

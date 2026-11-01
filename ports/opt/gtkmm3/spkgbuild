@@ -2,6 +2,7 @@
 # homepage	: https://www.gtkmm.org/en/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="A C++ wrapper for GTK3+"
 name=gtkmm3
 version=3.24.11
 release=3

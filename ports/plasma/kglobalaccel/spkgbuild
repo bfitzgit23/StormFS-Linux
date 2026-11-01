@@ -1,6 +1,7 @@
 # description	: kglobalaccel package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kglobalaccel package"
 name=kglobalaccel
 version=6.30.0
 release=1

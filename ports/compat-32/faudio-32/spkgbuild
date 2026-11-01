@@ -2,6 +2,7 @@
 # homepage	: https://github.com/FNA-XNA/FAudio/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="XAudio2 reimplementation"
 name=faudio-32
 version=26.09
 release=3

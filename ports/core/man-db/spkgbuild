@@ -1,6 +1,7 @@
 # description	: man-db package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="man-db package"
 name=man-db
 version=2.13.1
 release=1

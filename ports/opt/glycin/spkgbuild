@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: libheif vala python3-gi_docgen gtk4
 
+description="Sandboxed and extensible image loading framework used by modern GNOME applications"
 name=glycin
 version=2.2.0
 release=4

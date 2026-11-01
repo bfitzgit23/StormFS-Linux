@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: ffmpeg flac lame libmad libsndfile libvorbis libmusicbrainz musepack libmpcdec
 
+description="KDE optical-disc authoring, ripping, copying, and burning application."
 name=k3b
 version=26.08.1
 release=1

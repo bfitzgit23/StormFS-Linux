@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: doxygen
 
+description="C implementation of Protocol Buffers"
 name=protobuf-c
 version=1.5.2
 release=4

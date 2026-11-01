@@ -1,6 +1,7 @@
 # description	: evolution-data-server package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="evolution-data-server package"
 name=evolution-data-server
 version=3.62.0
 release=1

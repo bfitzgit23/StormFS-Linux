@@ -2,6 +2,7 @@
 # homepage	: https://tukaani.org/xz/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Compression utility using the lzma algorithm, successor of lzma-utils"
 name=xz-32
 version=5.8.4
 release=2

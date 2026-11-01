@@ -2,6 +2,7 @@
 # homepage	: https://github.com/Reference-LAPACK/lapack
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Linear Algebra PACKage - F77 routines for Linear Algebra"
 name=lapack
 version=3.12.1
 release=1

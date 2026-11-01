@@ -2,6 +2,7 @@
 # homepage	: https://xorg.freedesktop.org
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Display information utility for X"
 name=xdpyinfo
 version=1.4.0
 release=2

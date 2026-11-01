@@ -1,6 +1,7 @@
 # description	: plasma-workspace package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="plasma-workspace package"
 name=plasma-workspace
 version=6.7.5
 release=1

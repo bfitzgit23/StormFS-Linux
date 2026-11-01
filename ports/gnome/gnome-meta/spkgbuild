@@ -2,6 +2,7 @@
 # homepage	: https://www.gnome.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Complete BFSOS GNOME 51 desktop meta package"
 name=gnome-meta
 version=51.0
 release=2

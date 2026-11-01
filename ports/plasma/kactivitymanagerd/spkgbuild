@@ -1,6 +1,7 @@
 # description	: kactivitymanagerd package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kactivitymanagerd package"
 name=kactivitymanagerd
 version=6.7.5
 release=1

@@ -1,6 +1,7 @@
 # description	: libclc package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="libclc package"
 name=libclc
 version=23.1.1
 release=5

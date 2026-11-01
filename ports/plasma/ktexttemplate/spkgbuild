@@ -1,6 +1,7 @@
 # description	: ktexttemplate package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="ktexttemplate package"
 name=ktexttemplate
 version=6.30.0
 release=1

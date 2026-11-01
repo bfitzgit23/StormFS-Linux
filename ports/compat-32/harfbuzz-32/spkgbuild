@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: icu-32
 
+description="An OpenType text shaping engine"
 name=harfbuzz-32
 version=14.4.0
 release=4

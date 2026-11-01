@@ -2,6 +2,7 @@
 # homepage	: https//xorg.freedesktop.org
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="xorg font font-bh-75dpi"
 name=xorg-font-bh-75dpi
 version=1.0.4
 release=1

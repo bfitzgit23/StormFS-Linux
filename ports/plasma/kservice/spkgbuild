@@ -2,6 +2,7 @@
 # homepage	: https://invent.kde.org/frameworks/kservice
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="KDE Framework for advanced plugin and service introspection"
 name=kservice
 version=6.30.0
 release=1

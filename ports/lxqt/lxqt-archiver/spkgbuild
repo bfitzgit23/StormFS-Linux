@@ -2,6 +2,7 @@
 # homepage	: https://github.com/lxqt/lxqt-archiver
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Lxqt Archiver for LXQt"
 name=lxqt-archiver
 version=1.4.0
 release=2

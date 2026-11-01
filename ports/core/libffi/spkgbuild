@@ -1,6 +1,7 @@
 # description	: libffi package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="libffi package"
 name=libffi
 version=3.8.0
 release=1

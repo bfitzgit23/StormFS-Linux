@@ -1,6 +1,7 @@
 # description	: kcmutils package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kcmutils package"
 name=kcmutils
 version=6.30.0
 release=1

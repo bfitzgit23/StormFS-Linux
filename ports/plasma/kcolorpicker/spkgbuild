@@ -1,6 +1,7 @@
 # description	: kcolorpicker package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kcolorpicker package"
 name=kcolorpicker
 version=0.3.1
 release=1

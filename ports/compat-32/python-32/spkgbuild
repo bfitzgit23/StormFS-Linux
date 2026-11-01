@@ -2,6 +2,7 @@
 # homepage	: https://www.python.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Python interpreter, version 2.7"
 name=python-32
 version=2.7.18
 release=4

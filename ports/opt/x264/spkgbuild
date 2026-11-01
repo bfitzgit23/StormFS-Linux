@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: ffms2 gpac liblsmash
 
+description="Library for encoding H264/AVC video streams (snapshot)."
 name=x264
 version=20250815
 release=1

@@ -2,6 +2,7 @@
 # homepage	: https://gitlab.gnome.org/GNOME/pangomm
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="C++ interface to pango"
 name=pangomm-2.48
 version=2.56.2
 release=3

@@ -2,6 +2,7 @@
 # homepage	: https://sourceforge.net/projects/acpid2/
 # maintainer	: BFSOS maintainers
 
+description="ACPI event daemon"
 name=acpid
 version=2.0.34
 release=1

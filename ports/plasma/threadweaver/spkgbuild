@@ -1,6 +1,7 @@
 # description	: threadweaver package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="threadweaver package"
 name=threadweaver
 version=6.30.0
 release=1

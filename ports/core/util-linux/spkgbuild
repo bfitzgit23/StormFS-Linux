@@ -4,6 +4,7 @@
 #
 cription: Essential Linux system utilities
 
+description="util-linux package"
 name=util-linux
 version=2.42.4
 release=1

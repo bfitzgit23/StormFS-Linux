@@ -2,6 +2,7 @@
 # homepage	: https://wayland.freedesktop.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Specifications of extended Wayland protocols"
 name=wayland-protocols
 version=1.49
 release=2

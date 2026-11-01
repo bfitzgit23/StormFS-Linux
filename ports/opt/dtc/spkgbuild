@@ -2,6 +2,7 @@
 # homepage	: https://git.kernel.org/pub/scm/utils/dtc/dtc.git/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Device Tree Compiler and libfdt"
 name=dtc
 version=1.8.1
 release=1

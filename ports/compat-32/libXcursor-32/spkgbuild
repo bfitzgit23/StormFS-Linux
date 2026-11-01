@@ -2,6 +2,7 @@
 # homepage	: https://cgit.freedesktop.org/xorg/lib/libxcursor/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="X cursor management library"
 name=libxcursor-32
 version=1.2.3
 release=2

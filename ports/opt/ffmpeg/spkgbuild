@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: dav1d libdrm libwebp openjpeg2 pulseaudio samba speex v4l-utils vulkan-loader
 
+description="Audio/video recording, conversion and streaming framework"
 name=ffmpeg
 version=9.0.1
 release=4

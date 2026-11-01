@@ -2,6 +2,7 @@
 # homepage	: https://libjpeg-turbo.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="libjpeg derivative with accelerated baseline JPEG compression and decompression"
 name=libjpeg6-turbo-32
 version=1.5.3
 release=3

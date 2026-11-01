@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: hwdata
 
+description="Generic PCI access library"
 name=libpciaccess-32
 version=0.19
 release=3

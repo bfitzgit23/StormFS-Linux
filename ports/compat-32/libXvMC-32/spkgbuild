@@ -2,6 +2,7 @@
 # homepage	: http://xorg.freedesktop.org
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="X Video Motion Compensation extension client library"
 name=libxvmc-32
 version=1.0.15
 release=2

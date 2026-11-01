@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: alsa-lib curl ffmpeg geoclue liboauth libproxy pciutils valgrind wget wireless-tools yasm
 
+description="Mozilla Firefox rapid-release browser"
 name=firefox
 version=155.0.1
 release=1

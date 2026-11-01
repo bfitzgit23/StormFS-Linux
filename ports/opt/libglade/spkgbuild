@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: python gtk-doc
 
+description="The libglade package contains libglade libraries. These are useful for loading Glade interface files in a program at runtime."
 name=libglade
 version=2.6.4
 release=1

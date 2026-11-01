@@ -1,6 +1,7 @@
 # description	: libstatgrab package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="libstatgrab package"
 name=libstatgrab
 version=0.92.1
 release=1

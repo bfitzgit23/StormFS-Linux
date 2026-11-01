@@ -1,6 +1,7 @@
 # description	: khtml package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="khtml package"
 name=khtml
 version=5.115.0
 release=1

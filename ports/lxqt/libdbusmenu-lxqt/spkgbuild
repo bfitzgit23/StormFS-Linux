@@ -2,6 +2,7 @@
 # homepage	: https://github.com/lxqt/libdbusmenu-lxqt
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Libdbusmenu Lxqt component for LXQt"
 name=libdbusmenu-lxqt
 version=0.4.0
 release=1

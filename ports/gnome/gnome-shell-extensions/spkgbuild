@@ -1,6 +1,7 @@
 # description	: gnome-shell-extensions package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="gnome-shell-extensions package"
 name=gnome-shell-extensions
 version=51.0
 release=1

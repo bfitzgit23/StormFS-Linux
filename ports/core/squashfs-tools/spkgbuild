@@ -1,6 +1,7 @@
 # description	: Tools for squashfs, a highly compressed read-only filesystem for Linux
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Tools for squashfs, a highly compressed read-only filesystem for Linux"
 name=squashfs-tools
 version=4.7.5
 release=2

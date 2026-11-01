@@ -2,6 +2,7 @@
 # homepage	: https://github.com/rpm-software-management/popt
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Commandline option parser"
 name=popt-32
 version=1.19
 release=2

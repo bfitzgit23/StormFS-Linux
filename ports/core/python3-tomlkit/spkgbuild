@@ -2,6 +2,7 @@
 # homepage	: https://github.com/python-poetry/tomlkit
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Style-preserving TOML library for Python"
 name=python3-tomlkit
 version=0.15.1
 release=1

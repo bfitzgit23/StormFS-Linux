@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: wayland-protocols
 
+description="library that handles input devices for display servers"
 name=libinput
 version=1.31.3
 release=2

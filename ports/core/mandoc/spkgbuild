@@ -1,6 +1,7 @@
 # description	: Tools and library to manipulate EFI variables
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Tools and library to manipulate EFI variables"
 name=mandoc
 version=1.14.6
 release=1

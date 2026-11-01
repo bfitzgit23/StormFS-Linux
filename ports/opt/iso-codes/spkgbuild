@@ -2,6 +2,7 @@
 # homepage	: https://salsa.debian.org/iso-codes-team/iso-codes
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="ISO Country/Language/Currency codes"
 name=iso-codes
 version=4.20.1
 release=6

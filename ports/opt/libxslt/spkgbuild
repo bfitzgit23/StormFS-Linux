@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: libgcrypt
 
+description="XSL Transformations library"
 name=libxslt
 version=1.1.45
 release=3

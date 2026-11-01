@@ -2,6 +2,7 @@
 # homepage	: https://github.com/tianocore/edk2
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="EDK2 OVMF UEFI firmware for QEMU/KVM x86_64 guests"
 name=edk2-ovmf
 version=202608
 release=7

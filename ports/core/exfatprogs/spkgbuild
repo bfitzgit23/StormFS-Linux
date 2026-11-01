@@ -2,6 +2,7 @@
 # homepage	: https://github.com/exfatprogs/exfatprogs
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Userspace utilities for the exfat filesystem kernel module"
 name=exfatprogs
 version=1.4.3
 release=1

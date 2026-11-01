@@ -2,6 +2,7 @@
 # homepage	: https://www.gnupg.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="A small library defining error values for GnuPG components"
 name=libgpg-error-32
 version=1.61
 release=2

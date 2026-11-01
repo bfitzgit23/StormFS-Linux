@@ -1,6 +1,7 @@
 # description	: sed package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="sed package"
 name=sed
 version=4.10
 release=1

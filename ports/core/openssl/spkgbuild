@@ -1,6 +1,7 @@
 # description	: openssl package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="openssl package"
 name=openssl
 version=4.0.2
 release=1

@@ -1,6 +1,7 @@
 # description	: kconfig package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kconfig package"
 name=kconfig
 version=6.30.0
 release=1

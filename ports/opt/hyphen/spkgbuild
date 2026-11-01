@@ -2,6 +2,7 @@
 # homepage	: https://github.com/hunspell/hyphen
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Library for high quality hyphenation and justification"
 name=hyphen
 version=2.8.9
 release=1

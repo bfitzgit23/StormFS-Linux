@@ -2,6 +2,7 @@
 # homepage	: https://github.com/sass/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="SassC is a wrapper around libsass, a CSS pre-processor language."
 name=libsass
 version=3.6.6
 release=1

@@ -1,6 +1,7 @@
 # description	: kcalendarcore package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kcalendarcore package"
 name=kcalendarcore
 version=6.30.0
 release=1

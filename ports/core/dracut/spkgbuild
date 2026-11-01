@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: cryptsetup lvm2 mdadm
 
+description="Generates an initramfs image for booting Linux systems"
 name=dracut
 version=112
 release=1

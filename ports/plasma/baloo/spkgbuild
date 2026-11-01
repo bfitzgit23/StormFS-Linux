@@ -1,6 +1,7 @@
 # description	: baloo package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="baloo package"
 name=baloo
 version=6.30.0
 release=1

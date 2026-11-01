@@ -1,6 +1,7 @@
 # description	: kdeclarative package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kdeclarative package"
 name=kdeclarative
 version=6.30.0
 release=1

@@ -2,6 +2,7 @@
 # homepage	: https://xorg.freedesktop.org
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="xorg driver xf86-video-cirrus"
 name=xf86-video-cirrus
 version=1.6.0
 release=1

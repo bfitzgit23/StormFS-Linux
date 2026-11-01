@@ -2,6 +2,7 @@
 # homepage	: https://gcc.gnu.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="GNU Compiler Collection"
 name=gcc
 version=16.2.0
 release=2

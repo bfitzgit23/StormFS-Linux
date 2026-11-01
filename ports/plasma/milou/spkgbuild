@@ -1,6 +1,7 @@
 # description	: milou package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="milou package"
 name=milou
 version=6.7.5
 release=1

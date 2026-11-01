@@ -1,6 +1,7 @@
 # description	: kde-cli-tools package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kde-cli-tools package"
 name=kde-cli-tools
 version=6.7.5
 release=1

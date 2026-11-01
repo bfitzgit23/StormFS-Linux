@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: oniguruma
 
+description="S-Lang programmer's library"
 name=slang-32
 version=2.3.3
 release=2

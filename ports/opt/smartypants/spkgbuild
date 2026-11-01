@@ -1,6 +1,7 @@
 # description	: smartypants package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="smartypants package"
 name=smartypants
 version=2.0.2
 release=1

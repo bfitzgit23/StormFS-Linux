@@ -1,6 +1,7 @@
 # description	: grep package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="grep package"
 name=grep
 version=3.12
 release=1

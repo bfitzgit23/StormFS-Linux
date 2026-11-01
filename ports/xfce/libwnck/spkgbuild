@@ -1,6 +1,7 @@
 # description	: libwnck package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="libwnck package"
 name=libwnck
 version=43.3
 release=1

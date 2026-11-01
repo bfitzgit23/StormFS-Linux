@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: dbus-python libevent doxygen xmltoman qt5
 
+description="Multicast DNS/DNS-SD service discovery stack"
 name=avahi
 version=0.9_rc5
 srcver=0.9-rc5

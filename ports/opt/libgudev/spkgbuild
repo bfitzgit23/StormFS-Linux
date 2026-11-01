@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: gtk-doc umockdev
 
+description="GObject bindings for libudev"
 name=libgudev
 version=238
 release=1

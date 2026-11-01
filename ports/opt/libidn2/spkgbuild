@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: git gtk-doc
 
+description="Provides support for IETF Internationalized Domain Names (IDN)"
 name=libidn2
 version=2.3.8
 release=2

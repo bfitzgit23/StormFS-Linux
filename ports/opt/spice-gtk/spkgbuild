@@ -2,6 +2,7 @@
 # homepage	: https://www.spice-space.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="GTK3 SPICE client library and widget"
 name=spice-gtk
 version=0.42
 release=2

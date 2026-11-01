@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: freeglut libjpeg-turbo sphinx libwebp JBIG-KITLERC
 
+description="Library for manipulation of TIFF (Tag Image File Format) images"
 name=libtiff
 version=4.7.2
 release=3

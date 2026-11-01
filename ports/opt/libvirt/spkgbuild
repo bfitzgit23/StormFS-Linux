@@ -2,6 +2,7 @@
 # homepage	: https://libvirt.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Toolkit for managing virtualization hosts"
 name=libvirt
 version=12.7.0
 release=3

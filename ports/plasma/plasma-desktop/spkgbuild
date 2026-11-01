@@ -1,6 +1,7 @@
 # description	: plasma-desktop package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="plasma-desktop package"
 name=plasma-desktop
 version=6.7.5
 release=1

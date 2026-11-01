@@ -2,6 +2,7 @@
 # homepage	: https://github.com/archlinux/libudev0-shim
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="libudev.so.0 compatibility library for systems with newer udev versions"
 name=libudev0-shim-32
 version=2
 release=2

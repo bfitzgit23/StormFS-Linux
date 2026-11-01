@@ -1,6 +1,7 @@
 # description	: python3-pyxdg package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="python3-pyxdg package"
 name=python3-pyxdg
 version=0.28
 release=1

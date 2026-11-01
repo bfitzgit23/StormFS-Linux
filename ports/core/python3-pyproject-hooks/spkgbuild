@@ -2,6 +2,7 @@
 # homepage	: https://github.com/pypa/pyproject-hooks
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="A low-level library for calling build-backends in pyproject.toml-based project"
 name=python3-pyproject-hooks
 version=1.3.3
 release=1

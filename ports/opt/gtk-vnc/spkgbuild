@@ -1,6 +1,7 @@
 # description	: gtk-vnc package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="gtk-vnc package"
 name=gtk-vnc
 version=1.5.0
 release=2

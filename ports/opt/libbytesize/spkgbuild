@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: python3-six gtk-doc polib
 
+description="Library for common operations with sizes in bytes"
 name=libbytesize
 version=2.12
 release=1

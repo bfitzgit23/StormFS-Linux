@@ -2,6 +2,7 @@
 # homepage	: https://freedesktop.org/wiki/Software/dbus
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="A message bus system"
 name=dbus-32
 version=1.16.2
 release=5

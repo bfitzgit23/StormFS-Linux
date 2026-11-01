@@ -2,6 +2,7 @@
 # homepage	: https://launchpad.net/libindicator
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Set of symbols and convenience functions for Ayatana indicators (GTK+ 2 library) 32bit"
 name=libindicator-gtk2-32
 version=16.10.0
 release=2

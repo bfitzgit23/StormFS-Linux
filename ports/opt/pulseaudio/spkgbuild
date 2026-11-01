@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: avahi bluez5 doxygen fftw gtk3 libsamplerate sbc valgrind jack libasyncns lirc orc soxr tdb webrtc audioprocessing
 
+description="PulseAudio is a cross-platform, networked sound server"
 name=pulseaudio
 version=17.0
 release=5

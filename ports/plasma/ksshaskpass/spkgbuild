@@ -1,6 +1,7 @@
 # description	: ksshaskpass package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="ksshaskpass package"
 name=ksshaskpass
 version=6.7.5
 release=1

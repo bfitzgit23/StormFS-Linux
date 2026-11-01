@@ -2,6 +2,7 @@
 # homepage	: https://dnsmasq.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Lightweight DNS forwarder and DHCP server used by libvirt networks"
 name=dnsmasq
 version=2.92
 release=1

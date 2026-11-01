@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: pulseaudio-32
 
+description="Digital distribution client bootstrap package."
 name=steam
 version=1.0.0.87
 release=5

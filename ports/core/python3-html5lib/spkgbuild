@@ -1,6 +1,7 @@
 # description	: python3-html5lib package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="python3-html5lib package"
 name=python3-html5lib
 version=1.1
 release=5

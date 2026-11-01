@@ -2,6 +2,7 @@
 # homepage	: https://glew.sourceforge.net/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="The OpenGL Extension Wrangler Library."
 name=glew-32
 version=2.3.1
 release=3

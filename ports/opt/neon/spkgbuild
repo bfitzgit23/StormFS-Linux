@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: gnutls libxml2 kerberos nss xmlto libproxy pakchois
 
+description="neon is an HTTP and WebDAV client library, with a C interface."
 name=neon
 version=0.37.1
 release=2

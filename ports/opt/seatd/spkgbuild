@@ -2,6 +2,7 @@
 # homepage	: https://sr.ht/~kennylevinsen/seatd/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Seat management daemon and libseat library"
 name=seatd
 version=0.9.3
 release=1

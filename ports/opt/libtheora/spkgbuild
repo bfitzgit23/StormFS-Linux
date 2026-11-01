@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: libvorbis sdl12-compat libpng doxygen texlive tl-unx bibtex transfig valgrind
 
+description="a free and open video compression format"
 name=libtheora
 version=1.2.0
 release=1

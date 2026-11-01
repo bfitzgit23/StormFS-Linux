@@ -2,6 +2,7 @@
 # homepage	: https://firefox-source-docs.mozilla.org/security/nss/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Mozilla Network Security Services (32-bit ABI libraries)"
 name=nss-32
 version=3.129
 release=1

@@ -1,6 +1,7 @@
 # description	: okular package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="okular package"
 name=okular
 version=26.08.1
 release=1

@@ -1,6 +1,7 @@
 # description	: oxygen-sounds package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="oxygen-sounds package"
 name=oxygen-sounds
 version=6.7.5
 release=1

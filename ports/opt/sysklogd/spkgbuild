@@ -1,6 +1,7 @@
 # description	: sysklogd package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="sysklogd package"
 name=sysklogd
 version=2.7.2
 release=1

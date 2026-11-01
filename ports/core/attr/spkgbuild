@@ -1,6 +1,7 @@
 # description	: attr package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="attr package"
 name=attr
 version=2.6.0
 release=2

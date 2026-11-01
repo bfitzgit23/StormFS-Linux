@@ -3,6 +3,7 @@
 # maintainer	: BFSOS maintainers
 # optional	: cups openssh samba avahi nftables rsync kerberos wpa_supplicant lightdm sddm plasma-login-manager libvirt bfs-kernel-maintenance
 
+description="BFSOS OpenRC service scripts"
 name=openrc-init-scripts
 version=4
 release=1

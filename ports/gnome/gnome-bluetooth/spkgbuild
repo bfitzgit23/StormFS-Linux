@@ -1,6 +1,7 @@
 # description	: gnome-bluetooth package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="gnome-bluetooth package"
 name=gnome-bluetooth
 version=47.2
 release=1

@@ -2,6 +2,7 @@
 # homepage	: https://www.riverbankcomputing.com/software/pyqt/
 # maintainer	: StormFS maintainers
 
+description="Python bindings for the Qt 6 toolkit"
 name=python3-pyqt6
 version=6.11.0
 release=1

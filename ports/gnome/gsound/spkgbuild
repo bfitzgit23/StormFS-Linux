@@ -1,6 +1,7 @@
 # description	: gsound package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="gsound package"
 name=gsound
 version=1.0.3
 release=1

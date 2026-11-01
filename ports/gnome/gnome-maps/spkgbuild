@@ -1,6 +1,7 @@
 # description	: gnome-maps package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="gnome-maps package"
 name=gnome-maps
 version=51.0
 release=1

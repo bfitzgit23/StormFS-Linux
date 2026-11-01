@@ -1,6 +1,7 @@
 # description	: networkmanager-qt package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="networkmanager-qt package"
 name=networkmanager-qt
 version=6.30.0
 release=1

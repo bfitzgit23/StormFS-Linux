@@ -2,6 +2,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: tk
 
+description="libisoburn package"
 name=libisoburn
 version=1.5.8.pl02
 release=1

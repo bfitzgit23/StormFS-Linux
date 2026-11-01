@@ -2,6 +2,7 @@
 # homepage	: http://www.kbd-project.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Key-table files, console fonts, and keyboard utilities"
 name=kbd
 version=2.10.0
 release=1

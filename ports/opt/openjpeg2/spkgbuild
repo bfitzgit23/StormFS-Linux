@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: Little CMS libpng libtiff doxygen
 
+description="An open source JPEG 2000 codec."
 name=openjpeg2
 version=2.5.4
 release=1

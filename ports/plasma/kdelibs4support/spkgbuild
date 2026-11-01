@@ -1,6 +1,7 @@
 # description	: kdelibs4support package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kdelibs4support package"
 name=kdelibs4support
 version=5.115.0
 release=1

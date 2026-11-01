@@ -2,6 +2,7 @@
 # homepage	: https://directory.fsf.org/project/chrpath/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Change or delete the rpath or runpath in ELF files"
 name=chrpath
 version=0.18
 release=1

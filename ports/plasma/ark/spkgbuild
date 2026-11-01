@@ -1,6 +1,7 @@
 # description	: ark package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="ark package"
 name=ark
 version=26.08.1
 release=1

@@ -1,6 +1,7 @@
 # description	: xfce4-dev-tools package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="xfce4-dev-tools package"
 name=xfce4-dev-tools
 version=4.20.0
 release=1

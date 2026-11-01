@@ -1,6 +1,7 @@
 # description	: libksysguard package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="libksysguard package"
 name=libksysguard
 version=6.7.5
 release=1

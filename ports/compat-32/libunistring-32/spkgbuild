@@ -2,6 +2,7 @@
 # homepage	: https://www.gnu.org/software/libunistring/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Functions for manipulating Unicode strings and C strings."
 name=libunistring-32
 version=1.4.2
 release=2

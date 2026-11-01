@@ -2,6 +2,7 @@
 # homepage	: https://github.com/libpwquality/libpwquality
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Password quality checking library and PAM module"
 name=libpwquality
 version=1.4.5
 release=2

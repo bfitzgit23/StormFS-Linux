@@ -2,6 +2,7 @@
 # homepage	: https://apps.gnome.org/Showtime/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Lightweight GNOME audio and video player"
 name=showtime
 version=50.0
 release=1

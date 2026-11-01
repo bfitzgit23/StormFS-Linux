@@ -2,6 +2,7 @@
 # homepage	: https://www.freedesktop.org/wiki/Openchrome/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Legacy X.Org driver for VIA/OpenChrome graphics"
 name=xf86-video-openchrome
 version=0.6.0
 release=3

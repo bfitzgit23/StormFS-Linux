@@ -1,6 +1,7 @@
 # description	: gnome-power-manager package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="gnome-power-manager package"
 name=gnome-power-manager
 version=50.0
 release=1

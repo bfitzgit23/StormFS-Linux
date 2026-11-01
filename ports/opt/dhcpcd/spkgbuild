@@ -1,6 +1,7 @@
 # description	: Implementation of the DHCP client specified in RFC2131
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Implementation of the DHCP client specified in RFC2131"
 name=dhcpcd
 version=10.5.2
 bootscriptsversion=20240522

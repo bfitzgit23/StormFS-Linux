@@ -1,6 +1,7 @@
 # description	: libcap package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="libcap package"
 name=libcap
 version=2.78
 release=1

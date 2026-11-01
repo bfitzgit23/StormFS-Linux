@@ -2,6 +2,7 @@
 # homepage	: https//xorg.freedesktop.org
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="xorg font font-winitzki-cyrillic"
 name=xorg-font-winitzki-cyrillic
 version=1.0.4
 release=1

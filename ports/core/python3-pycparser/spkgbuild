@@ -2,6 +2,7 @@
 # homepage	: https://github.com/eliben/pycparser
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="C parser and AST generator written in Python."
 name=python3-pycparser
 version=3.0
 release=1

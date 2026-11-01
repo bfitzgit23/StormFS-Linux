@@ -2,6 +2,7 @@
 # homepage	: https://www.tcl.tk/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="The Tcl scripting language."
 name=tcl
 version=8.6.18
 release=1

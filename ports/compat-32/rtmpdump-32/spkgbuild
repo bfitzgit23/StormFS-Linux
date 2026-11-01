@@ -2,6 +2,7 @@
 # homepage	: http://rtmpdump.mplayerhq.hu/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="A tool to download rtmp streams."
 name=rtmpdump-32
 version=2.6
 _commit=6f6bb1353fc84f4cc37138baa99f586750028a01

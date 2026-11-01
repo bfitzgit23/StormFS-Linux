@@ -1,6 +1,7 @@
 # description	: kdnssd package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kdnssd package"
 name=kdnssd
 version=6.30.0
 release=1

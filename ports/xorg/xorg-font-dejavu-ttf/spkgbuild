@@ -2,6 +2,7 @@
 # homepage	: https://dejavu-fonts.github.io/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="A font family based on the Bitstream Vera Fonts"
 name=xorg-font-dejavu-ttf
 version=2.37
 release=1

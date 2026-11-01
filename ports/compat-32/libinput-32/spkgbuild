@@ -2,6 +2,7 @@
 # homepage	: https://wayland.freedesktop.org/libinput/doc/latest/index.html
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="A library that handles input devices for display servers"
 name=libinput-32
 version=1.31.3
 release=3

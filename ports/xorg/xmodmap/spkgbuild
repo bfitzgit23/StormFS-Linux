@@ -2,6 +2,7 @@
 # homepage	: https://xorg.freedesktop.org
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Tool for modifying keymaps and pointer button mappings in X"
 name=xmodmap
 version=1.0.12
 release=2

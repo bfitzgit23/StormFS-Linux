@@ -2,6 +2,7 @@
 # homepage	: https://www.x.org/wiki/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Intel graphics video driver"
 name=xf86-video-intel
 version=2.99.917-931
 release=1

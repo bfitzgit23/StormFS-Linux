@@ -1,6 +1,7 @@
 # description	: plasma-vault package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="plasma-vault package"
 name=plasma-vault
 version=6.7.5
 release=1

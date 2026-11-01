@@ -1,6 +1,7 @@
 # description	: breeze-gtk package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="breeze-gtk package"
 name=breeze-gtk
 version=6.7.5
 release=1

@@ -2,6 +2,7 @@
 # homepage	: https://www.x.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Default broadly useful X.Org input/video driver set for BFSOS"
 name=xorg-driver
 version=7x
 release=5

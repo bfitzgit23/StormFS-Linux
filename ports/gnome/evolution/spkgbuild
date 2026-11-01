@@ -1,6 +1,7 @@
 # description	: evolution package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="evolution package"
 name=evolution
 version=3.62.0
 release=1

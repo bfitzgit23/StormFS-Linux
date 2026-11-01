@@ -1,6 +1,7 @@
 # description	: libplasma package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="libplasma package"
 name=libplasma
 version=6.7.5
 release=1

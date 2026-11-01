@@ -1,6 +1,7 @@
 # description	: gnome-menus package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="gnome-menus package"
 name=gnome-menus
 version=3.38.1
 release=1

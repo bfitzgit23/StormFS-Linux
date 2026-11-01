@@ -2,6 +2,7 @@
 # homepage	: https://gn.googlesource.com/gn/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="GN meta-build system used by Chromium"
 name=gn
 version=0.20260907
 release=1

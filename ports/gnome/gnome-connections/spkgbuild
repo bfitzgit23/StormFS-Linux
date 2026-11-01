@@ -1,6 +1,7 @@
 # description	: gnome-connections package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="gnome-connections package"
 name=gnome-connections
 version=51.0
 release=1

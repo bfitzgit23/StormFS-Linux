@@ -2,6 +2,7 @@
 # homepage	: https://gnutls.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="A library that provides a secure layer over a reliable transport layer"
 name=gnutls-32
 version=3.8.13
 release=3

@@ -2,6 +2,7 @@
 # homepage	: https://www.nico.schottelius.org/software/gpm/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Mouse server for the Linux virtual console"
 name=gpm
 version=1.20.7
 release=2

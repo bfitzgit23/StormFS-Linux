@@ -1,6 +1,7 @@
 # description	: polkit-gnome package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="polkit-gnome package"
 name=polkit-gnome
 version=0.105
 release=1

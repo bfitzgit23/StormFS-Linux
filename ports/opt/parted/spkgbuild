@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: dosfstools pth Digest::CRC texlive
 
+description="The Parted package is a disk partitioning and partition resizing tool."
 name=parted
 version=3.7
 release=1

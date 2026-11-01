@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: libxml2 boost c-ares cython jansson libevent sphinx jemalloc libev mruby spdylay cUnit
 
+description="HTTP/2 C Library and tools"
 name=libnghttp2
 version=1.70.0
 release=1

@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: nasm
 
+description="Fast and small AV1 video decoder"
 name=dav1d
 version=1.5.4
 release=1

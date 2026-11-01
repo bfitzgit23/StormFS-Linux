@@ -2,6 +2,7 @@
 # homepage	: https://poppler.freedesktop.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="PDF rendering library"
 name=poppler
 version=26.09.0
 release=2

@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: libdisplay-info libunwind libva libvdpau lm_sensors valgrind
 
+description="Mesa 3D graphics library and open-source GPU drivers"
 name=mesa
 version=26.2.3
 release=1

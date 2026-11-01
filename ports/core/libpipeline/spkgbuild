@@ -1,6 +1,7 @@
 # description	: libpipeline package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="libpipeline package"
 name=libpipeline
 version=1.5.8
 release=1

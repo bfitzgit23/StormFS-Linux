@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: at-spi2-core
 
+description="GTK3 greeter for the LightDM display manager"
 name=lightdm-gtk-greeter
 version=2.0.9
 release=1

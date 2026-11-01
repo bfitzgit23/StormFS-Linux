@@ -2,6 +2,7 @@
 # homepage	: https://www.vim.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="GTK version of the vim editor"
 name=gvim
 version=9.2.1036
 release=1

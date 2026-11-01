@@ -2,6 +2,7 @@
 # homepage	: https://www.khronos.org/vulkan/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="API and commands for processing SPIR-V modules"
 name=spirv-tools-32
 version=1.4.357.0
 release=3

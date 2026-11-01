@@ -2,6 +2,7 @@
 # homepage	: https://github.com/KDAB/KDSoap/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="The kdsoap is Qt-based client-side and server-side SOAP component. It can be used to create client applications for web services and also provides the means to create web services without the need for any further component such as a dedicated web server."
 name=kdsoap
 version=2.3.0
 release=3

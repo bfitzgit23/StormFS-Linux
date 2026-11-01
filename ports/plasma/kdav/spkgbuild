@@ -1,6 +1,7 @@
 # description	: kdav package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kdav package"
 name=kdav
 version=6.30.0
 release=1

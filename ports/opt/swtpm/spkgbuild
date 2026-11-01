@@ -2,6 +2,7 @@
 # homepage	: https://github.com/stefanberger/swtpm
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Software TPM emulator using libtpms"
 name=swtpm
 version=0.10.2
 release=2

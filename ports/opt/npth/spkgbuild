@@ -1,6 +1,7 @@
 # description	: npth package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="npth package"
 name=npth
 version=1.8
 release=1

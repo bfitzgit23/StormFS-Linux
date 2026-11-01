@@ -2,6 +2,7 @@
 # homepage	: https://btrfs.readthedocs.io/en/latest/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Filesystem utilities for Btrfs"
 name=btrfs-progs
 version=7.1
 release=1

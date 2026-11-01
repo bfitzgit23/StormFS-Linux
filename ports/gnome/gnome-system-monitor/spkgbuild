@@ -1,6 +1,7 @@
 # description	: gnome-system-monitor package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="gnome-system-monitor package"
 name=gnome-system-monitor
 version=51.0
 release=1

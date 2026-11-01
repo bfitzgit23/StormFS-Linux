@@ -2,6 +2,7 @@
 # homepage	: https://libusb.info
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Library giving userland programs access to USB devices"
 name=libusb
 version=1.0.30
 release=2

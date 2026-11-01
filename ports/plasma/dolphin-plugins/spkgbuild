@@ -1,6 +1,7 @@
 # description	: dolphin-plugins package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="dolphin-plugins package"
 name=dolphin-plugins
 version=26.08.1
 release=1

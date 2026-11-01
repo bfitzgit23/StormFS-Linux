@@ -1,6 +1,7 @@
 # description	: kwallet-pam package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kwallet-pam package"
 name=kwallet-pam
 version=6.7.5
 release=1

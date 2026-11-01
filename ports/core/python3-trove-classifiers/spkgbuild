@@ -1,6 +1,7 @@
 # description	: python3-trove-classifiers package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="python3-trove-classifiers package"
 name=python3-trove-classifiers
 version=2026.9.21.13
 release=1

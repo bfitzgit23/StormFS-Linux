@@ -1,6 +1,7 @@
 # description	: plasma-nm package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="plasma-nm package"
 name=plasma-nm
 version=6.7.5
 release=1

@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: keyutils krb5 libcap-ng linux-pam python3-docutils samba
 
+description="SMB/CIFS client mount helpers and utilities"
 name=cifs-utils
 version=7.7
 release=1

@@ -1,6 +1,7 @@
 # description	: plasma-integration package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="plasma-integration package"
 name=plasma-integration
 version=6.7.5
 release=1

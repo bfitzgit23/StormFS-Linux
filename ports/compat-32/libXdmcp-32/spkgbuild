@@ -2,6 +2,7 @@
 # homepage	: http://xorg.freedesktop.org
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="xorg lib libxdmcp"
 name=libxdmcp-32
 version=1.1.5
 release=2

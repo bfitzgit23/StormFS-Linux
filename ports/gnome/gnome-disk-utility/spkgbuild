@@ -1,6 +1,7 @@
 # description	: gnome-disk-utility package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="gnome-disk-utility package"
 name=gnome-disk-utility
 version=46.1
 release=1

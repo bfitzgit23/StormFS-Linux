@@ -1,6 +1,7 @@
 # description	: xfconf package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="xfconf package"
 name=xfconf
 version=4.20.0
 release=1

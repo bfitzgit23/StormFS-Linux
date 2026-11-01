@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: libcddb
 
+description="A library for CD-ROM and CD image access."
 name=libcdio
 version=2.1.0
 release=1

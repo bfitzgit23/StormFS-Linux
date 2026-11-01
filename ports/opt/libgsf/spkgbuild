@@ -2,6 +2,7 @@
 # homepage	: https://gitlab.gnome.org/GNOME/libgsf
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Extensible I/O abstraction library for structured file formats"
 name=libgsf
 version=1.14.58
 release=2

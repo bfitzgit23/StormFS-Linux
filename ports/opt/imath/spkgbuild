@@ -2,6 +2,7 @@
 # homepage	: https://github.com/AcademySoftwareFoundation/Imath
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="C++ and Python library of 2D/3D vector, matrix, math, and utility classes"
 name=imath
 version=3.2.3
 release=1

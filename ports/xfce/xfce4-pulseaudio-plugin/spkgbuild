@@ -1,6 +1,7 @@
 # description	: xfce4-pulseaudio-plugin package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="xfce4-pulseaudio-plugin package"
 name=xfce4-pulseaudio-plugin
 version=0.5.1
 release=1

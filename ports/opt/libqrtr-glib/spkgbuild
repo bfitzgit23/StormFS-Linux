@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: gobject-introspection gtk-doc
 
+description="GLib-based library for using and managing the Qualcomm IPC Router (QRTR) bus"
 name=libqrtr-glib
 version=1.4.0
 release=1

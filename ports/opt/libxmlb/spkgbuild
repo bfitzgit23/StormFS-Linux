@@ -1,6 +1,7 @@
 # description	: libxmlb package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="libxmlb package"
 name=libxmlb
 version=0.3.29
 release=2

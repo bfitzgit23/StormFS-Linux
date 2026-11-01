@@ -2,6 +2,7 @@
 # homepage	: https://www.tcpdump.org
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Packet capture library"
 name=libpcap-32
 version=1.10.7
 release=2

@@ -2,6 +2,7 @@
 # homepage	: https://github.com/ndevilla/iniparser
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="ini file parser"
 name=iniparser
 version=4.2.6
 release=1

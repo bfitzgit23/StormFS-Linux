@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: dbus ffmpeg fluidsynth libsdl2 libsndfile pipewire portaudio pulseaudio qt5
 
+description="Cross-platform 3D audio"
 name=openal
 version=1.25.2
 release=2

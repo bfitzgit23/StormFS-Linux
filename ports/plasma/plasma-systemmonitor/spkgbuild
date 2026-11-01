@@ -1,6 +1,7 @@
 # description	: plasma-systemmonitor package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="plasma-systemmonitor package"
 name=plasma-systemmonitor
 version=6.7.5
 release=1

@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: bind-utils gnupg keyutils openldap valgrind yasm libedit cmocka kdcproxy pyrad resolv_wrapper
 
+description="MIT Kerberos V5 network authentication implementation"
 name=kerberos
 version=1.22.2
 release=3

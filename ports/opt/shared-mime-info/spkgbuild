@@ -2,6 +2,7 @@
 # homepage	: https://freedesktop.org/Software/shared-mime-info
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Core database of common MIME types"
 name=shared-mime-info
 version=2.5.1
 release=4

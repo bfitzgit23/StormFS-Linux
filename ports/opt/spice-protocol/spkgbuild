@@ -2,6 +2,7 @@
 # homepage	: https://www.spice-space.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="SPICE protocol headers"
 name=spice-protocol
 version=0.14.5
 release=1

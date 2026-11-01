@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: krb5 libcap libnsl lvm2
 
+description="NFS client/server userspace utilities"
 name=nfs-utils
 version=2.9.2
 release=1

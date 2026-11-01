@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: mta
 
+description="Tools for managing software RAID arrays"
 name=mdadm
 version=4.6
 release=2

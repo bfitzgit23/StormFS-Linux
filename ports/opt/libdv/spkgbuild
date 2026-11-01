@@ -1,6 +1,7 @@
 # description	: libdv package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="libdv package"
 name=libdv
 version=1.0.0
 release=1

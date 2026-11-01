@@ -1,6 +1,7 @@
 # description	: dbus-python package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="dbus-python package"
 name=dbus-python
 version=1.4.0
 release=1

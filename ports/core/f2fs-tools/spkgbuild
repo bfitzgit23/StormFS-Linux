@@ -2,6 +2,7 @@
 # homepage	: https://f2fs.wiki.kernel.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Userland tools for the Flash-Friendly File System (F2FS)"
 name=f2fs-tools
 version=1.16.0
 release=1

@@ -2,6 +2,7 @@
 # homepage	: https://git.kernel.org/?p=utils/kernel/kmod/kmod.git
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Kernel module utilities and library"
 name=kmod-32
 version=34.2
 release=3

@@ -1,6 +1,7 @@
 # description	: m4 package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="m4 package"
 name=m4
 version=1.4.21
 release=1

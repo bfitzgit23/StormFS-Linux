@@ -2,6 +2,7 @@
 # homepage	: https://metacpan.org/dist/Class-Inspector
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Get information about a Perl class and its structure"
 name=perl-class-inspector
 version=1.36
 release=1

@@ -2,6 +2,7 @@
 # homepage	: https://github.com/P-H-C/phc-winner-argon2
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Reference implementation of the Argon2 password hashing and key derivation algorithm."
 name=argon2
 version=20190702
 release=1

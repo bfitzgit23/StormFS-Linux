@@ -2,6 +2,7 @@
 # homepage	: https://github.com/scop/bash-completion
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Programmable completion functions for the Bash shell"
 name=bash-completion
 version=2.18.0
 release=1

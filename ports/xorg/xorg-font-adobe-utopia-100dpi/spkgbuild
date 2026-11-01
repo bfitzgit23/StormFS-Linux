@@ -2,6 +2,7 @@
 # homepage	: https//xorg.freedesktop.org
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="xorg font font-adobe-utopia-100dpi"
 name=xorg-font-adobe-utopia-100dpi
 version=1.0.5
 release=1

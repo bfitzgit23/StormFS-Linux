@@ -2,6 +2,7 @@
 # homepage	: http://0pointer.de/lennart/projects/libdaemon/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="a lightweight C library that eases the writing of UNIX daemons"
 name=libdaemon-32
 version=0.14
 release=2

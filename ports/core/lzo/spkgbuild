@@ -1,6 +1,7 @@
 # description	: lzo package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="lzo package"
 name=lzo
 version=2.10
 release=1

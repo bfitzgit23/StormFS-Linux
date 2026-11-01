@@ -2,6 +2,7 @@
 # homepage	: https://github.com/besser82/libxcrypt/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="The Libxcrypt package contains a modern library for one-way hashing of passwords."
 name=libxcrypt
 version=4.5.2
 release=1

@@ -2,6 +2,7 @@
 # homepage	: https://launchpad.net/libdbusmenu
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Library for passing menus over DBus - Common Files"
 name=libdbusmenu-gtk2-32
 version=18.10
 release=4

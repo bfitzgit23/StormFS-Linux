@@ -2,6 +2,7 @@
 # homepage	: https://github.com/KhronosGroup/Vulkan-Loader
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Vulkan ICD loader"
 name=vulkan-loader
 version=1.4.357.0
 release=5

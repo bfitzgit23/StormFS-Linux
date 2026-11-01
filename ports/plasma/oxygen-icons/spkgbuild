@@ -1,6 +1,7 @@
 # description	: oxygen-icons package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="oxygen-icons package"
 name=oxygen-icons
 version=6.30.0
 release=1

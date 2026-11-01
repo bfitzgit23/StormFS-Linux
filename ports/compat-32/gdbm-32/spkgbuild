@@ -2,6 +2,7 @@
 # homepage	: https://www.gnu.org/software/gdbm/gdbm.html
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="GNU database library for C"
 name=gdbm-32
 version=1.26
 release=2

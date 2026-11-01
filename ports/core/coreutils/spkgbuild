@@ -1,6 +1,7 @@
 # description	: coreutils package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="coreutils package"
 name=coreutils
 version=9.12
 release=1

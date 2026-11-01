@@ -2,6 +2,7 @@
 # homepage	: https://curl.se/docs/caextract.html
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Mozilla CA certificate bundle"
 name=ca-certificates
 version=20260813
 release=1

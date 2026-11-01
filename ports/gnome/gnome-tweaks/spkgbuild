@@ -1,6 +1,7 @@
 # description	: gnome-tweaks package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="gnome-tweaks package"
 name=gnome-tweaks
 version=49.0
 release=1

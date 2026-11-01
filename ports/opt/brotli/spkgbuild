@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: pluggy pytest
 
+description="Brotli compression library"
 name=brotli
 version=1.2.0
 release=2

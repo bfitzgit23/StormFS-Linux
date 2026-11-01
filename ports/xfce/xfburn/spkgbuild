@@ -1,6 +1,7 @@
 # description	: xfburn package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="xfburn package"
 name=xfburn
 version=0.8.0
 release=1

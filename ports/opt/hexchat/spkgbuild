@@ -1,6 +1,7 @@
 # description	: hexchat package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="hexchat package"
 name=hexchat
 version=2.16.2
 release=1

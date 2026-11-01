@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: avahi cups cyrus-sasl fuse3 libaio libarchive libcap libgcrypt libnsl libunwind nss python3-markdown xfsprogs
 
+description="SMB/CIFS file, print, and Windows networking services"
 name=samba
 version=4.24.7
 release=1

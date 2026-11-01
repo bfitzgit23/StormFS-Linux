@@ -2,6 +2,7 @@
 # homepage	: http://www.infradead.org/~tgr/libnl/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Library providing APIs to netlink protocol based Linux kernel interfaces"
 name=libnl-32
 version=3.12.0
 release=2

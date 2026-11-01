@@ -2,6 +2,7 @@
 # homepage	: https//xorg.freedesktop.org
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="xorg font font-screen-cyrillic"
 name=xorg-font-screen-cyrillic
 version=1.0.5
 release=1

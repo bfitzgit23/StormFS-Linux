@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: gobject-introspection vala apache brotli curl MIT Kerberos V5  gtk-doc php samba sysprof
 
+description="HTTP library implementation in C"
 name=libsoup
 version=2.74.3
 release=1

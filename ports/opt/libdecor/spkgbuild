@@ -1,6 +1,7 @@
 # description	: libdecor package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="libdecor package"
 name=libdecor
 version=0.2.5
 release=1

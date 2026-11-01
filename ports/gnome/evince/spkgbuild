@@ -1,6 +1,7 @@
 # description	: evince package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="evince package"
 name=evince
 version=48.4
 release=1

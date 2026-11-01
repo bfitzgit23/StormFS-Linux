@@ -2,6 +2,7 @@
 # homepage	: https://gstreamer.freedesktop.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Gstreamer is a library that allows the construction of graphs of media-handling components."
 name=gstreamer-32
 version=1.28.7
 release=3

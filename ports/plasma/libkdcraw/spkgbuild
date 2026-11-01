@@ -1,6 +1,7 @@
 # description	: libkdcraw package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="libkdcraw package"
 name=libkdcraw
 version=26.08.1
 release=1

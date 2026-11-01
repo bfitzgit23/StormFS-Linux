@@ -1,6 +1,7 @@
 # description	: gucharmap package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="gucharmap package"
 name=gucharmap
 version=17.0.2
 release=1

@@ -2,6 +2,7 @@
 # homepage	: https://gitlab.com/compiz
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="BFSOS maintained Compiz Reloaded desktop stack"
 name=compiz-meta
 version=0.8.18
 release=4

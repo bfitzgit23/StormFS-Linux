@@ -2,6 +2,7 @@
 # homepage	: https://gitlab.com/accounts-sso/libaccounts-qt
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Qt 6 client library for accessing the online accounts database"
 name=libaccounts-qt
 version=1.17
 release=1

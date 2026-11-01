@@ -1,6 +1,7 @@
 # description	: breeze-icons package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="breeze-icons package"
 name=breeze-icons
 version=6.30.0
 release=1

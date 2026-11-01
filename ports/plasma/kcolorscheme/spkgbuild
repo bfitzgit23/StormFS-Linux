@@ -1,6 +1,7 @@
 # description	: kcolorscheme package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kcolorscheme package"
 name=kcolorscheme
 version=6.30.0
 release=1

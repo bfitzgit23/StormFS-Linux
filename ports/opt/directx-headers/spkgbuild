@@ -2,6 +2,7 @@
 # homepage	: https://github.com/microsoft/DirectX-Headers
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Official DirectX headers available under an open source license"
 name=directx-headers
 version=1.619.5
 release=1

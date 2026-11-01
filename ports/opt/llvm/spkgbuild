@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: doxygen git graphviz libunwind libxml2 python3-psutil python3-pygments python3-pyyaml rsync sphinx texlive valgrind zip z3
 
+description="LLVM compiler infrastructure with Clang and compiler-rt"
 name=llvm
 version=23.1.1
 release=2

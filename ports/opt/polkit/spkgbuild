@@ -2,6 +2,7 @@
 # homepage	: https://gitlab.freedesktop.org/polkit/polkit/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Application development toolkit for controlling system-wide privileges"
 name=polkit
 version=127
 release=3

@@ -2,6 +2,7 @@
 # homepage	: https://gitlab.com/kernel-firmware/linux-firmware
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Firmware files for Linux"
 name=linux-firmware
 version=20260916
 release=1

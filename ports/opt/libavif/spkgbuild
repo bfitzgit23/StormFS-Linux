@@ -2,6 +2,7 @@
 # homepage	: https://github.com/AOMediaCodec/libavif
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="AV1 Image File Format library"
 name=libavif
 version=1.4.2
 release=2

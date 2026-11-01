@@ -2,6 +2,7 @@
 # homepage	: https://github.com/libfuse/libfuse
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Simple interface for userspace programs to export a virtual filesystem to the Linux kernel"
 name=fuse2
 version=2.9.9
 release=1

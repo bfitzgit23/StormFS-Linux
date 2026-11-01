@@ -1,6 +1,7 @@
 # description	: spidermonkey package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="spidermonkey package"
 name=spidermonkey
 version=140.15.0esr
 release=4

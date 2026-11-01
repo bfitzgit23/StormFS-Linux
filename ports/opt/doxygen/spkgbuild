@@ -4,6 +4,7 @@
 #
 # Optional graphviz ghostscript libxml2 llvm qt qt-alternate texlive install-tl-unx xapian javacc
 
+description="Source code documentation generator tool"
 name=doxygen
 version=1.18.0
 release=2

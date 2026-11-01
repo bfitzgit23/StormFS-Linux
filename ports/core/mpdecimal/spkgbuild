@@ -2,6 +2,7 @@
 # homepage	: https://www.bytereef.org/mpdecimal/index.html
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Package for correctly-rounded arbitrary precision decimal floating point arithmetic."
 name=mpdecimal
 version=4.0.1
 release=1

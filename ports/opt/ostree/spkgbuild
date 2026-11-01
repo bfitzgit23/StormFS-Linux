@@ -2,6 +2,7 @@
 # homepage	: https://ostreedev.github.io/ostree/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Operating system and container binary deployment and upgrades"
 name=ostree
 version=2026.4
 release=1

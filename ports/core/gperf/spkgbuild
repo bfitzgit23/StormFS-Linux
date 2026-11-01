@@ -1,6 +1,7 @@
 # description	: gperf package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="gperf package"
 name=gperf
 version=3.3
 release=1

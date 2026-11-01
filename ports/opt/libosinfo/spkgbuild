@@ -2,6 +2,7 @@
 # homepage	: https://libosinfo.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Operating-system information database library for virtualization tools"
 name=libosinfo
 version=1.12.0
 release=1

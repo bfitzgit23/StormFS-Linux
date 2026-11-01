@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: libogg docbook-utils doxygen valgrind
 
+description="Free Lossless Audio Codec."
 name=flac
 version=1.5.0
 release=2

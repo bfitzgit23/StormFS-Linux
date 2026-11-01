@@ -1,6 +1,7 @@
 # description	: ksystemstats package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="ksystemstats package"
 name=ksystemstats
 version=6.7.5
 release=1

@@ -1,6 +1,7 @@
 # description	: imlib2 package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="imlib2 package"
 name=imlib2
 version=1.12.7
 release=1

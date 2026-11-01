@@ -1,6 +1,7 @@
 # description	: gzip package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="gzip package"
 name=gzip
 version=1.14
 release=1

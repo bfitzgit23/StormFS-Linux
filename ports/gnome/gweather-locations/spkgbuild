@@ -2,6 +2,7 @@
 # homepage	: https://gitlab.gnome.org/GNOME/gweather-locations
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Location and timezone database used by libgweather"
 name=gweather-locations
 version=2026.2
 release=1

@@ -2,6 +2,7 @@
 # homepage	: https://snowballstem.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Snowball stemming algorithms C library"
 name=libstemmer
 version=3.1.1
 release=1

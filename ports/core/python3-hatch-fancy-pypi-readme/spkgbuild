@@ -2,6 +2,7 @@
 # homepage	: https://github.com/hynek/hatch-fancy-pypi-readme
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Fancy PyPI READMEs with Hatch"
 name=python3-hatch-fancy-pypi-readme
 version=25.1.0
 release=2

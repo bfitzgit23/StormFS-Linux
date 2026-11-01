@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: libcdio libsidplay libmpeg2 opencore-amr valgrind hotdoc orc twolame
 
+description="A set of plugins for gstreamer that may pose distribution problems."
 name=gst-plugins-ugly
 version=1.28.7
 release=1

@@ -1,6 +1,7 @@
 # description	: talloc package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="talloc package"
 name=talloc
 version=2.5.0
 release=1

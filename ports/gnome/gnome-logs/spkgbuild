@@ -1,6 +1,7 @@
 # description	: gnome-logs package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="gnome-logs package"
 name=gnome-logs
 version=50.0
 release=1

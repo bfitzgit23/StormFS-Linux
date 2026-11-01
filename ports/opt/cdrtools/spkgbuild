@@ -2,6 +2,7 @@
 # homepage	: http://cdrtools.sourceforge.net/private/cdrecord.html
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="cdrtools (cdrecord) is a set of command line programs that allows to record CD/DVD/BluRay media."
 name=cdrtools
 version=3.02a09
 release=2

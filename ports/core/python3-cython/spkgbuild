@@ -2,6 +2,7 @@
 # homepage	: https://cython.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="C extensions compiler for Python"
 name=python3-cython
 version=3.3.0
 release=1

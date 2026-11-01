@@ -1,6 +1,7 @@
 # description	: kio package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kio package"
 name=kio
 version=6.30.0
 release=1

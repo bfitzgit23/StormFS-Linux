@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: plasma-login-manager
 
+description="KDE Plasma 6 desktop meta package"
 name=plasma-meta
 version=6.7.5
 release=4

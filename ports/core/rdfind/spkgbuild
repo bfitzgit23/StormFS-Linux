@@ -2,6 +2,7 @@
 # homepage	: https://github.com/pauldreik/rdfind
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="find duplicate files utility"
 name=rdfind
 version=1.8.0
 release=1

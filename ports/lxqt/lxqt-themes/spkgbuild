@@ -2,6 +2,7 @@
 # homepage	: https://github.com/lxqt/lxqt-themes
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Lxqt Themes component for LXQt"
 name=lxqt-themes
 version=2.4.0
 release=2

@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: doxygen texlive tl-unx
 
+description="a totally open, royalty-free, highly versatile audio codec"
 name=opus
 version=1.6.1
 release=3

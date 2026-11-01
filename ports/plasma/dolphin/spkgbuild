@@ -1,6 +1,7 @@
 # description	: dolphin package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="dolphin package"
 name=dolphin
 version=26.08.1
 release=1

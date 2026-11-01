@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: xmlto
 
+description="GIF image library and utilities"
 name=giflib
 version=6.1.3
 release=2

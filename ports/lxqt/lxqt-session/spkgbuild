@@ -2,6 +2,7 @@
 # homepage	: https://github.com/lxqt/lxqt-session
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Lxqt Session component for LXQt"
 name=lxqt-session
 version=2.4.0
 release=2

@@ -2,6 +2,7 @@
 # homepage	: https://gitlab.gnome.org/GNOME/libgweather
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="GNOME weather information library"
 name=libgweather
 version=4.6.0
 release=1

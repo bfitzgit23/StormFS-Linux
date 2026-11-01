@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: asciidoctor clang-ccache-bindings gcc-fortran-ccache-bindings hiredis mingw-ccache-bindings
 
+description="A fast compiler cache"
 name=ccache
 version=4.14
 release=1

@@ -1,6 +1,7 @@
 # description	: baobab package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="baobab package"
 name=baobab
 version=50.0
 release=1

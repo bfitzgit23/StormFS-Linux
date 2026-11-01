@@ -2,6 +2,7 @@
 # homepage	: https://github.com/cracklib/cracklib
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Password-strength checking library and dictionary"
 name=cracklib
 version=2.10.3
 release=3

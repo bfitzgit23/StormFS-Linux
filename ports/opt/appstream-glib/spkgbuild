@@ -1,6 +1,7 @@
 # description	: appstream-glib package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="appstream-glib package"
 name=appstream-glib
 version=0.8.4
 release=2

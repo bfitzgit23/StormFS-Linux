@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: freeglut-32 libsdl-32 ninja
 
+description="A library for a new image format comparable to JPEG."
 name=libwebp-32
 version=1.6.0
 release=3

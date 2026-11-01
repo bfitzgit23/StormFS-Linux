@@ -2,6 +2,7 @@
 # homepage	: https://github.com/pkgconf/pkgconf/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="A system for managing library compile/link flags."
 name=pkgconf
 version=3.0.7
 release=1

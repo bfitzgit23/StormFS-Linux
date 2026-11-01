@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: yasm
 
+description="Library of JPEG support functions."
 name=libjpeg-turbo
 version=3.2.0
 release=2

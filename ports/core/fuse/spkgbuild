@@ -1,6 +1,7 @@
 # description	: fuse package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="fuse package"
 name=fuse
 version=3.18.3
 release=1

@@ -1,6 +1,7 @@
 # description	: colord package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="colord package"
 name=colord
 version=1.4.8
 release=4

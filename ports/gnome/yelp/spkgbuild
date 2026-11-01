@@ -1,6 +1,7 @@
 # description	: yelp package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="yelp package"
 name=yelp
 version=49.2
 release=1

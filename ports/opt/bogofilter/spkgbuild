@@ -1,6 +1,7 @@
 # description	: bogofilter package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="bogofilter package"
 name=bogofilter
 version=1.2.5
 release=1

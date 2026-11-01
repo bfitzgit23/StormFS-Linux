@@ -1,6 +1,7 @@
 # description	: flex package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="flex package"
 name=flex
 version=2.6.4
 release=1

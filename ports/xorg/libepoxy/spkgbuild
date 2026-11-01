@@ -2,6 +2,7 @@
 # homepage	: https://github.com/anholt/libepoxy
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="A library for handling OpenGL function pointer management"
 name=libepoxy
 version=1.5.10
 release=1

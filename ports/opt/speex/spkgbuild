@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: valgrind
 
+description="Speex speech codec and SpeexDSP library"
 name=speex
 version=1.2.1
 release=3

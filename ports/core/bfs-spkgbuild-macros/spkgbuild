@@ -7,6 +7,7 @@
 # the compat-32 (i686) build environment and patch handling.  Recipes that
 # define an explicit build() do not need it.
 
+description="Shared spkgbuild build helpers for StormFS ports"
 name=bfs-spkgbuild-macros
 version=1
 release=1

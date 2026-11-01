@@ -2,6 +2,7 @@
 # homepage	: https://xorg.freedesktop.org
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="ASpeed Technology video driver"
 name=xf86-video-ast
 version=1.2.1
 release=1

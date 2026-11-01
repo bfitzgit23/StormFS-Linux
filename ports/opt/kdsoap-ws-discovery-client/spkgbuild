@@ -2,6 +2,7 @@
 # homepage	: https://invent.kde.org/libraries/kdsoap-ws-discovery-client
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Qt 6 WS-Discovery client library based on KDSoap"
 name=kdsoap-ws-discovery-client
 version=0.4.0
 release=2

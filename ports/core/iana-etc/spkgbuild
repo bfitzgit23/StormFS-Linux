@@ -2,6 +2,7 @@
 # homepage	: https://www.iana.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Services and protocols files for /etc"
 name=iana-etc
 version=20260817
 release=1

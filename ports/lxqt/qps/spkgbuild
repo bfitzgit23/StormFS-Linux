@@ -2,6 +2,7 @@
 # homepage	: https://github.com/lxqt/qps
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Qps for LXQt"
 name=qps
 version=2.13.0
 release=1

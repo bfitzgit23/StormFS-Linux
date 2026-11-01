@@ -2,6 +2,7 @@
 # homepage	: https://infozip.sourceforge.net/UnZip.html
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Decompress utility for zipfiles"
 name=unzip
 version=6.0
 release=9

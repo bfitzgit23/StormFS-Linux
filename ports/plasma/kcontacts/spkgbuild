@@ -1,6 +1,7 @@
 # description	: kcontacts package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kcontacts package"
 name=kcontacts
 version=6.30.0
 release=1

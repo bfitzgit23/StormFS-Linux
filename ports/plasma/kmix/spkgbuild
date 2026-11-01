@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: libcanberra pulseaudio
 
+description="KDE audio volume and mixer application."
 name=kmix
 version=26.08.1
 release=1

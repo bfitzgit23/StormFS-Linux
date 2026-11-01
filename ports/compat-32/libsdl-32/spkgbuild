@@ -2,6 +2,7 @@
 # homepage	: http://www.libsdl.org
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="SDL, Simple DirectMedia Layer"
 name=libsdl-32
 version=1.2.15
 release=6

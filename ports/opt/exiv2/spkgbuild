@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: libssh doxygen graphviz libxslt
 
+description="Exiv2 is a C++ library and a command line utility for managing image and video metadata."
 name=exiv2
 version=0.28.9
 release=1

@@ -1,6 +1,7 @@
 # description	: freerdp package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="freerdp package"
 name=freerdp
 version=3.31.1
 release=1

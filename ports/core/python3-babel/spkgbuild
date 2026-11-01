@@ -1,6 +1,7 @@
 # description	: python3-babel package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="python3-babel package"
 name=python3-babel
 version=2.18.0
 release=1

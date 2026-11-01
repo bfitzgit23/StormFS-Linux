@@ -4,6 +4,7 @@
 #
 # Packager: Jose V Beneyto, sepen at crux dot nu
 
+description="Library for handling paper characteristics."
 name=libpaper
 version=2.2.8
 release=2

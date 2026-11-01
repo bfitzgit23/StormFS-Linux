@@ -2,6 +2,7 @@
 # homepage	: https://wireless.wiki.kernel.org/en/developers/regulatory/wireless-regdb
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Linux wireless regulatory database"
 name=wireless-regdb
 version=2026.09.03
 release=1

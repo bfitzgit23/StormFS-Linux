@@ -1,6 +1,7 @@
 # description	: libdvdcss package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="libdvdcss package"
 name=libdvdcss
 version=1.6.0
 release=3

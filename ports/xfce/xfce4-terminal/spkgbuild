@@ -1,6 +1,7 @@
 # description	: xfce4-terminal package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="xfce4-terminal package"
 name=xfce4-terminal
 version=1.2.0
 release=2

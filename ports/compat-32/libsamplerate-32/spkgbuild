@@ -2,6 +2,7 @@
 # homepage	: https://libsndfile.github.io/libsamplerate/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Sound sample rate conversion library"
 name=libsamplerate-32
 version=0.2.2
 release=3

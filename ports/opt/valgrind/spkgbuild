@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: gdb llvm which
 
+description="A debugging and profiling system for Linux programs"
 name=valgrind
 version=3.27.1
 release=2

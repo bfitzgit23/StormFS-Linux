@@ -2,6 +2,7 @@
 # homepage	: https://github.com/zeux/volk
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Meta loader for Vulkan API"
 name=volk
 version=1.4.357.0
 _version=vulkan-sdk-$version

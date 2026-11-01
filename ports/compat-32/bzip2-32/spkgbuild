@@ -2,6 +2,7 @@
 # homepage	: http://www.bzip.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Very high-quality data compression program"
 name=bzip2-32
 version=1.0.8
 release=3

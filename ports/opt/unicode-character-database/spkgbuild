@@ -2,6 +2,7 @@
 # homepage	: https://www.unicode.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Unicode Character Database"
 name=unicode-character-database
 version=17.0.0
 release=1

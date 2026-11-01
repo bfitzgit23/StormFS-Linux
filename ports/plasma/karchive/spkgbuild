@@ -1,6 +1,7 @@
 # description	: karchive package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="karchive package"
 name=karchive
 version=6.30.0
 release=1

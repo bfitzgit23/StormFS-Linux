@@ -2,6 +2,7 @@
 # homepage	: https://gitlab.gnome.org/Archive/libwnck
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Window Navigator Construction Kit 2 compatibility library"
 name=libwnck2
 version=2.31.0
 release=2

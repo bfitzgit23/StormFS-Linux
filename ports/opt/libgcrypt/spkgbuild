@@ -2,6 +2,7 @@
 # homepage	: https://www.gnupg.org/software/libgcrypt/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="General-purpose cryptographic library used by GnuPG and other applications."
 name=libgcrypt
 version=1.12.4
 release=1

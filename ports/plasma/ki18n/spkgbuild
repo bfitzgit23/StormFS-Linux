@@ -1,6 +1,7 @@
 # description	: ki18n package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="ki18n package"
 name=ki18n
 version=6.30.0
 release=1

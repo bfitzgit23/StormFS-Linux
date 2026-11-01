@@ -2,6 +2,7 @@
 # homepage	: https://docs.xfce.org/xfce/xfce4-panel/start
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Panel for the Xfce desktop environment"
 name=xfce4-panel
 version=4.20.8
 release=4

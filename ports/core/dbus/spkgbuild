@@ -4,6 +4,7 @@
 #
 cription: Message bus system for interprocess communication
 
+description="dbus package"
 name=dbus
 version=1.16.2
 release=2

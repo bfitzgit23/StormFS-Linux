@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: alsa-lib-32 ibus-32 jack libxkbcommon-32 ninja pipewire pulseaudio wayland-protocols
 
+description="SDL version 2, Simple DirectMedia Layer"
 name=libsdl2-32
 version=2.32.10
 release=3

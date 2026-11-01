@@ -2,6 +2,7 @@
 # homepage	: https://www.littlecms.com/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Little CMS intends to be an small-footprint color management engine"
 name=lcms2-32
 version=2.19.1
 release=3

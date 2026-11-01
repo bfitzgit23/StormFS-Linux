@@ -1,6 +1,7 @@
 # description	: tinysparql package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="tinysparql package"
 name=tinysparql
 version=3.12.0
 release=1

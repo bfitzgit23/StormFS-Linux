@@ -1,6 +1,7 @@
 # description	: kde-gtk-config package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kde-gtk-config package"
 name=kde-gtk-config
 version=6.7.5
 release=1

@@ -1,6 +1,7 @@
 # description	: check package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="check package"
 name=check
 version=0.15.2
 release=1

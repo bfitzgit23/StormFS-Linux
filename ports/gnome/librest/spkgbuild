@@ -1,6 +1,7 @@
 # description	: librest package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="librest package"
 name=librest
 version=0.10.2
 release=1

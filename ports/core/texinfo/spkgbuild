@@ -1,6 +1,7 @@
 # description	: texinfo package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="texinfo package"
 name=texinfo
 version=7.3
 release=1

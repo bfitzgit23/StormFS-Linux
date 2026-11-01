@@ -2,6 +2,7 @@
 # homepage	: https://xorg.freedesktop.org
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Bitmaps for X"
 name=xcursor-themes
 version=1.0.7
 release=1

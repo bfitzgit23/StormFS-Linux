@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: cairo gobject-introspection xorg-libs cantarell gi-docGen  help2man libthai sysprof
 
+description="A library for layout and rendering of text"
 name=pango
 version=1.58.2
 release=2

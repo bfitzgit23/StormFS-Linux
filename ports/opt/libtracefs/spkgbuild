@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: asciidoc xmlto
 
+description="Linux kernel trace file system library"
 name=libtracefs
 version=1.8.3
 release=1

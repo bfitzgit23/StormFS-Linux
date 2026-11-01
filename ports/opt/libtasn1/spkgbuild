@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: gtk-doc valgrind
 
+description="Highly portable C library for encoding and decoding DER/BER data using ASN.1 schemas."
 name=libtasn1
 version=4.21.0
 release=1

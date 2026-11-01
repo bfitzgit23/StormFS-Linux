@@ -1,6 +1,7 @@
 # description	: perl-parse-yapp package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="perl-parse-yapp package"
 name=perl-parse-yapp
 version=1.21
 release=1

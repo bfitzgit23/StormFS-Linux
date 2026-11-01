@@ -1,6 +1,7 @@
 # description	: psmisc package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="psmisc package"
 name=psmisc
 version=23.7
 release=1

@@ -2,6 +2,7 @@
 # homepage	: https://invisible-island.net/ncurses/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="A System V Release 4.0 curses emulation library"
 name=ncurses-32
 version=6.6
 release=4

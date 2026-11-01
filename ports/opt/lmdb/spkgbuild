@@ -2,6 +2,7 @@
 # homepage	: https://github.com/LMDB/lmdb
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Fast, compact memory-mapped key-value database"
 name=lmdb
 version=1.0.1
 release=3

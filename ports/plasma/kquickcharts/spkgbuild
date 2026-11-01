@@ -1,6 +1,7 @@
 # description	: kquickcharts package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kquickcharts package"
 name=kquickcharts
 version=6.30.0
 release=1

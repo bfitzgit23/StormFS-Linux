@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: cups fontconfig freetype lcms2 jbig2dec libjpeg-turbo libtiff openjpeg libpaper libpng cairo gtk+- libidn libwebp a graphical environment
 
+description="Postscript interpreter"
 name=ghostscript
 version=10.08.0
 release=1

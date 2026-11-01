@@ -2,6 +2,7 @@
 # homepage	: https://www.freedesktop.org/wiki/Software/fontconfig/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="A library for configuring and customizing font access"
 name=fontconfig
 version=2.18.3
 release=2

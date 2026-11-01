@@ -1,6 +1,7 @@
 # description	: qqc2-desktop-style package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="qqc2-desktop-style package"
 name=qqc2-desktop-style
 version=6.30.0
 release=1

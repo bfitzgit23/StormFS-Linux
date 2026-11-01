@@ -5,6 +5,7 @@
 # NOTE: OpenRC profile integration (chronyd service script) ships in the
 # openrc-init-scripts port.
 
+description="Lightweight NTP client/server used by the BFSOS live environment"
 name=chrony
 version=4.9
 release=2

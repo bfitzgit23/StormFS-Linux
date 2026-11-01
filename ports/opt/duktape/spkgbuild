@@ -2,6 +2,7 @@
 # homepage	: https://duktape.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="embeddable Javascript engine, with a focus on portability and compact footprint"
 name=duktape
 version=2.7.0
 release=2

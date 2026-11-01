@@ -1,6 +1,7 @@
 # description	: libpng package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="libpng package"
 name=libpng
 version=1.6.58
 release=3

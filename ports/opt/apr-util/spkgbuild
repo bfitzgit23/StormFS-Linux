@@ -1,6 +1,7 @@
 # description	: apr-util package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="apr-util package"
 name=apr-util
 version=1.6.5
 release=2

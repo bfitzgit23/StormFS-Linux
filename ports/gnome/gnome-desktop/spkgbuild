@@ -1,6 +1,7 @@
 # description	: gnome-desktop package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="gnome-desktop package"
 name=gnome-desktop
 version=51.0
 release=1

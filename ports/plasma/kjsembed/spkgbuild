@@ -1,6 +1,7 @@
 # description	: kjsembed package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kjsembed package"
 name=kjsembed
 version=5.115.0
 release=1

@@ -2,6 +2,7 @@
 # homepage	: https://doc.qt.io/qt-6/qtwebengine-index.html
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Qt 6 WebEngine Chromium-based web content module"
 name=qt6-webengine
 version=6.11.2
 release=1

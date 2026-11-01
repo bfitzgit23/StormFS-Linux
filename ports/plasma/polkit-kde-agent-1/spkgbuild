@@ -1,6 +1,7 @@
 # description	: polkit-kde-agent-1 package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="polkit-kde-agent-1 package"
 name=polkit-kde-agent-1
 version=6.7.5
 release=1

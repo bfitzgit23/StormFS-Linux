@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: bash-completion gi-docgen
 
+description="GLib-based library for talking to WWAN modems and devices using the Qualcomm MSM Interface (QMI) protocol."
 name=libqmi
 version=1.38.0
 release=1

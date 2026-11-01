@@ -1,6 +1,7 @@
 # description	: signify package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="signify package"
 name=signify
 version=0.14
 release=1

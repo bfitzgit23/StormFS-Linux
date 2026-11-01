@@ -1,6 +1,7 @@
 # description	: libpeas package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="libpeas package"
 name=libpeas
 version=1.38.1
 release=1

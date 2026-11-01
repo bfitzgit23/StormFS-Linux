@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: gi-docgen sphinx
 
+description="Protocol definitions and daemon for D-Bus at-spi"
 name=at-spi2-core
 version=2.60.6
 release=2

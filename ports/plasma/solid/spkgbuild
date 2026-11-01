@@ -1,6 +1,7 @@
 # description	: solid package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="solid package"
 name=solid
 version=6.30.0
 release=1

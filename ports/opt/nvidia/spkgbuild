@@ -2,6 +2,7 @@
 # homepage	: https://www.nvidia.com/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="NVIDIA Linux Display Driver (production branch)"
 name=nvidia
 version=595.99.02
 release=2

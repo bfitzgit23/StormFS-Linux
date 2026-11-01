@@ -1,6 +1,7 @@
 # description	: libxfce4util package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="libxfce4util package"
 name=libxfce4util
 version=4.20.1
 release=1

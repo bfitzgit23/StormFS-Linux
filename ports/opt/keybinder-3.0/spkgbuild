@@ -1,6 +1,7 @@
 # description	: keybinder-3.0 package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="keybinder-3.0 package"
 name=keybinder-3.0
 version=0.3.2
 release=1

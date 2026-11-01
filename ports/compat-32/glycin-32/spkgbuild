@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: libheif-32 libjxl-32 librsvg-32
 
+description="Sandboxed and extendable image loading - 32-bit"
 name=glycin-32
 version=2.2.0
 release=3

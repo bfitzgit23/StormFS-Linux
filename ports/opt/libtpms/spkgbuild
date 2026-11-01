@@ -2,6 +2,7 @@
 # homepage	: https://github.com/stefanberger/libtpms
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="TPM 1.2/2.0 software emulation library"
 name=libtpms
 version=0.10.2
 release=2

@@ -1,6 +1,7 @@
 # description	: exempi package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="exempi package"
 name=exempi
 version=2.6.6
 release=2

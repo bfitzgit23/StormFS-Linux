@@ -2,6 +2,7 @@
 # homepage	: https//xorg.freedesktop.org
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="xorg font font-isas-misc"
 name=xorg-font-isas-misc
 version=1.0.4
 release=1

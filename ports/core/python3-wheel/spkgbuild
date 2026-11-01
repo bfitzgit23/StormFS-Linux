@@ -2,6 +2,7 @@
 # homepage	: https://pypi.python.org/pypi/wheel
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="A built-package format for Python"
 name=python3-wheel
 version=0.48.0
 release=1

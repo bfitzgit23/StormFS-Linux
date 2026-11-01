@@ -1,6 +1,7 @@
 # description	: file-roller package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="file-roller package"
 name=file-roller
 version=44.7
 release=1

@@ -1,6 +1,7 @@
 # description	: bison package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="bison package"
 name=bison
 version=3.8.2
 release=1

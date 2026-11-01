@@ -1,6 +1,7 @@
 # description	: kdewebkit package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kdewebkit package"
 name=kdewebkit
 version=5.115.0
 release=1

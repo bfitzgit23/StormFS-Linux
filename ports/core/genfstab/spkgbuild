@@ -2,6 +2,7 @@
 # homepage	: https://gitlab.archlinux.org/archlinux/arch-install-scripts
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Generate an fstab from the current system"
 name=genfstab
 version=31
 release=2

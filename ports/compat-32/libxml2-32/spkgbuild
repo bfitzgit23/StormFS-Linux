@@ -2,6 +2,7 @@
 # homepage	: https://gitlab.gnome.org/GNOME/libxml2/-/wikis/home
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="XML library version 2"
 name=libxml2-32
 version=2.15.4
 release=4

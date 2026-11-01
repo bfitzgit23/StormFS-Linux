@@ -1,6 +1,7 @@
 # description	: konversation package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="konversation package"
 name=konversation
 version=26.08.1
 release=1

@@ -1,6 +1,7 @@
 # description	: prison package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="prison package"
 name=prison
 version=6.30.0
 release=1

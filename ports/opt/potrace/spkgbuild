@@ -1,6 +1,7 @@
 # description	: potrace package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="potrace package"
 name=potrace
 version=1.16
 release=1

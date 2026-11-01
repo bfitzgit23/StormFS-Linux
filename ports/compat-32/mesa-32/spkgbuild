@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: directx-headers-32 libunwind-32 libva-32 lm_sensors-32
 
+description="Mesa 3D Graphics Library (32-bit)"
 name=mesa-32
 version=26.2.3
 release=11

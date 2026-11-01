@@ -2,6 +2,7 @@
 # homepage	: http://xorg.freedesktop.org
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="X Fixes extension client library"
 name=libxfixes-32
 version=6.0.2
 release=2

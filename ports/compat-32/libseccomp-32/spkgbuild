@@ -2,6 +2,7 @@
 # homepage	: https://github.com/seccomp/libseccomp
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Library for Linux Kernel's syscall filtering mechanism - 32-bit"
 name=libseccomp-32
 version=2.6.1
 release=1

@@ -2,6 +2,7 @@
 # homepage	: https://github.com/danvratil/qcoro
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="C++ coroutine library for Qt6"
 name=qcoro
 version=0.13.0
 release=3

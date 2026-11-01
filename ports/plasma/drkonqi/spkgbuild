@@ -1,6 +1,7 @@
 # description	: drkonqi package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="drkonqi package"
 name=drkonqi
 version=6.7.5
 release=1

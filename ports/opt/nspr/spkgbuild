@@ -2,6 +2,7 @@
 # homepage	: https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSPR
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Netscape Portable Runtime library"
 name=nspr
 version=4.40
 release=3

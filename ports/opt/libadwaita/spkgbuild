@@ -2,6 +2,7 @@
 # homepage	: https://gitlab.gnome.org/GNOME/libadwaita
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Building blocks for modern GNOME applications"
 name=libadwaita
 version=1.10.0
 release=1

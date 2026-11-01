@@ -1,6 +1,7 @@
 # description	: kcrash package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kcrash package"
 name=kcrash
 version=6.30.0
 release=1

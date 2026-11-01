@@ -2,6 +2,7 @@
 # homepage	: http://www.monkey.org/~provos/libevent/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Event notification library"
 name=libevent-32
 version=2.1.13
 release=3

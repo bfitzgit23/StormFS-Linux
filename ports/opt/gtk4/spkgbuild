@@ -2,6 +2,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: highlight
 
+description="gtk4 package"
 name=gtk4
 version=4.24.0
 release=1

@@ -1,6 +1,7 @@
 # description	: kuserfeedback package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kuserfeedback package"
 name=kuserfeedback
 version=6.30.0
 release=1

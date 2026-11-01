@@ -2,6 +2,7 @@
 # homepage	: https://github.com/OpenRC/openrc
 # maintainer	: BFSOS maintainers
 
+description="Dependency-based service manager and init system"
 name=openrc
 version=0.63
 release=2

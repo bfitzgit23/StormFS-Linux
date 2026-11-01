@@ -2,6 +2,7 @@
 # homepage	: http://gimp-print.sourceforge.net/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Print plugin and ghostscript/cups driver (formerly called gimp-print)"
 name=gutenprint
 version=5.3.5
 release=2

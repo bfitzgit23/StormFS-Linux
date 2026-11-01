@@ -1,6 +1,7 @@
 # description	: frameworkintegration package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="frameworkintegration package"
 name=frameworkintegration
 version=6.30.0
 release=1

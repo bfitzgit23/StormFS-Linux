@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: pulseaudio sdl12-compat jack openal portaudio
 
+description="Commandline MP3 player"
 name=mpg123
 version=1.33.7
 release=1

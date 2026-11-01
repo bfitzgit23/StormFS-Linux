@@ -1,6 +1,7 @@
 # description	: kmenuedit package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kmenuedit package"
 name=kmenuedit
 version=6.7.5
 release=1

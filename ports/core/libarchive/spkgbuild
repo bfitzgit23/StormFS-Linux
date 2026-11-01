@@ -1,6 +1,7 @@
 # description	: libarchive package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="libarchive package"
 name=libarchive
 version=3.8.9
 release=2

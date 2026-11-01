@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: gtk4 mobile-broadband-provider-info vala
 
+description="Networkmanager GUI client library"
 name=libnma
 version=1.10.6
 release=3

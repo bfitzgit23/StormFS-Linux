@@ -1,6 +1,7 @@
 # description	: gmp package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="gmp package"
 name=gmp
 version=6.3.0
 release=1

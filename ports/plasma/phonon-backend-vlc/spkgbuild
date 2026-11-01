@@ -1,6 +1,7 @@
 # description	: phonon-backend-vlc package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="phonon-backend-vlc package"
 name=phonon-backend-vlc
 version=0.12.0
 release=2

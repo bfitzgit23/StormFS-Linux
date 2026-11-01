@@ -2,6 +2,7 @@
 # homepage	: http://libvisual.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="An abstraction library that comes between applications and audio visualisation plugins."
 name=libvisual-32
 version=0.4.2
 release=2

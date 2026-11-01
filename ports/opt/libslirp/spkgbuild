@@ -2,6 +2,7 @@
 # homepage	: https://gitlab.freedesktop.org/slirp/libslirp
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="General purpose TCP/IP emulator library used by QEMU"
 name=libslirp
 version=4.9.4
 release=1

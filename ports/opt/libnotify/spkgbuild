@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: gtk4 gobject-introspection gi-docgen xmlto notification-daemon xfce4-notifyd lxqt-notificationd
 
+description="Desktop notification library"
 name=libnotify
 version=0.8.8
 release=4

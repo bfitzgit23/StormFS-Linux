@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: dbus-32 gnutls-32
 
+description="CUPS - Common UNIX Printing System"
 name=cups-32
 version=2.4.19
 release=4

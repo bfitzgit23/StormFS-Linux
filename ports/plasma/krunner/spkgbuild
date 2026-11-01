@@ -1,6 +1,7 @@
 # description	: krunner package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="krunner package"
 name=krunner
 version=6.30.0
 release=1

@@ -2,6 +2,7 @@
 # homepage	: https://www.x.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="X Window System initializer (xinit/startx)"
 name=xinit
 version=1.4.4
 release=3

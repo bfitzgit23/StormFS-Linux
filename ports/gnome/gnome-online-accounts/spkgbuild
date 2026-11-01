@@ -1,6 +1,7 @@
 # description	: gnome-online-accounts package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="gnome-online-accounts package"
 name=gnome-online-accounts
 version=3.58.1
 release=1

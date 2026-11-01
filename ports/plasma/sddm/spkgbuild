@@ -2,6 +2,7 @@
 # homepage	: https://github.com/sddm/sddm
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="QML-based display manager"
 name=sddm
 version=0.21.0
 release=4

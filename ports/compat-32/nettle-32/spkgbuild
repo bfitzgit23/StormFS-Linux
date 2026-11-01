@@ -2,6 +2,7 @@
 # homepage	: http://www.lysator.liu.se/~nisse/nettle/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Low-level cryptographic library"
 name=nettle-32
 version=4.0
 release=2

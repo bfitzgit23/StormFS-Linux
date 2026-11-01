@@ -2,6 +2,7 @@
 # homepage	: https://gstreamer.freedesktop.org/projects/orc.html
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="The Oil Runtime Compiler."
 name=orc-32
 version=0.4.44
 release=2

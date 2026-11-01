@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: doxygen graphviz
 
+description="An EXIF tag parsing library"
 name=libexif
 version=0.6.26
 release=1

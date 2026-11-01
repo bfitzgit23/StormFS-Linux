@@ -2,6 +2,7 @@
 # homepage	: https://stedolan.github.io/jq/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Lightweight and flexible command-line JSON processor"
 name=jq-32
 version=1.8.2
 release=2

@@ -1,6 +1,7 @@
 # description	: python3-urllib3 package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="python3-urllib3 package"
 name=python3-urllib3
 version=2.7.0
 release=1

@@ -2,6 +2,7 @@
 # homepage	: https://codeberg.org/soundtouch/soundtouch
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Audio processing library for changing tempo, pitch and playback rates."
 name=soundtouch
 version=2.4.1
 release=2

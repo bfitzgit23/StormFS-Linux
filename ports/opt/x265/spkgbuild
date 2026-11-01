@@ -1,6 +1,7 @@
 # description	: x265 package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="x265 package"
 name=x265
 version=4.3
 release=1

@@ -1,6 +1,7 @@
 # description	: kpipewire package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kpipewire package"
 name=kpipewire
 version=6.7.5
 release=1

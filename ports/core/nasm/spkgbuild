@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: asciidoc xmlto
 
+description="80x86 assembler"
 name=nasm
 version=3.02
 release=4

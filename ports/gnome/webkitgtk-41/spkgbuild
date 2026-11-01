@@ -1,6 +1,7 @@
 # description	: webkitgtk-41 package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="webkitgtk-41 package"
 name=webkitgtk-41
 version=2.52.6
 release=4

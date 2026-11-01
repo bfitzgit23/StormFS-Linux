@@ -1,6 +1,7 @@
 # description	: kidletime package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kidletime package"
 name=kidletime
 version=6.30.0
 release=1

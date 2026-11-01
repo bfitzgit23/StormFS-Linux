@@ -2,6 +2,7 @@
 # homepage	: http://savannah.nongnu.org/projects/attr/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Extented attributes library"
 name=attr-32
 version=2.6.0
 release=2

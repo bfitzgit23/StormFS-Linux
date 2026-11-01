@@ -2,6 +2,7 @@
 # homepage	: https://curl.se/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="A tool for transfering files with URL syntax"
 name=curl-32
 version=8.22.0
 release=3

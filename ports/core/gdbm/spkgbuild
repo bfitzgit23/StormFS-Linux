@@ -1,6 +1,7 @@
 # description	: gdbm package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="gdbm package"
 name=gdbm
 version=1.26
 release=1

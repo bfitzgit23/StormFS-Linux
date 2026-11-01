@@ -1,6 +1,7 @@
 # description	: snapshot package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="snapshot package"
 name=snapshot
 version=51.0
 release=1

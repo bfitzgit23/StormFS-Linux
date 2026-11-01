@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: appstream
 
+description="Modern GNOME image viewer"
 name=loupe
 version=51.0
 release=1

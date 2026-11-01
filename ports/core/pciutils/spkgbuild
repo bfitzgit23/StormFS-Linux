@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: curl wget lynx
 
+description="Library and utilities to access the PCI bus configuration registers"
 name=pciutils
 version=3.15.0
 release=1

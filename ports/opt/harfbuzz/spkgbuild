@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: chafa
 
+description="An OpenType text shaping engine"
 name=harfbuzz
 version=14.4.0
 release=2

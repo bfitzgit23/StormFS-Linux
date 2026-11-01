@@ -2,6 +2,7 @@
 # homepage	: https://sourceware.org/lvm2/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Tools for managing logical volumes and device mappings."
 name=lvm2
 version=2.03.42
 release=2

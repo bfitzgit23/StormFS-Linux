@@ -2,6 +2,7 @@
 # homepage	: https://invent.kde.org/plasma/knighttime
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Helpers for scheduling the Plasma dark-light cycle"
 name=knighttime
 version=6.7.5
 release=1

@@ -2,6 +2,7 @@
 # homepage	: https://metacpan.org/dist/File-ShareDir
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Locate per-distribution and per-module shared files"
 name=perl-file-sharedir
 version=1.118
 release=1

@@ -1,6 +1,7 @@
 # description	: sudo package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="sudo package"
 name=sudo
 version=1.9.17p2
 release=1

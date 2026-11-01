@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: tk
 
+description="Distributed version control system"
 name=git
 version=2.55.0
 release=4

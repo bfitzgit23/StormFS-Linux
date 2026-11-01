@@ -2,6 +2,7 @@
 # homepage	: https://xorg.freedesktop.org
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Video driver for the AMD GPU families Tonga, Carrizo, Iceland, Fiji and Stoney"
 name=xf86-video-amdgpu
 version=25.0.0
 release=1

@@ -1,6 +1,7 @@
 # description	: breeze package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="breeze package"
 name=breeze
 version=6.7.5
 release=1

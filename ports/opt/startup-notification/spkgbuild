@@ -2,6 +2,7 @@
 # homepage	: http://freedesktop.org/wiki/Software/startup-notification
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Startup notification library."
 name=startup-notification
 version=0.12
 release=1

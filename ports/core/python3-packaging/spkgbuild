@@ -1,6 +1,7 @@
 # description	: python3-packaging package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="python3-packaging package"
 name=python3-packaging
 version=26.3
 release=1

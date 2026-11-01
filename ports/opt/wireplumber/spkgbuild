@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: doxygen gobject-introspection python3-lxml sphinx sphinx_rtd_theme breathe
 
+description="Session and policy manager for PipeWire"
 name=wireplumber
 version=0.5.17
 release=1

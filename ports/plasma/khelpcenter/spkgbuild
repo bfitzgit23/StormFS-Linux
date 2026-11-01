@@ -1,6 +1,7 @@
 # description	: khelpcenter package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="khelpcenter package"
 name=khelpcenter
 version=26.08.1
 release=1

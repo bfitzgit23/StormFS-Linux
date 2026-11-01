@@ -1,6 +1,7 @@
 # description	: kdesignerplugin package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kdesignerplugin package"
 name=kdesignerplugin
 version=5.115.0
 release=1

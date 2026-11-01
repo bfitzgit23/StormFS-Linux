@@ -1,6 +1,7 @@
 # description	: mutter package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="mutter package"
 name=mutter
 version=51.0
 release=1

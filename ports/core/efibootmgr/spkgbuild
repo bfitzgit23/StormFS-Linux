@@ -4,6 +4,7 @@
 #
 cription: Manipulate EFI boot manager variables
 
+description="efibootmgr package"
 name=efibootmgr
 version=18
 release=2

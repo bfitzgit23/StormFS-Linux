@@ -1,6 +1,7 @@
 # description	: xfce4-notifyd package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="xfce4-notifyd package"
 name=xfce4-notifyd
 version=0.9.7
 release=1

@@ -2,6 +2,7 @@
 # homepage	: https://github.com/eudev-project/eudev
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Userspace device management daemon"
 name=eudev-32
 version=3.2.14
 release=2

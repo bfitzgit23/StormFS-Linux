@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: cdparanoia-32
 
+description="An essential exemplary set of plugins for gstreamer."
 name=gst-plugins-base-32
 version=1.28.7
 release=5

@@ -1,6 +1,7 @@
 # description	: gnome-backgrounds package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="gnome-backgrounds package"
 name=gnome-backgrounds
 version=51.0
 release=1

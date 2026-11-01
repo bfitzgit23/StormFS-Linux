@@ -2,6 +2,7 @@
 # homepage	: https://www.typescriptlang.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="TypeScript language compiler"
 name=typescript
 version=5.7.3
 release=1

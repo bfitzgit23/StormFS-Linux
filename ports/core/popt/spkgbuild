@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: doxygen
 
+description="Popt libraries which are used by some programs to parse command-line options"
 name=popt
 version=1.19
 release=1

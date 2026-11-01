@@ -1,6 +1,7 @@
 # description	: protobuf package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="protobuf package"
 name=protobuf
 version=36.1
 release=2

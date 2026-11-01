@@ -1,6 +1,7 @@
 # description	: autoconf package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="autoconf package"
 name=autoconf
 version=2.73
 release=1

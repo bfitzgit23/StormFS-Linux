@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: flac-32 lame-32 libsdl2-32 pulseaudio-32
 
+description="Commandline MP3 player"
 name=mpg123-32
 version=1.33.7
 release=3

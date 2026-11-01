@@ -2,6 +2,7 @@
 # homepage	: https://www.nvidia.com/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="NVIDIA 32-bit userspace libraries matching the production driver"
 name=nvidia-fb-32
 version=595.99.02
 release=2

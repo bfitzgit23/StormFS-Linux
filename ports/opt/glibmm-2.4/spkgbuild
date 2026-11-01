@@ -2,6 +2,7 @@
 # homepage	: https://www.gtkmm.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="C++ interface for GLib, legacy glibmm-2.4 ABI."
 name=glibmm-2.4
 version=2.66.10
 release=1

@@ -1,6 +1,7 @@
 # description	: libshumate package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="libshumate package"
 name=libshumate
 version=1.7.0
 release=1

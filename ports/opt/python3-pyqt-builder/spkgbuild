@@ -2,6 +2,7 @@
 # homepage	: https://www.riverbankcomputing.com/software/pyqt/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="PEP 517 build backend for PyQt projects"
 name=python3-pyqt-builder
 version=1.19.1
 release=1

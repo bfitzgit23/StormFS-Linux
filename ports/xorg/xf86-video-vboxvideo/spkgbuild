@@ -2,6 +2,7 @@
 # homepage	: https://xorg.freedesktop.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Legacy X.Org VirtualBox video driver"
 name=xf86-video-vboxvideo
 version=1.0.0
 release=2

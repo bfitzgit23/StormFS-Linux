@@ -4,6 +4,7 @@
 #
 cription: GNU GRand Unified Bootloader
 
+description="grub package"
 name=grub
 version=2.14
 release=3

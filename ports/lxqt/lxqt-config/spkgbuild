@@ -2,6 +2,7 @@
 # homepage	: https://github.com/lxqt/lxqt-config
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Lxqt Config component for LXQt"
 name=lxqt-config
 version=2.4.0
 release=2

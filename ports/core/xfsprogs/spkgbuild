@@ -1,6 +1,7 @@
 # description	: xfsprogs package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="xfsprogs package"
 name=xfsprogs
 version=7.2.0
 release=1

@@ -2,6 +2,7 @@
 # homepage	: https://github.com/lxqt/pcmanfm-qt
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Pcmanfm Qt component for LXQt"
 name=pcmanfm-qt
 version=2.4.1
 release=2

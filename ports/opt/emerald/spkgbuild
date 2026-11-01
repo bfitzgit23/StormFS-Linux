@@ -2,6 +2,7 @@
 # homepage	: https://gitlab.com/vylen/emerald
 # maintainer	: StormFS maintainers
 
+description="Emerald package manager for StormFS"
 name=emerald
 version=0.1
 release=1

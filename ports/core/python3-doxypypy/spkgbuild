@@ -1,6 +1,7 @@
 # description	: python3-doxypypy package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="python3-doxypypy package"
 name=python3-doxypypy
 version=0.8.8.7
 release=1

@@ -1,6 +1,7 @@
 # description	: xfce4-power-manager package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="xfce4-power-manager package"
 name=xfce4-power-manager
 version=4.20.1
 release=1

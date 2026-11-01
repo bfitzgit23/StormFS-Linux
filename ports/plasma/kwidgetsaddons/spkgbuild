@@ -1,6 +1,7 @@
 # description	: kwidgetsaddons package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kwidgetsaddons package"
 name=kwidgetsaddons
 version=6.30.0
 release=1

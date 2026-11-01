@@ -2,6 +2,7 @@
 # homepage	: https://www.libraw.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Libraw is a library for reading RAW files obtained from digital photo cameras (CRW/CR2, NEF, RAF, DNG, and others)."
 name=libraw
 version=0.22.2
 release=1

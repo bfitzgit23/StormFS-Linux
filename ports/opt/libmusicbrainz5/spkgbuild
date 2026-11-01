@@ -2,6 +2,7 @@
 # homepage	: https://github.com/metabrainz/libmusicbrainz/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="The libmusicbrainz package contains a library which allows you to access the data held on the MusicBrainz server."
 name=libmusicbrainz5
 version=5.1.0
 release=1

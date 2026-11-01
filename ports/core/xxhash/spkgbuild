@@ -2,6 +2,7 @@
 # homepage	: https://github.com/Cyan4973/xxHash
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Extremely fast non-cryptographic hash algorithm"
 name=xxhash
 version=0.8.4
 release=1

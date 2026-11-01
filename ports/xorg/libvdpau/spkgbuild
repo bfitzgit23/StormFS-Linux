@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: doxygen graphviz texlive install-tl-unx
 
+description="Video Decode and Presentation API for Unix provides a complete solution for decoding, post-processing, compositing, and displaying compressed or uncompressed video streams."
 name=libvdpau
 version=1.5
 release=2

@@ -1,6 +1,7 @@
 # description	: plasma-activities package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="plasma-activities package"
 name=plasma-activities
 version=6.7.5
 release=1

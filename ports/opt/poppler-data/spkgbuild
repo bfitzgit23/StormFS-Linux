@@ -1,6 +1,7 @@
 # description	: poppler-data package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="poppler-data package"
 name=poppler-data
 version=0.4.12
 release=1

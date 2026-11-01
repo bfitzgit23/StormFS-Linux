@@ -1,6 +1,7 @@
 # description	: adwaita-icon-theme package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="adwaita-icon-theme package"
 name=adwaita-icon-theme
 version=50.0
 release=1

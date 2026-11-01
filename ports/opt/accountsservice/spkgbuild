@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: gtk-doc xmlto python3-python-dbusmock python3-gobject
 
+description="D-Bus interfaces and daemon for querying and manipulating user accounts"
 name=accountsservice
 version=26.27.3
 release=2

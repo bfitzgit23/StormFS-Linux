@@ -2,6 +2,7 @@
 # homepage	: https://github.com/dmtx/libdmtx
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Library for reading and writing Data Matrix barcodes"
 name=libdmtx
 version=0.7.8
 release=1

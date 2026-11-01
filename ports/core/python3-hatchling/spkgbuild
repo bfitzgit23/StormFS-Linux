@@ -1,6 +1,7 @@
 # description	: python3-hatchling package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="python3-hatchling package"
 name=python3-hatchling
 version=1.32.4
 release=1

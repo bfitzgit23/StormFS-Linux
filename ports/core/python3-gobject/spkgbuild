@@ -2,6 +2,7 @@
 # homepage	: https://wiki.gnome.org/Projects/PyGObject
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Python bindings for GLib/GObject/GIO/GTK+/GStreamer"
 name=python3-gobject
 version=3.58.0
 release=1

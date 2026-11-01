@@ -2,6 +2,7 @@
 # homepage	: https://gitlab.com/compiz/compiz-plugins-extra
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Extra Compiz Reloaded plugin collection"
 name=compiz-plugins-extra
 version=0.8.18
 release=1

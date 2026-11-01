@@ -1,6 +1,7 @@
 # description	: geocode-glib package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="geocode-glib package"
 name=geocode-glib
 version=3.26.4
 release=1

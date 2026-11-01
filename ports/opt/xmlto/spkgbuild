@@ -2,6 +2,7 @@
 # homepage	: https://codeberg.org/xmlto/xmlto
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Convert XML to many other formats."
 name=xmlto
 version=0.0.29
 release=2

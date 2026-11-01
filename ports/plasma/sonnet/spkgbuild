@@ -1,6 +1,7 @@
 # description	: sonnet package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="sonnet package"
 name=sonnet
 version=6.30.0
 release=1

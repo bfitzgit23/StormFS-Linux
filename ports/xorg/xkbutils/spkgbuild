@@ -2,6 +2,7 @@
 # homepage	: https://xorg.freedesktop.org
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="xorg XKB keyboard description compiler"
 name=xkbutils
 version=1.0.7
 release=3

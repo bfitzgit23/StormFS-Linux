@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: help2man libnotify webkitgtk
 
+description="Display graphical dialog boxes from shell scripts."
 name=zenity
 version=4.2.2
 release=1

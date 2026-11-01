@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: texlive (or install-tl-unx)
 
+description="The cpio package contains tools for archiving."
 name=cpio
 version=2.15
 release=1

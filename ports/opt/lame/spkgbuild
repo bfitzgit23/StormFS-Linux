@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: dmalloc electric fence libsndfile nasm
 
+description="MP3 encoder"
 name=lame
 version=3.100
 release=1

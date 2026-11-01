@@ -1,6 +1,7 @@
 # description	: knotifications package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="knotifications package"
 name=knotifications
 version=6.30.0
 release=1

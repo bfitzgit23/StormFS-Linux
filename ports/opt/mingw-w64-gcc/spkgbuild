@@ -2,6 +2,7 @@
 # homepage	: https://gcc.gnu.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="gcc for mingw-w64 toolchain"
 name=mingw-w64-gcc
 version=16.2.0
 release=1

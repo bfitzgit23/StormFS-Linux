@@ -2,6 +2,7 @@
 # homepage	: https://www.kde.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="A library that allows developers to access PolicyKit API with a Qt-style API"
 name=polkit-qt5
 version=0.201.1
 release=1

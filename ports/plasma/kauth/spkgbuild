@@ -2,6 +2,7 @@
 # homepage	: https://invent.kde.org/frameworks/kauth
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="KDE Framework for executing actions with elevated privileges"
 name=kauth
 version=6.30.0
 release=1

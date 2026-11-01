@@ -2,6 +2,7 @@
 # homepage	: https://www.linuxfromscratch.org/lfs/
 # maintainer	: BFSOS maintainers
 
+description="Linux From Scratch System V initialization scripts"
 name=lfs-bootscripts
 version=20250827
 release=2

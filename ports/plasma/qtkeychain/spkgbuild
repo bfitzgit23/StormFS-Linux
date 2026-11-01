@@ -2,6 +2,7 @@
 # homepage	: https://github.com/frankosterfeld/qtkeychain
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Platform-independent Qt API for storing passwords securely"
 name=qtkeychain
 version=0.17.0
 release=2

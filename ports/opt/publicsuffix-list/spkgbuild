@@ -2,6 +2,7 @@
 # homepage	: https://github.com/publicsuffix/list
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Cross-vendor public domain suffix database"
 name=publicsuffix-list
 version=20260913
 release=1

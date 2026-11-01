@@ -2,6 +2,7 @@
 # homepage	: https://lxml.de/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="A pythonic binding for the libxml2 and libxslt libraries."
 name=python3-lxml
 _name=${name#*-}
 version=6.1.3

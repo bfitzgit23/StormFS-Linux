@@ -2,6 +2,7 @@
 # homepage	: https://discord.com/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="All-in-one voice and text chat for gamers"
 name=discord
 version=1.0.158
 release=4

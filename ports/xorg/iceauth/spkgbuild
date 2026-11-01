@@ -2,6 +2,7 @@
 # homepage	: https://xorg.freedesktop.org
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="ICE authority file utility"
 name=iceauth
 version=1.0.11
 release=2

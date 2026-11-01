@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: llvm doxygen
 
+description="Widely used set of C/C++ libraries providing Unicode and Globalization support."
 name=icu
 version=78.3
 release=2

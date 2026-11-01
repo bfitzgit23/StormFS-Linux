@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: gtk-doc
 
+description="D-Bus GLib bindings"
 name=dbus-glib
 version=0.114
 release=3

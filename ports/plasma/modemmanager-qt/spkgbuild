@@ -1,6 +1,7 @@
 # description	: modemmanager-qt package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="modemmanager-qt package"
 name=modemmanager-qt
 version=6.30.0
 release=1

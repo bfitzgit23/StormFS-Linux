@@ -2,6 +2,7 @@
 # homepage	: https://invent.kde.org/frameworks/kcoreaddons
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="KDE Frameworks 6 core addons"
 name=kcoreaddons
 version=6.30.0
 release=1

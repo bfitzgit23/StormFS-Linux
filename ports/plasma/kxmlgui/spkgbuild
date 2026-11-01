@@ -1,6 +1,7 @@
 # description	: kxmlgui package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kxmlgui package"
 name=kxmlgui
 version=6.30.0
 release=1

@@ -2,6 +2,7 @@
 # homepage	: https://github.com/swaywm/swaylock
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Screen locker for Wayland compositors"
 name=swaylock
 version=1.8.6
 release=1

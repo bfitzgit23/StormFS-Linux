@@ -1,6 +1,7 @@
 # description	: kdenlive package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kdenlive package"
 name=kdenlive
 version=26.08.1
 release=1

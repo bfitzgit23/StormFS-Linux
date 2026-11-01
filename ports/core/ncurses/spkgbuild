@@ -1,6 +1,7 @@
 # description	: ncurses package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="ncurses package"
 name=ncurses
 version=6.6
 release=1

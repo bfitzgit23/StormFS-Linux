@@ -2,6 +2,7 @@
 # homepage	: https://github.com/d3d12/vkd3d
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Direct3D 12 to Vulkan translation library By WineHQ."
 name=vkd3d-32
 version=2.1
 release=3

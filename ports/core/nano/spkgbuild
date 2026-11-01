@@ -2,6 +2,7 @@
 # homepage	: https://www.nano-editor.org
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="GNU pico clone (a tiny text editor)"
 name=nano
 version=9.2
 release=1

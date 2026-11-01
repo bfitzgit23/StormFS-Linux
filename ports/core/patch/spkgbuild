@@ -1,6 +1,7 @@
 # description	: patch package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="patch package"
 name=patch
 version=2.8
 release=1

@@ -2,6 +2,7 @@
 # homepage	: https://github.com/astrand/xclip
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Command line interface to the X11 clipboard"
 name=xclip
 version=0.13
 release=3

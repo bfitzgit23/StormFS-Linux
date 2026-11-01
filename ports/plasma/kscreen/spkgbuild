@@ -1,6 +1,7 @@
 # description	: kscreen package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kscreen package"
 name=kscreen
 version=6.7.5
 release=1

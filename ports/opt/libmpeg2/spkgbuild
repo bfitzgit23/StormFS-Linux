@@ -2,6 +2,7 @@
 # homepage	: https://libmpeg2.sourceforge.io/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="MPEG1/MPEG2 decoder (includes libmpeg2)"
 name=libmpeg2
 version=0.5.1
 release=2

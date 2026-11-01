@@ -1,6 +1,7 @@
 # description	: patchelf package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="patchelf package"
 name=patchelf
 version=0.19.1
 release=2

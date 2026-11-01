@@ -2,6 +2,7 @@
 # homepage	: https://ftp.gnu.org/gnu/aspell/dict/en/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="The Aspell package contains an interactive spell checking program and the Aspell libraries. Aspell can either be used as a library or as an independent spell checker."
 name=aspell6-en
 version=2026.02.25_0
 srcver=2026.02.25-0

@@ -1,6 +1,7 @@
 # description	: diffutils package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="diffutils package"
 name=diffutils
 version=3.12
 release=1

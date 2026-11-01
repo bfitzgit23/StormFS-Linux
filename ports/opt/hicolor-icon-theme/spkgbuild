@@ -2,6 +2,7 @@
 # homepage	: https://www.freedesktop.org/wiki/Software/icon-theme/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="default fallback used by the icon theme specification"
 name=hicolor-icon-theme
 version=0.18
 release=1

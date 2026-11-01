@@ -1,6 +1,7 @@
 # description	: kirigami package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kirigami package"
 name=kirigami
 version=6.30.0
 release=1

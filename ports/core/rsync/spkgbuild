@@ -2,6 +2,7 @@
 # homepage	: https://rsync.samba.org
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Utility for incremental file transfers over networks"
 name=rsync
 version=3.5.1
 release=1

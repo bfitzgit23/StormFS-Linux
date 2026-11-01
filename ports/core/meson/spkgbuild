@@ -2,6 +2,7 @@
 # homepage	: https://mesonbuild.com/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="High productivity build system."
 name=meson
 version=1.12.1
 release=1

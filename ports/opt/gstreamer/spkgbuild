@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: gtk3 gsl libuwind valgrind bash-completion hotdoc libdw
 
+description="Gstreamer is a streaming media framework that enables applications to share a common set of plugins for tasks such as video encoding and decoding, audio encoding and decoding, audio and video filters, audio visualisation, web streaming and anything else that streams in real-time or otherwise. This package only provides base functionality and libraries. You may need at least gst-plugins-base-1.22.6 and one of Good, Bad, Ugly or Libav plugins."
 name=gstreamer
 version=1.28.7
 release=1

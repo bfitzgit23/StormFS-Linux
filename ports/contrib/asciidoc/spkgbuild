@@ -2,6 +2,7 @@
 # homepage	: https://asciidoc.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Text based document generation."
 name=asciidoc
 version=10.2.1
 release=4

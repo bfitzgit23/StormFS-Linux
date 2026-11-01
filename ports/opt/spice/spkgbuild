@@ -2,6 +2,7 @@
 # homepage	: https://www.spice-space.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="SPICE remote display server library"
 name=spice
 version=0.16.0
 release=1

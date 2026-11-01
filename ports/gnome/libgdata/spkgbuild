@@ -1,6 +1,7 @@
 # description	: libgdata package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="libgdata package"
 name=libgdata
 version=0.18.1
 release=1

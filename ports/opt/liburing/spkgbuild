@@ -2,6 +2,7 @@
 # homepage	: https://github.com/axboe/liburing
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Linux io_uring userspace library"
 name=liburing
 version=2.15
 release=5

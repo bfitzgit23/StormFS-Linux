@@ -1,6 +1,7 @@
 # description	: kjobwidgets package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kjobwidgets package"
 name=kjobwidgets
 version=6.30.0
 release=1

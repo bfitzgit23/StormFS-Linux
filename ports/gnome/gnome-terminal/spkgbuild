@@ -1,6 +1,7 @@
 # description	: gnome-terminal package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="gnome-terminal package"
 name=gnome-terminal
 version=3.60.0
 release=1

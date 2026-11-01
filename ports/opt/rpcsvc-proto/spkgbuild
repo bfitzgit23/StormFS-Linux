@@ -1,6 +1,7 @@
 # description	: rpcsvc-proto package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="rpcsvc-proto package"
 name=rpcsvc-proto
 version=1.4.4
 release=1

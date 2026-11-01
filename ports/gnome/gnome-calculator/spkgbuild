@@ -1,6 +1,7 @@
 # description	: gnome-calculator package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="gnome-calculator package"
 name=gnome-calculator
 version=51.0
 release=1

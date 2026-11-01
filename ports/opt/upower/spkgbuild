@@ -2,6 +2,7 @@
 # homepage	: https://gitlab.freedesktop.org/upower/upower
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="D-Bus service for power-device enumeration and statistics"
 name=upower
 version=1.91.3
 release=2

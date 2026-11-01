@@ -2,6 +2,7 @@
 # homepage	: https://github.com/lxqt/lxqt-powermanagement
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Lxqt Powermanagement component for LXQt"
 name=lxqt-powermanagement
 version=2.4.0
 release=2

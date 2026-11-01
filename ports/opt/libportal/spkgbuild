@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: qt6 vala xdg-desktop-portal xdg-desktop-portal-gtk xdg-desktop-portal-gnome
 
+description="GIO-style APIs for desktop portals"
 name=libportal
 version=0.10.0
 release=2

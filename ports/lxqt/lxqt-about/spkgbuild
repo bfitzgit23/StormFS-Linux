@@ -2,6 +2,7 @@
 # homepage	: https://github.com/lxqt/lxqt-about
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Lxqt About component for LXQt"
 name=lxqt-about
 version=2.4.0
 release=2

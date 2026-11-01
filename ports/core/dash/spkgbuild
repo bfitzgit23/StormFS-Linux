@@ -1,6 +1,7 @@
 # description	: dash package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="dash package"
 name=dash
 version=0.5.13.5
 release=1

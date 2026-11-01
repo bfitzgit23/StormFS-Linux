@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: ghostscript gtk+-3 gtk+-2 gtk-doc libdrm librsvg libxml2 lzo mesa poppler valgrind jbig2dec libspectre Skia
 
+description="A 2D graphics library with support for multiple output devices"
 name=cairo
 version=1.18.4
 release=3

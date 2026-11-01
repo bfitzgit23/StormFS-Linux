@@ -2,6 +2,7 @@
 # homepage	: https://xorg.freedesktop.org
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Wrapper library for evdev devices"
 name=libevdev
 version=1.13.7
 release=1

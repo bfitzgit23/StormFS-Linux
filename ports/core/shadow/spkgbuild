@@ -2,6 +2,7 @@
 # homepage	: https://github.com/shadow-maint/shadow
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Password and account management utilities"
 name=shadow
 version=4.20.2
 release=2

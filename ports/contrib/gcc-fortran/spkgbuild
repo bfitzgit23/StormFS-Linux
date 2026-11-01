@@ -2,6 +2,7 @@
 # homepage	: https://gcc.gnu.org/fortran/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="GNU Fortran front end matching the BFSOS GCC toolchain"
 name=gcc-fortran
 version=16.2.0
 release=4

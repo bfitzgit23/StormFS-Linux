@@ -2,6 +2,7 @@
 # homepage	: https://xorg.freedesktop.org
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Utility to set a display's backlight level"
 name=xcmsdb
 version=1.0.7
 release=2

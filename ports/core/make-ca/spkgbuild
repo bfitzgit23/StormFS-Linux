@@ -2,6 +2,7 @@
 # homepage	: https://github.com/lfs-book/make-ca
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Builds and maintains the system CA certificate trust store"
 name=make-ca
 version=1.16.1
 release=6

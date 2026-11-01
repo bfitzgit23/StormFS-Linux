@@ -1,6 +1,7 @@
 # description	: gnome-shell package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="gnome-shell package"
 name=gnome-shell
 version=51.0
 release=1

@@ -1,6 +1,7 @@
 # description	: kirigami-addons package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kirigami-addons package"
 name=kirigami-addons
 version=1.13.1
 release=1

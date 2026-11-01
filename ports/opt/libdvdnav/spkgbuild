@@ -2,6 +2,7 @@
 # homepage	: https://www.videolan.org/developers/libdvdnav.html
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="DVD Navigation library."
 name=libdvdnav
 version=7.0.0
 release=3

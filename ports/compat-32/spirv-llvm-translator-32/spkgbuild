@@ -2,6 +2,7 @@
 # homepage	: https://github.com/KhronosGroup/SPIRV-LLVM-Translator
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Bidirectional translation between LLVM IR and SPIR-V (32-bit compatibility libraries)"
 name=spirv-llvm-translator-32
 version=23.1.1
 release=1

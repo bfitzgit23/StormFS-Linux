@@ -2,6 +2,7 @@
 # homepage	: https://www.mingw-w64.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="C runtime (crt) for mingw-w64 toolchain"
 name=mingw-w64-crt
 version=14.0.0
 release=2

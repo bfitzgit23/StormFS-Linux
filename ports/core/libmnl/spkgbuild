@@ -2,6 +2,7 @@
 # homepage	: https://netfilter.org/projects/libmnl/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="A minimalistic user-space library oriented to Netlink developers."
 name=libmnl
 version=1.0.5
 release=1

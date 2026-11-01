@@ -1,6 +1,7 @@
 # description	: telepathy-glib package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="telepathy-glib package"
 name=telepathy-glib
 version=0.24.2
 release=1

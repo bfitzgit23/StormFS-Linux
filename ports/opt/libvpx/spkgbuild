@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: curl doxygen
 
+description="The VP8/VP9 Codec SDK"
 name=libvpx
 version=1.17.0
 release=1

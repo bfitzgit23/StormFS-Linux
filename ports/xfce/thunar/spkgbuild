@@ -1,6 +1,7 @@
 # description	: thunar package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="thunar package"
 name=thunar
 version=4.20.9
 release=1

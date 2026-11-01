@@ -2,6 +2,7 @@
 # homepage	: https://invent.kde.org/network/kio-extras
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Additional KIO workers and plugins for KDE resource and network access"
 name=kio-extras
 version=26.08.1
 release=1

@@ -1,6 +1,7 @@
 # description	: plasma-pa package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="plasma-pa package"
 name=plasma-pa
 version=6.7.5
 release=1

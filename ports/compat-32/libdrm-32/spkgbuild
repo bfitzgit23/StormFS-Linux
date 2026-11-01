@@ -2,6 +2,7 @@
 # homepage	: https://dri.freedesktop.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Userspace interface to kernel DRM services"
 name=libdrm-32
 version=2.4.134
 release=3

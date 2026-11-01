@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: alsa-lib curl ffmpeg geoclue liboauth libproxy pciutils valgrind wget wireless-tools yasm
 
+description="Mozilla Firefox Extended Support Release (ESR) browser"
 name=firefox-esr
 version=153.2.0esr
 release=4

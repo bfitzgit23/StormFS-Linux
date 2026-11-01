@@ -2,6 +2,7 @@
 # homepage	: https://github.com/pypa/setuptools-scm
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="VCS-backed version management used by setuptools-scm"
 name=python3-vcs-versioning
 version=2.4.1
 release=1

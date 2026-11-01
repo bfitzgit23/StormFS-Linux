@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: tcl-32
 
+description="a programming library for color text mode"
 name=libnewt-32
 version=0.52.25
 release=3

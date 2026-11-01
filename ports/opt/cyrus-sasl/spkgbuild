@@ -2,6 +2,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: linux-pam sqlite
 
+description="cyrus-sasl package"
 name=cyrus-sasl
 version=2.1.28
 release=2

@@ -2,6 +2,7 @@
 # homepage	: https://p11-glue.github.io/p11-glue/p11-kit.html
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Provides a way to load and enumerate PKCS#11 modules"
 name=p11-kit-32
 version=0.26.5
 release=3

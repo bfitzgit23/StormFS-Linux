@@ -2,6 +2,7 @@
 # homepage	: https://gitlab.freedesktop.org/emersion/libliftoff
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Lightweight KMS plane library"
 name=libliftoff
 version=0.5.0
 release=1

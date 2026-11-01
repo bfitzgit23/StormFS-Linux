@@ -2,6 +2,7 @@
 # homepage	: https://github.com/lxqt/libqtxdg
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Libqtxdg component for LXQt"
 name=libqtxdg
 version=4.4.0
 release=2

@@ -2,6 +2,7 @@
 # homepage	: https://fmt.dev/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Modern formatting library for C++"
 name=fmt
 version=12.2.0
 release=3

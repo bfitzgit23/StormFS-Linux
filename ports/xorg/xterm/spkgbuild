@@ -2,6 +2,7 @@
 # homepage	: https://invisible-island.net/xterm/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="X terminal emulator"
 name=xterm
 version=411
 release=1

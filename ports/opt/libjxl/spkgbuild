@@ -1,6 +1,7 @@
 # description	: libjxl package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="libjxl package"
 name=libjxl
 version=0.12.0
 release=1

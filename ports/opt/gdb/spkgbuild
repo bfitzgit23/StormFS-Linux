@@ -1,6 +1,7 @@
 # description	: gdb package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="gdb package"
 name=gdb
 version=17.2
 release=2

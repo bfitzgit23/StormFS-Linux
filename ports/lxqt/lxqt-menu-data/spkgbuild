@@ -2,6 +2,7 @@
 # homepage	: https://github.com/lxqt/lxqt-menu-data
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Lxqt Menu Data component for LXQt"
 name=lxqt-menu-data
 version=2.4.0
 release=2

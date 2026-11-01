@@ -2,6 +2,7 @@
 # homepage	: https://gitlab.com/accounts-sso/signond/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="D-Bus service that performs user authentication for Accounts-SSO clients"
 name=signond
 version=8.61
 release=1

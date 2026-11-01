@@ -1,6 +1,7 @@
 # description	: Compression and decompression routines used by some programs
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Compression and decompression routines used by some programs"
 name=zlib
 version=1.3.2
 release=1

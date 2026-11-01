@@ -2,6 +2,7 @@
 # homepage	: https://doc.qt.io/qtforpython-6/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Qt for Python 6 system bindings (PySide6 + Shiboken6 module/generator)"
 name=pyside6
 version=6.11.2
 release=2

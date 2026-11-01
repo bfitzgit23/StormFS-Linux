@@ -4,6 +4,7 @@
 # optional	: bluez cups gst-plugins-base gst-plugins-good gtk3 ibus mariadb pulseaudio unixodbc wayland-protocols
 
 keep_static=1
+description="Qt 5 compatibility framework (QtWebEngine packaged separately)"
 name=qt5
 version=5.15.19
 release=13

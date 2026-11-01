@@ -1,6 +1,7 @@
 # description	: mpfr package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="mpfr package"
 name=mpfr
 version=4.2.2
 release=1

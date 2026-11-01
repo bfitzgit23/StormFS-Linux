@@ -1,6 +1,7 @@
 # description	: binutils package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="binutils package"
 name=binutils
 version=2.47
 release=1

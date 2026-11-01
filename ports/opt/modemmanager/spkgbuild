@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: gtk-doc libxslt
 
+description="Unified high-level API for mobile broadband modems"
 name=modemmanager
 version=1.24.2
 release=3

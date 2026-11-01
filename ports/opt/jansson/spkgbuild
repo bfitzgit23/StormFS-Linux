@@ -2,6 +2,7 @@
 # homepage	: https://github.com/akheron/jansson/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="The Jansson package contains a library used to encode, decode, and manipulate JSON data."
 name=jansson
 version=2.15.1
 release=2

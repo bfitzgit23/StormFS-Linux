@@ -1,6 +1,7 @@
 # description	: less package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="less package"
 name=less
 version=704
 release=1

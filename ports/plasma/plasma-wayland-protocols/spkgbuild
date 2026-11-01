@@ -1,6 +1,7 @@
 # description	: plasma-wayland-protocols package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="plasma-wayland-protocols package"
 name=plasma-wayland-protocols
 version=1.21.0
 release=3

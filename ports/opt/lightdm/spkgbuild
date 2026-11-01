@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: accountsservice libxklavier vala
 
+description="Lightweight cross-desktop display manager"
 name=lightdm
 version=1.33.1
 release=3

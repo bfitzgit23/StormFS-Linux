@@ -2,6 +2,7 @@
 # homepage	: https://invent.kde.org/system/kpmcore
 # maintainer	: StormFS maintainers
 
+description="KDE library for partition management, used by calamares"
 name=kpmcore
 version=26.08.1
 release=1

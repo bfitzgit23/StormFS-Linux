@@ -1,6 +1,7 @@
 # description	: plasma-firewall package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="plasma-firewall package"
 name=plasma-firewall
 version=6.7.5
 release=1

@@ -1,6 +1,7 @@
 # description	: file package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="file package"
 name=file
 version=5.48
 release=1

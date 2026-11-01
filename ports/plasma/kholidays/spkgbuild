@@ -1,6 +1,7 @@
 # description	: kholidays package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kholidays package"
 name=kholidays
 version=6.30.0
 release=1

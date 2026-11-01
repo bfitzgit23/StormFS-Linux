@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: alsa-lib libsndfile fftw
 
+description="libsamplerate is a sample rate converter for audio."
 name=libsamplerate
 version=0.2.2
 release=1

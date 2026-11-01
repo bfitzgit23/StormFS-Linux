@@ -1,6 +1,7 @@
 # description	: gnome-autoar package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="gnome-autoar package"
 name=gnome-autoar
 version=0.5.2
 release=1

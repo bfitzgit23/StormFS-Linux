@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: fwupd malcontent packagekit
 
+description="Software store for GNOME with Flatpak and BFSOS native package support"
 name=gnome-software
 version=51.0
 release=1

@@ -1,6 +1,7 @@
 # description	: ktextwidgets package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="ktextwidgets package"
 name=ktextwidgets
 version=6.30.0
 release=1

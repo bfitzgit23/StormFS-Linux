@@ -2,6 +2,7 @@
 # homepage	: https://www.libssh.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Multiplatform C library implementing the SSHv2 protocol"
 name=libssh
 version=0.12.2
 release=1

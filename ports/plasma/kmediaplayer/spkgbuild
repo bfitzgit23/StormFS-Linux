@@ -1,6 +1,7 @@
 # description	: kmediaplayer package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kmediaplayer package"
 name=kmediaplayer
 version=5.115.0
 release=1

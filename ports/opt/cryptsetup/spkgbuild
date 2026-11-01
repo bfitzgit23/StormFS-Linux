@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: libpwquality passwdqc
 
+description="Cryptsetup configures encrypted block devices using dm-crypt and LUKS."
 name=cryptsetup
 version=2.8.7
 release=1

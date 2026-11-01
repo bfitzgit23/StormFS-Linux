@@ -1,6 +1,7 @@
 # description	: kmod package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kmod package"
 name=kmod
 version=34.2
 release=1

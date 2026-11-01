@@ -2,6 +2,7 @@
 # homepage	: http://www.libmng.com
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="libmng - Mutliple Image Network Graphics"
 name=libmng-32
 version=2.0.3
 release=3

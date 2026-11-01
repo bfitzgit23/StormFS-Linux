@@ -2,6 +2,7 @@
 # homepage	: http://www.mozilla.com
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Firefox binary"
 name=firefox-bin
 version=155.0.1
 release=4

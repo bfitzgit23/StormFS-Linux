@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: bluezlibnl libusb dag septel
 
+description="libpcap provides functions for user-level packet capture, used in low-level network monitoring."
 name=libpcap
 version=1.10.7
 release=1

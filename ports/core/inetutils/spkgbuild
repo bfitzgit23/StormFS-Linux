@@ -1,6 +1,7 @@
 # description	: inetutils package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="inetutils package"
 name=inetutils
 version=2.8
 release=1

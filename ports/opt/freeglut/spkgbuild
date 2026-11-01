@@ -2,6 +2,7 @@
 # homepage	: https://downloads.sourceforge.net/freeglut/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Freeglut is intended to be a 100% compatible, completely opensourced clone of the GLUT library. GLUT is a window system independent toolkit for writing OpenGL programs, implementing a simple windowing API, which makes learning about and exploring OpenGL programming very easy."
 name=freeglut
 version=3.8.0
 release=2

@@ -2,6 +2,7 @@
 # homepage	: https://opencv.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Open Source Computer Vision Library"
 name=opencv
 version=5.0.0
 release=1

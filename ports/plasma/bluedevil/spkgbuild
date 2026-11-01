@@ -1,6 +1,7 @@
 # description	: bluedevil package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="bluedevil package"
 name=bluedevil
 version=6.7.5
 release=1

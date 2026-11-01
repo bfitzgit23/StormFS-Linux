@@ -2,6 +2,7 @@
 # homepage	: http://freedesktop.org/wiki/Software/DBusBindings
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="D-Bus GLib bindings"
 name=dbus-glib-32
 version=0.114
 release=2

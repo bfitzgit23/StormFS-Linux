@@ -2,6 +2,7 @@
 # homepage	: https://gitlab.freedesktop.org/spice/usbredir
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="USB traffic redirection library for virtualization"
 name=usbredir
 version=0.15.0
 release=1

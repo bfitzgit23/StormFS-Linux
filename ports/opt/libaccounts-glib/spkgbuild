@@ -2,6 +2,7 @@
 # homepage	: https://gitlab.com/accounts-sso/libaccounts-glib
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="GLib-based client library for accessing the online accounts database"
 name=libaccounts-glib
 version=1.27
 release=1

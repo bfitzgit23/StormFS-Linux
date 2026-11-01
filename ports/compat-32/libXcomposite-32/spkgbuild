@@ -2,6 +2,7 @@
 # homepage	: http://xorg.freedesktop.org
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="X Composite extension client library"
 name=libxcomposite-32
 version=0.4.7
 release=2

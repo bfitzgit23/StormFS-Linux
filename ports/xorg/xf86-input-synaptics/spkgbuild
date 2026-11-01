@@ -2,6 +2,7 @@
 # homepage	: https://xorg.freedesktop.org
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Synaptics touchpad input driver"
 name=xf86-input-synaptics
 version=1.10.0
 release=2

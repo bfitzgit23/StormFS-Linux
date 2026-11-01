@@ -2,6 +2,7 @@
 # homepage	: https://openprinting.github.io/cups/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="CUPS - Common UNIX Printing System"
 name=cups
 version=2.4.19
 release=2

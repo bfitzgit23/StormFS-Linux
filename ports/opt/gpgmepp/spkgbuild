@@ -2,6 +2,7 @@
 # homepage	: https://www.gnupg.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="C++ bindings for GPGME"
 name=gpgmepp
 version=2.2.0
 release=1

@@ -2,6 +2,7 @@
 # homepage	: https://metacpan.org/dist/File-ShareDir-Install
 # maintainer	: Brian
 
+description="Install shared files for Perl distributions"
 name=perl-file-sharedir-install
 version=0.14
 release=1

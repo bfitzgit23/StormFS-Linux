@@ -2,6 +2,7 @@
 # homepage	: https://www.x.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Standard X.Org applications plus BFSOS basic X test/session clients."
 name=xorg-apps
 version=7x
 release=3

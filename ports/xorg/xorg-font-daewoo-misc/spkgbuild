@@ -2,6 +2,7 @@
 # homepage	: https://xorg.freedesktop.org
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="xorg font font-daewoo-misc"
 name=xorg-font-daewoo-misc
 version=1.0.3
 release=1

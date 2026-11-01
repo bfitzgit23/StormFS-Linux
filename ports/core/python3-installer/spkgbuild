@@ -2,6 +2,7 @@
 # homepage	: https://github.com/pypa/installer
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="A low-level library for installing from a Python wheel distribution"
 name=python3-installer
 version=1.0.1
 release=1

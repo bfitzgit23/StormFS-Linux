@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: wayland-32
 
+description="Vulkan loader, 32bit"
 name=vulkan-loader-32
 version=1.4.357.0
 release=4

@@ -1,6 +1,7 @@
 # description	: gst-libav package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="gst-libav package"
 name=gst-libav
 version=1.28.7
 release=1

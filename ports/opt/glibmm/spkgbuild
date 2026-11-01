@@ -2,6 +2,7 @@
 # homepage	: https://www.gtkmm.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="C++ interface for the popular glib library."
 name=glibmm
 version=2.88.1
 release=1

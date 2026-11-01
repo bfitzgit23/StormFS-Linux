@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: speex sqlite
 
+description="Library for manipulating sound files"
 name=libsndfile
 version=1.2.2
 release=3

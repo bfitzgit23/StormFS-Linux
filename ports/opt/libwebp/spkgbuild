@@ -3,6 +3,7 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: libjpeg-turbo libpng libtiff sdl12-compat freeglut giflib
 
+description="A library for a new image format comparable to JPEG."
 name=libwebp
 version=1.6.0
 release=2

@@ -1,6 +1,7 @@
 # description	: libsecret package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="libsecret package"
 name=libsecret
 version=0.21.7
 release=2

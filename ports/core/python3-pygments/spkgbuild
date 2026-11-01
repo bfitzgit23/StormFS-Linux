@@ -2,6 +2,7 @@
 # homepage	: https://pygments.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Python syntax highlighter"
 name=python3-pygments
 version=2.21.0
 release=1

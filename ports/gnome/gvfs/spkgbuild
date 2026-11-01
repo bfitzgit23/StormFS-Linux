@@ -1,6 +1,7 @@
 # description	: gvfs package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="gvfs package"
 name=gvfs
 version=1.62.0
 release=1

@@ -1,6 +1,7 @@
 # description	: kscreenlocker package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="kscreenlocker package"
 name=kscreenlocker
 version=6.7.5
 release=1

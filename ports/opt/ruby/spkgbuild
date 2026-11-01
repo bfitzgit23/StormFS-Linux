@@ -1,6 +1,7 @@
 # description	: ruby package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="ruby package"
 name=ruby
 version=3.4.10
 release=1

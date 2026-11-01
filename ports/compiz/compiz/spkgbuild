@@ -2,6 +2,7 @@
 # homepage	: https://gitlab.com/compiz/compiz-core
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="Compiz Reloaded compositing window manager (0.8.x series)"
 name=compiz
 version=0.8.18
 release=2

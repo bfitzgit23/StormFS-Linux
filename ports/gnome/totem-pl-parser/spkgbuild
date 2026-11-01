@@ -1,6 +1,7 @@
 # description	: totem-pl-parser package
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="totem-pl-parser package"
 name=totem-pl-parser
 version=3.26.7
 release=1

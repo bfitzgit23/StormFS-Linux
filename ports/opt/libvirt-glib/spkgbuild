@@ -2,6 +2,7 @@
 # homepage	: https://libvirt.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="GLib and GObject bindings for libvirt"
 name=libvirt-glib
 version=5.0.0
 release=1

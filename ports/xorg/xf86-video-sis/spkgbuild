@@ -2,6 +2,7 @@
 # homepage	: https://xorg.freedesktop.org
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
+description="xorg driver xf86-video-sis"
 name=xf86-video-sis
 version=0.12.0
 release=1
