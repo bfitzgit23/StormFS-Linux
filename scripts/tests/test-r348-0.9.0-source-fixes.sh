@@ -53,7 +53,7 @@ grep -q '_cleanup_completed_bootstrap_state' bootstrap.sh || fail 'successful-bo
 grep -q 'pkgbuild -o' bootstrap.sh || fail 'scratchpkg prefetch path missing'
 grep -q 'chown -R bfs:bfs /home/bfs/BFSOS' scripts/bfs-build-iso.sh || fail 'live checkout bfs ownership normalization missing'
 grep -q '^version=7.2.8$' ports/core/linux/spkgbuild || fail 'current kernel 7.2.8 update missing'
-grep -q '^version=6.18.54$' ports/core/linux-lts/spkgbuild || fail 'LTS kernel 6.18.54 update missing'
+grep -q '^version=7.3.1$' ports/core/linux-lts/spkgbuild || fail 'default kernel 7.3.1 update missing'
 pass 'r341-r347 release hardening source fixes'
 
 echo 'r348 0.9.0 source regression checks passed.' 

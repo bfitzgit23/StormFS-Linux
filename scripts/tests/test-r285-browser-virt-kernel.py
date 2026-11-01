@@ -7,8 +7,8 @@ def text(rel): return (root / rel).read_text()
 
 expected = {
     'ports/core/linux/spkgbuild': 'version=7.2.8',
-    'ports/core/linux-headers/spkgbuild': 'version=6.18.54',
-    'ports/core/linux-lts/spkgbuild': 'version=6.18.54',
+    'ports/core/linux-headers/spkgbuild': 'version=7.3.1',
+    'ports/core/linux-lts/spkgbuild': 'version=7.3.1',
     'ports/opt/qemu/spkgbuild': 'version=11.1.1',
     'ports/opt/libvirt/spkgbuild': 'version=12.7.0',
     'ports/opt/libvirt-python/spkgbuild': 'version=12.7.0',

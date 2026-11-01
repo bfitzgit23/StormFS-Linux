@@ -139,7 +139,7 @@ Each profile pulls in the matching service packages and dependency set automatic
 - Dracut initramfs generation and GRUB bootloader support.
 - UEFI and legacy BIOS installation paths.
 - Installer support for Btrfs subvolumes/snapshots, LUKS, LVM, md RAID (linear/JBOD, RAID0, RAID1, RAID10, RAID4/5/6), and combinations of those layers.
-- Kernel selection between the BFSOS default `linux-lts` package (Linux 6.18 LTS with broad x86_64 hardware support) and the optional `linux` 7.2.8 current kernel.
+- Kernel selection between the BFSOS default `linux-lts` package (Linux 7.3 stable with broad x86_64 hardware support) and the optional `linux` 7.2.8 current kernel.
 - Optional installer-managed ZRAM swap with explicit enable/disable and configurable sizing.
 - Flatpak/Flathub support in the ports tree, integrated with gnome-software.
 - BFSOS-owned systemd units and user presets under `/usr/share/bfsos/systemd-units/`.

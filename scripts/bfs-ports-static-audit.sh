@@ -131,8 +131,8 @@ check_version() {
 }
 
 check_version ports/core/linux/spkgbuild 7.2.8
-check_version ports/core/linux-headers/spkgbuild 6.18.54
-check_version ports/core/linux-lts/spkgbuild 6.18.54
+check_version ports/core/linux-headers/spkgbuild 7.3.1
+check_version ports/core/linux-lts/spkgbuild 7.3.1
 if grep -q 'debian_patch_base\|sources.debian.org/data/main/l/linux/6.18.9' ports/core/linux-lts/spkgbuild; then
     report "linux-lts still carries the obsolete cross-version Debian 6.18.9 patch bundle"
 fi

@@ -104,11 +104,11 @@ The primary standard user is the normal login account. Root password login is lo
 
 The maintained choices are:
 
-- `linux-lts` 6.18.54 — BFSOS default LTS kernel;
+- `linux-lts` 7.3.1 — BFSOS default kernel (7.3 stable line);
 - `linux` 7.2.8 — optional current kernel;
 - no kernel — advanced/custom installations only.
 
-The LTS kernel is the normal release choice.
+The default kernel is the normal release choice.
 
 ## 8. Sudo configuration
 

@@ -1,19 +1,19 @@
-# description	: BFSOS default Linux 6.18 LTS kernel with broad x86_64 hardware support
+# description	: BFSOS default Linux 7.3 kernel with broad x86_64 hardware support
 # homepage	: https://www.kernel.org/
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 # optional	: pahole
 
-description="BFSOS default Linux 6.18 LTS kernel with broad x86_64 hardware support"
+description="BFSOS default Linux 7.3 kernel with broad x86_64 hardware support"
 name=linux-lts
-version=6.18.54
+version=7.3.1
 release=1
-# Keep the LTS package on the current upstream 6.18.y point release.  Do not
-# mix a months-old Debian patch snapshot from another 6.18.y point release into
+# Keep the default kernel package on the current upstream 7.3.y point release.  Do not
+# mix a months-old Debian patch snapshot from another 7.3.y point release into
 # the current upstream tree: those URLs and patch contexts move independently
 # and previously made the LTS package vulnerable to download/apply failures.
 # BFSOS hardening/storage/boot policy is expressed explicitly below through
 # Kconfig so it stays auditable and version-reconciled by olddefconfig.
-source="https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-${version}.tar.xz config md-check-new-feature-6.18.patch"
+source="https://cdn.kernel.org/pub/linux/kernel/v7.x/linux-${version}.tar.xz config"
 
 build() {
 	cd "$name-$version" || return 1
@@ -25,9 +25,10 @@ build() {
 	done
     local kernver=""
 
-    # pkgbuild automatically applies *.patch entries from source=() before
-    # pkg_build() runs. Verify that the MD compatibility backport is present,
-    # but do not apply it a second time here.
+    # Linux 7.3 carries the MD check_new_feature knob natively, so the 6.18
+    # backport is no longer listed in source=().  Keep the verification so a
+    # kernel that loses the knob fails here instead of silently changing
+    # behaviour for arrays with newer metadata.
     grep -q 'module_param(check_new_feature, bool, 0600);' drivers/md/md.c || {
         echo "linux-lts patch error: MD check_new_feature backport is missing" >&2
         return 1
@@ -39,7 +40,7 @@ build() {
     # supplied config is intentionally used as the compatibility baseline so
     # the LTS flavor keeps the same proven EFI/console/virtio/storage behavior
     # instead of inheriting thousands of unrelated allmodconfig differences.
-    # olddefconfig below reconciles version-specific symbols for Linux 6.18.
+    # olddefconfig below reconciles version-specific symbols for Linux 7.3.
     cp "$SRC/config" .config
 
     scripts/config --set-str CONFIG_LOCALVERSION "-BFS-LTS"
