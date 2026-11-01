@@ -57,7 +57,28 @@ bfs_compat32_validate() {
 
 # build_opt may be a plain string (spkgbuild style) or a bash-style array
 # (legacy spkgbuild style).  Normalise both into BFS_BUILD_OPTS.
+# Stage 1 builds the temporary toolchain, which installs directly into $TOOLS
+# and must resolve its dependencies from that prefix.  An ordinary package
+# build stages under $PKG behind a /usr prefix instead.
+bfs_install_mode() {
+    if [ "${BOOTSTRAP:-}" = 1 ] && [ -n "${TOOLS:-}" ]; then
+        BFS_BOOTSTRAP=1
+        BFS_INSTALL_PREFIX="$TOOLS"
+        BFS_INSTALL_DESTDIR=""
+        export CPPFLAGS="${CPPFLAGS:+$CPPFLAGS }-I$TOOLS/include"
+        export LDFLAGS="${LDFLAGS:+$LDFLAGS }-L$TOOLS/lib"
+        export PKG_CONFIG_PATH="$TOOLS/lib/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
+    else
+        BFS_BOOTSTRAP=0
+        BFS_INSTALL_PREFIX=/usr
+        BFS_INSTALL_DESTDIR="$BFS_INSTALL_DESTDIR"
+    fi
+    export DESTDIR="$BFS_INSTALL_DESTDIR"
+    return 0
+}
+
 bfs_collect_build_opt() {
+    bfs_install_mode
     BFS_BUILD_OPTS=""
     if [ -n "${build_opt:-}" ]; then
         eval 'BFS_BUILD_OPTS="${build_opt[*]}"'
@@ -149,24 +170,24 @@ bfs_makefile_build() {
     # shellcheck disable=SC2086
     make $BFS_BUILD_OPTS || return 1
     # shellcheck disable=SC2086
-    make PREFIX=/usr prefix=/usr SYSCONFDIR=/etc sysconfdir=/etc \
-        MANDIR=/usr/share/man mandir=/usr/share/man \
-        LIBDIR="${BFS_PKG_LIBDIR:-/usr/lib}" libdir="${BFS_PKG_LIBDIR:-/usr/lib}" \
-        PKGCONFIGDIR="${BFS_PKG_LIBDIR:-/usr/lib}/pkgconfig" \
-        $BFS_BUILD_OPTS DESTDIR="$PKG" install || return 1
+    make PREFIX="$BFS_INSTALL_PREFIX" prefix="$BFS_INSTALL_PREFIX" SYSCONFDIR=/etc sysconfdir=/etc \
+        MANDIR="$BFS_INSTALL_PREFIX/share/man" mandir="$BFS_INSTALL_PREFIX/share/man" \
+        LIBDIR="${BFS_PKG_LIBDIR:-$BFS_INSTALL_PREFIX/lib}" libdir="${BFS_PKG_LIBDIR:-$BFS_INSTALL_PREFIX/lib}" \
+        PKGCONFIGDIR="${BFS_PKG_LIBDIR:-$BFS_INSTALL_PREFIX/lib}/pkgconfig" \
+        $BFS_BUILD_OPTS DESTDIR="$BFS_INSTALL_DESTDIR" install || return 1
     return 0
 }
 
 bfs_perlmodule_build() {
     perl Makefile.PL || return 1
     make || return 1
-    make DESTDIR="$PKG" install || return 1
+    make DESTDIR="$BFS_INSTALL_DESTDIR" install || return 1
     return 0
 }
 
 bfs_python3_build() {
     python3 setup.py build || return 1
-    python3 setup.py install --prefix=/usr --root="$PKG" --optimize=1 --skip-build || return 1
+    python3 setup.py install --prefix="$BFS_INSTALL_PREFIX" --root="$BFS_INSTALL_DESTDIR" --optimize=1 --skip-build || return 1
     return 0
 }
 
@@ -183,23 +204,25 @@ bfs_configure_build() {
         done
     fi
 
+    BFS_CONFIGURE_DIR_ARGS=""
+    if [ "${BFS_BOOTSTRAP:-0}" = 0 ]; then
+        BFS_CONFIGURE_DIR_ARGS="--sysconfdir=/etc --libexecdir=/usr/lib --localstatedir=/var --mandir=/usr/share/man"
+    fi
+
     BFS_CONFIGURE_HOST_ARGS=""
     [ -n "${BFS_MULTILIB_HOST:-}" ] && BFS_CONFIGURE_HOST_ARGS="--host=$BFS_MULTILIB_HOST"
 
     # shellcheck disable=SC2086
     ./configure \
-        --prefix=/usr \
-        --sysconfdir=/etc \
-        --libexecdir=/usr/lib \
-        --localstatedir=/var \
-        --mandir=/usr/share/man \
-        --libdir="${BFS_PKG_LIBDIR:-/usr/lib}" \
+        --prefix="$BFS_INSTALL_PREFIX" \
+        $BFS_CONFIGURE_DIR_ARGS \
+        --libdir="${BFS_PKG_LIBDIR:-$BFS_INSTALL_PREFIX/lib}" \
         $BFS_CONFIGURE_HOST_ARGS \
         $BFS_CONFIGURE_TEST_ARGS \
         $BFS_BUILD_OPTS || return 1
 
     make -j"${JOBS:-1}" || return 1
-    make DESTDIR="$PKG" install || return 1
+    make DESTDIR="$BFS_INSTALL_DESTDIR" install || return 1
     return 0
 }
 
@@ -211,7 +234,7 @@ bfs_cmake_build() {
     mkdir -p cmakebuild && cd cmakebuild || return 1
 
     # shellcheck disable=SC2086
-    cmake -DCMAKE_INSTALL_PREFIX=/usr \
+    cmake -DCMAKE_INSTALL_PREFIX="$BFS_INSTALL_PREFIX" \
         -DCMAKE_INSTALL_SYSCONFDIR=/etc \
         -DCMAKE_INSTALL_LIBDIR="${BFS_PKG_LIBDIR_NAME:-lib}" \
         -DCMAKE_INSTALL_LIBEXECDIR="${BFS_PKG_LIBDIR_NAME:-lib}" \
@@ -224,7 +247,7 @@ bfs_cmake_build() {
         $BFS_BUILD_OPTS \
         -G Ninja .. || return 1
     cmake --build . --parallel "${JOBS:-1}" || return 1
-    DESTDIR="$PKG" cmake --install . || return 1
+    DESTDIR="$BFS_INSTALL_DESTDIR" cmake --install . || return 1
     return 0
 }
 
@@ -255,9 +278,9 @@ bfs_meson_build() {
 
     # shellcheck disable=SC2086
     meson setup _meson_build \
-        --prefix=/usr \
-        --libdir="${BFS_PKG_LIBDIR:-/usr/lib}" \
-        --libexecdir="${BFS_PKG_LIBDIR:-/usr/lib}" \
+        --prefix="$BFS_INSTALL_PREFIX" \
+        --libdir="${BFS_PKG_LIBDIR:-$BFS_INSTALL_PREFIX/lib}" \
+        --libexecdir="${BFS_PKG_LIBDIR:-$BFS_INSTALL_PREFIX/lib}" \
         --includedir=/usr/include \
         --datadir=/usr/share \
         --mandir=/usr/share/man \
@@ -293,7 +316,7 @@ bfs_meson_build() {
     if [ "${SPKG_RUN_TESTS:-no}" = yes ] || [ "${run_tests:-no}" = yes ]; then
         meson test -C _meson_build --print-errorlogs || return 1
     fi
-    DESTDIR="$PKG" meson install --no-rebuild -C _meson_build || return 1
+    DESTDIR="$BFS_INSTALL_DESTDIR" meson install --no-rebuild -C _meson_build || return 1
     return 0
 }
 
@@ -310,7 +333,8 @@ bfs_cleanup_pkg() {
 # Automatic build-type detection, the scratchpkg equivalent of the retired
 # pkgmk extension.  Optional first argument forces a build type.
 bfs_autobuild() {
-    export DESTDIR="$PKG"
+    bfs_install_mode
+    export DESTDIR="$BFS_INSTALL_DESTDIR"
     export DEST_DIR="$PKG"      # p7zip
     export INSTALLROOT="$PKG"   # syslinux
     export install_root="$PKG"  # glibc
