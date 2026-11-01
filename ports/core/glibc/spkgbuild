@@ -192,7 +192,7 @@ bootstrap_build() {
         CXX="$LFS_TGT-g++ -m32"
 
     make
-    make install
+    make -j1 install
 
     #
     # GCC's -m32 multilib search expects the 32-bit runtime under
@@ -218,7 +218,12 @@ bootstrap_build() {
         --with-headers="$TOOLS/include"
 
     make
-    make install
+    # glibc's install re-enters subdir_lib, and MAKEFLAGS carries -j.  In
+    # parallel the math dependency postprocessing consumes the *.dt / *.T
+    # temporaries twice and prints "can't read *.os.dt" for every object,
+    # so the install of both the 32-bit and the 64-bit temporary glibc is
+    # serial.
+    make -j1 install
 
     # GCC 16.2 contains UTF-8 pathnames.  Stage 2 still uses libarchive/bsdtar
     # linked to this temporary glibc, so the temporary toolchain must have its
