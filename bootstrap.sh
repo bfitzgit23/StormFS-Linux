@@ -2441,7 +2441,7 @@ _clean_start() {
         fi
     }
 
-    if [ -n "${BFS_ROOTFS_CACHE_ARCHIVE:-}" ]; then
+    if [ -f "${BFS_ROOTFS_CACHE_ARCHIVE:-}" ]; then
         # A clean start discards cached state by definition, so drop the
         # checkpoint along with the extracted tree.
         echo "Discarding the cached build-state checkpoint:"
@@ -3178,6 +3178,13 @@ _buildtoolchain() {
     fi
 
     if [ -n "$_stage1_manifest" ]; then
+        # A clean start deletes $LFS outright, and outside the bind-mount case
+        # nothing recreates it before the manifest is written.
+        if ! /usr/bin/mkdir -p "$(/usr/bin/dirname "$_stage1_manifest")"; then
+            _stage_preflight_note "ERROR: Could not recreate the build-state directory for $_stage1_manifest"
+            return 1
+        fi
+
         printf '%s\n' "$_cache_sig" > "$_stage1_manifest" || {
             _stage_preflight_note "ERROR: Could not record the build-state manifest: $_stage1_manifest"
             return 1
