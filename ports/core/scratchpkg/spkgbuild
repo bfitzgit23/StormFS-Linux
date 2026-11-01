@@ -12,7 +12,10 @@ description="Package manager for StormFS Linux (Venom Linux scratchpkg)"
 name=scratchpkg
 version=fdd643ab
 release=1
-source="https://codeberg.org/venomlinux/scratchpkg/archive/$version/scratchpkg-$version.tar.gz
+# Codeberg runs Forgejo, which serves /archive/<ref>.tar.gz and does not
+# understand GitHub's /archive/<ref>/<name>.tar.gz, so name the file
+# explicitly; the archive unpacks to scratchpkg/, which build() handles.
+source="scratchpkg-$version.tar.gz::https://codeberg.org/venomlinux/scratchpkg/archive/$version.tar.gz
         scratchpkg.conf
         scratchpkg.repo"
 
