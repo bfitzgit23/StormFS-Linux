@@ -27,6 +27,8 @@ PID_FILE="$SCRIPT_DIR/.bootstrap.pid"
 # not a fatal error, so offline bootstrap work remains possible.
 sync_system_clock() {
     local synced=no
+    local chrony_running=no
+    local leap_status=""
     local i=0
     local -a root_cmd=()
 
@@ -48,7 +50,30 @@ sync_system_clock() {
 
     printf '\nSynchronizing system clock...\n'
 
-    if command -v chronyd >/dev/null 2>&1; then
+    # A chronyd may already be serving the clock (a distribution service, or
+    # the container entrypoint).  Starting a second `chronyd -q` then aborts
+    # with "Another chronyd may already be running", so ask the running daemon
+    # to settle the clock instead.  waitsync fails when the daemon has no
+    # usable source, so this never claims a sync that did not happen.
+    if command -v chronyc >/dev/null 2>&1 &&
+       "${root_cmd[@]}" chronyc tracking >/dev/null 2>&1; then
+        chrony_running=yes
+        # waitsync cannot decide this on its own: chrony 4.x still exits 0
+        # with no reference clock, so the leap status is the real answer.
+        "${root_cmd[@]}" chronyc waitsync 10 0.1 >/dev/null 2>&1 || true
+        leap_status="$("${root_cmd[@]}" chronyc tracking 2>/dev/null |
+            awk -F': *' '/^Leap status/ {print $2; exit}')"
+        if [ "$leap_status" = Normal ]; then
+            synced=yes
+            printf 'System clock synchronized by the running chronyd.\n'
+        else
+            printf 'WARNING: chronyd is running but has no usable time source yet.\n' >&2
+        fi
+    fi
+
+    # A second `chronyd -q` can only fail while another daemon holds the clock,
+    # so the fallback is skipped entirely in that case.
+    if [ "$synced" != yes ] && [ "$chrony_running" != yes ] && command -v chronyd >/dev/null 2>&1; then
         if "${root_cmd[@]}" chronyd -q; then
             synced=yes
             printf 'System clock synchronized with chronyd.\n'
@@ -2023,7 +2048,14 @@ esac
 CURRENT_PGID="$(ps -o pgid= -p "$$" | tr -d '[:space:]')"
 
 if [ "$$" != "$CURRENT_PGID" ]; then
-    if { : </dev/tty; } 2>/dev/null; then
+    # A controlling terminal is desirable, not required.  Inside a
+    # pseudo-terminal that already belongs to another session - the ISO
+    # builder's `script` wrapper, and most container terminals - the kernel
+    # refuses TIOCSCTTY with EPERM and `setsid --ctty` exits non-zero, which
+    # would abort the bootstrap before stage 1.  Probe the capability first and
+    # fall back to a plain session, which still gives the stage its own process
+    # group for Ctrl+C and the stop command.
+    if { : </dev/tty; } 2>/dev/null && setsid --ctty true 2>/dev/null; then
         exec setsid --ctty "$0" "$@"
     else
         exec setsid "$0" "$@"
@@ -2898,7 +2930,13 @@ _buildtoolchain() {
         fi
     fi
 
-    if ! /usr/bin/mkdir -p "${LFS}${TOOLS}" "$sourcedir" 2>>"$STAGE_PREFLIGHT_LOG"; then
+    # Create the toolchain layout up front.  Installing into $TOOLS/bin with a
+    # plain `install` (no -D) fails with ENOENT when the directory is absent,
+    # and Stage 1 seeds pkgbuild/pkgadd/scratch there before anything else has
+    # had a chance to create it.
+    if ! /usr/bin/mkdir -p \
+            "${LFS}${TOOLS}"/{bin,sbin,lib,include,share} \
+            "$sourcedir" 2>>"$STAGE_PREFLIGHT_LOG"; then
         _stage_preflight_note "ERROR: Could not create Stage-1 toolchain directories."
         _stage_preflight_note "       If $LFS survived an older root build, use Full Bootstrap clean-start or remove that stale tree with sudo."
         return 1

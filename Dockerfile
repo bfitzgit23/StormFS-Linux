@@ -103,6 +103,18 @@ RUN set -eux; \
 WORKDIR /build/StormFS-Linux
 COPY --chown=builder:builder . .
 
+# COPY sets ownership on the copied tree, but the WORKDIR directory itself stays
+# root-owned, and bootstrap.sh writes logs/ and archives/ next to its own
+# scripts.  Without this the builder cannot create /build/StormFS-Linux/logs.
+RUN set -eux; \
+    chown -R builder:builder /build/StormFS-Linux; \
+    install -d -o builder -g builder \
+        /build/StormFS-Linux/logs \
+        /build/StormFS-Linux/logs/toolchain \
+        /build/StormFS-Linux/logs/base \
+        /build/StormFS-Linux/archives \
+        /build/StormFS-Linux/archives/toolchain
+
 # timedatectl stand-in: sync_host_time() needs a systemd bus answer for
 # NTPSynchronized, which a container cannot provide.
 COPY --chmod=0755 scripts/docker-timedatectl-shim.sh /usr/local/bin/timedatectl
