@@ -602,9 +602,17 @@ choose_base_action() {
     esac
 }
 
+bootstrap_state_resumable() {
+    local cache="${BFS_STATE_DIR:-}"
+    [ -n "$cache" ] || return 1
+    [ -d "$cache/rootfs" ] || return 1
+    # A recorded Stage-1 manifest means a partially built toolchain is cached.
+    [ -f "$cache/rootfs/.bfs-stage1-manifest" ]
+}
+
 bootstrap_resume_stage_hint() {
     local root=/tmp/lfs-rootfs
-    if [ -f "$root/.bfs-verification-passed" ]; then printf '%s\n' 5
+    if [ -f "$root/.bfs-verified" ]; then printf '%s\n' 5
     elif [ -f "$root/.bfs-stage3-complete" ]; then printf '%s\n' 4
     elif [ -f "$root/.bfs-stage2-complete" ]; then printf '%s\n' 3
     elif [ -f "$PROJECT_DIR/archives/toolchain/toolchain.tar.zst" ] || \
@@ -616,7 +624,12 @@ bootstrap_resume_stage_hint() {
 choose_bootstrap_recovery_action() {
     local stage answer
     stage="$(bootstrap_resume_stage_hint)"
-    [ "$stage" -gt 1 ] || { printf '%s\n' restart; return 0; }
+    # A cached build state means Stage 1 work can be reused even though no
+    # stage marker exists yet, so do not force a full rebuild in that case.
+    if [ "$stage" -le 1 ] && ! bootstrap_state_resumable; then
+        printf '%s\n' restart
+        return 0
+    fi
 
     if [ "$ASSUME_YES" = yes ]; then
         printf '%s\n' resume
@@ -659,6 +672,11 @@ run_full_bootstrap() {
 
     # The bootstrap uses terminal/session handling internally. When launched
     # directly from the ISO builder, allocate a pseudo-terminal when possible.
+    # Keep the bootstrap state across runs so a failure resumes instead of
+    # rebuilding the toolchain and the base system from the first package.
+    BFS_STATE_DIR="${BFS_STATE_DIR:-${XDG_CACHE_HOME:-$HOME/.cache}/bfsos/bootstrap}"
+    export BFS_STATE_DIR
+
     if command -v script >/dev/null 2>&1; then
         (
             cd "$PROJECT_DIR"
@@ -671,6 +689,7 @@ run_full_bootstrap() {
         BFS_FULL_BOOTSTRAP_ASSUME_YES=yes \
         BFS_FULL_BOOTSTRAP_NO_INSTALL_PROMPT=yes \
         BFS_ISO_BUILD=yes \
+        BFS_STATE_DIR="$BFS_STATE_DIR" \
             "$PROJECT_DIR/bootstrap.sh" "$bootstrap_mode"
     fi
 }

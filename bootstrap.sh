@@ -1466,8 +1466,11 @@ _run_resume_full_bootstrap() {
 
     start="$(_next_resume_full_stage)"
     if [ "$start" -eq 1 ]; then
-        echo "ERROR: No completed Stage-1 toolchain archive was found. Use Full Bootstrap for a clean 1 -> 5 build." >&2
-        return 1
+        if [ -z "${BFS_ROOTFS_CACHE:-}${BFS_TOOLS_CACHE:-}" ]; then
+            echo "ERROR: No completed Stage-1 toolchain archive was found. Use Full Bootstrap for a clean 1 -> 5 build." >&2
+            return 1
+        fi
+        echo "Resuming Stage 1 from the cached build state."
     fi
     if [ "$start" -gt 5 ]; then
         echo "Full Bootstrap is already complete; a base archive exists."
@@ -1495,6 +1498,7 @@ _run_resume_full_bootstrap() {
 
     for ((stage=start; stage<=5; stage++)); do
         case "$stage" in
+            1) label="Temporary toolchain" ;;
             2) label="Base system" ;;
             3) label="Final-toolchain rebuild" ;;
             4) label="Base verification" ;;
@@ -1507,7 +1511,13 @@ _run_resume_full_bootstrap() {
             "Running Stage $stage: $label\n\nExisting successful work is being preserved."
         _reset_terminal_ui
 
-        if BFS_FULL_BOOTSTRAP=yes BFS_MENU_STAGE=yes _run_root_stage "$stage"; then
+        if [ "$stage" -eq 1 ]; then
+            if BFS_FULL_BOOTSTRAP=yes BFS_MENU_STAGE=yes _buildtoolchain; then
+                status=0
+            else
+                status=$?
+            fi
+        elif BFS_FULL_BOOTSTRAP=yes BFS_MENU_STAGE=yes _run_root_stage "$stage"; then
             status=0
         else
             status=$?
@@ -1703,6 +1713,9 @@ _run_root_stage() {
 
     if [ "$(id -u)" -eq 0 ]; then
         BFS_SKIP_TIME_SYNC=yes \
+        BFS_STATE_DIR="${BFS_STATE_DIR:-}" \
+        BFS_ROOTFS_CACHE="${BFS_ROOTFS_CACHE:-}" \
+        BFS_TOOLS_CACHE="${BFS_TOOLS_CACHE:-}" \
             BFS_FULL_BOOTSTRAP="${BFS_FULL_BOOTSTRAP:-no}" \
             "$0" "$stage"
         return $?
@@ -1722,6 +1735,9 @@ _run_root_stage() {
 
     sudo -- env \
         BFS_SKIP_TIME_SYNC=yes \
+        BFS_STATE_DIR="${BFS_STATE_DIR:-}" \
+        BFS_ROOTFS_CACHE="${BFS_ROOTFS_CACHE:-}" \
+        BFS_TOOLS_CACHE="${BFS_TOOLS_CACHE:-}" \
         BFS_MENU_STAGE="${BFS_MENU_STAGE:-no}" \
         BFS_FULL_BOOTSTRAP="${BFS_FULL_BOOTSTRAP:-no}" \
         "$0" "$stage"
@@ -2629,6 +2645,8 @@ _restore_toolchain() {
 }
 
 _restore_rootfs() {
+    _attach_rootfs_cache || return 1
+
     local archive
     local status=0
 
@@ -2929,6 +2947,48 @@ _spkg_bootstrap_build() {
     )
 }
 
+# Attach the persistent build-state cache at $LFS.
+#
+# Stages 2-5 re-execute this script through sudo, so each stage attaches the
+# cache itself instead of relying on the parent process.
+_attach_rootfs_cache() {
+    [ -n "${BFS_ROOTFS_CACHE:-}" ] || return 0
+
+    if ! sudo /usr/bin/mkdir -p "$BFS_ROOTFS_CACHE" 2>/dev/null ||
+        ! sudo /usr/bin/chown "$(id -u):$(id -g)" "$BFS_ROOTFS_CACHE" 2>/dev/null; then
+        echo "ERROR: Could not prepare the build-state cache: $BFS_ROOTFS_CACHE" >&2
+        return 1
+    fi
+
+    if ! /usr/bin/mkdir -p "$LFS" 2>/dev/null; then
+        echo "ERROR: Could not create the rootfs mount point: $LFS" >&2
+        return 1
+    fi
+
+    if ! /usr/bin/mountpoint -q "$LFS" 2>/dev/null; then
+        if ! sudo /usr/bin/mount --bind "$BFS_ROOTFS_CACHE" "$LFS"; then
+            echo "ERROR: Could not bind-mount the build-state cache at $LFS" >&2
+            return 1
+        fi
+    fi
+
+    # Resume only makes sense for the same source tree, so record which commit
+    # produced the cached state and say so when another checkout reuses it.
+    _state_source_marker="$BFS_ROOTFS_CACHE/.bfs-state-source"
+    _state_source_now="$(git -C "$SCRIPT_DIR" rev-parse HEAD 2>/dev/null || printf 'unknown')"
+
+    if [ -f "$_state_source_marker" ]; then
+        _state_source_prev="$(cat "$_state_source_marker" 2>/dev/null || true)"
+        if [ -n "$_state_source_prev" ] && [ "$_state_source_prev" != "$_state_source_now" ]; then
+            echo "Build state was produced at $(printf '%.12s' "$_state_source_prev"); resuming it."
+            echo "Choose restart (not resume) to rebuild from scratch."
+        fi
+    fi
+
+    printf '%s\n' "$_state_source_now" > "$_state_source_marker" 2>/dev/null || true
+    return 0
+}
+
 _buildtoolchain() {
     _ensure_archive_dirs
     _start_stage_preflight_log 1 || {
@@ -2941,24 +3001,29 @@ _buildtoolchain() {
         return 1
     fi
 
-    # Optional persistent Stage-1 toolchain (resume support).
-    #
-    # $TOOLS lives inside $LFS and both are under /tmp, so any restart - a
-    # container rebuild, a reboot, a lost session - discards every package that
-    # already built.  When BFS_TOOLS_CACHE names a directory on persistent
-    # storage, the toolchain is bind-mounted from there so the "$TOOLS/<pkg>"
-    # markers and the installed files survive, and the next run resumes at the
-    # package that failed instead of rebuilding gcc from scratch.
-    local _cache_keep=0 _cache_sig=""
+    # Optional persistent build state (resume support).
+    local _cache_keep=0 _cache_sig="" _stage1_cache_dir="" _stage1_manifest=""
 
-    if [ -n "${BFS_TOOLS_CACHE:-}" ]; then
-        if ! sudo /usr/bin/mkdir -p "$BFS_TOOLS_CACHE" 2>>"$STAGE_PREFLIGHT_LOG" ||
-            ! sudo /usr/bin/chown "$(id -u):$(id -g)" "$BFS_TOOLS_CACHE" 2>>"$STAGE_PREFLIGHT_LOG"; then
-            _stage_preflight_note "ERROR: Could not prepare the Stage-1 toolchain cache: $BFS_TOOLS_CACHE"
+    if ! _attach_rootfs_cache; then
+        return 1
+    fi
+
+    if [ -n "${BFS_ROOTFS_CACHE:-}" ]; then
+        _stage1_cache_dir="$BFS_ROOTFS_CACHE"
+    elif [ -n "${BFS_TOOLS_CACHE:-}" ]; then
+        _stage1_cache_dir="$BFS_TOOLS_CACHE"
+    fi
+
+    if [ -n "$_stage1_cache_dir" ]; then
+        _stage1_manifest="$_stage1_cache_dir/.bfs-stage1-manifest"
+
+        if ! sudo /usr/bin/mkdir -p "$_stage1_cache_dir" 2>>"$STAGE_PREFLIGHT_LOG" ||
+            ! sudo /usr/bin/chown "$(id -u):$(id -g)" "$_stage1_cache_dir" 2>>"$STAGE_PREFLIGHT_LOG"; then
+            _stage_preflight_note "ERROR: Could not prepare the Stage-1 build-state cache: $_stage1_cache_dir"
             return 1
         fi
 
-        # A cache is only reusable for the exact package set that produced it,
+        # The cache is only reusable for the exact package set that produced it,
         # so a version bump anywhere in the toolchain list invalidates it.
         _cache_sig="$(
             for _cache_pkg in $toolchainpkg; do
@@ -2967,17 +3032,24 @@ _buildtoolchain() {
             done
         )"
 
-        if [ -f "$BFS_TOOLS_CACHE/.bfs-stage1-manifest" ] &&
-            [ "$(cat "$BFS_TOOLS_CACHE/.bfs-stage1-manifest")" = "$_cache_sig" ]; then
+        if [ -f "$_stage1_manifest" ] &&
+            [ "$(cat "$_stage1_manifest")" = "$_cache_sig" ]; then
             _cache_keep=1
         fi
     fi
 
     if [ "$_cache_keep" = 1 ]; then
-        echo "Resuming Stage 1: keeping the cached toolchain and build state."
+        echo "Resuming: keeping the cached build state in $_stage1_cache_dir"
     elif ! _clean_start; then
         _stage_preflight_note "ERROR: Stage-1 clean-start preparation failed."
         return 1
+    fi
+
+    if [ -n "$_stage1_manifest" ]; then
+        printf '%s\n' "$_cache_sig" > "$_stage1_manifest" || {
+            _stage_preflight_note "ERROR: Could not record the build-state manifest: $_stage1_manifest"
+            return 1
+        }
     fi
 
     # Full-bootstrap clean-start can remove a previously populated /tmp/lfs-tools
@@ -3362,6 +3434,8 @@ _finalize_account_database() {
 }
 
 _verifybase() {
+    _attach_rootfs_cache || return 1
+
     local marker="$LFS/.bfs-verified"
     local failed=0
 
@@ -3559,6 +3633,8 @@ EOF
 }
 
 _compressrootfs() {
+    _attach_rootfs_cache || return 1
+
     local rootfs_archive
     local owner_uid=""
     local owner_gid=""
@@ -3689,6 +3765,8 @@ _compressrootfs() {
 }
 
 _buildbase() {
+    _attach_rootfs_cache || return 1
+
     if [ "$(id -u)" != 0 ]; then
         echo "ERROR: Stages 2 and 3 must be run as root." >&2
         return 1
@@ -4296,6 +4374,25 @@ unmount() {
 
 export LFS=/tmp/lfs-rootfs
 export TOOLS=/tmp/lfs-tools
+
+# Persistent build state (resume support).
+#
+# $LFS and $TOOLS live under /tmp, so a reboot, a container restart or a lost
+# session used to discard the toolchain, the base rootfs and every stage
+# marker, forcing a rebuild from the first package.  When BFS_STATE_DIR points
+# at persistent storage the rootfs - which contains $TOOLS - is bind-mounted
+# from there.  Stage 1 then resumes at the package that failed, Stage 2 keeps
+# its installed packages, and a completed stage stays completed.
+BFS_STATE_DIR="${BFS_STATE_DIR:-}"
+BFS_ROOTFS_CACHE="${BFS_ROOTFS_CACHE:-${BFS_STATE_DIR:+$BFS_STATE_DIR/rootfs}}"
+# A persistent rootfs already carries $TOOLS, so a separate toolchain cache is
+# only used when the rootfs itself is not cached.
+if [ -n "$BFS_ROOTFS_CACHE" ]; then
+    BFS_TOOLS_CACHE=""
+else
+    BFS_TOOLS_CACHE="${BFS_TOOLS_CACHE:-}"
+fi
+export BFS_STATE_DIR BFS_ROOTFS_CACHE BFS_TOOLS_CACHE
 
 export PATH=$TOOLS/bin:$PATH
 
