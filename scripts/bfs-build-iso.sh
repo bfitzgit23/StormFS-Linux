@@ -15,9 +15,11 @@ WORK_DIR="${BFS_ISO_WORK_DIR:-/var/tmp/bfsos-iso-${USER:-builder}}"
 OUTPUT_DIR="${BFS_ISO_OUTPUT_DIR:-$HOME/BFSOS-ISO}"
 BASE_CACHE_DIR="${BFS_ISO_BASE_CACHE_DIR:-${XDG_CACHE_HOME:-$HOME/.cache}/bfsos/iso}"
 VERSION="$(tr -d '[:space:]' < "$PROJECT_DIR/VERSION" 2>/dev/null || printf '0.9.0')"
+BASE_DIR_URL="${BFS_ISO_BASE_DIR_URL:-https://downloads.sourceforge.net/project/bfsos/BFSOS/base/latest}"
+BASE_INDEX_URL="${BFS_ISO_BASE_INDEX_URL:-https://sourceforge.net/projects/bfsos/files/BFSOS/base/latest/}"
 BASE_FILENAME="${BFS_ISO_BASE_FILENAME:-BFSOS-base-${VERSION}-${ARCH}.tar.zst}"
-BASE_URL="${BFS_ISO_BASE_URL:-https://downloads.sourceforge.net/project/bfsos/BFSOS/base/latest/${BASE_FILENAME}}"
-BASE_SHA256_URL="${BFS_ISO_BASE_SHA256_URL:-https://downloads.sourceforge.net/project/bfsos/BFSOS/base/latest/${BASE_FILENAME}.sha256}"
+BASE_URL="${BFS_ISO_BASE_URL:-${BASE_DIR_URL}/${BASE_FILENAME}}"
+BASE_SHA256_URL="${BFS_ISO_BASE_SHA256_URL:-${BASE_DIR_URL}/${BASE_FILENAME}.sha256}"
 BASE_MODE="${BFS_ISO_BASE_MODE:-auto}"
 REFRESH_BASE="${BFS_ISO_REFRESH_BASE:-no}"
 LOCAL_BASE_PATH="${BFS_ISO_LOCAL_BASE:-}"
@@ -120,53 +122,159 @@ verify_sha256_file() {
     [ "${actual,,}" = "${expected,,}" ]
 }
 
-fetch_sourceforge_base() {
-    local -n result_ref="$1"
-    local archive="$BASE_CACHE_DIR/$BASE_FILENAME"
+base_url_for() {
+    local name="$1"
+    if [ -n "${BFS_ISO_BASE_URL:-}" ] && [ "$name" = "${BASE_URL##*/}" ]; then
+        printf '%s\n' "$BASE_URL"
+    else
+        printf '%s/%s\n' "$BASE_DIR_URL" "$name"
+    fi
+}
+
+base_sha256_url_for() {
+    local name="$1"
+    if [ -n "${BFS_ISO_BASE_SHA256_URL:-}" ] && [ "$name" = "${BASE_URL##*/}" ]; then
+        printf '%s\n' "$BASE_SHA256_URL"
+    else
+        printf '%s/%s.sha256\n' "$BASE_DIR_URL" "$name"
+    fi
+}
+
+select_base_filename() {
+    local name="$1"
+    BASE_FILENAME="$name"
+    if [ -z "${BFS_ISO_BASE_URL:-}" ]; then
+        BASE_URL="$(base_url_for "$name")"
+    fi
+    if [ -z "${BFS_ISO_BASE_SHA256_URL:-}" ]; then
+        BASE_SHA256_URL="$(base_sha256_url_for "$name")"
+    fi
+}
+
+# The release-named base (BFSOS-base-<VERSION>-<ARCH>) goes stale as soon as the
+# ports tree moves past this checkout's VERSION, and a base published before a
+# package-manager change cannot be upgraded into the current tree at all: a
+# pre-scratchpkg base ships pkgmk and has no /usr/bin/pkgbuild to run the ISO
+# package build with. Ask SourceForge which bases are actually published and
+# take the newest, instead of assuming this tree's VERSION is still current.
+published_base_names() {
+    local listing=""
+    listing="$(wget -q -O - --timeout=30 --tries=2 "$BASE_INDEX_URL" 2>/dev/null)" || return 1
+    [ -n "$listing" ] || return 1
+    grep -oE "BFSOS-base-[0-9][A-Za-z0-9._-]*-${ARCH}\.tar\.zst" <<<"$listing" |
+        sort -u | sort -rV
+}
+
+# 0 = verified archive in the cache, 1 = transfer/setup problem, 2 = checksum
+# matched but the content is not a usable BFSOS base. The distinction matters:
+# an older base cannot repair a content mismatch, so it is not worth another
+# gigabyte of download.
+fetch_base_archive() {
+    local name="$1"
+    local archive="$BASE_CACHE_DIR/$name"
     local sumfile="$archive.sha256"
     local tmp_sum="$sumfile.tmp" tmp_archive="$archive.tmp"
-    result_ref=""
-    BASE_SOURCE="sourceforge:$BASE_URL"
-    mkdir -p "$BASE_CACHE_DIR"
+    local url="" sha_url=""
 
-    log "Checking SourceForge for current BFSOS base: $BASE_URL"
+    url="$(base_url_for "$name")"
+    sha_url="$(base_sha256_url_for "$name")"
     rm -f "$tmp_sum" "$tmp_archive"
-    if ! wget --max-redirect=20 -O "$tmp_sum" "$BASE_SHA256_URL" >&2; then
+
+    if ! wget --max-redirect=20 -O "$tmp_sum" "$sha_url" >&2; then
+        rm -f "$tmp_sum"
         if validate_base_archive "$archive" && verify_sha256_file "$archive" "$sumfile"; then
             log "SourceForge checksum check unavailable; reusing verified cached base: $archive"
-            result_ref="$archive"
             return 0
         fi
-        die "Could not download SourceForge base checksum and no verified cached base is available"
+        log "Could not download the SourceForge checksum for $name" >&2
+        return 1
     fi
-    grep -Eq '^[[:space:]]*[0-9A-Fa-f]{64}([[:space:]]|$)' "$tmp_sum" || \
-        die "SourceForge checksum download did not contain a SHA256 digest"
+    if ! grep -Eq '^[[:space:]]*[0-9A-Fa-f]{64}([[:space:]]|$)' "$tmp_sum"; then
+        log "SourceForge checksum download for $name did not contain a SHA256 digest" >&2
+        rm -f "$tmp_sum"
+        return 1
+    fi
 
     if [ "$REFRESH_BASE" != yes ] && verify_sha256_file "$archive" "$tmp_sum" && validate_base_archive "$archive"; then
         mv -f "$tmp_sum" "$sumfile"
         log "Cached SourceForge base is current and verified: $archive"
-        result_ref="$archive"
         return 0
     fi
 
-    log "Downloading current BFSOS base archive from SourceForge"
+    log "Downloading $name from SourceForge"
     log "Progress from wget follows; this can take a while on slower mirrors."
-    if ! wget --show-progress --max-redirect=20 -O "$tmp_archive" "$BASE_URL" >&2; then
+    if ! wget --show-progress --max-redirect=20 -O "$tmp_archive" "$url" >&2; then
         rm -f "$tmp_archive" "$tmp_sum"
-        die "Failed to download BFSOS base archive from SourceForge"
+        log "Failed to download $name from SourceForge" >&2
+        return 1
     fi
-    verify_sha256_file "$tmp_archive" "$tmp_sum" || {
+    if ! verify_sha256_file "$tmp_archive" "$tmp_sum"; then
         rm -f "$tmp_archive" "$tmp_sum"
-        die "SourceForge BFSOS base SHA256 verification failed"
-    }
-    validate_base_archive "$tmp_archive" || {
+        log "SourceForge BFSOS base SHA256 verification failed for $name" >&2
+        return 1
+    fi
+    if ! validate_base_archive "$tmp_archive"; then
         log "Downloaded file size: $(du -h "$tmp_archive" 2>/dev/null | awk '{print $1}')"
-        log "Archive path retained for diagnosis: $tmp_archive"
-        die "Downloaded SourceForge file passed transfer but failed BFSOS base-content validation"
-    }
+        log "Archive path retained for diagnosis: $tmp_archive" >&2
+        log "$name passed transfer and checksum but is not a usable BFSOS base" >&2
+        rm -f "$tmp_sum"
+        return 2
+    fi
     mv -f "$tmp_archive" "$archive"
     mv -f "$tmp_sum" "$sumfile"
-    result_ref="$archive"
+    return 0
+}
+
+fetch_sourceforge_base() {
+    local -n result_ref="$1"
+    local -a candidates=()
+    local name="" pinned="" status=0
+
+    result_ref=""
+    mkdir -p "$BASE_CACHE_DIR"
+
+    # An explicit filename or URL pins exactly one base and disables discovery.
+    if [ -n "${BFS_ISO_BASE_URL:-}" ]; then
+        pinned="${BFS_ISO_BASE_URL##*/}"
+    elif [ -n "${BFS_ISO_BASE_FILENAME:-}" ]; then
+        pinned="$BFS_ISO_BASE_FILENAME"
+    fi
+
+    if [ -n "$pinned" ]; then
+        candidates=("$pinned")
+        log "Using pinned SourceForge base: $(base_url_for "$pinned")"
+    else
+        log "Resolving published BFSOS bases from: $BASE_INDEX_URL"
+        mapfile -t candidates < <(published_base_names || true)
+        if ((${#candidates[@]})); then
+            log "Newest published BFSOS base: ${candidates[0]}"
+        else
+            candidates=("BFSOS-base-${VERSION}-${ARCH}.tar.zst")
+            log "Could not read the published base list; falling back to ${candidates[0]}"
+        fi
+    fi
+
+    for name in "${candidates[@]}"; do
+        status=0
+        fetch_base_archive "$name" || status=$?
+        case "$status" in
+            0)
+                select_base_filename "$name"
+                BASE_SOURCE="sourceforge:$(base_url_for "$name")"
+                result_ref="$BASE_CACHE_DIR/$name"
+                log "Verified SourceForge base selected: $name"
+                return 0
+                ;;
+            2)
+                die "Published BFSOS base '$name' failed content validation; an older base cannot satisfy the current ports tree. Pin a known-good archive with BFS_ISO_BASE_FILENAME, BFS_ISO_BASE_URL, or --local-base."
+                ;;
+            *)
+                log "Skipping unusable SourceForge base: $name" >&2
+                ;;
+        esac
+    done
+
+    die "Could not download a verified BFSOS base archive from SourceForge"
 }
 
 prepare_build_project() {
