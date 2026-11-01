@@ -2104,6 +2104,10 @@ _cleanup_on_exit() {
         umountfs 2>/dev/null || true
     fi
 
+    if declare -F _rootfs_cache_archive_save >/dev/null 2>&1; then
+        _rootfs_cache_archive_save 2>/dev/null || true
+    fi
+
     rm -f "$PID_FILE"
 
     if [ -n "$DIALOGRC_FILE" ]; then
@@ -2436,6 +2440,14 @@ _clean_start() {
             return 1
         fi
     }
+
+    if [ -n "${BFS_ROOTFS_CACHE_ARCHIVE:-}" ]; then
+        # A clean start discards cached state by definition, so drop the
+        # checkpoint along with the extracted tree.
+        echo "Discarding the cached build-state checkpoint:"
+        echo "  $BFS_ROOTFS_CACHE_ARCHIVE"
+        /usr/bin/rm -f "$BFS_ROOTFS_CACHE_ARCHIVE"
+    fi
 
     if _clean_start_cache_attached; then
         # Unmounting and deleting $LFS here would detach the bind-mounted cache
@@ -2979,6 +2991,78 @@ _spkg_bootstrap_build() {
 #
 # Stages 2-5 re-execute this script through sudo, so each stage attaches the
 # cache itself instead of relying on the parent process.
+# True when DIR can hold the BFS build tree.
+#
+# The tree needs case-sensitive names: the kernel UAPI headers ship both
+# xt_mark.h and xt_MARK.h, so a case-insensitive filesystem merges them and the
+# header install stops with "cp: cannot create regular file ...: File exists".
+# The tree also needs working symlinks, because $TOOLS is one.
+_bfs_cache_supports_posix_tree() {
+    local dir="$1" probe count ok=1
+
+    probe="$(/usr/bin/mktemp -d "$dir/.bfs-fs-probe.XXXXXX" 2>/dev/null)" || return 1
+
+    : > "$probe/case" 2>/dev/null && : > "$probe/CASE" 2>/dev/null || ok=0
+    count="$(/usr/bin/find "$probe" -mindepth 1 -maxdepth 1 2>/dev/null | /usr/bin/wc -l)"
+    [ "${count:-0}" -eq 2 ] || ok=0
+
+    /usr/bin/ln -s case "$probe/link" 2>/dev/null || ok=0
+    [ -L "$probe/link" ] || ok=0
+
+    /usr/bin/rm -rf "$probe"
+    [ "$ok" = 1 ]
+}
+
+# Save the build tree as a compressed checkpoint.
+#
+# Only used when the cache directory cannot hold the tree directly, for example
+# a Windows host bind mount.
+_rootfs_cache_archive_save() {
+    [ -n "${BFS_ROOTFS_CACHE_ARCHIVE:-}" ] || return 0
+    [ "${_bfs_cache_archive_saved:-0}" = 1 ] && return 0
+    _bfs_cache_archive_saved=1
+
+    [ -d "$LFS" ] || return 0
+    if [ -z "$(/usr/bin/find "$LFS" -mindepth 1 -maxdepth 1 -print -quit 2>/dev/null)" ]; then
+        return 0
+    fi
+
+    local tmp="$BFS_ROOTFS_CACHE_ARCHIVE.tmp.$$"
+
+    /usr/bin/rm -f "$tmp"
+    echo "Saving the build-state checkpoint:"
+    echo "  $BFS_ROOTFS_CACHE_ARCHIVE"
+
+    if ! /usr/bin/nice -n 19 /bin/tar -C "$LFS" -I 'zstd -T0 -3' -cpf "$tmp" . 2>/dev/null; then
+        /usr/bin/rm -f "$tmp"
+        echo "WARNING: Could not save the build-state checkpoint; cached state is unchanged." >&2
+        return 0
+    fi
+
+    if ! /usr/bin/mv -f "$tmp" "$BFS_ROOTFS_CACHE_ARCHIVE"; then
+        /usr/bin/rm -f "$tmp"
+        echo "WARNING: Could not replace the build-state checkpoint." >&2
+        return 0
+    fi
+
+    echo "Build-state checkpoint saved."
+}
+
+_rootfs_cache_archive_restore() {
+    [ -f "$BFS_ROOTFS_CACHE_ARCHIVE" ] || return 0
+
+    echo "Restoring the cached build state from:"
+    echo "  $BFS_ROOTFS_CACHE_ARCHIVE"
+
+    if ! /usr/bin/nice -n 19 /bin/tar -C "$LFS" -I 'zstd -d -T0' -xpf "$BFS_ROOTFS_CACHE_ARCHIVE"; then
+        echo "WARNING: Cached build state is unreadable; starting from a clean tree." >&2
+        /usr/bin/find "$LFS" -mindepth 1 -maxdepth 1 -exec /usr/bin/rm -rf -- {} + 2>/dev/null || true
+        /usr/bin/rm -f "$BFS_ROOTFS_CACHE_ARCHIVE"
+        return 0
+    fi
+    return 0
+}
+
 _attach_rootfs_cache() {
     [ -n "${BFS_ROOTFS_CACHE:-}" ] || return 0
 
@@ -2993,7 +3077,23 @@ _attach_rootfs_cache() {
         return 1
     fi
 
-    if ! /usr/bin/mountpoint -q "$LFS" 2>/dev/null; then
+    if ! _bfs_cache_supports_posix_tree "$BFS_ROOTFS_CACHE"; then
+        # The cache directory exists but cannot represent the build tree:
+        # case-insensitive names, missing symlinks, or both.  Keep the tree in
+        # the container-local rootfs and checkpoint it here instead.
+        BFS_ROOTFS_CACHE_ARCHIVE="$BFS_ROOTFS_CACHE/rootfs.tar.zst"
+        export BFS_ROOTFS_CACHE_ARCHIVE
+
+        echo "Build-state cache cannot hold the BFS tree directly:"
+        echo "  $BFS_ROOTFS_CACHE"
+        echo "Using a compressed checkpoint instead:"
+        echo "  $BFS_ROOTFS_CACHE_ARCHIVE"
+
+        if ! _rootfs_cache_archive_restore; then
+            echo "ERROR: Could not restore the cached build state." >&2
+            return 1
+        fi
+    elif ! /usr/bin/mountpoint -q "$LFS" 2>/dev/null; then
         if ! sudo /usr/bin/mount --bind "$BFS_ROOTFS_CACHE" "$LFS"; then
             echo "ERROR: Could not bind-mount the build-state cache at $LFS" >&2
             return 1
@@ -3036,7 +3136,11 @@ _buildtoolchain() {
         return 1
     fi
 
-    if [ -n "${BFS_ROOTFS_CACHE:-}" ]; then
+    if [ -n "${BFS_ROOTFS_CACHE_ARCHIVE:-}" ]; then
+        # The checkpoint carries the Stage-1 manifest with it, so read the
+        # manifest from the restored tree rather than from the cache directory.
+        _stage1_cache_dir="$LFS"
+    elif [ -n "${BFS_ROOTFS_CACHE:-}" ]; then
         _stage1_cache_dir="$BFS_ROOTFS_CACHE"
     elif [ -n "${BFS_TOOLS_CACHE:-}" ]; then
         _stage1_cache_dir="$BFS_TOOLS_CACHE"
