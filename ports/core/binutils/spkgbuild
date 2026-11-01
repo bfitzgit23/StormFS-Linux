@@ -48,20 +48,60 @@ bootstrap_build() {
 		mkdir -p $TOOLS/lib32
 		make install
 	elif [ "$tcpkg" = binutils-pass2 ]; then
+		# This builds for the temporary toolchain's target, not for the build
+		# host.  At this point $LFS_TGT-gcc links every program against the
+		# temporary glibc under $TOOLS, so a probe binary carries an
+		# interpreter under $TOOLS and autoconf cannot execute it from the
+		# build host: configure aborts with "cannot run C compiled programs.
+		# If you meant to cross compile, use `--host'."  Declaring the real
+		# build/host pair is what turns those probes into compile-only checks.
 		CC=$LFS_TGT-gcc \
 		AR=$LFS_TGT-ar \
 		RANLIB=$LFS_TGT-ranlib \
 		../configure \
+			--build="$(../config.guess)" \
+			--host="$LFS_TGT" \
 			--prefix=$TOOLS \
 			--enable-shared \
 			--disable-nls \
 			--disable-werror \
 			--enable-64-bit-bfd \
 			--enable-new-dtags \
-    			--enable-default-hash-style=gnu \
+			--enable-default-hash-style=gnu \
 			--with-lib-path=$TOOLS/lib \
 			--enable-gprofng=no \
 			--with-sysroot
+
+		if [ ! -f Makefile ]; then
+			echo "ERROR: binutils-pass2 configure did not produce a Makefile." >&2
+
+			if [ -f config.log ]; then
+				echo "== configure failure (config.log tail) ==" >&2
+				tail -n 40 config.log >&2
+			fi
+
+			# Report what the temporary compiler actually produces: a probe
+			# binary whose dynamic loader cannot be resolved is the usual
+			# cause, and this says which of the two it is.
+			printf 'int main(void) { return 0; }\n' > /tmp/bfs-cc-probe.c
+
+			if $LFS_TGT-gcc /tmp/bfs-cc-probe.c -o /tmp/bfs-cc-probe 2>/tmp/bfs-cc-probe.log; then
+				echo "== temporary-compiler probe ==" >&2
+				readelf -l /tmp/bfs-cc-probe 2>/dev/null |
+					sed -n 's@.*interpreter: \(.*\)@interpreter: \1@p' >&2
+				if /tmp/bfs-cc-probe; then
+					echo "probe: the compiled program runs; the dynamic loader is fine." >&2
+				else
+					echo "probe: the compiled program does not run (exit $?)." >&2
+				fi
+			else
+				echo "== temporary-compiler probe failed to compile ==" >&2
+				tail -n 20 /tmp/bfs-cc-probe.log >&2
+			fi
+
+			return 1
+		fi
+
 		make CFLAGS="-O2 -DPATH_MAX=4096" || make -j1
 		make install
 		make -C ld clean

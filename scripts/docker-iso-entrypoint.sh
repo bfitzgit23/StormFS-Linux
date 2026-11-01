@@ -9,6 +9,13 @@ set -Eeuo pipefail
 
 BUILD_PROJECT_DIR="${BUILD_PROJECT_DIR:-/build/StormFS-Linux}"
 
+# Stage 1 keeps its completed packages in this cache.  $HOME/.cache/bfsos is the
+# only build directory the documented run command mounts, so a stopped or
+# crashed container resumes at the package that failed instead of rebuilding
+# the whole temporary toolchain.  The cache is validated against the current
+# package versions, so a version bump still forces a clean rebuild.
+export BFS_TOOLS_CACHE="${BFS_TOOLS_CACHE:-/home/builder/.cache/bfsos/bootstrap/tools}"
+
 log() { printf '[BFSOS ISO container] %s\n' "$*"; }
 
 if [ "$(id -u)" -eq 0 ]; then

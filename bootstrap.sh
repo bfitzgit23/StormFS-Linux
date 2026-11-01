@@ -2941,7 +2941,41 @@ _buildtoolchain() {
         return 1
     fi
 
-    if ! _clean_start; then
+    # Optional persistent Stage-1 toolchain (resume support).
+    #
+    # $TOOLS lives inside $LFS and both are under /tmp, so any restart - a
+    # container rebuild, a reboot, a lost session - discards every package that
+    # already built.  When BFS_TOOLS_CACHE names a directory on persistent
+    # storage, the toolchain is bind-mounted from there so the "$TOOLS/<pkg>"
+    # markers and the installed files survive, and the next run resumes at the
+    # package that failed instead of rebuilding gcc from scratch.
+    local _cache_keep=0 _cache_sig=""
+
+    if [ -n "${BFS_TOOLS_CACHE:-}" ]; then
+        if ! sudo /usr/bin/mkdir -p "$BFS_TOOLS_CACHE" 2>>"$STAGE_PREFLIGHT_LOG" ||
+            ! sudo /usr/bin/chown "$(id -u):$(id -g)" "$BFS_TOOLS_CACHE" 2>>"$STAGE_PREFLIGHT_LOG"; then
+            _stage_preflight_note "ERROR: Could not prepare the Stage-1 toolchain cache: $BFS_TOOLS_CACHE"
+            return 1
+        fi
+
+        # A cache is only reusable for the exact package set that produced it,
+        # so a version bump anywhere in the toolchain list invalidates it.
+        _cache_sig="$(
+            for _cache_pkg in $toolchainpkg; do
+                printf '%s %s\n' "$_cache_pkg" \
+                    "$(sed -n 's/^version=//p' "$(_find_port_dir "$_cache_pkg")/spkgbuild" 2>/dev/null | head -n1)"
+            done
+        )"
+
+        if [ -f "$BFS_TOOLS_CACHE/.bfs-stage1-manifest" ] &&
+            [ "$(cat "$BFS_TOOLS_CACHE/.bfs-stage1-manifest")" = "$_cache_sig" ]; then
+            _cache_keep=1
+        fi
+    fi
+
+    if [ "$_cache_keep" = 1 ]; then
+        echo "Resuming Stage 1: keeping the cached toolchain and build state."
+    elif ! _clean_start; then
         _stage_preflight_note "ERROR: Stage-1 clean-start preparation failed."
         return 1
     fi
@@ -2991,6 +3025,38 @@ _buildtoolchain() {
                 _stage_preflight_note "ERROR: Could not remove stale toolchain path: $TOOLS"
                 return 1
             fi
+        fi
+    fi
+
+    # Attach the persistent toolchain before the layout below is created, so
+    # the directory tree and every package install land in the cache.
+    if [ -n "${BFS_TOOLS_CACHE:-}" ]; then
+        if ! /usr/bin/mkdir -p "${LFS}${TOOLS}" 2>>"$STAGE_PREFLIGHT_LOG"; then
+            _stage_preflight_note "ERROR: Could not create the Stage-1 toolchain mount point: ${LFS}${TOOLS}"
+            return 1
+        fi
+
+        if ! /usr/bin/mountpoint -q "${LFS}${TOOLS}" 2>/dev/null; then
+            if ! sudo /usr/bin/mount --bind "$BFS_TOOLS_CACHE" "${LFS}${TOOLS}" 2>>"$STAGE_PREFLIGHT_LOG"; then
+                _stage_preflight_note "ERROR: Could not bind-mount the Stage-1 toolchain cache: $BFS_TOOLS_CACHE"
+                return 1
+            fi
+        fi
+
+        if [ "$_cache_keep" = 1 ]; then
+            echo "Stage 1 resume: $(/usr/bin/find "$BFS_TOOLS_CACHE" -maxdepth 1 -type f ! -name '.bfs-stage1-manifest' 2>/dev/null | /usr/bin/wc -l) completed package(s) reused from:"
+            echo "  $BFS_TOOLS_CACHE"
+        else
+            sudo /usr/bin/find "$BFS_TOOLS_CACHE" -mindepth 1 -maxdepth 1 \
+                -exec /usr/bin/rm -rf -- {} + 2>>"$STAGE_PREFLIGHT_LOG" || {
+                _stage_preflight_note "ERROR: Could not clear the stale Stage-1 toolchain cache: $BFS_TOOLS_CACHE"
+                return 1
+            }
+            printf '%s\n' "$_cache_sig" > "$BFS_TOOLS_CACHE/.bfs-stage1-manifest" || {
+                _stage_preflight_note "ERROR: Could not record the Stage-1 cache manifest: $BFS_TOOLS_CACHE"
+                return 1
+            }
+            echo "Stage 1: starting a fresh cached toolchain in $BFS_TOOLS_CACHE"
         fi
     fi
 
@@ -3125,6 +3191,12 @@ EOF
         if [ "$status" -ne 0 ]; then
             rm -rf /tmp/lfs-pkg
             cd "$SCRIPT_DIR"
+            if [ -n "${BFS_TOOLS_CACHE:-}" ]; then
+                echo
+                echo "Stage 1 stopped at $i. Completed packages are cached in:"
+                echo "  $BFS_TOOLS_CACHE"
+                echo "Fix the failure and re-run: the build resumes at $i and rebuilds nothing."
+            fi
             unset tcpkg
             return "$status"
         fi
