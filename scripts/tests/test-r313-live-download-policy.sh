@@ -9,7 +9,9 @@ fail() { printf 'r313 live/download policy: FAIL: %s\n' "$*" >&2; exit 1; }
 
 grep -Fq 'downloads.sourceforge.net/project/bfsos/BFSOS/base/latest' "$iso" || fail 'ISO SourceForge base/latest endpoint missing'
 grep -Fq 'downloads.sourceforge.net/project/bfsos/BFSOS/base/latest' "$installer" || fail 'installer SourceForge base/latest endpoint missing'
-grep -Fq 'fetch_sourceforge_base base_archive' "$iso" || fail 'ISO fetch result handoff missing'
+grep -Fq 'fetch_base_or_rebuild base_archive' "$iso" || fail 'ISO fetch result handoff missing'
+grep -Fq 'local -n archive_ref="$1"' "$iso" || fail 'ISO fetched-base handoff missing'
+grep -Fq 'run_full_bootstrap rebuild' "$iso" || fail 'ISO self-built base fallback missing'
 grep -Fq 'local -n result_ref="$1"' "$iso" || fail 'ISO named-result handoff missing'
 grep -Fq 'BASE_ARCHIVE_RESULT="$archive"' "$installer" || fail 'installer verified archive handoff missing'
 grep -Fq 'Base archive handoff failed' "$installer" || fail 'installer handoff guard missing'

@@ -24,6 +24,7 @@ BASE_MODE="${BFS_ISO_BASE_MODE:-auto}"
 REFRESH_BASE="${BFS_ISO_REFRESH_BASE:-no}"
 LOCAL_BASE_PATH="${BFS_ISO_LOCAL_BASE:-}"
 BASE_SOURCE="unknown"
+BASE_MANAGER_FOUND=""
 GIT_URL="${BFS_ISO_GIT_URL:-https://github.com/bmadonnaster/BFSOS.git}"
 GIT_REF="${BFS_ISO_GIT_REF:-main}"
 GIT_COMMIT="unknown"
@@ -201,6 +202,22 @@ fetch_base_archive() {
         return 0
     fi
 
+    # A previous run may have left a completed download behind for diagnosis.
+    # If it still matches the published checksum its content is already known,
+    # so judging it costs nothing instead of another gigabyte.
+    if [ "$REFRESH_BASE" != yes ] && [ -s "$tmp_archive" ] && \
+       verify_sha256_file "$tmp_archive" "$tmp_sum"; then
+        if validate_base_archive "$tmp_archive"; then
+            mv -f "$tmp_archive" "$archive"
+            mv -f "$tmp_sum" "$sumfile"
+            log "Promoted retained verified download: $archive"
+            return 0
+        fi
+        log "Retained download for $name matches the published checksum and is still not a usable base" >&2
+        rm -f "$tmp_archive" "$tmp_sum"
+        return 2
+    fi
+
     log "Downloading $name from SourceForge"
     log "Progress from wget follows; this can take a while on slower mirrors."
     if ! wget --show-progress --max-redirect=20 -O "$tmp_archive" "$url" >&2; then
@@ -228,10 +245,21 @@ fetch_base_archive() {
 fetch_sourceforge_base() {
     local -n result_ref="$1"
     local -a candidates=()
-    local name="" pinned="" status=0
+    local name="" pinned="" status=0 content_mismatch=no
 
     result_ref=""
     mkdir -p "$BASE_CACHE_DIR"
+
+    # A published base that already failed content validation fails again byte
+    # for byte, and proving that costs a gigabyte of download plus a full
+    # archive decompression.  Remember the rejection so repeat runs go straight
+    # to building a base from this tree; --refresh-base clears it.
+    if [ "$REFRESH_BASE" != yes ] && [ -s "$BASE_CACHE_DIR/.published-base-rejected.reason" ] &&
+       [ -z "${BFS_ISO_BASE_URL:-}" ] && [ -z "${BFS_ISO_BASE_FILENAME:-}" ]; then
+        log "Skipping SourceForge discovery: $(cat "$BASE_CACHE_DIR/.published-base-rejected.reason") was already rejected as non-scratchpkg" >&2
+        log "Pass --refresh-base (or BFS_ISO_REFRESH_BASE=yes) to retry the download anyway." >&2
+        return 3
+    fi
 
     # An explicit filename or URL pins exactly one base and disables discovery.
     if [ -n "${BFS_ISO_BASE_URL:-}" ]; then
@@ -262,11 +290,26 @@ fetch_sourceforge_base() {
                 select_base_filename "$name"
                 BASE_SOURCE="sourceforge:$(base_url_for "$name")"
                 result_ref="$BASE_CACHE_DIR/$name"
+                rm -f "$BASE_CACHE_DIR/.published-base-rejected.reason"
                 log "Verified SourceForge base selected: $name"
                 return 0
                 ;;
             2)
-                die "Published BFSOS base '$name' failed content validation; an older base cannot satisfy the current ports tree. Pin a known-good archive with BFS_ISO_BASE_FILENAME, BFS_ISO_BASE_URL, or --local-base."
+                # Every base published so far predates the scratchpkg
+                # migration, so a content mismatch is the expected outcome
+                # rather than an exceptional one: no older archive can repair
+                # it, and the caller builds a base from this tree instead.  An
+                # explicit pin is a deliberate choice, so that still fails.
+                if [ -n "$pinned" ]; then
+                    die "Pinned BFSOS base '$name' failed content validation: it is not a scratchpkg base. Pin a base built from this tree with BFS_ISO_BASE_FILENAME, BFS_ISO_BASE_URL, or --local-base."
+                fi
+                content_mismatch=yes
+                printf '%s (%s)\n' "$name" "$BASE_MANAGER_FOUND" \
+                    > "$BASE_CACHE_DIR/.published-base-rejected.reason"
+                log "Published base '$name' carries $BASE_MANAGER_FOUND, not scratchpkg; a base built from this tree is needed" >&2
+                # Candidates are newest-first, so every remaining base is older
+                # and can only fail the same way after another gigabyte each.
+                break
                 ;;
             *)
                 log "Skipping unusable SourceForge base: $name" >&2
@@ -274,7 +317,34 @@ fetch_sourceforge_base() {
         esac
     done
 
+    if [ "$content_mismatch" = yes ]; then
+        return 3
+    fi
     die "Could not download a verified BFSOS base archive from SourceForge"
+}
+
+# A published base cannot serve this tree now that the ports are
+# scratchpkg-based.  Downloading is still tried first, so a future published
+# scratchpkg base is used as-is; when none qualify, the base is built from this
+# checkout with the repository's own stage 1 -> 5 bootstrap.
+fetch_base_or_rebuild() {
+    local -n archive_ref="$1"
+    local rc=0
+
+    fetch_sourceforge_base archive_ref || rc=$?
+    case "$rc" in
+        0) return 0 ;;
+        3)
+            log "No published SourceForge base is scratchpkg-capable; building a base from this tree (bootstrap stages 1 -> 5)" >&2
+            log "This compiles a complete system and takes hours; it is the supported way to obtain a scratchpkg base." >&2
+            run_full_bootstrap rebuild
+            archive_ref="$(latest_usable_base_archive 2>/dev/null || true)"
+            validate_base_archive "$archive_ref" ||
+                die "Bootstrapped base archive is missing or invalid: ${archive_ref:-<none>}"
+            BASE_SOURCE="local-rebuilt:$archive_ref"
+            ;;
+        *) die "Could not download a verified BFSOS base archive from SourceForge" ;;
+    esac
 }
 
 prepare_build_project() {
@@ -413,6 +483,20 @@ latest_base_archive() {
     project_base_candidates | head -n1 | cut -d' ' -f2-
 }
 
+# Report the package manager a rejected base actually carries.  This turns an
+# opaque "missing ./usr/bin/pkgbuild" into the reason: the archive is a
+# pkgmk/prt-get base from before the scratchpkg migration.
+describe_base_package_manager() {
+    local listing="$1"
+    if grep -Eqx '\.?/?usr/bin/pkgbuild' <<<"$listing"; then
+        printf '%s' "scratchpkg"
+    elif grep -Eqx '\.?/?usr/bin/pkgmk' <<<"$listing"; then
+        printf '%s' "a pkgmk/prt-get base from before the scratchpkg migration"
+    else
+        printf '%s' "no package manager"
+    fi
+}
+
 archive_list() {
     local archive="$1"
     case "$archive" in
@@ -446,7 +530,8 @@ validate_base_archive() {
         alternate="${required#./}"
         if ! grep -Fxq -- "$required" <<<"$listing" && \
            ! grep -Fxq -- "$alternate" <<<"$listing"; then
-            log "Base archive validation failed: missing $required in $archive" >&2
+            BASE_MANAGER_FOUND="$(describe_base_package_manager "$listing")"
+            log "Base archive validation failed: missing $required in $archive (found: $BASE_MANAGER_FOUND)" >&2
             return 1
         fi
     done
@@ -640,28 +725,30 @@ build_iso_package_set() {
     rm -rf "$root/usr/ports"
     mkdir -p "$root/usr/ports"
     cp -a "$BUILD_PROJECT_DIR/ports/." "$root/usr/ports/"
-    grep -Fqx 'prtdir /usr/ports/iso' "$root/etc/scratch.conf" || echo 'prtdir /usr/ports/iso' >> "$root/etc/scratch.conf"
+    # The release tree is installed as-is: scratchpkg reads /usr/ports through
+    # its own configuration, so there is no CRUX prtdir file to maintain here.
     cp -a /etc/resolv.conf "$root/etc/resolv.conf" 2>/dev/null || true
 
     mount_chroot_fs "$root"
     trap 'umount_chroot_fs "$root"' RETURN
 
-    log "Refreshing ports metadata in isolated root"
-    chroot "$root" /usr/bin/env -i \
-        HOME=/root TERM="${TERM:-linux}" PATH=/usr/bin:/usr/sbin:/bin:/sbin \
-        /bin/bash -lc "ports -u" ||
-        die "Failed to refresh ports in ISO root"
+    # No ports refresh: the release tree was copied in above and scratchpkg
+    # reads the installed spkgbuilds directly.  The former CRUX `ports -u`
+    # synchronisation tool is not part of a scratchpkg root.
+    [ -f "$root/usr/ports/core/scratchpkg/spkgbuild" ] ||
+        die "ISO root is missing the installed ports tree"
+    log "Installed release ports tree verified in isolated root"
 
-    log "Updating pkgutils before system upgrade"
+    log "Updating scratchpkg before system upgrade"
     chroot "$root" /usr/bin/env -i \
         HOME=/root TERM="${TERM:-linux}" PATH=/usr/bin:/usr/sbin:/bin:/sbin \
-        /bin/bash -lc "scratch sysup -y pkgutils" ||
-        die "Failed to update pkgutils in ISO root"
+        /bin/bash -lc "scratch sysup -y scratchpkg" ||
+        die "Failed to update scratchpkg in ISO root"
 
     chroot "$root" /usr/bin/env -i \
         HOME=/root TERM="${TERM:-linux}" PATH=/usr/bin:/usr/sbin:/bin:/sbin \
-        /bin/bash -lc 'grep -Fq "# BFSOS: command-line options override spkgbuild/pkgbuild.conf." /usr/bin/pkgbuild' ||
-        die "Updated pkgutils does not contain CLI precedence fix"
+        /bin/bash -lc 'for tool in pkgbuild pkgadd scratch; do [ -x "/usr/bin/$tool" ] || { echo "missing /usr/bin/$tool" >&2; exit 1; }; done; [ -r /etc/scratchpkg.conf ]' ||
+        die "Updated scratchpkg does not provide pkgbuild/pkgadd/scratch with /etc/scratchpkg.conf"
 
     log "Running full system upgrade in isolated root"
     chroot "$root" /usr/bin/env -i \
@@ -1270,7 +1357,7 @@ main() {
             BASE_SOURCE="local-explicit:$base_archive"
             ;;
         sourceforge)
-            fetch_sourceforge_base base_archive
+            fetch_base_or_rebuild base_archive
             ;;
         auto|local)
             base_archive="$(latest_usable_base_archive 2>/dev/null || true)"
@@ -1290,7 +1377,7 @@ main() {
                         BASE_SOURCE="local-rebuilt:$base_archive"
                         ;;
                     sourceforge)
-                        fetch_sourceforge_base base_archive
+                        fetch_base_or_rebuild base_archive
                         ;;
                     cancel) log "ISO build cancelled"; exit 0 ;;
                     *) die "Internal error: unknown base action '$base_action'" ;;
