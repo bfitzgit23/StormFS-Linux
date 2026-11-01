@@ -2899,7 +2899,7 @@ _spkg_bootstrap_build() {
     local port_dir="$1"
     local conf=/tmp/bootstrap.conf
     local workdir=/tmp/lfs-work
-    local srcdir="$workdir/\${port_dir##*/}/src"
+    local srcdir="$workdir/${port_dir##*/}/src"
 
     (
         cd "$port_dir" || return 1
