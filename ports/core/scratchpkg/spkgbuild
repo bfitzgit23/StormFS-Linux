@@ -23,6 +23,24 @@ build() {
 	# scratch, portsync, pkgbase, pkgrebuild, revdep and the configs.
 	DESTDIR="$PKG" ./INSTALL.sh || return 1
 
+	# spkgbuild recipes use bash arrays while pkgbuild ships a /bin/sh shebang.
+	# Re-exec under bash so they parse on a dash system; /bin/sh stays the
+	# shebang because it is the only interpreter guaranteed this early.
+	if ! grep -q 'BFS_PKGBUILD_BASH' "$PKG/usr/bin/pkgbuild"; then
+		cat > "$WORK_DIR/bfs-pkgbuild-reexec" <<'BFS_PKGBUILD_REEXEC'
+# StormFS: spkgbuild recipes use bash constructs; re-exec under bash when available.
+if [ -z "${BFS_PKGBUILD_BASH:-}" ] && [ -z "${BASH:-}" ]; then
+    for _bfs_bash in bash /bin/bash /usr/bin/bash /tools/bin/bash; do
+        if command -v "$_bfs_bash" >/dev/null 2>&1; then
+            BFS_PKGBUILD_BASH=1 exec "$_bfs_bash" "$0" "$@"
+        fi
+    done
+fi
+BFS_PKGBUILD_REEXEC
+		sed -i "1r $WORK_DIR/bfs-pkgbuild-reexec" "$PKG/usr/bin/pkgbuild"
+		rm -f "$WORK_DIR/bfs-pkgbuild-reexec"
+	fi
+
 	# The package database must exist before the first pkgadd run.
 	install -d -m 0755 "$PKG/var/lib/scratchpkg/db" || return 1
 

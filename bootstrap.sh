@@ -2219,6 +2219,30 @@ _ensure_fetch_mirror_shim() {
     : >"$BFS_PREFETCH_HEALTH_FILE" 2>/dev/null || true
 }
 
+# spkgbuild recipes use bash arrays while pkgbuild ships a /bin/sh shebang,
+# so a dash host aborts every such recipe with a syntax error. Insert a
+# re-exec under bash, keeping /bin/sh as the shebang because it is the only
+# interpreter guaranteed to exist at the very start of Stage 2.
+_add_pkgbuild_bash_reexec() {
+    local script="$1" tmp
+
+    grep -q 'BFS_PKGBUILD_BASH' "$script" 2>/dev/null && return 0
+
+    tmp="$(mktemp)"
+    cat >"$tmp" <<'BFS_PKGBUILD_REEXEC'
+# StormFS: spkgbuild recipes use bash constructs; re-exec under bash when available.
+if [ -z "${BFS_PKGBUILD_BASH:-}" ] && [ -z "${BASH:-}" ]; then
+    for _bfs_bash in bash /bin/bash /usr/bin/bash /tools/bin/bash; do
+        if command -v "$_bfs_bash" >/dev/null 2>&1; then
+            BFS_PKGBUILD_BASH=1 exec "$_bfs_bash" "$0" "$@"
+        fi
+    done
+fi
+BFS_PKGBUILD_REEXEC
+    sed -i "1r $tmp" "$script"
+    rm -f "$tmp"
+}
+
 _prefetch_bootstrap_sources() {
     local spkg_conf="$1"
     shift
@@ -3042,6 +3066,9 @@ EOF
             # time Stage 1 imports a source.  Normalise the installed copy
             # rather than the checked-out tree.
             sed -i 's/\r$//' "$TOOLS/bin/$_spkg_tool"
+            if [ "$_spkg_tool" = pkgbuild ]; then
+                _add_pkgbuild_bash_reexec "$TOOLS/bin/$_spkg_tool" || return 1
+            fi
         fi
     done
     if [ ! -x "$TOOLS/bin/spkgin" ]; then
