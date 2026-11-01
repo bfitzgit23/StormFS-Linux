@@ -102,10 +102,43 @@ bootstrap_build() {
 			return 1
 		fi
 
-		make CFLAGS="-O2 -DPATH_MAX=4096" || make -j1
-		make install
-		make -C ld clean
-		make -C ld LIB_PATH=/usr/lib:/lib:/usr/lib32
-		cp -v ld/ld-new $TOOLS/bin
+		# GCC prefers the target-layout tooldir copy of the assembler over
+		# PATH.  A failed earlier run can leave a target-linked binary there
+		# which cannot execute on the build host: every compile then reports
+		# "cannot execute .../as: posix_spawn: No such file or directory".
+		# Restore the pass-1 host copy while it is still usable.
+		tc_as="$TOOLS/$LFS_TGT/bin/as"
+		tc_as_host="$TOOLS/bin/$LFS_TGT-as"
+
+		if [ -e "$tc_as" ] && ! "$tc_as" --version >/dev/null 2>&1; then
+			if "$tc_as_host" --version >/dev/null 2>&1; then
+				echo "binutils-pass2: repairing unusable $tc_as from $tc_as_host" >&2
+				cp -f "$tc_as_host" "$tc_as" || return 1
+			else
+				echo "ERROR: the temporary assembler cannot run: $tc_as" >&2
+				readelf -l "$tc_as" 2>/dev/null |
+					sed -n 's@.*interpreter: \(.*\)@  interpreter: @p' >&2
+				return 1
+			fi
+		fi
+
+		# A failed compile must never reach make install: installing the
+		# partial tree puts a target-linked assembler in $TOOLS/bin and in the
+		# target-layout tooldir, so every following compile fails with an exec
+		# error instead of the real build error.
+		if ! make CFLAGS="-O2 -DPATH_MAX=4096"; then
+			echo "binutils-pass2: parallel build failed; retrying with -j1" >&2
+
+			if ! make -j1 CFLAGS="-O2 -DPATH_MAX=4096"; then
+				echo "ERROR: binutils-pass2 failed to compile; nothing was installed." >&2
+				echo "       The first error is above this line in the package log." >&2
+				return 1
+			fi
+		fi
+
+		make install || return 1
+		make -C ld clean || return 1
+		make -C ld LIB_PATH=/usr/lib:/lib:/usr/lib32 || return 1
+		cp -v ld/ld-new $TOOLS/bin || return 1
 	fi
 }
