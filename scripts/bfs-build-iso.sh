@@ -649,6 +649,13 @@ choose_bootstrap_recovery_action() {
 run_full_bootstrap() {
     local requested_mode="${1:-auto}" recovery_action bootstrap_mode=full
 
+    # Keep the bootstrap state across runs so a failure resumes instead of
+    # rebuilding the toolchain and the base system from the first package.
+    # This has to be set before the recovery decision below, because that
+    # decision asks whether a cached, resumable build state exists.
+    BFS_STATE_DIR="${BFS_STATE_DIR:-${XDG_CACHE_HOME:-$HOME/.cache}/bfsos/bootstrap}"
+    export BFS_STATE_DIR
+
     if [ "$requested_mode" = rebuild ]; then
         recovery_action=restart
         log "Rebuild selected: ignoring all existing base archives and cached base images"
@@ -672,11 +679,6 @@ run_full_bootstrap() {
 
     # The bootstrap uses terminal/session handling internally. When launched
     # directly from the ISO builder, allocate a pseudo-terminal when possible.
-    # Keep the bootstrap state across runs so a failure resumes instead of
-    # rebuilding the toolchain and the base system from the first package.
-    BFS_STATE_DIR="${BFS_STATE_DIR:-${XDG_CACHE_HOME:-$HOME/.cache}/bfsos/bootstrap}"
-    export BFS_STATE_DIR
-
     if command -v script >/dev/null 2>&1; then
         (
             cd "$PROJECT_DIR"
