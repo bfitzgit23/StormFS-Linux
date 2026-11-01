@@ -1,0 +1,27 @@
+# Keep the build context small; the ISO builder fetches its own tree from Git
+# and its base archive from SourceForge, so nothing here is needed in the image
+# except VERSION, ports/, files/, iso-builder/ and scripts/.
+.git
+.gitmodules
+.github
+.freebuff
+__pycache__
+**/__pycache__
+*.pyc
+*.zip
+*.tar
+*.tar.xz
+*.tar.zst
+*.tar.gz
+*.iso
+*.sha256
+*.sha256.bin
+*.img
+*.qcow2
+archives
+archive
+out
+BFSOS-ISO
+.regen-scratch
+scripts/*.before-*
+docs
