@@ -103,29 +103,40 @@ bootstrap_build() {
 		fi
 
 		# GCC prefers the target-layout tooldir copy of the assembler over
-		# PATH.  A failed earlier run can leave a target-linked binary there
-		# which cannot execute on the build host: every compile then reports
+		# PATH.  binutils' own install refreshes that entry from the program it
+		# just installed, so once a pass has owned the entry it can be left
+		# missing, dangling or target-linked; every compile then reports
 		# "cannot execute .../as: posix_spawn: No such file or directory".
-		# Restore the pass-1 host copy while it is still usable.
-		tc_as="$TOOLS/$LFS_TGT/bin/as"
-		tc_as_host="$TOOLS/bin/$LFS_TGT-as"
+		# `test -e` follows symlinks, so a dangling entry reads as absent:
+		# remove the entry before restoring the pass-1 host copy.
+		_bfs_ensure_tc_as() {
+			local tc_as="$TOOLS/$LFS_TGT/bin/as"
+			local tc_as_host="$TOOLS/bin/$LFS_TGT-as"
 
-		if [ -e "$tc_as" ] && ! "$tc_as" --version >/dev/null 2>&1; then
-			if "$tc_as_host" --version >/dev/null 2>&1; then
-				echo "binutils-pass2: repairing unusable $tc_as from $tc_as_host" >&2
-				cp -f "$tc_as_host" "$tc_as" || return 1
-			else
-				echo "ERROR: the temporary assembler cannot run: $tc_as" >&2
-				readelf -l "$tc_as" 2>/dev/null |
-					sed -n 's@.*interpreter: \(.*\)@  interpreter: @p' >&2
+			if "$tc_as" --version >/dev/null 2>&1; then
+				return 0
+			fi
+
+			if ! "$tc_as_host" --version >/dev/null 2>&1; then
+				echo "ERROR: no usable assembler for the temporary toolchain." >&2
+				echo "  unusable: $tc_as" >&2
+				echo "  unusable: $tc_as_host" >&2
+				ls -l "$tc_as" "$tc_as_host" >&2 2>/dev/null || true
 				return 1
 			fi
-		fi
+
+			echo "binutils-pass2: restoring $tc_as from $tc_as_host" >&2
+			rm -f "$tc_as" || return 1
+			cp -f "$tc_as_host" "$tc_as" || return 1
+			chmod 0755 "$tc_as" || return 1
+		}
 
 		# A failed compile must never reach make install: installing the
 		# partial tree puts a target-linked assembler in $TOOLS/bin and in the
 		# target-layout tooldir, so every following compile fails with an exec
 		# error instead of the real build error.
+		_bfs_ensure_tc_as || return 1
+
 		if ! make CFLAGS="-O2 -DPATH_MAX=4096"; then
 			echo "binutils-pass2: parallel build failed; retrying with -j1" >&2
 
@@ -137,6 +148,10 @@ bootstrap_build() {
 		fi
 
 		make install || return 1
+
+		# make install rewrites the tooldir assembler entry; the ld relink
+		# below compiles again and must not inherit a broken one.
+		_bfs_ensure_tc_as || return 1
 		make -C ld clean || return 1
 		make -C ld LIB_PATH=/usr/lib:/lib:/usr/lib32 || return 1
 		cp -v ld/ld-new $TOOLS/bin || return 1
