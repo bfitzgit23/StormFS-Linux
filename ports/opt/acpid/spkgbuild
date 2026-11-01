@@ -1,0 +1,16 @@
+# description	: ACPI event daemon
+# homepage	: https://sourceforge.net/projects/acpid2/
+# maintainer	: BFSOS maintainers
+
+name=acpid
+version=2.0.34
+release=1
+source="https://downloads.sourceforge.net/acpid2/$name-$version.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+    ./configure --prefix=/usr --sbindir=/usr/sbin --sysconfdir=/etc || return 1
+    make -j"${JOBS:-1}" || return 1
+    make DESTDIR="$PKG" install || return 1
+    install -d -m 0755 "$PKG/etc/acpi/events"
+}

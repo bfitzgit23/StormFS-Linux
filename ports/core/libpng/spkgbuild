@@ -1,0 +1,25 @@
+# description	: libpng package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=libpng
+version=1.6.58
+release=3
+source="https://downloads.sourceforge.net/$name/$name-$version.tar.xz libpng-1.6.58-apng.patch.gz"
+
+build() {
+	cd "$name-$version" || return 1
+
+	# Apply patch sources; pkgbuild does this automatically.
+	for _bfs_patch in "$SRC"/*.patch "$SRC"/*.diff; do
+		[ -f "$_bfs_patch" ] || continue
+		patch -t "${patch_opt:--p1}" -i "$_bfs_patch" || return 1
+	done
+
+    ./configure \
+        --prefix=/usr \
+        --disable-static || return 1
+
+    make || return 1
+
+    make DESTDIR="$PKG" install || return 1
+}

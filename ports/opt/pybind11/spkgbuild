@@ -1,0 +1,17 @@
+# description	: Seamless operability between C++11 and Python
+# homepage	: https://github.com/pybind/pybind11
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=pybind11
+version=3.1.0
+release=1
+build_opt="-DCMAKE_INSTALL_PREFIX=/usr
+           -DCMAKE_BUILD_TYPE=Release
+           -DPYBIND11_TEST=OFF"
+source="https://github.com/pybind/pybind11/archive/refs/tags/v$version.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

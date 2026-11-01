@@ -22,7 +22,7 @@ cd "$SCRIPT_DIR"
 PID_FILE="$SCRIPT_DIR/.bootstrap.pid"
 
 # Synchronize the host/live-environment clock before any bootstrap archive or
-# package timestamps are created. Prefer chrony (Gentoo LiveGUI), then systemd
+# package timestamps are created. Prefer chrony (Gentoo LiveGUI), then the host service manager
 # time synchronization, followed by ntpd/ntpdate. A failed sync is a warning,
 # not a fatal error, so offline bootstrap work remains possible.
 sync_system_clock() {
@@ -57,13 +57,13 @@ sync_system_clock() {
 
     if [ "$synced" != yes ] &&
        command -v timedatectl >/dev/null 2>&1 &&
-       [ -d /run/systemd/system ]; then
+       [ -d /run/openrc ]; then
         if "${root_cmd[@]}" timedatectl set-ntp true >/dev/null 2>&1; then
             i=0
             while [ "$i" -lt 15 ]; do
                 if [ "$(timedatectl show -p NTPSynchronized --value 2>/dev/null || true)" = yes ]; then
                     synced=yes
-                    printf 'System clock synchronized with systemd time synchronization.\n'
+                    printf 'System clock synchronized by the host time service.\n'
                     break
                 fi
                 sleep 1
@@ -123,8 +123,8 @@ _resolve_ccache_size() {
     # BFSOS default policy:
     #   VM -> 20G
     #   bare metal -> physical RAM rounded down to GiB
-    if command -v systemd-detect-virt >/dev/null 2>&1 &&
-       systemd-detect-virt --quiet 2>/dev/null; then
+    if true &&
+       grep -qaE 'hypervisor|kvm|vmware' /proc/cpuinfo 2>/dev/null; then
         printf '%s\n' "20G"
         return 0
     fi
@@ -157,8 +157,8 @@ _prepare_target_ccache() {
 max_size = $resolved_size
 EOF_CCACHE
 
-    # Once the dedicated pkgmk account exists, keep the cache owned by it.
-    if chroot "$LFS" /usr/bin/getent passwd pkgmk >/dev/null 2>&1; then
+    # Once the package-build account exists, keep the cache owned by it.
+    if chroot "$LFS" /usr/bin/getent passwd pkgbuild >/dev/null 2>&1; then
         chown -R 82:82 "$LFS/var/cache/ccache" 2>/dev/null || true
         chmod 0775 "$LFS/var/cache/ccache" 2>/dev/null || true
     fi
@@ -180,7 +180,7 @@ _apply_build_settings() {
 
     # Do NOT prepend /usr/lib/ccache here.  bootstrap.sh initially runs in a
     # foreign live environment, and Stage 1 must never pick up host ccache
-    # wrappers.  Stage 2/3 enable BFSOS ccache from pkgmk.conf only after the
+    # wrappers.  Stage 2/3 enable BFSOS ccache from scratchpkg.conf only after the
     # target's own /usr/bin/ccache and /usr/lib/ccache wrappers exist.
 }
 
@@ -1315,7 +1315,7 @@ _cleanup_completed_bootstrap_state() {
     esac
 
     for target in "$LFS/dev/pts" "$LFS/dev" "$LFS/run" "$LFS/proc" "$LFS/sys" \
-                  "$LFS/$pkgmkwork" "$LFS/$pkgmkpkg" "$LFS/$pkgmksrc"; do
+                  "$LFS/$spkgwork" "$LFS/$spkgpkg" "$LFS/$spkgsrc"; do
         while mountpoint -q "$target" 2>/dev/null; do
             sudo umount "$target" 2>/dev/null || sudo umount -l "$target" || return 1
         done
@@ -2019,7 +2019,7 @@ case "${1:-}" in
 esac
 
 # Run every bootstrap stage in its own process group. This makes Ctrl+C and
-# the stop command terminate pkgmk, make, gcc, tar, and other descendants too.
+# the stop command terminate pkgbuild, make, gcc, tar, and other descendants too.
 CURRENT_PGID="$(ps -o pgid= -p "$$" | tr -d '[:space:]')"
 
 if [ "$$" != "$CURRENT_PGID" ]; then
@@ -2119,7 +2119,7 @@ _find_port_dir() {
             -maxdepth 2 \
             -type d \
             -name "$normalized" \
-            -exec test -f '{}/Pkgfile' ';' \
+            -exec test -f '{}/spkgbuild' ';' \
             -print 2>/dev/null |
         sort
     )
@@ -2151,27 +2151,19 @@ _validate_package_ports() {
 }
 
 _prefetch_bootstrap_sources() {
-    local pkgmk_conf="$1"
+    local spkg_conf="$1"
     shift
     local package="" normalized="" port_dir="" attempt=0 status=0
     local -A seen_ports=()
-    local bootstrap_pkgmk="$TOOLS/bin/pkgmk"
+    local pkgbuild_cmd="$TOOLS/bin/pkgbuild"
 
-    # Source prefetch must use the temporary-toolchain pkgmk explicitly.
-    # bfs-prefetch-curl is curl-compatible, so pkgmk must retain curl's
-    # normal -o <source>.partial download destination.
-    if [ ! -x "$bootstrap_pkgmk" ]; then
-        echo "ERROR: bootstrap pkgmk is missing: $bootstrap_pkgmk" >&2
+    if [ ! -x "$pkgbuild_cmd" ]; then
+        echo "ERROR: pkgbuild is missing from the temporary toolchain: $pkgbuild_cmd" >&2
         return 1
     fi
 
-    sed -i         's/case ${PKGMK_DOWNLOAD_PROG} in/case ${PKGMK_DOWNLOAD_PROG##*\/} in/'         "$bootstrap_pkgmk"
-
-    sed -i         's/^[[:space:]]*curl)/        curl|bfs-prefetch-curl)/'         "$bootstrap_pkgmk"
-
-    if ! grep -Fq 'case ${PKGMK_DOWNLOAD_PROG##*/} in' "$bootstrap_pkgmk" ||
-       ! grep -Eq '^[[:space:]]*curl\|bfs-prefetch-curl\)' "$bootstrap_pkgmk"; then
-        echo "ERROR: bootstrap pkgmk does not support bfs-prefetch-curl safely." >&2
+    if [ ! -x "$pkgbuild_cmd" ]; then
+        echo "ERROR: pkgbuild is missing from the temporary toolchain: $pkgbuild_cmd" >&2
         return 1
     fi
 
@@ -2182,11 +2174,11 @@ _prefetch_bootstrap_sources() {
 
     rm -f "/tmp/bfsos-prefetch-unhealthy-origins.$$" 2>/dev/null || true
 
-    # pkgmk requires every configured output directory to exist even when it is
+    # pkgbuild requires every configured output directory to exist even when it is
     # being used only for source downloads (-do).  Create the temporary package
     # directory once for the entire prefetch pass instead of per package.
     if ! mkdir -p /tmp/lfs-pkg; then
-        echo "ERROR: Could not create temporary pkgmk package directory: /tmp/lfs-pkg" >&2
+        echo "ERROR: Could not create temporary pkgbuild package directory: /tmp/lfs-pkg" >&2
         return 1
     fi
 
@@ -2209,7 +2201,7 @@ _prefetch_bootstrap_sources() {
             printf '  %-28s (attempt %d/3) ' "$normalized" "$attempt"
             if (
                 cd "$port_dir"
-                "$bootstrap_pkgmk" -do -cf "$pkgmk_conf"
+                "$pkgbuild_cmd" -o --config="$spkg_conf"
             ); then
                 printf 'OK\n'
                 status=0
@@ -2505,18 +2497,18 @@ _restore_toolchain() {
 
     if [ ! -x "$TOOLS/bin/gcc" ] ||
         [ ! -x "$TOOLS/bin/ld" ] ||
-        [ ! -x "$TOOLS/bin/pkgmk" ]
+        [ ! -x "$TOOLS/bin/pkgbuild" ]
     then
         echo "ERROR: Restored toolchain failed verification." >&2
         echo >&2
         echo "Expected executable files:" >&2
         echo "  $TOOLS/bin/gcc" >&2
         echo "  $TOOLS/bin/ld" >&2
-        echo "  $TOOLS/bin/pkgmk" >&2
+        echo "  $TOOLS/bin/pkgbuild" >&2
         echo >&2
         echo "Available compiler/linker entries:" >&2
         /usr/bin/find "$TOOLS/bin" -maxdepth 1 \
-            \( -name '*gcc*' -o -name 'cc' -o -name 'ld*' -o -name 'pkgmk' \) \
+            \( -name '*gcc*' -o -name 'cc' -o -name 'ld*' -o -name 'pkgbuild' \) \
             -printf '  %f -> %l\n' 2>/dev/null | /usr/bin/sort >&2 || true
         exit 1
     fi
@@ -2527,8 +2519,8 @@ _restore_toolchain() {
     echo
 
     if [ -x "$LFS/usr/bin/bash" ] &&
-        [ -x "$LFS/usr/bin/pkgmk" ] &&
-        [ -f "$LFS/var/lib/pkg/db" ]
+        [ -x "$LFS/usr/bin/pkgbuild" ] &&
+        [ -f "$LFS/var/lib/scratchpkg/db" ]
     then
         echo "Existing base rootfs was preserved."
         echo "Continue with:"
@@ -2620,7 +2612,7 @@ _restore_rootfs() {
 
     if [ ! -x "$LFS/usr/bin/bash" ] ||
         [ ! -x "$LFS/usr/bin/gcc" ] ||
-        [ ! -f "$LFS/var/lib/pkg/db" ]
+        [ ! -f "$LFS/var/lib/scratchpkg/db" ]
     then
         echo "ERROR: Restored base rootfs failed basic verification." >&2
         exit 1
@@ -2802,6 +2794,45 @@ EOF_CPP
     return 1
 }
 
+# Build one Stage-1 toolchain port through its bootstrap_build() hook.
+#
+# scratchpkg's pkgbuild installs into /, which is wrong for the temporary
+# toolchain, so sources are fetched and unpacked with pkgbuild (-o, -x) and the
+# recipe's bootstrap_build() is then run with $TOOLS as the install prefix.
+_spkg_bootstrap_build() {
+    local port_dir="$1"
+    local conf=/tmp/bootstrap.conf
+    local workdir=/tmp/lfs-work
+    local srcdir="$workdir/\${port_dir##*/}/src"
+
+    (
+        cd "$port_dir" || return 1
+
+        pkgbuild -o --config="$conf" || return 1
+        pkgbuild -x --config="$conf" || return 1
+
+        # shellcheck disable=SC1091
+        . ./spkgbuild || return 1
+
+        SRC="$srcdir"
+        PKG="$TOOLS"
+        export SRC PKG TOOLS
+
+        cd "$srcdir" || return 1
+        if [ -d "$srcdir/$name-$version" ]; then
+            cd "$srcdir/$name-$version" || return 1
+        fi
+
+        if command -v bootstrap_build >/dev/null 2>&1; then
+            bootstrap_build
+        else
+            # shellcheck disable=SC1091
+            . "$SCRIPT_DIR/ports/core/bfs-spkgbuild-macros/helper.sh"
+            bfs_autobuild
+        fi
+    )
+}
+
 _buildtoolchain() {
     _ensure_archive_dirs
     _start_stage_preflight_log 1 || {
@@ -2898,140 +2929,42 @@ _buildtoolchain() {
     echo "  $TOOLS -> ${LFS}${TOOLS}"
 
     cat > /tmp/bootstrap.conf <<EOF
-# Do not override LC_ALL here.
-# The temporary pkgmk dynamically selects C.UTF-8/C.utf8 when available
-# so libarchive can extract UTF-8 source pathnames, falling back to C
-# only when the host has no UTF-8 C locale.
+# scratchpkg configuration for Stage 1 (temporary toolchain).
+#
+# Keep the Stage-1 source cache in the same package-namespaced layout the
+# installed configuration uses, so archives are reused by Stages 2 and 3.
+SOURCE_DIR="$sourcedir"
+PACKAGE_DIR=/tmp/lfs-pkg
+WORK_DIR=/tmp/lfs-work
+CBUILD_DIR=/tmp/lfs-cbuild
+
+export CFLAGS="-O2 -pipe"
+export CXXFLAGS="\$CFLAGS"
 export MAKEFLAGS=-j$(nproc)
 
-# Stage 1 temporary toolchain is deliberately uncached.  Never inherit a
-# live-host /usr/lib/ccache wrapper path into the bootstrap compiler chain.
+# Stage 1 is deliberately uncached: never inherit the build host's ccache.
 export BFS_CCACHE=no
 
-# Keep the Stage-1 source cache in the same package-namespaced layout used
-# by the installed BFSOS pkgmk configuration.  Later bootstrap stages bind
-# this same root at /var/cache/pkg/sources, so unchanged archives are reused
-# instead of being downloaded again merely because the cache layout changed.
-PKGMK_SOURCE_ROOT="$sourcedir"
-PKGMK_SOURCE_DIR="\$PKGMK_SOURCE_ROOT/\$name"
-mkdir -p "\$PKGMK_SOURCE_DIR" || exit 1
-PKGMK_PACKAGE_DIR=/tmp/lfs-pkg
-
-# Match the installed BFSOS source-fallback policy during Stage-1 prefetch.
-PKGMK_SOURCE_MIRRORS=()
-PKGMK_SOURCE_FLAT_FALLBACKS=(
-    "https://mirror.math.princeton.edu/pub/redcorelinux/amd64/distfiles"
-)
-PKGMK_SOURCE_FALLBACKS=(
-    "https://xorg.freedesktop.org/releases/|https://www.x.org/archive/"
-    "https://www.x.org/releases/|https://www.x.org/archive/"
-    "https://ftp.gnu.org/gnu/|https://ftpmirror.gnu.org/"
-    "ftp://ftp.gnu.org/gnu/|https://ftpmirror.gnu.org/"
-    "https://download.savannah.gnu.org/releases/|https://mirror.fi.ossplanet.net/nongnu/"
-    "https://debian.netcologne.de/savannah/|https://mirror.fi.ossplanet.net/nongnu/"
-    "https://cdn.kernel.org/pub/|https://mirrors.edge.kernel.org/pub/"
-    "https://www.kernel.org/pub/|https://mirrors.edge.kernel.org/pub/"
-)
-# The prefetch download wrapper maintains a per-run transport-health cache.
-# Prefixes are derived from the authoritative mapping above rather than from a
-# second mirror table. A transport/stall failure on a primary prefix is paid
-# once per prefetch run; later matching sources fail fast into pkgmk's normal
-# configured fallback chain. HTTP errors such as 404 do not poison the prefix.
-BFS_PREFETCH_HEALTH_FILE="/tmp/bfsos-prefetch-unhealthy-origins.$$"
-BFS_PREFETCH_SOURCE_PREFIXES="\$(printf '%s\n' "\${PKGMK_SOURCE_FALLBACKS[@]}" | sed 's/|.*//' | sed '/^$/d')"
-export BFS_PREFETCH_HEALTH_FILE BFS_PREFETCH_SOURCE_PREFIXES
-PKGMK_DOWNLOAD_PROG="$SCRIPT_DIR/files/bfs-prefetch-curl"
-
-# pkgmk only enables curl-style DOWNLOAD_OPTS when the downloader is named
-# "curl".  Our wrapper is curl-compatible, so teach the pkgmk used during
-# bootstrap prefetch to recognize it before sources are downloaded.
-if [ -n "$(PATH=$TOOLS/bin command -v pkgmk 2>/dev/null)" ]; then
-    sed -i         's/case ${PKGMK_DOWNLOAD_PROG} in/case ${PKGMK_DOWNLOAD_PROG##*\/} in/'         "$TOOLS/bin/pkgmk"
-    sed -i         's/^[[:space:]]*curl)/        curl|bfs-prefetch-curl)/'         "$TOOLS/bin/pkgmk"
-fi
-
-# Prefetch should fail over quickly.  Do not spend curl-level retries on the
-# same upstream URL before pkgmk gets a chance to try BFSOS mirrors.  The
-# outer prefetch loop retries the complete original+fallback chain up to 3x.
-PKGMK_CURL_OPTS="--fail --location --continue-at - --connect-timeout 8 --speed-limit 1024 --speed-time 15 --retry 0"
-
-. $PWD/files/pkgmk.bootstrap
+mkdir -p "\$SOURCE_DIR" "\$PACKAGE_DIR" "\$WORK_DIR" "\$CBUILD_DIR" || exit 1
 EOF
 
-    # Existing /tmp/lfs-tools may contain a pristine CRUX pkgmk from an earlier
-    # interrupted bootstrap.  Rebuild it if BFSOS fallback support is missing.
-    if [ ! "$(PATH=$TOOLS/bin command -v pkgmk)" ] || \
-       ! grep -q 'try_source_fallbacks()' "$TOOLS/bin/pkgmk" 2>/dev/null; then
-        # The first pkgutils build happens before pkgmk exists, so seed its
-        # source into the same package namespace normal pkgmk will use later.
-        mkdir -p "$sourcedir/pkgutils" || return 1
-        if [ ! -f "$sourcedir/pkgutils/pkgutils-5.40.12.tar.xz" ]; then
-            curl --fail --location --retry 3 \
-                -o "$sourcedir/pkgutils/pkgutils-5.40.12.tar.xz" \
-                https://crux.nu/files/pkgutils-5.40.12.tar.xz || return 1
+    # The temporary toolchain carries scratchpkg's pkgbuild so Stage 1 can
+    # fetch sources and so the toolchain remains self-hosting.  Recipes supply
+    # their own bootstrap_build() hook for the Stage-1 cross build.
+    for _spkg_tool in pkgbuild pkgadd pkgdel scratch; do
+        if [ ! -x "$TOOLS/bin/$_spkg_tool" ]; then
+            if [ ! -f "$SCRIPT_DIR/scratchpkg/$_spkg_tool" ]; then
+                echo "ERROR: scratchpkg sources are missing: $SCRIPT_DIR/scratchpkg" >&2
+                echo "       run: git submodule update --init scratchpkg" >&2
+                return 1
+            fi
+            install -m 0755 "$SCRIPT_DIR/scratchpkg/$_spkg_tool" "$TOOLS/bin/$_spkg_tool" || return 1
         fi
-
-        rm -rf /tmp/pkgutils-5.40.12
-        tar -xf "$sourcedir/pkgutils/pkgutils-5.40.12.tar.xz" -C /tmp || return 1
-
-        # The initial pkgutils bootstrap bypasses ports/core/pkgutils/Pkgfile,
-        # so explicitly apply BFSOS source-fallback support before installing
-        # the temporary pkgmk used by prefetch.
-        if [ ! -r "$SCRIPT_DIR/ports/core/pkgutils/pkgutils_source-fallbacks.patch" ]; then
-            echo "ERROR: Missing BFSOS pkgmk source-fallback patch:" >&2
-            echo "  $SCRIPT_DIR/ports/core/pkgutils/pkgutils_source-fallbacks.patch" >&2
-            return 1
-        fi
-        if ! grep -q 'try_source_fallbacks()' /tmp/pkgutils-5.40.12/pkgmk.in; then
-            patch -d /tmp/pkgutils-5.40.12 -p1 \
-                < "$SCRIPT_DIR/ports/core/pkgutils/pkgutils_source-fallbacks.patch" || return 1
-        fi
-
-        # The initial pkgutils bootstrap bypasses ports/core/pkgutils/Pkgfile.
-        # Prefer a UTF-8 C locale when the live host provides one (GCC 16.2
-        # contains UTF-8 pathnames), but fall back to plain C when it does not.
-        sed -i '/^export LC_ALL=C\.UTF-8$/c\
-_bfs_utf8_locale=""\
-_bfs_locale_cmd=""\
-_bfs_pkgmk_path="$(readlink -f "$0" 2>/dev/null || printf "%s" "$0")"\
-case "$_bfs_pkgmk_path" in\
-    */tmp/lfs-tools/*) [ -x /tmp/lfs-tools/bin/locale ] && _bfs_locale_cmd=/tmp/lfs-tools/bin/locale ;;\
-    *) [ -x /usr/bin/locale ] && _bfs_locale_cmd=/usr/bin/locale ;;\
-esac\
-[ -n "$_bfs_locale_cmd" ] || [ ! -x /usr/bin/locale ] || _bfs_locale_cmd=/usr/bin/locale\
-[ -n "$_bfs_locale_cmd" ] || _bfs_locale_cmd="$(command -v locale 2>/dev/null || true)"\
-for _bfs_locale in C.UTF-8 C.utf8; do\
-    if [ -n "$_bfs_locale_cmd" ] && \
-       "$_bfs_locale_cmd" -a 2>/dev/null | grep -Fxiq "$_bfs_locale" && \
-       LC_ALL="$_bfs_locale" "$_bfs_locale_cmd" charmap 2>/dev/null | grep -Fxiq UTF-8; then\
-        _bfs_utf8_locale="$_bfs_locale"\
-        break\
-    fi\
-done\
-if [ -n "$_bfs_utf8_locale" ]; then\
-    export LC_ALL="$_bfs_utf8_locale"\
-else\
-    export LC_ALL=C\
-fi\
-unset _bfs_utf8_locale _bfs_locale _bfs_locale_cmd _bfs_pkgmk_path' \
-            /tmp/pkgutils-5.40.12/pkgmk.in
-
-        sed -i \
-            -e 's/ --static//' \
-            -e 's/ -static//' \
-            /tmp/pkgutils-5.40.12/Makefile
-
-        make -j"$(nproc)" -C /tmp/pkgutils-5.40.12
-
-        make -j"$(nproc)" \
-            -C /tmp/pkgutils-5.40.12 \
-            BINDIR="$TOOLS/bin" \
-            MANDIR="$TOOLS/man" \
-            ETCDIR="$TOOLS/etc" \
-            install
-
-        rm -rf /tmp/pkgutils-5.40.12
+    done
+    if [ ! -x "$TOOLS/bin/spkgin" ]; then
+        install -m 0755 "$SCRIPT_DIR/files/spkgin" "$TOOLS/bin/spkgin" || return 1
     fi
+    unset _spkg_tool
 
     echo
     echo "Resolving temporary-toolchain ports across all collections..."
@@ -3046,7 +2979,7 @@ unset _bfs_utf8_locale _bfs_locale _bfs_locale_cmd _bfs_pkgmk_path' \
     # base-system stages. This turns transient mirror/network failures into an
     # early, bounded preflight failure rather than an interruption hours later.
     # Capture the complete prefetch transcript in the Stage-1 preflight log so
-    # the failure dialog points at the actual pkgmk/download error, not only the
+    # the failure dialog points at the actual pkgbuild/download error, not only the
     # final summary line.
     # shellcheck disable=SC2086
     if ! _prefetch_bootstrap_sources /tmp/bootstrap.conf $toolchainpkg $basepkg \
@@ -3070,7 +3003,7 @@ unset _bfs_utf8_locale _bfs_locale _bfs_locale_cmd _bfs_pkgmk_path' \
 
         _start_package_log toolchain "$i"
 
-        if pkgmk -d -is -if -cf /tmp/bootstrap.conf; then
+        if _spkg_bootstrap_build "$port_dir"; then
             status=0
         else
             status=$?
@@ -3157,9 +3090,9 @@ unset _bfs_utf8_locale _bfs_locale _bfs_locale_cmd _bfs_pkgmk_path' \
         return 1
     fi
 
-    if ! tar --zstd -tf "$toolchain_archive" | grep -q '^\./tmp/lfs-tools/bin/pkgmk$'; then
+    if ! tar --zstd -tf "$toolchain_archive" | grep -q '^\./tmp/lfs-tools/bin/pkgbuild$'; then
         rm -f "$toolchain_archive"
-        echo "ERROR: Temporary toolchain archive is missing pkgmk." >&2
+        echo "ERROR: Temporary toolchain archive is missing pkgbuild." >&2
         return 1
     fi
 
@@ -3286,8 +3219,9 @@ _verifybase() {
     _verify_path "$LFS/usr/bin/g++"
     _verify_path "$LFS/usr/bin/ld"
     _verify_path "$LFS/usr/bin/make"
-    _verify_path "$LFS/usr/bin/pkgmk"
-    _verify_path "$LFS/var/lib/pkg/db"
+    _verify_path "$LFS/usr/bin/pkgbuild"
+    _verify_path "$LFS/usr/share/bfsos/spkgbuild.helper"
+    _verify_path "$LFS/var/lib/scratchpkg/db"
     _verify_path "$LFS/etc/passwd"
     _verify_path "$LFS/etc/group"
     _verify_path "$LFS/etc/shadow"
@@ -3327,7 +3261,7 @@ _verifybase() {
             }
 
             echo "Checking final toolchain..."
-            for cmd in gcc g++ ld make pkg-config pkgmk pkgadd pkginfo; do
+            for cmd in gcc g++ ld make pkg-config pkgbuild pkgadd scratch; do
                 command -v "$cmd" >/dev/null 2>&1 || fail "$cmd is not available"
                 pass "$cmd"
             done
@@ -3360,7 +3294,7 @@ _verifybase() {
 
             echo
             echo "Checking package database..."
-            pkginfo -i >/dev/null 2>&1 || fail "package database is not readable"
+            scratch installed >/dev/null 2>&1 || fail "package database is not readable"
             pass "package database"
 
             echo
@@ -3487,9 +3421,9 @@ _compressrootfs() {
         "$LFS/run" \
         "$LFS/proc" \
         "$LFS/sys" \
-        "$LFS/$pkgmkwork" \
-        "$LFS/$pkgmkpkg" \
-        "$LFS/$pkgmksrc"
+        "$LFS/$spkgwork" \
+        "$LFS/$spkgpkg" \
+        "$LFS/$spkgsrc"
     do
         if mountpoint -q "$mount_path"; then
             echo "ERROR: Refusing to archive while a bootstrap mount is still active:" >&2
@@ -3500,12 +3434,12 @@ _compressrootfs() {
 
     # Source-cache retention is an explicit base-build policy. During normal
     # stages this path is a bind mount, so materialize it only after unmounting.
-    rm -rf "$LFS/$pkgmksrc"
-    mkdir -p "$LFS/$pkgmksrc"
+    rm -rf "$LFS/$spkgsrc"
+    mkdir -p "$LFS/$spkgsrc"
     if [ "${BFS_KEEP_SOURCE_ARCHIVES:-no}" = yes ]; then
         echo "Including downloaded package source archives in the base rootfs..."
-        cp -a "$sourcedir"/. "$LFS/$pkgmksrc"/
-        du -sh "$LFS/$pkgmksrc" 2>/dev/null || true
+        cp -a "$sourcedir"/. "$LFS/$spkgsrc"/
+        du -sh "$LFS/$spkgsrc" 2>/dev/null || true
     else
         echo "Excluding downloaded package source archives from the base rootfs (default)."
     fi
@@ -3521,7 +3455,7 @@ _compressrootfs() {
         cd "$LFS"
         command -v zstd >/dev/null 2>&1 || exit 99
         tar -I 'zstd -T0 -19' \
-            --exclude='./var/lib/pkg/rejected' \
+            --exclude='./var/lib/scratchpkg/rejected' \
             --exclude=".$TOOLS" \
             --exclude='./tmp/*' \
             --exclude='./dev/*' \
@@ -3546,7 +3480,7 @@ _compressrootfs() {
 
     # Sanity-check a few files required for any usable BFSOS base system.
     if ! tar --zstd -tf "$rootfs_archive" | grep -q '^\./usr/bin/bash$' ||
-       ! tar --zstd -tf "$rootfs_archive" | grep -q '^\./usr/bin/pkgmk$' ||
+       ! tar --zstd -tf "$rootfs_archive" | grep -q '^\./usr/bin/pkgbuild$' ||
        ! tar --zstd -tf "$rootfs_archive" | grep -q '^\./etc/os-release$'
     then
         rm -f "$rootfs_archive"
@@ -3587,7 +3521,7 @@ _buildbase() {
     _validate_package_ports $basepkg
     echo
 
-    if [ ! -f "$LFS/var/lib/pkg/db" ]; then
+    if [ ! -f "$LFS/var/lib/scratchpkg/db" ]; then
         mkdir -pv "$LFS"/{etc,var} "$LFS"/usr/{bin,lib,sbin} "$LFS/dev"
 
         for i in bash cat chmod dd echo ln mkdir pwd rm stty; do
@@ -3630,11 +3564,10 @@ _buildbase() {
         cat ports/core/aaa_filesystem/passwd > "$LFS/etc/passwd"
         cat ports/core/aaa_filesystem/group > "$LFS/etc/group"
 
-        mkdir -p "$LFS/var/lib/pkg"
-        touch "$LFS/var/lib/pkg/db"
+        mkdir -p "$LFS/var/lib/scratchpkg/db"
 
-        mkdir -p "$LFS/$pkgmkpkg"
-        mkdir -p "$LFS/$pkgmksrc"
+        mkdir -p "$LFS/$spkgpkg"
+        mkdir -p "$LFS/$spkgsrc"
         mkdir -p "$packagedir"
     fi
 
@@ -3643,17 +3576,17 @@ _buildbase() {
     cp -r ports/ "$LFS/usr/"
 
     mkdir -p "$LFS/tmp/lfs-tools/bin"
-    cp files/pkgin "$LFS/tmp/lfs-tools/bin/pkgin"
+    cp files/spkgin "$LFS/tmp/lfs-tools/bin/pkgin"
     chmod +x "$LFS/tmp/lfs-tools/bin/pkgin"
 
-    mkdir -p "$LFS/var/lib/pkgmk"
+    mkdir -p "$LFS/var/lib/scratchpkg"
     mkdir -p "$buildworkdir"
 
     echo "Stage 2/3 package work directory:"
     echo "  $buildworkdir"
 
-    cp ports/core/pkgutils/extension \
-        "$LFS/var/lib/pkgmk"
+    install -D -m 0755 ports/core/bfs-spkgbuild-macros/helper.sh \
+        "$LFS/usr/share/bfsos/spkgbuild.helper"
 
     # Create the target ccache configuration now.  During Stage 2 the compiler
     # wrapper path remains inactive until the BFSOS ccache package is actually
@@ -3663,90 +3596,60 @@ _buildbase() {
 
     resolved_ccache_size="$(_resolve_ccache_size)"
 
-    cat > "$LFS/tmp/pkgmk.conf" <<EOF
-# Do not force LC_ALL=C here.
-# pkgmk selects a UTF-8-capable C locale when available so libarchive can
-# extract source archives containing UTF-8 pathnames.
-
-export CPPFLAGS="-I/usr/include"
+    cat > "$LFS/tmp/scratchpkg.conf" <<EOF
+# scratchpkg configuration used while building Stages 2 and 3.
+#
+# Init is OpenRC for the whole tree: service integration belongs to the
+# init port, never to individual packages, and no systemd units are built.
 export CFLAGS="$CFLAGS"
-export CXXFLAGS="\${CFLAGS}"
+export CXXFLAGS="${CFLAGS}"
+export CPPFLAGS="-I/usr/include"
 export LDFLAGS="-L/usr/lib -Wl,-rpath-link,/usr/lib"
 export LIBRARY_PATH="/usr/lib"
-
 export PKG_CONFIG_PATH="/usr/lib/pkgconfig:/usr/share/pkgconfig"
 export PKG_CONFIG_LIBDIR="/usr/lib/pkgconfig:/usr/share/pkgconfig"
 
-# BFSOS X.Org build policy. Do not rely on login-shell profile.d loading.
 export XORG_PREFIX="/usr"
 export XORG_CONFIG="--prefix=/usr --sysconfdir=/etc --localstatedir=/var --disable-static"
 
-export JOBS=${BFS_BUILD_JOBS/auto/$(nproc)}
-export MAKEFLAGS="-j \$JOBS"
+JOBS=${BFS_BUILD_JOBS/auto/$(nproc)}
+export JOBS
+export MAKEFLAGS="-j $JOBS"
 
-# Bootstrap-safe ccache policy.  The live host is never used.  This condition
-# becomes true only after the BFSOS ccache package has installed both ccache
-# itself and its compiler-wrapper directory inside the target rootfs.
+# Bootstrap-safe ccache policy: active only once the target ccache package
+# has installed ccache and its compiler wrappers inside the rootfs.
 export BFS_CCACHE="$BFS_CCACHE"
 export BFS_CCACHE_SIZE="$resolved_ccache_size"
 export CCACHE_DIR="/var/cache/ccache"
-if [ "\$BFS_CCACHE" = yes ] &&
-   [ -x /usr/bin/ccache ] &&
-   [ -x /usr/lib/ccache/gcc ]; then
-    export PATH="/usr/lib/ccache:\$PATH"
+if [ "$BFS_CCACHE" = yes ] && [ -x /usr/bin/ccache ] && [ -x /usr/lib/ccache/gcc ]; then
+    export PATH="/usr/lib/ccache:$PATH"
 fi
 
-PKGMK_SOURCE_ROOT="/$pkgmksrc"
-PKGMK_SOURCE_DIR="\$PKGMK_SOURCE_ROOT/\$name"
-mkdir -p "\$PKGMK_SOURCE_DIR" || exit 1
-PKGMK_PACKAGE_DIR="/$pkgmkpkg"
-PKGMK_WORK_DIR="/$pkgmkwork/pkgmk-\$name"
-
-# Bootstrap integrity policy. All checks default to enabled; development
-# bypasses require an explicit settings change and are visible in this file/log.
-PKGMK_IGNORE_MD5SUM="$([ "$BFS_VERIFY_MD5" = yes ] && echo no || echo yes)"
-PKGMK_IGNORE_SIGNATURE="$([ "$BFS_VERIFY_SIGNATURE" = yes ] && echo no || echo yes)"
-PKGMK_IGNORE_FOOTPRINT="$([ "$BFS_VERIFY_FOOTPRINT" = yes ] && echo no || echo yes)"
-
-# Match the installed BFSOS downloader policy during Stage 2/3: go directly
-# to Pkgfile sources, resume partial downloads, and detect dead/stalled links.
-PKGMK_SOURCE_MIRRORS=()
-PKGMK_SOURCE_FLAT_FALLBACKS=(
-    "https://mirror.math.princeton.edu/pub/redcorelinux/amd64/distfiles"
-)
-PKGMK_SOURCE_FALLBACKS=(
-    "https://xorg.freedesktop.org/releases/|https://www.x.org/archive/"
-    "https://www.x.org/releases/|https://www.x.org/archive/"
-    "https://ftp.gnu.org/gnu/|https://ftpmirror.gnu.org/"
-    "ftp://ftp.gnu.org/gnu/|https://ftpmirror.gnu.org/"
-    "https://download.savannah.gnu.org/releases/|https://mirror.fi.ossplanet.net/nongnu/"
-    "https://cdn.kernel.org/pub/|https://mirrors.edge.kernel.org/pub/"
-    "https://www.kernel.org/pub/|https://mirrors.edge.kernel.org/pub/"
-)
-PKGMK_DOWNLOAD_PROG="$SCRIPT_DIR/files/bfs-prefetch-curl"
-PKGMK_CURL_OPTS="--fail --location --continue-at - --connect-timeout 10 --speed-limit 1024 --speed-time 30 --retry 3 --retry-delay 2 --retry-max-time 180 --retry-connrefused"
-
-. /var/lib/pkgmk/extension
+SOURCE_DIR="/$spkgsrc"
+PACKAGE_DIR="/$spkgpkg"
+WORK_DIR="/$spkgwork"
+CBUILD_DIR="/var/lib/scratchpkg/cbuild"
+mkdir -p "$SOURCE_DIR" "$PACKAGE_DIR" "$WORK_DIR" "$CBUILD_DIR" || exit 1
 EOF
 
-    # Keep the installed/final pkgmk configuration on the external build-work
-    # bind mount too. Stage 3 uses the installed pkgmk configuration for its
+    # Keep the installed/final pkgbuild configuration on the external build-work
+    # bind mount too. Stage 3 uses the installed pkgbuild configuration for its
     # exact-package rebuilds, so without this it falls back to
     # /var/cache/pkg/work inside the small
     # LiveGUI-backed rootfs and GCC can exhaust that filesystem.
-    if [ -f "$LFS/etc/pkgmk.conf" ]; then
+    if [ -f "$LFS/etc/scratchpkg.conf" ]; then
         if [ "$BFS_BUILD_SETTINGS_CHANGED" = yes ]; then
             jobs="$BFS_BUILD_JOBS"; [ "$jobs" = auto ] && jobs="$(nproc)"
             sed -i -e "s|^export CFLAGS=.*|export CFLAGS=\"$CFLAGS\"|" \
                    -e "s|^export CXXFLAGS=.*|export CXXFLAGS=\"\${CFLAGS}\"|" \
                    -e "s|^export JOBS=.*|export JOBS=$jobs|" \
                    -e "s|^export MAKEFLAGS=.*|export MAKEFLAGS=\"-j \$JOBS\"|" \
-                   "$LFS/etc/pkgmk.conf"
+                   "$LFS/etc/scratchpkg.conf"
             # Replace the BFSOS bootstrap-managed ccache block rather than
             # appending duplicate settings on every Stage 2/3 run.
             sed -i '/^# BEGIN BFSOS BOOTSTRAP CCACHE$/,/^# END BFSOS BOOTSTRAP CCACHE$/d' \
-                "$LFS/etc/pkgmk.conf"
-            cat >> "$LFS/etc/pkgmk.conf" <<EOF_INSTALLED_CCACHE
+                "$LFS/etc/scratchpkg.conf"
+            cat >> "$LFS/etc/scratchpkg.conf" <<EOF_INSTALLED_CCACHE
 
 # BEGIN BFSOS BOOTSTRAP CCACHE
 export BFS_CCACHE="$BFS_CCACHE"
@@ -3760,10 +3663,10 @@ fi
 # END BFSOS BOOTSTRAP CCACHE
 EOF_INSTALLED_CCACHE
         fi
-        # Ensure an existing installed pkgmk.conf has the target-only ccache
+        # Ensure an existing installed scratchpkg.conf has the target-only ccache
         # policy even when build settings were left at their saved/default values.
-        if ! grep -q '^# BEGIN BFSOS BOOTSTRAP CCACHE$' "$LFS/etc/pkgmk.conf"; then
-            cat >> "$LFS/etc/pkgmk.conf" <<EOF_INSTALLED_CCACHE_DEFAULT
+        if ! grep -q '^# BEGIN BFSOS BOOTSTRAP CCACHE$' "$LFS/etc/scratchpkg.conf"; then
+            cat >> "$LFS/etc/scratchpkg.conf" <<EOF_INSTALLED_CCACHE_DEFAULT
 
 # BEGIN BFSOS BOOTSTRAP CCACHE
 export BFS_CCACHE="$BFS_CCACHE"
@@ -3779,76 +3682,31 @@ EOF_INSTALLED_CCACHE_DEFAULT
         fi
 
         sed -i '/^# BEGIN BFSOS BOOTSTRAP INTEGRITY$/,/^# END BFSOS BOOTSTRAP INTEGRITY$/d' \
-            "$LFS/etc/pkgmk.conf"
-        cat >> "$LFS/etc/pkgmk.conf" <<EOF_INSTALLED_INTEGRITY
+            "$LFS/etc/scratchpkg.conf"
+        cat >> "$LFS/etc/scratchpkg.conf" <<EOF_INSTALLED_INTEGRITY
 
 # BEGIN BFSOS BOOTSTRAP INTEGRITY
-PKGMK_IGNORE_MD5SUM="$([ "$BFS_VERIFY_MD5" = yes ] && echo no || echo yes)"
-PKGMK_IGNORE_SIGNATURE="$([ "$BFS_VERIFY_SIGNATURE" = yes ] && echo no || echo yes)"
-PKGMK_IGNORE_FOOTPRINT="$([ "$BFS_VERIFY_FOOTPRINT" = yes ] && echo no || echo yes)"
+BFS_IGNORE_MD5SUM="$([ "$BFS_VERIFY_MD5" = yes ] && echo no || echo yes)"
+BFS_IGNORE_SIGNATURE="$([ "$BFS_VERIFY_SIGNATURE" = yes ] && echo no || echo yes)"
+BFS_IGNORE_FOOTPRINT="$([ "$BFS_VERIFY_FOOTPRINT" = yes ] && echo no || echo yes)"
 # END BFSOS BOOTSTRAP INTEGRITY
 EOF_INSTALLED_INTEGRITY
 
-        # Never point pkgmk at the bind-mount root itself.  pkgmk removes its
+        # Never point pkgbuild at the bind-mount root itself.  pkgbuild removes its
         # work directory during cleanup; using the mount point directly causes
         # "Device or resource busy".  Give each port a removable child dir.
-        if grep -q '^# *PKGMK_WORK_DIR=' "$LFS/etc/pkgmk.conf"; then
-            sed -i 's|^# *PKGMK_WORK_DIR=.*|PKGMK_WORK_DIR="/var/cache/pkg/build-work/pkgmk-$name"|'                 "$LFS/etc/pkgmk.conf"
-        elif grep -q '^PKGMK_WORK_DIR=' "$LFS/etc/pkgmk.conf"; then
-            sed -i 's|^PKGMK_WORK_DIR=.*|PKGMK_WORK_DIR="/var/cache/pkg/build-work/pkgmk-$name"|'                 "$LFS/etc/pkgmk.conf"
+        if grep -q '^# *WORK_DIR=' "$LFS/etc/scratchpkg.conf"; then
+            sed -i 's|^# *WORK_DIR=.*|WORK_DIR="/var/cache/scratchpkg/work"|'                 "$LFS/etc/scratchpkg.conf"
+        elif grep -q '^WORK_DIR=' "$LFS/etc/scratchpkg.conf"; then
+            sed -i 's|^WORK_DIR=.*|WORK_DIR="/var/cache/scratchpkg/work"|'                 "$LFS/etc/scratchpkg.conf"
         else
-            printf '\nPKGMK_WORK_DIR="/var/cache/pkg/build-work/pkgmk-$name"\n'                 >> "$LFS/etc/pkgmk.conf"
+            printf '\nWORK_DIR="/var/cache/scratchpkg/work"\n'                 >> "$LFS/etc/scratchpkg.conf"
         fi
 
-        echo "Final pkgmk work directory configured:"
-        grep '^PKGMK_WORK_DIR=' "$LFS/etc/pkgmk.conf" || true
+        echo "Final scratchpkg work directory configured:"
+        grep '^WORK_DIR=' "$LFS/etc/scratchpkg.conf" || true
     fi
 
-    cat > "$LFS/tmp/pkgmk.systemd-bootstrap.conf" <<EOF
-# Do not force LC_ALL=C here.
-# Preserve pkgmk's archive-safe locale selection.
-
-# systemd needs these before final util-linux exists.
-export CFLAGS="-O2 -march=x86-64 -pipe"
-export CXXFLAGS="\${CFLAGS}"
-export LDFLAGS="-L/usr/lib -Wl,-rpath-link,/usr/lib"
-
-# Expose only the temporary util-linux libraries to systemd.
-# All other dependencies must come from the Stage-2 BFS system.
-export PKG_CONFIG_PATH="/tmp/systemd-util-linux-pc:/usr/lib/pkgconfig:/usr/share/pkgconfig"
-export PKG_CONFIG_LIBDIR="/tmp/systemd-util-linux-pc:/usr/lib/pkgconfig:/usr/share/pkgconfig"
-
-export JOBS=$(nproc)
-export MAKEFLAGS="-j \$JOBS"
-
-# Keep the special systemd bootstrap transaction uncached.
-export BFS_CCACHE=no
-export CCACHE_DISABLE=1
-
-PKGMK_SOURCE_ROOT="/$pkgmksrc"
-PKGMK_SOURCE_DIR="\$PKGMK_SOURCE_ROOT/\$name"
-mkdir -p "\$PKGMK_SOURCE_DIR" || exit 1
-PKGMK_PACKAGE_DIR="/$pkgmkpkg"
-PKGMK_WORK_DIR="/$pkgmkwork/pkgmk-\$name"
-
-PKGMK_SOURCE_MIRRORS=()
-PKGMK_SOURCE_FLAT_FALLBACKS=(
-    "https://mirror.math.princeton.edu/pub/redcorelinux/amd64/distfiles"
-)
-PKGMK_SOURCE_FALLBACKS=(
-    "https://xorg.freedesktop.org/releases/|https://www.x.org/archive/"
-    "https://www.x.org/releases/|https://www.x.org/archive/"
-    "https://ftp.gnu.org/gnu/|https://ftpmirror.gnu.org/"
-    "ftp://ftp.gnu.org/gnu/|https://ftpmirror.gnu.org/"
-    "https://download.savannah.gnu.org/releases/|https://mirror.fi.ossplanet.net/nongnu/"
-    "https://cdn.kernel.org/pub/|https://mirrors.edge.kernel.org/pub/"
-    "https://www.kernel.org/pub/|https://mirrors.edge.kernel.org/pub/"
-)
-PKGMK_DOWNLOAD_PROG="$SCRIPT_DIR/files/bfs-prefetch-curl"
-PKGMK_CURL_OPTS="--fail --location --continue-at - --connect-timeout 10 --speed-limit 1024 --speed-time 30 --retry 3 --retry-delay 2 --retry-max-time 180 --retry-connrefused"
-
-. /var/lib/pkgmk/extension
-EOF
 
     # Provide systemd with only the temporary util-linux pkg-config files.
     mkdir -p "$LFS/tmp/systemd-util-linux-pc"
@@ -3881,12 +3739,12 @@ EOF
 
     # Stage 3 is an exact rebuild pass. Stage 2 has already established the
     # base package set, so Stage 3 must never resolve or install newly declared
-    # dependencies. Normal prt-get update dependency refresh remains useful on
+    # dependencies. Normal scratch sysup dependency refresh remains useful on
     # an installed BFSOS system, but it is intentionally bypassed here.
 
     for i in $basepkg; do
         if [ "${1:-}" != rebuild ]; then
-            pkginfo -i -r "$LFS" |
+            chroot "$LFS" scratch installed |
                 awk '{print $1}' |
                 grep -qx "$i" &&
                 continue
@@ -3901,27 +3759,17 @@ EOF
                     ;;
             esac
 
-            pkgmk_conf=/tmp/pkgmk.conf
+            spkg_conf=/tmp/scratchpkg.conf
 
-            if [ "${1:-}" != rebuild ] && [ "$i" = systemd ]; then
-                pkgmk_conf=/tmp/pkgmk.systemd-bootstrap.conf
-                echo "Using temporary util-linux libraries for systemd bootstrap."
-            fi
 
-            integrity_opts=""
-            [ "$BFS_VERIFY_SIGNATURE" = yes ] || integrity_opts="$integrity_opts -is"
-            [ "$BFS_VERIFY_FOOTPRINT" = yes ] || integrity_opts="$integrity_opts -if"
-            [ "$BFS_VERIFY_MD5" = yes ] || integrity_opts="$integrity_opts -im"
-            if [ -n "$integrity_opts" ]; then
-                echo "WARNING: development integrity bypass active:$integrity_opts"
-            fi
-
+            # scratchpkg builds and installs in one transaction inside the
+            # chroot, so no host-side pkgadd step is required.
             chroot "$LFS" \
                 env -i \
                 HOME=/root \
                 TERM="${TERM:-dumb}" \
                 PATH="$LFSPATH" \
-                pkgin -d "$i" $integrity_opts -cf "$pkgmk_conf" \
+                spkgin ${_force:-} --config="$spkg_conf" "$i" \
                 || {
                     status=$?
                     _close_active_package_log "$status"
@@ -3929,14 +3777,6 @@ EOF
                     return "$status"
                 }
 
-            pkgadd -r "$LFS" ${_force:-} -f \
-                "$(ls -1 "$packagedir/$i#"* | tail -n1)" \
-                || {
-                    status=$?
-                    _close_active_package_log "$status"
-                    umountfs
-                    return "$status"
-                }
 
             case "$i" in
                 ca-certificates)
@@ -4133,7 +3973,7 @@ EOF
                 env -i \
                 HOME=/root \
                 PATH=/usr/bin:/usr/sbin:/bin:/sbin \
-                /usr/bin/pkginfo -i | awk '{print $1}' | grep -qx "$i"
+                /usr/bin/scratch installed | awk '{print $1}' | grep -qx "$i"
             then
                 echo "ERROR: Stage 3 expected '$i' to already be installed by Stage 2." >&2
                 echo "ERROR: Re-run Stage 2 before Stage 3; Stage 3 will not install new base packages." >&2
@@ -4144,12 +3984,12 @@ EOF
 
             # Rebuild exactly this base package with the final BFSOS toolchain.
             # Stage 2 left its package archive in the shared package cache, so
-            # remove cached copies first; otherwise pkgmk may consider the package
+            # remove cached copies first; otherwise pkgbuild may consider the package
             # already built and Stage 3 would not actually recompile it.
             rm -f "$packagedir/$i#"*
 
-            # Use pkgin only as the single-port pkgmk wrapper, exactly as Stage 2
-            # does; do not invoke prt-get here because current prt-get update
+            # Use pkgin only as the single-port pkgbuild wrapper, exactly as Stage 2
+            # does; do not invoke scratch sysup here because the current upgrade
             # intentionally discovers and installs newly required dependencies.
             chroot "$LFS" \
                 env -i \
@@ -4160,7 +4000,7 @@ EOF
                 LANGUAGE=C \
                 PATH="$STAGE_BUILD_PATH" \
                 CCACHE_DIR=/var/cache/ccache \
-                /tmp/lfs-tools/bin/pkgin -d "$i" $integrity_opts -cf /etc/pkgmk.conf \
+                /tmp/lfs-tools/bin/spkgin "$i" $integrity_opts -cf /etc/scratchpkg.conf \
                 || {
                     status=$?
                     _close_active_package_log "$status"
@@ -4181,7 +4021,7 @@ EOF
                 env -i \
                 HOME=/root \
                 PATH=/usr/bin:/usr/sbin:/bin:/sbin \
-                /usr/bin/pkgadd -u -f "/$pkgmkpkg/$(basename "$package_file")" \
+                /usr/bin/pkgadd -u -f "/$spkgpkg/$(basename "$package_file")" \
                 || {
                     status=$?
                     _close_active_package_log "$status"
@@ -4235,15 +4075,15 @@ mountfs() {
         mkdir -p "$LFS/$(readlink "$LFS/dev/shm")"
     fi
 
-    mkdir -p "$LFS/$pkgmksrc"
-    mkdir -p "$LFS/$pkgmkpkg"
-    mkdir -p "$LFS/$pkgmkwork"
+    mkdir -p "$LFS/$spkgsrc"
+    mkdir -p "$LFS/$spkgpkg"
+    mkdir -p "$LFS/$spkgwork"
 
     mkdir -p "$sourcedir" "$packagedir" "$buildworkdir"
 
-    mount --bind "$sourcedir" "$LFS/$pkgmksrc"
-    mount --bind "$packagedir" "$LFS/$pkgmkpkg"
-    mount --bind "$buildworkdir" "$LFS/$pkgmkwork"
+    mount --bind "$sourcedir" "$LFS/$spkgsrc"
+    mount --bind "$packagedir" "$LFS/$spkgpkg"
+    mount --bind "$buildworkdir" "$LFS/$spkgwork"
 }
 
 umountfs() {
@@ -4252,9 +4092,9 @@ umountfs() {
     unmount "$LFS/run"
     unmount "$LFS/proc"
     unmount "$LFS/sys"
-    unmount "$LFS/$pkgmkwork"
-    unmount "$LFS/$pkgmkpkg"
-    unmount "$LFS/$pkgmksrc"
+    unmount "$LFS/$spkgwork"
+    unmount "$LFS/$spkgpkg"
+    unmount "$LFS/$spkgsrc"
 }
 
 unmount() {
@@ -4409,7 +4249,6 @@ xxhash
 ccache
 boost
 meson
-pacman
 p11-kit
 make-ca
 kmod
@@ -4434,19 +4273,15 @@ python3-tomli
 python3-pytz
 python3-babel
 python3-jinja2
-systemd
 util-linux
 dbus
 procps-ng
 e2fsprogs
 fakeroot
-pkgutils
+scratchpkg
+bfs-spkgbuild-macros
 dialog
-prt-get
 git
-httpup
-ports
-prt-utils
 pciutils
 lzo
 btrfs-progs
@@ -4463,19 +4298,18 @@ openssh
 genfstab
 rsync
 traceroute
-signify
 "
 sourcedir="$PWD/sources"
 packagedir="$PWD/packages"
 
-# Stage 2/3 pkgmk build trees can be several GiB (especially GCC multilib).
+# Stage 2/3 pkgbuild build trees can be several GiB (especially GCC multilib).
 # Keep them on the same filesystem as the BFS repository rather than the
 # LiveGUI /tmp overlay, which may be very small.
 buildworkdir="$PWD/build-work"
 
-pkgmkpkg="var/cache/pkg/packages"
-pkgmksrc="var/cache/pkg/sources"
-pkgmkwork="var/cache/pkg/build-work"
+spkgpkg="var/cache/scratchpkg/packages"
+spkgsrc="var/cache/scratchpkg/sources"
+spkgwork="var/cache/scratchpkg/work"
 
 
 

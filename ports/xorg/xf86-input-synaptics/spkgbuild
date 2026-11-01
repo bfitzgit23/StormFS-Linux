@@ -1,0 +1,16 @@
+# description	: Synaptics touchpad input driver
+# homepage	: https://xorg.freedesktop.org
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=xf86-input-synaptics
+version=1.10.0
+release=2
+source="https://xorg.freedesktop.org/archive/individual/driver/xf86-input-synaptics-$version.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+
+	./configure $XORG_CONFIG &&
+	make
+	make DESTDIR=$PKG install
+}

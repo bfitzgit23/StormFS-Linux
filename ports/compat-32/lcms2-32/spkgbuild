@@ -1,0 +1,19 @@
+# description	: Little CMS intends to be an small-footprint color management engine
+# homepage	: https://www.littlecms.com/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=lcms2-32
+version=2.19.1
+release=3
+source="https://downloads.sourceforge.net/project/lcms/lcms/$version/lcms2-$version.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+        _bfs_require_compat32_extension 2 || return $?
+	bfs_autobuild
+
+	rm -rf $PKG/usr/{bin,include,share/man}
+	bfs_compat32_validate || return 1
+}

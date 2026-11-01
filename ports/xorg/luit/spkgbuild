@@ -1,0 +1,17 @@
+# description	: ICE authority file utility
+# homepage	: https://xorg.freedesktop.org
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=luit
+version=20250912
+release=2
+source="https://invisible-mirror.net/archives/$name/$name-$version.tgz"
+
+build() {
+	cd "$name-$version" || return 1
+
+CFLAGS='-U_XOPEN_SOURCE -D_XOPEN_SOURCE=600'	./configure $XORG_CONFIG
+
+	make
+	make DESTDIR=$PKG install
+}

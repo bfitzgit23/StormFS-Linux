@@ -1,0 +1,5 @@
+cmake
+ninja
+vulkan-headers
+wayland
+xorg-libs

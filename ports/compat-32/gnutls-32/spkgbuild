@@ -1,0 +1,34 @@
+# description	: A library that provides a secure layer over a reliable transport layer
+# homepage	: https://gnutls.org/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=gnutls-32
+version=3.8.13
+release=3
+source="https://mirrors.dotsrc.org/gcrypt/${name%-*}/v${version:0:3}/${name%-*}-$version.tar.xz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+  (
+    set -e
+	./configure \
+		--prefix=/usr \
+		--libdir=/usr/lib32 \
+		--host=i686-pc-linux-gnu \
+		--with-default-trust-store-pkcs11="pkcs11:" \
+		--with-included-unistring \
+		--disable-guile \
+		--without-tpm
+
+	sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
+	make
+	make DESTDIR=$PKG install
+
+	rm -r \
+		$PKG/usr/share/{doc,info,locale,man} \
+		$PKG/usr/{bin,include,share}
+  )
+	bfs_compat32_validate || return 1
+}

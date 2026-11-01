@@ -1,0 +1,20 @@
+# description	: Kernel module utilities and library
+# homepage	: https://git.kernel.org/?p=utils/kernel/kmod/kmod.git
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=kmod-32
+version=34.2
+release=3
+build_opt="--bindir=/bin --sbindir=/sbin -D dlopen=all -D docs=false -D manpages=false -D bashcompletiondir=no -D fishcompletiondir=no -D zshcompletiondir=no"
+source="https://www.kernel.org/pub/linux/utils/kernel/${name%-*}/${name%-*}-$version.tar.xz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+        _bfs_require_compat32_extension 2 || return $?
+	bfs_autobuild
+
+	rm -rf $PKG/{bin,etc,sbin} $PKG/usr/{include,share}
+	bfs_compat32_validate || return 1
+}

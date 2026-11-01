@@ -1,0 +1,13 @@
+# description	: Linux From Scratch System V initialization scripts
+# homepage	: https://www.linuxfromscratch.org/lfs/
+# maintainer	: BFSOS maintainers
+
+name=lfs-bootscripts
+version=20250827
+release=2
+source="https://www.linuxfromscratch.org/lfs/downloads/12.4/lfs-bootscripts-$version.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+    make DESTDIR="$PKG" install || return 1
+}

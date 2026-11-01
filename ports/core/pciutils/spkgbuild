@@ -1,0 +1,25 @@
+# description	: Library and utilities to access the PCI bus configuration registers
+# homepage	: https://mj.ucw.cz/pciutils.shtml
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+# optional	: curl wget lynx
+
+name=pciutils
+version=3.15.0
+release=1
+source="https://mj.ucw.cz/download/linux/pci/$name-$version.tar.gz"
+
+build() {
+	cd "$name-$version" || return 1
+
+
+	make PREFIX=/usr                \
+     SHAREDIR=/usr/share/hwdata \
+     SHARED=yes
+
+     make PREFIX=/usr                \
+     SHAREDIR=/usr/share/hwdata \
+     SHARED=yes                 \
+     DESTDIR=$PKG install install-lib        &&
+
+chmod -v 755 $PKG/usr/lib/libpci.so
+}

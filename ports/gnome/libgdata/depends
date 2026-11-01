@@ -1,0 +1,9 @@
+libsoup
+gnome-online-accounts
+gtk3
+json-glib
+vala
+gcr
+glib
+gobject-introspection
+uhttpmock

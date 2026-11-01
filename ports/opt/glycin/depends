@@ -1,0 +1,9 @@
+bubblewrap
+fontconfig
+glib
+lcms2
+libseccomp
+libjxl
+librsvg
+rustc
+gtk4

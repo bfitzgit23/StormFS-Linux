@@ -1,0 +1,99 @@
+#!/bin/sh -e
+#
+# spkgin - build and install ports with scratchpkg.
+#
+# Replaces the former pkgmk-based pkgin helper.  It locates the port across
+# every collection under $PORTS_ROOT, refuses ambiguous names, and runs
+# pkgbuild with -i so the package is built and installed in one transaction
+# (pkgbuild calls pkgadd itself).
+#
+# Usage:
+#   spkgin [options] <port> [<port> ...]
+#
+# Options:
+#   -f, --force            rebuild even when the package is already built
+#   -m, --skip-checksum    skip checksum verification
+#       --config=<file>    scratchpkg configuration file
+#       --root=<path>      install into an alternate root
+#
+# scratchpkg options after the port names are passed through to pkgbuild.
+
+PORTS_ROOT="${PORTS_ROOT:-/usr/ports}"
+SPKG_CONF="${SPKG_CONF:-/etc/scratchpkg.conf}"
+SPKG_OPTS=""
+PORTS=""
+
+while [ "$#" -gt 0 ]; do
+    case "$1" in
+        -f|--force)        SPKG_OPTS="$SPKG_OPTS -f" ;;
+        -m|--skip-checksum) SPKG_OPTS="$SPKG_OPTS -m" ;;
+        --config=*)        SPKG_CONF="${1#*=}" ;;
+        --config)          shift; SPKG_CONF="${1:-}" ;;
+        --root=*)          SPKG_OPTS="$SPKG_OPTS $1" ;;
+        -h|--help)
+            sed -n '3,20p' "$0" | sed 's/^# \{0,1\}//'
+            exit 0
+            ;;
+        -*)                SPKG_OPTS="$SPKG_OPTS $1" ;;
+        *)                 PORTS="$PORTS $1" ;;
+    esac
+    shift
+done
+
+if [ -z "$PORTS" ]; then
+    echo "spkgin: no port given" >&2
+    echo "usage: spkgin [-f] [-m] [--config=FILE] <port> ..." >&2
+    exit 1
+fi
+
+if [ ! -d "$PORTS_ROOT" ]; then
+    echo "ERROR: ports root does not exist: $PORTS_ROOT" >&2
+    exit 1
+fi
+
+if [ ! -f "$SPKG_CONF" ]; then
+    echo "ERROR: scratchpkg configuration not found: $SPKG_CONF" >&2
+    exit 1
+fi
+
+for port in $PORTS; do
+    matches=$(
+        find "$PORTS_ROOT" -mindepth 2 -maxdepth 2 -type d -name "$port" \
+            -exec test -f '{}/spkgbuild' ';' -print 2>/dev/null | sort
+    )
+
+    count=$(printf '%s\n' "$matches" | sed '/^[[:space:]]*$/d' | wc -l | tr -d '[:space:]')
+
+    case "$count" in
+        0)
+            echo "ERROR: port '$port' was not found under $PORTS_ROOT" >&2
+            exit 1
+            ;;
+        1)
+            port_dir="$matches"
+            ;;
+        *)
+            echo "ERROR: port '$port' exists in multiple collections:" >&2
+            printf '  %s\n' $matches >&2
+            exit 1
+            ;;
+    esac
+
+    echo "=======> Port: $port"
+    echo "         Collection: $(basename "$(dirname "$port_dir")")"
+    echo "         Path: $port_dir"
+
+    old_pwd=$PWD
+    cd "$port_dir"
+
+    # shellcheck disable=SC2086
+    pkgbuild -i $SPKG_OPTS --config="$SPKG_CONF" || {
+        status=$?
+        cd "$old_pwd"
+        exit "$status"
+    }
+
+    cd "$old_pwd"
+done
+
+exit 0

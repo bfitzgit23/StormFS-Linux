@@ -1,0 +1,15 @@
+# description	: Xlib-based library for the X Present Extension
+# homepage	: https://gitlab.freedesktop.org/xorg/lib/libxpresent
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=libxpresent
+version=1.0.2
+release=3
+source="https://xorg.freedesktop.org/archive/individual/lib/libxpresent-$version.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+	 ./configure $XORG_CONFIG --docdir=/usr/share/doc/$name-$version
+	make
+	make DESTDIR=$PKG install
+}

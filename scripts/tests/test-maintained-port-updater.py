@@ -27,18 +27,18 @@ assert not mod.is_patch_name("thing.tar.xz")
 
 with tempfile.TemporaryDirectory() as td_s:
     td = Path(td_s)
-    (td / "Pkgfile").write_text('name=test\nversion=1.2.4\nrelease=1\nsource=(helper-1.2.3.conf)\n')
+    (td / "spkgbuild").write_text('name=test\nversion=1.2.4\nrelease=1\nsource=(helper-1.2.3.conf)\n')
     (td / "helper-1.2.3.conf").write_text("x")
-    meta = mod.eval_meta(td / "Pkgfile")
+    meta = mod.eval_meta(td / "spkgbuild")
     probs = mod.inventory_local_companions(meta, td, "1.2.3")
     assert any("old-version-named" in x for x in probs), probs
 
 # Version-named patches are judged by applicability, not filename alone.
 with tempfile.TemporaryDirectory() as td_s:
     td = Path(td_s)
-    (td / "Pkgfile").write_text('name=test\nversion=1.2.4\nrelease=1\nsource=(fix-1.2.3.patch)\n')
+    (td / "spkgbuild").write_text('name=test\nversion=1.2.4\nrelease=1\nsource=(fix-1.2.3.patch)\n')
     (td / "fix-1.2.3.patch").write_text("--- a/file\n+++ b/file\n@@ -1 +1 @@\n-old\n+new\n")
-    meta = mod.eval_meta(td / "Pkgfile")
+    meta = mod.eval_meta(td / "spkgbuild")
     assert mod.inventory_local_companions(meta, td, "1.2.3") == []
     assert mod.versioned_local_patches(meta, "1.2.3") == ["fix-1.2.3.patch"]
 
@@ -46,7 +46,7 @@ with tempfile.TemporaryDirectory() as td_s:
 with tempfile.TemporaryDirectory() as td_s:
     td = Path(td_s)
     text = 'name=x\nversion=2\nrelease=1\nsource=(https://example.invalid/x-2.tar.xz https://example.invalid/commit/123)\n'
-    (td / "Pkgfile").write_text(text)
+    (td / "spkgbuild").write_text(text)
     real_download = mod.curl_download
     def fake_download(url, dest, timeout, **kwargs):
         dest.write_text("--- a/file\n+++ b/file\n@@ -1 +1 @@\n-old\n+new\n")

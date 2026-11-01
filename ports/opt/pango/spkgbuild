@@ -1,0 +1,22 @@
+# description	: A library for layout and rendering of text
+# homepage	: https://www.gtk.org/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+# optional	: cairo gobject-introspection xorg-libs cantarell gi-docGen  help2man libthai sysprof
+
+name=pango
+version=1.58.2
+release=2
+source="https://download.gnome.org/sources/$name/${version:0:4}/$name-$version.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+	meson setup build . \
+		--prefix=/usr \
+		--buildtype=plain \
+		--wrap-mode nodownload \
+		-D b_lto=true \
+		-D b_pie=true \
+		-D introspection=enabled
+	meson compile -C build -j ${JOBS:-1}
+	DESTDIR=$PKG meson install -C build
+}

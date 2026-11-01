@@ -1,0 +1,7 @@
+glib
+libgudev
+gobject-introspection
+libmbim
+meson
+ninja
+libqrtr-glib

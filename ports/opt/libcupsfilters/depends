@@ -1,0 +1,11 @@
+cups
+glib
+ghostscript
+lcms2
+poppler
+qpdf
+libexif
+libjpeg-turbo
+libpng
+libtiff
+mupdf

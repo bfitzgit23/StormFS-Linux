@@ -1,0 +1,15 @@
+# description	: Xfce applications meta package
+# homepage	: https://xfce.org/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=xfce4-apps-meta
+version=4.20.0
+release=2
+source=""
+
+build() {
+    mkdir -p "$PKG/usr/share/bfsos/meta-packages"
+    printf '%s
+' 'BFSOS xfce4-apps-meta meta package' \
+        > "$PKG/usr/share/bfsos/meta-packages/xfce4-apps-meta"
+}

@@ -1,0 +1,10 @@
+accountsservice
+dconf
+gnome-session
+gnome-shell
+json-glib
+libcanberra
+libgudev
+linux-pam
+polkit
+upower

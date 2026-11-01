@@ -1,0 +1,19 @@
+# description	: Qt Quick image editing components used by KDE applications
+# homepage	: https://invent.kde.org/libraries/kquickimageeditor
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=kquickimageeditor
+version=0.6.2.1
+release=3
+source="https://download.kde.org/stable/$name/$name-$version.tar.xz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+    sed -i 's/find_package(OpenCV 4\.7/find_package(OpenCV/' CMakeLists.txt
+	bfs_autobuild
+}
+
+build_opt="-DCMAKE_INSTALL_PREFIX=/opt/kf6
+-DCMAKE_PREFIX_PATH=/opt/kf6;/opt/qt6
+-DBUILD_TESTING=OFF"

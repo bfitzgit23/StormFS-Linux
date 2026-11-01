@@ -1,0 +1,11 @@
+#
+# /etc/scratchpkg.repo : StormFS ports repositories
+#
+# Format: <repo directory> <repo url> <repo branch, "main" by default>
+#
+# portsync clones/updates each repository into its directory. The installed
+# release tree already contains every collection below /usr/ports, so these
+# entries only matter when an administrator wants to track git upstream.
+#
+
+/usr/ports/stormfs	https://github.com/bfitzgit23/StormFS-Linux	main

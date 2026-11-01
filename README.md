@@ -1,6 +1,6 @@
 # BFSOS
 
-**BFSOS** is a do-it-yourself, x86_64 source-built Linux distribution: you run one script and it builds the source code for every package on your own machine, so each program is compiled for *your* hardware. It uses an LFS/MLFS-style bootstrap, CRUX `pkgutils`/ports for package builds, and `prt-get` for dependency-aware package management, with a choice of **systemd**, **OpenRC**, or **SysVinit** as the init system. Dracut initramfs generation, GRUB, and a Dialog-based installer that supports both straightforward and layered storage layouts are included.
+**BFSOS** is a do-it-yourself, x86_64 source-built Linux distribution: you run one script and it builds the source code for every package on your own machine, so each program is compiled for *your* hardware. It uses an LFS/MLFS-style bootstrap, CRUX `pkgutils`/ports for package builds, and `scratch` for dependency-aware package management, with a choice of **systemd**, **OpenRC**, or **SysVinit** as the init system. Dracut initramfs generation, GRUB, and a Dialog-based installer that supports both straightforward and layered storage layouts are included.
 
 BFSOS is maintained by Brian Madonna; the packaging baseline in this working tree (StormFS-Linux) is imported from <https://codeberg.org/bmadonnaster/BFSOS>, and the tree additionally carries the StormFS ports, the init-selection layer, and this documentation.
 
@@ -30,8 +30,8 @@ Most Linux distros (Ubuntu, Fedora, Mint…) hand you pre-built programs that so
 |---|---|---|
 | Programs ("installed apps") | **Packages** | A package is one program plus its files, tracked so it can be updated or removed cleanly. |
 | The Microsoft Store / Mac App Store | **gnome-software** (installed as the `gnome-software` port) | A graphical store. It shows **Flathub** apps (see below) *and* BFSOS native packages in one place. |
-| `.exe` / `.msi` / `.dmg` installers | **Ports** | There is no "installer download". A *port* is a small recipe file (`Pkgfile`) that says where to fetch the source and how to build it. You never run random installers from the internet. |
-| Windows Update / Software Update | `ports -u` + `prt-get sysup` | Two commands update *everything* on the system. (The store's "Updates" button does the same thing graphically.) |
+| `.exe` / `.msi` / `.dmg` installers | **Ports** | There is no "installer download". A *port* is a small recipe file (`spkgbuild`) that says where to fetch the source and how to build it. You never run random installers from the internet. |
+| Windows Update / Software Update | `ports -u` + `scratch sysup` | Two commands update *everything* on the system. (The store's "Updates" button does the same thing graphically.) |
 | The Terminal (macOS) / PowerShell | **a terminal** | The black window where you type commands. On Linux it is the *fast, precise* way to do things — and for BFSOS administration it is the normal way. Give it a chance; it is easier than it looks. |
 | Services (`services.msc` / launchd) | **init system + services** | Background programs that start at boot (networking, Bluetooth, sound…). BFSOS lets you choose *which* init system manages them: **systemd**, **OpenRC**, or **SysVinit**. |
 | C: drive / Macintosh HD | `/` (the root filesystem) | Linux mounts everything under one tree starting at `/`. Your second disk might "live" at `/mnt/windows`, for example. |
@@ -46,17 +46,17 @@ Most Linux distros (Ubuntu, Fedora, Mint…) hand you pre-built programs that so
 **Way 1 — the store (easiest).** Open **Software** from the applications menu. It looks and feels like the app stores you already know:
 
 - **Flathub apps** run in a security *sandbox* (see below) and work on any Linux distro. This is the closest experience to the macOS App Store.
-- **Native BFSOS packages** are built from source on your machine. The store lists them through a local AppStream catalog that BFSOS generates from the ports tree with `prt-get`/`pkgutils` (see *How gnome-software sees native packages* below).
+- **Native BFSOS packages** are built from source on your machine. The store lists them through a local AppStream catalog that BFSOS generates from the ports tree with `scratch`/`pkgutils` (see *How gnome-software sees native packages* below).
 
 **Way 2 — the terminal (faster, more precise).**
 
 ```sh
 ports -u                 # refresh the ports tree (like "check for updates" for the catalog)
-prt-get depinst gimp     # install GIMP and everything it depends on
-prt-get sysup            # update every installed package
+scratch install -y gimp     # install GIMP and everything it depends on
+scratch sysup            # update every installed package
 ```
 
-To remove: `prt-get rm gimp`. To search: `prt-get search photo`. To see what an update would do before doing it: `prt-get diff`.
+To remove: `scratch rm gimp`. To search: `scratch search photo`. To see what an update would do before doing it: `scratch diff`.
 
 ### What is Flatpak and Flathub?
 
@@ -82,7 +82,7 @@ flatpak uninstall com.spotify.Client
 
 ### Switching from Windows specifically?
 
-- **No antivirus needed** in the way you are used to. Linux software is installed from signed, curated repositories — not random `.exe` downloads — and Flatpaks are sandboxed. Keep the system updated (`prt-get sysup`) and you are covered.
+- **No antivirus needed** in the way you are used to. Linux software is installed from signed, curated repositories — not random `.exe` downloads — and Flatpaks are sandboxed. Keep the system updated (`scratch sysup`) and you are covered.
 - **NTFS and dual-boot work.** BFSOS reads and writes Windows NTFS drives, so your second SSD with Windows 11 is visible from Linux and your BFSOS disk is visible from Windows (with a WSL2 or ext4 driver). Install each OS on its own drive and let the boot menu (GRUB) pick between them.
 - **Office files:** LibreOffice (Flatpak or native) opens Word/Excel/PowerPoint files. OnlyOffice from Flathub is closest to the Microsoft look.
 - **Games:** Steam is available on Flathub; Proton runs most Windows games.
@@ -97,11 +97,11 @@ flatpak uninstall com.spotify.Client
 
 ### Your first hour on BFSOS
 
-1. **Update everything** — `ports -u && prt-get sysup`.
+1. **Update everything** — `ports -u && scratch sysup`.
 2. **Open the store** — install a couple of apps from Flathub and watch them appear in the menu.
 3. **Learn the lay of the land** — your files are in `/home/you`; system files are under `/etc` (settings) and `/usr` (software).
 4. **Don't fear breakage** — worst case you reinstall from the installer ISO; keep personal files in `/home` and they survive reinstalls.
-5. **When stuck, read the man page** — `man prt-get`, `man flatpak`. Every command's manual is one command away.
+5. **When stuck, read the man page** — `man scratch`, `man flatpak`. Every command's manual is one command away.
 
 ### Choosing your init system (systemd, OpenRC, or SysVinit)
 
@@ -133,7 +133,7 @@ Each profile pulls in the matching service packages and dependency set automatic
 - Source-built temporary toolchain and base system.
 - Optional final-toolchain rebuild to verify that the base can rebuild itself.
 - CRUX-style ports and `pkgutils`, extended for BFSOS build conventions.
-- `prt-get` dependency management and Git-backed ports synchronization.
+- `scratch` dependency management and Git-backed ports synchronization.
 - x86_64 multilib support with 32-bit libraries under `/usr/lib32`.
 - Init-system choice per build: **systemd** (default), **OpenRC**, or **SysVinit**.
 - Dracut initramfs generation and GRUB bootloader support.
@@ -239,13 +239,13 @@ Update ports and installed packages with:
 
 ```sh
 ports -u
-prt-get sysup
+scratch sysup
 ```
 
 Install a package and its dependencies with:
 
 ```sh
-prt-get depinst <package>
+scratch install -y <package>
 ```
 
 Build a single port manually the way pkgutils does it:
@@ -260,14 +260,14 @@ BFSOS uses `python3` as the Python 3 package name; Python module ports use the `
 
 - `pkgutils` provides low-level package tools including `pkgmk` and `pkgadd`.
 - `ports` provides `ports -u` synchronization and repository drivers.
-- `prt-get` is the dependency-aware frontend used for `depinst`, `sysup`, and related operations.
+- `scratch` is the dependency-aware frontend used for `depinst`, `sysup`, and related operations.
 - `prt-utils` provides maintenance helpers such as `revdep`.
 
 BFSOS-maintained collections use the Git-backed monorepo definition `/etc/ports/bfsos.git`.
 
 ### Software stores and Flathub
 
-- Install **`gnome-software`** (`prt-get depinst gnome-software`) for a graphical store covering both native BFSOS packages and Flatpak applications.
+- Install **`gnome-software`** (`scratch install -y gnome-software`) for a graphical store covering both native BFSOS packages and Flatpak applications.
 - The **`flathub`** port registers the Flathub remote automatically (`flatpak remote-add --if-not-exists`); it is idempotent and safe across upgrades.
 - After installing native packages that ship desktop apps, refresh the store's native catalog with `bfsos-appstream` (installed by the `gnome-software` port).
 

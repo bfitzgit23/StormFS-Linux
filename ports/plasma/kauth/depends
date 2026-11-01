@@ -1,0 +1,5 @@
+kcoreaddons
+kwindowsystem
+polkit-qt-1
+extra-cmake-modules
+qt6

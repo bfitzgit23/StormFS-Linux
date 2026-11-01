@@ -1,0 +1,13 @@
+# description	: gnome-tweaks package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=gnome-tweaks
+version=49.0
+release=1
+source="https://download.gnome.org/sources/${name}/49/${name}-${version}.tar.xz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

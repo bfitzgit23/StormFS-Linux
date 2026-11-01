@@ -1,5 +1,0 @@
-# One pkgbuild subdirectory per line.
-# The build script builds each of these in order.
-
-core
-contrib

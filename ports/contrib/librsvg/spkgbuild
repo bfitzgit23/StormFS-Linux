@@ -1,0 +1,22 @@
+# description	: SVG rendering library with cairo backend
+# homepage	: https://wiki.gnome.org/Projects/LibRsvg
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+# optional	: object-introspection vala docutils gi-docgen xorg-fonts
+
+name=librsvg
+version=2.63.0
+release=3
+build_opt="-D docs=disabled -D tests=false -D pixbuf=enabled -D pixbuf-loader=enabled"
+source="https://download.gnome.org/sources/$name/${version%.*}/$name-$version.tar.xz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+  scratch isinstalled sccache && export RUSTC_WRAPPER=/usr/bin/sccache
+  mkdir -p "$BFS_SOURCE_DIR/rust" || return 1
+  export CARGO_HOME="$BFS_SOURCE_DIR/rust"
+  export CARGO_PROFILE_RELEASE_LTO=true
+  export CARGO_PROFILE_RELEASE_CODEGEN_UNITS=1
+  scratch isinstalled vala && build_opt+=' -D vala=enabled'
+	bfs_autobuild
+}

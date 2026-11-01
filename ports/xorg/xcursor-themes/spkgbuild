@@ -1,0 +1,15 @@
+# description	: Bitmaps for X
+# homepage	: https://xorg.freedesktop.org
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=xcursor-themes
+version=1.0.7
+release=1
+source="https://xorg.freedesktop.org/archive/individual/data/$name-$version.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+	./configure --prefix=/usr &&
+make
+	make DESTDIR=$PKG install
+}

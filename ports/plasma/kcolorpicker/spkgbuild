@@ -1,0 +1,17 @@
+# description	: kcolorpicker package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=kcolorpicker
+version=0.3.1
+release=1
+build_opt=" -DCMAKE_INSTALL_PREFIX=/usr 
+      -DCMAKE_BUILD_TYPE=Release  
+      -DBUILD_SHARED_LIBS=ON      
+      -DBUILD_WITH_QT6=ON         "
+source="https://github.com/ksnip/kColorPicker/archive/v${version}/kColorPicker-${version}.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

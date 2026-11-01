@@ -1,0 +1,30 @@
+# description	: Mouse server for the Linux virtual console
+# homepage	: https://www.nico.schottelius.org/software/gpm/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=gpm
+version=1.20.7
+release=2
+build_opt="--prefix=/usr
+           --sysconfdir=/etc"
+source="https://anduin.linuxfromscratch.org/BLFS/gpm/$name-$version.tar.bz2 gpm-1.20.7-consolidated-1.patch https://www.linuxfromscratch.org/patches/blfs/svn/gpm-1.20.7-gcc15_fixes-1.patch"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+
+	# Apply patch sources; pkgbuild does this automatically.
+	for _bfs_patch in "$SRC"/*.patch "$SRC"/*.diff; do
+		[ -f "$_bfs_patch" ] || continue
+		patch -t "${patch_opt:--p1}" -i "$_bfs_patch" || return 1
+	done
+	export BFS_SKIP_PATCHES=1
+    ./autogen.sh
+	bfs_autobuild
+    rm -f "$PKG/usr/lib/libgpm.a"
+
+    ln -sfn \
+        libgpm.so.2.1.0 \
+        "$PKG/usr/lib/libgpm.so"
+
+}

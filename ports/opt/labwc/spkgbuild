@@ -1,0 +1,22 @@
+# description	: Lightweight Wayland stacking compositor inspired by Openbox
+# homepage	: https://labwc.github.io/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=labwc
+version=0.20.2
+release=1
+source="https://github.com/labwc/labwc/archive/refs/tags/${version}.tar.gz"
+
+build() {
+	cd "$name-$version" || return 1
+    meson setup build . \
+        --prefix=/usr \
+        --buildtype=release \
+        --wrap-mode=nodownload \
+        -Dicon=disabled \
+        -Dtest=disabled || return 1
+
+    meson compile -C build || return 1
+
+    DESTDIR="$PKG" meson install -C build || return 1
+}

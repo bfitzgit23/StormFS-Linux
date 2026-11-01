@@ -1,0 +1,13 @@
+# description	: less package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=less
+version=704
+release=1
+source="https://www.greenwoodsoftware.com/$name/$name-$version.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

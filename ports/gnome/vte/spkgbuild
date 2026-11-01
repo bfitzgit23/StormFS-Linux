@@ -1,0 +1,21 @@
+# description	: vte package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=vte
+version=0.84.1
+release=1
+source="https://gitlab.gnome.org/GNOME/${name}/-/archive/${version}/${name}-${version}.tar.gz"
+
+build() {
+	cd "$name-$version" || return 1
+mkdir build &&
+cd    build &&
+
+meson setup --prefix=/usr --buildtype=release .. &&
+ninja
+ninja install
+}
+
+post_install () {
+rm -v /etc/profile.d/vte.*
+}

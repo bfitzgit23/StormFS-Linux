@@ -1,0 +1,14 @@
+# description	: C extensions compiler for Python
+# homepage	: https://cython.org/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=python3-cython
+version=3.3.0
+release=1
+source="https://files.pythonhosted.org/packages/source/c/cython/cython-$version.tar.gz"
+
+build() {
+	cd "$name-$version" || return 1
+    python3 -m build --wheel --skip-dependency-check --no-isolation
+    python3 -m installer --compile-bytecode 2 --destdir="$PKG" dist/*.whl
+}

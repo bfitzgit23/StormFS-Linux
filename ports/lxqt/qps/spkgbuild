@@ -1,0 +1,14 @@
+# description	: Qps for LXQt
+# homepage	: https://github.com/lxqt/qps
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=qps
+version=2.13.0
+release=1
+source="https://github.com/lxqt/${name}/releases/download/${version}/${name}-${version}.tar.xz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

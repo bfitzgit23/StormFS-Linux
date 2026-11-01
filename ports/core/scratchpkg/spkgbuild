@@ -1,0 +1,31 @@
+# description	: Package manager for StormFS Linux (Venom Linux scratchpkg)
+# homepage	: https://codeberg.org/venomlinux/scratchpkg
+# maintainer	: StormFS maintainers
+#
+# scratchpkg replaces the former the former CRUX packaging stack/pkgutils + scratch stack.  It
+# builds ports from spkgbuild recipes, records every installed file in
+# /var/lib/scratchpkg/db and resolves dependencies from each port's depends
+# file.  StormFS ships its own /etc/scratchpkg.conf and /etc/scratchpkg.repo
+# so the port tree under /usr/ports is the release source of truth.
+
+name=scratchpkg
+version=fdd643ab
+release=1
+source="https://codeberg.org/venomlinux/scratchpkg/archive/$version/scratchpkg-$version.tar.gz
+        scratchpkg.conf
+        scratchpkg.repo"
+
+build() {
+	cd "scratchpkg-$version" 2>/dev/null || cd scratchpkg || return 1
+
+	# INSTALL.sh honours DESTDIR and installs pkgbuild, pkgadd, pkgdel,
+	# scratch, portsync, pkgbase, pkgrebuild, revdep and the configs.
+	DESTDIR="$PKG" ./INSTALL.sh || return 1
+
+	# The package database must exist before the first pkgadd run.
+	install -d -m 0755 "$PKG/var/lib/scratchpkg/db" || return 1
+
+	# StormFS policy: our own build configuration and ports repository.
+	install -m 0644 "$SRC/scratchpkg.conf" "$PKG/etc/scratchpkg.conf" || return 1
+	install -m 0644 "$SRC/scratchpkg.repo" "$PKG/etc/scratchpkg.repo" || return 1
+}

@@ -1,0 +1,13 @@
+# description	: plasma-wayland-protocols package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=plasma-wayland-protocols
+version=1.21.0
+release=3
+source="https://download.kde.org/stable/${name}/$name-$version.tar.xz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

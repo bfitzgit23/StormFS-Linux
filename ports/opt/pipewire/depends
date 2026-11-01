@@ -1,0 +1,8 @@
+alsa-lib
+alsa-ucm-conf
+bluez
+gstreamer
+gst-plugins-base
+pulseaudio
+sbc
+v4l-utils

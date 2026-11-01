@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify every maintained Pkgfile evaluates and every local source companion exists."""
+"""Verify every maintained spkgbuild evaluates and every local source companion exists."""
 from pathlib import Path
 import importlib.util
 import sys
@@ -15,7 +15,7 @@ spec.loader.exec_module(mod)
 missing = []
 errors = []
 checked = local = remote = 0
-for pkgfile in sorted((ROOT / "ports").glob("*/*/Pkgfile")):
+for pkgfile in sorted((ROOT / "ports").glob("*/*/spkgbuild")):
     checked += 1
     try:
         meta = mod.eval_meta(pkgfile)
@@ -39,6 +39,6 @@ if errors or missing:
     raise SystemExit(1)
 
 print(
-    f"source companion regression: PASS ({checked} Pkgfiles; "
+    f"source companion regression: PASS ({checked} spkgbuilds; "
     f"{remote} remote sources; {local} local companions; 0 missing)"
 )

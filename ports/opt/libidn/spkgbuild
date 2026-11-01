@@ -1,0 +1,13 @@
+# description	: libidn package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=libidn
+version=1.44
+release=2
+source="https://ftp.gnu.org/gnu/${name}/${name}-${version}.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

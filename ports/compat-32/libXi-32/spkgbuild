@@ -1,0 +1,19 @@
+# description	: X Input client library
+# homepage	: http://xorg.freedesktop.org
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=libxi-32
+version=1.8.3
+release=2
+source="https://www.x.org/releases/individual/lib/libxi-$version.tar.xz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+        _bfs_require_compat32_extension 2 || return $?
+	bfs_autobuild
+
+	rm -r $PKG/usr/{include,share/man,share}
+	bfs_compat32_validate || return 1
+}

@@ -1,0 +1,22 @@
+# description	: A set of python bindings for cairo.
+# homepage	: https://pypi.org/project/pycairo/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=python3-cairo
+version=1.29.1
+release=2
+source="https://github.com/pygobject/pycairo/releases/download/v$version/pycairo-$version.tar.gz"
+
+build() {
+	cd "$name-$version" || return 1
+  meson setup build . \
+    --prefix=/usr \
+    --buildtype=plain \
+    --wrap-mode nodownload \
+    -D b_lto=true \
+    -D b_pie=true \
+    -D python=/usr/bin/python3
+
+  meson compile -C build
+  DESTDIR=$PKG meson install -C build
+}

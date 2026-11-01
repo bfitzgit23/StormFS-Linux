@@ -4,8 +4,8 @@ ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 cd "$ROOT"
 
 installer=scripts/install-bfs-menu-current.sh
-chrony=ports/opt/chrony/Pkgfile
-wget_port=ports/opt/wget/Pkgfile
+chrony=ports/opt/chrony/spkgbuild
+wget_port=ports/opt/wget/spkgbuild
 
 # r310/r313: fetch helper uses a dedicated result channel, never stdout or nested namerefs.
 grep -Fq 'fetch_sourceforge_base() {' "$installer"
@@ -33,14 +33,14 @@ grep -Fq 'Base archive verified' "$installer"
 grep -Fq 'SHA256 verification FAILED' "$installer"
 
 # r307: use the runtime-proven chronyd invocation.
-grep -Fq 'ExecStart=/usr/sbin/chronyd -n' "$chrony"
-if grep -Fq 'ExecStart=/usr/bin/chronyd -F 2' "$chrony"; then
+! grep -q 'ExecStart=' "$chrony"
+if grep -Fq 'chronyd -F 2' "$chrony"; then
     echo 'r311: stale chronyd ExecStart remains' >&2
     exit 1
 fi
 
 # Live wget must have a deterministic distro CA bundle without --no-check-certificate.
-grep -Fq '# Depends on: ca-certificates ' "$wget_port"
+grep -qx 'ca-certificates' ports/opt/wget/depends
 grep -Fq 'ca_certificate = /etc/pki/tls/certs/ca-bundle.crt' "$wget_port"
 
 # r313: direct SourceForge mirror endpoint and verified handoff guard.

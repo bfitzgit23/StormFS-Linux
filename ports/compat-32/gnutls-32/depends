@@ -1,0 +1,5 @@
+gnutls
+libidn2-32
+libtasn1-32
+nettle-32
+p11-kit-32

@@ -1,0 +1,16 @@
+# description	: Session and policy manager for PipeWire
+# homepage	: https://pipewire.pages.freedesktop.org/wireplumber/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+# optional	: doxygen gobject-introspection python3-lxml sphinx sphinx_rtd_theme breathe
+
+name=wireplumber
+version=0.5.17
+release=1
+build_opt="--prefix=/usr --buildtype=release -Dsystem-lua=true"
+source="https://gitlab.freedesktop.org/pipewire/$name/-/archive/$version/$name-$version.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

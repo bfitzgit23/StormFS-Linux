@@ -1,0 +1,17 @@
+# description	: Window information utility for X
+# homepage	: https://xorg.freedesktop.org
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=xwud
+version=1.0.8
+release=2
+source="https://xorg.freedesktop.org/archive/individual/app/xwud-$version.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+
+	./configure $XORG_CONFIG
+
+	make
+	make DESTDIR=$PKG install
+}

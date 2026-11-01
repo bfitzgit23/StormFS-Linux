@@ -1,0 +1,15 @@
+# description	: BFSOS maintained Compiz Reloaded desktop stack
+# homepage	: https://gitlab.com/compiz
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=compiz-meta
+version=0.8.18
+release=4
+source=""
+
+build() {
+    install -d "$PKG/usr/share/bfsos/meta"
+    printf '%s\n' \
+        'BFSOS Compiz Reloaded 0.8.18 meta-package.' \
+        > "$PKG/usr/share/bfsos/meta/$name"
+}

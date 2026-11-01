@@ -1,0 +1,28 @@
+# description	: Library of PNG support functions with APNG support.
+# homepage	: http://www.libpng.org/pub/png/libpng.html
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=libpng12-32
+version=1.2.59
+release=3
+source="https://sourceforge.net/projects/libpng/files/libpng-$version.tar.xz https://sourceforge.net/projects/libpng-apng/files/libpng12/$version/libpng-$version-apng.patch.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+	# Apply patch sources; pkgbuild does this automatically.
+	for _p in "$SRC"/*.patch "$SRC"/*.diff; do
+		[ -f "$_p" ] || continue
+		patch -t "${patch_opt:--p1}" -i "$_p" || return 1
+	done
+        _bfs_require_compat32_extension 2 || return 0
+	libtoolize --force --copy
+	aclocal
+	autoconf
+	automake --add-missing
+	bfs_autobuild
+
+	rm -rf $PKG/usr/{bin,include,lib32/{libpng.{la,a,so},pkgconfig},share}
+	bfs_compat32_validate || return 1
+}

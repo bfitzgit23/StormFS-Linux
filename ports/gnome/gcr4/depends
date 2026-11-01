@@ -1,0 +1,12 @@
+glib
+gobject-introspection
+libgcrypt
+p11-kit
+gnupg
+gtk4
+libsecret
+libxslt
+vala
+valgrind
+python3-gi_docgen
+gnutls

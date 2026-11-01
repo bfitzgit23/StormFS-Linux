@@ -1,0 +1,19 @@
+# description	: An EXIF tag parsing library
+# homepage	: https://libexif.github.io/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+# optional	: doxygen graphviz
+
+name=libexif
+version=0.6.26
+release=1
+source="https://github.com/$name/$name/releases/download/v$version/$name-$version.tar.bz2"
+
+build() {
+	cd "$name-$version" || return 1
+
+	./configure --prefix=/usr    \
+            --disable-static \
+            --with-doc-dir=/usr/share/doc/$name-$version &&
+make
+	make DESTDIR=$PKG install
+}

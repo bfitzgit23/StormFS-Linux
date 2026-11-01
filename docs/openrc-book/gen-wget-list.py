@@ -26,15 +26,15 @@ from pathlib import Path
 # Packages always required by the book, even if no prt-get line mentions them.
 EXTRA_PKGS = ["openrc"]
 
-# Packages whose source URL cannot be derived statically from their Pkgfile.
-# Used verbatim when Pkgfile parsing yields nothing; refresh on version bumps.
+# Packages whose source URL cannot be derived statically from their spkgbuild.
+# Used verbatim when spkgbuild parsing yields nothing; refresh on version bumps.
 FALLBACK_URLS = {}
 
 PRTGET_RE = re.compile(r"prt-get\s+(?:install|update)\s+([^\n\\]+)", re.IGNORECASE)
 TOKEN_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9+._-]*$")
 SOURCE_RE = re.compile(r"source\s*=\s*\((.*?)\)", re.DOTALL)
 
-# Top-level (unindented) VAR=value assignments in a Pkgfile.
+# Top-level (unindented) VAR=value assignments in a spkgbuild.
 ASSIGN_RE = re.compile(r"^([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.+?)\s*$", re.MULTILINE)
 # $VAR or ${EXPR} where EXPR may carry a bash operator:
 #   % %% # ##  (prefix/suffix strip),  / //  (substitution),  :off[:len]  (slice)
@@ -47,7 +47,7 @@ PRINTF_SPLIT_RE = re.compile(
 
 
 def parse_vars(text: str):
-    """Parse simple top-level VAR=value assignments from a Pkgfile."""
+    """Parse simple top-level VAR=value assignments from a spkgbuild."""
     variables = {}
     for m in ASSIGN_RE.finditer(text):
         key, val = m.group(1), m.group(2).strip()
@@ -163,18 +163,18 @@ def collect_packages(chapters_dir: Path):
 
 
 def find_port(ports_dir: Path, name: str):
-    """Locate <ports_dir>/<collection>/<name>/Pkgfile across all collections."""
+    """Locate <ports_dir>/<collection>/<name>/spkgbuild across all collections."""
     if not ports_dir.is_dir():
         return None
     for collection in sorted(p for p in ports_dir.iterdir() if p.is_dir()):
-        pkgfile = collection / name / "Pkgfile"
+        pkgfile = collection / name / "spkgbuild"
         if pkgfile.is_file():
             return pkgfile
     return None
 
 
 def extract_urls(pkgfile: Path):
-    """Return concrete remote source URLs from a Pkgfile's source=(...) array."""
+    """Return concrete remote source URLs from a spkgbuild's source=(...) array."""
     text = pkgfile.read_text(encoding="utf-8", errors="replace")
     variables = parse_vars(text)
     m = SOURCE_RE.search(text)

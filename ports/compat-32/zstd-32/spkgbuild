@@ -1,0 +1,22 @@
+# description	: Real-time compression with high compression ratios.
+# homepage	: https://facebook.github.io/zstd/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=zstd-32
+version=1.5.7
+release=2
+source="https://github.com/facebook/zstd/archive/v$version/zstd-v$version.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+  (
+    set -e
+	make HAVE_THREAD=1
+	PREFIX=/usr LIBDIR=/usr/lib32 PKGCONFIGDIR=/usr/lib32/pkgconfig make DESTDIR=$PKG install
+
+	rm -r $PKG/usr/{share,include,bin}
+  )
+	bfs_compat32_validate || return 1
+}

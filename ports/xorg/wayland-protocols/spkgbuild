@@ -1,0 +1,14 @@
+# description	: Specifications of extended Wayland protocols
+# homepage	: https://wayland.freedesktop.org/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=wayland-protocols
+version=1.49
+release=2
+source="https://gitlab.freedesktop.org/wayland/wayland-protocols/-/releases/$version/downloads/$name-$version.tar.xz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

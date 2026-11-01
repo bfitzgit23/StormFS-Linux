@@ -1,0 +1,15 @@
+# description	: libaio package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=libaio
+version=0.3.113
+release=2
+source="https://archive.ubuntu.com/ubuntu/pool/main/liba/libaio/libaio_${version}.orig.tar.gz"
+
+build() {
+	cd "$name-$version" || return 1
+        sed -i '/install.*libaio.a/s/^/#/' src/Makefile
+
+        make
+        make DESTDIR=$PKG install
+}

@@ -1,0 +1,17 @@
+# description	: khelpcenter package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=khelpcenter
+version=26.08.1
+release=1
+build_opt="-DCMAKE_INSTALL_PREFIX=/opt/kf6
+      -DCMAKE_BUILD_TYPE=Release
+      -DBUILD_TESTING=OFF
+      -Wno-author"
+source="https://download.kde.org/stable/release-service/$version/src/$name-$version.tar.xz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

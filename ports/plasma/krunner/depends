@@ -1,0 +1,6 @@
+kconfig
+kcoreaddons
+ki18n
+kitemmodels
+extra-cmake-modules
+qt6

@@ -1,0 +1,14 @@
+# description	: gnome-screenshot package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=gnome-screenshot
+version=41.0
+release=1
+source="https://download.gnome.org/sources/${name}/41/${name}-${version}.tar.xz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+sed -i '/merge_file/{n;d}' data/meson.build
+	bfs_autobuild
+}

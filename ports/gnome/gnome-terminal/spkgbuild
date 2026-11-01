@@ -1,0 +1,18 @@
+# description	: gnome-terminal package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=gnome-terminal
+version=3.60.0
+release=1
+source="https://gitlab.gnome.org/GNOME/${name}/-/archive/${version}/${name}-${version}.tar.gz"
+
+build() {
+	cd "$name-$version" || return 1
+sed -i -r 's:"(/system):"/org/gnome\1:g' src/external.gschema.xml
+mkdir build &&
+cd    build &&
+
+meson setup --prefix=/usr --buildtype=release .. &&
+ninja
+ninja install
+}

@@ -1,0 +1,18 @@
+# description	: gdm package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=gdm
+version=51.0
+release=1
+build_opt="--prefix=/usr
+      --buildtype=release  
+      -D gdm-xsession=true 
+      -D run-dir=/run/gdm
+      -D default-pam-config=lfs"
+source="https://gitlab.gnome.org/GNOME/gdm/-/archive/$version/gdm-$version.tar.bz2"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

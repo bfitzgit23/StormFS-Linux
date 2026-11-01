@@ -1,0 +1,24 @@
+# description	: Graphical virtual machine manager for libvirt
+# homepage	: https://virt-manager.org/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+# optional	: gtksourceview4
+
+name=virt-manager
+version=5.1.0
+release=5
+# BFSOS currently ships the VNC console path as the guaranteed baseline.
+# SPICE is packaged and available; keep VNC as the RC2 default until SPICE runtime acceptance is complete.
+build_opt=(
+    -Dtests=disabled
+    -Dupdate-icon-cache=false
+    -Dcompile-schemas=false
+    -Ddefault-graphics=vnc
+    -Ddefault-hvs="['qemu']"
+)
+source="https://github.com/virt-manager/virt-manager/archive/refs/tags/v$version.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

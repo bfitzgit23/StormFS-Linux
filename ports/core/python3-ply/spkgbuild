@@ -1,0 +1,13 @@
+# description	: python3-ply package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=python3-ply
+version=3.11
+release=1
+source="https://files.pythonhosted.org/packages/source/p/ply/ply-${version}.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

@@ -3,9 +3,9 @@ set -eu
 ROOT=$(CDPATH= cd -- "$(dirname -- "$0")/../.." && pwd)
 fail() { echo "firefox coexistence regression: FAIL: $*" >&2; exit 1; }
 
-normal="$ROOT/ports/opt/firefox/Pkgfile"
-esr="$ROOT/ports/opt/firefox-esr/Pkgfile"
-bin="$ROOT/ports/opt/firefox-bin/Pkgfile"
+normal="$ROOT/ports/opt/firefox/spkgbuild"
+esr="$ROOT/ports/opt/firefox-esr/spkgbuild"
+bin="$ROOT/ports/opt/firefox-bin/spkgbuild"
 
 # Three distinct package/application roots and launchers.
 grep -q 'MOZ_APP_REMOTINGNAME=firefox$' "$normal" || fail 'normal remoting identity missing'

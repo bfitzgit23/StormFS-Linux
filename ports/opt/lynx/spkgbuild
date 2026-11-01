@@ -1,0 +1,32 @@
+# description	: Text-based web browser.
+# homepage	: https://lynx.invisible-island.net/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+# optional	: zip sharutils
+
+name=lynx
+version=2.9.3
+release=3
+source="https://invisible-mirror.net/archives/lynx/tarballs/lynx${version}.tar.bz2"
+
+build() {
+	cd "$name-$version" || return 1
+    ./configure --prefix=/usr \
+        --sysconfdir=/etc/lynx \
+        --with-zlib \
+        --with-bzlib \
+        --with-ssl \
+        --without-gnutls \
+        --without-libarchive \
+        --without-libidn \
+        --with-screen=ncursesw \
+        --enable-ipv6 \
+        --enable-locale-charset \
+        --enable-nls \
+        --datadir=/usr/share/doc/lynx-$version
+    make -j "${JOBS:-1}"
+    make DESTDIR="$PKG" install-full
+    chgrp -R root "$PKG/usr/share/doc/lynx-$version/lynx_doc"
+    sed -e '/#LOCALE/     a LOCALE_CHARSET:TRUE' -i "$PKG/etc/lynx/lynx.cfg"
+    sed -e '/#DEFAULT_ED/ a DEFAULT_EDITOR:vi' -i "$PKG/etc/lynx/lynx.cfg"
+    sed -e '/#PERSIST/    a PERSISTENT_COOKIES:TRUE' -i "$PKG/etc/lynx/lynx.cfg"
+}

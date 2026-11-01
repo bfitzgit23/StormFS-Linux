@@ -1,0 +1,19 @@
+# description	: Masquerade directory to use ccache with mingw
+# homepage	: https://ccache.dev/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=mingw-ccache-bindings
+version=10.2.0
+release=1
+source=""
+
+build() {
+  install -d $PKG/usr/lib/ccache
+
+  ln -s ../../bin/ccache $PKG/usr/lib/ccache/i686-w64-mingw32-c++
+  ln -s ../../bin/ccache $PKG/usr/lib/ccache/i686-w64-mingw32-g++
+  ln -s ../../bin/ccache $PKG/usr/lib/ccache/i686-w64-mingw32-gcc
+  ln -s ../../bin/ccache $PKG/usr/lib/ccache/x86_64-w64-mingw32-c++
+  ln -s ../../bin/ccache $PKG/usr/lib/ccache/x86_64-w64-mingw32-g++
+  ln -s ../../bin/ccache $PKG/usr/lib/ccache/x86_64-w64-mingw32-gcc
+}

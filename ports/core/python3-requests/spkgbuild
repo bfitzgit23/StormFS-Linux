@@ -1,0 +1,19 @@
+# description	: python3-requests package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=python3-requests
+version=2.34.2
+release=2
+source="https://files.pythonhosted.org/packages/source/r/requests/requests-${version}.tar.gz requests-use_system_certs-2.patch"
+
+build() {
+	cd "$name-$version" || return 1
+
+	# Apply patch sources; pkgbuild does this automatically.
+	for _bfs_patch in "$SRC"/*.patch "$SRC"/*.diff; do
+		[ -f "$_bfs_patch" ] || continue
+		patch -t "${patch_opt:--p1}" -i "$_bfs_patch" || return 1
+	done
+python3 -m build --wheel --no-isolation || return 1
+python3 -m installer --destdir="$PKG" dist/*.whl || return 1
+}

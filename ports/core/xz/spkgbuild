@@ -1,0 +1,14 @@
+# description	: xz package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=xz
+version=5.8.4
+release=1
+keep_static=1
+source="https://github.com/tukaani-project/xz/releases/download/v$version/xz-$version.tar.xz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

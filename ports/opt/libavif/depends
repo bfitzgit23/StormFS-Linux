@@ -1,0 +1,6 @@
+cmake
+ninja
+libaom
+dav1d
+svt-av1
+gdk-pixbuf

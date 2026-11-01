@@ -1,0 +1,17 @@
+# description	: Query or set X gamma correction
+# homepage	: https://xorg.freedesktop.org
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=xgamma
+version=1.0.8
+release=2
+source="https://xorg.freedesktop.org/archive/individual/app/xgamma-$version.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+
+	./configure $XORG_CONFIG
+
+	make
+	make DESTDIR=$PKG install
+}

@@ -1,0 +1,25 @@
+# description	: Text and graphics mode WWW browser
+# homepage	: http://links.twibright.com/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=links
+version=2.30
+release=3
+source="http://links.twibright.com/download/$name-$version.tar.bz2 links-2.30-gcc16-const-fix.patch"
+
+build() {
+	cd "$name-$version" || return 1
+
+	# Apply patch sources; pkgbuild does this automatically.
+	for _bfs_patch in "$SRC"/*.patch "$SRC"/*.diff; do
+		[ -f "$_bfs_patch" ] || continue
+		patch -t "${patch_opt:--p1}" -i "$_bfs_patch" || return 1
+	done
+
+	./configure --prefix=/usr --mandir=/usr/share/man
+	make
+	make DESTDIR=$PKG install
+install -v -d -m755 $PKG/usr/share/doc/links-2.29 &&
+install -v -m644 doc/links_cal/* KEYS BRAILLE_HOWTO \
+    $PKG/usr/share/doc/links-2.29
+}

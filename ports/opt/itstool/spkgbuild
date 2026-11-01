@@ -1,0 +1,22 @@
+# description	: XML to PO and back again
+# homepage	: https://itstool.org/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=itstool
+version=2.0.7
+release=4
+source="https://github.com/itstool/itstool/archive/$version/$name-$version.tar.gz itstool-2.0.7-lxml-1.patch"
+
+build() {
+	cd "$name-$version" || return 1
+
+	# Apply patch sources; pkgbuild does this automatically.
+	for _bfs_patch in "$SRC"/*.patch "$SRC"/*.diff; do
+		[ -f "$_bfs_patch" ] || continue
+		patch -t "${patch_opt:--p1}" -i "$_bfs_patch" || return 1
+	done
+  PYTHON=/usr/bin/python3 \
+  ./autogen.sh --prefix=/usr
+  make
+  make DESTDIR=$PKG install
+}

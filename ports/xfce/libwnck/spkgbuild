@@ -1,0 +1,13 @@
+# description	: libwnck package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=libwnck
+version=43.3
+release=1
+source="https://download.gnome.org/sources/${name}/43/${name}-${version}.tar.xz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

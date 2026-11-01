@@ -1,0 +1,5 @@
+meson
+ninja
+libx11
+libxext
+xorgproto

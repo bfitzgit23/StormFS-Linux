@@ -1,0 +1,13 @@
+# description	: libdisplay-info package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=libdisplay-info
+version=0.4.0
+release=2
+source="https://gitlab.freedesktop.org/emersion/${name}/-/releases/${version}/downloads//${name}-${version}.tar.xz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

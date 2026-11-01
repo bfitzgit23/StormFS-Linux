@@ -1,0 +1,18 @@
+# description	: library providing a standalone version of the X server implementation of the VESA CVT standard timing modelines generator
+# homepage	: https://gitlab.freedesktop.org/xorg/lib/libxcvt
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=libxcvt
+version=0.1.3
+release=1
+source="https://xorg.freedesktop.org/archive/individual/lib/libxcvt-$version.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+mkdir build &&
+cd    build &&
+
+meson setup  --prefix=$XORG_PREFIX --buildtype=release .. &&
+ninja
+	DESTDIR=$PKG ninja install
+}

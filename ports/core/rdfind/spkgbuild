@@ -1,0 +1,19 @@
+# description	: find duplicate files utility
+# homepage	: https://github.com/pauldreik/rdfind
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=rdfind
+version=1.8.0
+release=1
+renames=($name-$version.tar.gz)
+source="https://github.com/pauldreik/rdfind/archive/releases/$version.tar.gz"
+
+build() {
+	cd "$name-$version" || return 1
+
+
+  ./bootstrap.sh
+  ./configure --prefix=/usr
+  make
+  make DESTDIR=$PKG install
+}

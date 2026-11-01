@@ -1,0 +1,5 @@
+cmake
+extra-cmake-modules
+qt6
+linux-pam
+upower

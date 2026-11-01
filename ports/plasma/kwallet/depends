@@ -1,0 +1,12 @@
+gpgme
+kcolorscheme
+kcoreaddons
+kdbusaddons
+kdoctools
+knotifications
+kwidgetsaddons
+kwindowsystem
+qca
+extra-cmake-modules
+libsecret
+qt6

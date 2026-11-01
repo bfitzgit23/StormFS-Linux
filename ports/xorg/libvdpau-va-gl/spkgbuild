@@ -1,0 +1,14 @@
+# description	: libvdpau-va-gl package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=libvdpau-va-gl
+version=0.4.2
+release=1
+build_opt="-D CMAKE_BUILD_TYPE=Release -D CMAKE_INSTALL_PREFIX=$XORG_PREFIX"
+source="https://github.com/i-rinat/${name}/archive/v${version}/${name}-${version}.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

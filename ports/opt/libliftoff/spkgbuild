@@ -1,0 +1,19 @@
+# description	: Lightweight KMS plane library
+# homepage	: https://gitlab.freedesktop.org/emersion/libliftoff
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=libliftoff
+version=0.5.0
+release=1
+source="https://gitlab.freedesktop.org/emersion/${name}/-/archive/v${version}/${name}-v${version}.tar.gz"
+
+build() {
+	cd "$name-$version" || return 1
+    meson setup build . \
+        --prefix=/usr \
+        --buildtype=release \
+        --wrap-mode=nodownload || return 1
+
+    meson compile -C build || return 1
+    DESTDIR="$PKG" meson install -C build || return 1
+}

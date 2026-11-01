@@ -1,0 +1,6 @@
+cmake
+libexif
+menu-cache
+qt6
+lxqt-build-tools
+lxqt-menu-data

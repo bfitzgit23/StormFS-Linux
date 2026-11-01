@@ -1,0 +1,18 @@
+# description	: X Athena Widgets toolkit
+# homepage	: https://xorg.freedesktop.org
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=libxaw
+version=1.0.16
+release=2
+source="https://xorg.freedesktop.org/archive/individual/lib/libxaw-$version.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+
+	  ./configure $XORG_CONFIG --docdir=/usr/share/doc/$name-$version \
+                  --with-appdefaultdir=/etc/X11/app-defaults
+
+	make
+	make DESTDIR=$PKG install
+}

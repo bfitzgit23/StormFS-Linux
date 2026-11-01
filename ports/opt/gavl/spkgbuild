@@ -1,0 +1,30 @@
+# description	: Low-level audio/video support library used by multimedia applications
+# homepage	: https://github.com/bplaum/gavl
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+# optional	: doxygen
+
+name=gavl
+version=2.0.1
+release=2
+source="https://github.com/bplaum/gavl/archive/refs/tags/v$version.tar.gz gavl-2.0.1-nettle4-md5.patch"
+
+build() {
+	cd "$name-$version" || return 1
+
+	# Apply patch sources; pkgbuild does this automatically.
+	for _bfs_patch in "$SRC"/*.patch "$SRC"/*.diff; do
+		[ -f "$_bfs_patch" ] || continue
+		patch -t "${patch_opt:--p1}" -i "$_bfs_patch" || return 1
+	done
+    autoreconf -fi
+
+    ./configure \
+        --prefix=/usr \
+        --disable-static \
+        --enable-shared \
+        --without-doxygen \
+        --with-cpuflags=none
+
+    make -j${JOBS:-1}
+    make DESTDIR="$PKG" install
+}

@@ -1,0 +1,16 @@
+# description	: libpeas package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=libpeas
+version=1.38.1
+release=1
+build_opt="--prefix=/usr          
+            --buildtype=release    
+            --wrap-mode=nofallback"
+source="https://download.gnome.org/sources/${name}/${version%.*}/${name}-${version}.tar.xz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

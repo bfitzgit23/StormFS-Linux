@@ -1,0 +1,19 @@
+# description	: Lightweight DNS forwarder and DHCP server used by libvirt networks
+# homepage	: https://dnsmasq.org/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=dnsmasq
+version=2.92
+release=1
+build_opt=(
+    PREFIX=/usr
+)
+source="https://thekelleys.org.uk/dnsmasq/dnsmasq-$version.tar.xz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+    install -d "$PKG/etc"
+    install -m644 dnsmasq.conf.example "$PKG/etc/dnsmasq.conf.example"
+}

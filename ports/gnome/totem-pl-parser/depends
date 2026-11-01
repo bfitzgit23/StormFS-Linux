@@ -1,0 +1,6 @@
+glib
+gobject-introspection
+libarchive
+libgcrypt
+cmake
+gvfs

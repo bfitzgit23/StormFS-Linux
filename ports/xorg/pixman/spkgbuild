@@ -1,0 +1,19 @@
+# description	: Pixel manipulation library
+# homepage	: https://xorg.freedesktop.org
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=pixman
+version=0.46.4
+release=2
+source="https://xorg.freedesktop.org/archive/individual/lib/$name-$version.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+
+	mkdir build &&
+	cd    build &&
+
+meson setup --prefix=/usr --buildtype=release &&
+ninja
+	DESTDIR=$PKG ninja install
+}

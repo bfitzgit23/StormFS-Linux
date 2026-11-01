@@ -1,0 +1,13 @@
+# description	: enchant package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=enchant
+version=2.8.21
+release=1
+source="https://github.com/rrthomas/$name/releases/download/v$version/$name-$version.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

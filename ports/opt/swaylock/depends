@@ -1,0 +1,6 @@
+meson
+wayland
+wayland-protocols
+libxkbcommon
+cairo
+linux-pam

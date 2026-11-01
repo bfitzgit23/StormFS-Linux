@@ -1,0 +1,7 @@
+libassuan
+libgcrypt
+libksba
+npth
+openldap
+gnutls
+pinentry

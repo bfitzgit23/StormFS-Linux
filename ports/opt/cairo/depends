@@ -1,0 +1,7 @@
+fontconfig
+glib
+pixman
+libxext
+libxrender
+xcb-util
+libpng

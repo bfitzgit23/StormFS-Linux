@@ -1,0 +1,20 @@
+# description	: Commandline MP3 player
+# homepage	: https://www.mpg123.de
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+# optional	: flac-32 lame-32 libsdl2-32 pulseaudio-32
+
+name=mpg123-32
+version=1.33.7
+release=3
+source="https://www.mpg123.de/download/${name%-*}-$version.tar.bz2"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+        _bfs_require_compat32_extension 2 || return $?
+	bfs_autobuild
+
+  rm -rf "$PKG/usr/bin" "$PKG/usr/include" "$PKG/usr/share"
+	bfs_compat32_validate || return 1
+}

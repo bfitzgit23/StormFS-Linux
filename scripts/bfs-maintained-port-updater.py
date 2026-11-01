@@ -9,10 +9,10 @@ Safety rules:
 - reset release=1 only when version changes;
 - inventory every source= companion before writing;
 - reject missing local companions; version-named patches are applicability-tested rather than rejected by filename alone;
-- vendor remote patch/diff URLs (including aliased, redirected, and small suffix-less patch endpoints) before the Pkgfile edit;
+- vendor remote patch/diff URLs (including aliased, redirected, and small suffix-less patch endpoints) before the spkgbuild edit;
 - reject HTML/empty/non-patch patch downloads and same-name collisions;
 - validate auto-applied patches against the proposed source tree before commit;
-- write the Pkgfile last so a failed patch/source transaction cannot leave a
+- write the spkgbuild last so a failed patch/source transaction cannot leave a
   version bump without its required companion files.
 
 The default is a dry run.  Use --apply only after reviewing the proposed set.
@@ -100,13 +100,16 @@ fi
         timeout=10,
     )
     if cp.returncode != 0:
-        raise UpdateError(f"Pkgfile evaluation failed ({cp.returncode}): {pkgfile}")
+        raise UpdateError(f"spkgbuild evaluation failed ({cp.returncode}): {pkgfile}")
     fields = cp.stdout.decode("utf-8", "replace").split("\0")
     if fields and fields[-1] == "":
         fields.pop()
     if len(fields) < 6:
-        raise UpdateError(f"Pkgfile did not define required metadata: {pkgfile}")
+        raise UpdateError(f"spkgbuild did not define required metadata: {pkgfile}")
     name, version, release, patch_opt, skip_patch, auto_patch, *sources = fields
+    # scratchpkg stores source as one space separated string, while the old
+    # pkgmk recipes used a bash array; normalise both to a token list.
+    sources = [tok for field in sources for tok in field.split()]
     return Meta(name, version, release, patch_opt or "-p1", bool(skip_patch), auto_patch != "no", sources)
 
 
@@ -161,10 +164,10 @@ def rewrite_version_release(text: str, old: str, new: str) -> str:
     vm = re.search(r"(?m)^version=(.*)$", text)
     rm = re.search(r"(?m)^release=(.*)$", text)
     if not vm or not rm:
-        raise UpdateError("Pkgfile must contain simple top-level version= and release= assignments")
+        raise UpdateError("spkgbuild must contain simple top-level version= and release= assignments")
     current_literal = vm.group(1).strip().strip("'\"")
     if current_literal != old:
-        raise UpdateError(f"Pkgfile version assignment is {current_literal!r}, expected audit current {old!r}")
+        raise UpdateError(f"spkgbuild version assignment is {current_literal!r}, expected audit current {old!r}")
     text = text[:vm.start()] + f"version={new}" + text[vm.end():]
     # find release again because offsets changed
     rm = re.search(r"(?m)^release=(.*)$", text)
@@ -208,7 +211,7 @@ def remote_probe_raw_tokens(text: str) -> list[str]:
 
 
 def expand_token_with_pkgfile(token: str, staged_pkgfile: Path) -> str:
-    # Let bash expand the same $name/$version expressions used by the Pkgfile.
+    # Let bash expand the same $name/$version expressions used by the spkgbuild.
     script = r'''
 set +u
 source "$1" >/dev/null 2>&1 || exit 31
@@ -244,7 +247,7 @@ def curl_download(url: str, dest: Path, timeout: int, *, max_filesize: int | Non
 
 
 def vendor_remote_patches(staged_dir: Path, old_text: str, new_text: str, timeout: int) -> tuple[str, list[str]]:
-    pkgfile = staged_dir / "Pkgfile"
+    pkgfile = staged_dir / "spkgbuild"
     pkgfile.write_text(new_text)
     provenance: list[str] = []
     explicit = set(remote_patch_raw_tokens(new_text))
@@ -310,7 +313,7 @@ def vendor_remote_patches(staged_dir: Path, old_text: str, new_text: str, timeou
             marker = "\n".join(fresh) + "\n"
             m = re.search(r"(?m)^source=", new_text)
             if not m:
-                raise UpdateError("Pkgfile has no source= assignment for provenance insertion")
+                raise UpdateError("spkgbuild has no source= assignment for provenance insertion")
             new_text = new_text[:m.start()] + marker + new_text[m.start():]
     pkgfile.write_text(new_text)
     return new_text, provenance
@@ -359,7 +362,7 @@ def validate_auto_patch_set(staged_dir: Path, meta: Meta, timeout: int) -> None:
     if not patch_sources:
         return
     if meta.skip_patch or not meta.auto_patch:
-        raise UpdateError("patch-bearing port disables pkgmk auto-patching; manual patch flow requires maintainer review")
+        raise UpdateError("patch-bearing port disables pkgbuild auto-patching; manual patch flow requires maintainer review")
 
     archives = [src for src in meta.sources if is_archive_name(source_filename(src))]
     if not archives:
@@ -428,7 +431,7 @@ def update_one(row: AuditRow, apply: bool, timeout: int, validate_patches: bool)
     if row.status != "UPDATE" or not row.latest:
         raise UpdateError("row is not a verified UPDATE")
     port_dir = ROOT / "ports" / row.port
-    pkgfile = port_dir / "Pkgfile"
+    pkgfile = port_dir / "spkgbuild"
     if not pkgfile.is_file():
         raise UpdateError(f"port not found: {row.port}")
     before = eval_meta(pkgfile)
@@ -438,7 +441,7 @@ def update_one(row: AuditRow, apply: bool, timeout: int, validate_patches: bool)
     with tempfile.TemporaryDirectory(prefix=f"bfs-update-{before.name}-") as td_s:
         staged = Path(td_s) / before.name
         shutil.copytree(port_dir, staged, symlinks=True)
-        staged_pkg = staged / "Pkgfile"
+        staged_pkg = staged / "spkgbuild"
         old_text = staged_pkg.read_text()
         new_text = rewrite_version_release(old_text, row.current, row.latest)
         staged_pkg.write_text(new_text)
@@ -469,9 +472,9 @@ def update_one(row: AuditRow, apply: bool, timeout: int, validate_patches: bool)
             suffix = f"; versioned patches require applicability validation: {','.join(versioned_patches)}" if versioned_patches else ""
             return f"WOULD-UPDATE {row.port} {row.current} -> {row.latest} release=1{suffix}"
 
-        # Commit newly vendored companion files first and Pkgfile last.
+        # Commit newly vendored companion files first and spkgbuild last.
         for child in staged.iterdir():
-            if child.name == "Pkgfile":
+            if child.name == "spkgbuild":
                 continue
             original = port_dir / child.name
             if original.exists():
@@ -480,7 +483,7 @@ def update_one(row: AuditRow, apply: bool, timeout: int, validate_patches: bool)
                 shutil.copy2(child, original)
             elif child.is_dir():
                 shutil.copytree(child, original)
-        tmp_pkg = pkgfile.with_name("Pkgfile.bfs-update-tmp")
+        tmp_pkg = pkgfile.with_name("spkgbuild.bfs-update-tmp")
         tmp_pkg.write_text(staged_pkg.read_text())
         os.replace(tmp_pkg, pkgfile)
         return f"UPDATED {row.port} {row.current} -> {row.latest} release=1"

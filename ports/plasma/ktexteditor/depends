@@ -1,0 +1,5 @@
+kparts
+ktextwidgets
+syntax-highlighting
+extra-cmake-modules
+qt6

@@ -1,0 +1,28 @@
+# description	: KDE library for partition management, used by calamares
+# homepage	: https://invent.kde.org/system/kpmcore
+# maintainer	: StormFS maintainers
+
+name=kpmcore
+version=26.08.1
+release=1
+build_opt="-DCMAKE_INSTALL_PREFIX=/usr
+           -DCMAKE_INSTALL_LIBDIR=lib
+           -DCMAKE_PREFIX_PATH=/opt/qt6;/opt/kf6
+           -DCMAKE_INSTALL_RPATH=/opt/qt6/lib;/opt/kf6/lib
+           -DCMAKE_BUILD_TYPE=Release
+           -DBUILD_TESTING=OFF
+           -Wno-dev"
+source="https://download.kde.org/stable/release-service/$version/src/$name-$version.tar.xz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+
+	# Calamares resolves KPMcore through CMAKE_PREFIX_PATH=/usr, so the CMake
+	# metadata must land in the default prefix rather than /opt/kf6.
+	test -f "$PKG/usr/lib/cmake/KPMcore/KPMcoreConfig.cmake" || {
+		echo "ERROR: KPMcore CMake metadata was not staged under /usr/lib/cmake" >&2
+		return 1
+	}
+}

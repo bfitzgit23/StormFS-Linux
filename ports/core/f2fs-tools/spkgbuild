@@ -1,0 +1,25 @@
+# description	: Userland tools for the Flash-Friendly File System (F2FS)
+# homepage	: https://f2fs.wiki.kernel.org/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=f2fs-tools
+version=1.16.0
+release=1
+source="https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git/snapshot/$name-$version.tar.gz 0001-f2fs-tools-use-stdbool.h-instead-of-bool.patch"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+
+	# Apply patch sources; pkgbuild does this automatically.
+	for _bfs_patch in "$SRC"/*.patch "$SRC"/*.diff; do
+		[ -f "$_bfs_patch" ] || continue
+		patch -t "${patch_opt:--p1}" -i "$_bfs_patch" || return 1
+	done
+	export BFS_SKIP_PATCHES=1
+    autoreconf -fi
+	bfs_autobuild
+}
+
+build_opt="--prefix=/usr
+           --sbindir=/sbin"

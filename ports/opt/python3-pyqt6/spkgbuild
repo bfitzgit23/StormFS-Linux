@@ -1,0 +1,25 @@
+# description	: Python bindings for the Qt 6 toolkit
+# homepage	: https://www.riverbankcomputing.com/software/pyqt/
+# maintainer	: StormFS maintainers
+
+name=python3-pyqt6
+version=6.11.0
+release=1
+source="https://files.pythonhosted.org/packages/source/P/PyQt6/PyQt6-$version.tar.gz"
+
+build() {
+	cd "$name-$version" || return 1
+
+	# sip-build locates qmake through PATH; Qt 6 lives outside the default prefix.
+	export PATH="/opt/qt6/bin:$PATH"
+
+    python3 -m build --wheel --no-isolation || return 1
+    python3 -m installer --compile-bytecode 2 --destdir="$PKG" dist/*.whl || return 1
+
+	# Translate the wheel's dist-info into a Qt style marker so bindings are
+	# never installed without a matching Qt 6 runtime.
+	test -d "$PKG/usr/lib/python3/site-packages/PyQt6" || {
+		echo "ERROR: PyQt6 bindings were not staged under site-packages" >&2
+		return 1
+	}
+}

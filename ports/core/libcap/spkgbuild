@@ -1,0 +1,14 @@
+# description	: libcap package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=libcap
+version=2.78
+release=1
+source="https://www.kernel.org/pub/linux/libs/security/linux-privs/libcap2/libcap-$version.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+	sed -i '/install -m.*STA/d' libcap/Makefile
+	make prefix=/usr lib=lib
+	make prefix=/usr lib=lib install
+}

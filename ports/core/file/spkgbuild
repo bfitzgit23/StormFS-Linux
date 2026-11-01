@@ -1,0 +1,13 @@
+# description	: file package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=file
+version=5.48
+release=1
+source="https://astron.com/pub/file/file-$version.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

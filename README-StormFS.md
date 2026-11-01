@@ -1,6 +1,6 @@
 # StormFS
 
-StormFS is an x86_64 source-built Linux distribution maintained by the StormFS community. It uses an LFS/MLFS-style bootstrap, CRUX `pkgutils`/ports for package builds, `prt-get` for dependency-aware package management, systemd as the default init system, a PyQt5 graphical installer, and a live ISO for easy deployment.
+StormFS is an x86_64 source-built Linux distribution maintained by the StormFS community. It uses an LFS/MLFS-style bootstrap, CRUX `pkgutils`/ports for package builds, `scratch` for dependency-aware package management, systemd as the default init system, a PyQt5 graphical installer, and a live ISO for easy deployment.
 
 > **Status:** StormFS is approaching the 1.0 release-candidate stage. The core bootstrap, graphical installer, storage stack, and boot path are under active regression testing. Treat current builds as development/RC software and keep backups of important data.
 
@@ -9,7 +9,7 @@ StormFS is an x86_64 source-built Linux distribution maintained by the StormFS c
 - Source-built temporary toolchain and base system.
 - Optional final-toolchain rebuild to validate that the base can rebuild itself.
 - CRUX-style ports and `pkgutils`, extended for StormFS build conventions.
-- `prt-get` dependency management and `ports -u` repository synchronization.
+- `scratch` dependency management and `ports -u` repository synchronization.
 - x86_64 multilib support with 32-bit libraries under `/usr/lib32`.
 - systemd by default.
 - Dracut initramfs generation and GRUB bootloader support.
@@ -132,13 +132,13 @@ Update the ports tree and installed packages with:
 
 ```sh
 ports -u
-prt-get sysup
+scratch sysup
 ```
 
 Install a package and dependencies with:
 
 ```sh
-prt-get depinst <package>
+scratch install -y <package>
 ```
 
 StormFS uses `python3` as the Python 3 package name; Python module ports use the `python3-*` naming convention.

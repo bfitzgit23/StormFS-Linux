@@ -1,0 +1,13 @@
+# description	: gperf package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=gperf
+version=3.3
+release=1
+source="https://ftp.gnu.org/gnu/gperf/gperf-$version.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

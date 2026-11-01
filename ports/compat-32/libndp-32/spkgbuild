@@ -1,0 +1,19 @@
+# description	: Library for Neighbor Discovery Protocol
+# homepage	: http://libndp.org/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=libndp-32
+version=1.9
+release=2
+source="http://libndp.org/files/${name%-*}-$version.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+        _bfs_require_compat32_extension 2 || return $?
+	bfs_autobuild
+
+	rm -r $PKG/usr/{bin,include,share}
+	bfs_compat32_validate || return 1
+}

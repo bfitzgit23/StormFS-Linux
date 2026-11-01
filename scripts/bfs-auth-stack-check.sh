@@ -9,8 +9,8 @@ bad()  { printf '[FAIL] %s\n' "$*"; fail=1; }
 
 check_pkg_version() {
     local pkg="$1" expected="$2" got=""
-    if command -v pkginfo >/dev/null 2>&1; then
-        got="$(pkginfo -i 2>/dev/null | awk -v p="$pkg" '$1==p {print $2; exit}')"
+    if command -v scratch info >/dev/null 2>&1; then
+        got="$(scratch installed 2>/dev/null | awk -v p="$pkg" '$1==p {print $2; exit}')"
     fi
     if [[ -z "$got" ]]; then
         bad "$pkg is not installed"

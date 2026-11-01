@@ -1,0 +1,13 @@
+# description	: xdg-desktop-portal-gtk package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=xdg-desktop-portal-gtk
+version=1.15.3
+release=1
+source="https://github.com/flatpak/${name}/releases/download/${version}/${name}-${version}.tar.xz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

@@ -1,0 +1,13 @@
+# description	: gnupg package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=gnupg
+version=2.5.22
+release=1
+source="https://www.${name}.org/ftp/gcrypt/${name}/${name}-${version}.tar.bz2"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

@@ -1,0 +1,6 @@
+at-spi2-core
+dbus-32
+glib-32
+libxi-32
+libxtst-32
+libxml2-32

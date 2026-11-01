@@ -1,0 +1,7 @@
+glib
+gobject-introspection
+libxml2
+gtk3
+libsoup
+totem-pl-parser
+vala

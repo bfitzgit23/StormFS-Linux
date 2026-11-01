@@ -1,0 +1,23 @@
+# description	: A C++ wrapper for GTK3+
+# homepage	: https://www.gtkmm.org/en/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=gtkmm3
+version=3.24.11
+release=3
+source="https://download.gnome.org/sources/gtkmm/${version%.*}/gtkmm-$version.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+  meson setup gtkmm-$version build \
+    --prefix=/usr \
+    --sysconfdir=/etc \
+    --buildtype=plain \
+    --wrap-mode nodownload \
+    -D b_lto=true \
+    -D b_pie=true \
+    -D build-demos=false \
+    -D build-tests=false
+  meson compile -C build
+  DESTDIR=$PKG meson install -C build
+}

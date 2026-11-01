@@ -1,0 +1,17 @@
+# description	: Generic PCI access library
+# homepage	: https://xorg.freedesktop.org
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=libpciaccess
+version=0.19
+release=2
+source="https://xorg.freedesktop.org/archive/individual/lib/libpciaccess-$version.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+	      mkdir build
+      cd    build
+        meson setup --prefix=$XORG_PREFIX --buildtype=release ..
+        ninja
+	DESTDIR=$PKG ninja install
+}

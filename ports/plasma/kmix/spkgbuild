@@ -1,0 +1,22 @@
+# description	: KDE audio volume and mixer application.
+# homepage	: https://kde.org/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+# optional	: libcanberra pulseaudio
+
+name=kmix
+version=26.08.1
+release=1
+source="https://download.kde.org/stable/release-service/$version/src/$name-$version.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+    cmake -S . -B build -G Ninja \
+        -DCMAKE_INSTALL_PREFIX=/opt/kf6 \
+        -DCMAKE_INSTALL_LIBEXECDIR=libexec \
+        "-DCMAKE_PREFIX_PATH=/opt/qt6;/opt/kf6" \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DBUILD_TESTING=OFF \
+        -Wno-author || return 1
+    cmake --build build -j "${JOBS:-1}" || return 1
+    DESTDIR="$PKG" cmake --install build || return 1
+}

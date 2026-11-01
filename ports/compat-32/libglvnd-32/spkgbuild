@@ -1,0 +1,19 @@
+# description	: The GL Vendor-Neutral Dispatch library
+# homepage	: https://github.com/NVIDIA/libglvnd
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=libglvnd-32
+version=1.7.0
+release=5
+build_opt="-Dheaders=false"
+source="https://github.com/NVIDIA/${name%-32}/archive/v$version/${name%-32}-$version.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+    _bfs_require_compat32_extension 2 || return 1
+	bfs_autobuild
+    rm -rf "$PKG/usr/include"
+	bfs_compat32_validate || return 1
+}

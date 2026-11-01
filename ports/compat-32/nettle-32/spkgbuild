@@ -1,0 +1,20 @@
+# description	: Low-level cryptographic library
+# homepage	: http://www.lysator.liu.se/~nisse/nettle/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=nettle-32
+version=4.0
+release=2
+build_opt="--disable-documentation"
+source="https://ftp.gnu.org/gnu/nettle/nettle-$version.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+        _bfs_require_compat32_extension 2 || return $?
+	bfs_autobuild
+
+	rm -r $PKG/usr/{bin,include}
+	bfs_compat32_validate || return 1
+}

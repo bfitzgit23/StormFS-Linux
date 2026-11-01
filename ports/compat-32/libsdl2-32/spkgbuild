@@ -1,0 +1,42 @@
+# description	: SDL version 2, Simple DirectMedia Layer
+# homepage	: https://www.libsdl.org/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+# optional	: alsa-lib-32 ibus-32 jack libxkbcommon-32 ninja pipewire pulseaudio wayland-protocols
+
+name=libsdl2-32
+version=2.32.10
+release=3
+source="https://www.libsdl.org/release/SDL2-$version.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+  (
+    set -e
+	prt-get isinst alsa-lib-32 && SPKG_SDL2+=' -D SDL_ALSA_SHARED=ON'
+	prt-get isinst ibus-32 && SPKG_SDL2+=' -D SDL_USE_IME=ON'
+	prt-get isinst jack-32 && SPKG_SDL2+=' -D SDL_JACK_SHARED=ON'
+	prt-get isinst pipewire-32 && SPKG_SDL2+=' -D SDL_PIPEWIRE_SHARED=ON'
+	prt-get isinst pulseaudio-32 && SPKG_SDL2+=' -D SDL_PULSEAUDIO_SHARED=ON'
+	prt-get isinst libxkbcommon-32 wayland-protocols && SPKG_SDL2+=' -D SDL_WAYLAND_SHARED=ON'
+
+	[ -e '/usr/bin/ccache' ] && PATH="$(echo ${PATH} | awk -v RS=: -v ORS=: '/ccache/ {next} {print}' | sed 's/:*$//')"
+
+	cmake -S . -B build -G Ninja $SPKG_SDL2 \
+		-D CMAKE_INSTALL_PREFIX=/usr \
+		-D CMAKE_INSTALL_LIBDIR=lib32 \
+		-D CMAKE_BUILD_TYPE=Release \
+		-D CMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
+		-D CMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+		-D SDL_CLOCK_GETTIME=ON \
+		-D SDL_RPATH=OFF \
+		-D SDL_DLOPEN=ON \
+		-Wno-dev
+	cmake --build build
+	DESTDIR=$PKG cmake --install build
+
+	rm -r $PKG/usr/{bin,include,share}
+  )
+	bfs_compat32_validate || return 1
+}

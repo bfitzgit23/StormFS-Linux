@@ -1,0 +1,14 @@
+# description	: A lil' TOML parser
+# homepage	: https://github.com/hukkin/tomli
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=python3-tomli
+version=2.4.1
+release=1
+source="https://pypi.python.org/packages/source/t/tomli/tomli-$version.tar.gz"
+
+build() {
+	cd "$name-$version" || return 1
+
+  /usr/bin/pip3 install --isolate --root=$PKG --ignore-installed --no-deps .
+}

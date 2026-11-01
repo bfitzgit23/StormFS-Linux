@@ -1,0 +1,8 @@
+gtk4
+pcre2
+glib
+gobject-introspection
+libxml2
+vala
+valgrind
+vulkan-loader

@@ -74,10 +74,10 @@ assert not mod.candidate_allowed('2.2.1', '1.38.1', fake('gnome/libpeas','1.38.1
 assert not mod.candidate_allowed('2.36.4', '2.28.5', fake('opt/atkmm','2.28.5'), 'gnome-cache')
 assert not mod.candidate_allowed('2.56.2', '2.46.5', fake('opt/pangomm','2.46.5'), 'gnome-cache')
 
-# Every maintained Pkgfile must source cleanly and retain a real name/version.
+# Every maintained spkgbuild must source cleanly and retain a real name/version.
 count = 0
 for tree in mod.TREES:
-    for pkgfile in sorted((ROOT / "ports" / tree).glob("*/Pkgfile")):
+    for pkgfile in sorted((ROOT / "ports" / tree).glob("*/spkgbuild")):
         port = mod.eval_pkgfile(pkgfile)
         assert port.name, f"empty name after sourcing {pkgfile}"
         assert port.version, f"empty version after sourcing {pkgfile}"
@@ -90,7 +90,7 @@ assert count >= 1110, count
 # v6 source-repair regressions: these are specific failures found during the
 # full maintained-tree audit and must not regress to dead/ambiguous locations.
 def port(rel):
-    return mod.eval_pkgfile(ROOT / "ports" / rel / "Pkgfile")
+    return mod.eval_pkgfile(ROOT / "ports" / rel / "spkgbuild")
 
 p = port("opt/autoconf-archive")
 assert any("ftp.gnu.org/gnu/autoconf-archive/" in s for s in p.sources), p.sources
@@ -150,7 +150,7 @@ assert any("/Public/17.0.0/ucd/Unihan.zip" in x for x in p.sources), p.sources
 p = port("opt/texlive")
 assert p.version == "20260301" and all("texlive.info/historic/" in x for x in p.sources), p.sources
 
-print(f"checkupdate v10 regression: PASS ({count} maintained Pkgfiles evaluated)")
+print(f"checkupdate v10 regression: PASS ({count} maintained spkgbuilds evaluated)")
 
 # provider regressions: source-hosting oddities must map through authoritative providers.
 assert mod.PYPI_PROJECT_OVERRIDES["core/python3-docutils"] == "docutils"

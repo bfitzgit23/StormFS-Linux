@@ -1,0 +1,17 @@
+# description	: CMake integration for Rust projects
+# homepage	: https://github.com/corrosion-rs/corrosion
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=corrosion
+version=0.6.1
+release=1
+build_opt="-DCMAKE_INSTALL_PREFIX=/usr \
+          -DCMAKE_BUILD_TYPE=Release \
+          -DCORROSION_BUILD_TESTS=OFF"
+source="https://github.com/corrosion-rs/corrosion/archive/refs/tags/v$version.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

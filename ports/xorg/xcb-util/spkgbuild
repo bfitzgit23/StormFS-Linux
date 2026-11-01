@@ -1,0 +1,15 @@
+# description	: XCB utilities library
+# homepage	: https://xcb.freedesktop.org/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=xcb-util
+version=0.4.1
+release=2
+source="https://xorg.freedesktop.org/archive/individual/lib/xcb-util-$version.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+    ./configure $XORG_CONFIG || return 1
+    make -j "${JOBS:-1}" || return 1
+    make DESTDIR="$PKG" install || return 1
+}

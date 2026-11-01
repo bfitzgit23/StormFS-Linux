@@ -1,0 +1,7 @@
+avahi
+dbus-32
+gdbm-32
+glib-32
+libcap-32
+libdaemon-32
+libevent-32

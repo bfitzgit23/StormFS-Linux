@@ -1,0 +1,13 @@
+# description	: perl-xml-parser package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=perl-xml-parser
+version=2.59
+release=1
+source="https://cpan.metacpan.org/authors/id/T/TO/TODDR/XML-Parser-$version.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

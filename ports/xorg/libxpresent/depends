@@ -1,0 +1,8 @@
+libxrandr
+libxrender
+libxfixes
+libxext
+libx11
+libxcb
+libxau
+libxdmcp

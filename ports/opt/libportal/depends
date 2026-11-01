@@ -1,0 +1,6 @@
+glib
+gobject-introspection
+gtk3
+gtk4
+meson
+ninja

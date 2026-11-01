@@ -1,0 +1,14 @@
+# description	: Locate per-distribution and per-module shared files
+# homepage	: https://metacpan.org/dist/File-ShareDir
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=perl-file-sharedir
+version=1.118
+release=1
+source="https://cpan.metacpan.org/authors/id/R/RE/REHSACK/File-ShareDir-$version.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

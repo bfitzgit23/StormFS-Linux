@@ -1,0 +1,20 @@
+# description	: A library for handling OpenGL function pointer management
+# homepage	: https://github.com/anholt/libepoxy
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=libepoxy
+version=1.5.10
+release=1
+source="https://github.com/anholt/libepoxy/archive/$version/$name-$version.tar.gz"
+
+build() {
+	cd "$name-$version" || return 1
+
+	mkdir build &&
+	cd    build &&
+
+	meson setup --prefix=/usr --buildtype=release .. &&
+	ninja
+
+	DESTDIR=$PKG ninja install
+}

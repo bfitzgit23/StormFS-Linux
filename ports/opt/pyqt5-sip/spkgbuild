@@ -1,0 +1,14 @@
+# description	: The SIP extension module for PyQt5
+# homepage	: https://pypi.org/project/PyQt5-sip/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=pyqt5-sip
+version=12.19.0
+release=1
+source="https://files.pythonhosted.org/packages/source/p/pyqt5_sip/pyqt5_sip-$version.tar.gz"
+
+build() {
+	cd "$name-$version" || return 1
+    python3 -m build --wheel --no-isolation || return 1
+    python3 -m installer --compile-bytecode 2 --destdir="$PKG" dist/*.whl || return 1
+}

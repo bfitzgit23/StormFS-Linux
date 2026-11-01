@@ -1,0 +1,8 @@
+gtk3
+gtk-vnc
+libvirt
+libvirt-glib
+libxml2
+spice-gtk
+spice-protocol
+vte

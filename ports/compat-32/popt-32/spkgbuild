@@ -1,0 +1,20 @@
+# description	: Commandline option parser
+# homepage	: https://github.com/rpm-software-management/popt
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=popt-32
+version=1.19
+release=2
+build_opt="--disable-nls"
+source="http://ftp.rpm.org/popt/releases/popt-1.x/popt-$version.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+        _bfs_require_compat32_extension 2 || return $?
+	bfs_autobuild
+
+	rm -r $PKG/usr/{share,include}
+	bfs_compat32_validate || return 1
+}

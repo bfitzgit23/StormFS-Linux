@@ -1,0 +1,16 @@
+# description	: The Sound Theme Freedesktop package contains sound themes for the desktop.
+# homepage	: https://people.freedesktop.org/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=sound-theme-freedesktop
+version=0.8
+release=1
+source="https://people.freedesktop.org/~mccann/dist/$name-$version.tar.bz2"
+
+build() {
+	cd "$name-$version" || return 1
+
+	./configure --prefix=/usr &&
+make
+	make DESTDIR=$PKG install
+}

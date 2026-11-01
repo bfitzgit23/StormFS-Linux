@@ -1,0 +1,15 @@
+# description	: python3-attrs package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=python3-attrs
+version=26.1.0
+release=1
+source="https://files.pythonhosted.org/packages/source/a/attrs/attrs-${version}.tar.gz"
+
+build() {
+	cd "$name-$version" || return 1
+#  cd ${name#*-}-$version
+
+  /usr/bin/python3 -m build --wheel --skip-dependency-check --no-isolation
+  /usr/bin/python3 -m installer --compile-bytecode 2 --destdir=$PKG dist/*.whl
+}

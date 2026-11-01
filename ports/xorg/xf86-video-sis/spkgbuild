@@ -1,0 +1,17 @@
+# description	: xorg driver xf86-video-sis
+# homepage	: https://xorg.freedesktop.org
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=xf86-video-sis
+version=0.12.0
+release=1
+source="https://xorg.freedesktop.org/archive/individual/driver/xf86-video-sis-$version.tar.bz2"
+
+build() {
+	cd "$name-$version" || return 1
+
+	./configure --prefix=/usr
+
+	make
+	make DESTDIR=$PKG install
+}

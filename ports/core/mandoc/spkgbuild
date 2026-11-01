@@ -1,0 +1,22 @@
+# description	: Tools and library to manipulate EFI variables
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=mandoc
+version=1.14.6
+release=1
+source="https://mandoc.bsd.lv/snapshots/mandoc-1.14.6.tar.gz"
+
+build() {
+	cd "$name-$version" || return 1
+
+
+	./configure &&
+	make mandoc
+
+    	./configure &&
+make mandoc
+mkdir -p $PKG/usr/bin
+install -vm755 mandoc   $PKG/usr/bin &&
+mkdir -p $PKG/usr/share/man/man1
+install -vm644 mandoc.1 $PKG/usr/share/man/man1
+}

@@ -1,0 +1,15 @@
+# description	: Lxqt Session component for LXQt
+# homepage	: https://github.com/lxqt/lxqt-session
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=lxqt-session
+version=2.4.0
+release=2
+source="https://github.com/lxqt/${name}/releases/download/${version}/${name}-${version}.tar.xz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+    sed -e '/TryExec/s|=|=/usr/bin/|' -i xsession/lxqt.desktop.in || return 1
+	bfs_autobuild
+}

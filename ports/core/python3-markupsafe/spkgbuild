@@ -1,0 +1,16 @@
+# description	: A stream oriented C library for parsing XML
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=python3-markupsafe
+version=3.0.3
+release=1
+source="https://pypi.org/packages/source/M/MarkupSafe/markupsafe-$version.tar.gz"
+
+build() {
+	cd "$name-$version" || return 1
+
+		/usr/bin/python3 setup.py build
+
+	/usr/bin/python3 setup.py install --prefix=/usr \
+		--root=$PKG --optimize=1
+}

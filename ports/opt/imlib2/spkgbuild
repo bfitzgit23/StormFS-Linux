@@ -1,0 +1,13 @@
+# description	: imlib2 package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=imlib2
+version=1.12.7
+release=1
+source="https://downloads.sourceforge.net/enlightenment/${name}-${version}.tar.xz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

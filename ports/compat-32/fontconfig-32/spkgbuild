@@ -1,0 +1,20 @@
+# description	: A library for configuring and customizing font access
+# homepage	: https://www.freedesktop.org/wiki/Software/fontconfig/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=fontconfig-32
+version=2.18.3
+release=3
+build_opt="-D doc-man=enabled -D doc=disabled -D nls=disabled -D tests=disabled -D cache-build=disabled"
+source="https://fontconfig.org/release/fontconfig-$version.tar.xz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+        _bfs_require_compat32_extension 2 || return $?
+	bfs_autobuild
+
+	rm -r $PKG/usr/{bin,include,share} $PKG/etc
+	bfs_compat32_validate || return 1
+}

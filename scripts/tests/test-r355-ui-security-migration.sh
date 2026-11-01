@@ -40,39 +40,22 @@ pass 'live-menu shell/quit cleanup'
 require_grep 'https://github.com/bmadonnaster/BFSOS.git' scripts/bfs-build-iso.sh 'ISO builder is not using GitHub'
 
 # Codeberg is retired as an active BFSOS upstream.  The prt-get post-install
-# migration is the one intentional exception: it must recognize the old URL
-# so existing BFSOS installations can migrate themselves to GitHub.
+# migration hook that used to be the one exception was removed together with
+# prt-get, so no maintained path may reference the old URL any more.
 if grep -RnsI 'codeberg\.org/bmadonnaster/BFSOS' \
     README.md bootstrap.sh files ports scripts \
     --exclude='install-bfs-menu-v50-r*.sh' \
     --exclude='test-r355-ui-security-migration.sh' \
     --exclude='*.md' --exclude='*.log' --exclude='*.tsv' \
     >/tmp/bfsos-r355-codeberg.$$ 2>/dev/null; then
-
-    grep -v '^ports/core/prt-get/post-install:' \
-        /tmp/bfsos-r355-codeberg.$$ \
-        >/tmp/bfsos-r355-codeberg-active.$$ || true
-
-    if [[ -s /tmp/bfsos-r355-codeberg-active.$$ ]]; then
-        cat /tmp/bfsos-r355-codeberg-active.$$ >&2
-        rm -f /tmp/bfsos-r355-codeberg.$$ \
-              /tmp/bfsos-r355-codeberg-active.$$
-        fail 'active BFSOS-specific Codeberg references remain'
-    fi
+    cat /tmp/bfsos-r355-codeberg.$$ >&2
+    rm -f /tmp/bfsos-r355-codeberg.$$
+    fail 'active BFSOS-specific Codeberg references remain'
 fi
 
-rm -f /tmp/bfsos-r355-codeberg.$$ \
-      /tmp/bfsos-r355-codeberg-active.$$
+rm -f /tmp/bfsos-r355-codeberg.$$
 
-require_grep 'https://codeberg.org/bmadonnaster/BFSOS.git' \
-    ports/core/prt-get/post-install \
-    'legacy Codeberg migration detector missing'
-
-require_grep 'https://github.com/bmadonnaster/BFSOS.git' \
-    ports/core/prt-get/post-install \
-    'GitHub migration destination missing'
-
-pass 'active GitHub migration references'
+pass 'active GitHub references'
 
 if grep -RnsI -E 'AIza[0-9A-Za-z_-]{20,}' ports/opt/geoclue README.md docs/INSTALL.md scripts files >/tmp/bfsos-r355-secret.$$ 2>/dev/null; then
     cat /tmp/bfsos-r355-secret.$$ >&2
@@ -83,7 +66,7 @@ rm -f /tmp/bfsos-r355-secret.$$
 require_grep 'rm -f /etc/geoclue/conf.d/90-lfs-google.conf' ports/opt/geoclue/post-install 'Geoclue legacy credential override cleanup missing'
 pass 'Geoclue maintained-tree credential cleanup'
 
-require_grep 'PKGMK_DOWNLOAD_PROG="\$SCRIPT_DIR/files/bfs-prefetch-curl"' bootstrap.sh 'prefetch wrapper is not restored'
+require_grep 'pkgbuild -o --config=' bootstrap.sh 'scratchpkg prefetch path is missing'
 require_grep 'refusing to write archive data to an interactive terminal' files/bfs-prefetch-curl 'stdout guard missing from prefetch wrapper'
 pass 'prefetch wrapper source guard'
 
@@ -95,9 +78,9 @@ require_grep '5\|archive\|archive-base\)' bootstrap.sh 'direct stage 5 dispatch 
 require_grep 'full\|full-bootstrap\|all\)' bootstrap.sh 'full bootstrap dispatch missing'
 pass 'direct bootstrap dispatch source'
 
-require_grep 'NAME="BFSOS"' ports/core/aaa_filesystem/Pkgfile 'installed os-release NAME not BFSOS'
-grep -Fq 'PRETTY_NAME="BFSOS $bfs_version"' ports/core/aaa_filesystem/Pkgfile || fail 'installed os-release PRETTY_NAME not BFSOS'
-grep -Fq 'BFSOS $bfs_version \\n \\l' ports/core/aaa_filesystem/Pkgfile || fail 'installed /etc/issue branding not BFSOS'
+require_grep 'NAME="BFSOS"' ports/core/aaa_filesystem/spkgbuild 'installed os-release NAME not BFSOS'
+grep -Fq 'PRETTY_NAME="BFSOS $bfs_version"' ports/core/aaa_filesystem/spkgbuild || fail 'installed os-release PRETTY_NAME not BFSOS'
+grep -Fq 'BFSOS $bfs_version \\n \\l' ports/core/aaa_filesystem/spkgbuild || fail 'installed /etc/issue branding not BFSOS'
 pass 'installed-system BFSOS branding'
 
 [[ -f docs/INSTALL.md ]] || fail 'docs/INSTALL.md missing'

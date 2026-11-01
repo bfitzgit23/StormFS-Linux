@@ -1,0 +1,19 @@
+# description	: A tool to display dialog boxes from shell scripts
+# homepage	: https://invisible-island.net/dialog/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=dialog
+version=1.3_20260721
+srcver=1.3-20260721
+release=1
+build_opt="
+    --prefix=/usr
+    --with-ncursesw
+"
+source="https://invisible-mirror.net/archives/dialog/dialog-$srcver.tgz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$srcver" || return 1
+	bfs_autobuild
+}

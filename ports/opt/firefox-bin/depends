@@ -1,0 +1,14 @@
+gtk3
+glib
+dbus
+libx11
+libxcomposite
+libxcursor
+libxdamage
+libxext
+libxfixes
+libxi
+libxrandr
+libxtst
+alsa-lib
+pulseaudio

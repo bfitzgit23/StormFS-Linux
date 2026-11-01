@@ -1,0 +1,15 @@
+# description	: The Xorg libraries provide library routines that are used within all X Window applications.
+# homepage	: https://www.x.org/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=xorg-fonts
+version=7x
+release=2
+source=""
+
+build() {
+    mkdir -p "$PKG/usr/share/bfsos/meta-packages"
+    printf '%s
+' 'BFSOS xorg-fonts meta package' \
+        > "$PKG/usr/share/bfsos/meta-packages/xorg-fonts"
+}

@@ -1,0 +1,4 @@
+extra-cmake-modules
+qt6
+shared-mime-info
+pyside6

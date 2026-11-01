@@ -1,0 +1,30 @@
+# description	: Decompress utility for zipfiles
+# homepage	: https://infozip.sourceforge.net/UnZip.html
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=unzip
+version=6.0
+release=9
+source="https://downloads.sourceforge.net/sourceforge/infozip/${name}${version//./}.tar.gz cumulative.patch gcc15.patch"
+
+build() {
+	cd "$name-$version" || return 1
+
+	# Apply patch sources; pkgbuild does this automatically.
+	for _bfs_patch in "$SRC"/*.patch "$SRC"/*.diff; do
+		[ -f "$_bfs_patch" ] || continue
+		patch -t "${patch_opt:--p1}" -i "$_bfs_patch" || return 1
+	done
+    sed -i 's/-O3//' unix/configure
+
+    make -f unix/Makefile \
+        LOCAL_UNZIP="$CFLAGS -std=gnu17" \
+        unzips
+
+    make -f unix/Makefile \
+        prefix="$PKG/usr" \
+        MANDIR="$PKG/usr/share/man/man1" \
+        install
+
+    ln -sf unzip "$PKG/usr/bin/zipinfo"
+}

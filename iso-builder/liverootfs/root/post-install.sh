@@ -89,11 +89,11 @@ if [ -d "$ROOT/usr/share/grub/themes/stormfs" ]; then
  fi
 fi
 
-# Enable systemd services
+# Enable OpenRC services
 for svc in dbus NetworkManager sshd; do
 	if [ -f "$ROOT/usr/lib/systemd/system/${svc}.service" ] || \
 	   [ -f "$ROOT/etc/systemd/system/${svc}.service" ]; then
-		_run systemctl enable "$svc" 2>/dev/null || true
+		_run rc-update add "$svc" default 2>/dev/null || true
 	fi
 done
 
@@ -104,7 +104,7 @@ if [ -f "$ROOT/etc/sudoers" ]; then
 fi
 
 # Set default graphical target
-_run systemctl set-default graphical.target 2>/dev/null || true
+_run rc-update add display-manager default 2>/dev/null || true
 
 # Cleanup: remove installer and live session artifacts
 rm -f "$ROOT/usr/bin/stormfs-installer"

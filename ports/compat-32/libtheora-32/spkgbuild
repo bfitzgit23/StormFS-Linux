@@ -1,0 +1,22 @@
+# description	: A free and open video compression format from the Xiph.org Foundation.
+# homepage	: https://www.theora.org/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=libtheora-32
+version=1.2.0
+release=3
+build_opt="--mandir=/usr/man --disable-examples"
+source="https://downloads.xiph.org/releases/theora/libtheora-$version.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+        _bfs_require_compat32_extension 2 || return $?
+	bfs_autobuild
+	rm -r $PKG/usr/share/doc
+	rmdir $PKG/usr/share
+
+	rm -rf $PKG/{etc,var} $PKG/usr/{bin,etc,include,man,sbin,share}
+	bfs_compat32_validate || return 1
+}

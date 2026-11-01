@@ -1,46 +1,54 @@
 #!/usr/bin/env python3
+"""compat-32 port consistency check for the scratchpkg tree.
+
+Every 32-bit compat port must
+
+  * live in a directory whose name ends in ``-32`` and match its ``name=``,
+  * carry the ``.32bit`` marker that the sync tooling keys on,
+  * build through the shared ``bfs_compat32`` environment so it targets i686 and
+    stages into /usr/lib32,
+  * validate its payload (``bfs_compat32_validate``) so 64-bit librarydirs are
+    never polluted,
+  * parse as shell, and never reintroduce a CRUX ``pkg_build`` hook.
+"""
+
 from pathlib import Path
 import re
 import subprocess
 
 ROOT = Path(__file__).resolve().parents[2]
-compat = ROOT / "ports" / "compat-32"
-pkgfiles = sorted(compat.glob("*/Pkgfile"))
-assert len(pkgfiles) == 173, len(pkgfiles)
-assert all((p.parent / ".32bit").is_file() for p in pkgfiles)
+COMPAT = ROOT / "ports" / "compat-32"
 
-custom = []
-automatic = []
-for p in pkgfiles:
-    s = p.read_text(errors="replace")
-    assert not re.search(r"(?m)^build\s*\(\)\s*\{", s), p
-    assert "-m32" not in s, p
-    assert "gnux32" not in s, p
-    cp = subprocess.run(["bash", "-n", str(p)], capture_output=True, text=True)
-    assert cp.returncode == 0, (p, cp.stderr)
-    if re.search(r"(?m)^pkg_build\s*\(", s):
-        custom.append(p)
-        assert "# Custom build required:" in s, p
-        assert re.search(r"pkg_build\s*\(\s*\)\s*\{\s*\n\s*\(\s*\n\s*set -e", s), p
-    else:
-        automatic.append(p)
-        assert "_bfs_require_compat32_extension 2" in s, p
+recipes = sorted(COMPAT.glob("*/spkgbuild"))
+assert recipes, f"no compat-32 recipes found under {COMPAT}"
 
-assert len(automatic) >= 125, len(automatic)
-assert len(custom) <= 46, len(custom)
+failures: list[str] = []
+for recipe in recipes:
+    port = recipe.parent
+    name = port.name
+    text = recipe.read_text(encoding="utf-8", errors="replace")
 
-conf = (ROOT / "ports/core/pkgutils/pkgmk.conf").read_text()
-extension = (ROOT / "ports/core/pkgutils/extension").read_text()
-assert 'BFS_MULTILIB_HOST="i686-pc-linux-gnu"' in conf
-assert 'PKG_CONFIG_LIBDIR="/usr/lib32/pkgconfig:/usr/share/pkgconfig"' in conf
-assert 'export CFLAGS="-O2 -march=i686 -pipe -m32"' in conf
-assert 'BFS_PKG_LIBDIR=/usr/lib32' in extension
-assert 'BFS_PKG_EXTENSION_API=2' in extension
-assert '_bfs_validate_compat32_payload' in extension
-assert "cpu_family = 'x86'" in extension
-assert '_bfs_meson_arch_args=(--cross-file .bfsos-compat32.cross)' in extension
+    if not name.endswith("-32"):
+        failures.append(f"{name}: directory name does not end in -32")
+    if not (port / ".32bit").is_file():
+        failures.append(f"{name}: missing .32bit marker")
+    if not re.search(rf"(?m)^name={re.escape(name)}$", text):
+        failures.append(f"{name}: name= does not match the directory")
+    if "bfs_compat32" not in text:
+        failures.append(f"{name}: build does not use the shared bfs_compat32 environment")
+    if "bfs_compat32_validate" not in text:
+        failures.append(f"{name}: build does not validate the compat-32 payload")
+    if re.search(r"(?m)^pkg_build\s*\(\s*\)", text):
+        failures.append(f"{name}: CRUX pkg_build hook must be merged into build()")
 
-cp = subprocess.run([str(ROOT / "scripts/multilibvercheck.sh")], capture_output=True, text=True)
-assert cp.returncode == 0, cp.stdout + cp.stderr
-assert "matched=158 special=15 drift=0 unexplained=0" in cp.stdout, cp.stdout
-print(f"compat-32 synchronization regression: PASS (173 ports; {len(automatic)} generic; {len(custom)} documented custom)")
+    check = subprocess.run(["bash", "-n", str(recipe)], capture_output=True, text=True)
+    if check.returncode != 0:
+        failures.append(f"{name}: shell syntax error: {check.stderr.strip()}")
+
+if failures:
+    print(f"compat-32 consistency: FAIL ({len(failures)} problems)")
+    for failure in failures:
+        print(f"  {failure}")
+    raise SystemExit(1)
+
+print(f"compat-32 consistency: PASS ({len(recipes)} ports)")

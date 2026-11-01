@@ -323,7 +323,7 @@ validate_base_archive() {
 
     for required in \
         ./usr/bin/bash \
-        ./usr/bin/pkgmk \
+        ./usr/bin/pkgbuild \
         ./etc/os-release \
         ./etc/passwd \
         ./etc/group \

@@ -1,0 +1,21 @@
+# description	: SDL version 2, Simple DirectMedia Layer
+# homepage	: https://www.libsdl.org
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+# optional	: libxkbcommon wayland-protocols xorg-libs alsa ibus libsamplerate nasm pipewire pulseaudio directfb fcitx jack sndio
+
+name=sdl2
+version=2.32.10
+release=1
+source="https://www.libsdl.org/release/SDL2-$version.tar.gz"
+
+build() {
+	cd "$name-$version" || return 1
+    ./configure \
+        --prefix=/usr || return 1
+
+    make -j "${JOBS:-1}" || return 1
+
+    DESTDIR="$PKG" make install || return 1
+
+    rm -f "$PKG"/usr/lib/libSDL2*.a
+}

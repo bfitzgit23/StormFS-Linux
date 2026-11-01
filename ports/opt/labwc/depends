@@ -1,0 +1,13 @@
+meson
+wlroots
+wayland
+wayland-protocols
+libinput
+libxkbcommon
+libxml2
+glib
+cairo
+pango
+pixman
+libpng
+libdrm

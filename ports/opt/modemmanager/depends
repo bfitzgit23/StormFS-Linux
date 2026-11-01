@@ -1,0 +1,7 @@
+libgudev
+glib
+gobject-introspection
+libmbim
+libqmi
+polkit
+vala

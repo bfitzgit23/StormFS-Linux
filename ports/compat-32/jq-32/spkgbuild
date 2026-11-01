@@ -1,0 +1,20 @@
+# description	: Lightweight and flexible command-line JSON processor
+# homepage	: https://stedolan.github.io/jq/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=jq-32
+version=1.8.2
+release=2
+build_opt="--disable-maintainer-mode --with-oniguruma=builtin --disable-gtk-doc"
+source="https://github.com/stedolan/jq/releases/download/jq-$version/jq-$version.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+        _bfs_require_compat32_extension 2 || return 0
+	autoreconf -i modules/oniguruma
+	bfs_autobuild
+	rm -r $PKG/usr/{bin,include,share}
+	bfs_compat32_validate || return 1
+}

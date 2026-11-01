@@ -1,0 +1,17 @@
+# description	: Property displayer for X
+# homepage	: https://xorg.freedesktop.org
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=xprop
+version=1.2.8
+release=2
+source="https://xorg.freedesktop.org/archive/individual/app/xprop-$version.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+
+	./configure $XORG_CONFIG
+
+	make
+	make DESTDIR=$PKG install
+}

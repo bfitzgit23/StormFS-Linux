@@ -1,0 +1,13 @@
+# description	: python3-meson_python package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=python3-meson_python
+version=0.20.0
+release=1
+source="https://files.pythonhosted.org/packages/source/m/meson_python/meson_python-${version}.tar.gz"
+
+build() {
+	cd "$name-$version" || return 1
+python3 -m build --wheel --no-isolation
+python3 -m installer --destdir="$PKG" dist/*.whl
+}

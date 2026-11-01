@@ -1,0 +1,23 @@
+# description	: efivar package
+# homepage	: https://github.com/rhboot/efivar
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+#
+cription: Tools and libraries to manipulate EFI variables
+
+name=efivar
+version=39
+release=2
+source="https://github.com/rhboot/$name/archive/$version/$name-$version.tar.gz"
+
+build() {
+	cd "$name-$version" || return 1
+    make -j1 \
+        ENABLE_DOCS=0 \
+        libdir=/usr/lib
+
+    make \
+        ENABLE_DOCS=0 \
+        libdir=/usr/lib \
+        DESTDIR="$PKG" \
+        install
+}

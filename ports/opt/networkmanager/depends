@@ -1,0 +1,8 @@
+curl
+iptables
+libndp
+libpsl
+newt
+nss
+polkit
+wpa_supplicant

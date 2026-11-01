@@ -1,0 +1,21 @@
+# description	: Video Acceleration API to enable hardware accelerated video decode/encode.
+# homepage	: https://github.com/intel/libva
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+# optional	: wayland-protocols
+
+name=libva
+version=2.24.1
+release=2
+source="https://github.com/intel/libva/archive/$version/$name-$version.tar.gz"
+
+build() {
+	cd "$name-$version" || return 1
+	mkdir builds &&
+	cd    builds &&
+
+meson setup --prefix=$XORG_PREFIX --buildtype=release &&
+ninja
+
+DESTDIR=$PKG ninja  install
+chmod -x $PKG/usr/include/va/va_vpp.h
+}

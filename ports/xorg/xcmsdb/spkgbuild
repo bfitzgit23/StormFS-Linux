@@ -1,0 +1,17 @@
+# description	: Utility to set a display's backlight level
+# homepage	: https://xorg.freedesktop.org
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=xcmsdb
+version=1.0.7
+release=2
+source="https://xorg.freedesktop.org/archive/individual/app/xcmsdb-$version.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+
+	./configure $XORG_CONFIG
+
+	make
+	make DESTDIR=$PKG install
+}

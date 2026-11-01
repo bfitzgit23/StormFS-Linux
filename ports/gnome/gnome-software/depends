@@ -1,0 +1,14 @@
+gtk4
+libadwaita
+appstream
+libxmlb
+gnome-desktop
+gsettings-desktop-schemas
+flatpak
+polkit
+libgudev
+libsecret
+gdk-pixbuf
+glib
+dbus
+gnome-keyring

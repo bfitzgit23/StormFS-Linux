@@ -1,0 +1,20 @@
+# description	: D-Bus GLib bindings
+# homepage	: http://freedesktop.org/wiki/Software/DBusBindings
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=dbus-glib-32
+version=0.114
+release=2
+build_opt="--enable-bash-completion=no"
+source="https://dbus.freedesktop.org/releases/${name%-*}/${name%-*}-$version.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+        _bfs_require_compat32_extension 2 || return $?
+	bfs_autobuild
+
+	rm -r $PKG/usr/{bin,share,include}
+	bfs_compat32_validate || return 1
+}

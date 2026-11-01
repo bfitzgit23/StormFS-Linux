@@ -1,0 +1,17 @@
+# description	: Startup notification library.
+# homepage	: http://freedesktop.org/wiki/Software/startup-notification
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=startup-notification
+version=0.12
+release=1
+source="http://www.freedesktop.org/software/$name/releases/$name-$version.tar.gz"
+
+build() {
+	cd "$name-$version" || return 1
+	./configure --prefix=/usr --disable-static &&
+make
+	make DESTDIR=$PKG install
+install -v -m644 -D doc/$name.txt \
+    $PKG/usr/share/doc/$name-$version/$name.txt
+}

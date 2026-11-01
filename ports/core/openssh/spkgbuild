@@ -1,0 +1,57 @@
+# description	: OpenSSH secure shell client and server
+# homepage	: https://www.openssh.com/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=openssh
+version=10.5p1
+release=2
+build_opt="--prefix=/usr
+           --sysconfdir=/etc/ssh
+           --with-privsep-path=/var/lib/sshd
+           --with-default-path=/usr/bin
+           --with-superuser-path=/usr/sbin:/usr/bin
+           --with-pid-dir=/run
+           --with-pam"
+source="https://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/$name-$version.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+    install -d -m700 /var/lib/sshd
+
+    groupadd -f -g 50 sshd
+
+    id -u sshd >/dev/null 2>&1 || useradd \
+        -u 50 \
+        -g sshd \
+        -d /var/lib/sshd \
+        -s /bin/false \
+        -c "sshd PrivSep" \
+        sshd
+	bfs_autobuild
+    install -d "$PKG/usr/bin"
+    install -m755 contrib/ssh-copy-id \
+        "$PKG/usr/bin/ssh-copy-id"
+
+    install -d "$PKG/usr/share/man/man1"
+    install -m644 contrib/ssh-copy-id.1 \
+        "$PKG/usr/share/man/man1/ssh-copy-id.1"
+
+    install -d "$PKG/usr/share/doc/$name-$version"
+    install -m644 INSTALL LICENCE OVERVIEW README* \
+        "$PKG/usr/share/doc/$name-$version"
+
+    install -d "$PKG/etc/pam.d"
+
+    if [ -f /etc/pam.d/login ]; then
+        sed 's@d/login@d/sshd@g' /etc/pam.d/login \
+            > "$PKG/etc/pam.d/sshd"
+        chmod 644 "$PKG/etc/pam.d/sshd"
+    fi
+
+    if [ -f "$PKG/etc/ssh/sshd_config" ] &&
+       ! grep -q '^UsePAM' "$PKG/etc/ssh/sshd_config"; then
+        echo "UsePAM yes" >> "$PKG/etc/ssh/sshd_config"
+    fi
+
+}

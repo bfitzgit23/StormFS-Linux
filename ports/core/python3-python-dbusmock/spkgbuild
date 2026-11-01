@@ -1,0 +1,26 @@
+# description	: python3-python-dbusmock package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=python3-python-dbusmock
+version=0.38.1
+release=2
+source="https://files.pythonhosted.org/packages/source/p/python_dbusmock/python_dbusmock-${version}.tar.gz"
+
+build() {
+	cd "$name-$version" || return 1
+    python3 -m pip wheel \
+        --no-build-isolation \
+        --no-deps \
+        --no-cache-dir \
+        -w dist \
+        . || return 1
+
+    python3 -m pip install \
+        --no-index \
+        --no-deps \
+        --no-cache-dir \
+        --no-user \
+        --root="$PKG" \
+        --prefix=/usr \
+        dist/*.whl || return 1
+}

@@ -1,0 +1,43 @@
+# description	: cyrus-sasl package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+# optional	: linux-pam sqlite
+
+name=cyrus-sasl
+version=2.1.28
+release=2
+build_opt=(
+  --prefix=/usr
+  --sysconfdir=/etc
+  --enable-auth-sasldb
+  --with-dblib=lmdb
+  --with-dbpath=/var/lib/sasl/sasldb2
+  --with-sphinx-build=no
+  --with-saslauthd=/var/run/saslauthd
+)
+source="https://github.com/cyrusimap/${name}/releases/download/${name}-${version}/${name}-${version}.tar.gz gcc-c23-gcc15-c23.patch"
+
+build() {
+	cd "$name-$version" || return 1
+
+	# Apply patch sources; pkgbuild does this automatically.
+	for _bfs_patch in "$SRC"/*.patch "$SRC"/*.diff; do
+		[ -f "$_bfs_patch" ] || continue
+		patch -t "${patch_opt:--p1}" -i "$_bfs_patch" || return 1
+	done
+  sed '/saslint/a #include <time.h>' -i lib/saslutil.c
+  sed '/plugin_common/a #include <time.h>' -i plugins/cram.c
+
+  autoreconf -fi
+
+  ./configure "${build_opt[@]}"
+
+  make -j1
+  make DESTDIR="$PKG" install
+
+  install -v -dm755 "$PKG/usr/share/doc/$name-$version/html"
+  install -v -m644 saslauthd/LDAP_SASLAUTHD \
+    "$PKG/usr/share/doc/$name-$version/"
+  install -v -m644 doc/legacy/*.html \
+    "$PKG/usr/share/doc/$name-$version/html/"
+  install -v -dm700 "$PKG/var/lib/sasl"
+}

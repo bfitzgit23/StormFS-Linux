@@ -8,7 +8,7 @@ Design goals:
 - use provider-aware checks for Git tags, GNOME, KDE, PyPI and Xfce;
 - use an exact current-filename template for generic directory indexes;
 - report UNVERIFIABLE instead of guessing when a provider cannot be proven;
-- never modify Pkgfiles automatically.
+- never modify spkgbuilds automatically.
 """
 from __future__ import annotations
 
@@ -433,12 +433,12 @@ fi
         timeout=8,
     )
     if cp.returncode != 0:
-        raise RuntimeError(f"Pkgfile evaluation failed ({cp.returncode})")
+        raise RuntimeError(f"spkgbuild evaluation failed ({cp.returncode})")
     fields = cp.stdout.decode("utf-8", "replace").split("\0")
     if fields and fields[-1] == "":
         fields.pop()
     if len(fields) < 2:
-        raise RuntimeError("Pkgfile did not define name/version")
+        raise RuntimeError("spkgbuild did not define name/version")
     name, version, *sources = fields
     root = pkgfile.parents[2]
     rel = str(pkgfile.parent.relative_to(root))
@@ -862,13 +862,13 @@ def discover(root: Path, args: list[str]) -> list[Path]:
         out: list[Path] = []
         for item in args:
             p = Path(item).expanduser()
-            if p.is_dir() and (p / "Pkgfile").is_file():
-                out.append(p / "Pkgfile")
+            if p.is_dir() and (p / "spkgbuild").is_file():
+                out.append(p / "spkgbuild")
                 continue
-            if p.is_file() and p.name == "Pkgfile":
+            if p.is_file() and p.name == "spkgbuild":
                 out.append(p)
                 continue
-            matches = list((root / "ports").glob(f"*/{item}/Pkgfile"))
+            matches = list((root / "ports").glob(f"*/{item}/spkgbuild"))
             if len(matches) == 1:
                 out.append(matches[0])
             elif not matches:
@@ -881,7 +881,7 @@ def discover(root: Path, args: list[str]) -> list[Path]:
     roots = [Path(x) for x in repo.split()] if repo else [root / "ports" / t for t in TREES]
     out = []
     for r in roots:
-        out.extend(sorted(r.glob("*/Pkgfile")))
+        out.extend(sorted(r.glob("*/spkgbuild")))
     return out
 
 

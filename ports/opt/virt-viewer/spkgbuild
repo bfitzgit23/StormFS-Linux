@@ -1,0 +1,27 @@
+# description	: Graphical console client for libvirt virtual machines
+# homepage	: https://virt-manager.org/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=virt-viewer
+version=11.0
+release=2
+build_opt=(
+    -Dlibvirt=enabled
+    -Dvnc=enabled
+    -Dspice=enabled
+    -Dovirt=disabled
+    -Dvte=enabled
+    -Dgit_werror=disabled
+)
+source="https://gitlab.com/virt-viewer/virt-viewer/-/archive/v$version/virt-viewer-v$version.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+    sed -i \
+        -e "/^[[:space:]]*desktop,$/d" \
+        -e "/^[[:space:]]*mimetypes,$/d" \
+        -e "/^[[:space:]]*metainfo,$/d" \
+        data/meson.build
+	bfs_autobuild
+}

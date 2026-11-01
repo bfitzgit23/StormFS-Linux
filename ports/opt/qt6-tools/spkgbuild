@@ -1,0 +1,30 @@
+# description	: Qt 6 assistant/designer/linguist tools (provided by the qt6 port)
+# homepage	: https://doc.qt.io/qt-6/qttools-index.html
+# maintainer	: StormFS maintainers
+
+name=qt6-tools
+version=6.11.2
+release=1
+source=""
+
+# qttools is built from the qt-everywhere tarball by the qt6 port, which installs
+# Qt6LinguistTools/Qt6Designer/Qt6Assistant into /opt/qt6.  Rebuilding the
+# submodule here would collide with that payload, so this port only records the
+# dependency and proves the tools are present.  Keep $version in lockstep with
+# the qt6 port.
+build() {
+	for _bfs_tool in Qt6LinguistTools/Qt6LinguistToolsConfig.cmake \
+	                 Qt6Designer/Qt6DesignerConfig.cmake \
+	                 Qt6Help/Qt6HelpConfig.cmake; do
+		test -f "/opt/qt6/lib/cmake/$_bfs_tool" || {
+			echo "ERROR: qt6 does not provide $_bfs_tool" >&2
+			echo "ERROR: qt6-tools must be rebuilt in lockstep with qt6" >&2
+			return 1
+		}
+	done
+
+	install -d "$PKG/usr/share/bfsos/meta" || return 1
+	printf '%s\n' \
+		'Qt 6 tools (assistant, designer, linguist) are shipped by the qt6 port.' \
+		> "$PKG/usr/share/bfsos/meta/$name" || return 1
+}

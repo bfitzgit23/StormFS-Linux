@@ -1,0 +1,14 @@
+# description	: PEP 517 build backend for PyQt projects
+# homepage	: https://www.riverbankcomputing.com/software/pyqt/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=python3-pyqt-builder
+version=1.19.1
+release=1
+source="https://files.pythonhosted.org/packages/source/p/pyqt-builder/pyqt_builder-$version.tar.gz"
+
+build() {
+	cd "$name-$version" || return 1
+    python3 -m build --wheel --skip-dependency-check --no-isolation || return 1
+    python3 -m installer --compile-bytecode 2 --destdir="$PKG" dist/*.whl || return 1
+}

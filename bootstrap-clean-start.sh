@@ -159,7 +159,7 @@ _restore_toolchain() {
 
     if [ ! -x "$TOOLS/bin/gcc" ] ||
         [ ! -x "$TOOLS/bin/ld" ] ||
-        [ ! -x "$TOOLS/bin/pkgmk" ]
+        [ ! -x "$TOOLS/bin/pkgbuild" ]
     then
         echo "ERROR: Restored toolchain failed verification." >&2
         exit 1
@@ -211,7 +211,7 @@ _restore_rootfs() {
 
     if [ ! -x "$LFS/usr/bin/bash" ] ||
         [ ! -x "$LFS/usr/bin/gcc" ] ||
-        [ ! -f "$LFS/var/lib/pkg/db" ]
+        [ ! -f "$LFS/var/lib/scratchpkg/db" ]
     then
         echo "ERROR: Restored base rootfs failed verification." >&2
         exit 1
@@ -252,10 +252,10 @@ export MAKEFLAGS=-j$(nproc)
 PKGMK_SOURCE_DIR=$sourcedir
 PKGMK_PACKAGE_DIR=/tmp/lfs-pkg
 
-. $PWD/files/pkgmk.bootstrap
+. $PWD/files/pkgbuild.bootstrap
 EOF
 
-    if [ ! "$(PATH=$TOOLS/bin command -v pkgmk)" ]; then
+    if [ ! "$(PATH=$TOOLS/bin command -v pkgbuild)" ]; then
         if [ ! -f "$sourcedir/pkgutils-5.40.12.tar.xz" ]; then
             curl -o "$sourcedir/pkgutils-5.40.12.tar.xz" \
                 https://crux.nu/files/pkgutils-5.40.12.tar.xz
@@ -290,7 +290,7 @@ EOF
 
         mkdir -p /tmp/lfs-pkg
 
-        pkgmk -d -is -if -cf /tmp/bootstrap.conf
+        pkgbuild -d -is -if -cf /tmp/bootstrap.conf
 
         rm -rf /tmp/lfs-pkg
 
@@ -337,7 +337,7 @@ _compressrootfs() {
         cd "$LFS"
 
         XZ_DEFAULTS='-T0' tar \
-            --exclude='./var/lib/pkg/rejected' \
+            --exclude='./var/lib/scratchpkg/rejected' \
             --exclude=".$TOOLS" \
             --exclude='./tmp/*' \
             --exclude='./dev/*' \
@@ -362,7 +362,7 @@ _buildbase() {
         exit 1
     fi
 
-    if [ ! -f "$LFS/var/lib/pkg/db" ]; then
+    if [ ! -f "$LFS/var/lib/scratchpkg/db" ]; then
         mkdir -pv "$LFS"/{etc,var} "$LFS"/usr/{bin,lib,sbin} "$LFS/dev"
 
         for i in bash cat chmod dd echo ln mkdir pwd rm stty; do
@@ -406,11 +406,11 @@ _buildbase() {
         cat ports/core/aaa_filesystem/passwd > "$LFS/etc/passwd"
         cat ports/core/aaa_filesystem/group > "$LFS/etc/group"
 
-        mkdir -p "$LFS/var/lib/pkg"
-        touch "$LFS/var/lib/pkg/db"
+        mkdir -p "$LFS/var/lib/scratchpkg"
+        touch "$LFS/var/lib/scratchpkg/db"
 
-        mkdir -p "$LFS/$pkgmkpkg"
-        mkdir -p "$LFS/$pkgmksrc"
+        mkdir -p "$LFS/$spkgpkg"
+        mkdir -p "$LFS/$spkgsrc"
         mkdir -p "$packagedir"
     fi
 
@@ -427,12 +427,12 @@ _buildbase() {
     cp files/pkgin "$TOOLS/bin/pkgin"
     chmod +x "$TOOLS/bin/pkgin"
 
-    mkdir -p "$LFS/var/lib/pkgmk"
+    mkdir -p "$LFS/var/lib/pkgbuild"
 
-    cp ports/core/pkgutils/extension \
-        "$LFS/var/lib/pkgmk"
+    cp ports/core/bfs-spkgbuild-macros/helper.sh \
+        "$LFS/var/lib/pkgbuild"
 
-    cat > "$LFS/tmp/pkgmk.conf" <<EOF
+    cat > "$LFS/tmp/pkgbuild.conf" <<EOF
 export LANG=C
 export LC_ALL=C
 export LANGUAGE=C
@@ -449,11 +449,11 @@ export PKG_CONFIG_LIBDIR="/usr/lib/pkgconfig:/usr/share/pkgconfig"
 export JOBS=$(nproc)
 export MAKEFLAGS="-j \$JOBS"
 
-PKGMK_SOURCE_DIR="/$pkgmksrc"
-PKGMK_PACKAGE_DIR="/$pkgmkpkg"
-PKGMK_WORK_DIR="/tmp/pkgmk-\$name"
+PKGMK_SOURCE_DIR="/$spkgsrc"
+PKGMK_PACKAGE_DIR="/$spkgpkg"
+PKGMK_WORK_DIR="/tmp/pkgbuild-\$name"
 
-. /var/lib/pkgmk/extension
+. /var/lib/pkgbuild/extension
 EOF
 
     LFSPATH=/bin:/usr/bin:/sbin:/usr/sbin
@@ -466,7 +466,7 @@ EOF
 
     for i in $basepkg; do
         if [ "${1:-}" != rebuild ]; then
-            pkginfo -i -r "$LFS" |
+            scratch installed -r "$LFS" |
                 awk '{print $1}' |
                 grep -qx "$i" &&
                 continue
@@ -487,7 +487,7 @@ EOF
                 LC_ALL=C \
                 LANGUAGE=C \
                 PATH="$LFSPATH" \
-                pkgin -d "$i" -is -if -im -cf /tmp/pkgmk.conf \
+                pkgin -d "$i" -is -if -im -cf /tmp/pkgbuild.conf \
                 || {
                     umountfs
                     exit 1
@@ -645,7 +645,7 @@ EOF
                 LC_ALL=C \
                 LANGUAGE=C \
                 PATH="$LFSPATH" \
-                prt-get update -im -fr -if -fi "$i" \
+                scratch sysup -y -im -fr -if -fi "$i" \
                 || {
                     umountfs
                     exit 1
@@ -678,11 +678,11 @@ mountfs() {
         mkdir -p "$LFS/$(readlink "$LFS/dev/shm")"
     fi
 
-    mkdir -p "$LFS/$pkgmksrc"
-    mkdir -p "$LFS/$pkgmkpkg"
+    mkdir -p "$LFS/$spkgsrc"
+    mkdir -p "$LFS/$spkgpkg"
 
-    mount --bind "$sourcedir" "$LFS/$pkgmksrc"
-    mount --bind "$packagedir" "$LFS/$pkgmkpkg"
+    mount --bind "$sourcedir" "$LFS/$spkgsrc"
+    mount --bind "$packagedir" "$LFS/$spkgpkg"
 }
 
 umountfs() {
@@ -691,8 +691,8 @@ umountfs() {
     unmount "$LFS/run"
     unmount "$LFS/proc"
     unmount "$LFS/sys"
-    unmount "$LFS/$pkgmkpkg"
-    unmount "$LFS/$pkgmksrc"
+    unmount "$LFS/$spkgpkg"
+    unmount "$LFS/$spkgsrc"
 }
 
 unmount() {
@@ -863,10 +863,10 @@ procps-ng
 util-linux
 e2fsprogs
 libarchive
-pacman
+scratch
 pkgutils
 dialog
-prt-get
+scratch
 httpup
 ports
 prt-utils
@@ -905,8 +905,8 @@ esac
 sourcedir="$PWD/sources"
 packagedir="$PWD/packages"
 
-pkgmkpkg="var/cache/pkg/packages"
-pkgmksrc="var/cache/pkg/sources"
+spkgpkg="var/cache/scratchpkg/packages"
+spkgsrc="var/cache/scratchpkg/sources"
 
 if [ -z "${1:-}" ]; then
     cat << EOF

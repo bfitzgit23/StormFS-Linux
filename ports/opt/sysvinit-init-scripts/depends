@@ -1,0 +1,8 @@
+sysvinit
+lfs-bootscripts
+dbus
+networkmanager
+acpid
+bluez
+gpm
+chrony

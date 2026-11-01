@@ -1,0 +1,5 @@
+compizconfig-python
+gtk3
+python3-cairo
+python3-gobject
+python3-setuptools

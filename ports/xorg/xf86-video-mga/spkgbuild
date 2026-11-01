@@ -1,0 +1,17 @@
+# description	: Matrox video driver
+# homepage	: https://xorg.freedesktop.org
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=xf86-video-mga
+version=2.1.0
+release=1
+source="https://xorg.freedesktop.org/archive/individual/driver/xf86-video-mga-$version.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+
+	./configure --prefix=/usr
+
+	make
+	make DESTDIR=$PKG install
+}

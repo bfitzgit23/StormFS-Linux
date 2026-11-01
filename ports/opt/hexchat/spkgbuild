@@ -1,0 +1,21 @@
+# description	: hexchat package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=hexchat
+version=2.16.2
+release=1
+source="https://github.com/${name}/${name}/releases/download/v${version}/${name}-${version}.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+mkdir build &&
+cd    build &&
+
+meson setup ..              \
+      --prefix=/usr         \
+      --buildtype=release   \
+      -Dwith-lua=false      \
+      -Dwith-python=false   &&
+ninja
+DESTDIR=$PKG ninja install
+}

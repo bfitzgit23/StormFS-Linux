@@ -1,0 +1,20 @@
+# description	: Pixel manipulation library
+# homepage	: https://xorg.freedesktop.org
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=pixman-32
+version=0.46.4
+release=3
+build_opt="-D tests=disabled"
+source="https://www.x.org/releases/individual/lib/pixman-$version.tar.xz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+        _bfs_require_compat32_extension 2 || return $?
+	bfs_autobuild
+
+	rm -r $PKG/usr/include
+	bfs_compat32_validate || return 1
+}

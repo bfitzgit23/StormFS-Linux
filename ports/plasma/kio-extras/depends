@@ -1,0 +1,8 @@
+extra-cmake-modules
+kde-frameworks-6
+kdsoap-ws-discovery-client
+libkexiv2
+libproxy
+plasma-activities-stats
+qcoro
+qt6

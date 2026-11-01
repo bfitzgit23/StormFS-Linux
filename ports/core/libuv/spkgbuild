@@ -1,0 +1,25 @@
+# description	: Support library with a focus on asynchronous I/O
+# homepage	: https://libuv.org/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=libuv
+version=1.52.1
+release=2
+source="https://dist.libuv.org/dist/v$version/$name-v$version.tar.gz"
+
+build() {
+	cd "$name-$version" || return 1
+    sh autogen.sh
+
+    ./configure \
+        --prefix=/usr \
+        --disable-static
+
+    make
+    make DESTDIR="$PKG" install
+    find "$PKG" -type f -name '*.la' -delete
+
+    rm -rf \
+        "$PKG/usr/share/doc" \
+        "$PKG/usr/share/info"
+}

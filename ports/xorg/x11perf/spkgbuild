@@ -1,0 +1,15 @@
+# description	: X11 server performance test program
+# homepage	: https://xorg.freedesktop.org
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=x11perf
+version=1.7.0
+release=1
+source="https://xorg.freedesktop.org/archive/individual/test/x11perf-$version.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+	./configure $XORG_CONFIG
+	make
+	make DESTDIR=$PKG install
+}

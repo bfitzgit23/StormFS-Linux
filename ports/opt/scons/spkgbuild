@@ -1,0 +1,13 @@
+# description	: scons package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=scons
+version=4.11.1
+release=2
+source="https://downloads.sourceforge.net/${name}/SCons-${version}.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

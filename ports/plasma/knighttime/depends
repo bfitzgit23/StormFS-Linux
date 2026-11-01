@@ -1,0 +1,7 @@
+extra-cmake-modules
+kconfig
+kcoreaddons
+kdbusaddons
+kholidays
+ki18n
+qt6

@@ -1,0 +1,14 @@
+# description	: A low-level library for calling build-backends in pyproject.toml-based project
+# homepage	: https://github.com/pypa/pyproject-hooks
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=python3-pyproject-hooks
+version=1.3.3
+release=1
+source="https://files.pythonhosted.org/packages/source/p/pyproject_hooks/pyproject_hooks-$version.tar.gz"
+
+build() {
+	cd "$name-$version" || return 1
+
+  /usr/bin/pip3 install --isolate --root=$PKG --ignore-installed --no-deps .
+}

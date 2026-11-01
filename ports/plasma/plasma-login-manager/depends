@@ -1,0 +1,16 @@
+extra-cmake-modules
+kauth
+kconfig
+kcoreaddons
+kdbusaddons
+ki18n
+kimageformats
+kpackage
+kwindowsystem
+layer-shell-qt
+libkscreen
+libplasma
+linux-pam
+plasma-workspace
+kwin
+qt6

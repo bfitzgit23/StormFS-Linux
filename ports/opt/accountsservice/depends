@@ -1,0 +1,4 @@
+polkit
+glib
+gobject-introspection
+vala

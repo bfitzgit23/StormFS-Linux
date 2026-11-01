@@ -1,0 +1,4 @@
+glib
+gobject-introspection
+gtk3
+libdaemon

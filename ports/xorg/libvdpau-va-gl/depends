@@ -1,0 +1,4 @@
+cmake
+libvdpau
+libva
+mesa

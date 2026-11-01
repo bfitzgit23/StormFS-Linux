@@ -1,0 +1,17 @@
+# description	: General purpose TCP/IP emulator library used by QEMU
+# homepage	: https://gitlab.freedesktop.org/slirp/libslirp
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=libslirp
+version=4.9.4
+release=1
+build_opt=(
+    -Ddefault_library=shared
+)
+source="https://gitlab.freedesktop.org/slirp/libslirp/-/archive/v$version/libslirp-v$version.tar.bz2"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

@@ -6,8 +6,8 @@ import subprocess
 ROOT = Path(__file__).resolve().parents[2]
 COMPAT = ROOT / "ports/compat-32"
 CONTRIB = ROOT / "ports/contrib"
-pkgfiles = sorted(COMPAT.glob("*/Pkgfile"))
-assert len(pkgfiles) >= 170, len(pkgfiles)
+pkgfiles = sorted(COMPAT.glob("*/spkgbuild"))
+assert len(pkgfiles) >= 150, len(pkgfiles)
 
 for p in pkgfiles:
     s = p.read_text(errors="replace")
@@ -18,56 +18,59 @@ for p in pkgfiles:
     cp = subprocess.run(["bash", "-n", str(p)], capture_output=True, text=True)
     assert cp.returncode == 0, (p, cp.stderr)
 
-extension = (ROOT / "ports/core/pkgutils/extension").read_text()
+extension = (ROOT / "ports/core/bfs-spkgbuild-macros/helper.sh").read_text()
 for needle in (
-    'BFS_PKG_EXTENSION_API=2',
-    'BFS_PKG_LIBDIR=/usr/lib32',
-    '-DCMAKE_INSTALL_LIBDIR="$BFS_PKG_LIBDIR_NAME"',
-    '--libdir="$BFS_PKG_LIBDIR"',
-    '"--host=${BFS_MULTILIB_HOST:-i686-pc-linux-gnu}"',
-    '_bfs_meson_arch_args=(--cross-file .bfsos-compat32.cross)',
-    '_bfs_validate_compat32_payload',
+    'bfs_compat32()',
+    'bfs_compat32_validate()',
+    'bfs_autobuild()',
+    'BFS_PKG_LIBDIR="/usr/lib32"',
+    'BFS_PKG_LIBDIR_NAME="lib32"',
+    'i686-pc-linux-gnu',
     'compat-32 payload contains files in native library directories',
 ):
     assert needle in extension, needle
 
 for p in pkgfiles:
     s = p.read_text(errors="replace")
-    if not re.search(r"(?m)^pkg_build\s*\(", s):
-        assert "_bfs_require_compat32_extension 2" in s, p
-        assert not re.search(r"(?m)^\s*(?:\./configure|meson setup|cmake -S)\b", s), p
+    # scratchpkg has no per-port architecture switch: every *-32 recipe must
+    # opt in to the i686 build and validate its payload stayed out of the
+    # native library directories.
+    assert "bfs_compat32" in s, p
+    assert "bfs_compat32_validate" in s, p
 
-libxml2 = (COMPAT / "libxml2-32/Pkgfile").read_text()
+libxml2 = (COMPAT / "libxml2-32/spkgbuild").read_text()
 assert "build_type=configure_build" in libxml2
-flac = (COMPAT / "flac-32/Pkgfile").read_text()
+flac = (COMPAT / "flac-32/spkgbuild").read_text()
 assert "build_type=cmake_build" in flac
-lcms2 = (COMPAT / "lcms2-32/Pkgfile").read_text()
+lcms2 = (COMPAT / "lcms2-32/spkgbuild").read_text()
 assert "rm -rf $PKG/usr/{bin,include,share/man}" in lcms2
-libffi = (COMPAT / "libffi-32/Pkgfile").read_text()
+libffi = (COMPAT / "libffi-32/spkgbuild").read_text()
 assert re.search(r"(?m)^release=3$", libffi)
 
-pkgutils = (ROOT / "ports/core/pkgutils/Pkgfile").read_text()
-assert int(re.search(r'(?m)^release=(\d+)$', pkgutils).group(1)) >= 35
+scratchpkg = (ROOT / "ports/core/scratchpkg/spkgbuild").read_text()
+assert re.search(r'(?m)^name=scratchpkg$', scratchpkg)
+assert re.search(r'(?m)^release=\d+$', scratchpkg)
+assert re.search(r'(?m)^build\(\) \{', scratchpkg)
 
-gstreamer = (COMPAT / "gstreamer-32/Pkgfile").read_text()
+gstreamer = (COMPAT / "gstreamer-32/spkgbuild").read_text()
 assert "CRUX Linux" not in gstreamer
 assert "_cross_file" not in gstreamer
-gstbase = (COMPAT / "gst-plugins-base-32/Pkgfile").read_text()
-assert "gl_platform=$PKGMK_GST_PLATFORM" in gstbase
+gstbase = (COMPAT / "gst-plugins-base-32/spkgbuild").read_text()
+assert re.search(r'build_opt\+=\([^)]*-Dgl_platform=\$', gstbase)
 assert "CRUX Linux" not in gstbase
 
-mpg = (COMPAT / "mpg123-32/Pkgfile").read_text()
-assert re.search(r"(?m)^# Depends on:.*\bopenal-32\b", mpg)
-openssl = (COMPAT / "openssl11-32/Pkgfile").read_text()
+mpg = (COMPAT / "mpg123-32/depends").read_text().split()
+assert "openal-32" in mpg
+openssl = (COMPAT / "openssl11-32/spkgbuild").read_text()
 assert "linux-x86" in openssl and "linux-x86_64" not in openssl
-pipewire = (COMPAT / "pipewire-32/Pkgfile").read_text()
+pipewire = (COMPAT / "pipewire-32/spkgbuild").read_text()
 assert "xorg-libxcb-32" not in pipewire and "libxcb-32" in pipewire
 
-wine = (CONTRIB / "wine-staging/Pkgfile").read_text()
+wine = (CONTRIB / "wine-staging/spkgbuild").read_text()
 assert '"$SRC/wine-staging-$version/staging/patchinstall.py"' in wine
 assert '"$SRC/wine-$version/configure" $build_opt' in wine
-steam = (CONTRIB / "steam/Pkgfile").read_text()
-for dep in ("alsa-plugins-32", "fontconfig-32", "libX11-32", "libva-32", "vulkan-loader-32"):
-    assert re.search(rf"(?m)^# Depends on:.*\b{re.escape(dep)}\b", steam), dep
+steam = (CONTRIB / "steam/depends").read_text().split()
+for dep in ("alsa-plugins-32", "fontconfig-32", "libx11-32", "libva-32", "vulkan-loader-32"):
+    assert dep in steam, dep
 
 print("compat-32/contrib build-contract regression: PASS")

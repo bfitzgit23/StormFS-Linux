@@ -1,0 +1,17 @@
+# description	: X font handling library version 2 for server & utilities
+# homepage	: https://xorg.freedesktop.org
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=libxfont2
+version=2.0.9
+release=3
+source="https://xorg.freedesktop.org/archive/individual/lib/libxfont2-$version.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+
+	 ./configure $XORG_CONFIG --docdir=/usr/share/doc/$name-$version --disable-devel-docs
+
+	make
+	make DESTDIR=$PKG install
+}

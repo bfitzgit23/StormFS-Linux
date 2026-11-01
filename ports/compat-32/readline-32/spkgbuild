@@ -1,0 +1,29 @@
+# description	: Lets users edit command lines as they are typed in
+# homepage	: https://tiswww.case.edu/php/chet/readline/rltop.html
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=readline-32
+version=8.3
+release=3
+build_opt="--prefix=/usr --host=${BFS_MULTILIB_HOST:-i686-pc-linux-gnu} --libdir=/usr/lib32"
+source="https://ftp.gnu.org/gnu/${name%-*}/${name%-*}-${version:0:3}.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+  (
+    set -e
+	./configure $build_opt
+	make -j1 SHLIB_LIBS=-lncurses
+	make -j1 DESTDIR=$PKG install
+
+	install -d $PKG/lib32
+	mv $PKG/usr/lib32/lib*.so.* $PKG/lib32
+	ln -sf ../../lib32/libhistory.so.${version:0:3} $PKG/usr/lib32/libhistory.so
+	ln -sf ../../lib32/libreadline.so.${version:0:3} $PKG/usr/lib32/libreadline.so
+
+	rm -r $PKG/usr/{bin,include,share/man,share}
+  )
+	bfs_compat32_validate || return 1
+}

@@ -1,0 +1,22 @@
+# description	: Wrapper library for evdev devices
+# homepage	: https://xorg.freedesktop.org
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=libevdev
+version=1.13.7
+release=1
+source="https://www.freedesktop.org/software/libevdev/libevdev-$version.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+
+	mkdir build &&
+	cd    build &&
+
+meson setup ..                 \
+      --prefix=$XORG_PREFIX    \
+      --buildtype=release      \
+      -Ddocumentation=disabled &&
+ninja
+	DESTDIR=$PKG ninja install
+}

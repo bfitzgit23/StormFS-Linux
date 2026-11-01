@@ -1,0 +1,7 @@
+dbus
+dconf
+gcr
+glib
+libgcrypt
+linux-pam
+p11-kit

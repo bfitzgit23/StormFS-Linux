@@ -1,0 +1,26 @@
+# description	: GTK3 greeter for the LightDM display manager
+# homepage	: https://github.com/Xubuntu/lightdm-gtk-greeter
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+# optional	: at-spi2-core
+
+name=lightdm-gtk-greeter
+version=2.0.9
+release=1
+build_opt="\
+    --libexecdir=/usr/lib/lightdm \
+    --sbindir=/usr/bin \
+    --sysconfdir=/etc \
+    --with-libxklavier \
+    --enable-kill-on-sigterm \
+    --disable-libido \
+    --disable-libindicator \
+    --disable-static \
+    --disable-maintainer-mode \
+    --docdir=/usr/share/doc/lightdm-gtk-greeter-$version"
+source="https://github.com/Xubuntu/lightdm-gtk-greeter/releases/download/lightdm-gtk-greeter-$version/lightdm-gtk-greeter-$version.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

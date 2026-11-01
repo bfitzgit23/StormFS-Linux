@@ -1,0 +1,28 @@
+# description	: Utility for incremental file transfers over networks
+# homepage	: https://rsync.samba.org
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=rsync
+version=3.5.1
+release=1
+source="https://www.samba.org/ftp/$name/src/$name-$version.tar.gz rsyncd.conf rsync.driver"
+
+build() {
+	cd "$name-$version" || return 1
+
+
+	./configure \
+		--prefix=/usr \
+		--with-rsh=ssh \
+		--with-included-zlib=no \
+		--with-included-popt=yes \
+		--disable-xxhash \
+		--disable-lz4
+
+	make
+	make DESTDIR=$PKG install
+
+	install -m 644 $SRC/rsyncd.conf $PKG/etc
+	install -m 755 $SRC/rsync.driver $PKG/etc/ports/drivers/rsync
+	touch $PKG/var/log/rsyncd.log
+}

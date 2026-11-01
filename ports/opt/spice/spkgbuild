@@ -1,0 +1,23 @@
+# description	: SPICE remote display server library
+# homepage	: https://www.spice-space.org/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=spice
+version=0.16.0
+release=1
+build_opt=(
+    -Dgstreamer=no
+    -Dlz4=true
+    -Dsasl=true
+    -Dopus=enabled
+    -Dsmartcard=disabled
+    -Dmanual=false
+    -Dtests=false
+)
+source="https://www.spice-space.org/download/releases/spice-server/spice-$version.tar.bz2"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

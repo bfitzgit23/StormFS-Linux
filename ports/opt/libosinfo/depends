@@ -1,0 +1,6 @@
+glib
+gobject-introspection
+libsoup3
+libxml2
+libxslt
+vala

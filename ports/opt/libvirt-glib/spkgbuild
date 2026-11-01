@@ -1,0 +1,20 @@
+# description	: GLib and GObject bindings for libvirt
+# homepage	: https://libvirt.org/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=libvirt-glib
+version=5.0.0
+release=1
+build_opt=(
+    -Ddocs=disabled
+    -Dtests=disabled
+    -Dintrospection=enabled
+    -Dvapi=enabled
+)
+source="https://download.libvirt.org/glib/libvirt-glib-$version.tar.xz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

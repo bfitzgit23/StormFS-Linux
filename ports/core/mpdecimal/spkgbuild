@@ -1,0 +1,23 @@
+# description	: Package for correctly-rounded arbitrary precision decimal floating point arithmetic.
+# homepage	: https://www.bytereef.org/mpdecimal/index.html
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=mpdecimal
+version=4.0.1
+release=1
+source="https://www.bytereef.org/software/mpdecimal/releases/mpdecimal-$version.tar.gz"
+
+build() {
+	cd "$name-$version" || return 1
+
+
+	./configure --prefix=/usr \
+		--disable-static \
+		--docdir=/usr/share/doc/$name-$version
+
+	make
+	make DESTDIR=$PKG install
+
+	rm -r $PKG/usr/share/doc
+	rmdir $PKG/usr/share
+}

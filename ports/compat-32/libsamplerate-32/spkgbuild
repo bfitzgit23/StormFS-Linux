@@ -1,0 +1,21 @@
+# description	: Sound sample rate conversion library
+# homepage	: https://libsndfile.github.io/libsamplerate/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=libsamplerate-32
+version=0.2.2
+release=3
+build_opt="-D BUILD_SHARED_LIBS=ON -Wno-dev"
+source="https://github.com/libsndfile/libsamplerate/releases/download/$version/libsamplerate-$version.tar.xz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+        _bfs_require_compat32_extension 2 || return $?
+	bfs_autobuild
+
+	rm -r $PKG/usr/share/doc $PKG/usr/include
+	rmdir $PKG/usr/share
+	bfs_compat32_validate || return 1
+}

@@ -1,0 +1,15 @@
+# description	: python3-setuptools package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=python3-setuptools
+version=84.0.0
+release=1
+export SETUPTOOLS_INSTALL_WINDOWS_SPECIFIC_FILES=0
+export PYTHONDONTWRITEBYTECODE=1
+source="https://pypi.org/packages/source/s/setuptools/setuptools-$version.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

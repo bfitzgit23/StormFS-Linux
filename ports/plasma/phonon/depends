@@ -1,0 +1,4 @@
+cmake
+extra-cmake-modules
+glib
+qt6

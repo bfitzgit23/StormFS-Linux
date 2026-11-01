@@ -1,0 +1,38 @@
+# description	: Filesystem snapshot management tool for Btrfs
+# homepage	: https://github.com/openSUSE/snapper
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+# optional	: linux-pam
+
+name=snapper
+version=0.13.1
+release=2
+#snapper-boost-system-header-only.patch)
+build_opt=(
+    --sysconfdir=/etc
+    --disable-static
+    --disable-pam
+    --disable-zypp
+    --disable-doc
+    --disable-bcachefs
+    --disable-ext4
+    --disable-lvm
+    --enable-btrfs
+    --enable-xattrs
+    --disable-systemd
+)
+source="https://github.com/openSUSE/snapper/archive/refs/tags/v$version.tar.gz"
+
+build() {
+	cd "$name-$version" || return 1
+    autoreconf -fi || return 1
+
+    ./configure "${build_opt[@]}" || return 1
+
+    make -j${JOBS:-1} || return 1
+    make DESTDIR="$PKG" install || return 1
+    find "$PKG" -type f -name '*.la' -delete
+
+    rm -rf \
+        "$PKG/usr/share/doc" \
+        "$PKG/usr/share/info"
+}

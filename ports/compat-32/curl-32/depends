@@ -1,0 +1,4 @@
+curl
+openssl-32
+zstd-32
+brotli-32

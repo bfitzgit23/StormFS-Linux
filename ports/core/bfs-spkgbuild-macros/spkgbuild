@@ -1,0 +1,17 @@
+# description	: Shared spkgbuild build helpers for StormFS ports
+# homepage	: https://github.com/bfitzgit23/StormFS-Linux
+# maintainer	: StormFS maintainers
+#
+# Installs /usr/share/bfsos/spkgbuild.helper, which provides the automatic
+# build-type detection that the retired the former CRUX packaging stack extension performed, plus
+# the compat-32 (i686) build environment and patch handling.  Recipes that
+# define an explicit build() do not need it.
+
+name=bfs-spkgbuild-macros
+version=1
+release=1
+source="helper.sh"
+
+build() {
+	install -D -m 0755 "$SRC/helper.sh" "$PKG/usr/share/bfsos/spkgbuild.helper" || return 1
+}

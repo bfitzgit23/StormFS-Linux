@@ -1,0 +1,7 @@
+dbus
+glib
+gtk3
+libhandy
+libxml2
+libxslt
+vala

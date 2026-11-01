@@ -1,0 +1,9 @@
+desktop-file-utils
+gsettings-desktop-schemas
+gtk3
+itstool
+libarchive
+unzip
+glib
+gobject-introspection
+vala

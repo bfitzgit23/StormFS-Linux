@@ -1,0 +1,17 @@
+# description	: X11 XFree86 video mode extension library
+# homepage	: https://xorg.freedesktop.org
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=libxxf86vm
+version=1.1.7
+release=3
+source="https://xorg.freedesktop.org/archive/individual/lib/libxxf86vm-$version.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+
+	 ./configure $XORG_CONFIG --docdir=/usr/share/doc/$name-$version
+
+	make
+	make DESTDIR=$PKG install
+}

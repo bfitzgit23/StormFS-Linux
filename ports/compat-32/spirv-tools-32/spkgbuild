@@ -1,0 +1,51 @@
+# description	: API and commands for processing SPIR-V modules
+# homepage	: https://www.khronos.org/vulkan/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=spirv-tools-32
+version=1.4.357.0
+release=3
+source="https://github.com/KhronosGroup/SPIRV-Tools/archive/vulkan-sdk-$version/SPIRV-Tools-v$version.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+  (
+    set -e
+        SPKG_SPIRV_TOOLS+=" -G Ninja"
+        SPKG_SPIRV_TOOLS+=" -S ."
+        SPKG_SPIRV_TOOLS+=" -D CMAKE_INSTALL_PREFIX=/usr"
+        SPKG_SPIRV_TOOLS+=" -D CMAKE_INSTALL_LIBDIR=lib32"
+        SPKG_SPIRV_TOOLS+=" -D CMAKE_BUILD_TYPE=Release"
+        SPKG_SPIRV_TOOLS+=" -D SPIRV_WERROR=OFF"
+        SPKG_SPIRV_TOOLS+=" -D SPIRV-Headers_SOURCE_DIR=/usr"
+        SPKG_SPIRV_TOOLS+=" -D SPIRV_TOOLS_BUILD_STATIC=OFF"
+        SPKG_SPIRV_TOOLS+=" -Wno-author"
+
+        cmake -B build-static $SPKG_SPIRV_TOOLS \
+                -D CMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+                -D CMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
+                -D BUILD_SHARED_LIBS=OFF || return 1
+
+        cmake --build build-static || return 1
+
+        cmake -B build-shared $SPKG_SPIRV_TOOLS \
+                -D CMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+                -D CMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
+                -D BUILD_SHARED_LIBS=ON || return 1
+
+        cmake --build build-shared || return 1
+
+        DESTDIR="$PKG" \
+                cmake --build build-static --target install || return 1
+
+        DESTDIR="$PKG" \
+                cmake --build build-shared --target install || return 1
+
+        # Native spirv-tools owns the executables and headers.
+        # This compat port supplies only the 32-bit libraries/pkg-config data.
+        rm -rf "$PKG/usr/bin" "$PKG/usr/include"
+  )
+	bfs_compat32_validate || return 1
+}

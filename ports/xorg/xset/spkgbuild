@@ -1,0 +1,17 @@
+# description	: User preference utility for X
+# homepage	: https://xorg.freedesktop.org
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=xset
+version=1.2.6
+release=2
+source="https://xorg.freedesktop.org/archive/individual/app/xset-$version.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+
+	./configure $XORG_CONFIG
+
+	make
+	make DESTDIR=$PKG install
+}

@@ -31,7 +31,7 @@ for unit in \
     plasma-kactivitymanagerd.service \
     plasma-kscreen.service
 do
-    if systemctl --user cat "$unit" >/dev/null 2>&1; then
+    if test -e "/etc/xdg/autostart/$unit" || test -e "/etc/init.d/$unit" >/dev/null 2>&1; then
         ok "$unit visible"
     else
         bad "$unit missing from systemd user unit path"
@@ -47,7 +47,7 @@ fi
 echo
 echo "== PipeWire audio =="
 for unit in pipewire.socket pipewire-pulse.socket wireplumber.service; do
-    if systemctl --user is-active "$unit" >/dev/null 2>&1; then
+    if rc-service "${unit%.service}" status >/dev/null 2>&1; then
         ok "$unit active"
     else
         warn "$unit not active"
@@ -96,7 +96,7 @@ else
 fi
 enabled_dms=0
 for dm_unit in sddm.service plasmalogin.service gdm.service lightdm.service; do
-    if systemctl is-enabled "$dm_unit" >/dev/null 2>&1; then
+    if rc-update show | grep -q "$dm_unit" >/dev/null 2>&1; then
         ok "$dm_unit explicitly enabled"
         enabled_dms=$((enabled_dms + 1))
     fi
@@ -160,7 +160,7 @@ else
     bad "VLC Qt GUI plugin missing"
 fi
 
-if systemctl is-active rtkit-daemon.service >/dev/null 2>&1; then
+if rc-service rtkit-daemon status >/dev/null 2>&1; then
     ok "rtkit-daemon.service active"
 else
     warn "rtkit-daemon.service not active; PipeWire may run without realtime priority"

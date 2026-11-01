@@ -2,7 +2,7 @@
 """Static/source-policy audit for BFSOS ports/core.
 
 This intentionally does not claim upstream-version or build/runtime validation.
-It records every core Pkgfile and highlights source-tree issues that can be
+It records every core spkgbuild and highlights source-tree issues that can be
 established without downloading or building packages.
 """
 from __future__ import annotations
@@ -41,8 +41,8 @@ def main() -> int:
     ap.add_argument('--tsv', default='docs/BFSOS-core-audit-r333-20260924.tsv')
     ns=ap.parse_args()
     root=Path(ns.root).resolve()
-    pkgfiles=sorted((root/'ports/core').glob('*/Pkgfile'))
-    all_pkgfiles=sorted((root/'ports').glob('*/*/Pkgfile'))
+    pkgfiles=sorted((root/'ports/core').glob('*/spkgbuild'))
+    all_pkgfiles=sorted((root/'ports').glob('*/*/spkgbuild'))
     all_names=set()
     for p in all_pkgfiles:
         t=p.read_text(errors='replace')
@@ -88,7 +88,7 @@ def main() -> int:
             'custom_note':'yes' if documented else ('no' if has_custom else '-'),
         })
 
-    backups=sorted(str(p.relative_to(root)) for p in (root/'ports').glob('*/*/Pkgfile*') if p.name!='Pkgfile')
+    backups=sorted(str(p.relative_to(root)) for p in (root/'ports').glob('*/*/spkgbuild*') if p.name!='spkgbuild')
 
     tsv=root/ns.tsv
     tsv.parent.mkdir(parents=True,exist_ok=True)
@@ -103,7 +103,7 @@ def main() -> int:
         f.write(f'# BFSOS `ports/core` audit — {ns.revision} source/static pass\n\n')
         f.write(f'Date: {ns.date}\n\n')
         f.write('## Scope and evidence\n\n')
-        f.write(f'- Core directories: **{len(list((root/"ports/core").glob("*/")))}**; canonical Pkgfiles: **{len(pkgfiles)}**.\n')
+        f.write(f'- Core directories: **{len(list((root/"ports/core").glob("*/")))}**; canonical spkgbuilds: **{len(pkgfiles)}**.\n')
         f.write(f'- Required metadata omissions: **{len(metadata)}**.\n')
         f.write(f'- Hard/optional dependency overlaps: **{len(dep_overlap)}**.\n')
         f.write(f'- Unresolved hard dependency tokens from core against the full BFSOS tree: **{len(unresolved)}**.\n')
@@ -111,7 +111,7 @@ def main() -> int:
         f.write(f'- Remote patch URLs still present in core source arrays: **{len(remote_patch)}**.\n')
         f.write(f'- `pkg_build()` recipes: **{len(custom)}**; with an explicit `Custom build required:` rationale: **{len(custom)-len(undocumented)}**.\n')
         f.write(f'- Direct `setup.py install` recipes: **{len(setup_py)}**.\n')
-        f.write(f'- Stale `Pkgfile*` backup/copy files anywhere under maintained `ports/`: **{len(backups)}**.\n\n')
+        f.write(f'- Stale `spkgbuild*` backup/copy files anywhere under maintained `ports/`: **{len(backups)}**.\n\n')
         f.write(f'The complete package-by-package inventory is in `{ns.tsv}`. '\
                 'This audit is deliberately source/static evidence: package builds, runtime behavior, and a true upstream-version sweep require a networked BFSOS host. '\
                 'The sandbox version checker was attempted and could not resolve upstream hosts, so the report does not mislabel unverified package versions as current.\n\n')
@@ -120,7 +120,7 @@ def main() -> int:
             f.write('### Remote patch vendoring still required\n\n')
             for n,us in remote_patch:
                 for u in us: f.write(f'- `{n}`: `{u}`\n')
-            f.write('\nThese patch bytes are not present in the supplied project archive. They must be fetched on a networked host, checksum-verified, committed beside each Pkgfile, and the source entries converted to local filenames.\n\n')
+            f.write('\nThese patch bytes are not present in the supplied project archive. They must be fetched on a networked host, checksum-verified, committed beside each spkgbuild, and the source entries converted to local filenames.\n\n')
         if undocumented:
             f.write('### BFSOS extension-contract review queue\n\n')
             f.write(f'**{len(undocumented)}** core ports still retain `pkg_build()` without an explicit custom-build rationale. This is an audit queue, not proof that all {len(undocumented)} are wrong. Ordinary Autotools/CMake/Meson recipes should migrate to the extension + `build_opt`; genuinely special orchestration should retain `pkg_build()` and gain a concise rationale.\n\n')

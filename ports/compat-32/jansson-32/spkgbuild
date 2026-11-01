@@ -1,0 +1,19 @@
+# description	: C library for encoding, decoding and manipulating JSON data.
+# homepage	: http://www.digip.org/jansson/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=jansson-32
+version=2.15.1
+release=2
+source="http://www.digip.org/${name%-*}/releases/${name%-*}-$version.tar.bz2 https://github.com/akheron/jansson/releases/download/v$version/${name%-*}-$version.tar.bz2"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+        _bfs_require_compat32_extension 2 || return $?
+	bfs_autobuild
+
+	rm -r $PKG/usr/include
+	bfs_compat32_validate || return 1
+}

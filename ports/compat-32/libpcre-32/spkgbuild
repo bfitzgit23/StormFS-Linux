@@ -1,0 +1,23 @@
+# description	: Perl Compatible Regular Expressions
+# homepage	: https://www.pcre.org
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=libpcre-32
+version=8.45
+release=3
+build_opt="--enable-unicode-properties --enable-pcre16 --enable-pcre32 --enable-jit --disable-pcregrep-libz --disable-pcregrep-libbz2 --disable-pcretest-libreadline"
+source="https://downloads.sourceforge.net/project/pcre/pcre/$version/pcre-$version.tar.bz2"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+        _bfs_require_compat32_extension 2 || return 0
+  export CC="${CC:-gcc}"
+  export CXX="${CXX:-g++}"
+autoreconf -fi
+	bfs_autobuild
+
+    rm -r $PKG/usr/{bin,include,share/man,share}
+	bfs_compat32_validate || return 1
+}

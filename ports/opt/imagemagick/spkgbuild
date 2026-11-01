@@ -1,0 +1,20 @@
+# description	: imagemagick package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=imagemagick
+version=7.1.2_31
+srcver=7.1.2-31
+release=1
+build_opt="--prefix=/usr
+            --sysconfdir=/etc
+            --enable-hdri
+            --with-modules
+            --with-perl
+            --disable-static"
+source="https://download.imagemagick.org/releases/ImageMagick-$srcver.tar.xz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$srcver" || return 1
+	bfs_autobuild
+}

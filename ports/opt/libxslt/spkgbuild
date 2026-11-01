@@ -1,0 +1,22 @@
+# description	: XSL Transformations library
+# homepage	: https://gitlab.gnome.org/GNOME/libxslt/-/wikis/home
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+# optional	: libgcrypt
+
+name=libxslt
+version=1.1.45
+release=3
+source="https://download.gnome.org/sources/libxslt/${version:0:3}/libxslt-$version.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+
+  scratch isinstalled libgcrypt || BFS_LIBXSLT+=' --without-crypto'
+
+  ./configure --prefix=/usr                          \
+            --disable-static                       \
+            --docdir=/usr/share/doc/libxslt-1.1.38 \
+            PYTHON=/usr/bin/python3 &&
+make
+  make DESTDIR=$PKG install
+}

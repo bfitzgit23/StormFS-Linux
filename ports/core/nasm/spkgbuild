@@ -1,0 +1,34 @@
+# description	: 80x86 assembler
+# homepage	: https://www.nasm.us/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+# optional	: asciidoc xmlto
+
+name=nasm
+version=3.02
+release=4
+source="https://www.nasm.us/pub/nasm/releasebuilds/$version/$name-$version.tar.xz https://www.nasm.us/pub/nasm/releasebuilds/$version/$name-$version-xdoc.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+    ./configure \
+        --prefix=/usr || return $?
+
+    make -j "${JOBS:-1}" || return $?
+
+    make DESTDIR="$PKG" install || return $?
+
+    install -d \
+        "$PKG/usr/share/doc/$name-$version/html" || return $?
+
+    for f in doc/html/*.html; do
+        [ -e "$f" ] || continue
+        cp -v "$f" \
+            "$PKG/usr/share/doc/$name-$version/html/" || return $?
+    done
+
+    for f in doc/*.txt doc/*.ps doc/*.pdf; do
+        [ -e "$f" ] || continue
+        cp -v "$f" \
+            "$PKG/usr/share/doc/$name-$version/" || return $?
+    done
+}

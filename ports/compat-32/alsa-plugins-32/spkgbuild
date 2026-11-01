@@ -1,0 +1,19 @@
+# description	: ALSA Plugins contains plugins for various audio libraries and sound servers.
+# homepage	: https://www.alsa-project.org/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=alsa-plugins-32
+version=1.2.12
+release=3
+source="ftp://ftp.alsa-project.org/pub/plugins/alsa-plugins-${version}.tar.bz2"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+        _bfs_require_compat32_extension 2 || return $?
+	bfs_autobuild
+
+	rm -rf $PKG/{etc,usr/share}
+	bfs_compat32_validate || return 1
+}

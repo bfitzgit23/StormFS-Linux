@@ -1,0 +1,15 @@
+# description	: x server access control program
+# homepage	: https://xorg.freedesktop.org
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=xhost
+version=1.0.10
+release=1
+source="https://xorg.freedesktop.org/archive/individual/app/xhost-$version.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+	./configure $XORG_CONFIG
+	make
+	make DESTDIR=$PKG install
+}

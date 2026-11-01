@@ -1,0 +1,20 @@
+# description	: Video Decode and Presentation API for Unix provides a complete solution for decoding, post-processing, compositing, and displaying compressed or uncompressed video streams.
+# homepage	: https://cgit.freedesktop.org/vdpau/libvdpau/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=libvdpau-32
+version=1.5
+release=3
+build_opt="-Ddocumentation=false"
+source="https://gitlab.freedesktop.org/vdpau/${name%-*}/-/archive/$version//${name%-*}-$version.tar.bz2"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+        _bfs_require_compat32_extension 2 || return $?
+	bfs_autobuild
+
+	rm -r $PKG/etc $PKG/usr/include
+	bfs_compat32_validate || return 1
+}

@@ -1,0 +1,20 @@
+# description	: GIO-style APIs for desktop portals
+# homepage	: https://github.com/flatpak/libportal
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+# optional	: qt6 vala xdg-desktop-portal xdg-desktop-portal-gtk xdg-desktop-portal-gnome
+
+name=libportal
+version=0.10.0
+release=2
+source="https://github.com/flatpak/${name}/releases/download/${version}/${name}-${version}.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+    meson setup build \
+        --prefix=/usr \
+        --buildtype=release \
+        -D vapi=false \
+        -D docs=false || return 1
+    meson compile -C build || return 1
+    DESTDIR="$PKG" meson install --no-rebuild -C build || return 1
+}

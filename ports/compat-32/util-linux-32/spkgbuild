@@ -1,0 +1,20 @@
+# description	: Miscellaneous system utilities
+# homepage	: https://github.com/karelzak/util-linux
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=util-linux-32
+version=2.42.4
+release=4
+build_opt="--bindir=/usr/bin --sbindir=/sbin --auto-features disabled -D build-libblkid=enabled -D build-libuuid=enabled -D build-libmount=enabled -D build-libsmartcols=enabled -D build-libfdisk=enabled -D build-python=disabled -D nls=disabled"
+source="https://www.kernel.org/pub/linux/utils/util-linux/v${version:0:4}/util-linux-$version.tar.xz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+        _bfs_require_compat32_extension 2 || return $?
+	bfs_autobuild
+
+	rm -rf $PKG/{sbin,usr/{bin,include,share}}
+	bfs_compat32_validate || return 1
+}

@@ -21,7 +21,7 @@ if [ "$2" ]; then
 fi
 
 [ -d $name ] && {
-	grep ^version= $name/Pkgfile
+	grep ^version= $name/spkgbuild
 	echo "port for $name exist"
 	exit 1
 }
@@ -41,6 +41,6 @@ echo "# Depends on:
 name=$name
 version=$version
 release=1
-source=($url)" > $name/Pkgfile
+source=($url)" > $name/spkgbuild
 
-cat $name/Pkgfile
+cat $name/spkgbuild

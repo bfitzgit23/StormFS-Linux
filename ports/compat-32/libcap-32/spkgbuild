@@ -1,0 +1,35 @@
+# description	: POSIX.1e capabilities library
+# homepage	: https://sites.google.com/site/fullycapable/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=libcap-32
+version=2.78
+release=3
+source="https://www.kernel.org/pub/linux/libs/security/linux-privs/libcap2/${name%-*}-$version.tar.xz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+    (
+        set -e
+
+        sed -i "/^CFLAGS/s/-O2/$CFLAGS/" Make.Rules
+
+        make -C libcap \
+            GOLANG=no \
+            RAISE_SETFCAP=no \
+            PKGCONFIGDIR=/usr/lib32/pkgconfig
+
+        make -C libcap \
+            GOLANG=no \
+            RAISE_SETFCAP=no \
+            DESTDIR="$PKG" \
+            prefix=/usr \
+            lib=lib32 \
+            install
+
+        rm -rf "$PKG/usr/include"
+    )
+	bfs_compat32_validate || return 1
+}

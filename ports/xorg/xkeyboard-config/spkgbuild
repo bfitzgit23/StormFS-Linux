@@ -1,0 +1,18 @@
+# description	: Bitmaps for X
+# homepage	: https://xorg.freedesktop.org
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=xkeyboard-config
+version=2.48
+release=3
+source="https://xorg.freedesktop.org/archive/individual/data/$name/$name-$version.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+	mkdir build &&
+cd    build &&
+
+meson setup --prefix=$XORG_PREFIX --buildtype=release .. &&
+ninja
+DESTDIR=$PKG ninja install
+}

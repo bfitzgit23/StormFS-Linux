@@ -1,0 +1,11 @@
+glib
+cryptsetup
+gobject-introspection
+keyutils
+libbytesize
+libnvme
+lvm2
+ndctl
+mdadm
+parted
+libyaml

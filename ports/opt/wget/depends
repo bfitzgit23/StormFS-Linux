@@ -1,0 +1,7 @@
+ca-certificates
+gnutls
+libidn2
+libpsl
+libunistring
+pcre2
+zlib

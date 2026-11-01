@@ -1,0 +1,27 @@
+# description	: appstream package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=appstream
+version=1.2.0
+release=1
+source="https://www.freedesktop.org/software/${name}/releases/AppStream-${version}.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+    cd "$SRC/AppStream-$version" || return 1
+
+    # AppStream still references the obsolete xsl-ns URL.
+    # BFSOS ships the current DocBook XSL non-NS stylesheets.
+    sed -i 's/xsl-ns/xsl/g' docs/meson.build || return 1
+
+    meson setup build \
+        --prefix=/usr \
+        --buildtype=release \
+        -Dapidocs=false \
+        -Dstemming=false \
+        || return 1
+
+    meson compile -C build || return 1
+
+    DESTDIR="$PKG" meson install -C build || return 1
+}

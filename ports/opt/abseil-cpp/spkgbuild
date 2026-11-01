@@ -1,0 +1,17 @@
+# description	: abseil-cpp package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=abseil-cpp
+version=20260817.0
+release=1
+build_opt="-DCMAKE_INSTALL_PREFIX=/usr
+      -DCMAKE_BUILD_TYPE=Release
+      -DABSL_PROPAGATE_CXX_STD=ON
+      -DBUILD_SHARED_LIBS=ON"
+source="https://github.com/abseil/${name}/releases/download/${version}/${name}-${version}.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

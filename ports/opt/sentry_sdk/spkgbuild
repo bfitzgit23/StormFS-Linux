@@ -1,0 +1,13 @@
+# description	: sentry_sdk package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=sentry_sdk
+version=2.68.1
+release=1
+source="https://github.com/getsentry/sentry-python/releases/download/${version}/${name}-${version}.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

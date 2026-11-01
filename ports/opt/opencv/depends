@@ -1,0 +1,13 @@
+cmake
+ninja
+unzip
+gst-plugins-base
+gtk3
+jasper
+libexif
+libjpeg-turbo
+libpng
+libtiff
+libwebp
+openjpeg2
+v4l-utils

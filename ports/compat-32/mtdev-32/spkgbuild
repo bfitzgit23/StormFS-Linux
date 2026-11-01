@@ -1,0 +1,19 @@
+# description	: Kernel multi-touch transformation library
+# homepage	: https://bitmath.org/code/mtdev/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=mtdev-32
+version=1.1.7
+release=2
+source="https://bitmath.org/code/mtdev/mtdev-$version.tar.bz2"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+        _bfs_require_compat32_extension 2 || return $?
+	bfs_autobuild
+
+	rm -r $PKG/usr/{bin,include}
+	bfs_compat32_validate || return 1
+}

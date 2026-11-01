@@ -1,0 +1,21 @@
+# description	: Little CMS intends to be an small-footprint color management engine
+# homepage	: http://www.littlecms.com/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+# optional	: libjpeg-turbo
+
+name=lcms2
+version=2.19.1
+release=3
+source="https://downloads.sourceforge.net/project/lcms/lcms/$version/lcms2-$version.tar.gz"
+
+build() {
+	cd "$name-$version" || return 1
+
+
+	sed '/BufferSize < TagSize/,+1 s/goto Error/TagSize = BufferSize/' \
+    -i src/cmsio0.c
+
+    ./configure --prefix=/usr --disable-static &&
+make
+	make DESTDIR=$PKG install
+}

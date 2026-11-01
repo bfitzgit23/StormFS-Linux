@@ -1,0 +1,13 @@
+# description	: Complete BFSOS Xfce desktop meta package
+# homepage	: https://xfce.org/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=xfce4-meta
+version=4.20.0
+release=4
+source=""
+
+build() {
+    install -d "$PKG/usr/share/bfsos/meta-packages" || return 1
+    printf '%s\n' 'BFSOS complete Xfce 4.20 desktop meta-package.' > "$PKG/usr/share/bfsos/meta-packages/$name"
+}

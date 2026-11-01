@@ -1,0 +1,21 @@
+# description	: evolution-data-server package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=evolution-data-server
+version=3.62.0
+release=1
+build_opt="-DSYSCONF_INSTALL_DIR=/etc
+-DENABLE_VALA_BINDINGS=ON
+-DENABLE_INSTALLED_TESTS=OFF
+-DWITH_OPENLDAP=OFF
+-DWITH_KRB5=OFF
+-DENABLE_INTROSPECTION=ON
+-DENABLE_GTK_DOC=OFF
+-DWITH_LIBDB=OFF"
+source="https://download.gnome.org/sources/${name}/${version%.*}/${name}-${version}.tar.xz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

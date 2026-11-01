@@ -1,0 +1,22 @@
+# description	: YAML parser and emitter for C++
+# homepage	: https://github.com/jbeder/yaml-cpp
+# maintainer	: StormFS maintainers
+# optional	: gtest
+
+name=yaml-cpp
+version=0.9.0
+release=1
+build_opt="-DYAML_BUILD_SHARED_LIBS=ON
+           -DYAML_CPP_BUILD_TESTS=OFF
+           -DYAML_CPP_BUILD_TOOLS=OFF
+           -DYAML_CPP_INSTALL=ON"
+source="https://github.com/jbeder/yaml-cpp/archive/refs/tags/yaml-cpp-$version.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+
+	# The GitHub tag archive unpacks as yaml-cpp-yaml-cpp-$version because the
+	# upstream tag already carries the project prefix.
+	cd "yaml-cpp-yaml-cpp-$version" || return 1
+	bfs_autobuild
+}

@@ -1,0 +1,19 @@
+# description	: colord-gtk package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=colord-gtk
+version=0.3.1
+release=1
+build_opt="--prefix=/usr
+            --buildtype=release
+            -Dgtk4=true
+            -Dvapi=true
+            -Ddocs=false
+            -Dman=false"
+source="https://www.freedesktop.org/software/colord/releases/${name}-${version}.tar.xz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

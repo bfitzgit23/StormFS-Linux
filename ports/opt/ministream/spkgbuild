@@ -1,0 +1,14 @@
+# description	: Lightweight AppStream metadata reader for libadwaita
+# homepage	: https://gitlab.gnome.org/GNOME/ministream
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=ministream
+version=0.99.1
+release=1
+source="https://gitlab.gnome.org/GNOME/$name/-/archive/$version/$name-$version.tar.bz2"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

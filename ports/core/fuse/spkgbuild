@@ -1,0 +1,14 @@
+# description	: fuse package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=fuse
+version=3.18.3
+release=1
+source="https://github.com/lib$name/lib$name/releases/download/$name-$version/$name-$version.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+	rm $PKG/dev/fuse
+}

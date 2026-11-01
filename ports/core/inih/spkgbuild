@@ -1,0 +1,13 @@
+# description	: inih package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=inih
+version=62
+release=1
+source="https://github.com/benhoyt/$name/archive/r$version/$name-r$version.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

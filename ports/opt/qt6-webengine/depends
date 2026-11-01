@@ -1,0 +1,10 @@
+bison
+cmake
+flex
+gperf
+ninja
+nodejs
+nss
+python3
+python3-html5lib
+qt6

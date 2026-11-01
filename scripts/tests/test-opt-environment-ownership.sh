@@ -3,7 +3,7 @@ set -euo pipefail
 ROOT=$(cd "$(dirname "$0")/../.." && pwd)
 cd "$ROOT"
 
-base=ports/core/aaa_filesystem/Pkgfile
+base=ports/core/aaa_filesystem/spkgbuild
 for f in bfs-opt.sh kf6.sh; do
     grep -Fq "$f" "$base" || { echo "aaa_filesystem missing $f" >&2; exit 1; }
 done
@@ -20,7 +20,7 @@ grep -Fq '60-bfsos-opt.conf' "$base"
 grep -Fq '/opt/kf6/bin:/opt/qt6/bin' ports/core/aaa_filesystem/60-bfsos-opt.conf
 grep -Fq 'XDG_DATA_DIRS=/usr/local/share:/usr/share:/opt/kf6/share' ports/core/aaa_filesystem/60-bfsos-opt.conf
 
-for leaf in ports/opt/qt5/Pkgfile ports/opt/qt6/Pkgfile ports/opt/rustc/Pkgfile; do
+for leaf in ports/opt/qt5/spkgbuild ports/opt/qt6/spkgbuild ports/opt/rustc/spkgbuild; do
     if grep -Eq '\$PKG/etc/profile\.d|\$PKG/etc/profile.d' "$leaf"; then
         echo "leaf package still owns canonical profile.d content: $leaf" >&2
         exit 1

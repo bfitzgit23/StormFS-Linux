@@ -1,0 +1,26 @@
+# description	: gucharmap package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=gucharmap
+version=17.0.2
+release=1
+renames=(SKIP UCD.zipx Unihan.zipx)
+source="https://gitlab.gnome.org/GNOME/${name}/-/archive/${version}/${name}-${version}.tar.bz2 https://www.unicode.org/Public/17.0.0/ucd/UCD.zip https://www.unicode.org/Public/17.0.0/ucd/Unihan.zip"
+
+build() {
+	cd "$name-$version" || return 1
+mkdir build
+cd build
+
+mkdir ucd
+unzip $SRC/UCD.zipx -d ucd
+cp $SRC/Unihan.zipx ucd
+meson setup --prefix=/usr       \
+            --strip             \
+            --buildtype=release \
+            -Ducd_path=./ucd    \
+            -Ddocs=false        \
+            ..                  &&
+ninja
+ninja install
+}

@@ -1,0 +1,22 @@
+# description	: Direct3D 12 to Vulkan translation library By WineHQ.
+# homepage	: https://github.com/d3d12/vkd3d
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=vkd3d-32
+version=2.1
+release=3
+build_opt="--with-spirv-tools"
+source="https://dl.winehq.org/vkd3d/source/${name%-*}-$version.tar.xz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+        _bfs_require_compat32_extension 2 || return $?
+	bfs_autobuild
+    mv $PKG/usr/bin/vkd3d-compiler{,-32}
+    mv $PKG/usr/bin/vkd3d-dxbc{,-32}
+
+    rm -r $PKG/usr/include
+	bfs_compat32_validate || return 1
+}

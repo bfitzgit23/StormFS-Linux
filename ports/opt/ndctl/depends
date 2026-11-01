@@ -1,0 +1,6 @@
+iniparser
+json-c
+keyutils
+meson
+ninja
+libtraceevent

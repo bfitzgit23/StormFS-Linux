@@ -1,0 +1,48 @@
+# description	: Secure Sockets Layer and Transport Layer Security tools
+# homepage	: https://www.openssl.org/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=openssl11-32
+version=1.1.1w
+release=3
+source="https://www.openssl.org/source/${name:0:7}-$version.tar.gz \ no-rpath.patch openssl-1.0-versioned-symbols.patch"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+	# Apply patch sources; pkgbuild does this automatically.
+	for _p in "$SRC"/*.patch "$SRC"/*.diff; do
+		[ -f "$_p" ] || continue
+		patch -t "${patch_opt:--p1}" -i "$_p" || return 1
+	done
+  (
+    set -e
+	#export MAKEFLAGS="$MAKEFLAGS -j1"
+	export CC="${CC:-gcc}"
+
+	./Configure --prefix=/usr \
+		--openssldir=/etc/ssl \
+		--libdir=lib32/openssl-1.1 \
+		shared linux-x86 || return 1
+
+	sed -i "s|-O3|$CFLAGS|" Makefile
+
+	make depend || return 1
+	make -j"${JOBS:-1}" || return 1
+	make DESTDIR="$PKG" LIBDIR=lib32/openssl-1.1 MANDIR=/usr/share/man MANSUFFIX=ssl install_sw || return 1
+
+	find $PKG -name "*fips*" -delete
+	chmod -R +w $PKG
+
+	rm -rf "$PKG/usr/include" "$PKG/usr/bin"
+	mv "$PKG/usr/lib32/openssl-1.1/libcrypto.so.1.1" "$PKG/usr/lib32/"
+	mv "$PKG/usr/lib32/openssl-1.1/libssl.so.1.1" "$PKG/usr/lib32/"
+	ln -sf ../libssl.so.1.1 "$PKG/usr/lib32/openssl-1.1/libssl.so"
+	ln -sf ../libcrypto.so.1.1 "$PKG/usr/lib32/openssl-1.1/libcrypto.so"
+
+	# Update includedir in .pc files
+	sed -e 's|/include$|/include/openssl-1.1|' -i $PKG/usr/lib32/openssl-1.1/pkgconfig/*.pc
+  )
+	bfs_compat32_validate || return 1
+}

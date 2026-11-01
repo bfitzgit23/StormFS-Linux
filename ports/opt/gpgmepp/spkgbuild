@@ -1,0 +1,17 @@
+# description	: C++ bindings for GPGME
+# homepage	: https://www.gnupg.org/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=gpgmepp
+version=2.2.0
+release=1
+build_opt="-DCMAKE_INSTALL_PREFIX=/usr
+           -DCMAKE_BUILD_TYPE=Release
+           -DBUILD_TESTING=OFF"
+source="https://gnupg.org/ftp/gcrypt/$name/$name-$version.tar.xz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

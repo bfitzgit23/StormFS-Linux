@@ -1,0 +1,17 @@
+# description	: Library for reading and writing Data Matrix barcodes
+# homepage	: https://github.com/dmtx/libdmtx
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=libdmtx
+version=0.7.8
+release=1
+source="https://github.com/dmtx/$name/archive/refs/tags/v$version.tar.gz"
+
+build() {
+	cd "$name-$version" || return 1
+
+    autoreconf -fi &&
+    ./configure --prefix=/usr &&
+    make &&
+    make DESTDIR=$PKG install
+}

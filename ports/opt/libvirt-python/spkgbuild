@@ -1,0 +1,15 @@
+# description	: Python bindings for libvirt
+# homepage	: https://libvirt.org/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=libvirt-python
+version=12.7.0
+release=1
+build_type=python3_build
+source="https://download.libvirt.org/python/libvirt_python-$version.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

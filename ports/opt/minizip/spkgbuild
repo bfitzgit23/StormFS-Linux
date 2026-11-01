@@ -1,0 +1,25 @@
+# description	: Modern Minizip library
+# homepage	: https://github.com/zlib-ng/minizip-ng
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=minizip
+version=4.2.2
+release=2
+build_opt=(
+    -DMZ_BUILD_TESTS=OFF
+    -DMZ_BUILD_UNIT_TESTS=OFF
+    -DMZ_BUILD_FUZZ_TESTS=OFF
+    -DMZ_BUILD_SHARED=ON
+    -DMZ_BUILD_STATIC=OFF
+    -DMZ_COMPAT=ON
+    -DMZ_PPMD=OFF
+    -DMZ_FETCH_LIBS=OFF
+    -DMZ_FORCE_FETCH_LIBS=OFF
+)
+source="https://github.com/zlib-ng/minizip-ng/archive/refs/tags/$version.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

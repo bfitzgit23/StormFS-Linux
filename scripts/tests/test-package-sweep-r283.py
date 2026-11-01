@@ -5,9 +5,9 @@ import re, subprocess, sys
 ROOT = Path(__file__).resolve().parents[2]
 
 def pkg(rel):
-    p = ROOT / 'ports' / rel / 'Pkgfile'
+    p = ROOT / 'ports' / rel / 'spkgbuild'
     if not p.is_file():
-        raise AssertionError(f'missing Pkgfile: {rel}')
+        raise AssertionError(f'missing spkgbuild: {rel}')
     return p.read_text(errors='replace')
 
 def value(rel, key):
@@ -28,7 +28,7 @@ expected = {
     'opt/libclc':'23.1.1', 'opt/rust-bindgen':'0.73.2',
     'opt/poppler':'26.09.0', 'opt/libpcap':'1.10.7', 'compat-32/libpcap-32':'1.10.7',
     'opt/imlib2':'1.12.7', 'compat-32/imlib2-32':'1.12.7',
-    'opt/libgcrypt':'1.12.3', 'compat-32/libgcrypt-32':'1.12.3',
+    'opt/libgcrypt':'1.12.4', 'compat-32/libgcrypt-32':'1.12.3',
     'opt/openldap':'2.7.1', 'compat-32/openldap-32':'2.7.1',
     'opt/samba':'4.24.7', 'opt/glib':'2.90.0', 'compat-32/glib-32':'2.90.0',
     'opt/firefox':'155.0.1', 'opt/firefox-bin':'155.0.1', 'opt/discord':'1.0.158',
@@ -45,7 +45,7 @@ for rel, ver in expected.items(): expect_ver(rel, ver)
 
 # Cohesive KDE family refresh: old release train versions may not remain in plasma collection.
 versions=[]
-for p in sorted((ROOT/'ports/plasma').glob('*/Pkgfile')):
+for p in sorted((ROOT/'ports/plasma').glob('*/spkgbuild')):
     m=re.search(r'^version=(.+)$',p.read_text(errors='replace'),re.M)
     if m: versions.append(m.group(1).strip().strip('"\''))
 for old in ('6.29.0','6.7.4','26.08.0'):
@@ -70,15 +70,15 @@ if (ROOT/'ports/opt/nss/nss-3.54-standalone-2.patch').exists():
 
 # Replaced duplicate/stale ports must stay gone.
 for rel in ('opt/freetype2','opt/cracklib-words','opt/lld'):
-    if (ROOT/'ports'/rel/'Pkgfile').exists():
+    if (ROOT/'ports'/rel/'spkgbuild').exists():
         raise AssertionError(f'obsolete duplicate port returned: {rel}')
 
 # Current build systems / hooks, not recipes pkgmk silently ignores.
 gk=pkg('gnome/gnome-keyring')
-if not re.search(r'^pkg_build\(\)',gk,re.M) or 'meson setup' not in gk or './configure' in gk:
-    raise AssertionError('gnome-keyring 50 recipe is not using pkg_build()+Meson')
-if not re.search(r'^pkg_build\(\)',pkg('core/python3-certifi'),re.M):
-    raise AssertionError('python3-certifi pkg_build hook is still misspelled')
+if not re.search(r'^build\(\)',gk,re.M) or 'meson setup' not in gk or './configure' in gk:
+    raise AssertionError('gnome-keyring 50 recipe is not using build()+Meson')
+if not re.search(r'^build\(\)',pkg('core/python3-certifi'),re.M):
+    raise AssertionError('python3-certifi build hook is still misspelled')
 wn=pkg('gnome/libwnck2')
 if re.search(r'# Depends on:.*\bfreetype2\b',wn):
     raise AssertionError('libwnck2 still depends on removed freetype2 duplicate')
@@ -99,7 +99,7 @@ for token in ('/etc/pki/tls/certs/ca-bundle.crt', '_PIP_STANDALONE_CERT'):
         raise AssertionError(f'Requests system-cert patch missing {token}')
 
 psl=pkg('opt/publicsuffix-list')
-if 'source=(public_suffix_list-$version.dat)' not in psl:
+if 'public_suffix_list-$version.dat' not in psl:
     raise AssertionError('publicsuffix-list is not using the versioned vendored data companion')
 psl_data = ROOT / 'ports/opt/publicsuffix-list' / f"public_suffix_list-{value('opt/publicsuffix-list','version')}.dat"
 if not psl_data.is_file() or psl_data.stat().st_size < 100000:

@@ -1,0 +1,16 @@
+alsa-lib
+gtk3
+libnotify
+libx11
+libxcomposite
+libxcursor
+libxdamage
+libxext
+libxfixes
+libxi
+libxrandr
+libxrender
+libxscrnsaver
+libxtst
+nspr
+nss

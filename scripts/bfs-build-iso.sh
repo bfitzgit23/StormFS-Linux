@@ -42,13 +42,13 @@ declare -A tool_packages=(
 )
 
 # Everything the current installer can select or require dynamically, plus
-# the live-media services/tools. Dependencies are resolved by prt-get.
+# the live-media services/tools. Dependencies are resolved by scratch.
 iso_packages=(
     linux-firmware dracut
     networkmanager-iso openssh git sudo wget wpa_supplicant wireless-regdb gpm lynx-iso chrony kbd
     cryptsetup lvm2 mdadm snapper pciutils parted
     dialog squashfs-tools grub grub-efi dosfstools mtools efibootmgr libisoburn syslinux
-    meson ninja pacman
+    meson ninja scratch
 )
 
 log() { printf '[BFSOS ISO] %s\n' "$*"; }
@@ -206,10 +206,10 @@ sync_host_time() {
     # The ISO builder intentionally runs as a regular user, so time correction
     # must be requested through sudo. Prefer chrony when available because it
     # can step a badly skewed clock immediately; otherwise fall back to
-    # timedatectl/systemd-timesyncd where available.
+    # chronyd/ntp where available.
     if command -v chronyc >/dev/null 2>&1; then
-        sudo systemctl start chronyd.service 2>/dev/null || \
-            sudo systemctl start chrony.service 2>/dev/null || true
+        sudo rc-service chronyd.service start 2>/dev/null || \
+            sudo rc-service chrony.service start 2>/dev/null || true
 
         if sudo chronyc -a makestep >/dev/null 2>&1; then
             sudo chronyc -a waitsync 10 0.5 >/dev/null 2>&1 || true
@@ -220,7 +220,7 @@ sync_host_time() {
 
     if command -v timedatectl >/dev/null 2>&1; then
         sudo timedatectl set-ntp true >/dev/null 2>&1 || true
-        sudo systemctl start systemd-timesyncd.service >/dev/null 2>&1 || true
+        sudo rc-service chronyd start >/dev/null 2>&1 ||         sudo chronyd -q >/dev/null 2>&1 || true
 
         # Give the service a short opportunity to acquire time. Do not block a
         # release build forever if the configured NTP service is unavailable.
@@ -228,7 +228,7 @@ sync_host_time() {
         for i in {1..20}; do
             synced="$(timedatectl show -p NTPSynchronized --value 2>/dev/null || true)"
             [ "$synced" = yes ] && {
-                log "Host clock synchronized with systemd time service"
+                log "Host clock synchronized by the host time service"
                 return 0
             }
             sleep 0.5
@@ -325,7 +325,7 @@ validate_base_archive() {
     # older published bases may regenerate them during installation.
     for required in \
         ./usr/bin/bash \
-        ./usr/bin/pkgmk \
+        ./usr/bin/pkgbuild \
         ./etc/os-release \
         ./etc/passwd \
         ./etc/group
@@ -532,7 +532,7 @@ build_iso_package_set() {
     rm -rf "$root/usr/ports"
     mkdir -p "$root/usr/ports"
     cp -a "$BUILD_PROJECT_DIR/ports/." "$root/usr/ports/"
-    grep -Fqx 'prtdir /usr/ports/iso' "$root/etc/prt-get.conf" || echo 'prtdir /usr/ports/iso' >> "$root/etc/prt-get.conf"
+    grep -Fqx 'prtdir /usr/ports/iso' "$root/etc/scratch.conf" || echo 'prtdir /usr/ports/iso' >> "$root/etc/scratch.conf"
     cp -a /etc/resolv.conf "$root/etc/resolv.conf" 2>/dev/null || true
 
     mount_chroot_fs "$root"
@@ -547,24 +547,24 @@ build_iso_package_set() {
     log "Updating pkgutils before system upgrade"
     chroot "$root" /usr/bin/env -i \
         HOME=/root TERM="${TERM:-linux}" PATH=/usr/bin:/usr/sbin:/bin:/sbin \
-        /bin/bash -lc "prt-get update pkgutils" ||
+        /bin/bash -lc "scratch sysup -y pkgutils" ||
         die "Failed to update pkgutils in ISO root"
 
     chroot "$root" /usr/bin/env -i \
         HOME=/root TERM="${TERM:-linux}" PATH=/usr/bin:/usr/sbin:/bin:/sbin \
-        /bin/bash -lc 'grep -Fq "# BFSOS: command-line options override Pkgfile/pkgmk.conf." /usr/bin/pkgmk' ||
+        /bin/bash -lc 'grep -Fq "# BFSOS: command-line options override spkgbuild/pkgbuild.conf." /usr/bin/pkgbuild' ||
         die "Updated pkgutils does not contain CLI precedence fix"
 
     log "Running full system upgrade in isolated root"
     chroot "$root" /usr/bin/env -i \
         HOME=/root TERM="${TERM:-linux}" PATH=/usr/bin:/usr/sbin:/bin:/sbin \
-        /bin/bash -lc "prt-get sysup" ||
+        /bin/bash -lc "scratch sysup -y" ||
         die "Failed to complete ISO root system upgrade"
 
     log "Ensuring gobject-introspection is installed"
     chroot "$root" /usr/bin/env -i \
         HOME=/root TERM="${TERM:-linux}" PATH=/usr/bin:/usr/sbin:/bin:/sbin \
-        /bin/bash -lc "prt-get depinst gobject-introspection" ||
+        /bin/bash -lc "scratch install -y gobject-introspection" ||
         die "Failed to install gobject-introspection in ISO root"
 
     log "Ensuring GLib introspection support required by ISO dependencies"
@@ -573,11 +573,11 @@ build_iso_package_set() {
         /bin/bash -lc '
             if [ ! -r /usr/share/gir-1.0/Gio-2.0.gir ] || \
                [ ! -r /usr/lib/girepository-1.0/Gio-2.0.typelib ]; then
-                rm -f /var/cache/pkg/packages/glib#*.pkg.tar.zst
-                rm -rf /var/cache/pkg/build-work/pkgmk-glib
+                rm -f /var/cache/scratchpkg/packages/glib#*.pkg.tar.zst
+                rm -rf /var/cache/scratchpkg/build-work/pkgbuild-glib
                 cd /usr/ports/opt/glib || exit 1
-                pkgmk -d -if || exit 1
-                glib_pkg="$(ls -1t /var/cache/pkg/packages/glib#*.pkg.tar.zst 2>/dev/null | head -n1)"
+                pkgbuild -d -if || exit 1
+                glib_pkg="$(ls -1t /var/cache/scratchpkg/packages/glib#*.pkg.tar.zst 2>/dev/null | head -n1)"
                 [ -n "$glib_pkg" ] || exit 1
                 pkgadd -u "$glib_pkg" || exit 1
             fi
@@ -590,7 +590,7 @@ build_iso_package_set() {
     log "Building/installing selected ISO kernel: $kernel_pkg"
     chroot "$root" /usr/bin/env -i \
         HOME=/root TERM="${TERM:-linux}" PATH=/usr/bin:/usr/sbin:/bin:/sbin \
-        /bin/bash -lc "prt-get depinst $kernel_pkg" ||
+        /bin/bash -lc "scratch install -y $kernel_pkg" ||
         die "Failed to build/install selected ISO kernel package set: $kernel_pkg"
 
     if ! find "$root/boot" -maxdepth 1 -type f -name "$kernel_pattern" -print -quit | grep -q .; then
@@ -606,7 +606,7 @@ build_iso_package_set() {
     log "Building/installing remaining ISO live + installer packages"
     chroot "$root" /usr/bin/env -i \
         HOME=/root TERM="${TERM:-linux}" PATH=/usr/bin:/usr/sbin:/bin:/sbin \
-        /bin/bash -lc "prt-get depinst ${iso_packages[*]}" ||
+        /bin/bash -lc "scratch install -y ${iso_packages[*]}" ||
         die "Failed to build/install remaining ISO package set"
 
     umount_chroot_fs "$root"
@@ -616,8 +616,8 @@ build_iso_package_set() {
 install_live_runtime() {
     local root="$1"
     log "Installing BFSOS live-session policy"
-    mkdir -p "$root/home/bfs" "$root/usr/local/sbin" "$root/etc/systemd/system" "$root/etc/sudoers.d"
-    mkdir -p "$root/etc/systemd/system/getty@tty1.service.d"
+    mkdir -p "$root/home/bfs" "$root/usr/local/sbin" "$root/etc/sudoers.d"
+    mkdir -p "$root/etc/init.d" "$root/etc/runlevels/default"
     mkdir -p "$root/home/bfs/BFSOS"
     rsync -a --delete \
         --exclude '/iso-work/' \
@@ -656,11 +656,13 @@ bfs ALL=(ALL:ALL) NOPASSWD: ALL
 EOS
     chmod 0440 "$root/etc/sudoers.d/90-bfs-live"
 
-    cat > "$root/etc/systemd/system/getty@tty1.service.d/10-bfs-live-autologin.conf" <<'EOS'
-[Service]
-ExecStart=
-ExecStart=-/sbin/agetty --autologin bfs --noclear %I $TERM
-EOS
+    # OpenRC starts the console login from /etc/inittab, so the live auto-login
+    # lives there instead of in a service drop-in.
+    if [ -f "$root/etc/inittab" ]; then
+        sed -i -e 's|^\(tty1::\).*|respawn:/sbin/agetty --autologin bfs --noclear tty1 38400 linux|'             "$root/etc/inittab"
+    else
+        die "live root has no /etc/inittab; OpenRC cannot start a console login"
+    fi
 
     cat > "$root/usr/local/sbin/bfs-live-console-font" <<'EOS'
 #!/usr/bin/env bash
@@ -787,10 +789,9 @@ printf 'SSH is disabled by default. Enter 3) Shell from the live menu for manual
 
 if command -v nm-online >/dev/null 2>&1 && nm-online -q --timeout=20; then
     printf '\nNetwork is available. Starting live time synchronization...\n'
-    systemctl stop systemd-timesyncd.service 2>/dev/null || true
     if command -v chronyd >/dev/null 2>&1; then
-        systemctl start chronyd.service 2>/dev/null || \
-            systemctl start chrony.service 2>/dev/null || \
+        rc-service chronyd.service start 2>/dev/null || \
+            rc-service chrony.service start 2>/dev/null || \
             chronyd >/dev/null 2>&1 || true
         if command -v chronyc >/dev/null 2>&1; then
             chronyc waitsync 10 0.5 >/dev/null 2>&1 || true
@@ -809,25 +810,22 @@ printf '\nLive initialization complete. Starting bfs console session.\n'
 EOS
     chmod 0755 "$root/usr/local/sbin/bfs-live-init"
 
-    cat > "$root/etc/systemd/system/bfs-live-init.service" <<'EOS'
-[Unit]
-Description=BFSOS live-session initialization
-After=NetworkManager.service
-Before=getty@tty1.service
-ConditionKernelCommandLine=bfs.live=1
+    cat > "$root/etc/init.d/bfs-live-init" <<'EOS'
+#!/sbin/openrc-run
+description="BFSOS live-session initialization"
 
-[Service]
-Type=oneshot
-ExecStart=/usr/local/sbin/bfs-live-init
-StandardInput=tty-force
-StandardOutput=tty
-StandardError=tty
-TTYPath=/dev/tty1
-RemainAfterExit=yes
+depend() {
+    need NetworkManager
+    before local
+}
 
-[Install]
-WantedBy=multi-user.target
+start() {
+    ebegin "Running BFSOS live-session initialization"
+    /usr/local/sbin/bfs-live-init </dev/tty1 >/dev/tty1 2>&1
+    eend $?
+}
 EOS
+    chmod 0755 "$root/etc/init.d/bfs-live-init"
 
     cat > "$root/usr/local/sbin/bfs-live-menu" <<'EOS'
 #!/usr/bin/env bash
@@ -862,7 +860,7 @@ while true; do
             printf 'SSH is disabled by default. To enable it for this live session:\n'
             printf '  sudo passwd bfs\n'
             printf '  sudo ssh-keygen -A\n'
-            printf '  sudo systemctl start sshd.service  # or ssh.service if that is the installed unit\n\n'
+            printf '  sudo rc-service sshd.service start  # or ssh.service if that is the installed unit\n\n'
             if command -v script >/dev/null 2>&1; then
                 script -qec 'bash -il' /dev/null
             else
@@ -882,57 +880,27 @@ if [ -z "${BFS_LIVE_MENU_STARTED:-}" ] && [ -t 0 ]; then
     /usr/local/sbin/bfs-live-menu
 fi
 EOS
-    chown 0:0 "$root/etc/systemd/system/bfs-live-init.service"
+    chown 0:0 "$root/etc/init.d/bfs-live-init"
     rm -f "$root"/etc/ssh/ssh_host_*
     chroot "$root" /bin/bash -lc '
-        mkdir -p /etc/systemd/system/multi-user.target.wants
-        ln -sfn /etc/systemd/system/bfs-live-init.service /etc/systemd/system/multi-user.target.wants/bfs-live-init.service
-        if [ -e /usr/lib/systemd/system/NetworkManager.service ]; then
-            ln -sfn /usr/lib/systemd/system/NetworkManager.service /etc/systemd/system/multi-user.target.wants/NetworkManager.service
-        fi
-        # Chrony is the live ISO time-sync policy. Do not run a competing
-        # systemd-timesyncd instance on live media. bfs-live-init starts chrony
-        # only after NetworkManager reports usable connectivity.
-        systemctl disable systemd-timesyncd.service 2>/dev/null || true
+        rc-update add bfs-live-init default 2>/dev/null || true
+        rc-update add NetworkManager default 2>/dev/null || true
+        # Chrony is the live ISO time-sync policy; bfs-live-init starts it only
+        # after NetworkManager reports usable connectivity.
+        rc-update del chronyd default 2>/dev/null || true
     ' || true
 
-    # BFSOS preset policy must keep package-provided network daemons disabled
-    # unless explicitly enabled by the administrator/installer. This is the
-    # primary policy; the checks below are a live-media release invariant.
-    local preset_file="$root/usr/lib/systemd/system-preset/99-bfsos.preset"
-    local unit state
-
-    [ -r "$preset_file" ] || \
-        die "BFSOS preset policy missing from live root: /usr/lib/systemd/system-preset/99-bfsos.preset"
-    grep -Eq '^[[:space:]]*disable[[:space:]]+\*[[:space:]]*$' "$preset_file" || \
-        die "BFSOS preset policy does not contain the required default-disable rule"
-
-    for unit in \
-        sshd.service ssh.service sshd.socket ssh.socket \
-        rsyncd.service rsync.service rsyncd.socket rsync.socket
-    do
-        # Remove stale enablement from reused bases/live roots, but only from
-        # wants/requires directories. Do not delete canonical unit aliases.
-        systemctl --root="$root" disable "$unit" 2>/dev/null || true
-        find "$root/etc/systemd/system" "$root/usr/lib/systemd/system" \
-            -type l \
-            \( -path "*/system/*.wants/$unit" -o -path "*/system/*.requires/$unit" \) \
-            -delete 2>/dev/null || true
-
-        state="$(systemctl --root="$root" is-enabled "$unit" 2>/dev/null || true)"
-        case "$state" in
-            enabled|enabled-runtime|linked|linked-runtime)
-                die "Live ISO policy violation: $unit is enabled ($state)"
-                ;;
-        esac
+        # BFSOS live-media policy: SSH and rsync must never be enabled at boot.
+    local unit runlevel
+    for unit in sshd ssh rsyncd rsync; do
+        for runlevel in "$root"/etc/runlevels/*; do
+            [ -d "$runlevel" ] || continue
+            rm -f "$runlevel/$unit" 2>/dev/null || true
+            [ -e "$runlevel/$unit" ] &&                 die "Live ISO policy violation: $unit is enabled in ${runlevel##*/}"
+        done
     done
 
-    # Verify the BFSOS default-disable preset policy itself.
-    # Explicit rules in earlier preset files still take precedence.
-    grep -Eq '^[[:space:]]*disable[[:space:]]+\*[[:space:]]*$' "$preset_file" || \
-        die "Live ISO preset policy violation: BFSOS default-disable rule is missing"
-
-    log "Verified: BFSOS default-disable preset policy is installed and SSH/rsync have no boot enablement"
+    log "Verified: SSH/rsync have no runlevel enablement in the live root"
 }
 
 install_dracut_live_module() {
@@ -1112,9 +1080,9 @@ stage_iso() {
     mkdir -p "$stage/boot/grub" "$stage/bfsos"
 
     log "Removing all package/source/build archives and caches from live root"
-    sudo rm -rf "$root/var/cache/pkg/sources" "$root/var/cache/pkg/packages" \
-        "$root/var/cache/pkg/build-work" "$root/var/cache/pkg/build-work-disk"
-    sudo mkdir -p "$root/var/cache/pkg/sources" "$root/var/cache/pkg/packages" "$root/var/cache/pkg/build-work"
+    sudo rm -rf "$root/var/cache/scratchpkg/sources" "$root/var/cache/scratchpkg/packages" \
+        "$root/var/cache/scratchpkg/build-work" "$root/var/cache/scratchpkg/build-work-disk"
+    sudo mkdir -p "$root/var/cache/scratchpkg/sources" "$root/var/cache/scratchpkg/packages" "$root/var/cache/scratchpkg/build-work"
     sudo bash -c "$(declare -f audit_live_root die log); audit_live_root '$root'"
     sudo bash -c "$(declare -f write_build_info); VERSION='$VERSION'; ARCH='$ARCH'; BUILD_DATE='$BUILD_DATE'; ISO_LABEL='$ISO_LABEL'; GIT_URL='$GIT_URL'; GIT_REF='$GIT_REF'; GIT_COMMIT_FULL='$GIT_COMMIT_FULL'; BASE_URL='$BASE_URL'; BASE_SOURCE='$BASE_SOURCE'; write_build_info '$root' '$base_archive'"
 

@@ -1,0 +1,21 @@
+# description	: SOcket CAT - netcat-like utility with many enhancements
+# homepage	: http://www.dest-unreach.org/socat
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=socat
+version=1.8.1.3
+release=1
+source="http://www.dest-unreach.org/socat/download/$name-$version.tar.gz https://www.linuxfromscratch.org/slfs/view/dev/download/socat/socat-$version-openssl4_fixes-1.patch"
+
+build() {
+	cd "$name-$version" || return 1
+
+	# Apply patch sources; pkgbuild does this automatically.
+	for _bfs_patch in "$SRC"/*.patch "$SRC"/*.diff; do
+		[ -f "$_bfs_patch" ] || continue
+		patch -t "${patch_opt:--p1}" -i "$_bfs_patch" || return 1
+	done
+    ./configure --prefix=/usr || return 1
+    make -j${JOBS:-1} || return 1
+    make DESTDIR="$PKG" install || return 1
+}

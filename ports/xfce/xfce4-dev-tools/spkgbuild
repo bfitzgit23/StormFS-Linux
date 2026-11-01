@@ -1,0 +1,13 @@
+# description	: xfce4-dev-tools package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=xfce4-dev-tools
+version=4.20.0
+release=1
+source="http://archive.xfce.org/src/xfce/${name}/${version%.*}/${name}-${version}.tar.bz2"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

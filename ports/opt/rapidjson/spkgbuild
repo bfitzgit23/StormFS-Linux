@@ -1,0 +1,21 @@
+# description	: Fast JSON parser and generator for C++
+# homepage	: https://github.com/Tencent/rapidjson
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=rapidjson
+version=20250205.24b5e7a
+_commit=24b5e7a8b27f42fa16b96fc70aade9106cf7102f
+release=1
+build_opt="-DCMAKE_INSTALL_PREFIX=/usr
+           -DCMAKE_BUILD_TYPE=Release
+           -DRAPIDJSON_BUILD_DOC=OFF
+           -DRAPIDJSON_BUILD_EXAMPLES=OFF
+           -DRAPIDJSON_BUILD_TESTS=OFF
+           -DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+source="https://github.com/Tencent/rapidjson/archive/$_commit/$name-$version.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

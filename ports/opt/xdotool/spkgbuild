@@ -1,0 +1,13 @@
+# description	: xdotool package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=xdotool
+version=4.20260303.1
+release=1
+source="https://github.com/jordansissel/${name}/releases/download/v${version}/${name}-${version}.tar.gz"
+
+build() {
+	cd "$name-$version" || return 1
+make WITHOUT_RPATH_FIX=1
+make PREFIX=/usr INSTALLMAN=/usr/share/man DESTDIR=$PKG install
+}

@@ -1,0 +1,15 @@
+# description	: BFSOS safe kernel upgrade, rollback retention, and boot finalization helper
+# homepage	: https://github.com/bmadonnaster/BFSOS
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=bfs-kernel-maintenance
+version=1.0
+release=3
+source="bfs-kernel-maintenance README"
+
+build() {
+    install -Dm0755 "$SRC/bfs-kernel-maintenance" \
+        "$PKG/usr/libexec/bfs-kernel-maintenance" || return 1
+    install -Dm0644 "$SRC/README" \
+        "$PKG/usr/share/doc/$name/README" || return 1
+}

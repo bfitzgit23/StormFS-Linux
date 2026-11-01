@@ -1,0 +1,13 @@
+# description	: gnome-icon-theme package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=gnome-icon-theme
+version=3.12.0
+release=1
+source="https://download.gnome.org/sources/${name}/${version%.*}/${name}-${version}.tar.xz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

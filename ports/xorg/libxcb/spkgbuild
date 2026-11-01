@@ -1,0 +1,19 @@
+# description	: X11 client-side library
+# homepage	: https://xcb.freedesktop.org/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=libxcb
+version=1.17.0
+release=1
+source="https://xorg.freedesktop.org/archive/individual/lib/$name-$version.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+
+	./configure $XORG_CONFIG      \
+            --without-doxygen \
+            --docdir='${datadir}'/doc/libxcb-$version &&
+	make
+	make DESTDIR=$PKG install
+chown -Rv root:root $PKG$XORG_PREFIX/share/doc/libxcb-$version
+}

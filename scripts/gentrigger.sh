@@ -10,7 +10,7 @@ g() {
 	}
 }
 
-for p in */*/Pkgfile; do
+for p in */*/spkgbuild; do
 	case $p in
 		multilib/*) continue;;
 	esac

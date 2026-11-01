@@ -1,0 +1,21 @@
+# description	: The UDisks package provides a daemon, tools and libraries to access and manipulate disks and storage devices.
+# homepage	: https://github.com/storaged-project/$name/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+# optional	: gobject-introspection dbus-python gtk-doc lvm2 python3-gobject exFAT libiscsi btrfs-progs dosfstools gptfdisk mdadm xfsprogs
+
+name=udisks
+version=2.11.2
+release=2
+source="https://github.com/storaged-project/$name/releases/download/$name-$version/$name-$version.tar.bz2"
+
+build() {
+	cd "$name-$version" || return 1
+./configure --prefix=/usr        \
+            --sysconfdir=/etc    \
+            --localstatedir=/var \
+            --disable-static     \
+            --enable-available-modules &&
+make
+
+	make DESTDIR=$PKG install
+}

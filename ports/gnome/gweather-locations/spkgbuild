@@ -1,0 +1,14 @@
+# description	: Location and timezone database used by libgweather
+# homepage	: https://gitlab.gnome.org/GNOME/gweather-locations
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=gweather-locations
+version=2026.2
+release=1
+source="https://download.gnome.org/sources/$name/2026/$name-$version.tar.xz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

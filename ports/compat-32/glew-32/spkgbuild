@@ -1,0 +1,31 @@
+# description	: The OpenGL Extension Wrangler Library.
+# homepage	: https://glew.sourceforge.net/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=glew-32
+version=2.3.1
+release=3
+source="https://downloads.sourceforge.net/project/glew/glew/$version/glew-$version.tgz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+  (
+    set -e
+	make \
+		CC="${CC:-gcc}" \
+		LD="${CC:-gcc}" \
+		CFLAGS.EXTRA="$CFLAGS -fPIC" \
+		LDFLAGS.EXTRA="$LDFLAGS"
+
+	make \
+		LIBDIR="$PKG/usr/lib32" \
+		PKGDIR="$PKG/usr/lib32/pkgconfig" \
+		GLEW_DEST=$PKG/usr \
+		install
+
+	rm -r $PKG/usr/include
+  )
+	bfs_compat32_validate || return 1
+}

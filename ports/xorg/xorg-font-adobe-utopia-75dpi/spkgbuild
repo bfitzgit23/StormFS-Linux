@@ -1,0 +1,19 @@
+# description	: xorg font font-adobe-utopia-75dpi
+# homepage	: https//xorg.freedesktop.org
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=xorg-font-adobe-utopia-75dpi
+version=1.0.5
+release=1
+source="https://xorg.freedesktop.org/archive/individual/font/font-adobe-utopia-75dpi-$version.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+
+	./configure --prefix=/usr
+
+	make
+	make DESTDIR=$PKG install
+
+	rm $PKG/usr/share/fonts/X11/75dpi/fonts.dir
+}

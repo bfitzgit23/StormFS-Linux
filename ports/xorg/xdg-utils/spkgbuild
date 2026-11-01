@@ -1,0 +1,18 @@
+# description	: Command line tools for desktop integration tasks.
+# homepage	: https://www.freedesktop.org/wiki/Software/xdg-utils/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+# optional	: lynx w3m dbus
+
+name=xdg-utils
+version=v1.2.1
+release=1
+source="https://gitlab.freedesktop.org/xdg/$name/-/archive/$version/$name-$version.tar.gz"
+
+build() {
+	cd "$name-$version" || return 1
+
+
+  ./configure --prefix=/usr --mandir=/usr/share/man &&
+make
+  make DESTDIR=$PKG install
+}

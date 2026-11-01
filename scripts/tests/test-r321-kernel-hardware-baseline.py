@@ -31,7 +31,7 @@ def load(p):
 bad=[]
 for p in configs:
     vals=load(p)
-    recipe=(p.parent/'Pkgfile').read_text(errors='replace')
+    recipe=(p.parent/'spkgbuild').read_text(errors='replace')
     for cat,syms in required.items():
         for sym in syms:
             enabled = vals.get(sym) in {'y','m'}

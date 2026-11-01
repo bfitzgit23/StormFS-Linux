@@ -1,0 +1,5 @@
+extra-cmake-modules
+qrencode
+libdmtx
+zxing-cpp
+qt6

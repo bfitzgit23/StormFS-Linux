@@ -1,0 +1,8 @@
+at-spi2-core-32
+gdk-pixbuf-32
+gtk
+pango-32
+libxcomposite-32
+libxcursor-32
+libxinerama-32
+libxrandr-32

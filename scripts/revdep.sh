@@ -33,7 +33,7 @@ while read -r line; do
 			if [ "$missinglib" ]; then
 				for i in $missinglib; do
 					objdump -p /$line | grep NEEDED | awk '{print $2}' | grep -qx $i && {
-						ownby=$(pkginfo -o $line | tail -n+2 | head -n1 | awk '{print $1}')
+						ownby=$(scratch provide $line | tail -n+2 | head -n1 | awk '{print $1}')
 						[ "$ownby" ] || continue
 						echo " $ownby: $line (requires $i)"
 					}

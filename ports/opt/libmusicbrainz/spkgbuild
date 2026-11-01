@@ -1,0 +1,31 @@
+# description	: The libmusicbrainz package contains a library which allows you to access the data held on the MusicBrainz server. This is useful for adding MusicBrainz lookup capabilities to other applications. MusicBrainz is a community music metadatabase that attempts to create a comprehensive music information site. You can use the MusicBrainz data either by browsing the web site, or you can access the data from a client program — for example, a CD player program can use MusicBrainz to identify CDs and provide information about the CD, about the artist or other related information.
+# homepage	: http://ftp.musicbrainz.org/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+# optional	: python doxygen
+
+name=libmusicbrainz
+version=5.1.0
+release=2
+source="https://github.com/metabrainz/$name/releases/download/release-$version/$name-$version.tar.gz https://www.linuxfromscratch.org/patches/blfs/svn/$name-$version-cmake_fixes-1.patch"
+
+build() {
+	cd "$name-$version" || return 1
+
+	# Apply patch sources; pkgbuild does this automatically.
+	for _bfs_patch in "$SRC"/*.patch "$SRC"/*.diff; do
+		[ -f "$_bfs_patch" ] || continue
+		patch -t "${patch_opt:--p1}" -i "$_bfs_patch" || return 1
+	done
+
+sed -e 's/xmlErrorPtr /const xmlError */'     \
+    -i src/xmlParser.cc
+
+mkdir build &&
+cd    build &&
+
+cmake -D CMAKE_INSTALL_PREFIX=/usr -D CMAKE_BUILD_TYPE=Release -D CMAKE_POLICY_VERSION_MINIMUM=3.5 .. || return 1 &&
+make
+
+	make -j${JOBS:-1} || return 1
+make DESTDIR="$PKG" install || return 1
+}

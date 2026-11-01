@@ -1,0 +1,10 @@
+glib
+gobject-introspection
+libgcrypt
+gnutls
+vala
+python3-gi_docgen
+docbook-xml
+docbook-xsl-nons
+libxslt
+valgrind

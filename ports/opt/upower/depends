@@ -1,0 +1,5 @@
+libgudev
+libusb
+glib
+meson
+ninja

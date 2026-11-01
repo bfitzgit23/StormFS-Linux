@@ -1,0 +1,12 @@
+meson
+wayland
+wayland-protocols
+libdrm
+libxkbcommon
+pixman
+libinput
+seatd
+mesa
+libdisplay-info
+hwdata
+libliftoff

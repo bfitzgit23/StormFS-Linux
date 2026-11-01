@@ -8,7 +8,7 @@ from pathlib import Path
 from collections import defaultdict, Counter
 import re, sys
 root=Path(sys.argv[1])
-ports=list(sorted(root.glob('ports/*/*/Pkgfile')))
+ports=list(sorted(root.glob('ports/*/*/spkgbuild')))
 ident=defaultdict(list); deps={}; versions={}; placeholder=[]; oldmaint=[]; setup=[]; legacy=[]; badhooks=[]
 for p in ports:
     txt=p.read_text(errors='replace'); rel=p.relative_to(root)
@@ -25,9 +25,9 @@ for p in ports:
     if re.search(r'^\s*build\s*\(\s*\)\s*\{',txt,re.M): legacy.append(rel)
     if re.search(r'^\s*(?:build_pkg|pkg_buile|pkg_buid|pkgbuild)\s*\(\s*\)\s*\{',txt,re.M): badhooks.append(rel)
 
-print(f'BFSOS ports-tree audit: {len(ports)} Pkgfiles')
+print(f'BFSOS ports-tree audit: {len(ports)} spkgbuilds')
 for collection in sorted((root/'ports').iterdir()):
-    if collection.is_dir(): print(f'  {collection.name:12s} {len(list(collection.glob("*/Pkgfile"))):4d}')
+    if collection.is_dir(): print(f'  {collection.name:12s} {len(list(collection.glob("*/spkgbuild"))):4d}')
 
 dups={k:v for k,v in ident.items() if len(v)>1}
 print(f'\nDuplicate package identities: {len(dups)}')
@@ -73,7 +73,7 @@ for n in ('gweather-locations','glycin','blueprint-compiler'):
 print('\nFocused suite versions:')
 for col in ('compiz','xfce','lxqt','gnome','plasma'):
     print(f'[{col}]')
-    for p in sorted((root/'ports'/col).glob('*/Pkgfile')):
+    for p in sorted((root/'ports'/col).glob('*/spkgbuild')):
         txt=p.read_text(errors='replace')
         n=next((x.split('=',1)[1].strip() for x in txt.splitlines() if x.startswith('name=')),'?')
         v=next((x.split('=',1)[1].strip() for x in txt.splitlines() if x.startswith('version=')),'?')

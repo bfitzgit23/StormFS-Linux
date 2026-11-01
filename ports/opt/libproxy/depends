@@ -1,0 +1,6 @@
+curl
+duktape
+glib
+meson
+ninja
+gsettings-desktop-schemas

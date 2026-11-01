@@ -1,0 +1,13 @@
+# description	: openbox package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=openbox
+version=3.6.1
+release=1
+source="http://${name}.org/dist/${name}/${name}-${version}.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

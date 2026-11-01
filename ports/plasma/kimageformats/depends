@@ -1,0 +1,5 @@
+qt6
+libavif
+libjxl
+libraw
+extra-cmake-modules

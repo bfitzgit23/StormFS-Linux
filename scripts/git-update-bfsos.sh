@@ -16,7 +16,7 @@ command -v git >/dev/null 2>&1 || die "git is not installed"
 # /etc/ports are outside this maintainer checkout and are not touched here.
 if [[ -d "$REPO_ROOT/ports" ]]; then
     # Development-tree hygiene: generated verification metadata is deliberately
-    # removed before committing. pkgmk will regenerate it when verification is
+    # removed before committing. pkgbuild will regenerate it when verification is
     # enabled for release/testing workflows.
     find "$REPO_ROOT/ports" -type f \
         \( -name '.httpup-repo.current' -o -name '.httpup-urlinfo' -o -name REPO \

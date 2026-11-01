@@ -14,15 +14,15 @@ USAGE
 }
 
 unit_exists() {
-    [ -e "/usr/lib/systemd/system/$1" ] || [ -e "/lib/systemd/system/$1" ]
+    [ -x "/etc/init.d/$1" ]
 }
 
 status() {
     selected=$(cat "$state_file" 2>/dev/null || printf '%s' 'unselected')
     printf 'Selected BFSOS display manager: %s\n' "$selected"
     for unit in sddm.service plasmalogin.service; do
-        if command -v systemctl >/dev/null 2>&1; then
-            printf '%-24s %s\n' "$unit" "$(systemctl is-enabled "$unit" 2>/dev/null || true)"
+        if command -v rc-update >/dev/null 2>&1; then
+            printf '%-24s %s\n' "$unit" "$(rc-update show default 2>/dev/null | grep -qx "$unit" && echo enabled || echo disabled)"
         fi
     done
 }
@@ -58,12 +58,12 @@ mkdir -p "$state_dir"
 printf '%s\n' "$selected" > "$state_file.tmp.$$"
 mv -f "$state_file.tmp.$$" "$state_file"
 
-if command -v systemctl >/dev/null 2>&1; then
+if command -v rc-update >/dev/null 2>&1; then
     if unit_exists "$other"; then
-        systemctl disable "$other" >/dev/null 2>&1 || true
+        rc-update del "$other" default >/dev/null 2>&1 || true
     fi
-    rm -f /etc/systemd/system/display-manager.service
-    systemctl enable --force "$unit"
+    rm -f /etc/runlevels/default/display-manager 2>/dev/null || true
+    rc-update add "$unit" default
 fi
 
 printf 'BFSOS display manager selected: %s (%s)\n' "$selected" "$unit"

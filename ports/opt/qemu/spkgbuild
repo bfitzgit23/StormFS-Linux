@@ -1,0 +1,54 @@
+# description	: QEMU machine emulator and KVM virtualizer
+# homepage	: https://www.qemu.org/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+# optional	: pipewire pulseaudio
+
+name=qemu
+version=11.1.1
+release=7
+build_work=disk
+configure_out_of_tree=yes
+configure_build_tool=ninja
+build_opt=(
+    --libexecdir=/usr/lib/qemu
+    --target-list=x86_64-softmmu,i386-softmmu
+    --disable-download
+    --enable-tools
+    --enable-guest-agent
+    --enable-kvm
+    --enable-linux-aio
+    --enable-linux-io-uring
+    --enable-slirp
+    --enable-gtk
+    --enable-sdl
+    --enable-opengl
+    --enable-virglrenderer
+    --enable-vnc
+    --enable-spice
+    --enable-seccomp
+    --enable-cap-ng
+    --enable-libusb
+    --enable-usb-redir
+    --disable-werror
+)
+# QEMU contains meson.build, but its supported feature switches belong to
+# QEMU's ./configure wrapper. Do not let the generic backend invoke Meson
+# directly with QEMU configure options.
+source="https://download.qemu.org/qemu-$version.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+    rm -rf _bfs_qemu_build
+    mkdir _bfs_qemu_build
+    cd _bfs_qemu_build || return 1
+
+    ../configure \
+        --prefix=/usr \
+        --libdir=/usr/lib \
+        --sysconfdir=/etc \
+        --localstatedir=/var \
+        "${build_opt[@]}" || return 1
+
+    ninja || return 1
+    DESTDIR="$PKG" ninja install || return 1
+}

@@ -1,0 +1,20 @@
+# description	: Color AsCii Art library (32-bit)
+# homepage	: http://caca.zoy.org/wiki/libcaca
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=libcaca-32
+version=0.99.beta20
+release=2
+build_opt="--enable-shared --disable-doc --disable-cxx --disable-gl --disable-csharp --disable-python --disable-slang"
+source="https://github.com/cacalabs/libcaca/releases/download/v$version/libcaca-$version.tar.bz2"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+        _bfs_require_compat32_extension 2 || return $?
+	bfs_autobuild
+
+	rm -r $PKG/usr/{bin,include,share}
+	bfs_compat32_validate || return 1
+}

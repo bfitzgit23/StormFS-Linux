@@ -1,0 +1,35 @@
+# description	: colord package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=colord
+version=1.4.8
+release=4
+source="https://mirror.freedif.org/pub/blfs/conglomeration/colord/colord-$version.tar.xz disable-udev-hwdb-tests.patch"
+
+build() {
+	cd "$name-$version" || return 1
+
+	# Apply patch sources; pkgbuild does this automatically.
+	for _bfs_patch in "$SRC"/*.patch "$SRC"/*.diff; do
+		[ -f "$_bfs_patch" ] || continue
+		patch -t "${patch_opt:--p1}" -i "$_bfs_patch" || return 1
+	done
+    mkdir build &&
+    cd build &&
+
+    meson setup .. \
+        --prefix=/usr \
+        --buildtype=release \
+        -Ddaemon_user=colord \
+        -Dvapi=true \
+        -Dsystemd=disabled \
+        -Dlibcolordcompat=true \
+        -Dargyllcms_sensor=false \
+        -Dbash_completion=false \
+        -Ddocs=false \
+        -Dman=false &&
+
+    ninja &&
+
+    DESTDIR="$PKG" ninja install
+}

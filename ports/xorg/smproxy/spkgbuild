@@ -1,0 +1,17 @@
+# description	: Set the keyboard using the X Keyboard Extension
+# homepage	: https://xorg.freedesktop.org
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=smproxy
+version=1.0.8
+release=2
+source="https://xorg.freedesktop.org/archive/individual/app/smproxy-$version.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+
+	./configure $XORG_CONFIG
+
+	make
+	make DESTDIR=$PKG install
+}

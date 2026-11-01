@@ -1,0 +1,6 @@
+gtk4
+gsettings-desktop-schemas
+libadwaita
+libgudev
+python3-gobject
+sound-theme-freedesktop

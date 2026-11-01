@@ -1,0 +1,28 @@
+# description	: DSP library derived from speex
+# homepage	: https://www.speex.org/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=speexdsp-32
+version=1.2.1
+release=2
+source="https://ftp.osuosl.org/pub/xiph/releases/speex/speexdsp-$version.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+  (
+    set -e
+	./configure \
+		--prefix=/usr \
+		--libdir=/usr/lib32
+
+	sed -i -e '/^SUBDIRS *=/s|\bdoc\b||' Makefile
+
+	make
+	make DESTDIR=$PKG install
+
+	rm -r $PKG/usr/include
+  )
+	bfs_compat32_validate || return 1
+}

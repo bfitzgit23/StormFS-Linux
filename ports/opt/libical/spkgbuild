@@ -1,0 +1,27 @@
+# description	: The libical package contains an implementation of the iCalendar protocols and data formats.
+# homepage	: https://github.com/libical
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+# optional	: db doxygen graphviz gtk-doc icu pygobject
+
+name=libical
+version=4.0.5
+release=3
+build_opt=(
+  -DCMAKE_INSTALL_PREFIX=/usr
+  -DCMAKE_BUILD_TYPE=Release
+  -DLIBICAL_STATIC=NO
+  -DLIBICAL_BUILD_DOCS=false
+  -DLIBICAL_GOBJECT_INTROSPECTION=true
+  -DLIBICAL_GLIB_VAPI=true
+  -DLIBICAL_JAVA_BINDINGS=OFF
+)
+source="https://github.com/$name/$name/releases/download/v$version/$name-$version.tar.gz"
+
+build() {
+	cd "$name-$version" || return 1
+  cmake -S . -B build "${build_opt[@]}"
+
+  cmake --build build -j1
+
+  DESTDIR="$PKG" cmake --install build
+}

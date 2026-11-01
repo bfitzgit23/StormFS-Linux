@@ -1,0 +1,28 @@
+# description	: Userspace interface to kernel DRM services
+# homepage	: https://dri.freedesktop.org/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+# optional	: cairo cmake docbook-xml docbook-xsl-nons docutils libxslt libatomic_ops valgrind cunit
+
+name=libdrm
+version=2.4.134
+release=3
+renames=(libdrm-$version.tar.xz)
+source="https://ftp.debian.org/debian/pool/main/libd/libdrm/libdrm_$version.orig.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+    meson setup build . \
+        --prefix="$XORG_PREFIX" \
+        --buildtype=release \
+        -Dudev=true \
+        -Dintel=enabled \
+        -Dvalgrind=enabled \
+        -Damdgpu=enabled \
+        -Dnouveau=enabled \
+        --wrap-mode=nodownload \
+        -Db_lto=true \
+        -Db_pie=true \
+        -Dman-pages=disabled || return $?
+    meson compile -C build -j "${JOBS:-1}" || return $?
+    DESTDIR="$PKG" meson install -C build || return $?
+}

@@ -1,0 +1,20 @@
+# description	: Protocol definitions and daemon for D-Bus at-spi
+# homepage	: https://gitlab.gnome.org/GNOME/at-spi2-core
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=at-spi2-core-32
+version=2.60.6
+release=3
+build_opt="--sysconfdir=/usr/etc --libexecdir=/usr/lib32/at-spi2 -D introspection=disabled"
+source="https://download.gnome.org/sources/at-spi2-core/${version:0:4}/at-spi2-core-$version.tar.xz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+        _bfs_require_compat32_extension 2 || return $?
+	bfs_autobuild
+
+	rm -r $PKG/usr/{include,etc,share,lib}
+	bfs_compat32_validate || return 1
+}

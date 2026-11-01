@@ -1,0 +1,7 @@
+kwindowsystem
+layer-shell-qt
+libqtxdg
+libx11
+libxcb
+qt6
+lxqt-build-tools

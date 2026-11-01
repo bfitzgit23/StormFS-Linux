@@ -1,0 +1,31 @@
+# description	: openssl package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=openssl
+version=4.0.2
+release=1
+keep_static=1
+source="https://github.com/openssl/openssl/releases/download/$name-$version/$name-$version.tar.gz"
+
+build() {
+	cd "$name-$version" || return 1
+	./config \
+		--prefix=/usr \
+		--openssldir=/etc/ssl \
+		--libdir=lib \
+		shared \
+		zlib-dynamic
+	make
+	make MANSUFFIX=ssl DESTDIR=$PKG install
+}
+
+bootstrap_build() {
+	./config \
+		--prefix=$TOOLS \
+		--openssldir=$TOOLS/etc/ssl \
+		--libdir=lib \
+		shared \
+		no-ssl3-method
+	make
+	make -j1 MANDIR=$TOOLS/share/man MANSUFFIX=ssl install
+}

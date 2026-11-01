@@ -1,0 +1,6 @@
+fuse
+gdk-pixbuf
+json-glib
+pipewire
+dbus
+bubblewrap

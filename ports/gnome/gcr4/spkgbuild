@@ -1,0 +1,20 @@
+# description	: gcr4 package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=gcr4
+version=4.4.0.1
+release=1
+source="https://download.gnome.org/sources/gcr/4.4/gcr-$version.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+mkdir build &&
+cd    build &&
+
+meson setup --prefix=/usr       \
+            --buildtype=release \
+            -Dgtk_doc=false     \
+            ..                  &&
+ninja 
+DESTDIR=$PKG ninja install
+}

@@ -1,0 +1,6 @@
+libevent
+libnl
+libtirpc
+libxml2
+rpcbind
+rpcsvc-proto

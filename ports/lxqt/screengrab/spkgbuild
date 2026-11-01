@@ -1,0 +1,21 @@
+# description	: Screengrab for LXQt
+# homepage	: https://github.com/lxqt/screengrab
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=screengrab
+version=3.2.0
+release=3
+source="https://github.com/lxqt/${name}/releases/download/${version}/${name}-${version}.tar.xz screengrab-3.2.0-bfsos-fixes.patch"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+
+	# Apply patch sources; pkgbuild does this automatically.
+	for _bfs_patch in "$SRC"/*.patch "$SRC"/*.diff; do
+		[ -f "$_bfs_patch" ] || continue
+		patch -t "${patch_opt:--p1}" -i "$_bfs_patch" || return 1
+	done
+	export BFS_SKIP_PATCHES=1
+	bfs_autobuild
+}

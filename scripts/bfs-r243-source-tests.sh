@@ -3,8 +3,8 @@ set -euo pipefail
 ROOT=$(cd "$(dirname "$0")/.." && pwd)
 cd "$ROOT"
 
-echo "== maintained Pkgfile shell syntax =="
-find ports/{core,opt,xorg,plasma,gnome,lxqt,xfce,compiz,contrib,compat-32} -mindepth 2 -maxdepth 2 -name Pkgfile -print0 | xargs -0 -n1 bash -n
+echo "== maintained spkgbuild shell syntax =="
+find ports/{core,opt,xorg,plasma,gnome,lxqt,xfce,compiz,contrib,compat-32} -mindepth 2 -maxdepth 2 -name spkgbuild -print0 | xargs -0 -n1 bash -n
 
 echo "== maintained tree static audit =="
 ./scripts/bfs-ports-static-audit.sh
@@ -15,8 +15,8 @@ echo "== release static audit =="
 echo "== kernel maintenance regression =="
 ./scripts/tests/test-kernel-maintenance.sh
 
-echo "== prt-get regression =="
-./scripts/tests/test-prt-get-no-new-deps.sh
+echo "== scratch regression =="
+./scripts/tests/test-scratch-no-new-deps.sh
 
 echo "== installer build-work sizing regression =="
 ./scripts/tests/test-installer-build-work-sizing.sh
@@ -63,8 +63,8 @@ printf "\n== Firefox coexistence regression ==\n"
 printf "\n== build-work backend regression ==\n"
 "$ROOT/scripts/tests/test-build-work-backend.sh"
 
-printf "\n== pkgmk payload guard regression ==\n"
-"$ROOT/scripts/tests/test-pkgmk-payload-guard.sh"
+printf "\n== pkgbuild payload guard regression ==\n"
+"$ROOT/scripts/tests/test-pkgbuild-payload-guard.sh"
 
 echo
 echo '== ISO builder source regression =='

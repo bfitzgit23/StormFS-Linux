@@ -1,0 +1,14 @@
+# description	: Linux wireless regulatory database
+# homepage	: https://wireless.wiki.kernel.org/en/developers/regulatory/wireless-regdb
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=wireless-regdb
+version=2026.09.03
+release=1
+source="https://www.kernel.org/pub/software/network/wireless-regdb/wireless-regdb-$version.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+    install -Dm644 regulatory.db "$PKG/usr/lib/firmware/regulatory.db"
+    install -Dm644 regulatory.db.p7s "$PKG/usr/lib/firmware/regulatory.db.p7s"
+}

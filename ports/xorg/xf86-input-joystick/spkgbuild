@@ -1,0 +1,16 @@
+# description	: xorg driver xf86-input-joystick
+# homepage	: https://xorg.freedesktop.org
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=xf86-input-joystick
+version=1.6.4
+release=1
+source="https://xorg.freedesktop.org/archive/individual/driver/$name-$version.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+
+	./configure $XORG_CONFIG &&
+	make
+	make DESTDIR=$PKG install
+}

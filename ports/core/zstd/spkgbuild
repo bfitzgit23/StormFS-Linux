@@ -1,0 +1,14 @@
+# description	: zstd package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=zstd
+version=1.5.7
+release=1
+keep_static=1
+source="https://github.com/facebook/zstd/releases/download/v$version/zstd-$version.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

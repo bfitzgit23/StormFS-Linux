@@ -1,0 +1,8 @@
+dbus
+duktape
+gobject-introspection
+intltool
+util-linux
+glib
+docbook-xml
+docbook-xsl-nons

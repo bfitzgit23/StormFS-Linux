@@ -1,0 +1,6 @@
+doxygen
+python3-doxypypy
+python3-doxyqml
+python3-requests
+extra-cmake-modules
+qt6

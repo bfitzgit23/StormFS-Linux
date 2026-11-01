@@ -1,0 +1,17 @@
+# description	: YAML 1.1 parser and emitter library
+# homepage	: https://github.com/yaml/libyaml
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=libyaml
+version=0.2.5
+release=1
+source="https://github.com/yaml/libyaml/releases/download/$version/yaml-$version.tar.gz"
+
+build() {
+	cd "$name-$version" || return 1
+    ./configure \
+        --prefix=/usr \
+        --disable-static
+    make
+    make DESTDIR="$PKG" install
+}

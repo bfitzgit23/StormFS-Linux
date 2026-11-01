@@ -1,0 +1,14 @@
+# description	: gdbm package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=gdbm
+version=1.26
+release=1
+build_opt="--enable-libgdbm-compat"
+source="https://ftp.gnu.org/gnu/gdbm/gdbm-$version.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

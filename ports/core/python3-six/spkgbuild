@@ -1,0 +1,17 @@
+# description	: Python 2 and 3 compatibility utilities
+# homepage	: https://pypi.python.org/pypi/six/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=python3-six
+version=1.17.0
+release=2
+source="https://pypi.org/packages/source/s/six/six-$version.tar.gz"
+
+build() {
+	cd "$name-$version" || return 1
+
+  /usr/bin/python3 setup.py build
+  /usr/bin/python3 setup.py install --prefix=/usr \
+    --root=$PKG \
+    --skip-build
+}

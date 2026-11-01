@@ -1,0 +1,10 @@
+exiv2
+ffmpeg
+karchive
+kconfig
+kcoreaddons
+ki18n
+poppler
+taglib
+extra-cmake-modules
+qt6

@@ -1,0 +1,15 @@
+# description	: Python bindings for YAML with optional LibYAML acceleration
+# homepage	: https://pyyaml.org/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=python3-pyyaml
+version=6.0.3
+release=3
+source="https://files.pythonhosted.org/packages/source/p/pyyaml/pyyaml-$version.tar.gz"
+
+build() {
+	cd "$name-$version" || return 1
+    PYYAML_FORCE_CYTHON=1 \
+        python3 -m build --wheel --skip-dependency-check --no-isolation || return $?
+    python3 -m installer --compile-bytecode 2 --destdir="$PKG" dist/*.whl || return $?
+}

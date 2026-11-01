@@ -1,0 +1,15 @@
+# description	: USB traffic redirection library for virtualization
+# homepage	: https://gitlab.freedesktop.org/spice/usbredir
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=usbredir
+version=0.15.0
+release=1
+build_opt=(-Dtools=enabled -Dtests=disabled)
+source="https://gitlab.freedesktop.org/spice/usbredir/-/archive/usbredir-$version/usbredir-usbredir-$version.tar.bz2"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

@@ -1,0 +1,21 @@
+# description	: Intel graphics video driver
+# homepage	: https://www.x.org/wiki/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=xf86-video-intel
+version=2.99.917-931
+release=1
+source="https://crux.nu/files/distfiles/xf86-video-intel-$version.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+
+	./configure \
+		--prefix=/usr \
+		--libexecdir=/usr/lib/xf86-video-intel \
+		--enable-tools \
+		--with-default-dri=3
+
+	make
+	make DESTDIR=$PKG install
+}

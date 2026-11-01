@@ -1,0 +1,20 @@
+# description	: a lightweight C library that eases the writing of UNIX daemons
+# homepage	: http://0pointer.de/lennart/projects/libdaemon/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=libdaemon-32
+version=0.14
+release=2
+build_opt="--disable-lynx"
+source="http://0pointer.de/lennart/projects/${name%-*}/${name%-*}-$version.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+        _bfs_require_compat32_extension 2 || return $?
+	bfs_autobuild
+
+	rm -r $PKG/usr/{include,share}
+	bfs_compat32_validate || return 1
+}

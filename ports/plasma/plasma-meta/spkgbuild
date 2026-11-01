@@ -1,0 +1,17 @@
+# description	: KDE Plasma 6 desktop meta package
+# homepage	: https://kde.org/plasma-desktop/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+# optional	: plasma-login-manager
+
+name=plasma-meta
+version=6.7.5
+release=4
+source=""
+
+build() {
+    install -d "$PKG/usr/share/bfsos/meta-packages" || return 1
+
+    printf '%s\n'         'BFSOS Plasma meta-package. Desktop audio activation is owned by the WirePlumber systemd user preset.'         > "$PKG/usr/share/bfsos/meta-packages/plasma-meta" || return 1
+}
+
+# vim: set ts=4 et:

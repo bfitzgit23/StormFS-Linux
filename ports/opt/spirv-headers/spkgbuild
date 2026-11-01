@@ -1,0 +1,17 @@
+# description	: spirv-headers package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=spirv-headers
+version=1.4.357.0
+release=2
+source="https://github.com/KhronosGroup/SPIRV-Headers/archive/vulkan-sdk-${version}/SPIRV-Headers-${version}.tar.gz"
+
+build() {
+	cd "$name-$version" || return 1
+mkdir build &&
+cd    build &&
+
+cmake -D CMAKE_INSTALL_PREFIX=/usr -G Ninja .. &&
+ninja
+DESTDIR="$PKG" ninja install
+}

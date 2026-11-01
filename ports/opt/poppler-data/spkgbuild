@@ -1,0 +1,13 @@
+# description	: poppler-data package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=poppler-data
+version=0.4.12
+release=1
+source="https://poppler.freedesktop.org/$name-$version.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

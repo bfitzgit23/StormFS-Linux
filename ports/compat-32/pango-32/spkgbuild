@@ -1,0 +1,23 @@
+# description	: A library for layout and rendering of text
+# homepage	: https://www.gtk.org/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=pango-32
+version=1.58.2
+release=3
+build_opt="-D introspection=disabled"
+source="https://download.gnome.org/sources/pango/${version:0:4}/${name%-*}-$version.tar.xz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+        _bfs_require_compat32_extension 2 || return $?
+	bfs_autobuild
+
+	rm -r $PKG/usr/{bin,include}
+
+	# help2man no option in meson options to disable
+	rm -rf $PKG/usr/share
+	bfs_compat32_validate || return 1
+}

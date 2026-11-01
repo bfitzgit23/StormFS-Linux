@@ -1,0 +1,42 @@
+# description	: Postscript interpreter
+# homepage	: https://www.ghostscript.com
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+# optional	: cups fontconfig freetype lcms2 jbig2dec libjpeg-turbo libtiff openjpeg libpaper libpng cairo gtk+- libidn libwebp a graphical environment
+
+name=ghostscript
+version=10.08.0
+release=1
+source="https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs${version//./}/$name-$version.tar.xz https://downloads.sourceforge.net/sourceforge/gs-fonts/$name-fonts-std-8.11.tar.gz"
+
+build() {
+	cd "$name-$version" || return 1
+export CFLAGS+=" -Wno-incompatible-pointer-types -Wno-int-conversion"
+	scratch isinstalled fontconfig && BFS_GHOSTSCRIPT+=' --enable-fontconfig'
+	scratch isinstalled freetype && BFS_GHOSTSCRIPT+=' --enable-freetype'
+	scratch isinstalled libjpeg-turbo libtiff && BFS_GHOSTSCRIPT+=' --enable-openjpeg --with-system-libtiff' && rm -r tiff jpeg
+	scratch isinstalled jbig2dec && BFS_GHOSTSCRIPT+=' --with-jbig2dec' && rm -r jbig2dec
+	scratch isinstalled openjpeg2 && BFS_GHOSTSCRIPT+=' --enable-openjpeg' && rm -r openjpeg
+	scratch isinstalled libxt libxext || BFS_GHOSTSCRIPT+=' --without-x'
+
+	rm -rf zlib &&
+
+./configure --prefix=/usr           \
+            --disable-compile-inits \
+            --with-system-libtiff   &&
+
+	make
+	make DESTDIR=$PKG install-so install
+
+	cd ijs
+
+	./autogen.sh
+	./configure --prefix=/usr --enable-shared
+	make
+	make DESTDIR=$PKG install
+
+	cp -r $SRC/fonts $PKG/usr/share/ghostscript
+
+	rm -r $PKG/usr/share/doc
+	rm $PKG/usr/share/ghostscript/fonts/[CRT]*
+	rm $PKG/usr/bin/ijs_{client,server}_example
+}

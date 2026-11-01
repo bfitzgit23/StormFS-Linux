@@ -3,10 +3,10 @@
 # build-and-publish-repo.sh
 #
 # Full pipeline for stormfs-repo:
-#   1. Build every PKGBUILD under pkgbuilds/ with makepkg -s
-#   2. Install the resulting .pkg.tar.zst packages into a live LFS root using pacman
+#   1. Build every PKGBUILD under pkgbuilds/ with pkgbuild -s
+#   2. Install the resulting .pkg.tar.zst packages into a live LFS root using scratch
 #   3. Copy the built packages into stormfs-repo/x86_64/
-#   4. Rebuild the pacman database with repo-add
+#   4. Rebuild the scratch database with scratch
 #   5. Commit and push the repo (and optionally the pkgbuilds) to GitHub
 #
 # This is intended to run on/against a live LFS root. It refuses to run against
@@ -50,10 +50,10 @@ usage() {
 Usage: build-and-publish-repo.sh [options]
 
 Pipeline:
-  1. Build packages from pkgbuilds/ (makepkg -s)
-  2. Install packages into a live LFS root with pacman
+  1. Build packages from pkgbuilds/ (pkgbuild -s)
+  2. Install packages into a live LFS root with scratch
   3. Copy built packages into stormfs-repo/x86_64
-  4. Rebuild the pacman repo database (repo-add)
+  4. Rebuild the scratch repo database (scratch)
   5. Push the repo to GitHub (git push)
 
 Defaults:
@@ -66,7 +66,7 @@ Defaults:
 
 Options:
   --pkgbuild-dir DIR     pkgbuilds directory
-  --repo-dir DIR         pacman repo directory
+  --repo-dir DIR         scratch repo directory
   --lfs-root DIR         live LFS root to install into
   --package-list FILE    one pkgbuild subdirectory per line (optional)
   --stage3-conf FILE    lfs-mkstage3 config (documentation/reference only)
@@ -76,7 +76,7 @@ Options:
   --force                allow non-obvious LFS_ROOT paths
   --verbose              print each command as it runs
   --skip-install         build packages and update repo, but do not install into LFS
-  --skip-push            build/install/copy/repo-add, but do not push to GitHub
+  --skip-push            build/install/copy/scratch, but do not push to GitHub
   --push-pkgbuilds       also commit+push pkgbuilds/ with the repo update
   -h, --help             this help
 EOF
@@ -118,7 +118,7 @@ if [[ "$FORCE" != yes ]]; then
     esac
 fi
 
-for cmd in makepkg pacman repo-add git; do
+for cmd in pkgbuild scratch scratch git; do
     command -v "$cmd" >/dev/null 2>&1 || die "Required command not found: $cmd"
 done
 
@@ -181,7 +181,7 @@ for pkgdir in "${PKG_DIRS[@]}"; do
         cd '$src'
         export PKGDEST='$BUILD_DIR'
         export PKGEXT='.pkg.tar.zst'
-        makepkg -s --noconfirm --holdver
+        pkgbuild -s --noconfirm --holdver
     " || { warn "Build failed for $pkgdir"; FAILED+=("$pkgdir"); continue; }
 
     pkgfile="$(find "$BUILD_DIR" -maxdepth 1 -name "${pkgdir}-"*.pkg.tar.zst -print -quit)"
@@ -210,17 +210,17 @@ if [[ "$SKIP_INSTALL" == yes ]]; then
 else
     log "Installing packages into LFS root: $LFS_ROOT"
 
-    # Ensure the package cache used by pacman contains the built packages.
-    PKG_CACHE="$BUILD_DIR/pacman-cache"
+    # Ensure the package cache used by scratch contains the built packages.
+    PKG_CACHE="$BUILD_DIR/scratch-cache"
     mkdir -p "$PKG_CACHE"
     cp -f "${BUILT_PACKAGES[@]}" "$PKG_CACHE/"
 
-    run pacman --root "$LFS_ROOT" \
-        --dbpath "$LFS_ROOT/var/lib/pacman" \
+    run scratch --root "$LFS_ROOT" \
+        --dbpath "$LFS_ROOT/var/lib/scratch" \
         --cachedir "$PKG_CACHE" \
-        --config "${LFS_ROOT}/etc/pacman.conf" \
+        --config "${LFS_ROOT}/etc/scratch.conf" \
         --noconfirm \
-        -U "${BUILT_PACKAGES[@]}" || die "pacman install into LFS root failed"
+        -U "${BUILT_PACKAGES[@]}" || die "scratch install into LFS root failed"
 
     log "Installed packages into LFS root"
 fi
@@ -232,9 +232,9 @@ run cp -f "${BUILT_PACKAGES[@]}" "$REPO_DIR/"
 
 # ---- repo database --------------------------------------------------
 
-log "Rebuilding pacman repo database: $REPO_DIR"
-run repo-add "$REPO_DIR/stormfs-repo.db.tar.zst" "$REPO_DIR"/*.pkg.tar.zst || \
-    die "repo-add failed"
+log "Rebuilding scratch repo database: $REPO_DIR"
+run scratch "$REPO_DIR/stormfs-repo.db.tar.zst" "$REPO_DIR"/*.pkg.tar.zst || \
+    die "scratch failed"
 
 log "Repo database updated: $REPO_DIR/stormfs-repo.db.tar.zst"
 

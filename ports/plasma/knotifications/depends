@@ -1,0 +1,4 @@
+kconfig
+libcanberra
+extra-cmake-modules
+qt6

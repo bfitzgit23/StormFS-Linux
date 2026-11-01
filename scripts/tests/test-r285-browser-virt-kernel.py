@@ -1,38 +1,42 @@
 #!/usr/bin/env python3
 from pathlib import Path
+import re
 root = Path(__file__).resolve().parents[2]
 
 def text(rel): return (root / rel).read_text()
 
 expected = {
-    'ports/core/linux/Pkgfile': 'version=7.2.8',
-    'ports/core/linux-headers/Pkgfile': 'version=6.18.54',
-    'ports/core/linux-lts/Pkgfile': 'version=6.18.54',
-    'ports/opt/qemu/Pkgfile': 'version=11.1.1',
-    'ports/opt/libvirt/Pkgfile': 'version=12.7.0',
-    'ports/opt/libvirt-python/Pkgfile': 'version=12.7.0',
-    'ports/opt/virt-manager/Pkgfile': 'version=5.1.0',
-    'ports/opt/chromium/Pkgfile': 'version=153.0.8010.36',
+    'ports/core/linux/spkgbuild': 'version=7.2.8',
+    'ports/core/linux-headers/spkgbuild': 'version=6.18.54',
+    'ports/core/linux-lts/spkgbuild': 'version=6.18.54',
+    'ports/opt/qemu/spkgbuild': 'version=11.1.1',
+    'ports/opt/libvirt/spkgbuild': 'version=12.7.0',
+    'ports/opt/libvirt-python/spkgbuild': 'version=12.7.0',
+    'ports/opt/virt-manager/spkgbuild': 'version=5.1.0',
+    'ports/opt/chromium/spkgbuild': 'version=153.0.8010.36',
 }
 for rel, needle in expected.items():
     assert needle in text(rel), (rel, needle)
 
-for rel in ['ports/opt/libvirt/Pkgfile','ports/opt/virt-manager/Pkgfile']:
+for rel in ['ports/opt/libvirt/spkgbuild','ports/opt/virt-manager/spkgbuild']:
     s=text(rel)
     assert 'build_opt=' in s
-    assert '\npkg_build() {' not in s, f'{rel}: ordinary build should be extension-owned'
+    # scratchpkg requires build(); ordinary ports must keep it extension-owned
+    # (delegating to spkgbuild.helper) instead of hand-rolling configure steps.
+    assert 'bfs_autobuild' in s, f'{rel}: ordinary build should be extension-owned'
+    assert not re.search(r'(?m)^\s*(?:\./configure|meson setup|cmake -S)\b', s), rel
 
-qemu=text('ports/opt/qemu/Pkgfile')
+qemu=text('ports/opt/qemu/spkgbuild')
 assert 'build_opt=' in qemu
 assert 'Custom build required' not in qemu or 'configure' in qemu
 assert "QEMU's ./configure wrapper" in qemu
-assert '\npkg_build() {' in qemu
+assert '\nbuild() {' in qemu
 
-for rel in ['ports/opt/chromium/Pkgfile','ports/opt/gn/Pkgfile']:
+for rel in ['ports/opt/chromium/spkgbuild','ports/opt/gn/spkgbuild']:
     s=text(rel)
     assert 'Custom build required:' in s
-    assert 'pkg_build()' in s
+    assert 'build() {' in s
 
-assert 'build_work=disk' in text('ports/opt/chromium/Pkgfile')
-assert 'build_work=disk' in text('ports/opt/qemu/Pkgfile')
+assert 'build_work=disk' in text('ports/opt/chromium/spkgbuild')
+assert 'build_work=disk' in text('ports/opt/qemu/spkgbuild')
 print('r285 browser/virtualization/kernel source regression: PASS')

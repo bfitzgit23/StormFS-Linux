@@ -1,0 +1,21 @@
+# description	: XML library version 2
+# homepage	: https://gitlab.gnome.org/GNOME/libxml2/-/wikis/home
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=libxml2-32
+version=2.15.4
+release=4
+build_opt="--without-python"
+build_type=configure_build
+source="https://download.gnome.org/sources/libxml2/${version:0:4}/libxml2-$version.tar.xz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+        _bfs_require_compat32_extension 2 || return $?
+	bfs_autobuild
+
+	rm -rf $PKG/usr/{bin,include,share/man,share}
+	bfs_compat32_validate || return 1
+}

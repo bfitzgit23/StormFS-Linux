@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""StormFS Port Manager - A PyQt5 GUI frontend for prt-get package management."""
+"""StormFS Port Manager - A PyQt5 GUI frontend for scratch package management."""
 
 import os
 import sys
@@ -360,25 +360,25 @@ def run_cmd(cmd, timeout=30):
 
 
 def is_package_installed(name):
-    """Check if a package is installed via pkginfo."""
-    out, _, rc = run_cmd(f"pkginfo -i {name} 2>/dev/null")
+    """Check if a package is installed via scratch info."""
+    out, _, rc = run_cmd(f"scratch installed {name} 2>/dev/null")
     return rc == 0 and "not installed" not in out.lower()
 
 
 def get_installed_packages():
     """Return a dict of {name: version} for installed packages."""
     pkgs = {}
-    out, _, rc = run_cmd("pkginfo -i 2>/dev/null")
+    out, _, rc = run_cmd("scratch installed 2>/dev/null")
     if rc != 0:
         return pkgs
     for line in out.splitlines():
         line = line.strip()
         if not line:
             continue
-        # pkginfo -i output: "package-version"
+        # scratch installed output: "package-version"
         if "-" in line:
             # package names can have hyphens, version is after last hyphen
-            # Actually pkginfo -i gives "name version" or "name-version"
+            # Actually scratch installed gives "name version" or "name-version"
             parts = line.rsplit("-", 1)
             if len(parts) == 2:
                 pkgs[parts[0]] = parts[1]
@@ -594,7 +594,7 @@ class SyncWorker(QThread):
     def run(self):
         self.output.emit("Syncing ports database...\n")
         proc = subprocess.Popen(
-            "prt-get update 2>&1 || true", shell=True,
+            "scratch sysup -y 2>&1 || true", shell=True,
             stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True,
         )
         while True:
@@ -717,7 +717,7 @@ class PortDetailsDialog(QDialog):
             self.files_text.setPlainText("Package not installed — no file list available.")
 
     def _load_files(self, name):
-        out, err, rc = run_cmd(f"pkginfo -li {name} 2>/dev/null", timeout=15)
+        out, err, rc = run_cmd(f"scratch files {name} 2>/dev/null", timeout=15)
         if rc == 0 and out:
             self.files_text.setPlainText(out)
         else:
@@ -933,7 +933,7 @@ class PortManagerWindow(QMainWindow):
 
         row = QHBoxLayout()
         self.cmd_input = QLineEdit()
-        self.cmd_input.setPlaceholderText("Run a custom command (e.g. prt-get search foo)...")
+        self.cmd_input.setPlaceholderText("Run a custom command (e.g. scratch search foo)...")
         self.cmd_input.returnPressed.connect(self._run_custom_cmd)
         run_btn = QPushButton("Run")
         run_btn.clicked.connect(self._run_custom_cmd)
@@ -1232,11 +1232,11 @@ class PortManagerWindow(QMainWindow):
     def _sysup(self):
         reply = QMessageBox.question(
             self, "System Update",
-            "Run prt-get sysup to update all installed packages?\nThis may take a while.",
+            "Run scratch sysup -y to update all installed packages?\nThis may take a while.",
             QMessageBox.Yes | QMessageBox.No, QMessageBox.No,
         )
         if reply == QMessageBox.Yes:
-            self._run_command("prt-get sysup")
+            self._run_command("scratch sysup -y")
 
     def _install_selected(self):
         names = self._get_selected_search_or_browse()
@@ -1250,7 +1250,7 @@ class PortManagerWindow(QMainWindow):
         )
         if reply == QMessageBox.Yes:
             for name in names:
-                self._run_command(f"prt-get install {name}", tab_focus=True)
+                self._run_command(f"scratch install -y {name}", tab_focus=True)
 
     def _remove_selected(self):
         names = self._get_selected_installed()
@@ -1264,7 +1264,7 @@ class PortManagerWindow(QMainWindow):
         )
         if reply == QMessageBox.Yes:
             for name in names:
-                self._run_command(f"prt-get remove {name}", tab_focus=True)
+                self._run_command(f"scratch remove -y {name}", tab_focus=True)
 
     def _update_selected(self):
         names = self._get_selected_search_or_browse()
@@ -1274,7 +1274,7 @@ class PortManagerWindow(QMainWindow):
             QMessageBox.information(self, "No Selection", "Select package(s) to update.")
             return
         for name in names:
-            self._run_command(f"prt-get update {name}", tab_focus=True)
+            self._run_command(f"scratch sysup -y {name}", tab_focus=True)
 
     def _update_all(self):
         reply = QMessageBox.question(
@@ -1283,7 +1283,7 @@ class PortManagerWindow(QMainWindow):
             QMessageBox.Yes | QMessageBox.No, QMessageBox.No,
         )
         if reply == QMessageBox.Yes:
-            self._run_command("prt-get sysup")
+            self._run_command("scratch sysup -y")
 
     def _get_selected_search_or_browse(self):
         """Get selected package names from search table or browse tree."""
@@ -1308,8 +1308,8 @@ class PortManagerWindow(QMainWindow):
         self._append_log("\n" + "="*60 + "\n")
         self._append_log("Searching for orphan packages...\n")
         self._run_command(
-            "comm -23 <(pkginfo -i 2>/dev/null | awk '{print $1}' | sort) "
-            "<(prt-get list 2>/dev/null | sort) 2>/dev/null || "
+            "comm -23 <(scratch installed 2>/dev/null | awk '{print $1}' | sort) "
+            "<(scratch list 2>/dev/null | sort) 2>/dev/null || "
             "echo 'Could not determine orphans (bash required)'",
             tab_focus=True,
         )
@@ -1317,11 +1317,11 @@ class PortManagerWindow(QMainWindow):
     def _clean_cache(self):
         reply = QMessageBox.question(
             self, "Clean Cache",
-            "Clean the package cache?\nThis removes downloaded tarballs from /var/cache/prt-get.",
+            "Clean the package cache?\nThis removes downloaded tarballs from /var/cache/scratch.",
             QMessageBox.Yes | QMessageBox.No, QMessageBox.No,
         )
         if reply == QMessageBox.Yes:
-            self._run_command("rm -f /var/cache/prt-get/packages/*.tar.* && echo 'Cache cleaned.'")
+            self._run_command("rm -f /var/cache/scratch/packages/*.tar.* && echo 'Cache cleaned.'")
 
     # ---- Cleanup ----
 

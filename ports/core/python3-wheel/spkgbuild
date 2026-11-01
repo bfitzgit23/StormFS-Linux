@@ -1,0 +1,25 @@
+# description	: A built-package format for Python
+# homepage	: https://pypi.python.org/pypi/wheel
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=python3-wheel
+version=0.48.0
+release=1
+source="https://files.pythonhosted.org/packages/source/w/wheel/${name#*-}-$version.tar.gz"
+
+build() {
+
+  /usr/bin/python3 -m build --wheel --skip-dependency-check --no-isolation
+  /usr/bin/python3 -m installer --destdir=$PKG dist/*.whl
+}
+
+unpack_source() {
+          for file in ${source[@]}; do
+                   case ${file##*/} in
+                           ${name#*-}-$version.tar.gz)
+                                   tar xfvz $(get_filename $file) -C $SRC ;;
+                           *)
+                                   cp $(get_filename $file) $SRC ;;
+                   esac
+           done
+   }

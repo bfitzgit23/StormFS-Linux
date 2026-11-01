@@ -1,0 +1,16 @@
+# description	: apr package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=apr
+version=1.7.6
+release=1
+build_opt="--prefix=/usr
+            --disable-static 
+            --with-installbuilddir=/usr/share/apr-1/build"
+source="https://archive.apache.org/dist/${name}/${name}-${version}.tar.bz2"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

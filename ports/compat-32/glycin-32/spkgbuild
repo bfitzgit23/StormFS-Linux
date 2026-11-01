@@ -1,0 +1,51 @@
+# description	: Sandboxed and extendable image loading - 32-bit
+# homepage	: https://gitlab.gnome.org/GNOME/glycin
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+# optional	: libheif-32 libjxl-32 librsvg-32
+
+name=glycin-32
+version=2.2.0
+release=3
+build_opt="-Dglycin-loaders=true \
+-Dtest_skip_install=false \
+-Dtests=false \
+-Dglycin-thumbnailer=false \
+-Dvapi=false \
+-Dlibglycin-gtk4=false \
+-Dintrospection=false \
+-Dcapi_docs=false"
+source="https://gitlab.gnome.org/GNOME/glycin/-/archive/$version/glycin-$version.tar.bz2 i686"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+    (
+        set -e
+
+        prt-get isinst sccache && export RUSTC_WRAPPER=/usr/bin/sccache
+        export PKG_CONFIG_ALLOW_CROSS=1
+
+        local loaders="glycin-image-rs"
+        prt-get isinst libheif-32 && loaders+=",glycin-heif"
+        prt-get isinst libjxl-32  && loaders+=",glycin-jxl"
+        prt-get isinst librsvg-32 && loaders+=",glycin-svg"
+
+        meson setup build . \
+            --cross-file="$SRC/i686" \
+            --prefix=/usr \
+            --libdir=lib32 \
+            --libexecdir=lib32/$name \
+            --buildtype=plain \
+            --wrap-mode=nodownload \
+            -Db_lto=true \
+            -Db_pie=true \
+            $build_opt \
+            -Dloaders="$loaders"
+
+        meson compile -C build -j "${JOBS:-1}"
+        DESTDIR="$PKG" meson install -C build
+    )
+    rm -rf "$PKG/usr/include" "$PKG/usr/share"
+	bfs_compat32_validate || return 1
+}

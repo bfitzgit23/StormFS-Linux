@@ -1,0 +1,7 @@
+enchant
+icu
+gtk3
+glib
+gobject-introspection
+vala
+valgrind

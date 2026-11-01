@@ -1,0 +1,20 @@
+# description	: Portable Foreign Function Interface Library
+# homepage	: https://sourceware.org/libffi/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=libffi-32
+version=3.8.0
+release=3
+build_opt="--includedir=/usr/lib32/libffi/include"
+source="https://github.com/libffi/libffi/releases/download/v$version/libffi-$version.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+        _bfs_require_compat32_extension 2 || return $?
+	bfs_autobuild
+
+	rm -rf $PKG/usr/{lib,share/man,share}
+	bfs_compat32_validate || return 1
+}

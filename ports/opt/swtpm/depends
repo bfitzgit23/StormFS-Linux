@@ -1,0 +1,13 @@
+autoconf
+automake
+expect
+fuse2
+glib
+gmp
+gnutls
+json-glib
+libseccomp
+libtasn1
+libtool
+libtpms
+openssl

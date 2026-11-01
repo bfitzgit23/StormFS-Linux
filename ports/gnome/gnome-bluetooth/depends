@@ -1,0 +1,7 @@
+gtk4
+gsound
+libnotify
+upower
+glib
+gobject-introspection
+bluez

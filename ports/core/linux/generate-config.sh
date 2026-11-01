@@ -153,14 +153,14 @@ main() {
     echo "  $CONFIG_FILE"
     echo
     echo "The config contains the running system's hardware support."
-    echo "The Pkgfile will run olddefconfig and enforce the required"
+    echo "The spkgbuild will run olddefconfig and enforce the required"
     echo "BFS/LFS kernel options during the next build."
     echo
     echo "Next steps:"
     echo "  rm -f \"$PORT_DIR/.md5sum\" \"$PORT_DIR/.footprint\""
     echo "  cd \"$PORT_DIR\""
-    echo "  pkgmk -d"
-    echo "  pkgmk -i"
+    echo "  pkgbuild -o"
+    echo "  pkgbuild -i"
 }
 
 main "$@"

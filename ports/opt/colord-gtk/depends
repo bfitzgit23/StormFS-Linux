@@ -1,0 +1,6 @@
+colord
+gtk3
+glib
+gobject-introspection
+gtk4
+vala

@@ -1,0 +1,34 @@
+# description	: Vulkan loader, 32bit
+# homepage	: https://www.khronos.org/vulkan/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+# optional	: wayland-32
+
+name=vulkan-loader-32
+version=1.4.357.0
+release=4
+source="https://github.com/KhronosGroup/Vulkan-Loader/archive/refs/tags/vulkan-sdk-$version.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+  (
+    set -e
+	prt-get isinst wayland-32 || SPKG_VULKAN_LOADER+=' -D BUILD_WSI_WAYLAND_SUPPORT=OFF'
+
+	export ASFLAGS='--32'
+
+	cmake -S . -B build -G Ninja $SPKG_VULKAN_LOADER \
+		-D CMAKE_INSTALL_PREFIX=/usr \
+		-D CMAKE_INSTALL_LIBDIR=lib32 \
+		-D CMAKE_BUILD_TYPE=Release \
+		-D CMAKE_C_FLAGS_RELEASE="${CFLAGS}" \
+		-D CMAKE_CXX_FLAGS_RELEASE="${CXXFLAGS}" \
+		-D CMAKE_SKIP_RPATH=ON \
+		-D BUILD_TESTS=OFF
+
+	cmake --build build
+	DESTDIR=$PKG cmake --build build --target install
+  )
+	bfs_compat32_validate || return 1
+}

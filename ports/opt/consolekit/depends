@@ -1,0 +1,4 @@
+dbus
+gobject-introspection
+linux-pam
+libx11

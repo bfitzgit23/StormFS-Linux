@@ -1,0 +1,6 @@
+cmake
+git
+llvm
+ninja
+python3
+qt6

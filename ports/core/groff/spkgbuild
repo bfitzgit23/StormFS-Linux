@@ -1,0 +1,15 @@
+# description	: groff package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=groff
+version=1.24.1
+release=1
+export PAGE=Letter
+build_opt="--without-x"
+source="https://ftp.gnu.org/gnu/groff/groff-$version.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

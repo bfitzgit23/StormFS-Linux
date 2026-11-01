@@ -1,0 +1,16 @@
+gnutls
+libtirpc
+perl-parse-yapp
+rpcsvc-proto
+gpgme
+icu
+jansson
+libtasn1
+libxslt
+linux-pam
+kerberos
+openldap
+lmdb
+popt
+talloc
+python3

@@ -1,0 +1,13 @@
+# description	: Complete BFSOS LXQt desktop meta package
+# homepage	: https://lxqt-project.org/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=lxqt-meta
+version=2.4.0
+release=5
+source=""
+
+build() {
+    install -d "$PKG/usr/share/doc/$name"
+    printf '%s\n' 'BFSOS LXQt 2.4 desktop meta-package.' > "$PKG/usr/share/doc/$name/README"
+}

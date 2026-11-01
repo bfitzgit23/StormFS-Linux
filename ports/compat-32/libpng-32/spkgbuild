@@ -1,0 +1,20 @@
+# description	: Library of PNG support functions
+# homepage	: http://www.libpng.org/pub/png/libpng.html
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=libpng-32
+version=1.6.58
+_base=${_base/./}
+release=2
+source="https://downloads.sourceforge.net/project/${name%-*}/${name%-*}$_base/$version/${name%-*}-$version.tar.xz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+        _bfs_require_compat32_extension 2 || return $?
+	bfs_autobuild
+
+	rm -r $PKG/usr/{bin,include,share/man}
+	bfs_compat32_validate || return 1
+}

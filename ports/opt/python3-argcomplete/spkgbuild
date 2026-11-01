@@ -1,0 +1,24 @@
+# description	: Bash and Zsh tab completion for Python argparse
+# homepage	: https://github.com/kislyuk/argcomplete
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=python3-argcomplete
+version=3.7.1
+release=1
+source="https://files.pythonhosted.org/packages/source/a/argcomplete/argcomplete-$version.tar.gz"
+
+build() {
+	cd "$name-$version" || return 1
+    python3 -m pip wheel \
+        --no-deps \
+        --no-build-isolation \
+        . -w dist || return 1
+
+    python3 -m pip install \
+        --no-deps \
+        --no-index \
+        --no-cache-dir \
+        --root="$PKG" \
+        --prefix=/usr \
+        dist/*.whl || return 1
+}

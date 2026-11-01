@@ -21,10 +21,10 @@ fi
 run sh -c 'grep -E "^[[:space:]]*GRUB_TOP_LEVEL=" /etc/default/grub 2>/dev/null || true'
 
 section "Build-work policy"
-run sh -c 'grep MemTotal /proc/meminfo; findmnt /var/cache/pkg/build-work 2>/dev/null || true; df -h /var/cache/pkg/build-work 2>/dev/null || true'
+run sh -c 'grep MemTotal /proc/meminfo; findmnt /var/cache/scratchpkg/build-work 2>/dev/null || true; df -h /var/cache/scratchpkg/build-work 2>/dev/null || true'
 
-section "prt-get no-new-deps"
-run sh -c 'prt-get --help 2>&1 | grep -A8 -B2 -- "--no-new-deps" || true'
+section "scratch no-new-deps"
+run sh -c 'scratch --help 2>&1 | grep -A8 -B2 -- "--no-new-deps" || true'
 
 section "sudoers"
 if command -v visudo >/dev/null 2>&1; then
@@ -37,21 +37,21 @@ fi
 run sh -c 'sudo -n true >/dev/null 2>&1 && sudo -n env | grep -E "^(KF6_PREFIX|QT6DIR|QT5DIR|CMAKE_PREFIX_PATH|PKG_CONFIG_PATH|XORG_PREFIX|XORG_CONFIG)=" || true'
 
 section "PipeWire / WirePlumber"
-run systemctl --user status pipewire.service pipewire.socket pipewire-pulse.service pipewire-pulse.socket wireplumber.service --no-pager
+run rc-service pipewire.service pipewire.socket pipewire-pulse.service pipewire-pulse.socket wireplumber.service --no-pager
 run sh -c 'pgrep -a -f "pipewire|wireplumber|pulseaudio" || true'
 command -v pactl >/dev/null 2>&1 && run pactl info
 command -v wpctl >/dev/null 2>&1 && run wpctl status
 
 section "Display manager"
-run systemctl status display-manager --no-pager
-run sh -c 'systemctl is-enabled sddm.service 2>/dev/null || true'
-run sh -c 'systemctl is-enabled plasmalogin.service 2>/dev/null || true'
+run rc-service display-manager status
+run sh -c 'rc-update show | grep sddm.service 2>/dev/null || true'
+run sh -c 'rc-update show | grep plasmalogin.service 2>/dev/null || true'
 if command -v bfs-display-manager >/dev/null 2>&1; then
     run bfs-display-manager status
 fi
 
 section "Failed units"
-run systemctl --failed --no-pager
-run systemctl --user --failed --no-pager
+run rc-status --crashed
+run rc-status --crashed
 
 printf '\nRuntime check complete. Paste or upload the complete output for tracker closeout.\n'

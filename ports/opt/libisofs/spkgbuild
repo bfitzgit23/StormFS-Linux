@@ -1,0 +1,13 @@
+# description	: libisofs package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=libisofs
+version=1.5.8.pl02
+release=1
+source="https://files.libburnia-project.org/releases/${name}-${version}.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

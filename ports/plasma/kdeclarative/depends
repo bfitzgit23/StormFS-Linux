@@ -1,0 +1,7 @@
+kconfig
+kglobalaccel
+kguiaddons
+ki18n
+kwidgetsaddons
+extra-cmake-modules
+qt6

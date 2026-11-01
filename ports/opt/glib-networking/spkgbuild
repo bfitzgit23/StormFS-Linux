@@ -1,0 +1,25 @@
+# description	: Network-related giomodules for glib
+# homepage	: https://git.gnome.org/browse/glib-networking/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+# optional	: make-ca
+
+name=glib-networking
+version=2.80.1
+release=2
+source="https://download.gnome.org/sources/$name/2.80/$name-$version.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+
+mkdir build &&
+cd    build &&
+
+meson setup            \
+   --prefix=/usr       \
+   --buildtype=release \
+   -Dlibproxy=disabled \
+   .. &&
+ninja
+
+  DESTDIR=$PKG ninja install
+}

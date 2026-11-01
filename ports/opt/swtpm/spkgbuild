@@ -1,0 +1,21 @@
+# description	: Software TPM emulator using libtpms
+# homepage	: https://github.com/stefanberger/swtpm
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=swtpm
+version=0.10.2
+release=2
+build_opt=(
+    --with-gnutls
+    --without-selinux
+)
+# Upstream's GitHub tag archive requires autogen.sh before configure exists.
+source="https://github.com/stefanberger/swtpm/archive/refs/tags/v$version.tar.gz"
+
+build() {
+	cd "$name-$version" || return 1
+    ./autogen.sh --prefix=/usr --libdir=/usr/lib --sysconfdir=/etc \
+        --localstatedir=/var "${build_opt[@]}" || return 1
+    make || return 1
+    make DESTDIR="$PKG" install || return 1
+}

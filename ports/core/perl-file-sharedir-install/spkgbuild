@@ -1,0 +1,14 @@
+# description	: Install shared files for Perl distributions
+# homepage	: https://metacpan.org/dist/File-ShareDir-Install
+# maintainer	: Brian
+
+name=perl-file-sharedir-install
+version=0.14
+release=1
+source="https://cpan.metacpan.org/authors/id/E/ET/ETHER/File-ShareDir-Install-$version.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

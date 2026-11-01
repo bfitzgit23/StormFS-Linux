@@ -1,0 +1,15 @@
+# description	: X font rendering client library
+# homepage	: https://xorg.freedesktop.org
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=libxft
+version=2.3.9
+release=3
+source="https://xorg.freedesktop.org/archive/individual/lib/libxft-$version.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+	 ./configure $XORG_CONFIG --docdir=/usr/share/doc/$name-$version
+	make
+	make DESTDIR=$PKG install
+}

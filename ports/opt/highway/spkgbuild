@@ -1,0 +1,26 @@
+# description	: Performance-portable SIMD library
+# homepage	: https://github.com/google/highway
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=highway
+version=1.4.0
+release=3
+renames=(highway-$version.tar.gz)
+source="https://github.com/google/highway/archive/refs/tags/$version.tar.gz"
+
+build() {
+	cd "$name-$version" || return 1
+    cmake -S . -B build \
+        -G Ninja \
+        -DCMAKE_INSTALL_PREFIX=/usr \
+        -DCMAKE_INSTALL_LIBDIR=lib \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DBUILD_SHARED_LIBS=ON \
+        -DHWY_ENABLE_TESTS=OFF \
+        -DHWY_ENABLE_EXAMPLES=OFF || return 1
+
+    cmake --build build -j "${JOBS:-1}" || return 1
+
+    DESTDIR="$PKG" \
+        cmake --install build || return 1
+}

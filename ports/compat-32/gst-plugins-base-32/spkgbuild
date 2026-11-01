@@ -1,0 +1,42 @@
+# description	: An essential exemplary set of plugins for gstreamer.
+# homepage	: https://gstreamer.freedesktop.org/modules/gst-plugins-base.html
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+# optional	: cdparanoia-32
+
+name=gst-plugins-base-32
+version=1.28.7
+release=5
+build_opt=(
+  "-Dgl=enabled"
+  "-Dgl-graphene=enabled"
+  "-Dnls=disabled"
+  "-Dintrospection=disabled"
+  "-Dexamples=disabled"
+  "-Dqt5=disabled"
+  "-Dpackage-name=GStreamer Plugins Base (BFSOS)"
+  "-Dpackage-origin=https://github.com/bmadonnaster/BFSOS"
+)
+source="https://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-$version.tar.xz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+        _bfs_require_compat32_extension 2 || return 0
+  if [ -e /usr/lib32/pkgconfig/egl.pc ] && prt-get isinst wayland-protocols; then
+    SPKG_GST_PLATFORM=egl
+    SPKG_GST_GLAPI=gles2
+    SPKG_GST_WINDOW=egl
+  fi
+  if prt-get isinst libxdamage-32 libxrandr-32 libxshmfence-32 libxvmc-32 libxxf86vm-32; then
+    SPKG_GST_PLATFORM="${SPKG_GST_PLATFORM:+$SPKG_GST_PLATFORM,}glx"
+    SPKG_GST_GLAPI="${SPKG_GST_GLAPI:+$SPKG_GST_GLAPI,}opengl"
+    SPKG_GST_WINDOW="${SPKG_GST_WINDOW:+$SPKG_GST_WINDOW,}x11"
+  fi
+  [ -z "${SPKG_GST_PLATFORM:-}" ] || build_opt+=("-Dgl_platform=$SPKG_GST_PLATFORM")
+  [ -z "${SPKG_GST_GLAPI:-}" ] || build_opt+=("-Dgl_api=$SPKG_GST_GLAPI")
+  [ -z "${SPKG_GST_WINDOW:-}" ] || build_opt+=("-Dgl_winsys=$SPKG_GST_WINDOW")
+	bfs_autobuild
+  rm -rf "$PKG/usr/bin" "$PKG/usr/include" "$PKG/usr/share"
+	bfs_compat32_validate || return 1
+}

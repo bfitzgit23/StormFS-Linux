@@ -1,0 +1,22 @@
+# description	: OpenGL Extension Wrangler library
+# homepage	: https://glew.sourceforge.net/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=glew
+version=2.3.1
+release=1
+source="https://downloads.sourceforge.net/project/glew/glew/$version/glew-$version.tgz"
+
+build() {
+	cd "$name-$version" || return 1
+    make -j"${JOBS:-1}" \
+        GLEW_DEST=/usr \
+        LIBDIR=/usr/lib \
+        || return 1
+    make \
+        GLEW_DEST="$PKG/usr" \
+        LIBDIR="$PKG/usr/lib" \
+        PKGDIR="$PKG/usr/lib/pkgconfig" \
+        install \
+        || return 1
+}

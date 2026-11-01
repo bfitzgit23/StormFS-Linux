@@ -1,0 +1,5 @@
+libxml2-32
+llvm-32
+spirv-headers
+spirv-tools-32
+spirv-llvm-translator

@@ -1,0 +1,15 @@
+# description	: xorg font bitstream vera
+# homepage	: https://xorg.freedesktop.org
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=xorg-font-bitstream-vera
+version=1.10
+release=3
+source="https://download.gnome.org/pub/GNOME/sources/ttf-bitstream-vera/1.10/ttf-bitstream-vera-$version.tar.bz2"
+
+build() {
+	cd "$name-$version" || return 1
+
+	install -d $PKG/usr/share/fonts/X11/TTF
+	install -m 644 *ttf $PKG/usr/share/fonts/X11/TTF
+}

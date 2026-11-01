@@ -1,0 +1,45 @@
+# description	: CUPS - Common UNIX Printing System
+# homepage	: https://www.cups.org
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+# optional	: dbus-32 gnutls-32
+
+name=cups-32
+version=2.4.19
+release=4
+source="https://github.com/OpenPrinting/cups/releases/download/v$version/${name%-*}-$version-source.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+  (
+    set -e
+	SPKG_CUPS=' --with-tls=openssl'
+	prt-get isinst gnutls-32 && SPKG_CUPS=' --with-tls=gnutls'
+
+
+	CC=gcc CXX=g++ \
+	./configure \
+		--prefix=/usr $SPKG_CUPS \
+		--sysconfdir=/etc \
+		--libdir=/usr/lib32 \
+		--localstatedir=/var \
+		--with-docdir=/usr/share/cups/doc \
+		--with-logdir=/var/log/cups \
+		--with-cups-user=daemon \
+		--with-cups-group=lp \
+		--with-languages="" \
+		--without-{java,perl,php,python} \
+		--without-rcdir \
+		--without-pam  \
+		--without-crypt \
+		--with-optim="$CFLAGS" \
+		--enable-acl \
+		--disable-{pam,dbus,dnssd,systemd} \
+		--without-systemd
+
+	make libs
+	make BUILDROOT=$PKG install-libs
+  )
+	bfs_compat32_validate || return 1
+}

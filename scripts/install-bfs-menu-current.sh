@@ -1881,7 +1881,7 @@ configure_build_work_mode() {
         local choice="" value="" recommended=""
         recommended="$(recommended_build_tmpfs_size)"
         themed_menu choice "Package build workspace" \
-                "Choose how /var/cache/pkg/build-work is provided. Auto is based on physical RAM only (swap is not counted). tmpfs sizes are ceilings and are allocated on demand." \
+                "Choose how /var/cache/scratchpkg/build-work is provided. Auto is based on physical RAM only (swap is not counted). tmpfs sizes are ceilings and are allocated on demand." \
                 20 94 6 \
                 1 "Auto (recommended: $recommended)" \
                 2 "Disk-backed" \
@@ -1916,7 +1916,7 @@ compiler_build_settings_menu() {
         while true; do
                 recommended="$(recommended_build_tmpfs_size)"
                 themed_menu choice "Compiler / Build Settings" \
-                        "Integrity checks are ON by default. Disable them only deliberately for development/testing. RAM build workspace affects only disposable pkgmk work files; sources, packages, and ccache stay persistent." \
+                        "Integrity checks are ON by default. Disable them only deliberately for development/testing. RAM build workspace affects only disposable pkgbuild work files; sources, packages, and ccache stay persistent." \
                         30 108 13 \
                         1 "Build jobs: $BUILD_JOBS" \
                         2 "Optimization: $BUILD_OPT" \
@@ -5519,7 +5519,7 @@ kernel_pkgfile_version() {
 
         [[ -n "$package" ]] || { printf '%s' "unknown"; return 0; }
         [[ "$package" =~ ^[A-Za-z0-9._+-]+$ ]] || { printf '%s' "unknown"; return 0; }
-        pkgfile="$PROJECT_DIR/ports/core/$package/Pkgfile"
+        pkgfile="$PROJECT_DIR/ports/core/$package/spkgbuild"
         [[ -r "$pkgfile" ]] || { printf '%s' "unknown"; return 0; }
 
         version="$(sed -n 's/^[[:space:]]*version[[:space:]]*=[[:space:]]*//p' "$pkgfile" 2>/dev/null | head -n1 || true)"
@@ -7094,7 +7094,7 @@ path_is_or_contains_mount() {
 
 target_has_valid_base_system() {
         [[ -x "$TARGET/usr/bin/bash" ]] &&
-        [[ -x "$TARGET/usr/bin/pkgmk" ]] &&
+        [[ -x "$TARGET/usr/bin/pkgbuild" ]] &&
         [[ -f "$TARGET/etc/os-release" ]]
 }
 
@@ -7903,8 +7903,8 @@ else
 fi
 
 if [[ ! -f "$STATE_DIR/packages_complete" ]]; then
-command -v prt-get >/dev/null 2>&1 || {
-        echo "prt-get is missing; mandatory system upgrade cannot run." >&2
+command -v scratch >/dev/null 2>&1 || {
+        echo "scratch is missing; mandatory system upgrade cannot run." >&2
         exit 1
 }
 command -v ports >/dev/null 2>&1 || {
@@ -7970,24 +7970,28 @@ rm -f /run/bfs-install-failure
 # preflights, or the GLib/GI bootstrap.  The older ordering applied these
 # settings only after the package transaction had already run, so selecting
 # "Verify footprints: no" could not affect the failing package build.
-configure_pkgmk_integrity_settings_early() {
-        local conf=/etc/pkgmk.conf md5_ignore=no signature_ignore=no footprint_ignore=no
+# scratchpkg verifies blake3 sums from each port's .checksums. The old
+# MD5/signature/footprint toggles belonged to pkgmk and no longer exist.
+configure_scratchpkg_integrity_settings_early() {
+        local conf=/etc/scratchpkg.conf checksum=no
         [[ -f "$conf" ]] || return 0
 
-        [[ "$VERIFY_MD5_VALUE" == yes ]] || md5_ignore=yes
-        [[ "$VERIFY_SIGNATURE_VALUE" == yes ]] || signature_ignore=yes
-        [[ "$VERIFY_FOOTPRINT_VALUE" == yes ]] || footprint_ignore=yes
+        [[ "$VERIFY_MD5_VALUE" == yes ]] || checksum=yes
 
-        sed -i \
-                -e "s|^PKGMK_IGNORE_MD5SUM=.*|PKGMK_IGNORE_MD5SUM=\"$md5_ignore\"|" \
-                -e "s|^PKGMK_IGNORE_SIGNATURE=.*|PKGMK_IGNORE_SIGNATURE=\"$signature_ignore\"|" \
-                -e "s|^PKGMK_IGNORE_FOOTPRINT=.*|PKGMK_IGNORE_FOOTPRINT=\"$footprint_ignore\"|" \
-                "$conf"
+        if grep -q '^IGNORE_CHECKSUM=' "$conf"; then
+                sed -i "s|^IGNORE_CHECKSUM=.*|IGNORE_CHECKSUM=\"$checksum\"|" "$conf"
+        elif grep -q '^# IGNORE_CHECKSUM=' "$conf"; then
+                sed -i "s|^# IGNORE_CHECKSUM=.*|IGNORE_CHECKSUM=\"$checksum\"|" "$conf"
+        else
+                printf '
+IGNORE_CHECKSUM="%s"
+' "$checksum" >> "$conf"
+        fi
 
-        log "Early package integrity policy: MD5=$VERIFY_MD5_VALUE signatures=$VERIFY_SIGNATURE_VALUE footprints=$VERIFY_FOOTPRINT_VALUE"
+        log "Early package integrity policy: checksum verification=$([ "$checksum" = no ] && echo enabled || echo disabled)"
 }
 
-configure_pkgmk_integrity_settings_early
+configure_scratchpkg_integrity_settings_early
 
 ensure_bfsos_git_ports() {
         local config=/etc/ports/bfsos.git
@@ -7995,7 +7999,7 @@ ensure_bfsos_git_ports() {
 
         if ! command -v git >/dev/null 2>&1; then
                 log "Git is required by BFSOS ports; installing it from the existing base ports tree before ports -u"
-                run_package_operation "required Git installation for ports synchronization" prt-get depinst git
+                run_package_operation "required Git installation for ports synchronization" scratch install -y git
         fi
         command -v git >/dev/null 2>&1 || { echo "Git installation completed but git is still unavailable." >&2; return 1; }
 
@@ -8041,12 +8045,12 @@ ensure_glib_introspection_ready() {
                 *) return 0 ;;
         esac
 
-        if ! prt-get isinst gobject-introspection >/dev/null 2>&1; then
+        if ! scratch isinstalled gobject-introspection >/dev/null 2>&1; then
                 log "Preparing GObject Introspection before Polkit"
                 rm -f "$glib_footprint"
-                rm -f /var/cache/pkg/packages/glib#*.pkg.tar.*
+                rm -f /var/cache/scratchpkg/packages/glib#*.pkg.tar.*
                 run_package_operation "gobject-introspection bootstrap installation" \
-                        prt-get depinst gobject-introspection
+                        scratch install -y gobject-introspection
         fi
 
         if [[ ! -r /usr/share/gir-1.0/Gio-2.0.gir || \
@@ -8054,9 +8058,9 @@ ensure_glib_introspection_ready() {
               ! -r /usr/share/gir-1.0/GObject-2.0.gir ]]; then
                 log "Rebuilding GLib once with introspection enabled"
                 rm -f "$glib_footprint"
-                rm -f /var/cache/pkg/packages/glib#*.pkg.tar.*
+                rm -f /var/cache/scratchpkg/packages/glib#*.pkg.tar.*
                 run_package_operation "GLib introspection rebuild" \
-                        prt-get -fr update glib
+                        scratch -fr update glib
         fi
 
         for gir in GLib-2.0.gir GObject-2.0.gir Gio-2.0.gir GioUnix-2.0.gir GModule-2.0.gir GLibUnix-2.0.gir; do
@@ -8071,27 +8075,27 @@ ensure_glib_introspection_ready() {
 
 
 log "Running mandatory installed-system upgrade"
-# prt-get update/sysup intentionally do not install dependencies newly added
+# scratch sysup -y/sysup intentionally do not install dependencies newly added
 # since a package was first installed. Resolve those missing dependencies first
 # using the dependency-preflight pattern documented by CRUX.
-outdated_packages="$(prt-get quickdiff 2>/dev/null || true)"
+outdated_packages="$(scratch quickdiff 2>/dev/null || true)"
 if [[ -n "$outdated_packages" ]]; then
-        dependency_closure="$(prt-get quickdep $outdated_packages 2>/dev/null || true)"
+        dependency_closure="$(scratch quickdep $outdated_packages 2>/dev/null || true)"
         if [[ -n "$dependency_closure" ]]; then
                 ensure_glib_introspection_ready "$dependency_closure" || exit 1
-                missing_dependencies="$(prt-get isinst $dependency_closure 2>/dev/null | awk '/not installed/ {print $2}' | sort -u | tr '\n' ' ')"
+                missing_dependencies="$(scratch isinstalled $dependency_closure 2>/dev/null | awk '/not installed/ {print $2}' | sort -u | tr '\n' ' ')"
                 if [[ -n "$missing_dependencies" ]]; then
                         read -r -a missing_dependency_array <<< "$missing_dependencies"
                         run_package_operation "new dependencies required by system upgrade" \
-                                prt-get depinst "${missing_dependency_array[@]}"
+                                scratch install -y "${missing_dependency_array[@]}"
                 fi
         fi
 fi
 
-run_package_operation "mandatory package upgrade (prt-get sysup)" prt-get sysup
+run_package_operation "mandatory package upgrade (scratch sysup -y)" scratch sysup -y
 
 log "Ensuring BFSOS package-build safety/cache tooling is installed"
-run_package_operation "mandatory build tooling (fakeroot/ccache/meson/ninja)" prt-get depinst fakeroot fmt xxhash ccache meson ninja
+run_package_operation "mandatory build tooling (fakeroot/ccache/meson/ninja)" scratch install -y fakeroot fmt xxhash ccache meson ninja
 
 
 if [[ -n "$PACKAGE_LIST_VALUE" ]]; then
@@ -8103,7 +8107,7 @@ if [[ -n "$PACKAGE_LIST_VALUE" ]]; then
         MISSING_PACKAGES=()
         log "Checking selected package installation status"
         for package in "${PACKAGE_LIST_ARRAY[@]}"; do
-                if prt-get isinst "$package" >/dev/null 2>&1; then
+                if scratch isinstalled "$package" >/dev/null 2>&1; then
                         printf 'Already installed: %s\n' "$package"
                 else
                         printf 'Will install:      %s\n' "$package"
@@ -8111,11 +8115,11 @@ if [[ -n "$PACKAGE_LIST_VALUE" ]]; then
                 fi
         done
         if ((${#MISSING_PACKAGES[@]} > 0)); then
-                dependency_closure="$(prt-get quickdep "${MISSING_PACKAGES[@]}" 2>/dev/null || true)"
+                dependency_closure="$(scratch quickdep "${MISSING_PACKAGES[@]}" 2>/dev/null || true)"
                 ensure_glib_introspection_ready "$dependency_closure" || exit 1
 
                 log "Installing missing packages: ${MISSING_PACKAGES[*]}"
-                run_package_operation "optional package installation (${MISSING_PACKAGES[*]})" prt-get depinst "${MISSING_PACKAGES[@]}"
+                run_package_operation "optional package installation (${MISSING_PACKAGES[*]})" scratch install -y "${MISSING_PACKAGES[@]}"
         else
                 log "All selected packages are already installed"
         fi
@@ -8131,7 +8135,7 @@ fi
 
 if [[ "$INSTALL_GPM_VALUE" == yes ]]; then
         if [[ -f /usr/lib/systemd/system/gpm.service || -f /etc/systemd/system/gpm.service ]]; then
-                offline_systemctl enable gpm.service 2>/dev/null ||
+                offline_rc_enable gpm.service 2>/dev/null ||
                         echo "WARNING: gpm was installed but gpm.service could not be enabled automatically." >&2
         else
                 echo "WARNING: gpm was selected/installed but no gpm.service unit was found." >&2
@@ -8169,43 +8173,45 @@ else
         rm -f /etc/sudoers.d/10-wheel
 fi
 
-offline_systemctl() {
-        # /run is bind-mounted from the live environment while installing.
-        # Force systemctl to operate only on the target filesystem so it never
-        # attempts to contact the live system's D-Bus or systemd manager.
-        env -u DBUS_SESSION_BUS_ADDRESS \
-            -u DBUS_SYSTEM_BUS_ADDRESS \
-            -u SYSTEMD_EXEC_PID \
-            SYSTEMD_OFFLINE=1 \
-            SYSTEMD_IGNORE_CHROOT=1 \
-            systemctl --root=/ --no-reload --no-ask-password "$@"
+# OpenRC service helpers for the target root filesystem.
+# The installer no longer manages systemd units: init is OpenRC.
+offline_rc_enable() {
+    chroot "$ROOT" rc-update add "${1%.service}" default 2>/dev/null || true
+}
+
+offline_rc_disable() {
+    chroot "$ROOT" rc-update del "${1%.service}" default 2>/dev/null || true
+}
+
+offline_rc_present() {
+    test -x "$ROOT/etc/init.d/${1%.service}"
 }
 
 command -v ssh-keygen >/dev/null 2>&1 && ssh-keygen -A
 ldconfig
-offline_systemctl preset-all || true
+true
 
-if [[ "$INSTALL_NETWORKMANAGER_VALUE" == yes ]] && offline_systemctl list-unit-files NetworkManager.service >/dev/null 2>&1; then
+if [[ "$INSTALL_NETWORKMANAGER_VALUE" == yes ]] && offline_rc_present NetworkManager.service >/dev/null 2>&1; then
         log "Enabling NetworkManager and disabling systemd-networkd"
-        offline_systemctl enable NetworkManager.service
-        offline_systemctl disable systemd-networkd.service 2>/dev/null || true
-        offline_systemctl disable systemd-networkd-wait-online.service 2>/dev/null || true
-elif offline_systemctl list-unit-files systemd-networkd.service >/dev/null 2>&1; then
+        offline_rc_enable NetworkManager.service
+        offline_rc_disable systemd-networkd.service 2>/dev/null || true
+        offline_rc_disable systemd-networkd-wait-online.service 2>/dev/null || true
+elif offline_rc_present systemd-networkd.service >/dev/null 2>&1; then
         log "Enabling systemd-networkd"
-        offline_systemctl enable systemd-networkd.service
-        offline_systemctl disable systemd-networkd-wait-online.service 2>/dev/null || true
+        offline_rc_enable systemd-networkd.service
+        offline_rc_disable systemd-networkd-wait-online.service 2>/dev/null || true
 fi
 
-if offline_systemctl list-unit-files systemd-resolved.service >/dev/null 2>&1; then
-        offline_systemctl enable systemd-resolved.service
+if offline_rc_present systemd-resolved.service >/dev/null 2>&1; then
+        offline_rc_enable systemd-resolved.service
         ln -sfn /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
 fi
 
 if [[ "$ENABLE_OPENSSH_VALUE" == yes ]]; then
-        if offline_systemctl list-unit-files sshd.service >/dev/null 2>&1; then
-                offline_systemctl enable sshd.service
-        elif offline_systemctl list-unit-files ssh.service >/dev/null 2>&1; then
-                offline_systemctl enable ssh.service
+        if offline_rc_present sshd.service >/dev/null 2>&1; then
+                offline_rc_enable sshd.service
+        elif offline_rc_present ssh.service >/dev/null 2>&1; then
+                offline_rc_enable ssh.service
         else
                 echo "WARNING: No OpenSSH service unit was found." >&2
         fi
@@ -8217,7 +8223,7 @@ if [[ "$AUTO_LVM2_VALUE" == yes ]] &&
                 mkdir -p /etc/lvm
                 lvmconfig --type full --withcomments > /etc/lvm/lvm.conf
         fi
-        offline_systemctl enable lvm2-monitor.service 2>/dev/null || true
+        offline_rc_enable lvm2-monitor.service 2>/dev/null || true
 fi
 
 configure_required_mdadm_conf() {
@@ -8280,7 +8286,7 @@ configure_btrfs_snapshots() {
         ((${#config_names[@]} > 0)) || {
                 # preset-all may have enabled the root-only boot timer even when
                 # the installation has no root Snapper configuration.
-                offline_systemctl disable snapper-boot.timer 2>/dev/null || true
+                offline_rc_disable snapper-boot.timer 2>/dev/null || true
                 return 0
         }
 
@@ -8363,17 +8369,17 @@ EOF_SNAPPER
                 echo "NOTE: Snapper --no-dbus is unavailable; file-level configuration checks passed." >&2
         fi
 
-        offline_systemctl enable snapper-timeline.timer 2>/dev/null || true
-        offline_systemctl enable snapper-cleanup.timer 2>/dev/null || true
+        offline_rc_enable snapper-timeline.timer 2>/dev/null || true
+        offline_rc_enable snapper-cleanup.timer 2>/dev/null || true
 
         # snapper-boot.service is hard-coded to use --config root, so only
         # enable its timer when / is actually one of the configured Btrfs
         # filesystems. Explicitly disable it otherwise because preset-all may
         # have enabled it earlier.
         if [[ "$have_root_config" == yes ]]; then
-                offline_systemctl enable snapper-boot.timer 2>/dev/null || true
+                offline_rc_enable snapper-boot.timer 2>/dev/null || true
         else
-                offline_systemctl disable snapper-boot.timer 2>/dev/null || true
+                offline_rc_disable snapper-boot.timer 2>/dev/null || true
         fi
 
         for config_name in "${config_names[@]}"; do
@@ -8990,7 +8996,7 @@ ExecStop=/usr/libexec/bfs-zram-stop
 WantedBy=swap.target
 EOF_ZRAM_SERVICE
 
-        offline_systemctl enable bfs-zram.service
+        offline_rc_enable bfs-zram.service
         [[ -L /etc/systemd/system/swap.target.wants/bfs-zram.service ]] || {
                 echo "ZRAM service was created but was not enabled successfully." >&2
                 exit 1
@@ -8998,15 +9004,15 @@ EOF_ZRAM_SERVICE
         log "Configured ZRAM swap for boot"
 }
 
-configure_pkgmk_tmpfs() {
-        local mountpoint=/var/cache/pkg/build-work size="$BUILD_TMPFS_SIZE_VALUE"
+configure_scratchpkg_tmpfs() {
+        local mountpoint=/var/cache/scratchpkg/build-work size="$BUILD_TMPFS_SIZE_VALUE"
         local kb=0 gib=0 recommended="" fstab_line=""
 
         mkdir -p "$mountpoint"
         if [[ "$BUILD_TMPFS_VALUE" != yes ]]; then
                 # Remove only the BFSOS-managed tmpfs entry if the option was disabled.
                 if [[ -f /etc/fstab ]]; then
-                        sed -i '\|^[[:space:]]*tmpfs[[:space:]]\+/var/cache/pkg/build-work[[:space:]]\+tmpfs[[:space:]]|d' /etc/fstab
+                        sed -i '\|^[[:space:]]*tmpfs[[:space:]]\+/var/cache/scratchpkg/build-work[[:space:]]\+tmpfs[[:space:]]|d' /etc/fstab
                 fi
                 return 0
         fi
@@ -9020,9 +9026,9 @@ configure_pkgmk_tmpfs() {
                         # leave build-work disk-backed instead of creating a tiny
                         # tmpfs that can break modern browser/kernel/toolchain builds.
                         if [[ -f /etc/fstab ]]; then
-                                sed -i '\|^[[:space:]]*tmpfs[[:space:]]\+/var/cache/pkg/build-work[[:space:]]\+tmpfs[[:space:]]|d' /etc/fstab
+                                sed -i '\|^[[:space:]]*tmpfs[[:space:]]\+/var/cache/scratchpkg/build-work[[:space:]]\+tmpfs[[:space:]]|d' /etc/fstab
                         fi
-                        log "Build-work Auto: ${gib} GiB physical RAM -> disk-backed /var/cache/pkg/build-work"
+                        log "Build-work Auto: ${gib} GiB physical RAM -> disk-backed /var/cache/scratchpkg/build-work"
                         return 0
                 elif ((gib < 32)); then
                         size=8G
@@ -9042,17 +9048,17 @@ configure_pkgmk_tmpfs() {
                 return 1
         }
 
-        install -d -m 0775 -o pkgmk -g pkgmk "$mountpoint"
+        install -d -m 0775 -o pkgbuild -g pkgbuild "$mountpoint"
         [[ -f /etc/fstab ]] || : > /etc/fstab
-        sed -i '\|^[[:space:]]*tmpfs[[:space:]]\+/var/cache/pkg/build-work[[:space:]]\+tmpfs[[:space:]]|d' /etc/fstab
-        fstab_line="tmpfs /var/cache/pkg/build-work tmpfs rw,nosuid,nodev,size=$size,mode=0775,uid=82,gid=82 0 0"
+        sed -i '\|^[[:space:]]*tmpfs[[:space:]]\+/var/cache/scratchpkg/build-work[[:space:]]\+tmpfs[[:space:]]|d' /etc/fstab
+        fstab_line="tmpfs /var/cache/scratchpkg/build-work tmpfs rw,nosuid,nodev,size=$size,mode=0775,uid=82,gid=82 0 0"
         printf '%s\n' "$fstab_line" >> /etc/fstab
 
         # Make the setting effective for package builds in this installer run.
         # tmpfs size= is a ceiling; RAM is consumed only as files are written.
         if mountpoint -q "$mountpoint"; then
-                if pgrep -x pkgmk >/dev/null 2>&1 || pgrep -f '/usr/bin/pkgmk' >/dev/null 2>&1; then
-                        echo "Refusing to resize active build-work tmpfs while pkgmk is running." >&2
+                if pgrep -x pkgbuild >/dev/null 2>&1 || pgrep -f '/usr/bin/pkgbuild' >/dev/null 2>&1; then
+                        echo "Refusing to resize active build-work tmpfs while pkgbuild is running." >&2
                         echo "Retry after the package build completes; current contents were left untouched." >&2
                         return 1
                 fi
@@ -9060,13 +9066,13 @@ configure_pkgmk_tmpfs() {
         else
                 mount "$mountpoint"
         fi
-        chown pkgmk:pkgmk "$mountpoint"
+        chown pkgbuild:pkgbuild "$mountpoint"
         chmod 0775 "$mountpoint"
-        log "Configured RAM-backed pkgmk workspace at $mountpoint (maximum $size)"
+        log "Configured RAM-backed pkgbuild workspace at $mountpoint (maximum $size)"
 }
 
-configure_pkgmk_build_settings() {
-        local conf=/etc/pkgmk.conf jobs flags size kb gib
+configure_scratchpkg_build_settings() {
+        local conf=/etc/scratchpkg.conf jobs flags size kb gib
         [[ -f "$conf" ]] || return 0
         [[ "$BUILD_JOBS_VALUE" == inherited ]] || {
                 jobs="$BUILD_JOBS_VALUE"; [[ "$jobs" == auto ]] && jobs="$(nproc)"
@@ -9094,36 +9100,35 @@ configure_pkgmk_build_settings() {
                                 kb=$(awk '/^MemTotal:/ {print $2; exit}' /proc/meminfo); gib=$(( (kb + 1048575) / 1048576 )); size="${gib}G"
                         fi
                 fi
-                install -d -m 0775 -o pkgmk -g pkgmk /var/cache/ccache
+                install -d -m 0775 -o pkgbuild -g pkgbuild /var/cache/ccache
                 CCACHE_DIR=/var/cache/ccache ccache --set-config="max_size=$size"
-                chown -R pkgmk:pkgmk /var/cache/ccache
+                chown -R pkgbuild:pkgbuild /var/cache/ccache
         fi
 }
 
-configure_pkgmk_integrity_settings() {
-        local conf=/etc/pkgmk.conf md5_ignore=no signature_ignore=no footprint_ignore=no
+configure_scratchpkg_integrity_settings() {
+        local conf=/etc/scratchpkg.conf checksum=no
         [[ -f "$conf" ]] || return 0
 
-        [[ "$VERIFY_MD5_VALUE" == yes ]] || md5_ignore=yes
-        [[ "$VERIFY_SIGNATURE_VALUE" == yes ]] || signature_ignore=yes
-        [[ "$VERIFY_FOOTPRINT_VALUE" == yes ]] || footprint_ignore=yes
+        # scratchpkg verifies blake3 sums from each port's .checksums;
+        # signature and footprint verification belonged to the retired
+        # pkgmk toolchain and no longer exist.
+        [[ "$VERIFY_MD5_VALUE" == yes ]] || checksum=yes
 
-        sed -i \
-                -e "s|^PKGMK_IGNORE_MD5SUM=.*|PKGMK_IGNORE_MD5SUM=\"$md5_ignore\"|" \
-                -e "s|^PKGMK_IGNORE_SIGNATURE=.*|PKGMK_IGNORE_SIGNATURE=\"$signature_ignore\"|" \
-                -e "s|^PKGMK_IGNORE_FOOTPRINT=.*|PKGMK_IGNORE_FOOTPRINT=\"$footprint_ignore\"|" \
-                "$conf"
-
-        if [[ "$md5_ignore" == yes || "$signature_ignore" == yes || "$footprint_ignore" == yes ]]; then
-                log "WARNING: development package-integrity bypass active: MD5=$VERIFY_MD5_VALUE signatures=$VERIFY_SIGNATURE_VALUE footprints=$VERIFY_FOOTPRINT_VALUE"
+        if grep -q '^IGNORE_CHECKSUM=' "$conf"; then
+                sed -i "s|^IGNORE_CHECKSUM=.*|IGNORE_CHECKSUM=\"$checksum\"|" "$conf"
+        elif grep -q '^# IGNORE_CHECKSUM=' "$conf"; then
+                sed -i "s|^# IGNORE_CHECKSUM=.*|IGNORE_CHECKSUM=\"$checksum\"|" "$conf"
         else
-                log "Package integrity verification enabled: MD5/checksums, signatures, footprints"
+                printf '
+IGNORE_CHECKSUM="%s"
+' "$checksum" >> "$conf"
         fi
 }
 
-configure_pkgmk_tmpfs
-configure_pkgmk_build_settings
-configure_pkgmk_integrity_settings
+configure_scratchpkg_tmpfs
+configure_scratchpkg_build_settings
+configure_scratchpkg_integrity_settings
 configure_zram_swap
 
 configure_dracut_storage_modules() {
@@ -9252,7 +9257,7 @@ selected_kernel_release() {
                 *) return 1 ;;
         esac
 
-        pkgver="$(pkginfo -i 2>/dev/null | awk -v p="$KERNEL_PACKAGE_VALUE" '$1 == p { print $2; exit }')"
+        pkgver="$(scratch installed 2>/dev/null | awk -v p="$KERNEL_PACKAGE_VALUE" '$1 == p { print $2; exit }')"
         version="${pkgver%-*}"
         if [[ -n "$version" && -f "/boot/vmlinuz-${version}-${suffix}" ]]; then
                 printf '%s\n' "${version}-${suffix}"
@@ -9576,7 +9581,7 @@ if command -v findmnt >/dev/null 2>&1; then
         }
 fi
 
-for command in bash sh env sed grep awk find tar gzip xz make gcc g++ ld ar nm strip readelf mount umount ls cp mv rm chmod chown pkgmk pkgadd pkginfo; do
+for command in bash sh env sed grep awk find tar gzip xz make gcc g++ ld ar nm strip readelf mount umount ls cp mv rm chmod chown pkgbuild pkgadd scratch info; do
         command -v "$command" >/dev/null 2>&1 || printf 'MISSING COMMAND: %s\n' "$command" >&2
 done
 
@@ -9592,7 +9597,7 @@ if gcc -dumpspecs | grep -q '/tmp/lfs-tools'; then
 fi
 rm -f /tmp/bfs-test /tmp/bfs-test.c
 
-pkginfo -i | sort > /root/base-system.manifest
+scratch installed | sort > /root/base-system.manifest
 find /usr/lib/systemd/system /etc/systemd/system -type f -o -type l 2>/dev/null | sort > /root/systemd-units.manifest
 ldconfig -p > /root/ldconfig.manifest
 
@@ -9783,15 +9788,15 @@ run_chroot_installer() {
 
 
 offer_package_cache_cleanup() {
-        local answer=no cache_dir="$TARGET/var/cache/pkg/packages"
+        local answer=no cache_dir="$TARGET/var/cache/scratchpkg/packages"
         ask_yes_no answer \
-                "Package installation and system upgrade completed successfully. Clear /var/cache/pkg/packages/* before finishing? Keeping packages is useful for reinstalling or deploying to additional systems." \
+                "Package installation and system upgrade completed successfully. Clear /var/cache/scratchpkg/packages/* before finishing? Keeping packages is useful for reinstalling or deploying to additional systems." \
                 no || answer=no
         [[ "$answer" == yes ]] || return 0
         mkdir -p "$cache_dir"
         find "$cache_dir" -mindepth 1 -maxdepth 1 -exec rm -rf -- {} +
         CLEAR_PACKAGE_CACHE=yes
-        log "Cleared installed-system binary package cache: /var/cache/pkg/packages/*"
+        log "Cleared installed-system binary package cache: /var/cache/scratchpkg/packages/*"
 }
 
 show_installation_success_dialog() {

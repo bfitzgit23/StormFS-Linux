@@ -1,0 +1,20 @@
+# description	: kmod package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=kmod
+version=34.2
+release=1
+build_opt="-D openssl=enabled -D xz=enabled -D zlib=enabled -D manpages=false"
+source="https://www.kernel.org/pub/linux/utils/kernel/kmod/kmod-$version.tar.xz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+	mkdir -p $PKG/sbin $PKG/bin
+	for target in depmod insmod modinfo modprobe rmmod; do
+	  ln -s /usr/bin/kmod $PKG/sbin/$target
+	done
+	
+#	ln -s kmod $PKG/usr/bin/lsmod
+}

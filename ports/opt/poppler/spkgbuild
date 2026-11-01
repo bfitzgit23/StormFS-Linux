@@ -1,0 +1,25 @@
+# description	: PDF rendering library
+# homepage	: https://poppler.freedesktop.org/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=poppler
+version=26.09.0
+release=2
+build_opt="\
+    -DCMAKE_PREFIX_PATH=/opt/qt6 \
+    -DENABLE_UNSTABLE_API_ABI_HEADERS=ON \
+    -DENABLE_QT5=OFF \
+    -DENABLE_QT6=ON \
+    -DENABLE_GLIB=ON \
+    -DBUILD_GTK_TESTS=OFF \
+    -DBUILD_QT5_TESTS=OFF \
+    -DBUILD_QT6_TESTS=OFF \
+    -DBUILD_CPP_TESTS=OFF \
+    -DBUILD_MANUAL_TESTS=OFF"
+source="https://poppler.freedesktop.org/poppler-$version.tar.xz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

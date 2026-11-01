@@ -1,0 +1,15 @@
+# description	: XCB utilities library
+# homepage	: https://xcb.freedesktop.org/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=xcb-util-cursor
+version=0.1.6
+release=1
+source="https://xcb.freedesktop.org/dist/xcb-util-cursor-$version.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+    ./configure $XORG_CONFIG || return 1
+    make -j "${JOBS:-1}" || return 1
+    make DESTDIR="$PKG" install || return 1
+}

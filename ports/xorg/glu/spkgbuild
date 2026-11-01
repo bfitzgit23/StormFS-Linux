@@ -1,0 +1,22 @@
+# description	: Mesa OpenGL Utility library
+# homepage	: https://www.mesa3d.org/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=glu
+version=9.0.3
+release=1
+source="https://mesa.freedesktop.org/archive/$name/$name-$version.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+	mkdir build &&
+	cd    build &&
+
+meson setup ..              \
+      --prefix=$XORG_PREFIX \
+      -Dgl_provider=gl      \
+      --buildtype=release   &&
+ninja
+	DESTDIR=$PKG ninja install
+	rm -vf $PKG/usr/lib/libGLU.a
+}

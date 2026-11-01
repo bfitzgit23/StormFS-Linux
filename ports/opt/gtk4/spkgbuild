@@ -1,0 +1,23 @@
+# description	: gtk4 package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+# optional	: highlight
+
+name=gtk4
+version=4.24.0
+release=1
+build_opt="--prefix=/usr
+            --buildtype=release
+            -Dbroadway-backend=true
+            -Dintrospection=enabled
+            -Dvulkan=enabled
+	    -Dbuild-tests=false
+	    -Dbuild-testsuite=false
+            -Dbuild-examples=false
+            -Dbuild-demos=false"
+source="https://gitlab.gnome.org/GNOME/gtk/-/archive/$version/gtk-$version.tar.bz2"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

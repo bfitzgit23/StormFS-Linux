@@ -1,0 +1,14 @@
+# description	: flex package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=flex
+version=2.6.4
+release=1
+source="https://github.com/westes/$name/releases/download/v$version/$name-$version.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+	ln -s flex $PKG/usr/bin/lex
+}

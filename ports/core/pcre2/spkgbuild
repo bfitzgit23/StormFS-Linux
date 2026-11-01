@@ -1,0 +1,21 @@
+# description	: pcre2 package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=pcre2
+version=10.48
+release=1
+source="https://github.com/PCRE2Project/pcre2/releases/download/pcre2-$version/pcre2-$version.tar.bz2"
+
+build() {
+	cd "$name-$version" || return 1
+	./configure --prefix=/usr                       \
+	            --enable-unicode                    \
+	            --enable-jit                        \
+	            --enable-pcre2-16                   \
+	            --enable-pcre2-32                   \
+	            --enable-pcre2grep-libz             \
+	            --enable-pcre2grep-libbz2           \
+	            --enable-pcre2test-libreadline
+	make
+	make install
+}

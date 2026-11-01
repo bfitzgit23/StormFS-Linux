@@ -1,0 +1,5 @@
+rustc
+libssh2
+sqlite
+openssl
+pkgconf

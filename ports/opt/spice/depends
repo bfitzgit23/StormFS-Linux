@@ -1,0 +1,10 @@
+cyrus-sasl
+glib
+libjpeg-turbo
+lz4
+openssl
+opus
+pixman
+python3-pyparsing
+spice-protocol
+zlib

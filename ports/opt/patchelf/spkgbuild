@@ -1,0 +1,13 @@
+# description	: patchelf package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=patchelf
+version=0.19.1
+release=2
+source="https://github.com/NixOS/${name}/releases/download/${version}/${name}-${version}.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

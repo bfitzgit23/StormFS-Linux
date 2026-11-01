@@ -1,0 +1,19 @@
+# description	: Cross-platform 3D audio.
+# homepage	: https://github.com/kcat/openal-soft
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=openal-32
+version=1.25.2
+release=3
+build_opt="-D ALSOFT_UTILS=OFF -D ALSOFT_EXAMPLES=OFF -D QT_QMAKE_EXECUTABLE=qmake-disabled"
+source="https://github.com/kcat/openal-soft/archive/$version/openal-soft-$version.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+        _bfs_require_compat32_extension 2 || return $?
+	bfs_autobuild
+  rm -rf "$PKG/usr/include" "$PKG/usr/share"
+	bfs_compat32_validate || return 1
+}

@@ -1,0 +1,46 @@
+# description	: A library for a new image format comparable to JPEG.
+# homepage	: https://developers.google.com/speed/webp/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+# optional	: freeglut-32 libsdl-32 ninja
+
+name=libwebp-32
+version=1.6.0
+release=3
+source="https://storage.googleapis.com/downloads.webmproject.org/releases/webp/${name%-*}-$version.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+  (
+    set -e
+	prt-get isinst ninja && SPKG_LIBWEBP_32+=' -G Ninja'
+
+prt-get isinst freeglut && ! prt-get isinst freeglut-32 && printf "\e[031mfreeglut is detected on your system, please run:
+prt-get depinst freeglut-32
+before continuing with libwebp-32.\033[0m\n" &&
+exit 1
+
+prt-get isinst libsdl && ! prt-get isinst libsdl-32 && printf "\e[031mlibsdl is detected on your system, please run:
+prt-get depinst libsdl-32
+before continuing with libwebp-32.\033[0m\n" &&
+exit 1
+
+	cmake -S . -B build $SPKG_LIBWEBP_32 \
+		-D CMAKE_INSTALL_PREFIX="/usr" \
+		-D CMAKE_INSTALL_LIBDIR="/usr/lib32" \
+		-D BUILD_SHARED_LIBS=ON \
+		-D CMAKE_BUILD_TYPE=Release \
+		-D CMAKE_C_FLAGS_RELEASE="${CFLAGS}" \
+		-D WEBP_BUILD_VWEBP=OFF \
+		-D WEBP_BUILD_IMG2WEBP=OFF \
+		-Wno-dev
+
+	cmake --build build
+	DESTDIR=$PKG cmake --install build
+
+
+	rm -r $PKG/usr/{bin,share,include}
+  )
+	bfs_compat32_validate || return 1
+}

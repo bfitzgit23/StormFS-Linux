@@ -1,0 +1,18 @@
+# description	: eudev package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=eudev
+version=3.2.14
+release=1
+build_opt="--sbindir=/sbin
+	--bindir=/sbin
+	--with-rootprefix=
+	--with-rootlibdir=/lib
+	--libexecdir=/lib"
+source="https://github.com/$name-project/$name/releases/download/v$version/$name-$version.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

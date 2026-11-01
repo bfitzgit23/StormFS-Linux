@@ -4,14 +4,14 @@
 #
 # Adapted from the Vylen `make_tarball.sh` (which drives `emerald` and
 # `.epkg.tar.xz` packages) for LFS systems whose package manager is either
-# **scratchpkg** or **pacman**.  The flow and the config file, package list and
+# **scratchpkg** or **scratch**.  The flow and the config file, package list and
 # --clean/--compress/--force interface are kept; the package manager, the world
 # or explicit-install bookkeeping, the caches that must not be captured and the
 # chroot helper are replaced by the real ones of each manager:
 #
 #   scratchpkg : pkgadd --root=ROOTFS <pkg>.spkg.tar.*   DB var/lib/scratchpkg/db
 #                world file var/lib/scratchpkg/world     helper xchroot
-#   pacman     : pacman --root ROOTFS --dbpath ... -U    DB var/lib/pacman
+#   scratch     : scratch --root ROOTFS --dbpath ... -U    DB var/lib/scratch
 #                explicit set via -D --asexplicit        helper chroot + mounts
 #
 # Modes
@@ -28,8 +28,8 @@
 #        --pkg-dir /var/cache/scratchpkg/packages \
 #        --packages lfs-packages.txt --compress
 #
-#   # LFS + pacman: pack an installed system (no package cache needed)
-#   sudo scripts/lfs-mkstage3.sh --pkgmgr pacman --rootfs /mnt/lfs \
+#   # LFS + scratch: pack an installed system (no package cache needed)
+#   sudo scripts/lfs-mkstage3.sh --pkgmgr scratch --rootfs /mnt/lfs \
 #        --compress --compressor zstd -l 19
 #
 #   # Both: dry-run first - prints every command and every exclude, changes nothing
@@ -52,7 +52,7 @@ SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd -P)
 # Defaults (a config file and the environment may override all of these)
 # ---------------------------------------------------------------------------
 
-PKGMGR=${PKGMGR:-}                      # scratchpkg | pacman | empty = autodetect
+PKGMGR=${PKGMGR:-}                      # scratchpkg | scratch (aliases); empty = autodetect
 ROOTFS=${ROOTFS:-/mnt/lfs}              # root filesystem to assemble and/or pack
 PKG_DIR=${PKG_DIR:-}                    # directory holding the built packages
 PACKAGES=${PACKAGES:-}                  # file: one package name per line
@@ -65,11 +65,11 @@ THREADS=${THREADS:-}
 EXCLUDES=()
 LOCALES=${LOCALES:-"C.UTF-8 en_US.ISO-8859-1 en_US.UTF-8"}
 CHECKSUM=${CHECKSUM:-sha256sum}         # sha256sum | sha512sum | b3sum | none
-HOST_PACMAN_CONF=${HOST_PACMAN_CONF:-}  # --config for pacman when the root has none
+HOST_PACMAN_CONF=${HOST_PACMAN_CONF:-}  # --config for scratch when the root has none
 CHROOT_CMD=${CHROOT_CMD:-}              # override the chroot helper (xchroot, chroot)
 PACMAN_CONF=${PACMAN_CONF:-}
 PKGADD=${PKGADD:-pkgadd}
-PACMAN=${PACMAN:-pacman}
+PACMAN=${PACMAN:-scratch}
 
 DRY_RUN=no
 NUMERIC_OWNER=yes
@@ -102,7 +102,7 @@ usage() {
 Usage: $PROGRAM [options]
 
 Assemble and/or pack an LFS root filesystem as a stage3 archive, using either
-scratchpkg or pacman as the package manager.
+scratchpkg or scratch as the package manager.
 
 Modes:
   (default)                 install --packages from --pkg-dir into --rootfs and
@@ -113,14 +113,14 @@ Modes:
       --force               assemble even if --rootfs is not empty
 
 Packages:
-      --pkgmgr NAME         scratchpkg or pacman (default: autodetect from
+      --pkgmgr NAME         scratchpkg or scratch (default: autodetect from
                             --rootfs, then from \$PATH)
   -d, --pkg-dir DIR         built packages (default: \$PKG_DIR, else the
                             manager's cache: /var/cache/scratchpkg/packages or
-                            /var/cache/pacman/pkg)
+                            /var/cache/scratch/pkg)
   -p, --packages FILE       package names, in install order, one per line
                             (only the first field is used, so \`scratch installed\`
-                            and \`pacman -Qq\` output can be used directly)
+                            and \`scratch -Qq\` output can be used directly)
   -w, --world FILE          names to mark explicitly installed
                             (default: every name in --packages)
       --ignore-conflict     pass -c/--ignore-conflict to pkgadd
@@ -128,8 +128,8 @@ Packages:
       --one-by-one          install one package per transaction, in list order
                             (slower; use when a single transaction trips over
                             ordering or scriptlets)
-      --no-scriptlet        pacman --noscriptlet (do not run .INSTALL scripts)
-      --pacman-config FILE  pacman --config (default: the root's /etc/pacman.conf)
+      --no-scriptlet        scratch --noscriptlet (do not run .INSTALL scripts)
+      --scratch-config FILE  scratch --config (default: the root's /etc/scratch.conf)
   -r, --rootfs DIR          root filesystem (default: $ROOTFS)
   -o, --output FILE         archive path
                             (default: lfs-stage3-<version>-<date>-<arch>.tar.<ext>)
@@ -150,7 +150,7 @@ Packing:
       --no-hooks            skip the post-install steps (ldconfig, locales,
                             triggers, database checks)
       --no-locales          skip locale-archive generation
-      --check-files         pacman: also run \`pacman -Qkk\` inside the root
+      --check-files         scratch: also run \`scratch -Qkk\` inside the root
       --revdep-rebuild      scratchpkg: \`revdep -r -y\` (rebuild broken packages)
       --chroot-cmd CMD      chroot helper (default: xchroot, else an own chroot
                             with /dev, /proc, /sys, /run mounted)
@@ -310,7 +310,7 @@ in_root() {
 pkg_glob() {
 	case $PKGMGR in
 		scratchpkg) printf '%s' '*.spkg.tar.*' ;;
-		pacman)     printf '%s' '*.pkg.tar.*' ;;
+		scratch)     printf '%s' '*.pkg.tar.*' ;;
 	esac
 }
 
@@ -319,12 +319,12 @@ pkg_basename() {
 	local base=${1##*/}
 	case $PKGMGR in
 		scratchpkg) base=${base%.spkg.tar.*} ;;
-		pacman)     base=${base%.pkg.tar.*} ;;
+		scratch)     base=${base%.pkg.tar.*} ;;
 	esac
 	printf '%s' "$base"
 }
 
-# Print the .PKGINFO of a pacman package, whatever it is compressed with.
+# Read legacy .PKGINFO metadata when a package archive still carries it.
 read_pkginfo() {
 	local f=$1
 	case $f in
@@ -344,7 +344,7 @@ read_pkginfo() {
 
 # pkg_identity <file> -> "name version release".
 #
-# A pacman archive carries its identity in .PKGINFO, so use it when it can be
+# A scratch archive carries its identity in .PKGINFO, so use it when it can be
 # read (names may contain dashes and versions may carry epochs, and the file
 # name also ends in the architecture).  Older archives without readable
 # metadata fall back to peeling "name-version-release-arch" from the file name,
@@ -354,7 +354,7 @@ read_pkginfo() {
 pkg_identity() {
 	local f=$1 base rest name version release arch info pkgname pkgver
 
-	if [ "$PKGMGR" = pacman ]; then
+	if [ "$PKGMGR" = scratch ]; then
 		info=$(read_pkginfo "$f") || info=
 		if [ -n "$info" ]; then
 			pkgname=$(printf '%s\n' "$info" | awk -F' *= *' '$1 == "pkgname" { print $2; exit }')
@@ -367,7 +367,7 @@ pkg_identity() {
 	fi
 
 	base=$(pkg_basename "$f")
-	if [ "$PKGMGR" = pacman ]; then
+	if [ "$PKGMGR" = scratch ]; then
 		# name-version-release-arch: drop the architecture first, but only when
 		# it is not numeric (a release always is).
 		arch=${base##*-}
@@ -387,17 +387,17 @@ detect_pkgmgr() {
 	if [ -d "$ROOTFS/var/lib/scratchpkg/db" ]; then
 		candidates+=(scratchpkg)
 	fi
-	if [ -d "$ROOTFS/var/lib/pacman" ]; then
-		candidates+=(pacman)
+	if [ -d "$ROOTFS/var/lib/scratch" ]; then
+		candidates+=(scratch)
 	fi
 	if [ ${#candidates[@]} -eq 0 ]; then
 		command -v "$PKGADD" >/dev/null 2>&1 && candidates+=(scratchpkg)
-		command -v "$PACMAN" >/dev/null 2>&1 && candidates+=(pacman)
+		command -v "$PACMAN" >/dev/null 2>&1 && candidates+=(scratch)
 	fi
 	case ${#candidates[@]} in
 		1) PKGMGR=${candidates[0]} ;;
-		0) die "cannot tell whether this is a scratchpkg or a pacman system; pass --pkgmgr" ;;
-		*) die "$ROOTFS has both a scratchpkg and a pacman database; pass --pkgmgr" ;;
+		0) die "cannot tell whether this is a scratchpkg or a scratch system; pass --pkgmgr" ;;
+		*) die "$ROOTFS has both a scratchpkg and a scratch database; pass --pkgmgr" ;;
 	esac
 	msg_info "Package manager: $PKGMGR (detected)"
 }
@@ -405,7 +405,7 @@ detect_pkgmgr() {
 default_pkg_dir() {
 	case $PKGMGR in
 		scratchpkg) printf '%s' '/var/cache/scratchpkg/packages' ;;
-		pacman)     printf '%s' '/var/cache/pacman/pkg' ;;
+		scratch)     printf '%s' '/var/cache/scratch/pkg' ;;
 	esac
 }
 
@@ -415,7 +415,7 @@ default_pkg_dir() {
 
 # read_package_list <list file> <output file>
 # One package per line; '#' starts a comment; only the first field is taken, so
-# `scratch installed` ("name version-release"), `pacman -Qq` and plain name
+# `scratch installed` ("name version-release"), `scratch -Qq` and plain name
 # lists all work.  Writes through a file rather than a subshell so that the
 # emptiness check below actually aborts the script.
 read_package_list() {
@@ -490,10 +490,10 @@ prepare_root() {
 				"$ROOTFS/var/cache/scratchpkg/work" \
 				"$ROOTFS/etc"
 			;;
-		pacman)
+		scratch)
 			step_root mkdir -p \
-				"$ROOTFS/var/lib/pacman/local" \
-				"$ROOTFS/var/cache/pacman/pkg" \
+				"$ROOTFS/var/lib/scratch/local" \
+				"$ROOTFS/var/cache/scratch/pkg" \
 				"$ROOTFS/etc"
 			;;
 	esac
@@ -515,10 +515,10 @@ install_packages() {
 			[ "$IGNORE_CONFLICT" = yes ] && cmd+=(-c)
 			[ "$REBUILD" = yes ] && cmd+=(-r)
 			;;
-		pacman)
+		scratch)
 			command -v "$PACMAN" >/dev/null 2>&1 || [ "$DRY_RUN" = yes ] ||
-				die "$PACMAN not found in \$PATH (install pacman, or set PACMAN)"
-			cmd=("$PACMAN" --root "$ROOTFS" --dbpath "$ROOTFS/var/lib/pacman"
+				die "$PACMAN not found in \$PATH (install scratch, or set PACMAN)"
+			cmd=("$PACMAN" --root "$ROOTFS" --dbpath "$ROOTFS/var/lib/scratch"
 				--cachedir "$PKG_DIR" --config "$PACMAN_CONF" --noconfirm)
 			[ "$NO_SCRIPTLET" = yes ] && cmd+=(--noscriptlet)
 			cmd+=(-U)
@@ -535,7 +535,7 @@ install_packages() {
 }
 
 # Mark the requested packages as explicitly installed: scratchpkg keeps this in
-# its world file, pacman in the %REASON% field of its local database.
+# its world file, scratch in the %REASON% field of its local database.
 set_world() {
 	local -a want=()
 	local list_tmp world_file world_tmp
@@ -564,8 +564,8 @@ set_world() {
 			sort -u "$list_tmp" -o "$list_tmp"
 			step_root install -D -m0644 "$list_tmp" "$world_file"
 			;;
-		pacman)
-			step_root "$PACMAN" --root "$ROOTFS" --dbpath "$ROOTFS/var/lib/pacman" \
+		scratch)
+			step_root "$PACMAN" --root "$ROOTFS" --dbpath "$ROOTFS/var/lib/scratch" \
 				--config "$PACMAN_CONF" --noconfirm -D --asexplicit "${want[@]}"
 			;;
 	esac
@@ -636,14 +636,14 @@ post_install() {
 				post_step "revdep -f" in_root revdep -f
 			fi
 			;;
-		pacman)
-			if [ -x "$ROOTFS/usr/bin/pacman" ]; then
-				post_step "pacman -Dk" in_root pacman -Dk
+		scratch)
+			if [ -x "$ROOTFS/usr/bin/scratch" ]; then
+				post_step "scratch -Dk" in_root scratch -Dk
 				if [ "$CHECK_FILES" = yes ]; then
-					post_step "pacman -Qkk" in_root pacman -Qkk
+					post_step "scratch -Qkk" in_root scratch -Qkk
 				fi
 			else
-				msg_warn "pacman is not installed in $ROOTFS; skipping the database checks"
+				msg_warn "scratch is not installed in $ROOTFS; skipping the database checks"
 			fi
 			;;
 	esac
@@ -673,10 +673,10 @@ build_exclude_list() {
 				./etc/*.spkgnew ./usr/ports/*
 			)
 			;;
-		pacman)
+		scratch)
 			EXCLUDES_DEFAULT+=(
-				./var/cache/pacman/pkg/* ./var/lib/pacman/sync/*
-				./etc/*.pacnew ./etc/*.pacsave ./var/log/pacman.log
+				./var/cache/scratch/pkg/* ./var/lib/scratch/sync/*
+				./etc/*.pacnew ./etc/*.pacsave ./var/log/scratch.log
 			)
 			;;
 	esac
@@ -827,7 +827,7 @@ while [ $# -gt 0 ]; do
 		-T|--threads) [ $# -ge 2 ] || die "$1 needs an argument"; THREADS=$2; shift 2 ;;
 		-x|--exclude) [ $# -ge 2 ] || die "$1 needs an argument"; EXCLUDES+=("$2"); shift 2 ;;
 		--config) [ $# -ge 2 ] || die "$1 needs an argument"; shift 2 ;;
-		--pacman-config) [ $# -ge 2 ] || die "$1 needs an argument"; PACMAN_CONF=$2; shift 2 ;;
+		--scratch-config) [ $# -ge 2 ] || die "$1 needs an argument"; PACMAN_CONF=$2; shift 2 ;;
 		--chroot-cmd) [ $# -ge 2 ] || die "$1 needs an argument"; CHROOT_CMD=$2; shift 2 ;;
 		--checksum) [ $# -ge 2 ] || die "$1 needs an argument"; CHECKSUM=$2; shift 2 ;;
 		--no-checksum) CHECKSUM=none; shift ;;
@@ -860,8 +860,8 @@ if [ "$LEVEL_GIVEN" = yes ]; then
 fi
 
 case $PKGMGR in
-	''|scratchpkg|pacman) ;;
-	*) die "unknown package manager: $PKGMGR (expected scratchpkg or pacman)" ;;
+	''|scratchpkg|scratch) ;;
+	*) die "unknown package manager: $PKGMGR (scratchpkg only)" ;;
 esac
 
 # ---------------------------------------------------------------------------
@@ -956,19 +956,19 @@ if [ -d "$ROOTFS" ] && [ -n "$(ls -A "$ROOTFS" 2>/dev/null)" ] && [ "$DO_FORCE" 
 	die "$ROOTFS already exists and is not empty (use --force to assemble into it, or --compress to pack it)"
 fi
 
-if [ "$PKGMGR" = pacman ] && [ -z "$PACMAN_CONF" ]; then
-	if [ -r "$ROOTFS/etc/pacman.conf" ]; then
-		PACMAN_CONF=$ROOTFS/etc/pacman.conf
+if [ "$PKGMGR" = scratch ] && [ -z "$PACMAN_CONF" ]; then
+	if [ -r "$ROOTFS/etc/scratch.conf" ]; then
+		PACMAN_CONF=$ROOTFS/etc/scratch.conf
 	elif [ -n "$HOST_PACMAN_CONF" ] && [ -r "$HOST_PACMAN_CONF" ]; then
 		PACMAN_CONF=$HOST_PACMAN_CONF
 	elif [ "$DRY_RUN" = no ]; then
-		die "no pacman config: create $ROOTFS/etc/pacman.conf or pass --pacman-config FILE"
+		die "no scratch config: create $ROOTFS/etc/scratch.conf or pass --scratch-config FILE"
 	else
-		PACMAN_CONF=$ROOTFS/etc/pacman.conf
+		PACMAN_CONF=$ROOTFS/etc/scratch.conf
 	fi
 fi
-if [ "$PKGMGR" = pacman ] && [ "$DRY_RUN" = no ]; then
-	[ -r "$PACMAN_CONF" ] || die "pacman config not readable: $PACMAN_CONF"
+if [ "$PKGMGR" = scratch ] && [ "$DRY_RUN" = no ]; then
+	[ -r "$PACMAN_CONF" ] || die "scratch config not readable: $PACMAN_CONF"
 fi
 
 LIST_TMP=$(new_tmp)

@@ -17,11 +17,11 @@ grep -Fq "review_device_size" "$installer" || fail "swap/device review size help
 grep -Fq '"swap" "$SWAP_DEV" "swap"' "$installer" || fail "swap review row missing"
 grep -Fq "Finish returns directly to the calling shell/bootstrap" "$installer" || fail "Finish-to-shell source policy missing"
 
-grep -Fq '# Depends on: linux-headers' "$ROOT/ports/core/glibc/Pkgfile" || fail "glibc header ordering dependency missing"
+grep -Fxq 'linux-headers' "$ROOT/ports/core/glibc/depends" || fail "glibc header ordering dependency missing"
 for p in cifs-utils rpcbind nfs-utils python3-sip python3-pyqt-builder python3-pyqt5; do
-    test -f "$ROOT/ports/opt/$p/Pkgfile" || fail "missing new port: $p"
+    test -f "$ROOT/ports/opt/$p/spkgbuild" || fail "missing new port: $p"
 done
-grep -Fq 'python3-pyqt5' "$ROOT/ports/compiz/fusion-icon/Pkgfile" || fail "Fusion Icon PyQt5 dependency missing"
+grep -Fxq 'python3-pyqt5' "$ROOT/ports/compiz/fusion-icon/depends" || fail "Fusion Icon PyQt5 dependency missing"
 
 # Numeric dispatch must remain direct and not fall through to the menu.
 for n in 1 2 3 4 5; do

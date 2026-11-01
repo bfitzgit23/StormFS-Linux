@@ -1,0 +1,22 @@
+# description	: Provides a way to load and enumerate PKCS#11 modules
+# homepage	: https://p11-glue.github.io/p11-glue/p11-kit.html
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=p11-kit-32
+version=0.26.5
+release=3
+build_opt="-D trust_paths=/etc/pki/anchors -D module_path=/usr/lib/pkcs11 -D nls=false"
+source="https://github.com/p11-glue/${name%-*}/releases/download/$version/${name%-*}-$version.tar.xz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+        _bfs_require_compat32_extension 2 || return $?
+	bfs_autobuild
+
+	rm -rf \
+		$PKG/etc $PKG/usr/{bin,lib,include,share} \
+		$PKG/usr/lib32/p11-kit/{trust-extract-compat,p11-kit-{remote,server}}
+	bfs_compat32_validate || return 1
+}

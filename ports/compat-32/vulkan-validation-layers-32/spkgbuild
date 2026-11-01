@@ -1,0 +1,38 @@
+# description	: Vulkan validation layers, 32bit
+# homepage	: https://www.khronos.org/vulkan/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+# optional	: wayland-32
+
+name=vulkan-validation-layers-32
+_name=Vulkan-ValidationLayers
+version=1.4.357.0
+_version=vulkan-sdk-$version
+release=3
+source="https://github.com/KhronosGroup/Vulkan-ValidationLayers/archive/$_version/$_name-$version.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+  (
+    set -e
+	prt-get isinst wayland-32 || SPKG_VULKAN_VALIDATION_LAYERS+=' -D BUILD_WSI_WAYLAND_SUPPORT=OFF'
+
+	cmake -S . -B build -G Ninja $SPKG_VULKAN_VALIDATION_LAYERS \
+		-D CMAKE_INSTALL_PREFIX=/usr \
+		-D CMAKE_INSTALL_LIBDIR=lib32 \
+		-D CMAKE_BUILD_TYPE=Release \
+		-D CMAKE_CXX_FLAGS_RELEASE="${CXXFLAGS}" \
+		-D SPIRV_HEADERS_INSTALL_DIR=/usr \
+		-D VULKAN_HEADERS_INSTALL_DIR=/usr \
+		-D USE_ROBIN_HOOD_HASHING=ON \
+		-D BUILD_TESTS=OFF \
+		-Wno-dev
+
+	cmake --build build
+	DESTDIR=$PKG cmake --install build
+
+	rm -r $PKG/usr/share
+  )
+	bfs_compat32_validate || return 1
+}

@@ -1,0 +1,20 @@
+# description	: A fast, non-validating, stream-oriented XML parsing library
+# homepage	: https://libexpat.github.io/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=expat-32
+version=2.8.5
+release=3
+source="https://downloads.sourceforge.net/project/${name%-*}/${name%-*}/$version/${name%-*}-$version.tar.bz2"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+        _bfs_require_compat32_extension 2 || return $?
+	bfs_autobuild
+
+	rm -r $PKG/usr/{bin,include,share/doc,share/man}
+	rmdir $PKG/usr/share
+	bfs_compat32_validate || return 1
+}

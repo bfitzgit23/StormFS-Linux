@@ -1,0 +1,26 @@
+# description	: The gptfdisk package is a set of programs for creation and maintenance of GUID Partition Table (GPT) disk drives. A GPT partitioned disk is required for drives greater than 2 TB and is a modern replacement for legacy PC-BIOS partitioned disk drives that use a Master Boot Record (MBR). The main program, gdisk, has an interface similar to the classic fdisk program.
+# homepage	: https://downloads.sourceforge.net/$name
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+# optional	: icu
+
+name=gptfdisk
+version=1.0.10
+release=1
+source="https://downloads.sourceforge.net/$name/$name-$version.tar.gz https://www.linuxfromscratch.org/patches/blfs/svn/$name-$version-convenience-1.patch"
+
+build() {
+	cd "$name-$version" || return 1
+
+	# Apply patch sources; pkgbuild does this automatically.
+	for _bfs_patch in "$SRC"/*.patch "$SRC"/*.diff; do
+		[ -f "$_bfs_patch" ] || continue
+		patch -t "${patch_opt:--p1}" -i "$_bfs_patch" || return 1
+	done
+sed -i 's|ncursesw/||' gptcurses.cc &&
+sed -i 's|sbin|usr/sbin|' Makefile &&
+sed -i '/UUID_H/s/^.*$/#if defined (_UUID_UUID_H) || defined (_UL_LIBUUID_UUID_H)/' guid.cc &&
+sed -i "/device =/s/= \(.*\);/= strdup(\1);/" gptcl.cc &&
+
+make || return 1
+	make DESTDIR="$PKG" install || return 1
+}

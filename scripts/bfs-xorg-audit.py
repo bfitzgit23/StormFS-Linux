@@ -20,11 +20,11 @@ def main():
     ap.add_argument('--tsv', default=str(ROOT/'docs/BFSOS-xorg-audit-r340-20260926.tsv'))
     args=ap.parse_args()
     names={}
-    for pf in ROOT.glob('ports/*/*/Pkgfile'):
+    for pf in ROOT.glob('ports/*/*/spkgbuild'):
         s=pf.read_text(errors='ignore'); n=scalar(s,'name').strip("'\"")
         if n: names.setdefault(n,[]).append(str(pf.parent.relative_to(ROOT)))
     rows=[]
-    for pf in sorted((ROOT/'ports/xorg').glob('*/Pkgfile')):
+    for pf in sorted((ROOT/'ports/xorg').glob('*/spkgbuild')):
         s=pf.read_text(errors='ignore'); deps=depends(s)
         src=[]
         m=re.search(r'^source=\((.*?)\)\s*$',s,re.M|re.S)

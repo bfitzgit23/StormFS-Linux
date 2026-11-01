@@ -1,0 +1,29 @@
+# description	: 32-bit Avahi mDNS/DNS-SD compatibility libraries
+# homepage	: https://github.com/avahi/avahi
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=avahi-32
+version=0.9-rc5
+release=8
+build_opt="--with-distro=none --disable-static --disable-gtk --disable-gtk3 --disable-qt3 --disable-qt4 --disable-qt5 --disable-python --disable-pygobject --disable-python-dbus --disable-mono --disable-monodoc --disable-nls --disable-manpages --enable-compat-libdns_sd --disable-libsystemd"
+source="https://github.com/avahi/avahi/archive/v$version/avahi-$version.tar.gz https://www.linuxfromscratch.org/patches/blfs/svn/avahi-$version-ipv6_race_condition_fix-1.patch"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+	# Apply patch sources; pkgbuild does this automatically.
+	for _p in "$SRC"/*.patch "$SRC"/*.diff; do
+		[ -f "$_p" ] || continue
+		patch -t "${patch_opt:--p1}" -i "$_p" || return 1
+	done
+        _bfs_require_compat32_extension 2 || return 0
+  autoreconf -fiv || return 1
+	bfs_autobuild
+
+  # compat-32 owns only the 32-bit ABI. Native Avahi owns executables,
+  # configuration, service units, headers and architecture-independent data.
+  rm -rf "$PKG/usr/bin" "$PKG/usr/sbin" "$PKG/usr/include" "$PKG/usr/share" \
+         "$PKG/usr/lib/systemd" "$PKG/etc" "$PKG/var"
+	bfs_compat32_validate || return 1
+}

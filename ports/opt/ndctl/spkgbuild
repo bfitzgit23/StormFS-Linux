@@ -1,0 +1,40 @@
+# description	: Utility library for managing the libnvdimm and CXL subsystems in the Linux kernel
+# homepage	: https://github.com/pmem/ndctl
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+# optional	: libtracefs bash-completion asciidoctor
+
+name=ndctl
+version=85
+release=1
+renames=(ndctl-$version.tar.gz)
+source="https://github.com/pmem/ndctl/archive/refs/tags/v$version.tar.gz"
+
+build() {
+	cd "$name-$version" || return 1
+    local tracefs_opt="disabled"
+
+    if scratch isinstalled libtracefs >/dev/null 2>&1; then
+        tracefs_opt="enabled"
+    fi
+
+    meson setup build \
+        --prefix=/usr \
+        --buildtype=plain \
+        --wrap-mode=nodownload \
+        -Db_lto=false \
+        -Db_pie=true \
+        -Dversion-tag="$version" \
+        -Dasciidoctor=disabled \
+        -Ddocs=disabled \
+        -Dsystemd=disabled \
+        -Dlibtracefs="$tracefs_opt" || return 1
+
+    meson compile -C build -j "${JOBS:-1}" || return 1
+
+    DESTDIR="$PKG" \
+        meson install -C build || return 1
+
+    if ! scratch isinstalled bash-completion >/dev/null 2>&1; then
+        rm -rf "$PKG/usr/share/bash-completion"
+    fi
+}

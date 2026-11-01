@@ -1,0 +1,15 @@
+# description	: bc package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=bc
+version=7.1.0
+release=1
+source="https://github.com/gavinhoward/bc/releases/download/$version/bc-$version.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+	PREFIX=/usr CC=gcc CFLAGS="-std=c99" ./configure.sh -G -O3
+	#./configure --prefix=/usr -r
+	make
+	make install
+}

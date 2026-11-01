@@ -1,0 +1,19 @@
+# description	: Event notification library
+# homepage	: http://www.monkey.org/~provos/libevent/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=libevent-32
+version=2.1.13
+release=3
+source="https://github.com/libevent/libevent/releases/download/release-$version-stable/libevent-$version-stable.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+        _bfs_require_compat32_extension 2 || return $?
+	bfs_autobuild
+
+	rm -r $PKG/usr/{bin,include}
+	bfs_compat32_validate || return 1
+}

@@ -1,0 +1,22 @@
+# description	: Lxqt Panel component for LXQt
+# homepage	: https://github.com/lxqt/lxqt-panel
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=lxqt-panel
+version=2.4.1
+release=2
+source="https://github.com/lxqt/${name}/releases/download/${version}/${name}-${version}.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+sed -e '/lxqt_app_translation_loader/a set(CMAKE_EXECUTABLE_ENABLE_EXPORTS TRUE)' \
+    -i panel/CMakeLists.txt
+    mkdir build &&
+cd    build &&
+
+cmake -D CMAKE_INSTALL_PREFIX=/usr \
+      -D CMAKE_BUILD_TYPE=Release  \
+      ..                           &&
+make
+make install
+}

@@ -1,0 +1,15 @@
+# description	: A stream oriented C library for parsing XML
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=stripping
+version=1.0
+release=1
+source="cleanup.sh stripping.sh"
+
+build() {
+
+	mkdir -p $PKG/sources/work
+	mkdir -p $PKG/sources/packages
+        mkdir -p $PKG/scripts
+        cp -rf * $PKG/scripts
+}

@@ -1,0 +1,5 @@
+gtk4
+libsoup3
+protobuf-c
+glib
+gobject-introspection

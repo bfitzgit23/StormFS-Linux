@@ -1,0 +1,19 @@
+# description	: A generic library support script
+# homepage	: http://www.gnu.org/software/libtool/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=libtool-32
+version=2.6.2
+release=2
+source="https://ftp.gnu.org/gnu/${name%-*}/${name%-*}-$version.tar.xz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+        _bfs_require_compat32_extension 2 || return $?
+	bfs_autobuild
+
+	rm -r $PKG/usr/{bin,include,share}
+	bfs_compat32_validate || return 1
+}

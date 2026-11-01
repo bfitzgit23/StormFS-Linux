@@ -1,0 +1,15 @@
+# description	: Default broadly useful X.Org input/video driver set for BFSOS
+# homepage	: https://www.x.org/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=xorg-driver
+version=7x
+release=5
+source=""
+
+build() {
+    mkdir -p "$PKG/usr/share/bfsos/meta-packages"
+    printf '%s
+' 'BFSOS xorg-driver meta package' \
+        > "$PKG/usr/share/bfsos/meta-packages/xorg-driver"
+}

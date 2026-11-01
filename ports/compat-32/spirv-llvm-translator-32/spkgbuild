@@ -1,0 +1,49 @@
+# description	: Bidirectional translation between LLVM IR and SPIR-V (32-bit compatibility libraries)
+# homepage	: https://github.com/KhronosGroup/SPIRV-LLVM-Translator
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=spirv-llvm-translator-32
+version=23.1.1
+release=1
+source="https://github.com/KhronosGroup/SPIRV-LLVM-Translator/archive/v${version}/SPIRV-LLVM-Translator-${version}.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+    (
+        set -e
+
+        rm -rf build
+
+        cmake -S . -B build \
+            -G Ninja \
+            -DCMAKE_INSTALL_PREFIX=/usr \
+            -DCMAKE_INSTALL_LIBDIR=lib32 \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+            -DCMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
+            -DBUILD_SHARED_LIBS=ON \
+            -DCMAKE_SKIP_INSTALL_RPATH=ON \
+            -DLLVM_LINK_LLVM_DYLIB=ON \
+            -DLLVM_BUILD_LLVM_DYLIB=ON \
+            -DLLVM_EXTERNAL_SPIRV_HEADERS_SOURCE_DIR=/usr \
+            -DCMAKE_PREFIX_PATH=/usr/lib32/cmake \
+            || return 1
+
+        cmake --build build -j "${JOBS:-1}" || return 1
+
+        DESTDIR="$PKG" cmake --install build || return 1
+
+        rm -rf \
+            "$PKG/usr/bin" \
+            "$PKG/usr/include"
+
+        if [ -d "$PKG/usr/lib" ]; then
+            echo "ERROR: spirv-llvm-translator-32 installed files into /usr/lib"
+            find "$PKG/usr/lib" -maxdepth 3 -print
+            return 1
+        fi
+    )
+	bfs_compat32_validate || return 1
+}

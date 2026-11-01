@@ -1,0 +1,24 @@
+# description	: A set of plugins for gstreamer that may pose distribution problems.
+# homepage	: https://gstreamer.freedesktop.org/modules/gst-plugins-ugly.html
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+# optional	: libcdio libsidplay libmpeg2 opencore-amr valgrind hotdoc orc twolame
+
+name=gst-plugins-ugly
+version=1.28.7
+release=1
+source="https://gstreamer.freedesktop.org/src/$name/$name-$version.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+  mkdir build &&
+cd    build &&
+
+meson  setup ..            \
+       --prefix=/usr       \
+       --buildtype=release \
+       -Dgpl=enabled       \
+       -Dpackage-origin=https://www.linuxfromscratch.org/blfs/view/stable/ \
+       -Dpackage-name="GStreamer 1.22.6 BLFS" &&
+ninja
+  DESTDIR=$PKG ninja install
+}

@@ -1,0 +1,5 @@
+dbus-glib
+glib
+libnotify
+gtk
+libcanberra

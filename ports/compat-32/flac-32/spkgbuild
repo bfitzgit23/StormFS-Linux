@@ -1,0 +1,22 @@
+# description	: Free Lossless Audio Codec.
+# homepage	: https://xiph.org/flac/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=flac-32
+version=1.5.0
+release=4
+build_opt="-D BUILD_SHARED_LIBS=ON -D BUILD_EXAMPLES=OFF -D BUILD_TESTING=OFF -Wno-dev"
+build_type=cmake_build
+source="https://downloads.xiph.org/releases/flac/flac-$version.tar.xz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+        _bfs_require_compat32_extension 2 || return $?
+	bfs_autobuild
+
+	rm -rf $PKG/usr/{bin,include,share/man}
+	rm -rf $PKG/usr/share
+	bfs_compat32_validate || return 1
+}

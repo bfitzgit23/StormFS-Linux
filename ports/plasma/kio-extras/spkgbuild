@@ -1,0 +1,20 @@
+# description	: Additional KIO workers and plugins for KDE resource and network access
+# homepage	: https://invent.kde.org/network/kio-extras
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=kio-extras
+version=26.08.1
+release=1
+source="https://download.kde.org/stable/release-service/$version/src/$name-$version.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+    cmake -B build -S . \
+        -DCMAKE_INSTALL_PREFIX="/opt/kf6" \
+        -DCMAKE_PREFIX_PATH="/opt/qt6;/opt/kf6" \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DBUILD_TESTING=OFF \
+        -Wno-author || return 1
+    cmake --build build -j${JOBS:-1} || return 1
+    DESTDIR="$PKG" cmake --install build || return 1
+}

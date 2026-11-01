@@ -1,0 +1,24 @@
+# description	: Reference implementation of the Argon2 password hashing and key derivation algorithm.
+# homepage	: https://github.com/P-H-C/phc-winner-argon2
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=argon2
+version=20190702
+release=1
+build_opt=(
+    PREFIX=/usr
+    LIBDIR=/usr/lib
+)
+source="https://github.com/P-H-C/phc-winner-argon2/archive/refs/tags/$version.tar.gz"
+
+build() {
+	cd "$name-$version" || return 1
+    make "${build_opt[@]}"
+
+    make \
+        DESTDIR="$PKG" \
+        "${build_opt[@]}" \
+        install
+
+    rm -f "$PKG/usr/lib/"*.la
+}

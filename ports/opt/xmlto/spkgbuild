@@ -1,0 +1,24 @@
+# description	: Convert XML to many other formats.
+# homepage	: https://codeberg.org/xmlto/xmlto
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=xmlto
+version=0.0.29
+release=2
+source="https://codeberg.org/xmlto/xmlto/archive/$version.tar.gz"
+
+build() {
+	cd "$name-$version" || return 1
+        autoreconf -fiv
+
+        sed -i \
+                -e 's,4\.2,4\.5,g' doc/xmlif.xml \
+                -e 's,4\.2,4\.5,g; /productname/s|25|28|;' doc/xmlto.xml
+
+        LINKS=/usr/bin/links \
+        ./configure \
+                --prefix=/usr
+
+        make
+        make DESTDIR="$PKG" install
+}

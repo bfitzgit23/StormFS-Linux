@@ -1,0 +1,9 @@
+glib
+curl
+freetype
+gdk-pixbuf
+gst-plugins-base
+libjpeg-turbo
+libgsf
+libpng
+poppler

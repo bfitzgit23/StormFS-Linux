@@ -1,0 +1,15 @@
+libical
+libsecret
+nss
+sqlite
+gnome-online-accounts
+glib
+gobject-introspection
+gtk3
+gtk4
+icu
+libcanberra
+libgweather
+vala
+webkitgtk
+webkitgtk-41

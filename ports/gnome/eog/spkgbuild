@@ -1,0 +1,20 @@
+# description	: eog package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=eog
+version=50.3
+release=1
+source="https://download.gnome.org/sources/${name}/${version%.*}/${name}-${version}.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+mkdir build &&
+cd    build &&
+
+meson setup --prefix=/usr       \
+            --buildtype=release \
+            -Dlibportal=false   \
+            ..                  &&
+ninja
+ninja install
+}

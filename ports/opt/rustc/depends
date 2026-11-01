@@ -1,0 +1,4 @@
+cmake
+curl
+ninja
+python3

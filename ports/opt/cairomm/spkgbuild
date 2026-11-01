@@ -1,0 +1,20 @@
+# description	: C++ wrapper for the cairo graphics library.
+# homepage	: https://cairographics.org/cairomm/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=cairomm
+version=1.18.1
+release=3
+source="https://cairographics.org/releases/$name-$version.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+	meson setup build . \
+		--prefix=/usr \
+		--buildtype=plain \
+		-D b_lto=true \
+		-D b_pie=true
+
+	ninja -C build -j ${JOBS:-1}
+	DESTDIR=$PKG ninja -C build install
+}

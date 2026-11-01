@@ -1,0 +1,19 @@
+# description	: Current BLFS GNOME applications meta package
+# homepage	: https://www.gnome.org/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+# optional	: eog gnome-screenshot
+
+name=gnome-apps-meta
+version=51.0
+release=2
+source=""
+
+build() {
+    install -d "$PKG/usr/share/doc/$name"
+    cat > "$PKG/usr/share/doc/$name/README" <<'EOT'
+This meta package tracks the BFSOS GNOME 51 application set.
+Applications with GNOME 51 final releases are aligned to that cycle; independent
+or not-yet-51 applications remain at their current stable upstream versions.
+Legacy EOG and gnome-screenshot remain available as standalone BFSOS ports.
+EOT
+}

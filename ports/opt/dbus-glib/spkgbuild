@@ -1,0 +1,21 @@
+# description	: D-Bus GLib bindings
+# homepage	: https://freedesktop.org/wiki/Software/DBusBindings
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+# optional	: gtk-doc
+
+name=dbus-glib
+version=0.114
+release=3
+source="https://ftp.debian.org/debian/pool/main/d/dbus-glib/dbus-glib_${version}.orig.tar.gz"
+
+build() {
+	cd "$name-$version" || return 1
+
+	scratch isinstalled bash-completion || BFS_DBUSGLIB+=' --enable-bash-completion=no'
+
+	./configure --prefix=/usr     \
+            --sysconfdir=/etc \
+            --disable-static &&
+make
+	make DESTDIR=$PKG install
+}

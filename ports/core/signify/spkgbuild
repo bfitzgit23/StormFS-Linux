@@ -1,0 +1,37 @@
+# description	: signify package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=signify
+version=0.14
+release=1
+source="https://github.com/leahneukirchen/outils/archive/v$version/outils-$version.tar.gz cruxify.diff"
+
+build() {
+	cd "$name-$version" || return 1
+
+	# Apply patch sources; pkgbuild does this automatically.
+	for _bfs_patch in "$SRC"/*.patch "$SRC"/*.diff; do
+		[ -f "$_bfs_patch" ] || continue
+		patch -t "${patch_opt:--p1}" -i "$_bfs_patch" || return 1
+	done
+
+
+
+    export CFLAGS+=" -DSIGNIFYROOT=\\\"/etc/ports\\\""
+
+    make \
+        PREFIX=/usr \
+        src/usr.bin/signify/signify
+
+    install -d \
+        "$PKG/usr/bin" \
+        "$PKG/usr/share/man/man1"
+
+    install -m 0755 \
+        src/usr.bin/signify/signify \
+        "$PKG/usr/bin/signify"
+
+    install -m 0644 \
+        src/usr.bin/signify/signify.1 \
+        "$PKG/usr/share/man/man1/signify.1"
+}

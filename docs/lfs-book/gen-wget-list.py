@@ -4,7 +4,7 @@
 Collects the upstream source URLs of every package covered by the book
 (toolchain packages from chapter 3, base system packages from chapter 4,
 and the kernel from chapter 9) by reading the source=(...) arrays of the
-corresponding Pkgfiles in the StormFS ports tree.
+corresponding spkgbuilds in the StormFS ports tree.
 
 Usage:
     gen-wget-list.py [--output wget-list] [--ports DIR]
@@ -178,7 +178,7 @@ BASE_PKGS = [
     "fakeroot",
     "pkgutils",
     "dialog",
-    "prt-get",
+    "scratch",
     "httpup",
     "ports",
     "prt-utils",
@@ -201,8 +201,8 @@ BASE_PKGS = [
 # Chapter 9 - the kernel itself.
 KERNEL_PKGS = ["linux"]
 
-# Packages whose source URL cannot be derived statically from their Pkgfile.
-# Used verbatim when Pkgfile parsing yields nothing; refresh on version bumps.
+# Packages whose source URL cannot be derived statically from their spkgbuild.
+# Used verbatim when spkgbuild parsing yields nothing; refresh on version bumps.
 FALLBACK_URLS = {}
 
 # Matches:  VAR=$(printf "%i%.2i%.2i%.2i" ${version//./ })
@@ -214,7 +214,7 @@ PRINTF_SPLIT_RE = re.compile(
 
 SOURCE_RE = re.compile(r"source\s*=\s*\((.*?)\)", re.DOTALL)
 
-# Top-level (unindented) VAR=value assignments in a Pkgfile.
+# Top-level (unindented) VAR=value assignments in a spkgbuild.
 ASSIGN_RE = re.compile(r"^([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.+?)\s*$", re.MULTILINE)
 # $VAR or ${EXPR} where EXPR may carry a bash operator:
 #   % %% # ##  (prefix/suffix strip),  / //  (substitution),  :off[:len]  (slice)
@@ -222,7 +222,7 @@ EXPAND_RE = re.compile(r"\$\{([^}]+)\}|\$([A-Za-z_][A-Za-z0-9_]*)")
 
 
 def parse_vars(text: str):
-    """Parse simple top-level VAR=value assignments from a Pkgfile."""
+    """Parse simple top-level VAR=value assignments from a spkgbuild."""
     variables = {}
     for m in ASSIGN_RE.finditer(text):
         key, val = m.group(1), m.group(2).strip()
@@ -316,18 +316,18 @@ def expand_string(s: str, variables):
 
 
 def find_port(ports_dir: Path, name: str):
-    """Locate <ports_dir>/<collection>/<name>/Pkgfile across all collections."""
+    """Locate <ports_dir>/<collection>/<name>/spkgbuild across all collections."""
     if not ports_dir.is_dir():
         return None
     for collection in sorted(p for p in ports_dir.iterdir() if p.is_dir()):
-        pkgfile = collection / name / "Pkgfile"
+        pkgfile = collection / name / "spkgbuild"
         if pkgfile.is_file():
             return pkgfile
     return None
 
 
 def extract_urls(pkgfile: Path):
-    """Return concrete remote source URLs from a Pkgfile's source=(...) array."""
+    """Return concrete remote source URLs from a spkgbuild's source=(...) array."""
     text = pkgfile.read_text(encoding="utf-8", errors="replace")
     variables = parse_vars(text)
     m = SOURCE_RE.search(text)
@@ -390,7 +390,7 @@ def main() -> None:
 
     print(f"wrote {len(lines)} URLs ({len(ordered_pkgs) - len(missing)} packages) to {out}")
     if missing:
-        print(f"warning: {len(missing)} packages have no Pkgfile in {ports_dir}:", file=sys.stderr)
+        print(f"warning: {len(missing)} packages have no spkgbuild in {ports_dir}:", file=sys.stderr)
         for pkg in missing:
             print(f"  - {pkg}", file=sys.stderr)
 

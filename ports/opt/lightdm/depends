@@ -1,0 +1,6 @@
+glib
+libgcrypt
+linux-pam
+intltool
+itstool
+xorg-server

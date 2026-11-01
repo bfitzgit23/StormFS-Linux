@@ -1,0 +1,18 @@
+# description	: power-profiles-daemon package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+# optional	: gtk-doc dbusmock umockdev
+
+name=power-profiles-daemon
+version=0.30
+release=1
+build_opt="--prefix=/usr
+      --buildtype=release
+      -Dgtk_doc=false
+      -Dtests=false"
+source="https://gitlab.freedesktop.org/upower/${name}/-/archive/${version}/${name}-${version}.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

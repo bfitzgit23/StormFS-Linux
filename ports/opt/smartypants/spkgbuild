@@ -1,0 +1,13 @@
+# description	: smartypants package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=smartypants
+version=2.0.2
+release=1
+source="https://github.com/leohemsted/${name}.py/archive/v${version}/${name}-${version}.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

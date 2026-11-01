@@ -1,0 +1,23 @@
+# description	: Platform-independent Qt API for storing passwords securely
+# homepage	: https://github.com/frankosterfeld/qtkeychain
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=qtkeychain
+version=0.17.0
+release=2
+source="https://github.com/frankosterfeld/$name/archive/refs/tags/$version.tar.gz"
+
+build() {
+	cd "$name-$version" || return 1
+    cmake -B build -S . \
+        -DCMAKE_INSTALL_PREFIX=/opt/kf6 \
+        -DCMAKE_PREFIX_PATH="/opt/qt6;/opt/kf6" \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DBUILD_WITH_QT6=ON \
+        -DBUILD_TESTING=OFF \
+        -DBUILD_TRANSLATIONS=OFF \
+        -Wno-author || return 1
+
+    cmake --build build -j${JOBS:-1} || return 1
+    DESTDIR="$PKG" cmake --install build || return 1
+}

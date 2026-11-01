@@ -1,0 +1,5 @@
+bash
+coreutils
+gawk
+grep
+util-linux

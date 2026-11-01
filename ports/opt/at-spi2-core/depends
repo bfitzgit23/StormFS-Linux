@@ -1,0 +1,6 @@
+dbus
+gobject-introspection
+intltool
+libxml2
+libxtst
+xorg-libs

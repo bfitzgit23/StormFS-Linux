@@ -1,8 +1,8 @@
 #!/bin/sh
 set -eu
 ROOT=$(CDPATH= cd -- "$(dirname "$0")/../.." && pwd)
-qt5="$ROOT/ports/opt/qt5/Pkgfile"
-qt6="$ROOT/ports/opt/qt6/Pkgfile"
+qt5="$ROOT/ports/opt/qt5/spkgbuild"
+qt6="$ROOT/ports/opt/qt6/spkgbuild"
 
 grep -q '"$PKG/usr/bin/$file-qt5"' "$qt5"
 grep -q '"$PKG/usr/bin/$file-qt6"' "$qt6"

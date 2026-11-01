@@ -46,7 +46,7 @@ def native_index():
     for tree in PORTS.iterdir():
         if not tree.is_dir() or tree.name == "compat-32":
             continue
-        for pkgfile in tree.glob("*/Pkgfile"):
+        for pkgfile in tree.glob("*/spkgbuild"):
             try:
                 name, version, _ = metadata(pkgfile)
             except ValueError:
@@ -60,7 +60,7 @@ def main() -> int:
     ns = ap.parse_args()
     native = native_index()
     matched = special = drift = errors = 0
-    for pkgfile in sorted((PORTS / "compat-32").glob("*/Pkgfile")):
+    for pkgfile in sorted((PORTS / "compat-32").glob("*/spkgbuild")):
         name, version, text = metadata(pkgfile)
         base = name[:-3] if name.endswith("-32") else pkgfile.parent.name.removesuffix("-32")
         target = ALIASES.get(base, base)

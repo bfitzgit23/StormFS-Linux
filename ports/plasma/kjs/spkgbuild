@@ -1,0 +1,14 @@
+# description	: kjs package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=kjs
+version=5.115.0
+release=1
+build_opt="-DCMAKE_INSTALL_PREFIX=$KF5_PREFIX -DCMAKE_PREFIX_PATH=$QT5DIR -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF"
+source="https://download.kde.org/Attic/frameworks/${version%.*}/portingAids/$name-$version.tar.xz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

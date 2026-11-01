@@ -1,0 +1,27 @@
+# description	: Newt is a programming library for color text mode, widget based user interfaces.
+# homepage	: https://releases.pagure.org/newt/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+# optional	: gpm
+
+name=newt
+version=0.52.25
+release=2
+source="https://releases.pagure.org/$name/$name-$version.tar.gz"
+
+build() {
+	cd "$name-$version" || return 1
+    sed \
+        -e '/install -m 644 $(LIBNEWT)/ s/^/#/' \
+        -e '/$(LIBNEWT):/,/rv/ s/^/#/' \
+        -e 's/$(LIBNEWT)/$(LIBNEWTSH)/g' \
+        -i Makefile.in || return 1
+
+    ./configure \
+        --prefix=/usr \
+        --with-gpm-support \
+        --without-python || return 1
+
+    make -j "${JOBS:-1}" || return 1
+
+    make DESTDIR="$PKG" install || return 1
+}

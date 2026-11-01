@@ -19,11 +19,11 @@ for pkg in networkmanager-iso openssh git sudo wget wpa_supplicant wireless-regd
     grep -q "\b$pkg\b" "$iso" || fail "ISO package set is missing $pkg"
 done
 
-[ -f "$ROOT/ports/iso/networkmanager-iso/Pkgfile" ] || fail 'networkmanager-iso port is missing'
-[ -f "$ROOT/ports/iso/lynx-iso/Pkgfile" ] || fail 'lynx-iso port is missing'
-grep -q -- '-Dwifi=true' "$ROOT/ports/iso/networkmanager-iso/Pkgfile" || fail 'ISO NetworkManager lost Wi-Fi support'
-grep -q -- '-Dnmcli=true' "$ROOT/ports/iso/networkmanager-iso/Pkgfile" || fail 'ISO NetworkManager lost nmcli'
-grep -q -- '-Dnmtui=true' "$ROOT/ports/iso/networkmanager-iso/Pkgfile" || fail 'ISO NetworkManager lost nmtui'
+[ -f "$ROOT/ports/iso/networkmanager-iso/spkgbuild" ] || fail 'networkmanager-iso port is missing'
+[ -f "$ROOT/ports/iso/lynx-iso/spkgbuild" ] || fail 'lynx-iso port is missing'
+grep -q -- '-Dwifi=true' "$ROOT/ports/iso/networkmanager-iso/spkgbuild" || fail 'ISO NetworkManager lost Wi-Fi support'
+grep -q -- '-Dnmcli=true' "$ROOT/ports/iso/networkmanager-iso/spkgbuild" || fail 'ISO NetworkManager lost nmcli'
+grep -q -- '-Dnmtui=true' "$ROOT/ports/iso/networkmanager-iso/spkgbuild" || fail 'ISO NetworkManager lost nmtui'
 
 grep -q 'downloads.sourceforge.net/project/bfsos/BFSOS/base/latest' "$iso" || fail 'SourceForge base URL is missing'
 grep -q 'BASE_SHA256_URL' "$iso" || fail 'SourceForge base checksum verification is missing'
@@ -36,8 +36,9 @@ grep -q '/etc/bfs-build-info' "$iso" || fail 'embedded build provenance is missi
 grep -q 'git pull --ff-only' "$iso" || fail 'safe live online project refresh is missing'
 grep -q 'passwd bfs' "$iso" || fail 'temporary bfs live-password prompt is missing'
 grep -q 'ssh-keygen -A' "$iso" || fail 'runtime SSH host-key generation is missing'
-grep -q 'systemctl start sshd.service' "$iso" || fail 'runtime SSH startup is missing'
-grep -q 'NetworkManager.service' "$iso" || fail 'NetworkManager live default is missing'
+grep -q 'rc-service sshd' "$iso" || fail 'runtime SSH startup is missing'
+grep -q 'rc-update add NetworkManager default' "$iso" \
+	|| fail 'NetworkManager live default is missing'
 grep -q 'rootfs.squashfs' "$iso" || fail 'SquashFS live-root staging is missing'
 grep -q 'mount -t overlay overlay' "$iso" || fail 'writable overlay root is missing'
 

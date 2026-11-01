@@ -1,0 +1,4 @@
+cmake
+libxml2
+neon
+doxygen

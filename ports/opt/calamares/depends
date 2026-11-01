@@ -1,0 +1,9 @@
+cmake
+extra-cmake-modules
+qt6
+qt6-tools
+kpmcore
+yaml-cpp
+polkit-qt-1
+boost
+python3-pyqt6

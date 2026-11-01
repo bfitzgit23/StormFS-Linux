@@ -1,0 +1,18 @@
+# description	: X client library
+# homepage	: https://xorg.freedesktop.org
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=libx11
+version=1.8.13
+release=3
+source="https://xorg.freedesktop.org/archive/individual/lib/libx11-$version.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+
+	  ./configure $XORG_CONFIG --docdir=/usr/share/doc/$name-$version \
+                  --with-appdefaultdir=/etc/X11/app-defaults
+
+	make
+	make DESTDIR="$PKG" install
+}

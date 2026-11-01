@@ -1,0 +1,29 @@
+# description	: A small and lightweight implementation of the XDG Sound Theme Specification
+# homepage	: http://0pointer.de/lennart/projects/libcanberra
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+# optional	: pulseaudio-32
+
+name=libcanberra-32
+version=0.30
+release=3
+build_opt="--enable-alsa --disable-oss --disable-systemd --with-builtin=dso --with-pic"
+source="http://0pointer.de/lennart/projects/libcanberra/libcanberra-$version.tar.xz libcanberra-broadway-fix.patch libcanberra-multi-backend.patch"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+	# Apply patch sources; pkgbuild does this automatically.
+	for _p in "$SRC"/*.patch "$SRC"/*.diff; do
+		[ -f "$_p" ] || continue
+		patch -t "${patch_opt:--p1}" -i "$_p" || return 1
+	done
+        _bfs_require_compat32_extension 2 || return $?
+	bfs_autobuild
+
+	rm -r $PKG/usr/{bin,share,include}
+	rm -r $PKG/usr/lib/systemd/system/canberra-system-bootup.service
+	rm -r $PKG/usr/lib/systemd/system/canberra-system-shutdown-reboot.service
+	rm -r $PKG/usr/lib/systemd/system/canberra-system-shutdown.service
+	bfs_compat32_validate || return 1
+}

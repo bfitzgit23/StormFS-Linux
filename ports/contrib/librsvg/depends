@@ -1,0 +1,6 @@
+cairo
+gdk-pixbuf
+pango
+rustc
+vala
+cargo-c

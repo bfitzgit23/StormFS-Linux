@@ -1,0 +1,20 @@
+# description	: The Oil Runtime Compiler.
+# homepage	: https://gstreamer.freedesktop.org/projects/orc.html
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=orc-32
+version=0.4.44
+release=2
+build_opt="-D benchmarks=disabled -D examples=disabled -D hotdoc=disabled -D tests=disabled"
+source="https://gstreamer.freedesktop.org/src/orc/orc-$version.tar.xz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+        _bfs_require_compat32_extension 2 || return $?
+	bfs_autobuild
+
+  rm -rf $PKG/usr/{bin,include}
+	bfs_compat32_validate || return 1
+}

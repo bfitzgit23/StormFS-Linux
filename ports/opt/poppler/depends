@@ -1,0 +1,13 @@
+poppler-data
+fontconfig
+gobject-introspection
+boost
+cairo
+lcms2
+libjpeg-turbo
+libpng
+nss
+openjpeg2
+gpgme
+gpgmepp
+qt6

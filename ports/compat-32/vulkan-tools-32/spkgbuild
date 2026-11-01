@@ -1,0 +1,47 @@
+# description	: Vulkan tools
+# homepage	: https://www.khronos.org/vulkan/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+# optional	: wayland-32
+
+name=vulkan-tools-32
+_name=Vulkan-Tools
+version=1.4.357.0
+_version=vulkan-sdk-$version
+release=3
+source="https://github.com/KhronosGroup/Vulkan-Tools/archive/$_version/$_name-$version.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+  (
+    set -e
+	prt-get isinst wayland-32 || SPKG_VULKAN_TOOLS+=' -D BUILD_WSI_WAYLAND_SUPPORT=OFF'
+	prt-get isinst wayland-32 && export PKG_CONFIG_LIBDIR=/usr/lib32/pkgconfig:/usr/share/pkgconfig
+
+	export ASFLAGS='--32'
+
+	cmake -S . -B build -G Ninja $SPKG_VULKAN_TOOLS \
+		-D CMAKE_INSTALL_PREFIX=/usr \
+		-D CMAKE_INSTALL_LIBDIR=lib32 \
+		-D CMAKE_BUILD_TYPE=Release \
+		-D CMAKE_C_FLAGS_RELEASE="${CFLAGS}" \
+		-D CMAKE_CXX_FLAGS_RELEASE="${CXXFLAGS}" \
+		-D GLSLANG_INSTALL_DIR=/usr \
+		-D BUILD_CUBE=True \
+		-D BUILD_VULKANINFO=True \
+		-D CUBE_WSI_SELECTION=XCB \
+		-D BUILD_WSI_XCB_SUPPORT=True \
+		-D BUILD_WSI_XLIB_SUPPORT=True \
+		-D BUILD_ICD=OFF \
+		-Wno-dev
+
+	cmake --build build
+	DESTDIR=$PKG cmake --build build --target install
+
+	for app in $PKG/usr/bin/* ; do
+		mv $app $app-32
+	done
+  )
+	bfs_compat32_validate || return 1
+}

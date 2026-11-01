@@ -1,0 +1,16 @@
+# description	: SassC is a wrapper around libsass, a CSS pre-processor language.
+# homepage	: https://github.com/sass/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=sassc
+version=3.6.2
+release=1
+source="https://github.com/sass/sassc/archive/3.6.2/$name-$name.tar.gz https://github.com/sass/libsass/archive/3.6.5/libsass-3.6.5.tar.gz"
+
+build() {
+	cd "$name-$version" || return 1
+	autoreconf -fi
+	./configure --prefix=/usr
+	make
+	make DESTDIR=$PKG install
+}

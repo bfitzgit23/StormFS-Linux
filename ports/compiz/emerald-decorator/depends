@@ -1,0 +1,8 @@
+compiz
+gtk3
+libwnck
+libxres
+shared-mime-info
+xdg-utils
+desktop-file-utils
+hicolor-icon-theme

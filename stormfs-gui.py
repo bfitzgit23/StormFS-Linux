@@ -29,7 +29,7 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 
 def detect_distro():
     """Detect the host Linux distribution package manager."""
-    if shutil.which("pacman"):
+    if shutil.which("scratch"):
         return "arch"
     if shutil.which("apt"):
         return "debian"
@@ -56,7 +56,7 @@ def ensure_pyqt5():
     distro = detect_distro()
     print("[StormFS] PyQt5 not found. Attempting automatic installation...")
     cmds = {
-        "arch":    ["sudo", "pacman", "-S", "--noconfirm", "python-pyqt5"],
+        "arch":    ["sudo", "scratch", "-S", "--noconfirm", "python-pyqt5"],
         "debian":  ["sudo", "apt", "install", "-y", "python3-pyqt5"],
         "fedora":  ["sudo", "dnf", "install", "-y", "python3-qt5"],
         "opensuse":["sudo", "zypper", "install", "-y", "python3-Qt5"],
@@ -102,7 +102,7 @@ def ensure_system_deps():
     if distro in needed_tools:
         print(f"[StormFS] Ensuring system dependencies are installed ({distro})...")
         pkg_cmd = {
-            "arch":    ["sudo", "pacman", "-S", "--noconfirm", "--needed"],
+            "arch":    ["sudo", "scratch", "-S", "--noconfirm", "--needed"],
             "debian":  ["sudo", "apt", "install", "-y"],
             "fedora":  ["sudo", "dnf", "install", "-y"],
             "opensuse":["sudo", "zypper", "install", "-y"],

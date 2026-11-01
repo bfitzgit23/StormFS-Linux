@@ -1,0 +1,25 @@
+# description	: The cpio package contains tools for archiving.
+# homepage	: https://ftp.gnu.org/gnu/cpio/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+# optional	: texlive (or install-tl-unx)
+
+name=cpio
+version=2.15
+release=1
+CFLAGS+=' -fcommon'
+build_opt="--prefix=/usr
+            --enable-mt
+            --with-rmt=/usr/libexec/rmt"
+source="https://ftp.gnu.org/gnu/$name/$name-$version.tar.bz2"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+sed -e "/^extern int (\*xstat)/s/()/(const char * restrict,  struct stat * restrict)/" \
+    -i src/extern.h
+sed -e "/^int (\*xstat)/s/()/(const char * restrict,  struct stat * restrict)/" \
+    -i src/global.c
+CFLAGS+=' -fcommon'
+autoreconf -fi
+	bfs_autobuild
+}

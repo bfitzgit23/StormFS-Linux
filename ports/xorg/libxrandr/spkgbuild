@@ -1,0 +1,17 @@
+# description	: X Resize and Rotate extension client library
+# homepage	: https://xorg.freedesktop.org
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=libxrandr
+version=1.5.5
+release=3
+source="https://xorg.freedesktop.org/archive/individual/lib/libxrandr-$version.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+
+	./configure $XORG_CONFIG --docdir=/usr/share/doc/$name-$version
+
+	make
+	make DESTDIR=$PKG install
+}

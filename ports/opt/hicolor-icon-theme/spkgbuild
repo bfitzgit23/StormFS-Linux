@@ -1,0 +1,19 @@
+# description	: default fallback used by the icon theme specification
+# homepage	: https://www.freedesktop.org/wiki/Software/icon-theme/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=hicolor-icon-theme
+version=0.18
+release=1
+source="https://icon-theme.freedesktop.org/releases/$name-$version.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+
+	mkdir build &&
+cd    build &&
+
+meson setup --prefix=/usr --buildtype=release .. &&
+ninja
+DESTDIR=$PKG ninja install
+}

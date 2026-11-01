@@ -1,0 +1,18 @@
+# description	: Library for encoding H264/AVC video streams (snapshot).
+# homepage	: https://www.videolan.org/developers/x264.html
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+# optional	: ffms2 gpac liblsmash
+
+name=x264
+version=20250815
+release=1
+source="https://anduin.linuxfromscratch.org/BLFS/x264/$name-$version.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+  ./configure --prefix=/usr \
+            --enable-shared \
+            --disable-cli &&
+make
+  make DESTDIR=$PKG install
+}

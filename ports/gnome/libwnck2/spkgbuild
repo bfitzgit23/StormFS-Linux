@@ -1,0 +1,29 @@
+# description	: Window Navigator Construction Kit 2 compatibility library
+# homepage	: https://gitlab.gnome.org/Archive/libwnck
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=libwnck2
+version=2.31.0
+release=2
+source="https://download.gnome.org/sources/libwnck/2.31/libwnck-$version.tar.xz WindowActionMenu-unset-window-and-stop-async-events-on-dispose.patch"
+
+build() {
+	cd "$name-$version" || return 1
+
+	# Apply patch sources; pkgbuild does this automatically.
+	for _bfs_patch in "$SRC"/*.patch "$SRC"/*.diff; do
+		[ -f "$_bfs_patch" ] || continue
+		patch -t "${patch_opt:--p1}" -i "$_bfs_patch" || return 1
+	done
+    ./configure \
+        --prefix=/usr \
+        --sysconfdir=/etc \
+        --localstatedir=/var \
+        --disable-static
+
+    make
+    make DESTDIR="$PKG" install
+
+    rm -f "$PKG/usr/bin/wnckprop" "$PKG/usr/bin/wnck-urgency-monitor"
+    rmdir "$PKG/usr/bin" 2>/dev/null || true
+}

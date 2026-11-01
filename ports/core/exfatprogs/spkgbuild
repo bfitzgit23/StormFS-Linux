@@ -1,0 +1,16 @@
+# description	: Userspace utilities for the exfat filesystem kernel module
+# homepage	: https://github.com/exfatprogs/exfatprogs
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=exfatprogs
+version=1.4.3
+release=1
+source="https://github.com/exfatprogs/exfatprogs/releases/download/$version/$name-$version.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+
+	./configure --prefix=/usr --sbindir=/sbin
+	make
+	make DESTDIR=$PKG install
+}

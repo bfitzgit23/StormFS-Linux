@@ -1,0 +1,15 @@
+# description	: xorg lib libxpm
+# homepage	: https://xorg.freedesktop.org
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=libxpm
+version=3.5.19
+release=3
+source="https://xorg.freedesktop.org/archive/individual/lib/libxpm-$version.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+	   ./configure $XORG_CONFIG --docdir=/usr/share/doc/$name-$version --disable-open-zfile
+	make
+	make DESTDIR=$PKG install
+}

@@ -1,0 +1,17 @@
+# description	: X-Video information utility
+# homepage	: https://xorg.freedesktop.org
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=xvinfo
+version=1.1.6
+release=2
+source="https://xorg.freedesktop.org/archive/individual/app/xvinfo-$version.tar.xz"
+
+build() {
+	cd "$name-$version" || return 1
+
+	./configure $XORG_CONFIG
+
+	make
+	make DESTDIR=$PKG install
+}

@@ -1,0 +1,41 @@
+# description	: Multicast DNS/DNS-SD service discovery stack
+# homepage	: https://github.com/avahi/avahi
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+# optional	: dbus-python libevent doxygen xmltoman qt5
+
+name=avahi
+version=0.9_rc5
+srcver=0.9-rc5
+release=3
+build_opt="\
+    --disable-static \
+    --disable-libevent \
+    --disable-mono \
+    --disable-monodoc \
+    --disable-python \
+    --disable-qt3 \
+    --disable-qt4 \
+    --disable-manpages \
+    --enable-core-docs \
+    --with-distro=none"
+source="https://github.com/avahi/avahi/archive/v$srcver/avahi-$srcver.tar.gz https://www.linuxfromscratch.org/patches/blfs/svn/avahi-$srcver-ipv6_race_condition_fix-1.patch"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$srcver" || return 1
+
+	# Apply patch sources; pkgbuild does this automatically.
+	for _bfs_patch in "$SRC"/*.patch "$SRC"/*.diff; do
+		[ -f "$_bfs_patch" ] || continue
+		patch -t "${patch_opt:--p1}" -i "$_bfs_patch" || return 1
+	done
+	export BFS_SKIP_PATCHES=1
+    autoreconf -fiv || return 1
+
+    if scratch isinstalled qt5 >/dev/null 2>&1; then
+        build_opt="$build_opt --enable-qt5"
+    else
+        build_opt="$build_opt --disable-qt5"
+    fi
+	bfs_autobuild
+}

@@ -1,0 +1,10 @@
+json-glib
+libusb
+glib
+gobject-introspection
+hwdata
+vala
+python3-gi_docgen
+umockdev
+python3-markdown
+python3-typogrify

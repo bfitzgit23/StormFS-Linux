@@ -1,0 +1,7 @@
+cairo
+dbus
+glib
+gobject-introspection
+spidermonkey
+gtk3
+gtk4

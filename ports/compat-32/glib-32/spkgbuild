@@ -1,0 +1,27 @@
+# description	: Low-level data structure handling, portability wrappers, and interfaces for runtime functionality
+# homepage	: https://www.gtk.org/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=glib-32
+version=2.90.0
+release=3
+build_opt="--libexecdir=/usr/lib32/glib -D introspection=disabled -D tests=false"
+source="https://download.gnome.org/sources/glib/${version:0:4}/${name%-*}-$version.tar.xz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+        _bfs_require_compat32_extension 2 || return 0
+        CFLAGS+=' -Wno-error=missing-include-dirs -mstackrealign'
+        CXXFLAGS+=" -Wno-error=missing-include-dirs -mstackrealign"
+	bfs_autobuild
+
+        rm -r $PKG/usr/{share,include}
+        find $PKG/usr/bin -type f -not -name gio-querymodules \
+                -printf 'Removing %P\n' -delete
+        mv $PKG/usr/bin/gio-querymodules{,-32}
+
+        install -d $PKG/usr/lib32/gio/modules
+	bfs_compat32_validate || return 1
+}

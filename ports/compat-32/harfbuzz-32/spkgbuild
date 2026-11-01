@@ -1,0 +1,24 @@
+# description	: An OpenType text shaping engine
+# homepage	: https://www.freedesktop.org/wiki/Software/HarfBuzz
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+# optional	: icu-32
+
+name=harfbuzz-32
+version=14.4.0
+release=4
+build_opt="-Dbenchmark=disabled -Ddocs=disabled -Dgraphite2=disabled -Dicu=disabled -Dintrospection=disabled"
+source="https://github.com/harfbuzz/harfbuzz/releases/download/$version/${name%-*}-$version.tar.xz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+    _bfs_require_compat32_extension 2 || return 1
+
+    if prt-get isinst icu-32 >/dev/null 2>&1; then
+        build_opt+=" -Dicu=enabled"
+    fi
+	bfs_autobuild
+    rm -rf "$PKG/usr/bin" "$PKG/usr/include"
+	bfs_compat32_validate || return 1
+}

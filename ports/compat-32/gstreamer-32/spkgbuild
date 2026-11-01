@@ -1,0 +1,24 @@
+# description	: Gstreamer is a library that allows the construction of graphs of media-handling components.
+# homepage	: https://gstreamer.freedesktop.org/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=gstreamer-32
+version=1.28.7
+release=3
+build_opt=(
+  "-Dnls=disabled"
+  "-Dintrospection=disabled"
+  "-Dpackage-name=GStreamer (BFSOS)"
+  "-Dpackage-origin=https://github.com/bmadonnaster/BFSOS"
+)
+source="https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-$version.tar.xz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+        _bfs_require_compat32_extension 2 || return $?
+	bfs_autobuild
+  rm -rf "$PKG/usr/bin" "$PKG/usr/include" "$PKG/usr/share"
+	bfs_compat32_validate || return 1
+}

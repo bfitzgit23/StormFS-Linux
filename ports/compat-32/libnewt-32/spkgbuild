@@ -1,0 +1,27 @@
+# description	: a programming library for color text mode
+# homepage	: https://pagure.io/newt
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+# optional	: tcl-32
+
+name=libnewt-32
+version=0.52.25
+release=3
+build_opt="--without-python --disable-nls"
+source="https://releases.pagure.org/newt/newt-$version.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+        _bfs_require_compat32_extension 2 || return 0
+	if prt-get isinst tcl-32; then
+		sed -i "s:tcl8.4:tcl8.6:" Makefile.in
+		echo '#define USE_INTERP_RESULT 1' >> config.h
+	fi
+
+	NOCONFIGURE=1 ./autogen.sh || return 1
+	bfs_autobuild
+
+	rm -r $PKG/usr/{bin,include,share}
+	bfs_compat32_validate || return 1
+}

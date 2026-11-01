@@ -1,0 +1,18 @@
+# description	: Complete BFSOS GNOME 51 desktop meta package
+# homepage	: https://www.gnome.org/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=gnome-meta
+version=51.0
+release=2
+source=""
+
+build() {
+    install -d "$PKG/usr/share/bfsos/meta-packages" || return 1
+    cat > "$PKG/usr/share/bfsos/meta-packages/$name" <<'EOT'
+BFSOS complete GNOME 51 desktop meta package.
+The core GNOME 51 shell/session/settings/application stack is coordinated with
+GTK 4.23 and libadwaita 1.10. Legacy compatibility modules remain packaged
+where BFSOS still has runtime consumers; removal is a separate migration.
+EOT
+}

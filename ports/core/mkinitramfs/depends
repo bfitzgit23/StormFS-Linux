@@ -1,0 +1,6 @@
+meson
+ninja
+cpio
+gzip
+xz
+zstd

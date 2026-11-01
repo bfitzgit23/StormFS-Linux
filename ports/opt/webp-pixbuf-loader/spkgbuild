@@ -1,0 +1,13 @@
+# description	: webp-pixbuf-loader package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=webp-pixbuf-loader
+version=0.2.7
+release=1
+source="https://github.com/aruiz/${name}/archive/${version}/${name}-${version}.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

@@ -1,0 +1,15 @@
+# description	: Image processing library required by Tesseract OCR
+# homepage	: http://www.leptonica.org/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=leptonica
+version=1.87.0
+release=2
+build_opt="--disable-programs"
+source="https://github.com/DanBloomberg/leptonica/releases/download/$version/leptonica-$version.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

@@ -1,0 +1,21 @@
+# description	: Fully-featured YAML parser and emitter library
+# homepage	: https://github.com/pantoniou/libfyaml
+# maintainer	: Brian
+
+name=libfyaml
+version=0.9.6
+release=1
+source="https://github.com/pantoniou/libfyaml/archive/refs/tags/v$version.tar.gz"
+
+build() {
+	cd "$name-$version" || return 1
+    cmake -S . -B build \
+        -DCMAKE_INSTALL_PREFIX=/usr \
+        -DCMAKE_INSTALL_LIBDIR=lib \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DBUILD_SHARED_LIBS=ON \
+        -Wno-dev || return 1
+
+    cmake --build build -j "${JOBS:-1}" || return 1
+    DESTDIR="$PKG" cmake --install build || return 1
+}

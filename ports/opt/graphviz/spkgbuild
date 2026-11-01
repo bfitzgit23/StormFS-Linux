@@ -1,0 +1,26 @@
+# description	: Graph visualization software
+# homepage	: https://graphviz.org/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+# optional	: cairo fontconfig ghostscript gtk3 libgd libpng librsvg pango poppler swig tcl
+
+name=graphviz
+version=16.1.0
+release=1
+source="https://gitlab.com/graphviz/graphviz/-/archive/$version/graphviz-$version.tar.bz2"
+
+build() {
+	cd "$name-$version" || return 1
+    # Current Graphviz supports CMake directly; avoid carrying the obsolete
+    # autotools/libpostfix surgery from the old recipe.
+    sed '/ORIGIN/d' -i lib/CMakeLists.txt || return 1
+
+    cmake -S . -B build \
+        -DCMAKE_INSTALL_PREFIX=/usr \
+        -DCMAKE_BUILD_TYPE=Release || return 1
+
+    # Match the current BLFS packaging fix for generated gzip commands.
+    sed -i '/GZIP/s/:.*$/=/' build/CMakeCache.txt || return 1
+
+    cmake --build build -j"${JOBS:-1}" || return 1
+    DESTDIR="$PKG" cmake --install build || return 1
+}

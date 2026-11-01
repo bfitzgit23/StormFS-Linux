@@ -1,0 +1,21 @@
+# description	: Small fast portable speech synthesis engine
+# homepage	: https://github.com/festvox/flite
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=flite
+version=2.2
+release=1
+source="https://github.com/festvox/flite/archive/refs/tags/v$version.tar.gz"
+
+build() {
+	cd "$name-$version" || return 1
+    ./configure \
+        --prefix=/usr \
+        --enable-shared \
+        --with-audio=alsa || return 1
+
+    # Flite has historically had parallel-build ordering problems.
+    make -j1 || return 1
+
+    make DESTDIR="$PKG" install || return 1
+}

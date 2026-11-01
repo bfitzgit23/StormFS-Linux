@@ -1,0 +1,21 @@
+# description	: libmad is a high-quality MPEG audio decoder capable of 24-bit output.
+# homepage	: https://downloads.sourceforge.net/mad/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=libmad
+version=0.15.1b
+release=1
+skip_patch=1
+source="https://downloads.sourceforge.net/mad/$name-$version.tar.gz https://www.linuxfromscratch.org/patches/blfs/svn/$name-$version-fixes-1.patch"
+
+build() {
+	cd "$name-$version" || return 1
+patch -Np1 -i ../$name-$version-fixes-1.patch                &&
+sed "s@AM_CONFIG_HEADER@AC_CONFIG_HEADERS@g" -i configure.ac &&
+touch NEWS AUTHORS ChangeLog                                 &&
+autoreconf -fi                                               &&
+
+./configure --prefix=/usr --disable-static &&
+make
+	make DESTDIR=$PKG install
+}

@@ -1,0 +1,16 @@
+# description	: A portable subtitle renderer for the ASS/SSA (Advanced Substation Alpha/Substation Alpha) subtitle format.
+# homepage	: https://github.com/libass/libass
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+# optional	: fontconfig libunibreak
+
+name=libass
+version=0.17.5
+release=2
+source="https://github.com/$name/$name/releases/download/$version/$name-$version.tar.gz"
+
+build() {
+	cd "$name-$version" || return 1
+  	./configure --prefix=/usr --disable-static &&
+	make
+  make DESTDIR=$PKG install
+}

@@ -1,0 +1,26 @@
+# description	: inetutils package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=inetutils
+version=2.8
+release=1
+build_opt="
+	--disable-logger
+	--disable-whois
+	--disable-rcp
+	--disable-rexec
+	--disable-rlogin
+	--disable-rsh
+	--disable-servers
+"
+source="https://ftp.gnu.org/gnu/inetutils/inetutils-$version.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+sed -i 's/def HAVE_TERMCAP_TGETENT/ 1/' telnet/telnet.c
+	bfs_autobuild
+	mkdir -p $PKG/{,s}bin
+	mv $PKG/usr/bin/hostname $PKG/bin
+	mv $PKG/usr/bin/ifconfig $PKG/sbin
+}

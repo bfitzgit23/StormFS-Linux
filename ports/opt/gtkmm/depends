@@ -1,0 +1,6 @@
+cairomm
+glibmm-2.68
+gtk4
+libsigc++
+pangomm-2.48
+vulkan-loader

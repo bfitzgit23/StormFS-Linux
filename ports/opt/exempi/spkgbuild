@@ -1,0 +1,13 @@
+# description	: exempi package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=exempi
+version=2.6.6
+release=2
+source="https://libopenraw.freedesktop.org/download/${name}-${version}.tar.xz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

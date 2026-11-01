@@ -1,0 +1,24 @@
+# description	: QML-based display manager
+# homepage	: https://github.com/sddm/sddm
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=sddm
+version=0.21.0
+release=4
+source="https://github.com/${name}/${name}/archive/v${version}/${name}-${version}.tar.gz"
+
+build() {
+	cd "$name-$version" || return 1
+    cmake -S . -B build \
+        -DCMAKE_INSTALL_PREFIX=/usr \
+        -DBUILD_WITH_QT6=ON \
+        -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DRUNTIME_DIR=/run/sddm \
+        -DBUILD_MAN_PAGES=ON \
+        -DDATA_INSTALL_DIR=/usr/share/sddm \
+        -DDBUS_CONFIG_FILENAME=sddm_org.freedesktop.DisplayManager.conf || return 1
+
+    cmake --build build -j "${JOBS:-1}" || return 1
+    DESTDIR="$PKG" cmake --install build || return 1
+}

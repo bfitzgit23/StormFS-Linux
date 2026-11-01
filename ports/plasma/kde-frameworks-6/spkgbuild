@@ -1,0 +1,13 @@
+# description	: KDE Frameworks is a collection of libraries based on top of Qt6 and QML derived from the previous KDE libraries. They can be used independent of the KDE Display Environment (Plasma 6).
+# homepage	: https://kde.org/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=kde-frameworks-6
+version=6.30.0
+release=2
+source=""
+
+build() {
+    install -d "$PKG/usr/share/bfsos/metapackages" || return 1
+    printf '%s\n' "$name $version" >         "$PKG/usr/share/bfsos/metapackages/$name" || return 1
+}

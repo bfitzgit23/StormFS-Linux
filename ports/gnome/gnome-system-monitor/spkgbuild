@@ -1,0 +1,16 @@
+# description	: gnome-system-monitor package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=gnome-system-monitor
+version=51.0
+release=1
+source="https://download.gnome.org/sources/${name}/${version%.*}/${name}-${version}.tar.xz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+    # Catch2 is only required for the upstream unit tests.
+    # Normal BFSOS package builds do not build/run the test suite.
+    find . -name meson.build -exec sed -i '/catch2/d' {} +
+	bfs_autobuild
+}

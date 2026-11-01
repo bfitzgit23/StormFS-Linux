@@ -1,0 +1,12 @@
+dbus
+glu
+librsvg
+libsm
+libxcomposite
+libxcursor
+libxdamage
+libxi
+libxinerama
+libxrandr
+libxslt
+startup-notification

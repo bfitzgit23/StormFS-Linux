@@ -1,0 +1,15 @@
+# description	: Tray icon to launch and manage Compiz Reloaded
+# homepage	: https://gitlab.com/compiz/fusion-icon
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=fusion-icon
+version=0.2.4
+release=3
+source="https://gitlab.com/compiz/$name/-/archive/v$version/$name-v$version.tar.bz2"
+
+build() {
+	cd "$name-$version" || return 1
+    # fusion-icon 0.2.4 still ships a setuptools setup.py rather than pyproject metadata.
+    python3 setup.py build || return 1
+    python3 setup.py install --root="$PKG" --prefix=/usr --optimize=1 || return 1
+}

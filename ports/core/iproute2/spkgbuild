@@ -1,0 +1,13 @@
+# description	: iproute2 package
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=iproute2
+version=7.2.0
+release=1
+source="https://www.kernel.org/pub/linux/utils/net/iproute2/iproute2-$version.tar.xz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	cd "$name-$version" || return 1
+	bfs_autobuild
+}

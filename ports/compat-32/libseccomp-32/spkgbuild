@@ -1,0 +1,20 @@
+# description	: Library for Linux Kernel's syscall filtering mechanism - 32-bit
+# homepage	: https://github.com/seccomp/libseccomp
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=libseccomp-32
+version=2.6.1
+release=1
+source="https://github.com/seccomp/libseccomp/releases/download/v${version}/libseccomp-${version}.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+    _bfs_require_compat32_extension 2 || return $?
+	bfs_autobuild
+    rm -rf "$PKG/usr/bin" \
+           "$PKG/usr/include" \
+           "$PKG/usr/share"
+	bfs_compat32_validate || return 1
+}

@@ -1,0 +1,27 @@
+# description	: PulseAudio 32-bit client libraries
+# homepage	: https://www.freedesktop.org/wiki/Software/PulseAudio/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+name=pulseaudio-32
+version=17.0
+release=5
+build_opt="-D daemon=false -D client=true -D dbus=enabled -D glib=enabled -D systemd=disabled -D x11=disabled -D fftw=disabled -D asyncns=disabled -D gtk=disabled -D oss-output=disabled -D tests=false -D doxygen=false -D man=false -D bashcompletiondir=no -D zshcompletiondir=no"
+source="https://freedesktop.org/software/pulseaudio/releases/pulseaudio-$version.tar.xz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	bfs_compat32
+	cd "$name-$version" || return 1
+        _bfs_require_compat32_extension 2 || return $?
+	bfs_autobuild
+
+        # Native pulseaudio owns commands, headers and architecture-neutral
+        # data.  This package supplies only the 32-bit runtime libraries.
+        rm -rf \
+                "$PKG/usr/bin" \
+                "$PKG/usr/include" \
+                "$PKG/usr/share" \
+                "$PKG/etc" \
+                "$PKG/lib"
+	bfs_compat32_validate || return 1
+}
