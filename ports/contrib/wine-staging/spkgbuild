@@ -21,7 +21,8 @@ build() {
     "$SRC/wine-staging-$version/staging/patchinstall.py" \
         DESTDIR="$SRC/wine-$version" --all -W server-Stored_ACLs || return 1
 
-    export CPPFLAGS="${CPPFLAGS/-D_FORTIFY_SOURCE=2/} -D_FORTIFY_SOURCE=0"
+    CPPFLAGS=$(printf '%s' "$CPPFLAGS" | sed 's/-D_FORTIFY_SOURCE=2//')
+    export CPPFLAGS="$CPPFLAGS -D_FORTIFY_SOURCE=0"
 
     install -d "$SRC/wine64" || return 1
     cd "$SRC/wine64" || return 1

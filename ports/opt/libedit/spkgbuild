@@ -5,8 +5,10 @@
 description="Command line editor library providing generic line editing, history, and tokenization functions"
 name=libedit
 version=20260512_3.1
+# pkgbuild sources recipes with /bin/sh; keep this POSIX.
+_ver_dash=$(printf '%s' "$version" | sed 's/_/-/')
 release=1
-source="https://thrysoee.dk/editline/$name-${version/_/-}.tar.gz"
+source="https://thrysoee.dk/editline/$name-$_ver_dash.tar.gz"
 
 build() {
 	cd "$name-$version" || return 1

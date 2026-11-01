@@ -10,7 +10,10 @@ release=1
 # installed trust lifecycle is driven by the pinned Mozilla NSS certdata input
 # below and make-ca -r, so normal package installation never downloads roots.
 nss_certdata_version=3.128
-source="https://curl.se/ca/cacert.pem https://archive.mozilla.org/pub/security/nss/releases/NSS_${nss_certdata_version//./_}_RTM/src/nss-$nss_certdata_version.tar.gz"
+# pkgbuild sources recipes with /bin/sh, so keep this substitution POSIX: the
+# NSS release tag uses underscores where the version uses dots.
+nss_certdata_release=$(printf '%s' "$nss_certdata_version" | tr . _)
+source="https://curl.se/ca/cacert.pem https://archive.mozilla.org/pub/security/nss/releases/NSS_${nss_certdata_release}_RTM/src/nss-$nss_certdata_version.tar.gz"
 
 build() {
 	cd "$name-$version" || return 1

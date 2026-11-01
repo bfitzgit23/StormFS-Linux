@@ -4,9 +4,12 @@
 description="expat package"
 name=expat
 version=2.8.5
+# pkgbuild sources recipes with /bin/sh, so compute the dotted version
+# forms that POSIX shell has no substitution for.
+_ver_under=$(printf '%s' "$version" | tr . _)
 release=1
 keep_static=1
-source="https://github.com/libexpat/libexpat/releases/download/R_${version//./_}/$name-$version.tar.xz"
+source="https://github.com/libexpat/libexpat/releases/download/R_$_ver_under/$name-$version.tar.xz"
 
 build() {
 	. /usr/share/bfsos/spkgbuild.helper || return 1

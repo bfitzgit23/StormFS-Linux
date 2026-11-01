@@ -5,9 +5,13 @@
 description="Widely used set of C/C++ libraries providing Unicode and Globalization support."
 name=icu-32
 version=78.3
+# pkgbuild sources recipes with /bin/sh, so compute the dotted version
+# forms that POSIX shell has no substitution for.
+_ver_under=$(printf '%s' "$version" | tr . _)
+_ver_dash=$(printf '%s' "$version" | tr . -)
 release=3
 build_opt="--disable-samples --disable-tests"
-source="https://github.com/unicode-org/icu/releases/download/release-${version//./-}/icu4c-${version/./_}-src.tgz"
+source="https://github.com/unicode-org/icu/releases/download/release-$_ver_dash/icu4c-$_ver_under-src.tgz"
 
 build() {
 	. /usr/share/bfsos/spkgbuild.helper || return 1

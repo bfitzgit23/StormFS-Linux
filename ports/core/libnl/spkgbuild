@@ -4,8 +4,11 @@
 description="Collection of libraries providing APIs to netlink protocol based Linux kernel interfaces"
 name=libnl
 version=3.12.0
+# pkgbuild sources recipes with /bin/sh, so compute the dotted version
+# forms that POSIX shell has no substitution for.
+_ver_under=$(printf '%s' "$version" | tr . _)
 release=2
-source="https://github.com/thom311/libnl/releases/download/libnl${version//./_}/libnl-$version.tar.gz"
+source="https://github.com/thom311/libnl/releases/download/libnl$_ver_under/libnl-$version.tar.gz"
 
 build() {
 	cd "$name-$version" || return 1

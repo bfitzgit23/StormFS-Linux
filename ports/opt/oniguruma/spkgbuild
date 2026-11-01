@@ -5,8 +5,10 @@
 description="Regular expressions library"
 name=oniguruma
 version=6.9.10
+# pkgbuild sources recipes with /bin/sh; keep this POSIX.
+_ver_under=$(printf '%s' "$version" | sed 's/-/_/')
 release=1
-source="https://github.com/kkos/oniguruma/releases/download/v${version/-/_}/onig-$version.tar.gz"
+source="https://github.com/kkos/oniguruma/releases/download/v$_ver_under/onig-$version.tar.gz"
 
 build() {
 	cd "$name-$version" || return 1

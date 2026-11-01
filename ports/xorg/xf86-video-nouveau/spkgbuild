@@ -10,8 +10,10 @@ source="https://xorg.freedesktop.org/archive/individual/driver/xf86-video-nouvea
 
 build() {
 	cd "$name-$version" || return 1
-	export CFLAGS="${CFLAGS/-fno-plt} -DFB_ACCESS_WRAPPER"
-	export CXXFLAGS="${CXXFLAGS/-fno-plt} -DFB_ACCESS_WRAPPER"
+	CFLAGS=$(printf '%s' "$CFLAGS" | sed 's/-fno-plt//')
+	CXXFLAGS=$(printf '%s' "$CXXFLAGS" | sed 's/-fno-plt//')
+	export CFLAGS="$CFLAGS -DFB_ACCESS_WRAPPER"
+	export CXXFLAGS="$CXXFLAGS -DFB_ACCESS_WRAPPER"
 	export LDFLAGS="$LDFLAGS -Wl,-z,lazy"
 	./configure --prefix=/usr
 

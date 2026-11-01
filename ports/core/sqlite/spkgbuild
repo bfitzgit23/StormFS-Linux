@@ -4,8 +4,11 @@
 description="sqlite package"
 name=sqlite
 version=3.53.4
+# pkgbuild sources recipes with /bin/sh, so compute the dotted version
+# forms that POSIX shell has no substitution for.
+_ver_space=$(printf '%s' "$version" | tr . ' ')
 release=1
-_version=$(printf "%i%.2i%.2i%.2i" ${version//./ })
+_version=$(printf "%i%.2i%.2i%.2i" $_ver_space)
 source="https://www.sqlite.org/2026/sqlite-autoconf-${_version}.tar.gz"
 
 build() {

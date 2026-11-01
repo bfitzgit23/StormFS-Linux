@@ -5,8 +5,11 @@
 description="Decompress utility for zipfiles"
 name=unzip
 version=6.0
+# pkgbuild sources recipes with /bin/sh, so compute the dotted version
+# forms that POSIX shell has no substitution for.
+_ver_nodot=$(printf '%s' "$version" | tr -d .)
 release=9
-source="https://downloads.sourceforge.net/sourceforge/infozip/${name}${version//./}.tar.gz cumulative.patch gcc15.patch"
+source="https://downloads.sourceforge.net/sourceforge/infozip/${name}$_ver_nodot.tar.gz cumulative.patch gcc15.patch"
 
 build() {
 	cd "$name-$version" || return 1

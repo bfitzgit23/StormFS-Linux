@@ -5,8 +5,11 @@
 description="The Zip package contains Zip utilities. These are useful for compressing files into ZIP archives."
 name=zip
 version=3.0
+# pkgbuild sources recipes with /bin/sh, so compute the dotted version
+# forms that POSIX shell has no substitution for.
+_ver_nodot=$(printf '%s' "$version" | tr -d .)
 release=1
-source="https://downloads.sourceforge.net/infozip/${name}${version//./}.tar.gz"
+source="https://downloads.sourceforge.net/infozip/${name}$_ver_nodot.tar.gz"
 
 build() {
 	cd "$name-$version" || return 1

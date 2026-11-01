@@ -6,8 +6,11 @@
 description="Postscript interpreter"
 name=ghostscript
 version=10.08.0
+# pkgbuild sources recipes with /bin/sh, so compute the dotted version
+# forms that POSIX shell has no substitution for.
+_ver_nodot=$(printf '%s' "$version" | tr -d .)
 release=1
-source="https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs${version//./}/$name-$version.tar.xz https://downloads.sourceforge.net/sourceforge/gs-fonts/$name-fonts-std-8.11.tar.gz"
+source="https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs$_ver_nodot/$name-$version.tar.xz https://downloads.sourceforge.net/sourceforge/gs-fonts/$name-fonts-std-8.11.tar.gz"
 
 build() {
 	cd "$name-$version" || return 1
