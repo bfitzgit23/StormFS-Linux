@@ -2337,6 +2337,16 @@ _prefetch_bootstrap_sources() {
     echo "All bootstrap sources downloaded and verified."
 }
 
+# True when $LFS is the persistent build-state cache itself.
+#
+# _buildtoolchain attaches the cache before this cleanup runs, so the
+# "delete /tmp/lfs-rootfs" path would unmount the cache and throw away every
+# package already built into it.
+_clean_start_cache_attached() {
+    [ -n "${BFS_ROOTFS_CACHE:-}" ] || return 1
+    /usr/bin/mountpoint -q "$LFS" 2>/dev/null
+}
+
 _clean_start() {
     local answer
 
@@ -2427,19 +2437,37 @@ _clean_start() {
         fi
     }
 
-    _clean_start_unmount_tree "$TOOLS" || return 1
-    _clean_start_unmount_tree "$LFS" || return 1
+    if _clean_start_cache_attached; then
+        # Unmounting and deleting $LFS here would detach the bind-mounted cache
+        # and discard every package already built there, so clear the tree in
+        # place and keep the cache attached.
+        echo "Clearing the attached build-state cache in place:"
+        echo "  $BFS_ROOTFS_CACHE"
 
-    # Delete the two known BFS trees explicitly.  Do not use a broad /tmp/lfs*
-    # removal as the primary cleanup path, and do not continue after rm errors.
-    sudo rm -rf -- "$TOOLS" "$LFS" || {
-        echo "ERROR: Failed to remove old BFS build trees." >&2
-        return 1
-    }
+        sudo /usr/bin/find "$LFS" -mindepth 1 -maxdepth 1 -exec /usr/bin/rm -rf -- {} + || {
+            echo "ERROR: Failed to clear the cached BFS build tree." >&2
+            return 1
+        }
 
-    if [ -e "$TOOLS" ] || [ -L "$TOOLS" ] || [ -e "$LFS" ] || [ -L "$LFS" ]; then
-        echo "ERROR: Old BFS build trees still exist after cleanup." >&2
-        return 1
+        sudo /usr/bin/rm -rf -- "$TOOLS" || {
+            echo "ERROR: Failed to remove the old toolchain symlink." >&2
+            return 1
+        }
+    else
+        _clean_start_unmount_tree "$TOOLS" || return 1
+        _clean_start_unmount_tree "$LFS" || return 1
+
+        # Delete the two known BFS trees explicitly.  Do not use a broad /tmp/lfs*
+        # removal as the primary cleanup path, and do not continue after rm errors.
+        sudo rm -rf -- "$TOOLS" "$LFS" || {
+            echo "ERROR: Failed to remove old BFS build trees." >&2
+            return 1
+        }
+
+        if [ -e "$TOOLS" ] || [ -L "$TOOLS" ] || [ -e "$LFS" ] || [ -L "$LFS" ]; then
+            echo "ERROR: Old BFS build trees still exist after cleanup." >&2
+            return 1
+        fi
     fi
 
     sudo mkdir -p "$packagedir" "$buildworkdir"
