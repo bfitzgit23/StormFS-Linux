@@ -1,16 +1,43 @@
 #!/usr/bin/env bash
+#
+# curl shim for package source downloads.
+#
+# pkgbuild fetches every source with a bare "curl" resolved from PATH. A single
+# unreachable primary origin would otherwise abort the whole bootstrap, so this
+# shim retries the same file on the configured mirrors and remembers origins
+# that failed for the rest of the run.
+#
+# It also refuses to dump archive data onto an interactive terminal.
+#
+# Environment:
+#   BFS_PREFETCH_HEALTH_FILE  file recording origins that failed this run
+#                             (default /tmp/bfsos-prefetch-unhealthy-origins)
+#   BFS_PREFETCH_SOURCE_PREFIXES  space separated origin prefixes to watch
+#                             (default https://ftp.gnu.org/gnu/)
+#   BFS_PREFETCH_MIRROR_MAP   "<prefix>=<mirror>[,<mirror>]" entries; set to
+#                             "none" to disable mirror fallback entirely
 set -u
 
-health_file="${BFS_PREFETCH_HEALTH_FILE:-}"
-prefixes="${BFS_PREFETCH_SOURCE_PREFIXES:-}"
-url="${!#:-}"
+health_file="${BFS_PREFETCH_HEALTH_FILE:-/tmp/bfsos-prefetch-unhealthy-origins}"
+prefixes="${BFS_PREFETCH_SOURCE_PREFIXES-https://ftp.gnu.org/gnu/}"
+mirror_map="${BFS_PREFETCH_MIRROR_MAP-"https://ftp.gnu.org/gnu/=https://ftpmirror.gnu.org/,https://mirrors.kernel.org/gnu/"}"
 
-{
-    printf 'cwd=%q\n' "$PWD"
-    printf 'argc=%s\n' "$#"
-    printf 'arg=%q\n' "$@"
-    printf '%s\n' '---'
-} >> /tmp/bfs-prefetch-args.log
+if [ "$#" -eq 0 ]; then
+    printf 'pkgmk prefetch: curl shim requires a URL\n' >&2
+    exit 2
+fi
+
+args=("$@")
+url="${!#}"
+
+if [ "${BFS_PREFETCH_DEBUG:-no}" = yes ]; then
+    {
+        printf 'cwd=%q\n' "$PWD"
+        printf 'argc=%s\n' "$#"
+        printf 'arg=%q\n' "$@"
+        printf '%s\n' '---'
+    } >> /tmp/bfs-prefetch-args.log
+fi
 
 matched_prefix=""
 has_output=no
@@ -43,7 +70,7 @@ if [[ "$expect_output_value" == yes ]]; then
     exit 2
 fi
 
-# pkgmk normally captures downloader stdout itself.  Permit that when stdout
+# pkgmk normally captures downloader stdout itself. Permit that when stdout
 # is redirected, but refuse to dump an archive onto an interactive terminal.
 if [[ "$has_output" != yes && -t 1 ]]; then
     printf 'pkgmk prefetch: refusing to write archive data to an interactive terminal: %s\n' \
@@ -61,29 +88,133 @@ while IFS= read -r prefix; do
     esac
 done <<<"$prefixes"
 
-if [[ -n "$matched_prefix" && -n "$health_file" && -f "$health_file" ]] &&
-   grep -Fxq -- "$matched_prefix" "$health_file"; then
-    printf 'pkgmk prefetch: skipping unhealthy primary for this run: %s\n' \
-        "$matched_prefix" >&2
-    exit 7
+# Build the mirror candidates for this URL by substituting the matched origin
+# prefix, so https://ftp.gnu.org/gnu/gmp/gmp-6.3.0.tar.xz becomes
+# https://ftpmirror.gnu.org/gmp/gmp-6.3.0.tar.xz and so on.
+mirrors=()
+
+if [[ "$mirror_map" != none && -n "$matched_prefix" ]]; then
+    for entry in $mirror_map; do
+        [[ "$entry" == "$matched_prefix"=* ]] || continue
+        list="${entry#*=}"
+        for mirror in ${list//,/ }; do
+            [[ -n "$mirror" ]] || continue
+            mirrors+=("${mirror}${url#"$matched_prefix"}")
+        done
+    done
 fi
 
-curl "$@"
-status=$?
+skipped_primary=no
 
-# Mark only transport/TLS/stall failures. HTTP status failures (curl 22),
-# local file/write errors, and resume/range errors remain source-specific
-# and do not poison an otherwise healthy origin.
-case "$status" in
-    5|6|7|18|28|35|52|55|56|92)
-        if [[ -n "$matched_prefix" && -n "$health_file" ]]; then
-            if ! grep -Fxq -- "$matched_prefix" "$health_file" 2>/dev/null; then
-                printf '%s\n' "$matched_prefix" >>"$health_file"
-                printf 'pkgmk prefetch: marked primary unavailable for this run: %s (curl %s)\n' \
-                    "$matched_prefix" "$status" >&2
-            fi
+if [[ -n "$matched_prefix" && -f "$health_file" ]] &&
+   grep -Fxq -- "$matched_prefix" "$health_file"; then
+    if [ "${#mirrors[@]}" -eq 0 ]; then
+        printf 'pkgmk prefetch: skipping unhealthy primary for this run: %s\n' \
+            "$matched_prefix" >&2
+        exit 7
+    fi
+    printf 'pkgmk prefetch: primary unavailable for this run, using mirror: %s\n' \
+        "$matched_prefix" >&2
+    skipped_primary=yes
+fi
+
+# Only transport/TLS/stall failures are origin problems. HTTP status failures
+# (curl 22), local file/write errors and resume/range errors stay source
+# specific and must be reported as-is instead of being retried elsewhere.
+_transport_failure() {
+    case "$1" in
+        5|6|7|18|28|35|52|55|56|92) return 0 ;;
+    esac
+    return 1
+}
+
+# Resolve the real curl, never this shim (which is also named "curl" and may be
+# the first match on PATH inside the build chroot).
+_real_curl() {
+    local dir candidate self_dir rest
+
+    self_dir="$(cd -- "$(dirname -- "$0")" 2>/dev/null && pwd -P)" || self_dir=""
+    rest="$PATH"
+
+    while [ -n "$rest" ]; do
+        dir="${rest%%:*}"
+        if [ "$dir" = "$rest" ]; then
+            rest=""
+        else
+            rest="${rest#*:}"
         fi
-        ;;
-esac
+        [ -n "$dir" ] || dir=/usr/bin
 
-exit "$status"
+        candidate="$dir/curl"
+        [ -x "$candidate" ] || continue
+
+        if [ -n "$self_dir" ] &&
+           [ "$(cd -- "$dir" 2>/dev/null && pwd -P)" = "$self_dir" ]; then
+            continue
+        fi
+
+        printf '%s\n' "$candidate"
+        return 0
+    done
+
+    return 1
+}
+
+real_curl="$(_real_curl || true)"
+if [ -z "$real_curl" ]; then
+    printf 'pkgmk prefetch: no curl found outside the shim directory: %s\n' \
+        "$0" >&2
+    exit 127
+fi
+
+_run_curl() {
+    local target="$1"
+    local -a call=("${args[@]}")
+
+    call[$((${#call[@]} - 1))]="$target"
+    "$real_curl" "${call[@]}"
+}
+
+last_status=0
+
+if [ "$skipped_primary" = no ]; then
+    _run_curl "$url"
+    status=$?
+
+    if [ "$status" -eq 0 ]; then
+        exit 0
+    fi
+
+    if ! _transport_failure "$status"; then
+        exit "$status"
+    fi
+
+    last_status="$status"
+
+    if [ -n "$matched_prefix" ] && ! grep -Fxq -- "$matched_prefix" "$health_file" 2>/dev/null; then
+        printf '%s\n' "$matched_prefix" >>"$health_file" 2>/dev/null || true
+        printf 'pkgmk prefetch: marked primary unavailable for this run: %s (curl %s)\n' \
+            "$matched_prefix" "$status" >&2
+    fi
+fi
+
+if [ "${#mirrors[@]}" -gt 0 ]; then
+    for mirror_url in "${mirrors[@]}"; do
+        printf 'pkgmk prefetch: retrying on mirror: %s\n' "$mirror_url" >&2
+
+        _run_curl "$mirror_url"
+        status=$?
+
+        if [ "$status" -eq 0 ]; then
+            exit 0
+        fi
+
+        if ! _transport_failure "$status"; then
+            exit "$status"
+        fi
+
+        last_status="$status"
+    done
+fi
+
+exit "$last_status"

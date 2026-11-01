@@ -2182,6 +2182,43 @@ _validate_package_ports() {
     done
 }
 
+# pkgbuild downloads every source with a bare "curl" looked up on PATH. Install
+# a shim that retries an unreachable origin on the configured mirrors, so a
+# blocked host (ftp.gnu.org is commonly blackholed) cannot abort the whole
+# build. The shim lives under $LFS/tmp so the same directory is
+# "$LFS/tmp/bfsos-curl-shim" on the build host and /tmp/bfsos-curl-shim inside
+# the chroot stages.
+BFS_FETCH_SHIM_DIR=""
+
+_clear_prefetch_health_file() {
+    if [ -n "${BFS_PREFETCH_HEALTH_FILE:-}" ]; then
+        rm -f "$BFS_PREFETCH_HEALTH_FILE" 2>/dev/null || true
+    fi
+    rm -f "/tmp/bfsos-prefetch-unhealthy-origins" \
+          "/tmp/bfsos-prefetch-unhealthy-origins.$$" 2>/dev/null || true
+}
+
+_ensure_fetch_mirror_shim() {
+    local shim_dir="${LFS}/tmp/bfsos-curl-shim"
+
+    if [ ! -f "$SCRIPT_DIR/files/bfs-prefetch-curl" ]; then
+        echo "WARNING: curl mirror shim is missing; downloads will not fall back to mirrors." >&2
+        return 0
+    fi
+
+    mkdir -p "$shim_dir" || return 0
+    install -m 0755 "$SCRIPT_DIR/files/bfs-prefetch-curl" "$shim_dir/curl" || return 0
+
+    # A CRLF checkout would give the shim a "/bin/sh\r" interpreter.
+    sed -i 's/\r$//' "$shim_dir/curl"
+
+    BFS_FETCH_SHIM_DIR="$shim_dir"
+
+    # Shared with the chroot stages: "$LFS/tmp/..." here is /tmp/... there.
+    export BFS_PREFETCH_HEALTH_FILE="${LFS}/tmp/bfsos-prefetch-unhealthy-origins"
+    : >"$BFS_PREFETCH_HEALTH_FILE" 2>/dev/null || true
+}
+
 _prefetch_bootstrap_sources() {
     local spkg_conf="$1"
     shift
@@ -2204,7 +2241,9 @@ _prefetch_bootstrap_sources() {
     echo "========================="
     echo "Downloading/verifying all sources required by Stages 1-3 before package compilation."
 
-    rm -f "/tmp/bfsos-prefetch-unhealthy-origins.$$" 2>/dev/null || true
+    _ensure_fetch_mirror_shim
+
+    _clear_prefetch_health_file
 
     # pkgbuild requires every configured output directory to exist even when it is
     # being used only for source downloads (-do).  Create the temporary package
@@ -2233,7 +2272,8 @@ _prefetch_bootstrap_sources() {
             printf '  %-28s (attempt %d/3) ' "$normalized" "$attempt"
             if (
                 cd "$port_dir"
-                "$pkgbuild_cmd" -o --config="$spkg_conf"
+                PATH="${BFS_FETCH_SHIM_DIR:+$BFS_FETCH_SHIM_DIR:}$PATH" \
+                    "$pkgbuild_cmd" -o --config="$spkg_conf"
             ); then
                 printf 'OK\n'
                 status=0
@@ -2251,7 +2291,7 @@ _prefetch_bootstrap_sources() {
     done
 
     rm -rf /tmp/lfs-pkg
-    rm -f "/tmp/bfsos-prefetch-unhealthy-origins.$$" 2>/dev/null || true
+    _clear_prefetch_health_file
 
     echo
     echo "All bootstrap sources downloaded and verified."
@@ -3760,6 +3800,10 @@ EOF_INSTALLED_INTEGRITY
     done
 
     LFSPATH=/bin:/usr/bin:/sbin:/usr/sbin
+
+    if [ -x "$LFS/tmp/bfsos-curl-shim/curl" ]; then
+        LFSPATH=/tmp/bfsos-curl-shim:$LFSPATH
+    fi
 
     if [ "${1:-}" != rebuild ]; then
         LFSPATH=$LFSPATH:$TOOLS/bin
