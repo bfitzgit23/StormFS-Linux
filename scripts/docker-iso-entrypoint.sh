@@ -9,6 +9,11 @@ set -Eeuo pipefail
 
 BUILD_PROJECT_DIR="${BUILD_PROJECT_DIR:-/build/StormFS-Linux}"
 
+# The tree in this container is a snapshot taken when the image was built.
+# A fix committed after that is not in here, so the build repeats the old
+# failure until the image is rebuilt; the stamp names the snapshot.
+IMAGE_REV_FILE="$BUILD_PROJECT_DIR/.bfs-image-rev"
+
 # Keep the bootstrap state across container runs.  $HOME/.cache/bfsos is the
 # only build directory the documented run command mounts, while /tmp - which
 # holds the toolchain, the base rootfs and the stage markers - does not survive
@@ -41,6 +46,12 @@ for _ in $(seq 1 30); do
     sleep 1
 done
 clock_synced || log "warning: clock not yet synchronised; the builder retries for 10s and then stops"
+
+if [ -r "$IMAGE_REV_FILE" ]; then
+    log "Image source revision: $(cat "$IMAGE_REV_FILE")"
+else
+    log "Image source revision: unstamped (image predates revision stamping)"
+fi
 
 log "Running scripts/bfs-build-iso.sh $*"
 exec "$BUILD_PROJECT_DIR/scripts/bfs-build-iso.sh" "$@"

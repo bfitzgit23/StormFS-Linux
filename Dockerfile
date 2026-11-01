@@ -135,6 +135,16 @@ RUN set -eux; \
 WORKDIR /build/StormFS-Linux
 COPY --chown=builder:builder . .
 
+# The image carries a snapshot of this tree, so a fix pushed after the image
+# was built is not in the image until it is rebuilt: the run repeats the old
+# failure and looks like an unfixed bug.  Stamp the revision the snapshot came
+# from; the entrypoint prints it, so a stale image says so.
+#
+#   docker build --build-arg BFS_SOURCE_REV=$(git rev-parse --short HEAD) -t bfsos-iso .
+ARG BFS_SOURCE_REV=unknown
+RUN printf '%s\n' "$BFS_SOURCE_REV" > /build/StormFS-Linux/.bfs-image-rev
+RUN chown builder:builder /build/StormFS-Linux/.bfs-image-rev
+
 # COPY sets ownership on the copied tree, but the WORKDIR directory itself stays
 # root-owned, and bootstrap.sh writes logs/ and archives/ next to its own
 # scripts.  Without this the builder cannot create /build/StormFS-Linux/logs.

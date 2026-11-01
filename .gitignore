@@ -30,3 +30,6 @@ bfs-install*.log
 docs/*/html/
 docs/*/*.pdf
 __pycache__/
+
+# Docker image source-revision stamp
+.bfs-image-rev
