@@ -2997,10 +2997,16 @@ EOF
                 return 1
             fi
             install -m 0755 "$SCRIPT_DIR/scratchpkg/$_spkg_tool" "$TOOLS/bin/$_spkg_tool" || return 1
+            # A CRLF checkout gives the seeded tool a "/bin/sh\r" interpreter,
+            # so it fails as "cannot execute: required file not found" the first
+            # time Stage 1 imports a source.  Normalise the installed copy
+            # rather than the checked-out tree.
+            sed -i 's/\r$//' "$TOOLS/bin/$_spkg_tool"
         fi
     done
     if [ ! -x "$TOOLS/bin/spkgin" ]; then
         install -m 0755 "$SCRIPT_DIR/files/spkgin" "$TOOLS/bin/spkgin" || return 1
+        sed -i 's/\r$//' "$TOOLS/bin/spkgin"
     fi
     unset _spkg_tool
 

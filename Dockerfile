@@ -115,6 +115,22 @@ RUN set -eux; \
         /build/StormFS-Linux/archives \
         /build/StormFS-Linux/archives/toolchain
 
+# A Windows checkout can carry CRLF inside scratchpkg/ (a gitlink, so this
+# repository's .gitattributes does not reach it).  A CRLF shebang turns every
+# seeded tool into "/tmp/lfs-tools/bin/pkgbuild: cannot execute: required file
+# not found" because the interpreter becomes "/bin/sh\r".  Normalise the text
+# files the build executes and fail the image build if any survived.
+RUN set -eux; \
+    find . -type f \
+        \( -name '*.sh' -o -name spkgbuild -o -name depends \
+           -o -path './scratchpkg/*' -o -path './files/*' \) \
+        -exec sh -c 'file --mime-type -b "$1" | grep -q "^text/" && sed -i "s/\r$//" "$1"' _ {} \; ; \
+    for tool in scratchpkg/pkgbuild scratchpkg/pkgadd scratchpkg/pkgdel \
+                scratchpkg/scratch scratchpkg/portsync files/spkgin; do \
+        bash -n "$tool"; \
+        ! grep -q $'\r' "$tool"; \
+    done
+
 # timedatectl stand-in: sync_host_time() needs a systemd bus answer for
 # NTPSynchronized, which a container cannot provide.
 COPY --chmod=0755 scripts/docker-timedatectl-shim.sh /usr/local/bin/timedatectl
