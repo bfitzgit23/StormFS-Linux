@@ -47,6 +47,12 @@ ENV DEBIAN_FRONTEND=noninteractive \
 #   bash git sudo tar xz zstd rsync wget sha256sum find awk sed grep
 #   mount umount chroot mksquashfs xorriso grub-mkrescue mformat
 # plus the /usr/lib/grub/{i386-pc,x86_64-efi} module trees that preflight probes.
+# scratchpkg's pkgbuild downloads sources with curl (not wget) and
+# verifies them with gnupg.  Stage 1 builds the temporary toolchain with
+# the host compiler, so the image must satisfy the LFS host system
+# requirements: binutils, bison, bzip2, coreutils, diffutils, findutils,
+# gawk, gcc, g++, gzip, m4, make, patch, perl, python3, sed, tar, texinfo
+# and xz.  Missing any of them fails deep inside a package build hours in.
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
         bash \
@@ -64,6 +70,22 @@ RUN apt-get update \
         zstd \
         rsync \
         wget \
+        curl \
+        gnupg \
+        diffutils \
+        build-essential \
+        g++ \
+        binutils \
+        gzip \
+        bzip2 \
+        perl \
+        python3 \
+        gettext \
+        patch \
+        m4 \
+        bison \
+        flex \
+        texinfo \
         file \
         less \
         bsdutils \
@@ -83,7 +105,17 @@ RUN set -eux; \
     test -x /usr/bin/mksquashfs; \
     test -x /usr/bin/xorriso; \
     test -d /usr/lib/grub/i386-pc; \
-    test -d /usr/lib/grub/x86_64-efi
+    test -d /usr/lib/grub/x86_64-efi; \
+    test -x /usr/bin/curl; \
+    test -x /usr/bin/gpg; \
+    test -x /usr/bin/gcc; \
+    test -x /usr/bin/make; \
+    test -x /usr/bin/bison; \
+    test -x /usr/bin/m4; \
+    for tool in g++ as ld gzip bzip2 perl python3 msgfmt tar xz sed grep \
+                awk find diff make patch bash; do \
+        command -v "$tool" >/dev/null; \
+    done
 
 ARG BUILDER_UID=1000
 ARG BUILDER_GID=1000
