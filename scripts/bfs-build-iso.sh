@@ -611,13 +611,22 @@ bootstrap_state_resumable() {
 }
 
 bootstrap_resume_stage_hint() {
-    local root=/tmp/lfs-rootfs
-    if [ -f "$root/.bfs-verified" ]; then printf '%s\n' 5
-    elif [ -f "$root/.bfs-stage3-complete" ]; then printf '%s\n' 4
-    elif [ -f "$root/.bfs-stage2-complete" ]; then printf '%s\n' 3
-    elif [ -f "$PROJECT_DIR/archives/toolchain/toolchain.tar.zst" ] || \
-         [ -f "$PROJECT_DIR/toolchain.tar.zst" ]; then printf '%s\n' 2
-    else printf '%s\n' 1
+    # Markers are written under /tmp/lfs-rootfs, but that path holds them only
+    # while the persistent cache is mounted there.  Read the cache directly
+    # too, so a completed stage is recognised before any stage attaches it.
+    local root=""
+    for root in "${BFS_STATE_DIR:+$BFS_STATE_DIR/rootfs}" /tmp/lfs-rootfs; do
+        [ -n "$root" ] || continue
+        if [ -f "$root/.bfs-verified" ]; then printf '%s\n' 5; return 0; fi
+        if [ -f "$root/.bfs-stage3-complete" ]; then printf '%s\n' 4; return 0; fi
+        if [ -f "$root/.bfs-stage2-complete" ]; then printf '%s\n' 3; return 0; fi
+    done
+
+    if [ -f "$PROJECT_DIR/archives/toolchain/toolchain.tar.zst" ] || \
+        [ -f "$PROJECT_DIR/toolchain.tar.zst" ]; then
+        printf '%s\n' 2
+    else
+        printf '%s\n' 1
     fi
 }
 
