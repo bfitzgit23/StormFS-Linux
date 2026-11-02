@@ -11,8 +11,24 @@ source="https://github.com/thkukuk/$name/releases/download/v$version/$name-$vers
 build() {
 	cd "$name-$version" || return 1
 
-
 	./configure --sysconfdir=/etc --disable-static &&
-make
+	make &&
 	make DESTDIR=$PKG install
+}
+
+# Stage 1 has no pkg-config binary: the temporary toolchain does not build one
+# before libnsl, so configure prints "checking for pkg-config... no" and
+# "checking for libtirpc... no", drops the tirpc include path, and the compile
+# dies on <rpc/types.h>.  libtirpc installs into $TOOLS just before this port,
+# so supply the flags pkg-config would have reported.  PKG_CHECK_MODULES uses
+# TIRPC_CFLAGS/TIRPC_LIBS when they are already set, so it never looks for the
+# .pc file or the pkg-config binary.  Stages 2 and 3 build pkgconf before this
+# port and keep using build().
+bootstrap_build() {
+	export TIRPC_CFLAGS="-I$TOOLS/include/tirpc"
+	export TIRPC_LIBS="-L$TOOLS/lib -ltirpc"
+
+	./configure --prefix="$TOOLS" --sysconfdir="$TOOLS/etc" --disable-static &&
+	make &&
+	make install
 }
