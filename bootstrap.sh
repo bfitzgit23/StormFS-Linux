@@ -4209,7 +4209,7 @@ export CPPFLAGS="-I/usr/include"
 # library directory, so name it explicitly.  /usr/lib stays first so
 # installed libraries still take precedence.
 export LDFLAGS="-L/usr/lib -Wl,-rpath-link,/usr/lib -L$TOOLS/lib -Wl,-rpath-link,$TOOLS/lib"
-export LIBRARY_PATH="/usr/lib"
+export LIBRARY_PATH="/usr/lib:$TOOLS/lib"
 export PKG_CONFIG_PATH="/usr/lib/pkgconfig:/usr/share/pkgconfig"
 export PKG_CONFIG_LIBDIR="/usr/lib/pkgconfig:/usr/share/pkgconfig"
 
