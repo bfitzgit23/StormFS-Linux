@@ -4564,6 +4564,9 @@ grep found dummy.log \
 rm -fv dummy.c dummy.o a.out dummy.log
 EOF
 
+                    # The verification link runs before the gcc port installs
+                    # the as-needed scripts into /usr/lib; use the same
+                    # fallback as package builds.
                     chroot "$LFS" \
                         env -i \
                         HOME=/root \
@@ -4571,9 +4574,6 @@ EOF
                         LANG=C \
                         LC_ALL=C \
                         LANGUAGE=C \
-                        # The verification link runs before the gcc port installs
-                        # the as-needed scripts into /usr/lib; use the same
-                        # fallback as package builds.
                         LIBRARY_PATH="/usr/lib:$TOOLS/lib" \
                         PATH="$LFSPATH" \
                         sh /tmp/glibc-postinstall
