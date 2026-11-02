@@ -997,40 +997,73 @@ _sanitize_log_name() {
 # resumes from.  The record lives in the persistent build state when there is
 # one: the container's /tmp does not survive a restart, and a resume that
 # cannot say what failed is indistinguishable from a fresh build.
+# The state directory is shared with the root stages, which create files there
+# as root, so a Stage-1 failure cannot always write its own record as the
+# unprivileged builder.  Record through tee, whose "cannot open" goes to its own
+# stderr instead of escaping from the shell, leave the record world-writable for
+# the next unprivileged stage, and fall back to the privileged helper the rest
+# of the script already uses for root-owned state.
+_bfs_failure_record() {
+    printf 'stage=%s
+' "${BFS_CURRENT_STAGE:-unknown}"
+    printf 'package=%s
+' "${ACTIVE_LOG_PACKAGE:-}"
+    printf 'status=%s
+' "${1:-1}"
+    printf 'log=%s
+' "${ACTIVE_LOG_FILE:-}"
+    printf 'stamp=%s
+' "$(date --iso-8601=seconds 2>/dev/null || date)"
+}
+
+_bfs_privileged() {
+    command -v sudo >/dev/null 2>&1 || return 1
+    sudo -n "$@"
+}
+
 _record_last_failure() {
-    local status="$1" dir="${BFS_STATE_DIR:-$LFS}" file=""
+    local status="${1:-1}" dir="${BFS_STATE_DIR:-${LFS:-}}" file=""
 
     [ -n "${ACTIVE_LOG_PACKAGE:-}" ] || return 0
-    [ -n "${dir:-}" ] || return 0
-    /usr/bin/mkdir -p "$dir" 2>/dev/null || return 0
+    [ -n "$dir" ] || return 0
+    if [ ! -d "$dir" ]; then
+        /usr/bin/mkdir -p "$dir" 2>/dev/null ||
+            _bfs_privileged /usr/bin/mkdir -p "$dir" >/dev/null 2>&1 || return 0
+    fi
 
     file="$dir/.bfs-last-failure"
-    {
-        printf 'stage=%s
-' "${BFS_CURRENT_STAGE:-unknown}"
-        printf 'package=%s
-' "$ACTIVE_LOG_PACKAGE"
-        printf 'status=%s
-' "$status"
-        printf 'log=%s
-' "${ACTIVE_LOG_FILE:-}"
-        printf 'stamp=%s
-' "$(date --iso-8601=seconds 2>/dev/null || date)"
-    } > "$file" 2>/dev/null || return 0
-
+    if ! _bfs_failure_record "$status" | /usr/bin/tee "$file" >/dev/null 2>&1; then
+        _bfs_failure_record "$status" |
+            _bfs_privileged /usr/bin/tee "$file" >/dev/null 2>&1
+    fi
+    # A root stage creates the record as root; without this the next
+    # unprivileged stage can neither replace nor clear it.
+    /usr/bin/chmod 0666 "$file" 2>/dev/null ||
+        _bfs_privileged /usr/bin/chmod 0666 "$file" >/dev/null 2>&1
     return 0
 }
 
 # Report the recorded failure once, then clear it.  Completed work stays
 # installed, so the run that follows continues from the failed package.
 _report_last_failure() {
-    local file="${BFS_STATE_DIR:-$LFS}/.bfs-last-failure"
+    local file="${BFS_STATE_DIR:-${LFS:-}}/.bfs-last-failure"
     local stage="" package="" status="" log="" stamp="" stage_label=""
+    local source_file=""
 
-    [ -r "$file" ] || return 0
+    [ -s "$file" ] || return 0
 
-    . "$file" 2>/dev/null || {
-        /usr/bin/rm -f "$file"
+    if [ -r "$file" ]; then
+        source_file="$file"
+    else
+        source_file="$(/usr/bin/mktemp 2>/dev/null)" || return 0
+        _bfs_privileged /usr/bin/cat "$file" > "$source_file" 2>/dev/null || {
+            /usr/bin/rm -f "$source_file"
+            return 0
+        }
+    fi
+
+    . "$source_file" 2>/dev/null || {
+        /usr/bin/rm -f "$source_file"
         return 0
     }
 
@@ -1048,7 +1081,11 @@ _report_last_failure() {
     [ -z "${log:-}" ] || echo "  log: $log"
     echo "Resuming from that package; completed work is reused."
 
-    /usr/bin/rm -f "$file"
+    # Truncate rather than unlink: replacing the contents needs write access to
+    # the file, while removing it needs write access to the shared directory.
+    : > "$file" 2>/dev/null ||
+        _bfs_privileged /usr/bin/truncate -s 0 "$file" >/dev/null 2>&1
+    [ "$source_file" = "$file" ] || /usr/bin/rm -f "$source_file" 2>/dev/null
     return 0
 }
 
