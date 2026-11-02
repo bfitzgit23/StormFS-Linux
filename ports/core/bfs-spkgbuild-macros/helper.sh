@@ -83,6 +83,29 @@ bfs_collect_build_opt() {
     if [ -n "${build_opt:-}" ]; then
         eval 'BFS_BUILD_OPTS="${build_opt[*]}"'
     fi
+
+    # Stage 1 installs into $TOOLS and runs unprivileged, so an absolute /var
+    # default points outside the toolchain and into a path the build cannot
+    # write.  findutils' locate install-data-hook is the visible case: it runs
+    # mkinstalldirs $(LOCATE_DB), ignores DESTDIR, and died with
+    # "mkdir: cannot create directory '/var/lib/locate': Permission denied".
+    # Keep those defaults inside the toolchain while it is the install prefix;
+    # a target-root build keeps the real paths.
+    if [ "${BFS_BOOTSTRAP:-0}" = 1 ] && [ -n "${TOOLS:-}" ]; then
+        _bfs_relocated=""
+        for _bfs_opt in $BFS_BUILD_OPTS; do
+            case $_bfs_opt in
+                --localstatedir=/var)
+                    _bfs_opt="--localstatedir=$TOOLS/var"
+                    ;;
+                --localstatedir=/var/*)
+                    _bfs_opt="--localstatedir=$TOOLS/var/${_bfs_opt#--localstatedir=/var/}"
+                    ;;
+            esac
+            _bfs_relocated="$_bfs_relocated $_bfs_opt"
+        done
+        BFS_BUILD_OPTS="${_bfs_relocated# }"
+    fi
     return 0
 }
 
