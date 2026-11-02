@@ -117,10 +117,26 @@ build() {
     mkdir -v build32
     cd build32
 
+    #
+    # This build creates /usr/lib32, so until it has installed there GCC's
+    # -m32 library prefix points at a directory that does not exist yet.  The
+    # temporary toolchain keeps the 32-bit libc, libgcc_s and libatomic in
+    # $TOOLS/lib32; without that directory in the search path the linker only
+    # sees the 64-bit /usr/lib and fails while linking elf/sotruss-lib.so
+    # with "skipping incompatible ... cannot find -latomic".
+    #
+    local tools_lib32
+    tools_lib32="$(dirname "$(command -v gcc)")/../lib32"
+
+    if [ -f "$tools_lib32/libc.so.6" ]; then
+        LDFLAGS="${LDFLAGS:+$LDFLAGS }-L$tools_lib32 -Wl,-rpath-link,$tools_lib32"
+    fi
+
     CC="gcc -m32 -mstackrealign" \
     CXX="g++ -m32 -mstackrealign" \
     CFLAGS="-O2 -march=i686 -pipe -Wno-error=parentheses" \
     CXXFLAGS="-O2 -march=i686 -pipe -Wno-error=parentheses" \
+    LDFLAGS="$LDFLAGS" \
     ../configure \
         --host=i686-pc-linux-gnu \
         --libdir=/usr/lib32 \
