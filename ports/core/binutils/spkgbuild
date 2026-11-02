@@ -29,6 +29,38 @@ build() {
 }
 
 bootstrap_build() {
+	# The temporary compiler is configured with --with-sysroot=$TOOLS, so it
+	# links every program with the interpreter $TOOLS/lib64/ld-linux-x86-64.so.2
+	# (and $TOOLS/lib/ld-linux.so.2 for -m32), while the temporary glibc
+	# installs its loaders into $TOOLS/lib and $TOOLS/lib32.  $TOOLS/lib64 must
+	# therefore be a link to lib.  A cache that cannot hold symlinks drops that
+	# link silently, and the failure it causes is misleading: execve reports
+	# ENOENT for the missing interpreter, not for the program, so gcc prints
+	# "cannot execute .../as: No such file or directory" while the file is
+	# right there, and every compile and link in the toolchain stage fails.
+	_bfs_ensure_tools_loader() {
+		if [ ! -e "$TOOLS/lib64/ld-linux-x86-64.so.2" ]; then
+			if [ ! -d "$TOOLS/lib64" ] || [ -L "$TOOLS/lib64" ]; then
+				/bin/ln -sfn lib "$TOOLS/lib64" 2>/dev/null || true
+			fi
+		fi
+
+		if [ ! -e "$TOOLS/lib/ld-linux.so.2" ] && [ -e "$TOOLS/lib32/ld-linux.so.2" ]; then
+			/bin/ln -sfn ../lib32/ld-linux.so.2 "$TOOLS/lib/ld-linux.so.2" 2>/dev/null || true
+		fi
+
+		if [ -e "$TOOLS/lib/ld-linux-x86-64.so.2" ] &&
+			[ ! -e "$TOOLS/lib64/ld-linux-x86-64.so.2" ]; then
+			echo "ERROR: the temporary loader is not reachable at $TOOLS/lib64/ld-linux-x86-64.so.2" >&2
+			ls -ld "$TOOLS/lib64" "$TOOLS/lib/ld-linux-x86-64.so.2" >&2 2>/dev/null || true
+			return 1
+		fi
+
+		return 0
+	}
+
+	_bfs_ensure_tools_loader || return 1
+
 	mkdir -v build
 	cd       build
 	
@@ -44,7 +76,7 @@ bootstrap_build() {
 			--enable-default-hash-style=gnu \
 			--with-lib-path=$TOOLS/lib:$TOOLS/lib32
 		make
-		mkdir -v $TOOLS/lib && ln -sv lib $TOOLS/lib64
+		mkdir -pv $TOOLS/lib
 		mkdir -p $TOOLS/lib32
 		make install
 	elif [ "$tcpkg" = binutils-pass2 ]; then

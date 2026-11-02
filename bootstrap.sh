@@ -3299,6 +3299,26 @@ _buildtoolchain() {
         return 1
     fi
 
+    # The temporary compiler is configured with --with-sysroot=$TOOLS, so every
+    # program it links records $TOOLS/lib64/ld-linux-x86-64.so.2 as its
+    # interpreter, while the temporary glibc installs its loader into
+    # $TOOLS/lib.  binutils-pass1 creates the lib64 -> lib link that reconciles
+    # the two, but a cache that cannot hold symlinks silently loses it, and
+    # execve then reports ENOENT for the interpreter: "cannot execute .../as:
+    # No such file or directory" while the assembler is right there.  Restore
+    # the link before anything in the toolchain is executed, so a resumed tree
+    # heals instead of failing every compile in the stage.
+    if [ -e "${LFS}${TOOLS}/lib/ld-linux-x86-64.so.2" ] &&
+        [ ! -e "${LFS}${TOOLS}/lib64/ld-linux-x86-64.so.2" ] &&
+        [ ! -d "${LFS}${TOOLS}/lib64" ]; then
+        if ! /usr/bin/ln -sfn lib "${LFS}${TOOLS}/lib64" 2>>"$STAGE_PREFLIGHT_LOG"; then
+            _stage_preflight_note "ERROR: Could not restore ${TOOLS}/lib64 -> lib; temporary-toolchain programs cannot run."
+            return 1
+        fi
+
+        _stage_preflight_note "Stage 1: restored ${TOOLS}/lib64 -> lib for the temporary toolchain."
+    fi
+
     # The toolchain directory now exists again. Flush command hashing once more
     # so early Stage-1 orchestration falls back to host tools until each target
     # utility is actually built into $TOOLS/bin.
