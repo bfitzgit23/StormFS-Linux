@@ -10,6 +10,20 @@ source="https://ftp.gnu.org/gnu/findutils/findutils-$version.tar.xz"
 
 build() {
 	. /usr/share/bfsos/spkgbuild.helper || return 1
+
+	# locate's install-data-hook creates $(LOCATE_DB) with mkinstalldirs and
+	# ignores DESTDIR, so the LFS default /var/lib/locate is created on the
+	# build host rather than in the prefix being installed.  During Stage 1 the
+	# prefix is the temporary toolchain and the build runs unprivileged, where
+	# that host path is not writable ("mkdir: cannot create directory
+	# '/var/lib/locate': Permission denied").  Keep the temporary locate
+	# database inside $TOOLS in that mode; a target-root build keeps the real
+	# path, which is created inside the rootfs by the same hook.
+	bfs_install_mode
+	if [ -n "${TOOLS:-}" ] && [ "$BFS_INSTALL_PREFIX" = "$TOOLS" ]; then
+		build_opt="--localstatedir=$TOOLS/var/lib/locate"
+	fi
+
 	cd "$name-$version" || return 1
 	bfs_autobuild
 }

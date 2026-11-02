@@ -964,6 +964,8 @@ ACTIVE_LOG_STDERR_FD=8
 CURRENT_BASE_LOGS=()
 STAGE_OPERATION_STARTED_EPOCH=0
 LAST_FAILED_LOG_FILE=""
+ACTIVE_LOG_PHASE=""
+ACTIVE_LOG_PACKAGE=""
 STAGE_PREFLIGHT_LOG=""
 
 mkdir -p "$TOOLCHAIN_LOG_DIR" "$BASE_LOG_DIR"
@@ -991,8 +993,69 @@ _sanitize_log_name() {
     printf '%s\n' "$name"
 }
 
+# Remember where a stage stopped, so the next run can name the package it
+# resumes from.  The record lives in the persistent build state when there is
+# one: the container's /tmp does not survive a restart, and a resume that
+# cannot say what failed is indistinguishable from a fresh build.
+_record_last_failure() {
+    local status="$1" dir="${BFS_STATE_DIR:-$LFS}" file=""
+
+    [ -n "${ACTIVE_LOG_PACKAGE:-}" ] || return 0
+    [ -n "${dir:-}" ] || return 0
+    /usr/bin/mkdir -p "$dir" 2>/dev/null || return 0
+
+    file="$dir/.bfs-last-failure"
+    {
+        printf 'stage=%s
+' "${BFS_CURRENT_STAGE:-unknown}"
+        printf 'package=%s
+' "$ACTIVE_LOG_PACKAGE"
+        printf 'status=%s
+' "$status"
+        printf 'log=%s
+' "${ACTIVE_LOG_FILE:-}"
+        printf 'stamp=%s
+' "$(date --iso-8601=seconds 2>/dev/null || date)"
+    } > "$file" 2>/dev/null || return 0
+
+    return 0
+}
+
+# Report the recorded failure once, then clear it.  Completed work stays
+# installed, so the run that follows continues from the failed package.
+_report_last_failure() {
+    local file="${BFS_STATE_DIR:-$LFS}/.bfs-last-failure"
+    local stage="" package="" status="" log="" stamp="" stage_label=""
+
+    [ -r "$file" ] || return 0
+
+    . "$file" 2>/dev/null || {
+        /usr/bin/rm -f "$file"
+        return 0
+    }
+
+    case "${stage:-}" in
+        1) stage_label="Stage 1 (temporary toolchain)" ;;
+        2) stage_label="Stage 2 (base system)" ;;
+        3) stage_label="Stage 3 (final-toolchain rebuild)" ;;
+        4) stage_label="Stage 4 (base verification)" ;;
+        5) stage_label="Stage 5 (base archive)" ;;
+        *) stage_label="Stage ${stage:-unknown}" ;;
+    esac
+
+    echo "Previous run stopped in $stage_label while building ${package:-<unknown>}:"
+    echo "  exit status ${status:-unknown} at ${stamp:-unknown}"
+    [ -z "${log:-}" ] || echo "  log: $log"
+    echo "Resuming from that package; completed work is reused."
+
+    /usr/bin/rm -f "$file"
+    return 0
+}
+
 _start_stage_preflight_log() {
     local stage="$1" directory="" timestamp=""
+
+    BFS_CURRENT_STAGE="$stage"
 
     case "$stage" in
         1) directory="$TOOLCHAIN_LOG_DIR" ;;
@@ -1019,6 +1082,8 @@ _start_stage_preflight_log() {
         printf 'Project: %s\n' "$SCRIPT_DIR"
         printf '============================================================\n\n'
     } >> "$STAGE_PREFLIGHT_LOG"
+
+    _report_last_failure
 }
 
 _stage_preflight_note() {
@@ -1036,6 +1101,9 @@ _close_active_package_log() {
     printf 'Exit status: %s\n' "$status"
     if [ "$status" -ne 0 ]; then
         LAST_FAILED_LOG_FILE="$ACTIVE_LOG_FILE"
+        _record_last_failure "$status"
+    else
+        /usr/bin/rm -f "${BFS_STATE_DIR:-$LFS}/.bfs-last-failure" 2>/dev/null || true
     fi
 
     exec 1>&"$ACTIVE_LOG_STDOUT_FD" 2>&"$ACTIVE_LOG_STDERR_FD"
@@ -1075,6 +1143,8 @@ _start_package_log() {
     safe_package="$(_sanitize_log_name "$package")"
     timestamp="$(date +%Y%m%d-%H%M%S)"
     ACTIVE_LOG_FILE="$directory/${safe_package}-${timestamp}.log"
+    ACTIVE_LOG_PHASE="$phase"
+    ACTIVE_LOG_PACKAGE="$package"
     ACTIVE_LOG_FIFO="$(mktemp -u /tmp/bfs-build-log.XXXXXX)"
     mkfifo "$ACTIVE_LOG_FIFO"
 
@@ -4380,6 +4450,16 @@ EOF
 
             _close_active_package_log 0
         else
+            # Stage 3 rebuilds packages that are already installed, so the
+            # installed-package check cannot tell a resumed pass what it has
+            # already done.  A failure at package 100 of 132 would otherwise
+            # restart at package 1.  The markers live in the rootfs, so they
+            # travel with the checkpoint, and a completed pass removes them.
+            if [ -f "$LFS/var/lib/bfs-bootstrap/stage3-done/$i" ]; then
+                echo "Stage 3 resume: $i was already rebuilt in this pass."
+                continue
+            fi
+
             _start_package_log base "$i"
 
             integrity_opts=""
@@ -4453,6 +4533,9 @@ EOF
                     return "$status"
                 }
 
+            /usr/bin/mkdir -p "$LFS/var/lib/bfs-bootstrap/stage3-done"
+            : > "$LFS/var/lib/bfs-bootstrap/stage3-done/$i"
+
             _close_active_package_log 0
         fi
     done
@@ -4470,10 +4553,12 @@ EOF
     umountfs
 
     if [ "${1:-}" = rebuild ]; then
+        /usr/bin/rm -rf "$LFS/var/lib/bfs-bootstrap/stage3-done"
         touch "$LFS/.bfs-stage3-complete"
     else
         touch "$LFS/.bfs-stage2-complete"
         rm -f "$LFS/.bfs-stage3-complete"
+        /usr/bin/rm -rf "$LFS/var/lib/bfs-bootstrap/stage3-done"
     fi
 
     echo
