@@ -3082,6 +3082,23 @@ _spkg_bootstrap_build() {
         cd "$srcdir" || return 1
         if [ -d "$srcdir/$name-$version" ]; then
             cd "$srcdir/$name-$version" || return 1
+        else
+            # Tarballs do not always unpack into "$name-$version": python3
+            # unpacks into Python-$version.  Guessing left the hook running in
+            # the parent directory, where ./configure does not exist.  With a
+            # single top-level directory there is no ambiguity, so build there.
+            _bfs_src_top=""
+            for _bfs_candidate in "$srcdir"/*; do
+                [ -d "$_bfs_candidate" ] || continue
+                if [ -n "$_bfs_src_top" ]; then
+                    _bfs_src_top=""
+                    break
+                fi
+                _bfs_src_top="$_bfs_candidate"
+            done
+            if [ -n "$_bfs_src_top" ]; then
+                cd "$_bfs_src_top" || return 1
+            fi
         fi
 
         if command -v bootstrap_build >/dev/null 2>&1; then
