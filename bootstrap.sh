@@ -1874,7 +1874,10 @@ _enter_bfs_chroot() {
 
     echo
     echo "Mounting virtual filesystems..."
-    mountfs
+    if ! mountfs; then
+        echo "ERROR: Could not mount the virtual filesystems required by the chroot." >&2
+        return 1
+    fi
 
     echo
     echo "Entering BFS chroot."
@@ -3804,7 +3807,10 @@ _verifybase() {
 
     echo
     echo "Mounting virtual filesystems for chroot tests..."
-    mountfs
+    if ! mountfs; then
+        echo "ERROR: Could not mount the virtual filesystems required by Stage 4." >&2
+        return 1
+    fi
 
     if ! chroot "$LFS" \
         env -i \
@@ -4312,7 +4318,10 @@ EOF_INSTALLED_INTEGRITY
                 CCACHE_DIR=/var/cache/ccache /usr/bin/ccache -s 2>/dev/null || true
     fi
 
-    mountfs
+    if ! mountfs; then
+        echo "ERROR: Could not prepare the Stage-2 chroot mounts; no base package was built." >&2
+        return 1
+    fi
 
     # Stage 3 is an exact rebuild pass. Stage 2 has already established the
     # base package set, so Stage 3 must never resolve or install newly declared
@@ -4657,33 +4666,59 @@ EOF
 }
 
 mountfs() {
-    umountfs
+    # Every mount is checked.  Called bare under `set -e`, the first failure
+    # used to kill the stage before its first package log existed, leaving no
+    # stage-level error to explain why nothing was built.
+    umountfs || return 1
 
-    mkdir -p "$LFS/dev" "$LFS/run" "$LFS/proc" "$LFS/sys"
+    mkdir -p "$LFS/dev" "$LFS/run" "$LFS/proc" "$LFS/sys" || return 1
 
-    mount --bind /dev "$LFS/dev"
+    mount --bind /dev "$LFS/dev" || {
+        echo "ERROR: Could not bind-mount /dev into $LFS/dev." >&2
+        return 1
+    }
 
-    mount -t devpts devpts \
-        "$LFS/dev/pts" \
-        -o gid=5,mode=620
+    mount -t devpts devpts         "$LFS/dev/pts"         -o gid=5,mode=620 || {
+        echo "ERROR: Could not mount devpts at $LFS/dev/pts." >&2
+        return 1
+    }
 
-    mount -t proc proc "$LFS/proc"
-    mount -t sysfs sysfs "$LFS/sys"
-    mount -t tmpfs tmpfs "$LFS/run"
+    mount -t proc proc "$LFS/proc" || {
+        echo "ERROR: Could not mount proc at $LFS/proc." >&2
+        return 1
+    }
+
+    mount -t sysfs sysfs "$LFS/sys" || {
+        echo "ERROR: Could not mount sysfs at $LFS/sys." >&2
+        return 1
+    }
+
+    mount -t tmpfs tmpfs "$LFS/run" || {
+        echo "ERROR: Could not mount tmpfs at $LFS/run." >&2
+        return 1
+    }
 
     if [ -h "$LFS/dev/shm" ]; then
-        mkdir -p "$LFS/$(readlink "$LFS/dev/shm")"
+        mkdir -p "$LFS/$(readlink "$LFS/dev/shm")" || true
     fi
 
-    mkdir -p "$LFS/$spkgsrc"
-    mkdir -p "$LFS/$spkgpkg"
-    mkdir -p "$LFS/$spkgwork"
+    mkdir -p "$LFS/$spkgsrc" "$LFS/$spkgpkg" "$LFS/$spkgwork" || return 1
+    mkdir -p "$sourcedir" "$packagedir" "$buildworkdir" || return 1
 
-    mkdir -p "$sourcedir" "$packagedir" "$buildworkdir"
+    mount --bind "$sourcedir" "$LFS/$spkgsrc" || {
+        echo "ERROR: Could not bind-mount $sourcedir at $LFS/$spkgsrc." >&2
+        return 1
+    }
 
-    mount --bind "$sourcedir" "$LFS/$spkgsrc"
-    mount --bind "$packagedir" "$LFS/$spkgpkg"
-    mount --bind "$buildworkdir" "$LFS/$spkgwork"
+    mount --bind "$packagedir" "$LFS/$spkgpkg" || {
+        echo "ERROR: Could not bind-mount $packagedir at $LFS/$spkgpkg." >&2
+        return 1
+    }
+
+    mount --bind "$buildworkdir" "$LFS/$spkgwork" || {
+        echo "ERROR: Could not bind-mount $buildworkdir at $LFS/$spkgwork." >&2
+        return 1
+    }
 }
 
 umountfs() {
@@ -4700,8 +4735,13 @@ umountfs() {
 unmount() {
     while mountpoint -q "$1"; do
         if ! umount "$1" 2>/dev/null; then
-            echo "ERROR: Could not unmount busy bootstrap mount: $1" >&2
-            return 1
+            # An interrupted or failed stage can leave a mount pinned by a
+            # process that has just been killed.  A lazy unmount detaches it so
+            # the next stage is not aborted by the stale mount.
+            if ! umount -l "$1" 2>/dev/null; then
+                echo "ERROR: Could not unmount busy bootstrap mount: $1" >&2
+                return 1
+            fi
         fi
     done
     return 0
