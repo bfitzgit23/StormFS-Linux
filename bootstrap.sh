@@ -4203,7 +4203,12 @@ _buildbase() {
 export CFLAGS="$CFLAGS"
 export CXXFLAGS="${CFLAGS}"
 export CPPFLAGS="-I/usr/include"
-export LDFLAGS="-L/usr/lib -Wl,-rpath-link,/usr/lib"
+# The temporary toolchain's gcc specs link every binary against
+# -latomic_asneeded, which only the tools ship.  Once the binutils port is
+# installed, /usr/bin/ld wins the PATH race and does not search the tools'
+# library directory, so name it explicitly.  /usr/lib stays first so
+# installed libraries still take precedence.
+export LDFLAGS="-L/usr/lib -Wl,-rpath-link,/usr/lib -L$TOOLS/lib -Wl,-rpath-link,$TOOLS/lib"
 export LIBRARY_PATH="/usr/lib"
 export PKG_CONFIG_PATH="/usr/lib/pkgconfig:/usr/share/pkgconfig"
 export PKG_CONFIG_LIBDIR="/usr/lib/pkgconfig:/usr/share/pkgconfig"
