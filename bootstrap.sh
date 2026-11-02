@@ -4515,9 +4515,11 @@ then
 fi
 
 install -m 0755 "\$SAVED_LD" "\$TOOLS/bin/ld"
-install -m 0755 \
-    "\$SAVED_LD" \
-    "\$TOOLS/\$HOST_TRIPLET/bin/ld"
+if [ -d "\$TOOLS/\$HOST_TRIPLET/bin" ]; then
+    install -m 0755 "\$SAVED_LD" "\$TOOLS/\$HOST_TRIPLET/bin/ld"
+else
+    echo "No \$TOOLS/\$HOST_TRIPLET/bin in this toolchain; installed the linker only in \$TOOLS/bin."
+fi
 
 gcc -dumpspecs | sed \
     -e "s@\$TOOLS@@g" \
