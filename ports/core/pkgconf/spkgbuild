@@ -10,7 +10,6 @@ source="https://distfiles.ariadne.space/pkgconf/pkgconf-$version.tar.xz https://
 
 build() {
 	cd "$name-$version" || return 1
-    tar -xf "$BFS_SOURCE_DIR/meson-1.12.0.tar.gz" -C "$SRC"
     mkdir -p build
     cd build
     python3 "$SRC/meson-1.12.0/meson.py" setup \
