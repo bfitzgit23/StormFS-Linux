@@ -1651,7 +1651,17 @@ _stage_complete_text() {
     fi
 }
 
+# Stage 1 records this marker only after the toolchain passed multilib
+# verification and the archive created from it validated.  It lives in the
+# persistent build state as well as in the tree, because archives/ is
+# image-local: a new container starts without a toolchain tarball, and Stage 1
+# must not run again just because that ephemeral copy is gone.
+_stage1_marker() {
+    printf '%s\n' "${BFS_ROOTFS_CACHE:-${BFS_TOOLS_CACHE:-$LFS}}/.bfs-stage1-complete"
+}
+
 _toolchain_complete() {
+    [ -f "$(_stage1_marker)" ] && return 0
     { _latest_archive "$TOOLCHAIN_ARCHIVE_DIR" 'bfs-toolchain-*.tar.zst' || _latest_archive "$TOOLCHAIN_ARCHIVE_DIR" 'bfs-toolchain-*.tar.xz'; } >/dev/null 2>&1
 }
 
@@ -2510,6 +2520,8 @@ _clean_start() {
     echo
     echo "Removing old BFS build files..."
 
+    /usr/bin/rm -f -- "$(_stage1_marker)" "$LFS/.bfs-stage1-complete" 2>/dev/null || true
+
     # A previous Stage 2/3/chroot or interrupted run can leave bind/proc/sys/tmpfs
     # mounts below $LFS.  rm -rf cannot remove a mount point and historically the
     # script continued anyway, leaving a split/stale toolchain tree behind.
@@ -3315,6 +3327,16 @@ _buildtoolchain() {
         }
     fi
 
+    if [ "$_cache_keep" = 1 ] &&
+        { [ -f "$LFS/.bfs-stage1-complete" ] || [ -f "$(_stage1_marker)" ]; }; then
+        echo "Stage 1 is already complete; reusing the verified temporary toolchain."
+        echo "  $_stage1_cache_dir"
+        if [ ! -L "$TOOLS" ]; then
+            /usr/bin/ln -s "${LFS}${TOOLS}" "$TOOLS" 2>/dev/null || true
+        fi
+        return 0
+    fi
+
     # Full-bootstrap clean-start can remove a previously populated /tmp/lfs-tools
     # while Bash still has commands from that directory cached in its hash table.
     # Flush those stale command paths before Stage 1 recreates the toolchain.
@@ -3639,6 +3661,10 @@ EOF
         echo "ERROR: Temporary toolchain archive is missing the UTF-8 locale archive." >&2
         return 1
     fi
+
+    # Only a verified toolchain that produced a valid archive may be marked
+    # complete.  Written last so a failure above leaves Stage 1 resumable.
+    /usr/bin/touch "$LFS/.bfs-stage1-complete" "$(_stage1_marker)" 2>/dev/null || true
 
     # Return directly to the main menu after the archive passes validation.
 }
