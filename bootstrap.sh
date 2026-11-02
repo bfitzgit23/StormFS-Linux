@@ -4313,6 +4313,14 @@ EOF_INSTALLED_INTEGRITY
             spkg_conf=/tmp/scratchpkg.conf
 
 
+            # The Stage-2 rootfs is seeded by _buildbase before any package
+            # owns its files: the merged-/usr links, /etc/passwd,
+            # /etc/group and the toolchain shims in /usr/bin exist
+            # before the ports that ship those same paths
+            # (aaa_filesystem, bash, coreutils, perl, dash) are
+            # installed.  pkgadd therefore reports each of them as an
+            # unowned file conflict, so ignore conflicts for this
+            # pass - the same -c Stage 3 already passes with -f.
             # scratchpkg builds and installs in one transaction inside the
             # chroot, so no host-side pkgadd step is required.
             chroot "$LFS" \
@@ -4320,7 +4328,7 @@ EOF_INSTALLED_INTEGRITY
                 HOME=/root \
                 TERM="${TERM:-dumb}" \
                 PATH="$LFSPATH" \
-                spkgin ${_force:-} --config="$spkg_conf" "$i" \
+                spkgin ${_force:-} -c --config="$spkg_conf" "$i" \
                 || {
                     status=$?
                     _close_active_package_log "$status"
