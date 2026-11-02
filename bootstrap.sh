@@ -4173,7 +4173,10 @@ SOURCE_DIR="/$spkgsrc"
 PACKAGE_DIR="/$spkgpkg"
 WORK_DIR="/$spkgwork"
 CBUILD_DIR="/var/lib/scratchpkg/cbuild"
-mkdir -p "$SOURCE_DIR" "$PACKAGE_DIR" "$WORK_DIR" "$CBUILD_DIR" || exit 1
+# The heredoc is unquoted: escape these four so pkgbuild expands them when it
+# sources the file.  Left unescaped they expand here, where they are unset, and
+# the generated config ran mkdir with empty arguments and exited immediately.
+mkdir -p "\$SOURCE_DIR" "\$PACKAGE_DIR" "\$WORK_DIR" "\$CBUILD_DIR" || exit 1
 EOF
 
     # Keep the installed/final pkgbuild configuration on the external build-work
