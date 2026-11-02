@@ -12,6 +12,11 @@ source="https://ftp.gnu.org/gnu/glibc/glibc-$version.tar.xz glibc-fhs-1.patch gl
 build() {
 	cd "$name-$version" || return 1
 
+	# A failed or interrupted build can leave stale dependency files in the
+	# out-of-tree build directories.  Remove them so a checkpoint retry starts
+	# from clean sources.
+	rm -rf build build32
+
 	# Apply patch sources; pkgbuild does this automatically.
 	for _bfs_patch in "$SRC"/*.patch "$SRC"/*.diff; do
 		[ -f "$_bfs_patch" ] || continue
@@ -56,7 +61,10 @@ build() {
         '/test-installation/s@$(PERL)@echo not running@' \
         -i ../Makefile
 
-    make install_root="$PKG" install
+    # glibc's install re-enters math/subdir_install.  With a parallel make the
+    # dependency postprocessing races and can leave NUL-filled *.os.d files
+    # ("missing separator"), so install serially as in bootstrap_build.
+    make -j1 install_root="$PKG" install
 
     install -d -m 0755 \
         "$PKG/usr/lib/locale" \
@@ -145,7 +153,7 @@ build() {
         $configure_flags
 
     make
-    make install_root="$PWD/DESTDIR" install
+    make -j1 install_root="$PWD/DESTDIR" install
 
     install -d -m 0755 \
         "$PKG/usr/lib32" \
@@ -188,6 +196,10 @@ build() {
 bootstrap_build() {
     # Patch sources are applied automatically by files/pkgbuild.bootstrap before
     # this function runs, in source=() order.
+
+    # Clear build trees preserved by a checkpoint so a retry cannot reuse stale
+    # or partially written dependency files.
+    rm -rf build build32
 
     #
     # Temporary 32-bit Glibc.
