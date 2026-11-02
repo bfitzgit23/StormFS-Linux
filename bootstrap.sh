@@ -4170,6 +4170,13 @@ _buildbase() {
     mkdir -p "$LFS/tmp/lfs-tools/bin"
     cp files/spkgin "$LFS/tmp/lfs-tools/bin/pkgin"
     chmod +x "$LFS/tmp/lfs-tools/bin/pkgin"
+    # scratchpkg hashes every source with b3sum, which the bootstrap does not
+    # provide: pkgbuild printed "b3sum: command not found" for each source and
+    # wrote .checksums empty anyway.  The stand-in keeps that behaviour quiet
+    # without changing what pkgbuild records; see files/b3sum.
+    mkdir -p "$LFS/tmp/lfs-tools/bin/bfs-shims"
+    cp files/b3sum "$LFS/tmp/lfs-tools/bin/bfs-shims/b3sum"
+    chmod +x "$LFS/tmp/lfs-tools/bin/bfs-shims/b3sum"
 
     mkdir -p "$LFS/var/lib/scratchpkg"
     mkdir -p "$buildworkdir"
@@ -4378,7 +4385,7 @@ EOF_INSTALLED_INTEGRITY
                 env -i \
                 HOME=/root \
                 TERM="${TERM:-dumb}" \
-                PATH="$LFSPATH" \
+                PATH="$LFSPATH:/tmp/lfs-tools/bin/bfs-shims" \
                 spkgin ${_force:-} -c --config="$spkg_conf" "$i" \
                 || {
                     status=$?
@@ -4618,7 +4625,7 @@ EOF
                 LANG=C \
                 LC_ALL=C \
                 LANGUAGE=C \
-                PATH="$STAGE_BUILD_PATH" \
+                PATH="$STAGE_BUILD_PATH:/tmp/lfs-tools/bin/bfs-shims" \
                 CCACHE_DIR=/var/cache/ccache \
                 /tmp/lfs-tools/bin/spkgin "$i" $integrity_opts -cf /etc/scratchpkg.conf \
                 || {

@@ -1,0 +1,11 @@
+#!/bin/sh
+# b3sum stand-in for the BFSOS bootstrap.
+#
+# scratchpkg's pkgbuild hashes every port source with b3sum, which neither the
+# temporary toolchain nor the base package set provides.  The shell therefore
+# printed "b3sum: command not found" once per source of every package, and
+# .checksums was written empty anyway.  The base build does not verify source
+# checksums, so this stand-in reports success with no output: pkgbuild records
+# exactly what it recorded before, without the noise.  Replace it with a real
+# b3sum port before source verification is expected to mean anything.
+exit 0
