@@ -71,7 +71,12 @@ bfs_install_mode() {
     else
         BFS_BOOTSTRAP=0
         BFS_INSTALL_PREFIX=/usr
-        BFS_INSTALL_DESTDIR="$BFS_INSTALL_DESTDIR"
+        # scratchpkg packages the payload from $PKG, so an ordinary port must
+        # stage there.  This used to be a self-assignment that left the
+        # staging root empty, so the port installed into the chroot's live
+        # /usr and pkgbuild aborted with "ERROR: PKG is empty" right after
+        # a successful build.
+        BFS_INSTALL_DESTDIR="$PKG"
     fi
     export DESTDIR="$BFS_INSTALL_DESTDIR"
     return 0
