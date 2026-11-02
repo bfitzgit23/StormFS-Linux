@@ -8,6 +8,7 @@ release=1
 source="https://www.kernel.org/pub/linux/docs/man-pages/man-pages-$version.tar.xz https://www.kernel.org/pub/linux/docs/$name/$name-posix/$name-posix-2017-a.tar.xz"
 
 build() {
+	cd "$SRC/$name-$version"
 	rm -f man5/passwd.5
 	make -R prefix=/usr DESTDIR=$PKG install
 
