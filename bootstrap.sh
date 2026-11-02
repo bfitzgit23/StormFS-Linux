@@ -4571,6 +4571,10 @@ EOF
                         LANG=C \
                         LC_ALL=C \
                         LANGUAGE=C \
+                        # The verification link runs before the gcc port installs
+                        # the as-needed scripts into /usr/lib; use the same
+                        # fallback as package builds.
+                        LIBRARY_PATH="/usr/lib:$TOOLS/lib" \
                         PATH="$LFSPATH" \
                         sh /tmp/glibc-postinstall
 
