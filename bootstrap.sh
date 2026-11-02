@@ -4206,7 +4206,7 @@ export XORG_CONFIG="--prefix=/usr --sysconfdir=/etc --localstatedir=/var --disab
 
 JOBS=${BFS_BUILD_JOBS/auto/$(nproc)}
 export JOBS
-export MAKEFLAGS="-j $JOBS"
+export MAKEFLAGS="-j \${JOBS:-1}"
 
 # Bootstrap-safe ccache policy: active only once the target ccache package
 # has installed ccache and its compiler wrappers inside the rootfs.
