@@ -4202,7 +4202,7 @@ _buildbase() {
 # init port, never to individual packages, and no systemd units are built.
 export CFLAGS="$CFLAGS"
 export CXXFLAGS="${CFLAGS}"
-export CPPFLAGS="-I/usr/include"
+export CPPFLAGS="-idirafter /usr/include"
 # The temporary toolchain's gcc specs link every binary against
 # -latomic_asneeded, which only the tools ship.  Once the binutils port is
 # installed, /usr/bin/ld wins the PATH race and does not search the tools'
@@ -4355,6 +4355,14 @@ EOF_INSTALLED_INTEGRITY
     # base package set, so Stage 3 must never resolve or install newly declared
     # dependencies. Normal scratch sysup dependency refresh remains useful on
     # an installed BFSOS system, but it is intentionally bypassed here.
+
+    # Checkpoints saved before the C++ include-order fix embed GCC specs that
+    # put /usr/include ahead of the C++ headers.  That breaks #include_next in
+    # <cstdlib>; move the target header directory behind the C++ search path.
+    for _bfs_spec in "$LFS"/usr/lib/gcc/*/*/specs; do
+        [ -f "$_bfs_spec" ] || continue
+        sed -i 's@-isystem /usr/include@-idirafter /usr/include@g' "$_bfs_spec"
+    done
 
     for i in $basepkg; do
         if [ "${1:-}" != rebuild ]; then
@@ -4529,7 +4537,7 @@ fi
 gcc -dumpspecs | sed \
     -e "s@\$TOOLS@@g" \
     -e "/\*startfile_prefix_spec:/{n;s@.*@/usr/lib/ @}" \
-    -e '/\*cpp:/{n;s@\$@ -isystem /usr/include@}' \
+    -e '/\*cpp:/{n;s@\$@ -idirafter /usr/include@}' \
     > "\$(dirname "\$(gcc --print-libgcc-file-name)")/specs"
 
 echo 'int main(void) { return 0; }' > dummy.c

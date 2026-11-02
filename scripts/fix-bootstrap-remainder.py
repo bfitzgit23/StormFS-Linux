@@ -57,7 +57,7 @@ NEW_CONFIG_HEREDOC = [
     "# init port, never to individual packages, and no systemd units are built.",
     'export CFLAGS="$CFLAGS"',
     'export CXXFLAGS="$' + '{CFLAGS}"',
-    'export CPPFLAGS="-I/usr/include"',
+    'export CPPFLAGS="-idirafter /usr/include"',
     'export LDFLAGS="-L/usr/lib -Wl,-rpath-link,/usr/lib"',
     'export LIBRARY_PATH="/usr/lib"',
     'export PKG_CONFIG_PATH="/usr/lib/pkgconfig:/usr/share/pkgconfig"',

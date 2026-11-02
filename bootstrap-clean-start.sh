@@ -437,7 +437,7 @@ export LANG=C
 export LC_ALL=C
 export LANGUAGE=C
 
-export CPPFLAGS="-I/usr/include"
+export CPPFLAGS="-idirafter /usr/include"
 export CFLAGS="-O2 -march=x86-64 -pipe"
 export CXXFLAGS="\${CFLAGS}"
 export LDFLAGS="-L/usr/lib -Wl,-rpath-link,/usr/lib"
@@ -590,7 +590,7 @@ fi
 gcc -dumpspecs | sed \
     -e "s@\$TOOLS@@g" \
     -e "/\*startfile_prefix_spec:/{n;s@.*@/usr/lib/ @}" \
-    -e '/\*cpp:/{n;s@\$@ -isystem /usr/include@}' \
+    -e '/\*cpp:/{n;s@\$@ -idirafter /usr/include@}' \
     > "\$(dirname "\$(gcc --print-libgcc-file-name)")/specs"
 
 echo 'int main(void) { return 0; }' > dummy.c
