@@ -2794,7 +2794,7 @@ _restore_toolchain() {
 
     if [ -x "$LFS/usr/bin/bash" ] &&
         [ -x "$LFS/usr/bin/pkgbuild" ] &&
-        [ -f "$LFS/var/lib/scratchpkg/db" ]
+        [ -d "$LFS/var/lib/scratchpkg/db" ]
     then
         echo "Existing base rootfs was preserved."
         echo "Continue with:"
@@ -2888,7 +2888,7 @@ _restore_rootfs() {
 
     if [ ! -x "$LFS/usr/bin/bash" ] ||
         [ ! -x "$LFS/usr/bin/gcc" ] ||
-        [ ! -f "$LFS/var/lib/scratchpkg/db" ]
+        [ ! -d "$LFS/var/lib/scratchpkg/db" ]
     then
         echo "ERROR: Restored base rootfs failed basic verification." >&2
         exit 1
@@ -4097,7 +4097,7 @@ _buildbase() {
     _validate_package_ports $basepkg
     echo
 
-    if [ ! -f "$LFS/var/lib/scratchpkg/db" ]; then
+    if [ ! -d "$LFS/var/lib/scratchpkg/db" ]; then
         mkdir -pv "$LFS"/{etc,var} "$LFS"/usr/{bin,lib,sbin} "$LFS/dev"
 
         for i in bash cat chmod dd echo ln mkdir pwd rm stty; do
@@ -4109,7 +4109,18 @@ _buildbase() {
         done
 
         for i in bin lib sbin; do
-            ln -sv "usr/$i" "$LFS/$i"
+            # A previous run followed the existing $LFS/$i symlink and left a
+            # nested $LFS/$i/$i link behind.  Remove that junk before the top
+            # link is recreated, and never write through a real directory.
+            if [ -L "$LFS/$i/$i" ] &&
+                [ "$(readlink "$LFS/$i/$i")" = "usr/$i" ]; then
+                rm -f "$LFS/$i/$i"
+            fi
+            if [ -d "$LFS/$i" ] && [ ! -L "$LFS/$i" ]; then
+                echo "ERROR: $LFS/$i is a directory; expected a usr/$i symlink." >&2
+                return 1
+            fi
+            ln -sfnv "usr/$i" "$LFS/$i"
         done
 
         case $(uname -m) in
@@ -4120,7 +4131,12 @@ _buildbase() {
 
         mkdir -pv "$LFS/usr/lib32"
 
-        ln -sv usr/lib32 "$LFS/lib32"
+        if [ -L "$LFS/lib32/lib32" ] &&
+            [ "$(readlink "$LFS/lib32/lib32")" = "usr/lib32" ]; then
+            rm -f "$LFS/lib32/lib32"
+        fi
+
+        ln -sfnv usr/lib32 "$LFS/lib32"
 
         ln -svf \
             "$TOOLS/lib/libgcc_s.so" \
