@@ -21,7 +21,7 @@ build() {
 
     make || return 1
 
-    python3 -m pip wheel \
+    /usr/bin/pip3 wheel \
         -w dist \
         --no-build-isolation \
         --no-deps \
@@ -30,7 +30,7 @@ build() {
 
     make DESTDIR="$PKG" install || return 1
 
-    PIP_CONFIG_FILE=/dev/null python3 -m pip install \
+    PIP_CONFIG_FILE=/dev/null /usr/bin/pip3 install \
         --isolated \
         --root="$PKG" \
         --ignore-installed \

@@ -12,7 +12,7 @@ build() {
 	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
 	[ -n "$_bfs_src" ] || return 1
 	cd "$_bfs_src" || return 1
-    python3 -m pip install . \
+    /usr/bin/pip3 install . \
         --root="$PKG" \
         --prefix=/usr \
         --no-deps \
