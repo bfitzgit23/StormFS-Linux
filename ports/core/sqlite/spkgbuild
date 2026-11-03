@@ -12,7 +12,8 @@ _version=$(printf "%i%.2i%.2i%.2i" $_ver_space)
 source="https://www.sqlite.org/2026/sqlite-autoconf-${_version}.tar.gz"
 
 build() {
-	cd "$name-$version" || return 1
+	# The autoconf tarball unpacks as sqlite-autoconf-<numeric version>.
+	cd "sqlite-autoconf-$_version" || return 1
     CPPFLAGS="$CPPFLAGS \
         -DSQLITE_SECURE_DELETE=1 \
         -DSQLITE_ENABLE_COLUMN_METADATA=1 \
