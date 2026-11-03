@@ -7,7 +7,8 @@ ca=ports/core/ca-certificates/spkgbuild
 makeca=ports/core/make-ca/post-install
 
 grep -Fq 'nss_certdata_version=' "$ca"
-grep -Fq 'NSS_${nss_certdata_version//./_}_RTM' "$ca"
+grep -Fq 'NSS_${nss_certdata_release}_RTM' "$ca"
+grep -Fq 'cd "nss-$nss_certdata_version"' "$ca"
 grep -Fq '/usr/share/pki/mozilla/certdata.txt' "$ca"
 grep -Fq '/etc/ssl/certdata.txt' "$ca"
 grep -qx 'ca-certificates' ports/core/make-ca/depends && grep -qx 'p11-kit' ports/core/make-ca/depends

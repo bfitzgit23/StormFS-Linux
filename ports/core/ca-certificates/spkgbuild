@@ -16,7 +16,9 @@ nss_certdata_release=$(printf '%s' "$nss_certdata_version" | tr . _)
 source="https://curl.se/ca/cacert.pem https://archive.mozilla.org/pub/security/nss/releases/NSS_${nss_certdata_release}_RTM/src/nss-$nss_certdata_version.tar.gz"
 
 build() {
-	cd "$name-$version" || return 1
+	# The package version is independent of the pinned NSS archive, whose
+	# top-level directory is named after nss_certdata_version instead.
+	cd "nss-$nss_certdata_version" || return 1
     certdata="$PWD/nss/lib/ckfw/builtins/certdata.txt"
     [ -s "$certdata" ] || {
         echo "ca-certificates: pinned Mozilla certdata.txt is missing from NSS $nss_certdata_version" >&2
