@@ -9,6 +9,10 @@ release=1
 source="https://files.pythonhosted.org/packages/source/w/wheel/${name#*-}-$version.tar.gz"
 
 build() {
+  _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "wheel-$version" -print -quit)
+  [ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+  [ -n "$_bfs_src" ] || return 1
+  cd "$_bfs_src" || return 1
 
   /usr/bin/python3 -m build --wheel --skip-dependency-check --no-isolation
   /usr/bin/python3 -m installer --destdir=$PKG dist/*.whl
