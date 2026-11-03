@@ -4366,10 +4366,12 @@ EOF_INSTALLED_INTEGRITY
 
     for i in $basepkg; do
         if [ "${1:-}" != rebuild ]; then
-            chroot "$LFS" scratch installed |
-                awk '{print $1}' |
-                grep -qx "$i" &&
+            # scratchpkg is not installed in the target yet during the first
+            # Stage-2 pass, so do not depend on the target's scratch command.
+            # The package database is authoritative and survives checkpoints.
+            if [ -f "$LFS/var/lib/scratchpkg/db/$i" ]; then
                 continue
+            fi
 
             _start_package_log base "$i"
 

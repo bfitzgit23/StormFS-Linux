@@ -466,10 +466,11 @@ EOF
 
     for i in $basepkg; do
         if [ "${1:-}" != rebuild ]; then
-            scratch installed -r "$LFS" |
-                awk '{print $1}' |
-                grep -qx "$i" &&
+            # Do not require the target's scratch command during Stage 2; the
+            # package database is authoritative and survives checkpoints.
+            if [ -f "$LFS/var/lib/scratchpkg/db/$i" ]; then
                 continue
+            fi
 
             unset _force
 
