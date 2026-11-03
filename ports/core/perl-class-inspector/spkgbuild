@@ -10,6 +10,6 @@ source="https://cpan.metacpan.org/authors/id/P/PL/PLICEASE/Class-Inspector-$vers
 
 build() {
 	. /usr/share/bfsos/spkgbuild.helper || return 1
-	cd "$name-$version" || return 1
+	cd "Class-Inspector-$version" || return 1
 	bfs_autobuild
 }

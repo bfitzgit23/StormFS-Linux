@@ -10,6 +10,6 @@ source="https://cpan.metacpan.org/authors/id/E/ET/ETHER/File-ShareDir-Install-$v
 
 build() {
 	. /usr/share/bfsos/spkgbuild.helper || return 1
-	cd "$name-$version" || return 1
+	cd "File-ShareDir-Install-$version" || return 1
 	bfs_autobuild
 }

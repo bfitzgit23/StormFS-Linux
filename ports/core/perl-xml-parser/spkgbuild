@@ -9,6 +9,6 @@ source="https://cpan.metacpan.org/authors/id/T/TO/TODDR/XML-Parser-$version.tar.
 
 build() {
 	. /usr/share/bfsos/spkgbuild.helper || return 1
-	cd "$name-$version" || return 1
+	cd "XML-Parser-$version" || return 1
 	bfs_autobuild
 }

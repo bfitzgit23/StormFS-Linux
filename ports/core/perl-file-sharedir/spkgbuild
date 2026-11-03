@@ -10,6 +10,6 @@ source="https://cpan.metacpan.org/authors/id/R/RE/REHSACK/File-ShareDir-$version
 
 build() {
 	. /usr/share/bfsos/spkgbuild.helper || return 1
-	cd "$name-$version" || return 1
+	cd "File-ShareDir-$version" || return 1
 	bfs_autobuild
 }
