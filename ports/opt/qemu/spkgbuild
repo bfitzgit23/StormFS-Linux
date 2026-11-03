@@ -38,7 +38,10 @@ build_opt=(
 source="https://download.qemu.org/qemu-$version.tar.xz"
 
 build() {
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
     rm -rf _bfs_qemu_build
     mkdir _bfs_qemu_build
     cd _bfs_qemu_build || return 1

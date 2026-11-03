@@ -17,7 +17,10 @@ tpm_commit=bc29a21d44b01396223c152a4834e52318591770
 source="https://github.com/tianocore/edk2/archive/refs/tags/edk2-stable$version.tar.gz https://github.com/google/brotli/archive/$brotli_commit.tar.gz https://github.com/ARMmbed/mbedtls/archive/$mbedtls_commit.tar.gz https://github.com/openssl/openssl/archive/$openssl_commit.tar.gz https://github.com/kkos/oniguruma/archive/$oniguruma_commit.tar.gz https://github.com/devicetree-org/pylibfdt/archive/$libfdt_commit.tar.gz https://github.com/MIPI-Alliance/public-mipi-sys-t/archive/$mipisyst_commit.tar.gz https://github.com/DMTF/libspdm/archive/$libspdm_commit.tar.gz https://github.com/TrustedComputingGroup/TPM/archive/$tpm_commit.tar.gz"
 
 build() {
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
     edk2="$SRC/edk2-edk2-stable$version"
 
     rm -rf \

@@ -12,7 +12,10 @@ _gcc_version=16.2.0
 source="https://sourceforge.net/projects/mingw-w64/files/mingw-w64/mingw-w64-release/mingw-w64-v$version.tar.bz2 \ https://ftp.gnu.org/gnu/binutils/binutils-$_binutils_version.tar.xz \ https://gcc.gnu.org/pub/gcc/releases/gcc-$_gcc_version/gcc-$_gcc_version.tar.xz"
 
 build() {
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
         local bootstrap="$SRC/sysroot"
         local old_path="$PATH"
         local T OPTS

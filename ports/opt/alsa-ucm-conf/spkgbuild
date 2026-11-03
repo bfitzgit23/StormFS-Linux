@@ -9,7 +9,10 @@ release=2
 source="https://github.com/alsa-project/alsa-ucm-conf/archive/refs/tags/v$version.tar.gz"
 
 build() {
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
     # MSI MEG X870E GODLIKE (USB 0db0:e5c3) uses the Realtek
     # ALC408x USB audio UCM configuration.
     python3 - <<'PY'

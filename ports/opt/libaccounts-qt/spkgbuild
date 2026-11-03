@@ -9,7 +9,10 @@ release=1
 source="https://gitlab.com/accounts-sso/$name/-/archive/VERSION_$version/$name-VERSION_$version.tar.gz"
 
 build() {
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
     "$QT6DIR/bin/qmake" PREFIX=/usr LIBDIR=/usr/lib CONFIG+=release || return 1
     make -j${JOBS:-1} || return 1
     make INSTALL_ROOT="$PKG" install || return 1

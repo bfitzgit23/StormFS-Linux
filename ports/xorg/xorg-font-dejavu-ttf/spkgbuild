@@ -9,7 +9,10 @@ release=1
 source="https://downloads.sourceforge.net/project/dejavu/dejavu/$version/dejavu-fonts-ttf-$version.tar.bz2"
 
 build() {
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
 
     install -m 0755 -d $PKG/usr/share/fonts/X11/TTF
     install -m 0644 -t $PKG/usr/share/fonts/X11/TTF ttf/*.ttf

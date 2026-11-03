@@ -9,7 +9,10 @@ release=2
 source="https://download.qt.io/official_releases/QtForPython/pyside6/PySide6-$version-src/pyside-setup-everywhere-src-$version.tar.xz"
 
 build() {
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
     # Qt recommends the CMake-only path for distribution packaging.
     # Use BFSOS's system Qt and LLVM/libclang; never download a bundled
     # prebuilt libclang or create a private Qt copy.

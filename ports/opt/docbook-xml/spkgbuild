@@ -13,7 +13,10 @@ renames=($name-$version.zyp
 source="https://archive.docbook.org/xml/4.5/$name-4.5.zip https://archive.docbook.org/xml/4.4/$name-4.4.zip https://archive.docbook.org/xml/4.3/$name-4.3.zip https://archive.docbook.org/xml/4.2/$name-4.2.zip"
 
 build() {
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
 	# map module filenames to their descriptions
 	declare -A DB_DESC
 	DB_DESC["docbookx.dtd"]="DTD DocBook\$xml V 4.\$vminor"

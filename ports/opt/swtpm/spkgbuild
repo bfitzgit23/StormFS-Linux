@@ -14,7 +14,10 @@ build_opt=(
 source="https://github.com/stefanberger/swtpm/archive/refs/tags/v$version.tar.gz"
 
 build() {
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
     ./autogen.sh --prefix=/usr --libdir=/usr/lib --sysconfdir=/etc \
         --localstatedir=/var "${build_opt[@]}" || return 1
     make || return 1

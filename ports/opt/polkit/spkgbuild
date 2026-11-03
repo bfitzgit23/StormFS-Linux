@@ -9,7 +9,10 @@ release=3
 source="https://github.com/$name-org/$name/archive/$version/$name-$version.tar.gz"
 
 build() {
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
   if [ ! -r /usr/share/gir-1.0/Gio-2.0.gir ]; then
     echo "ERROR: polkit introspection requires /usr/share/gir-1.0/Gio-2.0.gir." >&2
     echo "Rebuild glib after gobject-introspection is installed before building polkit." >&2

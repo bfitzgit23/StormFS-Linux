@@ -14,7 +14,10 @@ renames=(
 source="https://download.qt.io/archive/qt/5.15/$version/submodules/qtwebengine-everywhere-opensource-src-$version.tar.xz https://deb.debian.org/debian/pool/main/q/qtwebengine-opensource-src/qtwebengine-opensource-src_5.15.19+dfsg2-7.debian.tar.xz"
 
 build() {
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
     export QT5DIR=/opt/qt5
     export PATH="$QT5DIR/bin:$PATH"
     export PKG_CONFIG_PATH="$QT5DIR/lib/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"

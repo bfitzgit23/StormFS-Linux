@@ -9,7 +9,10 @@ release=6
 source="https://github.com/lfs-book/make-ca/archive/v$version/$name-$version.tar.gz"
 
 build() {
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
     # BLFS recommends removing deprecated mktemp -t usage.
     sed '/mktemp/s/-t //' -i make-ca || return 1
 

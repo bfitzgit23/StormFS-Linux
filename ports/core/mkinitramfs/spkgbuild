@@ -9,7 +9,10 @@ release=1
 source="https://gitlab.com/vylen/mkinitramfs/-/archive/main/mkinitramfs-main.tar.gz"
 
 build() {
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
     cd mkinitramfs-main || return 1
     meson setup build --prefix=/usr --buildtype=release || return 1
     ninja -C build -j "${JOBS:-1}" || return 1

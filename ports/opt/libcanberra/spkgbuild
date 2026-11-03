@@ -11,7 +11,10 @@ skip_patch=1
 source="https://0pointer.de/lennart/projects/$name/$name-$version.tar.xz https://www.linuxfromscratch.org/patches/blfs/svn/$name-$version-wayland-1.patch"
 
 build() {
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
 patch -Np1 -i $BFS_SOURCE_DIR/$name-$version-wayland-1.patch
 #autoreconf -fi
 	./configure --prefix=/usr --disable-oss &&

@@ -11,7 +11,10 @@ build_opt="--prefix=/usr --sysconfdir=/etc --libexecdir=/usr/lib/libdbusmenu-gtk
 source="https://deb.debian.org/debian/pool/main/libd/libdbusmenu/libdbusmenu_18.10.20180917~bzr492+repack1.orig.tar.xz 0001_no-deprecated-gnome-common-macros.patch 0003_port-tools-dbusmenu-bench-to-py3.patch 0004_prevent-test-json-from-failing.patch"
 
 build() {
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
 
 	# Apply patch sources; pkgbuild does this automatically.
 	for _bfs_patch in "$SRC"/*.patch "$SRC"/*.diff; do

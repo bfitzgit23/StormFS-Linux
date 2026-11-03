@@ -10,7 +10,10 @@ release=3
 source="https://ftp.debian.org/debian/pool/main/d/dbus-glib/dbus-glib_${version}.orig.tar.gz"
 
 build() {
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
 
 	scratch isinstalled bash-completion || BFS_DBUSGLIB+=' --enable-bash-completion=no'
 

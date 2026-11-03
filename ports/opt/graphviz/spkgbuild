@@ -10,7 +10,10 @@ release=1
 source="https://gitlab.com/graphviz/graphviz/-/archive/$version/graphviz-$version.tar.bz2"
 
 build() {
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
     # Current Graphviz supports CMake directly; avoid carrying the obsolete
     # autotools/libpostfix surgery from the old recipe.
     sed '/ORIGIN/d' -i lib/CMakeLists.txt || return 1

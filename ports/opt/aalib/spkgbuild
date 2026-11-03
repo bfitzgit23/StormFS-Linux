@@ -8,7 +8,10 @@ release=1
 source="https://downloads.sourceforge.net/aa-project/${name}-${version}.tar.gz aalib-aalinuxkbd-return.patch aalib-c99.patch aalib-mouse.patch aalib-fix-aarender.patch aalib-opaque-ncurses-fix.patch aalib-free-offset-pointer.patch aalib-key-down-OOB.patch"
 
 build() {
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
 
 	# Apply patch sources; pkgbuild does this automatically.
 	for _bfs_patch in "$SRC"/*.patch "$SRC"/*.diff; do

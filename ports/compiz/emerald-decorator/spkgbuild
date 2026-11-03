@@ -9,7 +9,10 @@ release=2
 source="https://gitlab.com/compiz/emerald/-/archive/v$version/emerald-v$version.tar.bz2"
 
 build() {
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
     NOCONFIGURE=1 LIBS+=" -lm -ldl" ./autogen.sh || return 1
     ./configure --prefix=/usr --with-gtk=3.0 || return 1
     make -j"${JOBS:-1}" || return 1

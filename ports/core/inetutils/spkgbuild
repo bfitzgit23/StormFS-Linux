@@ -18,7 +18,10 @@ source="https://ftp.gnu.org/gnu/inetutils/inetutils-$version.tar.gz"
 
 build() {
 	. /usr/share/bfsos/spkgbuild.helper || return 1
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
 sed -i 's/def HAVE_TERMCAP_TGETENT/ 1/' telnet/telnet.c
 	bfs_autobuild
 	mkdir -p $PKG/{,s}bin

@@ -25,7 +25,10 @@ source="https://download.libvirt.org/libvirt-$version.tar.xz default-network.xml
 
 build() {
 	. /usr/share/bfsos/spkgbuild.helper || return 1
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
 	bfs_autobuild
     # Ship a deterministic default NAT network instead of relying on an
     # upstream sample file being present in a particular release.

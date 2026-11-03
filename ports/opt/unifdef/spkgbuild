@@ -9,7 +9,10 @@ release=3
 source="https://ftp2.osuosl.org/pub/blfs/svn/u/$name-$version.tar.gz"
 
 build() {
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
     sed -i 's/constexpr/unifdef_&/g' unifdef.c
     sed -i 's/ln -s/ln -sf/' Makefile
 

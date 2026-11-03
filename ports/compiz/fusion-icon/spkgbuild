@@ -9,7 +9,10 @@ release=3
 source="https://gitlab.com/compiz/$name/-/archive/v$version/$name-v$version.tar.bz2"
 
 build() {
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
     # fusion-icon 0.2.4 still ships a setuptools setup.py rather than pyproject metadata.
     python3 setup.py build || return 1
     python3 setup.py install --root="$PKG" --prefix=/usr --optimize=1 || return 1

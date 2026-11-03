@@ -10,7 +10,10 @@ release=3
 source="https://gitlab.gnome.org/GNOME/libnma/-/archive/$version/libnma-$version.tar.bz2"
 
 build() {
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
   scratch isinstalled gtk4 && BFS_LIBNMA+=' -D libnma_gtk4=true'
   scratch isinstalled mobile-broadband-provider-info || BFS_LIBNMA+=' -D mobile_broadband_provider_info=false'
   #scratch isinstalled vala || BFS_LIBNMA+=' -D vapi=false'

@@ -8,7 +8,10 @@ release=1
 source="https://archive.apache.org/dist/${name}/${name}-${version}.tar.bz2"
 
 build() {
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
 sed -i "/Append/s:RPATH=libdir,::"          SConstruct &&
 sed -i "/Default/s:lib_static,::"           SConstruct &&
 sed -i "/Alias/s:install_static,::"         SConstruct &&

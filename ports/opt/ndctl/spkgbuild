@@ -11,7 +11,10 @@ renames=(ndctl-$version.tar.gz)
 source="https://github.com/pmem/ndctl/archive/refs/tags/v$version.tar.gz"
 
 build() {
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
     local tracefs_opt="disabled"
 
     if scratch isinstalled libtracefs >/dev/null 2>&1; then

@@ -9,7 +9,10 @@ release=1
 source="https://download.gnome.org/sources/${name}/${version%.*}/${name}-${version}.tar.xz"
 
 build() {
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
     # Current upstream (48.alpha and newer) uses Meson, not Autotools.
     sed -i 's:"/desktop:"/org:' schema/*.xml || return 1
 

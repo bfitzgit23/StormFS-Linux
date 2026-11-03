@@ -9,7 +9,10 @@ release=4
 source="https://gitlab.freedesktop.org/xdg/shared-mime-info/-/archive/$version/shared-mime-info-$version.tar.gz https://anduin.linuxfromscratch.org/BLFS/xdgmime/xdgmime.tar.xz"
 
 build() {
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
     if [ -d "$SRC/xdgmime" ]; then
         cp -a "$SRC/xdgmime" .
         make -C xdgmime || return 1

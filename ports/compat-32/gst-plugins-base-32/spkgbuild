@@ -22,7 +22,10 @@ source="https://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-
 build() {
 	. /usr/share/bfsos/spkgbuild.helper || return 1
 	bfs_compat32
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
         _bfs_require_compat32_extension 2 || return 0
   if [ -e /usr/lib32/pkgconfig/egl.pc ] && prt-get isinst wayland-protocols; then
     SPKG_GST_PLATFORM=egl

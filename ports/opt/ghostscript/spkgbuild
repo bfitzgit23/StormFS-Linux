@@ -13,7 +13,10 @@ release=1
 source="https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs$_ver_nodot/$name-$version.tar.xz https://downloads.sourceforge.net/sourceforge/gs-fonts/$name-fonts-std-8.11.tar.gz"
 
 build() {
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
 export CFLAGS+=" -Wno-incompatible-pointer-types -Wno-int-conversion"
 	scratch isinstalled fontconfig && BFS_GHOSTSCRIPT+=' --enable-fontconfig'
 	scratch isinstalled freetype && BFS_GHOSTSCRIPT+=' --enable-freetype'

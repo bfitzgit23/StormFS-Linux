@@ -9,7 +9,10 @@ release=2
 source="https://duktape.org/$name-$version.tar.xz"
 
 build() {
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
   export CFLAGS="$CFLAGS -DDUK_USE_FASTINT"
  sed -i 's/-Os/-O2/' Makefile.sharedlibrary
   make -f Makefile.sharedlibrary INSTALL_PREFIX=/usr

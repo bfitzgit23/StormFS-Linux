@@ -10,7 +10,10 @@ release=1
 source="https://github.com/ConsoleKit2/ConsoleKit2/archive/$version/ConsoleKit2-$version.tar.gz system-session pam-foreground-compat.ck"
 
 build() {
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
 
   NOCONFIGURE=1 ./autogen.sh
   ./configure \

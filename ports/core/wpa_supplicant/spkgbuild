@@ -9,7 +9,10 @@ release=6
 source="https://w1.fi/releases/wpa_supplicant-$version.tar.gz wpa_supplicant.conf"
 
 build() {
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
     cat > wpa_supplicant/.config <<'EOF'
 CONFIG_BACKEND=file
 CONFIG_CTRL_IFACE=y

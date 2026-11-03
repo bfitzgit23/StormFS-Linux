@@ -11,7 +11,10 @@ SPKG_AUTO_PATCH=no
 source="https://nodejs.org/dist/v$version/node-v$version.tar.xz unbundle-uv.patch"
 
 build() {
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
 
   patch -Np1 -i "$SRC/unbundle-uv.patch" || return 1
   rm deps/uv/uv.gyp deps/zlib/zlib.gyp || return 1

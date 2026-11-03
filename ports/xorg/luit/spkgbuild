@@ -9,7 +9,10 @@ release=2
 source="https://invisible-mirror.net/archives/$name/$name-$version.tgz"
 
 build() {
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
 
 CFLAGS='-U_XOPEN_SOURCE -D_XOPEN_SOURCE=600'	./configure $XORG_CONFIG
 

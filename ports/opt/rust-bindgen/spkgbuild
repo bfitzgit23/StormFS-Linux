@@ -8,7 +8,10 @@ release=1
 source="https://github.com/rust-lang/${name}/archive/refs/tags/v${version}.tar.gz"
 
 build() {
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
     scratch isinstalled sccache && export RUSTC_WRAPPER=/usr/bin/sccache
 
     mkdir -p "$BFS_SOURCE_DIR/rust"

@@ -9,7 +9,10 @@ release=3
 source="https://github.com/open-acpica/acpica/releases/download/$version/acpica-unix-$version.tar.gz"
 
 build() {
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
     make iasl -j "${JOBS:-1}" || return 1
 
     mkdir -p "$PKG/usr/bin"

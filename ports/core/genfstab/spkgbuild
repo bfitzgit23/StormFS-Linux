@@ -12,7 +12,10 @@ release=2
 source="https://gitlab.archlinux.org/archlinux/arch-install-scripts/-/archive/v$version/arch-install-scripts-v$version.tar.gz"
 
 build() {
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
     make genfstab || return 1
 
     install -d "$PKG/usr/bin" "$PKG/usr/share/licenses/$name" || return 1

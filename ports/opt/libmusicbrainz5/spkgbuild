@@ -10,7 +10,10 @@ skip_patch=1
 source="https://github.com/metabrainz/libmusicbrainz/releases/download/release-$version/libmusicbrainz-$version.tar.gz https://www.linuxfromscratch.org/patches/blfs/svn/libmusicbrainz-$version-cmake_fixes-1.patch"
 
 build() {
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
 patch -Np1 -i ../libmusicbrainz-$version-cmake_fixes-1.patch
 	mkdir build &&
 cd    build &&

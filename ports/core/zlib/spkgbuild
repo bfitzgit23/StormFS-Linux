@@ -11,7 +11,10 @@ export CPATH="/usr/include"
 source="https://zlib.net/fossils/zlib-$version.tar.gz https://github.com/madler/zlib/commit/36ff1be48ef696cc67b0855f7c8537ce0276210d.patch"
 
 build() {
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
 
 	# Apply patch sources; pkgbuild does this automatically.
 	for _bfs_patch in "$SRC"/*.patch "$SRC"/*.diff; do

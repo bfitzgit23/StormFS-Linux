@@ -9,7 +9,10 @@ release=2
 source="https://github.com/frankosterfeld/$name/archive/refs/tags/$version.tar.gz"
 
 build() {
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
     cmake -B build -S . \
         -DCMAKE_INSTALL_PREFIX=/opt/kf6 \
         -DCMAKE_PREFIX_PATH="/opt/qt6;/opt/kf6" \

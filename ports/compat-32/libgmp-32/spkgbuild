@@ -11,7 +11,10 @@ source="https://gmplib.org/download/gmp/gmp-$version.tar.xz"
 build() {
 	. /usr/share/bfsos/spkgbuild.helper || return 1
 	bfs_compat32
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
   (
     set -e
 	CC="gcc -std=gnu17" \

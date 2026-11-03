@@ -24,7 +24,10 @@ renames=(
 source="https://download.qt.io/archive/qt/5.15/$version/single/qt-everywhere-opensource-src-$version.tar.xz https://deb.debian.org/debian/pool/main/q/qtbase-opensource-src/qtbase-opensource-src_5.15.19+dfsg-4.debian.tar.xz https://deb.debian.org/debian/pool/main/q/qtlocation-opensource-src/qtlocation-opensource-src_5.15.19+dfsg-2.debian.tar.xz qtlocation-rapidjson-gcc16.patch.manual"
 
 build() {
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
     export QT5PREFIX=/opt/qt5
 
     apply_qt5_compat_patches || return 1

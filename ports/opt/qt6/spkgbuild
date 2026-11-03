@@ -12,7 +12,10 @@ build_work=disk
 source="https://download.qt.io/official_releases/qt/6.11/$version/single/qt-everywhere-src-$version.tar.xz"
 
 build() {
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
     export QT6PREFIX=/opt/qt6
 
     # Configure/build tools must run outside pkgbuild staging; staging is applied

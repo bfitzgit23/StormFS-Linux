@@ -11,7 +11,10 @@ source="https://www.openssl.org/source/${name:0:7}-$version.tar.gz \ no-rpath.pa
 build() {
 	. /usr/share/bfsos/spkgbuild.helper || return 1
 	bfs_compat32
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
 	# Apply patch sources; pkgbuild does this automatically.
 	for _p in "$SRC"/*.patch "$SRC"/*.diff; do
 		[ -f "$_p" ] || continue

@@ -20,7 +20,10 @@ build_opt=(
 source="https://www.sudo.ws/dist/$name-$version.tar.gz $name.pam"
 
 build() {
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
 
     # OpenSSL 4 compatibility
     sed -i \

@@ -9,7 +9,10 @@ release=1
 source="https://github.com/sass/sassc/archive/3.6.2/$name-$name.tar.gz https://github.com/sass/libsass/archive/3.6.5/libsass-3.6.5.tar.gz"
 
 build() {
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
 	autoreconf -fi
 	./configure --prefix=/usr
 	make

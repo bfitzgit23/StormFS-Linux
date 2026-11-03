@@ -16,7 +16,10 @@ build_opt=(
 source="https://github.com/lloyd/yajl/archive/refs/tags/$version.tar.gz"
 
 build() {
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
     sed -i \
         -e '/GET_TARGET_PROPERTY(binPath json_reformat LOCATION)/d' \
         -e 's|${binPath}|$<TARGET_FILE:json_reformat>|g' \

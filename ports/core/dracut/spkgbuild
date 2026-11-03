@@ -15,7 +15,10 @@ build_opt=(
 source="https://github.com/dracut-ng/dracut-ng/archive/refs/tags/$version.tar.gz bfs.conf bfsos-storage.conf bfsos-gpu.conf"
 
 build() {
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
     ./configure "${build_opt[@]}"
 
     sed -i \

@@ -13,7 +13,10 @@ keep_libtool=1
 source="https://downloads.sourceforge.net/tcl/tcl$version-src.tar.gz https://downloads.sourceforge.net/tcl/$name$version-html.tar.gz"
 
 build() {
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
 SRCDIR=$(pwd)
   cd unix
 

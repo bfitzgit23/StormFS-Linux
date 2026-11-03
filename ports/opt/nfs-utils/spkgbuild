@@ -12,7 +12,10 @@ source="https://www.kernel.org/pub/linux/utils/nfs-utils/$version/nfs-utils-$ver
 
 build() {
 	. /usr/share/bfsos/spkgbuild.helper || return 1
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
 	bfs_autobuild
     chmod u+w,go+r "$PKG/usr/sbin/mount.nfs" 2>/dev/null || true
     install -d "$PKG/var/lib/nfs" || return 1

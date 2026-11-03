@@ -10,7 +10,10 @@ keep_static=1
 source="https://ftp.gnu.org/gnu/glibc/glibc-$version.tar.xz glibc-fhs-1.patch glibc-2.44-upstream_fix-1.patch genlocales ld.so.conf nsswitch.conf"
 
 build() {
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
 
 	# A failed or interrupted build can leave stale dependency files in the
 	# out-of-tree build directories.  Remove them so a checkpoint retry starts

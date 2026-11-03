@@ -42,7 +42,10 @@ build_opt=(
 source="https://commondatastorage.googleapis.com/chromium-browser-official/chromium-$version.tar.xz"
 
 build() {
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
     local gn_args f d size
 
     # Fail early with a useful message instead of discovering a missing host

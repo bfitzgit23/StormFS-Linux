@@ -13,7 +13,10 @@ build_opt="--prefix=/usr --libexecdir=/usr/lib --enable-languages=fortran --disa
 source="https://ftp.gnu.org/gnu/gcc/gcc-$version/gcc-$version.tar.xz"
 
 build() {
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
   (
     set -e
   # Match the native BFSOS GCC multilib layout: 64-bit libraries in /usr/lib

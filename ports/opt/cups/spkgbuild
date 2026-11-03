@@ -9,7 +9,10 @@ release=2
 source="https://github.com/OpenPrinting/cups/releases/download/v$version/$name-$version-source.tar.gz"
 
 build() {
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
     ./configure --libdir=/usr/lib \
         --with-rundir=/run/cups \
         --with-system-groups=lpadmin \

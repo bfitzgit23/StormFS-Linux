@@ -27,7 +27,10 @@ source="https://ftp.gnu.org/gnu/grub/grub-$version.tar.xz extra_deps.lst"
 
 build() {
 	. /usr/share/bfsos/spkgbuild.helper || return 1
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
     #
     # GRUB supplies target-specific compiler flags and is known to
     # reject or miscompile with some globally inherited optimization
