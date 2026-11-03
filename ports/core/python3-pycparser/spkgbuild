@@ -9,9 +9,11 @@ release=1
 source="https://pypi.org/packages/source/p/pycparser/pycparser-$version.tar.gz"
 
 build() {
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "pycparser-3.0" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
   ls
-  cd pycparser-$version
 
   /usr/bin/python3 setup.py build
   cd pycparser

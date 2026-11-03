@@ -9,7 +9,10 @@ release=1
 source="https://pypi.org/packages/source/J/Jinja2/jinja2-$version.tar.gz"
 
 build() {
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "jinja2-3.1.6" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
   /usr/bin/python3 -m build --wheel --skip-dependency-check --no-isolation
   /usr/bin/python3 -m installer --compile-bytecode 2 --destdir=$PKG dist/*.whl
 }

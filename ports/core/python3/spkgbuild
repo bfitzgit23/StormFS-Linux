@@ -17,7 +17,10 @@ source="https://www.python.org/ftp/python/$version/Python-$version.tar.xz https:
 
 build() {
 	. /usr/share/bfsos/spkgbuild.helper || return 1
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "Python-3.14.7" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
 
 	# Apply patch sources; pkgbuild does this automatically.
 	for _bfs_patch in "$SRC"/*.patch "$SRC"/*.diff; do

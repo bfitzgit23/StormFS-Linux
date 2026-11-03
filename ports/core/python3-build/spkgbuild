@@ -9,7 +9,10 @@ release=1
 source="https://files.pythonhosted.org/packages/source/b/build/build-$version.tar.gz"
 
 build() {
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "build-1.6.1" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
    /usr/bin/python3 -m flit_core.wheel
   /usr/bin/python3 -m installer --destdir=$PKG dist/*.whl
 }

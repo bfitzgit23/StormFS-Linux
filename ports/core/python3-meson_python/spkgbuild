@@ -8,7 +8,10 @@ release=1
 source="https://files.pythonhosted.org/packages/source/m/meson_python/meson_python-${version}.tar.gz"
 
 build() {
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "meson_python-0.20.0" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
 python3 -m build --wheel --no-isolation
 python3 -m installer --destdir="$PKG" dist/*.whl
 }

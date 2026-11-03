@@ -8,7 +8,10 @@ release=5
 source="https://files.pythonhosted.org/packages/source/h/html5lib/html5lib-${version}.tar.gz"
 
 build() {
-	cd "$name-$version" || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "html5lib-1.1" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
     # html5lib 1.1 compatibility with modern setuptools.
     sed -i \
         's/from pkg_resources import/from packaging.version import parse as/' \
