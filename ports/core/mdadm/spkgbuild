@@ -16,7 +16,8 @@ build() {
 	cd "$_bfs_src" || return 1
     make \
         BINDIR=/usr/sbin \
-        CWFLAGS="-Wall -Wstrict-prototypes -Wextra -Wno-unused-parameter -Wimplicit-fallthrough=0 -O2"
+        CWFLAGS="-Wall -Wstrict-prototypes -Wextra -Wno-unused-parameter -Wimplicit-fallthrough=0 -O2" \
+        CXFLAGS="-DNO_LIBUDEV"
 
     make \
         DESTDIR=$PKG \
