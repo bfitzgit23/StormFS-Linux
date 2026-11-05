@@ -372,6 +372,20 @@ bfs_autobuild() {
     bfs_apply_patches || return 1
 
     _bfs_bt="${1:-}"
+    if [ -z "$_bfs_bt" ] && [ -n "${build_type:-}" ]; then
+        case $build_type in
+            configure_build) _bfs_bt=configure ;;
+            meson_build)     _bfs_bt=meson ;;
+            cmake_build)     _bfs_bt=cmake ;;
+            python3_build)   _bfs_bt=python3 ;;
+            perlmodule_build) _bfs_bt=perlmodule ;;
+            makefile_build)  _bfs_bt=makefile ;;
+            *)
+                bfs_die "unsupported build_type: $build_type"
+                return 1
+                ;;
+        esac
+    fi
     if [ -z "$_bfs_bt" ]; then
         _bfs_bt=$(bfs_detect_buildtype) || {
             bfs_die "failed to detect a build system for $name-$version"
