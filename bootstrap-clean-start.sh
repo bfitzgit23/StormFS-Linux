@@ -815,6 +815,7 @@ gzip
 zstd
 iptables
 libtirpc
+libnsl
 iproute2
 kbd
 libpipeline

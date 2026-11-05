@@ -4366,17 +4366,6 @@ EOF_INSTALLED_INTEGRITY
 
     for i in $basepkg; do
         if [ "${1:-}" != rebuild ]; then
-            # A checkpoint made with the old ncurses package can contain a
-            # dangling libncursesw.so.6 ABI link.  Vim's terminal-library test
-            # links through libtinfo and needs that runtime SONAME, so rebuild
-            # only ncurses before reusing the rest of the checkpoint.
-            if [ "$i" = ncurses ] &&
-                [ ! -e "$LFS/usr/lib/libncursesw.so.6" ]; then
-                echo "Repairing stale ncurses package: missing libncursesw.so.6 ABI link."
-                rm -f "$LFS/var/lib/scratchpkg/db/ncurses"
-                rm -f "$LFS/$spkgpkg/ncurses#"* "$LFS/$spkgpkg/ncurses-"*
-            fi
-
             # scratchpkg is not installed in the target yet during the first
             # Stage-2 pass, so do not depend on the target's scratch command.
             # The package database is authoritative and survives checkpoints.
@@ -4389,7 +4378,7 @@ EOF_INSTALLED_INTEGRITY
             unset _force
 
             case $i in
-                aaa_filesystem|gcc|bash|dash|perl|coreutils|pkgutils|ncurses)
+                aaa_filesystem|gcc|bash|dash|perl|coreutils|pkgutils)
                     _force=-f
                     ;;
             esac
@@ -4939,6 +4928,7 @@ gzip
 zstd
 iptables
 libtirpc
+libnsl
 iproute2
 kbd
 libpipeline
