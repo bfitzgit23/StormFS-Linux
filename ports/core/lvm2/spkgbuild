@@ -17,7 +17,7 @@ build_opt=(
     --enable-pkgconfig
     --disable-systemd
     --enable-dmeventd
-    --enable-udev_sync
+    --disable-udev_sync
 )
 source="https://sourceware.org/pub/lvm2/LVM2.$version.tgz"
 
