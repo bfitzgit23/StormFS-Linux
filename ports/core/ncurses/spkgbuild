@@ -64,6 +64,11 @@ build() {
     mv "$PKG/usr/lib/$real_lib" \
         "$PKG/lib/"
 
+    # Vim links through libtinfo, whose SONAME is libncursesw.so.6.
+    # Repair the ABI link left pointing at the moved real library.
+    ln -sf "../../lib/$real_lib" \
+        "$PKG/usr/lib/libncursesw.so.$abi"
+
     # Wide ncurses linker and runtime links.
     ln -sf "../../lib/$real_lib" \
         "$PKG/usr/lib/libncursesw.so"
