@@ -10,7 +10,8 @@ build_opt="--prefix=/usr
            --bindir=/sbin
            --disable-convert
            --disable-zoned
-           --disable-documentation"
+           --disable-documentation
+           --disable-libudev"
 source="https://www.kernel.org/pub/linux/kernel/people/kdave/$name/$name-v$version.tar.xz"
 
 build() {
