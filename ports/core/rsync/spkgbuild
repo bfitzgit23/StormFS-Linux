@@ -27,6 +27,7 @@ build() {
 	make
 	make DESTDIR=$PKG install
 
+	install -d "$PKG/etc/ports/drivers" "$PKG/var/log"
 	install -m 644 $SRC/rsyncd.conf $PKG/etc
 	install -m 755 $SRC/rsync.driver $PKG/etc/ports/drivers/rsync
 	touch $PKG/var/log/rsyncd.log
