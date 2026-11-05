@@ -21,7 +21,8 @@ build() {
 		--with-included-zlib=no \
 		--with-included-popt=yes \
 		--disable-xxhash \
-		--disable-lz4
+		--disable-lz4 \
+		--disable-idn
 
 	make
 	make DESTDIR=$PKG install
