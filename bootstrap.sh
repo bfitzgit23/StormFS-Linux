@@ -4648,7 +4648,7 @@ EOF
                 LANGUAGE=C \
                 PATH="$STAGE_BUILD_PATH:/tmp/lfs-tools/bin/bfs-shims" \
                 CCACHE_DIR=/var/cache/ccache \
-                /tmp/lfs-tools/bin/spkgin "$i" $integrity_opts -cf /etc/scratchpkg.conf \
+                /tmp/lfs-tools/bin/spkgin $integrity_opts -c -f --config=/etc/scratchpkg.conf "$i" \
                 || {
                     status=$?
                     _close_active_package_log "$status"
