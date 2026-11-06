@@ -779,6 +779,7 @@ register_iso_port_collections() {
 
 build_iso_package_set() {
     local root="$1"
+    local source_ports="${BUILD_PROJECT_DIR:-}/ports"
     local kernel_flavor="${BFS_ISO_KERNEL:-lts}"
     local kernel_pkg kernel_pattern
 
@@ -796,10 +797,20 @@ build_iso_package_set() {
             ;;
     esac
 
+    if [ ! -f "$source_ports/core/scratchpkg/spkgbuild" ] &&
+       [ -n "${PROJECT_DIR:-}" ] &&
+       [ -f "$PROJECT_DIR/ports/core/scratchpkg/spkgbuild" ]; then
+        BUILD_PROJECT_DIR="$PROJECT_DIR"
+        source_ports="$BUILD_PROJECT_DIR/ports"
+    fi
+    [ -f "$source_ports/core/scratchpkg/spkgbuild" ] ||
+        die "BFSOS ports tree is missing from BUILD_PROJECT_DIR=${BUILD_PROJECT_DIR:-<unset>}; expected $source_ports/core/scratchpkg/spkgbuild"
+
     log "Building/installing complete ISO live + installer package set in isolated root"
     rm -rf "$root/usr/ports"
     mkdir -p "$root/usr/ports"
-    cp -a "$BUILD_PROJECT_DIR/ports/." "$root/usr/ports/"
+    cp -a "$source_ports/." "$root/usr/ports/" ||
+        die "Failed to copy the BFSOS ports tree into the ISO root"
     [ -n "${VENOM_PORTS_DIR:-}" ] && [ -d "$VENOM_PORTS_DIR" ] ||
         die "Venom Linux ports tree is missing; refusing to build an incomplete ISO"
     cp -a "$VENOM_PORTS_DIR/." "$root/usr/ports/"
@@ -815,7 +826,7 @@ build_iso_package_set() {
     # reads the installed spkgbuilds directly.  The former CRUX `ports -u`
     # synchronisation tool is not part of a scratchpkg root.
     [ -f "$root/usr/ports/core/scratchpkg/spkgbuild" ] ||
-        die "ISO root is missing the installed ports tree"
+        die "ISO root is missing the installed ports tree (source=$source_ports root=$root/usr/ports)"
     log "Installed release ports tree verified in isolated root"
 
     log "Updating scratchpkg before system upgrade"
@@ -1493,7 +1504,7 @@ main() {
     log "Extracting verified base into isolated ISO live root"
     sudo bash -c "$(declare -f extract_archive die); extract_archive '$base_archive' '$WORK_DIR/live-root'"
 
-    sudo env BUILD_PROJECT_DIR="$BUILD_PROJECT_DIR" VENOM_PORTS_DIR="$VENOM_PORTS_DIR" WORK_DIR="$WORK_DIR" BFS_ISO_KERNEL="${BFS_ISO_KERNEL:-lts}" bash -c "$(declare -f log die mount_chroot_fs umount_chroot_fs register_iso_port_collections build_iso_package_set install_live_runtime install_dracut_live_module); $(declare -p iso_packages); build_iso_package_set '$WORK_DIR/live-root'; install_live_runtime '$WORK_DIR/live-root'; install_dracut_live_module '$WORK_DIR/live-root'"
+    sudo env BUILD_PROJECT_DIR="$BUILD_PROJECT_DIR" PROJECT_DIR="$PROJECT_DIR" VENOM_PORTS_DIR="$VENOM_PORTS_DIR" WORK_DIR="$WORK_DIR" BFS_ISO_KERNEL="${BFS_ISO_KERNEL:-lts}" bash -c "$(declare -f log die mount_chroot_fs umount_chroot_fs register_iso_port_collections build_iso_package_set install_live_runtime install_dracut_live_module); $(declare -p iso_packages); build_iso_package_set '$WORK_DIR/live-root'; install_live_runtime '$WORK_DIR/live-root'; install_dracut_live_module '$WORK_DIR/live-root'"
 
     mapfile -t boot_files < <(sudo env WORK_DIR="$WORK_DIR" BFS_ISO_KERNEL="${BFS_ISO_KERNEL:-lts}" bash -c "$(declare -f log die mount_chroot_fs umount_chroot_fs create_live_initramfs); create_live_initramfs '$WORK_DIR/live-root'" | tail -n2)
     ((${#boot_files[@]} == 2)) || die "Could not determine generated live kernel/initramfs"
