@@ -4687,7 +4687,7 @@ EOF
                 env -i \
                 HOME=/root \
                 PATH=/usr/bin:/usr/sbin:/bin:/sbin \
-                /usr/bin/pkgadd -u -f "/$spkgpkg/$(basename "$package_file")" \
+                /usr/bin/pkgadd -r "/$spkgpkg/$(basename "$package_file")" \
                 || {
                     status=$?
                     _close_active_package_log "$status"
