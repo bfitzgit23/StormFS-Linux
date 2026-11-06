@@ -4631,10 +4631,20 @@ EOF
             fi
 
             # Rebuild exactly this base package with the final BFSOS toolchain.
-            # Stage 2 left its package archive in the shared package cache, so
-            # remove cached copies first; otherwise pkgbuild may consider the package
-            # already built and Stage 3 would not actually recompile it.
-            rm -f "$packagedir/$i#"*
+            # pkgbuild names archives <name>-<version>-<release>.spkg.tar.<ext>
+            # and records that exact stem in the port's .pkgfiles.  The old '#'
+            # pattern never matched, so a successful rebuild looked like a
+            # missing archive.  Use the recorded stem so a package such as
+            # "foo" cannot pick up the archive for "foo-bar".
+            port_dir="$(find "$LFS/usr/ports" -mindepth 2 -maxdepth 2 \
+                -type d -name "$i" -print -quit 2>/dev/null)"
+            old_package_stem=""
+            if [ -n "$port_dir" ] && [ -r "$port_dir/.pkgfiles" ]; then
+                old_package_stem="$(sed -n '1p' "$port_dir/.pkgfiles")"
+            fi
+            if [ -n "$old_package_stem" ]; then
+                rm -f "$packagedir/$old_package_stem".spkg.tar.*
+            fi
 
             # Use pkgin only as the single-port pkgbuild wrapper, exactly as Stage 2
             # does; do not invoke scratch sysup here because the current upgrade
@@ -4656,7 +4666,15 @@ EOF
                     return "$status"
                 }
 
-            package_file="$(ls -1 "$packagedir/$i#"* 2>/dev/null | tail -n1)"
+            package_stem=""
+            if [ -n "$port_dir" ] && [ -r "$port_dir/.pkgfiles" ]; then
+                package_stem="$(sed -n '1p' "$port_dir/.pkgfiles")"
+            fi
+            package_file=""
+            if [ -n "$package_stem" ]; then
+                package_file="$(find "$packagedir" -maxdepth 1 -type f \
+                    -name "$package_stem.spkg.tar.*" -print -quit 2>/dev/null)"
+            fi
             if [ -z "$package_file" ] || [ ! -f "$package_file" ]; then
                 echo "ERROR: Stage 3 rebuilt $i but no package archive was found in $packagedir." >&2
                 _close_active_package_log 1
