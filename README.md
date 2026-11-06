@@ -2,7 +2,7 @@
 
 **BFSOS** is a do-it-yourself, x86_64 source-built Linux distribution: you run one script and it builds the source code for every package on your own machine, so each program is compiled for *your* hardware. It uses an LFS/MLFS-style bootstrap, CRUX `pkgutils`/ports for package builds, and `scratch` for dependency-aware package management, with a choice of **systemd**, **OpenRC**, or **SysVinit** as the init system. Dracut initramfs generation, GRUB, and a Dialog-based installer that supports both straightforward and layered storage layouts are included.
 
-BFSOS is maintained by Brian Madonna; the packaging baseline in this working tree (StormFS-Linux) is imported from <https://codeberg.org/bmadonnaster/BFSOS>, and the tree additionally carries the StormFS ports, the init-selection layer, and this documentation.
+BFSOS is maintained by Brian Madonna; the packaging baseline in this working tree (StormFS-Linux) is imported from <https://codeberg.org/bmadonnaster/BFSOS>, and the tree additionally carries the StormFS ports, the init-selection layer, and this documentation. The ISO builder fetches the Venom Linux ports collections from <https://codeberg.org/venomlinux/> so the live package set can draw on those repositories alongside the BFSOS-specific ISO ports.
 
 > **Current release:** 0.9.0. BFSOS is usable for development and testing, but the 1.0 release line is still under active validation. Keep backups when testing installer/storage changes on important systems.
 
@@ -169,6 +169,12 @@ The packaging baseline in this tree originates from Brian Madonna's BFSOS, whose
 
 ```text
 https://codeberg.org/bmadonnaster/BFSOS
+```
+
+The ISO builder additionally fetches the Venom Linux ports collections from:
+
+```text
+https://codeberg.org/venomlinux/
 ```
 
 Large base archives and public ISO releases are hosted through the BFSOS SourceForge project (`bfsos`, published by `scripts/bfs-publish-sourceforge.sh`); SourceForge remains the release-artifact host for the base/ISO downloads. Source control for this working tree lives at:

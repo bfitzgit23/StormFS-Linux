@@ -37,11 +37,13 @@ require_grep 'BFSOS Live Shell' scripts/bfs-build-iso.sh 'live shell heading mis
 reject_grep '5\) Quit menu' scripts/bfs-build-iso.sh 'redundant live Quit menu entry remains'
 pass 'live-menu shell/quit cleanup'
 
-require_grep 'https://github.com/bmadonnaster/BFSOS.git' scripts/bfs-build-iso.sh 'ISO builder is not using GitHub'
+require_grep 'https://codeberg.org/venomlinux/' scripts/bfs-build-iso.sh 'ISO builder is not using the Venom Linux Codeberg source'
+for repo in core extra mate nonfree multilib kde-lxqt s6 xfce; do
+    require_grep "https://codeberg.org/venomlinux/$repo.git" scripts/bfs-build-iso.sh "Venom repository is missing: $repo"
+done
 
-# Codeberg is retired as an active BFSOS upstream.  The prt-get post-install
-# migration hook that used to be the one exception was removed together with
-# prt-get, so no maintained path may reference the old URL any more.
+# The old bmadonnaster Codeberg BFSOS upstream remains retired.  Venom Linux
+# uses Codeberg too, so reject only the old BFSOS paths.
 if grep -RnsI 'codeberg\.org/bmadonnaster/BFSOS' \
     README.md bootstrap.sh files ports scripts \
     --exclude='install-bfs-menu-v50-r*.sh' \
@@ -55,7 +57,7 @@ fi
 
 rm -f /tmp/bfsos-r355-codeberg.$$
 
-pass 'active GitHub references'
+pass 'active Venom Linux source references'
 
 if grep -RnsI -E 'AIza[0-9A-Za-z_-]{20,}' ports/opt/geoclue README.md docs/INSTALL.md scripts files >/tmp/bfsos-r355-secret.$$ 2>/dev/null; then
     cat /tmp/bfsos-r355-secret.$$ >&2

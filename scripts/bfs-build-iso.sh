@@ -25,8 +25,23 @@ REFRESH_BASE="${BFS_ISO_REFRESH_BASE:-no}"
 LOCAL_BASE_PATH="${BFS_ISO_LOCAL_BASE:-}"
 BASE_SOURCE="unknown"
 BASE_MANAGER_FOUND=""
-GIT_URL="${BFS_ISO_GIT_URL:-https://github.com/bmadonnaster/BFSOS.git}"
+# Venom Linux publishes its ports as separate repositories, not one monorepo.
+# The ISO build consumes every collection below and stages it alongside the
+# BFSOS-specific ISO ports in this tree.
+GIT_URL="${BFS_ISO_VENOM_URL:-https://codeberg.org/venomlinux/}"
 GIT_REF="${BFS_ISO_GIT_REF:-main}"
+VENOM_GIT_REPOS=(
+    "core=https://codeberg.org/venomlinux/core.git"
+    "extra=https://codeberg.org/venomlinux/extra.git"
+    "mate=https://codeberg.org/venomlinux/mate.git"
+    "nonfree=https://codeberg.org/venomlinux/nonfree.git"
+    "multilib=https://codeberg.org/venomlinux/multilib.git"
+    "kde-lxqt=https://codeberg.org/venomlinux/kde-lxqt.git"
+    "s6=https://codeberg.org/venomlinux/s6.git"
+    "xfce=https://codeberg.org/venomlinux/xfce.git"
+)
+VENOM_PORTS_DIR=""
+VENOM_PORTS_SOURCES=""
 GIT_COMMIT="unknown"
 GIT_COMMIT_FULL="unknown"
 ISO_LABEL=""
@@ -67,7 +82,7 @@ Usage: $(basename "$0") [--refresh-base] [--sourceforge-base] [--local-base PATH
   --sourceforge-base
                     Explicitly use the SourceForge release base/cache path.
   --refresh-base    Force a fresh SourceForge base download (implies --sourceforge-base).
-  --git-ref REF     Build from this GitHub branch, tag, or commit (default: main).
+  --git-ref REF     Build from this Codeberg branch, tag, or commit (default: main).
 EOF
 }
 
@@ -349,31 +364,47 @@ fetch_base_or_rebuild() {
 
 prepare_build_project() {
     local dest="$WORK_DIR/source-tree"
-    log "Fetching authoritative BFSOS Git tree: $GIT_URL ($GIT_REF)"
+    local entry repo repo_url repo_dir commit found
+    log "Fetching authoritative Venom Linux ports trees: $GIT_URL ($GIT_REF)"
     rm -rf "$dest"
-    git clone --no-tags "$GIT_URL" "$dest" >/dev/null 2>&1 || die "Failed to clone BFSOS Git repository"
-    git -C "$dest" fetch --force --tags origin >/dev/null 2>&1 || die "Failed to fetch BFSOS Git refs"
-    if git -C "$dest" show-ref --verify --quiet "refs/remotes/origin/$GIT_REF"; then
-        # A normal branch build must leave the copy shipped in the live ISO on
-        # a real tracking branch. bfs-live-init can then safely use
-        # `git pull --ff-only` instead of failing on a detached HEAD.
-        git -C "$dest" checkout -B "$GIT_REF" "origin/$GIT_REF" >/dev/null 2>&1 ||             die "Failed to checkout tracking branch origin/$GIT_REF"
-        git -C "$dest" branch --set-upstream-to="origin/$GIT_REF" "$GIT_REF" >/dev/null 2>&1 ||             die "Failed to set upstream for $GIT_REF"
-    elif git -C "$dest" rev-parse --verify "$GIT_REF^{commit}" >/dev/null 2>&1; then
-        # Explicit tags/commit IDs are immutable build inputs and intentionally
-        # remain detached for reproducibility.
-        git -C "$dest" checkout --detach "$GIT_REF" >/dev/null 2>&1 || die "Failed to checkout $GIT_REF"
-    else
-        die "Requested BFSOS Git ref cannot be resolved: $GIT_REF"
-    fi
-    BUILD_PROJECT_DIR="$dest"
+    mkdir -p "$dest/ports"
+    VENOM_PORTS_SOURCES=""
+    for entry in "${VENOM_GIT_REPOS[@]}"; do
+        repo="${entry%%=*}"
+        repo_url="${entry#*=}"
+        repo_dir="$dest/ports/venom-$repo"
+        log "  - $repo: $repo_url"
+        git clone --no-tags "$repo_url" "$repo_dir" >/dev/null 2>&1 ||
+            die "Failed to clone Venom Linux repository: $repo"
+        git -C "$repo_dir" fetch --force --tags origin >/dev/null 2>&1 ||
+            die "Failed to fetch Venom Linux repository refs: $repo"
+        if git -C "$repo_dir" show-ref --verify --quiet "refs/remotes/origin/$GIT_REF"; then
+            git -C "$repo_dir" checkout -B "$GIT_REF" "origin/$GIT_REF" >/dev/null 2>&1 ||
+                die "Failed to checkout tracking branch origin/$GIT_REF for $repo"
+            git -C "$repo_dir" branch --set-upstream-to="origin/$GIT_REF" "$GIT_REF" >/dev/null 2>&1 ||
+                die "Failed to set upstream for $repo"
+        elif git -C "$repo_dir" rev-parse --verify "$GIT_REF^{commit}" >/dev/null 2>&1; then
+            git -C "$repo_dir" checkout --detach "$GIT_REF" >/dev/null 2>&1 ||
+                die "Failed to checkout $GIT_REF for $repo"
+        else
+            die "Requested Venom Linux Git ref cannot be resolved for $repo: $GIT_REF"
+        fi
+        commit="$(git -C "$repo_dir" rev-parse HEAD)"
+        found="$(find "$repo_dir" -mindepth 2 -maxdepth 2 -name spkgbuild -print -quit)"
+        [ -n "$found" ] || die "Venom Linux repository '$repo' contains no package recipes"
+        VENOM_PORTS_SOURCES+="${VENOM_PORTS_SOURCES:+ }$repo=$repo_url@$commit"
+        rm -rf "$repo_dir/.git"
+    done
+    VENOM_PORTS_DIR="$dest/ports"
+    BUILD_PROJECT_DIR="$PROJECT_DIR"
     load_project_metadata "$BUILD_PROJECT_DIR"
+    log "Venom Linux ports resolved: ${#VENOM_GIT_REPOS[@]} collections"
     log "BFSOS build source resolved to $GIT_COMMIT_FULL"
 
-    bash -n "$BUILD_PROJECT_DIR/bootstrap.sh" || die "Fetched bootstrap.sh has shell syntax errors"
-    bash -n "$BUILD_PROJECT_DIR/scripts/install-bfs-menu-current.sh" || die "Fetched installer has shell syntax errors"
+    bash -n "$BUILD_PROJECT_DIR/bootstrap.sh" || die "Bootstrap has shell syntax errors"
+    bash -n "$BUILD_PROJECT_DIR/scripts/install-bfs-menu-current.sh" || die "Installer has shell syntax errors"
     if [ -x "$BUILD_PROJECT_DIR/scripts/bfs-release-static-audit.sh" ]; then
-        "$BUILD_PROJECT_DIR/scripts/bfs-release-static-audit.sh" || die "Fetched BFSOS release static audit failed"
+        "$BUILD_PROJECT_DIR/scripts/bfs-release-static-audit.sh" || die "BFSOS release static audit failed"
     fi
 }
 
@@ -732,6 +763,20 @@ umount_chroot_fs() {
     umount -l "$root/dev" 2>/dev/null || true
 }
 
+register_iso_port_collections() {
+    local root="$1" repo_dir repo_path
+    touch "$root/etc/scratchpkg.repo"
+    for repo_dir in "$root"/usr/ports/*; do
+        [ -d "$repo_dir" ] || continue
+        repo_path="/usr/ports/${repo_dir##*/}"
+        if ! awk -v p="$repo_path" '$1 == p { found=1 } END { exit !found }' \
+            "$root/etc/scratchpkg.repo"; then
+            printf '%s\n' "$repo_path" >> "$root/etc/scratchpkg.repo"
+        fi
+    done
+    log "Registered staged ports collections in /etc/scratchpkg.repo"
+}
+
 build_iso_package_set() {
     local root="$1"
     local kernel_flavor="${BFS_ISO_KERNEL:-lts}"
@@ -755,6 +800,10 @@ build_iso_package_set() {
     rm -rf "$root/usr/ports"
     mkdir -p "$root/usr/ports"
     cp -a "$BUILD_PROJECT_DIR/ports/." "$root/usr/ports/"
+    [ -n "${VENOM_PORTS_DIR:-}" ] && [ -d "$VENOM_PORTS_DIR" ] ||
+        die "Venom Linux ports tree is missing; refusing to build an incomplete ISO"
+    cp -a "$VENOM_PORTS_DIR/." "$root/usr/ports/"
+    register_iso_port_collections "$root"
     # The release tree is installed as-is: scratchpkg reads /usr/ports through
     # its own configuration, so there is no CRUX prtdir file to maintain here.
     cp -a /etc/resolv.conf "$root/etc/resolv.conf" 2>/dev/null || true
@@ -848,6 +897,11 @@ install_live_runtime() {
         --exclude '/iso-work/' \
         --exclude '/iso-output/' \
         "$BUILD_PROJECT_DIR/" "$root/home/bfs/BFSOS/"
+    if [ -n "${VENOM_PORTS_DIR:-}" ] && [ -d "$VENOM_PORTS_DIR" ]; then
+        mkdir -p "$root/home/bfs/BFSOS/ports"
+        rsync -a "$VENOM_PORTS_DIR/" "$root/home/bfs/BFSOS/ports/"
+        register_iso_port_collections "$root"
+    fi
 
     chroot "$root" /bin/bash -lc '
         getent group bfs >/dev/null 2>&1 || groupadd bfs
@@ -1287,6 +1341,7 @@ ISO_LABEL=$ISO_LABEL
 GIT_URL=$GIT_URL
 GIT_REF=$GIT_REF
 GIT_COMMIT=$GIT_COMMIT_FULL
+VENOM_PORTS_SOURCES=$VENOM_PORTS_SOURCES
 BASE_ARCHIVE=$(basename "$base_archive")
 BASE_SHA256=$base_sha
 BASE_URL=$BASE_URL
@@ -1309,7 +1364,7 @@ stage_iso() {
         "$root/var/cache/scratchpkg/build-work" "$root/var/cache/scratchpkg/build-work-disk"
     sudo mkdir -p "$root/var/cache/scratchpkg/sources" "$root/var/cache/scratchpkg/packages" "$root/var/cache/scratchpkg/build-work"
     sudo bash -c "$(declare -f audit_live_root die log); audit_live_root '$root'"
-    sudo bash -c "$(declare -f write_build_info); VERSION='$VERSION'; ARCH='$ARCH'; BUILD_DATE='$BUILD_DATE'; ISO_LABEL='$ISO_LABEL'; GIT_URL='$GIT_URL'; GIT_REF='$GIT_REF'; GIT_COMMIT_FULL='$GIT_COMMIT_FULL'; BASE_URL='$BASE_URL'; BASE_SOURCE='$BASE_SOURCE'; write_build_info '$root' '$base_archive'"
+    sudo bash -c "$(declare -f write_build_info); VERSION='$VERSION'; ARCH='$ARCH'; BUILD_DATE='$BUILD_DATE'; ISO_LABEL='$ISO_LABEL'; GIT_URL='$GIT_URL'; GIT_REF='$GIT_REF'; GIT_COMMIT_FULL='$GIT_COMMIT_FULL'; VENOM_PORTS_SOURCES='$VENOM_PORTS_SOURCES'; BASE_URL='$BASE_URL'; BASE_SOURCE='$BASE_SOURCE'; write_build_info '$root' '$base_archive'"
 
     root_bytes="$(sudo du -sb "$root" | awk '{print $1}')"
     sudo cp "$root/boot/$kernel" "$stage/bfsos/vmlinuz"
@@ -1329,6 +1384,7 @@ ISO_LABEL=$ISO_LABEL
 GIT_URL=$GIT_URL
 GIT_REF=$GIT_REF
 GIT_COMMIT=$GIT_COMMIT_FULL
+VENOM_PORTS_SOURCES=$VENOM_PORTS_SOURCES
 BASE_ARCHIVE=$(basename "$base_archive")
 BASE_SHA256=$base_sha
 BASE_URL=$BASE_URL
@@ -1437,7 +1493,7 @@ main() {
     log "Extracting verified base into isolated ISO live root"
     sudo bash -c "$(declare -f extract_archive die); extract_archive '$base_archive' '$WORK_DIR/live-root'"
 
-    sudo env BUILD_PROJECT_DIR="$BUILD_PROJECT_DIR" WORK_DIR="$WORK_DIR" BFS_ISO_KERNEL="${BFS_ISO_KERNEL:-lts}" bash -c "$(declare -f log die mount_chroot_fs umount_chroot_fs build_iso_package_set install_live_runtime install_dracut_live_module); $(declare -p iso_packages); build_iso_package_set '$WORK_DIR/live-root'; install_live_runtime '$WORK_DIR/live-root'; install_dracut_live_module '$WORK_DIR/live-root'"
+    sudo env BUILD_PROJECT_DIR="$BUILD_PROJECT_DIR" VENOM_PORTS_DIR="$VENOM_PORTS_DIR" WORK_DIR="$WORK_DIR" BFS_ISO_KERNEL="${BFS_ISO_KERNEL:-lts}" bash -c "$(declare -f log die mount_chroot_fs umount_chroot_fs register_iso_port_collections build_iso_package_set install_live_runtime install_dracut_live_module); $(declare -p iso_packages); build_iso_package_set '$WORK_DIR/live-root'; install_live_runtime '$WORK_DIR/live-root'; install_dracut_live_module '$WORK_DIR/live-root'"
 
     mapfile -t boot_files < <(sudo env WORK_DIR="$WORK_DIR" BFS_ISO_KERNEL="${BFS_ISO_KERNEL:-lts}" bash -c "$(declare -f log die mount_chroot_fs umount_chroot_fs create_live_initramfs); create_live_initramfs '$WORK_DIR/live-root'" | tail -n2)
     ((${#boot_files[@]} == 2)) || die "Could not determine generated live kernel/initramfs"

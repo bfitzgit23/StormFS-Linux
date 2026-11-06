@@ -28,8 +28,14 @@ grep -q -- '-Dnmtui=true' "$ROOT/ports/iso/networkmanager-iso/spkgbuild" || fail
 grep -q 'downloads.sourceforge.net/project/bfsos/BFSOS/base/latest' "$iso" || fail 'SourceForge base URL is missing'
 grep -q 'BASE_SHA256_URL' "$iso" || fail 'SourceForge base checksum verification is missing'
 grep -q 'verify_sha256_file' "$iso" || fail 'base SHA256 verifier is missing'
-grep -q 'github.com/bmadonnaster/BFSOS.git' "$iso" || fail 'canonical GitHub Git URL is missing'
+for repo in core extra mate nonfree multilib kde-lxqt s6 xfce; do
+    grep -q "https://codeberg.org/venomlinux/$repo.git" "$iso" ||
+        fail "Venom Linux repository is missing: $repo"
+done
 grep -q 'prepare_build_project' "$iso" || fail 'automatic clean Git checkout is missing'
+grep -q 'VENOM_PORTS_DIR' "$iso" || fail 'Venom ports staging directory is missing'
+grep -q 'register_iso_port_collections' "$iso" || fail 'Venom collections are not registered with scratchpkg'
+grep -q 'VENOM_PORTS_SOURCES' "$iso" || fail 'Venom ports provenance is missing'
 grep -q 'GIT_COMMIT_FULL' "$iso" || fail 'full Git commit provenance is missing'
 grep -q '/etc/bfs-build-info' "$iso" || fail 'embedded build provenance is missing'
 
