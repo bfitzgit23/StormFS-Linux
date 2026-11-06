@@ -1737,7 +1737,8 @@ _latest_failure_log() {
 
     [ -d "$directory" ] || return 1
 
-    if [ -n "${LAST_FAILED_LOG_FILE:-}" ] && [ -r "$LAST_FAILED_LOG_FILE" ]; then
+    if [ -n "${LAST_FAILED_LOG_FILE:-}" ] && [ -r "$LAST_FAILED_LOG_FILE" ] &&
+        [ "${LAST_FAILED_LOG_FILE%/*}" = "$directory" ]; then
         printf '%s\n' "$LAST_FAILED_LOG_FILE"
         return 0
     fi
@@ -1763,8 +1764,18 @@ _latest_failure_log() {
 
 _show_stage_failure_dialog() {
     local stage="$1" status="$2" logfile="" details="" failed_url=""
+    local preflight_dir=""
+
+    case "$stage" in
+        1) preflight_dir="$TOOLCHAIN_LOG_DIR" ;;
+        2|3|4|5) preflight_dir="$BASE_LOG_DIR" ;;
+        *) preflight_dir="$LOG_DIR" ;;
+    esac
+
     logfile="$(_latest_failure_log "$stage" 2>/dev/null || true)"
-    if [ -z "$logfile" ] && [ -n "${STAGE_PREFLIGHT_LOG:-}" ] && [ -r "$STAGE_PREFLIGHT_LOG" ]; then
+    if [ -z "$logfile" ] && [ -n "${STAGE_PREFLIGHT_LOG:-}" ] &&
+        [ -r "$STAGE_PREFLIGHT_LOG" ] &&
+        [ "${STAGE_PREFLIGHT_LOG%/*}" = "$preflight_dir" ]; then
         logfile="$STAGE_PREFLIGHT_LOG"
     fi
     if [ -n "$logfile" ] && [ -r "$logfile" ]; then
@@ -3166,6 +3177,15 @@ _rootfs_cache_archive_save() {
         return 0
     fi
 
+    # A failed pre-package stage leaves only the initial directory skeleton.
+    # Saving that over a usable checkpoint destroys the only resumable state.
+    # Stage 1 writes this manifest before it builds anything; every resumable
+    # tree must carry it.
+    if [ ! -f "$LFS/.bfs-stage1-manifest" ]; then
+        echo "WARNING: Not saving an incomplete rootfs; the existing checkpoint is unchanged." >&2
+        return 0
+    fi
+
     local tmp="$BFS_ROOTFS_CACHE_ARCHIVE.tmp.$$"
 
     /usr/bin/rm -f "$tmp"
@@ -3190,14 +3210,21 @@ _rootfs_cache_archive_save() {
 _rootfs_cache_archive_restore() {
     [ -f "$BFS_ROOTFS_CACHE_ARCHIVE" ] || return 0
 
+    # Stage 1 restores the checkpoint into /tmp/lfs-rootfs. Stage 2 then runs as
+    # a separate process and must use that live tree, not extract the same 899 MB
+    # archive over it. Re-extraction is expensive and can fail (for example on
+    # ENOSPC), which previously discarded the checkpoint and left a skeleton.
+    if [ -n "$(/usr/bin/find "$LFS" -mindepth 1 -maxdepth 1 -print -quit 2>/dev/null)" ]; then
+        return 0
+    fi
+
     echo "Restoring the cached build state from:"
     echo "  $BFS_ROOTFS_CACHE_ARCHIVE"
 
     if ! /usr/bin/nice -n 19 /bin/tar -C "$LFS" -I 'zstd -d -T0' -xpf "$BFS_ROOTFS_CACHE_ARCHIVE"; then
-        echo "WARNING: Cached build state is unreadable; starting from a clean tree." >&2
+        echo "ERROR: Cached build state is unreadable; refusing to discard it." >&2
         /usr/bin/find "$LFS" -mindepth 1 -maxdepth 1 -exec /usr/bin/rm -rf -- {} + 2>/dev/null || true
-        /usr/bin/rm -f "$BFS_ROOTFS_CACHE_ARCHIVE"
-        return 0
+        return 1
     fi
     return 0
 }
@@ -4080,10 +4107,33 @@ _compressrootfs() {
 }
 
 _buildbase() {
-    _attach_rootfs_cache || return 1
+    local _base_stage=2
+    [ "${1:-}" = rebuild ] && _base_stage=3
+
+    _start_stage_preflight_log "$_base_stage" || {
+        echo "ERROR: Could not create the Stage-$_base_stage preflight log." >&2
+        return 1
+    }
+
+    if ! _attach_rootfs_cache; then
+        _stage_preflight_note "ERROR: Stage $_base_stage could not attach or restore the build-state cache."
+        return 1
+    fi
 
     if [ "$(id -u)" != 0 ]; then
         echo "ERROR: Stages 2 and 3 must be run as root." >&2
+        _stage_preflight_note "ERROR: Stage $_base_stage must run as root."
+        return 1
+    fi
+
+    # A restored checkpoint must contain the temporary toolchain before Stage 2
+    # can copy its pkg-config files or build a package. Without this check, an
+    # empty/mis-restored cache fails at the first unguarded cp with no useful log.
+    if [ "${1:-}" != rebuild ] &&
+        [ ! -x "$LFS/tmp/lfs-tools/bin/gcc" ] &&
+        [ ! -x "$TOOLS/bin/gcc" ]; then
+        echo "ERROR: Temporary toolchain is missing; cannot start Stage 2." >&2
+        _stage_preflight_note "ERROR: Temporary toolchain is missing; run Stage 1 before Stage 2."
         return 1
     fi
 
@@ -4094,7 +4144,10 @@ _buildbase() {
     echo
     echo "Resolving base-system ports across all collections..."
     # shellcheck disable=SC2086
-    _validate_package_ports $basepkg
+    if ! _validate_package_ports $basepkg 2> >(tee -a "$STAGE_PREFLIGHT_LOG" >&2); then
+        _stage_preflight_note "ERROR: Base-system port validation failed."
+        return 1
+    fi
     echo
 
     if [ ! -d "$LFS/var/lib/scratchpkg/db" ]; then
@@ -4319,7 +4372,12 @@ EOF_INSTALLED_INTEGRITY
     mkdir -p "$LFS/tmp/systemd-util-linux-pc"
 
     for pc in uuid blkid mount; do
-        cp "$LFS/tmp/lfs-tools/lib/pkgconfig/$pc.pc"             "$LFS/tmp/systemd-util-linux-pc/$pc.pc"
+        if ! cp "$LFS/tmp/lfs-tools/lib/pkgconfig/$pc.pc" \
+                "$LFS/tmp/systemd-util-linux-pc/$pc.pc"; then
+            echo "ERROR: Temporary util-linux pkg-config file is missing: $pc.pc" >&2
+            _stage_preflight_note "ERROR: Temporary toolchain is incomplete; missing util-linux pkg-config file $pc.pc."
+            return 1
+        fi
     done
 
     LFSPATH=/bin:/usr/bin:/sbin:/usr/sbin
@@ -4348,6 +4406,7 @@ EOF_INSTALLED_INTEGRITY
 
     if ! mountfs; then
         echo "ERROR: Could not prepare the Stage-2 chroot mounts; no base package was built." >&2
+        _stage_preflight_note "ERROR: Could not prepare the base-system chroot mounts; no package was built."
         return 1
     fi
 
