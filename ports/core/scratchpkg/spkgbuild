@@ -11,13 +11,14 @@
 description="Package manager for StormFS Linux (Venom Linux scratchpkg)"
 name=scratchpkg
 version=fdd643ab
-release=2
+release=3
 # Codeberg runs Forgejo, which serves /archive/<ref>.tar.gz and does not
 # understand GitHub's /archive/<ref>/<name>.tar.gz, so name the file
 # explicitly; the archive unpacks to scratchpkg/, which build() handles.
 source="scratchpkg-$version.tar.gz::https://codeberg.org/venomlinux/scratchpkg/archive/$version.tar.gz
         scratchpkg.conf
-        scratchpkg.repo"
+        scratchpkg.repo
+        scratchpkg.alias"
 
 build() {
 	cd "scratchpkg-$version" 2>/dev/null || cd scratchpkg || return 1
@@ -58,4 +59,5 @@ BFS_PKGBUILD_REEXEC
 	# StormFS policy: our own build configuration and ports repository.
 	install -m 0644 "$SRC/scratchpkg.conf" "$PKG/etc/scratchpkg.conf" || return 1
 	install -m 0644 "$SRC/scratchpkg.repo" "$PKG/etc/scratchpkg.repo" || return 1
+	install -m 0644 "$SRC/scratchpkg.alias" "$PKG/etc/scratchpkg.alias" || return 1
 }

@@ -836,6 +836,7 @@ util-linux
 meson
 ninja
 kmod
+eudev
 cracklib
 linux-pam
 libpwquality

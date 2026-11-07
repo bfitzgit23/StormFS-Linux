@@ -1,0 +1,9 @@
+#
+# /etc/scratchpkg.alias : StormFS package aliases
+#
+# Format: <real package> <aliased package>
+#
+# libudev is not a separate port: eudev builds libudev.so.1, its headers and
+# libudev.pc.  Ports that name libudev as a dependency resolve to eudev.
+#
+libudev eudev

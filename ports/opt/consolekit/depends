@@ -1,4 +1,6 @@
+acl
 dbus
+eudev
 gobject-introspection
 linux-pam
 libx11

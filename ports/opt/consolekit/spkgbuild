@@ -6,7 +6,7 @@
 description="Framework for defining and tracking users, login sessions, and seats"
 name=consolekit
 version=1.2.6
-release=1
+release=2
 source="https://github.com/ConsoleKit2/ConsoleKit2/archive/$version/ConsoleKit2-$version.tar.gz system-session pam-foreground-compat.ck"
 
 build() {

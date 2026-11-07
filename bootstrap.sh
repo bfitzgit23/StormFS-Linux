@@ -5115,6 +5115,7 @@ python3-pytz
 python3-babel
 python3-jinja2
 util-linux
+eudev
 dbus
 procps-ng
 e2fsprogs

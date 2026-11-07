@@ -107,7 +107,7 @@ done
 # scratchpkg port and the installer compatibility repair must ignore it so
 # minimal installs do not run glib-compile-schemas with no schema files.
 scratchpkg_port=ports/core/scratchpkg
-grep -Fq 'release=2' "$scratchpkg_port/spkgbuild" || \
+grep -Fq 'release=3' "$scratchpkg_port/spkgbuild" || \
     fail "scratchpkg trigger repair release is missing"
 grep -Fq 'grep -Eq "^usr/share/glib-2.0/schemas/.*[.]gschema[.](xml|override)$"' \
     "$scratchpkg_port/spkgbuild" || \
