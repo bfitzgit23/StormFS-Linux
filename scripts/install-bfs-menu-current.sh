@@ -7462,6 +7462,19 @@ write_chroot_installer() {
                 fi
         done
 
+        # Existing base archives request libXau with a lowercase filename that
+        # the X.Org archive returns as 404. Refresh both the native and
+        # compat-32 recipes so dependency builds use the correct filename.
+        local libxau_port
+        for libxau_port in xorg/libXau compat-32/libxau-32; do
+                if [[ -d "$PROJECT_DIR/ports/$libxau_port" ]]; then
+                        install -d -m 0755 "$TARGET/usr/ports/${libxau_port%/*}"
+                        rm -rf "$TARGET/usr/ports/$libxau_port"
+                        cp -a "$PROJECT_DIR/ports/$libxau_port" \
+                                "$TARGET/usr/ports/$libxau_port"
+                fi
+        done
+
         # Existing base archives carry the unconditional GLib schema hook,
         # which prints "No schema files found" when only gschema.dtd exists.
         # Refresh both hooks so a rebuilt GLib/GTK4 uses the guarded step.

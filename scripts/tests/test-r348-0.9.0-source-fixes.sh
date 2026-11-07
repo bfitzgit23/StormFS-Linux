@@ -23,6 +23,14 @@ grep -Fq 'session_tracking=ConsoleKit' ports/opt/polkit/spkgbuild || fail 'polki
 ! grep -Fq 'session_tracking=logind' ports/opt/polkit/spkgbuild || fail 'polkit still requests the libsystemd logind backend'
 grep -Fq 'release=4' ports/opt/polkit/spkgbuild || fail 'polkit ConsoleKit recipe release missing'
 grep -Fq 'for polkit_port in opt/polkit opt/consolekit; do' scripts/install-bfs-menu-current.sh || fail 'installer does not refresh the Polkit/ConsoleKit recipes'
+for libxau_port in xorg/libXau compat-32/libxau-32; do
+    grep -Fq 'https://www.x.org/releases/individual/lib/libXau-$version.tar.xz' "ports/$libxau_port/spkgbuild" || \
+        fail "$libxau_port does not use the case-correct libXau archive"
+    ! grep -Fq '/libxau-$version.tar.xz' "ports/$libxau_port/spkgbuild" || \
+        fail "$libxau_port still requests the missing lowercase archive"
+done
+grep -Fq 'for libxau_port in xorg/libXau compat-32/libxau-32; do' scripts/install-bfs-menu-current.sh || \
+    fail 'installer does not refresh the native and compat-32 libXau recipes'
 line_func=$(grep -n '^ensure_glib_introspection_ready()' scripts/install-bfs-menu-current.sh | cut -d: -f1)
 line_sysup=$(grep -n 'mandatory package upgrade (scratch sysup -y)' scripts/install-bfs-menu-current.sh | cut -d: -f1)
 (( line_func < line_sysup )) || fail 'GI preflight must be defined before mandatory sysup'
