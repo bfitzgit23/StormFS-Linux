@@ -18,6 +18,11 @@ pass 'bootstrap/ISO/installer/publisher shell syntax'
 [[ ! -e ports/opt/glib/.footprint ]] || fail 'generated final GLib footprint must not be committed for bootstrap pass'
 grep -qx 'glib' ports/opt/gobject-introspection/depends || fail 'GI must depend on glib'
 grep -qx 'gobject-introspection' ports/opt/polkit/depends || fail 'polkit must depend on GI'
+grep -qx 'consolekit' ports/opt/polkit/depends || fail 'polkit must depend on its ConsoleKit session provider'
+grep -Fq 'session_tracking=ConsoleKit' ports/opt/polkit/spkgbuild || fail 'polkit still requests the libsystemd logind backend'
+! grep -Fq 'session_tracking=logind' ports/opt/polkit/spkgbuild || fail 'polkit still requests the libsystemd logind backend'
+grep -Fq 'release=4' ports/opt/polkit/spkgbuild || fail 'polkit ConsoleKit recipe release missing'
+grep -Fq 'for polkit_port in opt/polkit opt/consolekit; do' scripts/install-bfs-menu-current.sh || fail 'installer does not refresh the Polkit/ConsoleKit recipes'
 line_func=$(grep -n '^ensure_glib_introspection_ready()' scripts/install-bfs-menu-current.sh | cut -d: -f1)
 line_sysup=$(grep -n 'mandatory package upgrade (scratch sysup -y)' scripts/install-bfs-menu-current.sh | cut -d: -f1)
 (( line_func < line_sysup )) || fail 'GI preflight must be defined before mandatory sysup'

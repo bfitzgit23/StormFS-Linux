@@ -5,7 +5,7 @@
 description="Application development toolkit for controlling system-wide privileges"
 name=polkit
 version=127
-release=3
+release=4
 source="https://github.com/$name-org/$name/archive/$version/$name-$version.tar.gz"
 
 build() {
@@ -24,7 +24,7 @@ build() {
     --buildtype=release \
     -D introspection=true \
     -D man=true \
-    -D session_tracking=logind \
+    -D session_tracking=ConsoleKit \
     -D tests=false || return $?
 
   meson compile -C build -j "${JOBS:-1}" || return $?

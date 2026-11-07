@@ -1,4 +1,5 @@
 dbus
+consolekit
 duktape
 gobject-introspection
 intltool

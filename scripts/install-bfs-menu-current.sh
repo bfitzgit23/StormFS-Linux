@@ -7449,6 +7449,19 @@ write_chroot_installer() {
                         "$TARGET/usr/ports/$docbook_xml_port"
         fi
 
+        # Existing base archives build Polkit with the systemd logind backend,
+        # which needs libsystemd on this OpenRC target. Refresh Polkit and its
+        # ConsoleKit session provider so the recipe uses ConsoleKit instead.
+        local polkit_port
+        for polkit_port in opt/polkit opt/consolekit; do
+                if [[ -d "$PROJECT_DIR/ports/$polkit_port" ]]; then
+                        install -d -m 0755 "$TARGET/usr/ports/${polkit_port%/*}"
+                        rm -rf "$TARGET/usr/ports/$polkit_port"
+                        cp -a "$PROJECT_DIR/ports/$polkit_port" \
+                                "$TARGET/usr/ports/$polkit_port"
+                fi
+        done
+
         # Existing base archives carry the unconditional GLib schema hook,
         # which prints "No schema files found" when only gschema.dtd exists.
         # Refresh both hooks so a rebuilt GLib/GTK4 uses the guarded step.
