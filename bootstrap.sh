@@ -2503,8 +2503,17 @@ _clean_start() {
         answer=YES
         echo "Full Bootstrap: clean start confirmed; removing prior build state."
     else
-        printf "Type YES to continue, or press Enter to keep existing files: "
-        read -r answer
+        # A host build launched from a service, CI job, or a shell without a
+        # controlling terminal must not fall off the preflight screen with a
+        # bare `read` and set -e.  Prompt on the controlling terminal when one
+        # exists, and report a clear error otherwise.
+        if [ -r /dev/tty ] && [ -w /dev/tty ]; then
+            printf "Type YES to continue, or press Enter to keep existing files: " >/dev/tty
+            read -r answer </dev/tty || answer=""
+        else
+            _stage_preflight_note "ERROR: Clean-start confirmation requires an interactive terminal; use ./bootstrap.sh full for the documented noninteractive host workflow."
+            return 1
+        fi
     fi
 
     if [ "$answer" != "YES" ]; then

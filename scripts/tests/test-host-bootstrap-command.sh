@@ -21,7 +21,9 @@ for token in \
     'BFS_FULL_BOOTSTRAP_NO_INSTALL_PROMPT' \
     'sudo -v' \
     '_run_full_bootstrap' \
-    'full|full-bootstrap|all'
+    'full|full-bootstrap|all' \
+    'read -r answer </dev/tty' \
+    'Clean-start confirmation requires an interactive terminal'
 do
     grep -Fq -- "$token" "$BOOT" || fail "bootstrap is missing contract token: $token"
 done
@@ -45,6 +47,7 @@ printf '%s\n' "$command_block" > "$WORK/command.sh"
 cat > "$WORK/bin/sudo" <<'EOF'
 #!/bin/sh
 printf 'sudo:%s\n' "$*" >> "$BFS_TEST_ORDER"
+[ "${BFS_TEST_SUDO_FAIL:-no}" = yes ] && exit 1
 exit 0
 EOF
 
@@ -89,5 +92,16 @@ grep -Fqx -- 'BFS_FULL_BOOTSTRAP_ASSUME_YES=yes' "$WORK/bootstrap-record" \
     || fail "full-bootstrap confirmation was not suppressed"
 grep -Fqx -- 'BFS_FULL_BOOTSTRAP_NO_INSTALL_PROMPT=yes' "$WORK/bootstrap-record" \
     || fail "installer handoff prompt was not suppressed"
+
+# A failed sudo pre-authentication must stop before bootstrap starts.
+: > "$WORK/order"
+rm -f "$WORK/bootstrap-record"
+if (cd "$WORK/project"; BFS_TEST_SUDO_FAIL=yes sh "$WORK/command.sh" </dev/null); then
+    fail "documented command continued after sudo pre-authentication failure"
+fi
+[ "$(sed -n '1p' "$WORK/order")" = 'sudo:-v' ] \
+    || fail "sudo pre-authentication was not attempted on the failure path"
+[ ! -e "$WORK/bootstrap-record" ] \
+    || fail "bootstrap ran after sudo pre-authentication failed"
 
 echo 'Noninteractive host bootstrap command regression: PASS'
