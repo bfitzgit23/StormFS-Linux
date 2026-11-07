@@ -9,7 +9,7 @@ version=3.129
 # forms that POSIX shell has no substitution for.
 _ver_under=$(printf '%s' "$version" | tr . _)
 release=1
-source="https://archive.mozilla.org/pub/security/nss/releases/NSS_$_ver_under_RTM/src/nss-$version.tar.gz nss-config.in nss.pc.in nss-softokn.pc.in nss-util.pc.in"
+source="https://archive.mozilla.org/pub/security/nss/releases/NSS_${_ver_under}_RTM/src/nss-$version.tar.gz nss-config.in nss.pc.in nss-softokn.pc.in nss-util.pc.in"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
