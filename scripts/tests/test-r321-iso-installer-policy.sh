@@ -96,9 +96,8 @@ grep -Fq 'packages/nss#*.pkg.tar.*' "$inst" || \
     fail "installer does not discard the stale NSS package"
 grep -Fq 'packages/nss-32#*.pkg.tar.*' "$inst" || \
     fail "installer does not discard the stale NSS-32 package"
-# In POSIX shells, NSS_$_ver_under_RTM expands the undefined variable
-# _ver_under_RTM, producing NSS_/ and a 404. Verify the expanded URL, not
-# just the literal recipe text.
+# Keep the release tag fully pinned: a variable followed by _RTM is parsed
+# as one variable by POSIX shells, producing NSS_/ and a 404.
 for nss_port in opt/nss compat-32/nss-32; do
     nss_url="$(NSS_PORT="$nss_port" sh -c '. "./ports/$NSS_PORT/spkgbuild"; printf "%s\n" "$source"' | awk '{print $1}')"
     [ "$nss_url" = 'https://archive.mozilla.org/pub/security/nss/releases/NSS_3_129_RTM/src/nss-3.129.tar.gz' ] || \
