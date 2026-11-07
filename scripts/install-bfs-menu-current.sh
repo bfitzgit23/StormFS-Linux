@@ -7422,6 +7422,22 @@ write_chroot_installer() {
         rm -f "$TARGET"/var/cache/scratchpkg/packages/newt#*.pkg.tar.*
         rm -f "$TARGET"/var/cache/scratchpkg/packages/libnewt-32#*.pkg.tar.*
 
+        # Existing base archives may carry an older NSS recipe or a partial
+        # 3.129 source download. Refresh both NSS recipes and discard cached
+        # NSS artifacts before NetworkManager's dependency build.
+        local nss_port
+        for nss_port in opt/nss compat-32/nss-32; do
+                if [[ -d "$PROJECT_DIR/ports/$nss_port" ]]; then
+                        install -d -m 0755 "$TARGET/usr/ports/${nss_port%/*}"
+                        rm -rf "$TARGET/usr/ports/$nss_port"
+                        cp -a "$PROJECT_DIR/ports/$nss_port" \
+                                "$TARGET/usr/ports/$nss_port"
+                fi
+        done
+        rm -f "$TARGET"/var/cache/scratchpkg/sources/nss-3.129.tar.gz*
+        rm -f "$TARGET"/var/cache/scratchpkg/packages/nss#*.pkg.tar.*
+        rm -f "$TARGET"/var/cache/scratchpkg/packages/nss-32#*.pkg.tar.*
+
         # The chroot is launched with `env -i`, and the live-environment
         # DIALOGRC points at /tmp outside the target. Copy the active theme into
         # the installed tree so password/account dialogs retain the selected

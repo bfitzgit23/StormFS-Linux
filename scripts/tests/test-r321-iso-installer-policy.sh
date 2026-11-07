@@ -86,6 +86,16 @@ grep -Fq 'packages/newt#*.pkg.tar.*' "$inst" || \
     fail "installer does not discard the stale newt package"
 grep -Fq 'packages/libnewt-32#*.pkg.tar.*' "$inst" || \
     fail "installer does not discard the stale libnewt-32 package"
+# Existing targets may also have an older NSS recipe or a truncated 3.129
+# source download. Refresh both recipes and discard cached NSS artifacts.
+grep -Fq 'for nss_port in opt/nss compat-32/nss-32; do' "$inst" || \
+    fail "installer does not refresh both NSS recipes"
+grep -Fq 'sources/nss-3.129.tar.gz*' "$inst" || \
+    fail "installer does not discard the stale NSS source archive"
+grep -Fq 'packages/nss#*.pkg.tar.*' "$inst" || \
+    fail "installer does not discard the stale NSS package"
+grep -Fq 'packages/nss-32#*.pkg.tar.*' "$inst" || \
+    fail "installer does not discard the stale NSS-32 package"
 for repo in core extra nonfree multilib s6 kde-lxqt mate xfce s6-services; do
     grep -Fq "https://codeberg.org/venomlinux/$repo.git" "$inst" || fail "installer Venom repository missing: $repo"
     grep -Fq "https://codeberg.org/venomlinux/$repo.git" ports/core/scratchpkg/scratchpkg.repo || fail "default scratchpkg repository missing: $repo"
