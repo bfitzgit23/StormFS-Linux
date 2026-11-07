@@ -38,7 +38,7 @@ reject_grep '5\) Quit menu' scripts/bfs-build-iso.sh 'redundant live Quit menu e
 pass 'live-menu shell/quit cleanup'
 
 require_grep 'https://codeberg.org/venomlinux/' scripts/bfs-build-iso.sh 'ISO builder is not using the Venom Linux Codeberg source'
-for repo in core extra mate nonfree multilib kde-lxqt s6 xfce; do
+for repo in core extra nonfree multilib s6 kde-lxqt mate xfce s6-services; do
     require_grep "https://codeberg.org/venomlinux/$repo.git" scripts/bfs-build-iso.sh "Venom repository is missing: $repo"
 done
 

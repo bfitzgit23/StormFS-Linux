@@ -20,6 +20,17 @@ grep -Fq 'rm -f "$root"/etc/ssh/ssh_host_*' "$iso" || fail "ISO build does not r
 grep -Fq '(fd|sr|loop)[0-9]+$/' "$inst" || fail "installer does not filter floppy/optical/loop pseudo-disks"
 grep -Fq '# Back from Ready to install returns to the main installer menu.' "$inst" || fail "review Back-loop fix missing"
 
+# The scratchpkg migration removed the CRUX ports command.  Installation must
+# use portsync and pull every Venom Linux collection, including s6-services.
+! grep -Eq '^[[:space:]]*ports -u([[:space:]]|$)' "$inst" || fail "installer still invokes the removed ports tool"
+! grep -Eq '^[[:space:]]*command -v ports([[:space:]]|$)' "$inst" || fail "installer still requires the removed ports command"
+grep -Fq 'portsync -r' "$inst" || fail "installer does not synchronize ports with scratchpkg"
+grep -Fq 'configure_venom_ports_repositories' "$inst" || fail "installer Venom repository setup missing"
+for repo in core extra nonfree multilib s6 kde-lxqt mate xfce s6-services; do
+    grep -Fq "https://codeberg.org/venomlinux/$repo.git" "$inst" || fail "installer Venom repository missing: $repo"
+    grep -Fq "https://codeberg.org/venomlinux/$repo.git" ports/core/scratchpkg/scratchpkg.repo || fail "default scratchpkg repository missing: $repo"
+done
+
 # The target is OpenRC-only.  Do not make a completed install depend on the
 # systemd package just to create the machine ID required by D-Bus.
 ! grep -Eq '^[[:space:]]*systemd-machine-id-setup([[:space:]]|$)' "$inst" || fail "installer still invokes systemd-machine-id-setup"

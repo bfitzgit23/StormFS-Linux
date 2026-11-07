@@ -3,9 +3,29 @@
 #
 # Format: <repo directory> <repo url> <repo branch, "main" by default>
 #
-# portsync clones/updates each repository into its directory. The installed
-# release tree already contains every collection below /usr/ports, so these
-# entries only matter when an administrator wants to track git upstream.
+# The installed release tree already contains the BFSOS collections below.
+# portsync clones/updates the Venom Linux collections into venom-* so an
+# upstream checkout cannot replace BFSOS-specific ports.
 #
 
-/usr/ports/stormfs	https://github.com/bfitzgit23/StormFS-Linux	main
+/usr/ports/compat-32
+/usr/ports/compiz
+/usr/ports/contrib
+/usr/ports/core
+/usr/ports/gnome
+/usr/ports/iso
+/usr/ports/lxqt
+/usr/ports/opt
+/usr/ports/plasma
+/usr/ports/xfce
+/usr/ports/xorg
+
+/usr/ports/venom-core https://codeberg.org/venomlinux/core.git main
+/usr/ports/venom-extra https://codeberg.org/venomlinux/extra.git main
+/usr/ports/venom-nonfree https://codeberg.org/venomlinux/nonfree.git main
+/usr/ports/venom-multilib https://codeberg.org/venomlinux/multilib.git main
+/usr/ports/venom-s6 https://codeberg.org/venomlinux/s6.git main
+/usr/ports/venom-kde-lxqt https://codeberg.org/venomlinux/kde-lxqt.git main
+/usr/ports/venom-mate https://codeberg.org/venomlinux/mate.git main
+/usr/ports/venom-xfce https://codeberg.org/venomlinux/xfce.git main
+/usr/ports/venom-s6-services https://codeberg.org/venomlinux/s6-services.git main

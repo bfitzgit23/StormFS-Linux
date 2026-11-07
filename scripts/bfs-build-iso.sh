@@ -27,7 +27,9 @@ BASE_SOURCE="unknown"
 BASE_MANAGER_FOUND=""
 # Venom Linux publishes its ports as separate repositories, not one monorepo.
 # The ISO build consumes every collection below and stages it alongside the
-# BFSOS-specific ISO ports in this tree.
+# BFSOS-specific ISO ports in this tree.  s6-services contains service
+# definitions rather than spkgbuild recipes, but it is fetched and staged with
+# the s6 collection for provenance and service references.
 GIT_URL="${BFS_ISO_VENOM_URL:-https://codeberg.org/venomlinux/}"
 GIT_REF="${BFS_ISO_GIT_REF:-main}"
 VENOM_GIT_REPOS=(
@@ -39,7 +41,9 @@ VENOM_GIT_REPOS=(
     "kde-lxqt=https://codeberg.org/venomlinux/kde-lxqt.git"
     "s6=https://codeberg.org/venomlinux/s6.git"
     "xfce=https://codeberg.org/venomlinux/xfce.git"
+    "s6-services=https://codeberg.org/venomlinux/s6-services.git"
 )
+VENOM_SUPPORT_REPOS=(s6-services)
 VENOM_PORTS_DIR=""
 VENOM_PORTS_SOURCES=""
 GIT_COMMIT="unknown"
@@ -390,8 +394,18 @@ prepare_build_project() {
             die "Requested Venom Linux Git ref cannot be resolved for $repo: $GIT_REF"
         fi
         commit="$(git -C "$repo_dir" rev-parse HEAD)"
-        found="$(find "$repo_dir" -mindepth 2 -maxdepth 2 -name spkgbuild -print -quit)"
-        [ -n "$found" ] || die "Venom Linux repository '$repo' contains no package recipes"
+        case " ${VENOM_SUPPORT_REPOS[*]} " in
+            *" $repo "*)
+                found="$(find "$repo_dir" -mindepth 1 -maxdepth 1 ! -name .git -print -quit)"
+                [ -n "$found" ] ||
+                    die "Venom Linux support repository '$repo' is empty"
+                ;;
+            *)
+                found="$(find "$repo_dir" -mindepth 2 -maxdepth 2 -name spkgbuild -print -quit)"
+                [ -n "$found" ] ||
+                    die "Venom Linux repository '$repo' contains no package recipes"
+                ;;
+        esac
         VENOM_PORTS_SOURCES+="${VENOM_PORTS_SOURCES:+ }$repo=$repo_url@$commit"
         rm -rf "$repo_dir/.git"
     done

@@ -7371,13 +7371,12 @@ write_chroot_installer() {
 
         # Transitional support for installs made from an older base archive:
         # seed the current Git port so Git can be installed before the first
-        # Git-backed `ports -u`, and seed the updated driver independently of
-        # which Git package release the base archive contains.
+        # portsync run, independently of which Git package release the base
+        # archive contains.
         if [[ -d "$PROJECT_DIR/ports/opt/git" ]]; then
                 install -d -m 0755 "$TARGET/usr/ports/opt"
                 rm -rf "$TARGET/usr/ports/opt/git"
                 cp -a "$PROJECT_DIR/ports/opt/git" "$TARGET/usr/ports/opt/git"
-                install -m 0755 "$PROJECT_DIR/ports/opt/git/git" "$TARGET/root/.bfsos-git-driver"
         fi
 
         # The chroot is launched with `env -i`, and the live-environment
@@ -7938,8 +7937,8 @@ command -v scratch >/dev/null 2>&1 || {
         echo "scratch is missing; mandatory system upgrade cannot run." >&2
         exit 1
 }
-command -v ports >/dev/null 2>&1 || {
-        echo "ports is missing; mandatory ports synchronization cannot run." >&2
+command -v portsync >/dev/null 2>&1 || {
+        echo "portsync is missing; mandatory ports synchronization cannot run." >&2
         exit 1
 }
 
@@ -8024,41 +8023,62 @@ IGNORE_CHECKSUM="%s"
 
 configure_scratchpkg_integrity_settings_early
 
-ensure_bfsos_git_ports() {
-        local config=/etc/ports/bfsos.git
-        local driver=/etc/ports/drivers/git
+configure_venom_ports_repositories() {
+        local repo_file=/etc/scratchpkg.repo
+        local repo_dir
+
+        # Register the BFSOS collections already present in the target before
+        # installing Git.  An older base archive may still point its repository
+        # file at the retired BFSOS/GitHub monorepo, so relying on that file to
+        # find ports/opt/git would fail before portsync can run.
+        mkdir -p /usr/ports
+        : > "$repo_file"
+        for repo_dir in /usr/ports/*; do
+                [ -d "$repo_dir" ] || continue
+                case "${repo_dir##*/}" in
+                        venom-*) continue ;;
+                esac
+                printf '%s\n' "$repo_dir" >> "$repo_file"
+        done
+        cat >> "$repo_file" <<'EOF_VENOM_PORTS'
+/usr/ports/venom-core https://codeberg.org/venomlinux/core.git main
+/usr/ports/venom-extra https://codeberg.org/venomlinux/extra.git main
+/usr/ports/venom-nonfree https://codeberg.org/venomlinux/nonfree.git main
+/usr/ports/venom-multilib https://codeberg.org/venomlinux/multilib.git main
+/usr/ports/venom-s6 https://codeberg.org/venomlinux/s6.git main
+/usr/ports/venom-kde-lxqt https://codeberg.org/venomlinux/kde-lxqt.git main
+/usr/ports/venom-mate https://codeberg.org/venomlinux/mate.git main
+/usr/ports/venom-xfce https://codeberg.org/venomlinux/xfce.git main
+/usr/ports/venom-s6-services https://codeberg.org/venomlinux/s6-services.git main
+EOF_VENOM_PORTS
+
+        rm -f /etc/ports/bfsos.git
 
         if ! command -v git >/dev/null 2>&1; then
-                log "Git is required by BFSOS ports; installing it from the existing base ports tree before ports -u"
+                log "Git is required by portsync; installing it from the existing base ports tree"
                 run_package_operation "required Git installation for ports synchronization" scratch install -y git
         fi
-        command -v git >/dev/null 2>&1 || { echo "Git installation completed but git is still unavailable." >&2; return 1; }
-
-        mkdir -p /etc/ports/drivers
-        if [[ -r /root/.bfsos-git-driver ]]; then
-                install -m 0755 /root/.bfsos-git-driver "$driver"
-        fi
-        [[ -x "$driver" ]] || { echo "CRUX/BFSOS Git ports driver is missing after Git installation." >&2; return 1; }
-
-        cat > "$config" <<'EOF_BFSOS_GIT'
-URL=https://github.com/bmadonnaster/BFSOS.git
-NAME=bfsos
-BRANCH=main
-LOCAL_REPOSITORY=/var/cache/ports-git/bfsos
-COLLECTIONS="compat-32:ports/compat-32 compiz:ports/compiz contrib:ports/contrib core:ports/core gnome:ports/gnome iso:ports/iso lxqt:ports/lxqt opt:ports/opt plasma:ports/plasma xfce:ports/xfce xorg:ports/xorg"
-EOF_BFSOS_GIT
-
-        # Retire only BFSOS-owned legacy HttpUp definitions. Third-party *.httpup
-        # files remain untouched and continue to use the generic HttpUp driver.
-        local collection
-        for collection in compat-32 compiz contrib core gnome iso lxqt opt plasma xfce xorg; do
-                rm -f "/etc/ports/$collection.httpup"
-        done
+        command -v git >/dev/null 2>&1 || {
+                echo "Git installation completed but git is still unavailable." >&2
+                return 1
+        }
+        command -v portsync >/dev/null 2>&1 || {
+                echo "portsync is missing; the scratchpkg installation is incomplete." >&2
+                return 1
+        }
 }
 
-ensure_bfsos_git_ports || exit 1
-log "Synchronizing BFSOS ports tree through Git"
-run_package_operation "ports synchronization (ports -u)" ports -u
+configure_venom_ports_repositories || exit 1
+
+sync_venom_ports() {
+        # portsync can offer to display repository news after syncing.  The
+        # installer has no interactive prompt at this point, so consume EOF
+        # rather than leaving a half-written install waiting for input.
+        portsync -r </dev/null
+}
+
+log "Synchronizing Venom Linux ports collections through portsync"
+run_package_operation "Venom Linux ports synchronization (portsync -r)" sync_venom_ports
 
 # GLib/GObject-Introspection bootstrap ordering.
 #
