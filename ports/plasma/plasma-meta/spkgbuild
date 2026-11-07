@@ -5,7 +5,7 @@
 
 description="KDE Plasma 6 desktop meta package"
 name=plasma-meta
-version=6.7.5
+version=6.7.6
 release=4
 source=""
 

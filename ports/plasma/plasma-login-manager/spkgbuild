@@ -4,7 +4,7 @@
 
 description="KDE Plasma integrated display/login manager and configuration KCM"
 name=plasma-login-manager
-version=6.7.5
+version=6.7.6
 release=2
 source="https://download.kde.org/stable/plasma/$version/$name-$version.tar.xz bfs-display-manager plasmalogin.pam plasmalogin-autologin.pam plasmalogin-greeter.pam remember-session-binding-fix.patch"
 

@@ -4,10 +4,10 @@
 
 description="A general purpose cryptographic library based on GnuPG"
 name=libgcrypt-32
-version=1.12.3
-release=2
+version=1.12.4
+release=3
 build_opt="--disable-padlock-support --enable-static=yes --disable-asm"
-source="https://mirrors.dotsrc.org/gcrypt/${name%-*}/${name%-*}-$version.tar.bz2"
+source="https://gnupg.org/ftp/gcrypt/${name%-*}/${name%-*}-$version.tar.bz2"
 
 build() {
 	. /usr/share/bfsos/spkgbuild.helper || return 1

@@ -28,7 +28,7 @@ expected = {
     'opt/libclc':'23.1.1', 'opt/rust-bindgen':'0.73.2',
     'opt/poppler':'26.09.0', 'opt/libpcap':'1.10.7', 'compat-32/libpcap-32':'1.10.7',
     'opt/imlib2':'1.12.7', 'compat-32/imlib2-32':'1.12.7',
-    'opt/libgcrypt':'1.12.4', 'compat-32/libgcrypt-32':'1.12.3',
+    'opt/libgcrypt':'1.12.4', 'compat-32/libgcrypt-32':'1.12.4',
     'opt/openldap':'2.7.1', 'compat-32/openldap-32':'2.7.1',
     'opt/samba':'4.24.7', 'opt/glib':'2.90.0', 'compat-32/glib-32':'2.90.0',
     'opt/firefox':'155.0.1', 'opt/firefox-bin':'155.0.1', 'opt/discord':'1.0.158',
@@ -39,7 +39,7 @@ expected = {
     'opt/publicsuffix-list':'20260913', 'opt/rapidjson':'20250205.24b5e7a',
     'opt/lua':'5.4.9', 'compat-32/vkd3d-32':'2.1',
     'compat-32/vulkan-tools-32':'1.4.357.0', 'compat-32/libnm-32':'1.58.1',
-    'compat-32/nvidia-fb-32':'595.99.02',
+    'compat-32/nvidia-fb-32':'620.70.06',
 }
 for rel, ver in expected.items(): expect_ver(rel, ver)
 
@@ -48,9 +48,9 @@ versions=[]
 for p in sorted((ROOT/'ports/plasma').glob('*/spkgbuild')):
     m=re.search(r'^version=(.+)$',p.read_text(errors='replace'),re.M)
     if m: versions.append(m.group(1).strip().strip('"\''))
-for old in ('6.29.0','6.7.4','26.08.0'):
+for old in ('6.29.0','6.7.4','6.7.5','26.08.0'):
     if old in versions: raise AssertionError(f'plasma collection still contains stale {old}')
-for cur, minimum in (('6.30.0',74),('6.7.5',58),('26.08.1',17)):
+for cur, minimum in (('6.30.0',74),('6.7.6',58),('26.08.1',17)):
     if versions.count(cur) < minimum:
         raise AssertionError(f'plasma collection has only {versions.count(cur)} entries at {cur}, expected >= {minimum}')
 

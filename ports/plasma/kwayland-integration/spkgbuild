@@ -3,7 +3,7 @@
 
 description="kwayland-integration package"
 name=kwayland-integration
-version=6.7.5
+version=6.7.6
 release=1
 build_opt="-DCMAKE_INSTALL_PREFIX=/opt/kf6 
             -DCMAKE_INSTALL_LIBEXECDIR=libexec 

@@ -13,7 +13,7 @@ expected = {
     'ports/opt/libvirt/spkgbuild': 'version=12.7.0',
     'ports/opt/libvirt-python/spkgbuild': 'version=12.7.0',
     'ports/opt/virt-manager/spkgbuild': 'version=5.1.0',
-    'ports/opt/chromium/spkgbuild': 'version=153.0.8010.36',
+    'ports/opt/chromium/spkgbuild': 'version=157.0.8103.38',
 }
 for rel, needle in expected.items():
     assert needle in text(rel), (rel, needle)

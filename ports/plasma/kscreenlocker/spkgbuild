@@ -3,7 +3,7 @@
 
 description="kscreenlocker package"
 name=kscreenlocker
-version=6.7.5
+version=6.7.6
 release=1
 build_opt="-DCMAKE_INSTALL_PREFIX=/opt/kf6 \
             -DCMAKE_PREFIX_PATH=/opt/qt6;/opt/kf6 

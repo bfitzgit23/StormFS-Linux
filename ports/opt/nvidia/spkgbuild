@@ -4,8 +4,8 @@
 
 description="NVIDIA Linux Display Driver (production branch)"
 name=nvidia
-version=595.99.02
-release=2
+version=620.70.06
+release=3
 source="https://us.download.nvidia.com/XFree86/Linux-x86_64/$version/NVIDIA-Linux-x86_64-$version.run \ 90-nvidia-uvm.rules 10-nvidia-drm-outputclass.conf nvidia-powerd.rc \ nvidia-hybrid-blacklist.conf"
 
 build() {

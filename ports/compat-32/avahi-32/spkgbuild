@@ -4,15 +4,16 @@
 
 description="32-bit Avahi mDNS/DNS-SD compatibility libraries"
 name=avahi-32
-version=0.9-rc5
-release=8
+version=0.9_rc5
+srcver=0.9-rc5
+release=9
 build_opt="--with-distro=none --disable-static --disable-gtk --disable-gtk3 --disable-qt3 --disable-qt4 --disable-qt5 --disable-python --disable-pygobject --disable-python-dbus --disable-mono --disable-monodoc --disable-nls --disable-manpages --enable-compat-libdns_sd --disable-libsystemd"
-source="https://github.com/avahi/avahi/archive/v$version/avahi-$version.tar.gz https://www.linuxfromscratch.org/patches/blfs/svn/avahi-$version-ipv6_race_condition_fix-1.patch"
+source="https://github.com/avahi/avahi/archive/v$srcver/avahi-$srcver.tar.gz https://www.linuxfromscratch.org/patches/blfs/svn/avahi-$srcver-ipv6_race_condition_fix-1.patch"
 
 build() {
 	. /usr/share/bfsos/spkgbuild.helper || return 1
 	bfs_compat32
-	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "avahi-$srcver" -print -quit)
 	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
 	[ -n "$_bfs_src" ] || return 1
 	cd "$_bfs_src" || return 1
