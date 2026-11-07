@@ -8147,9 +8147,17 @@ if [[ -n "$outdated_packages" ]]; then
         dependency_closure="$(scratch quickdep $outdated_packages 2>/dev/null || true)"
         if [[ -n "$dependency_closure" ]]; then
                 ensure_glib_introspection_ready "$dependency_closure" || exit 1
-                missing_dependencies="$(scratch isinstalled $dependency_closure 2>/dev/null | awk '/not installed/ {print $2}' | sort -u | tr '\n' ' ')"
-                if [[ -n "$missing_dependencies" ]]; then
-                        read -r -a missing_dependency_array <<< "$missing_dependencies"
+                # scratch isinstalled is a single-package status check: it
+                # returns 1 and prints nothing for a missing package.  Do not
+                # pipe a whole closure through it under pipefail, because that
+                # aborts the installer before the upgrade can report an error.
+                missing_dependency_array=()
+                for dependency in $dependency_closure; do
+                        if ! scratch isinstalled "$dependency" >/dev/null 2>&1; then
+                                missing_dependency_array+=("$dependency")
+                        fi
+                done
+                if ((${#missing_dependency_array[@]} > 0)); then
                         run_package_operation "new dependencies required by system upgrade" \
                                 scratch install -y "${missing_dependency_array[@]}"
                 fi
