@@ -7405,6 +7405,23 @@ write_chroot_installer() {
                 fi
         done
 
+        # Pagure's newt release endpoint currently returns 404, and pkg_fetch
+        # trusts any cached file with the expected name. Refresh both newt
+        # recipes and discard an older truncated source or package archive so
+        # the BLFS mirror is actually used.
+        local newt_port
+        for newt_port in opt/newt compat-32/libnewt-32; do
+                if [[ -d "$PROJECT_DIR/ports/$newt_port" ]]; then
+                        install -d -m 0755 "$TARGET/usr/ports/${newt_port%/*}"
+                        rm -rf "$TARGET/usr/ports/$newt_port"
+                        cp -a "$PROJECT_DIR/ports/$newt_port" \
+                                "$TARGET/usr/ports/$newt_port"
+                fi
+        done
+        rm -f "$TARGET"/var/cache/scratchpkg/sources/newt-0.52.25.tar.gz*
+        rm -f "$TARGET"/var/cache/scratchpkg/packages/newt#*.pkg.tar.*
+        rm -f "$TARGET"/var/cache/scratchpkg/packages/libnewt-32#*.pkg.tar.*
+
         # The chroot is launched with `env -i`, and the live-environment
         # DIALOGRC points at /tmp outside the target. Copy the active theme into
         # the installed tree so password/account dialogs retain the selected

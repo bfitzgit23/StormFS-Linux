@@ -8,7 +8,9 @@ name=libnewt-32
 version=0.52.25
 release=3
 build_opt="--without-python --disable-nls"
-source="https://releases.pagure.org/newt/newt-$version.tar.gz"
+# Pagure's release endpoint currently returns 404; BLFS mirrors the
+# byte-identical upstream archive (MD5 cca66ed1d8774fb9e3f6a33525de416d).
+source="https://anduin.linuxfromscratch.org/BLFS/newt/newt-$version.tar.gz"
 
 build() {
 	. /usr/share/bfsos/spkgbuild.helper || return 1

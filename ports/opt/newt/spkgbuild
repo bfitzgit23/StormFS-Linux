@@ -7,7 +7,9 @@ description="Newt is a programming library for color text mode, widget based use
 name=newt
 version=0.52.25
 release=2
-source="https://releases.pagure.org/$name/$name-$version.tar.gz"
+# Pagure's release endpoint currently returns 404; BLFS mirrors the
+# byte-identical upstream archive (MD5 cca66ed1d8774fb9e3f6a33525de416d).
+source="https://anduin.linuxfromscratch.org/BLFS/newt/newt-$version.tar.gz"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)

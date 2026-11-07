@@ -71,6 +71,21 @@ for kernel_port in linux linux-lts; do
         fail "$kernel_port still references the retired THUNDERBOLT symbol"
     fi
 done
+# Pagure's newt release endpoint returns 404. Use the byte-identical BLFS
+# mirror for both recipes, and discard stale cached archives in existing
+# targets because pkg_fetch reuses any file with the expected name.
+for newt_port in opt/newt compat-32/libnewt-32; do
+    grep -Fq 'https://anduin.linuxfromscratch.org/BLFS/newt/newt-$version.tar.gz' \
+        "ports/$newt_port/spkgbuild" || fail "$newt_port does not use the newt mirror"
+done
+grep -Fq 'for newt_port in opt/newt compat-32/libnewt-32; do' "$inst" || \
+    fail "installer does not refresh both newt recipes"
+grep -Fq 'sources/newt-0.52.25.tar.gz*' "$inst" || \
+    fail "installer does not discard the stale newt source archive"
+grep -Fq 'packages/newt#*.pkg.tar.*' "$inst" || \
+    fail "installer does not discard the stale newt package"
+grep -Fq 'packages/libnewt-32#*.pkg.tar.*' "$inst" || \
+    fail "installer does not discard the stale libnewt-32 package"
 for repo in core extra nonfree multilib s6 kde-lxqt mate xfce s6-services; do
     grep -Fq "https://codeberg.org/venomlinux/$repo.git" "$inst" || fail "installer Venom repository missing: $repo"
     grep -Fq "https://codeberg.org/venomlinux/$repo.git" ports/core/scratchpkg/scratchpkg.repo || fail "default scratchpkg repository missing: $repo"
