@@ -7391,6 +7391,20 @@ write_chroot_installer() {
                 fi
         done
 
+        # Older base archives contain the previous BFSOS kernel recipe, which
+        # still required the retired CONFIG_THUNDERBOLT symbol. Refresh both
+        # BFSOS kernel ports so the current recipe is used without rebuilding
+        # the base archive.
+        local kernel_port
+        for kernel_port in linux linux-lts; do
+                if [[ -d "$PROJECT_DIR/ports/core/$kernel_port" ]]; then
+                        install -d -m 0755 "$TARGET/usr/ports/core"
+                        rm -rf "$TARGET/usr/ports/core/$kernel_port"
+                        cp -a "$PROJECT_DIR/ports/core/$kernel_port" \
+                                "$TARGET/usr/ports/core/$kernel_port"
+                fi
+        done
+
         # The chroot is launched with `env -i`, and the live-environment
         # DIALOGRC points at /tmp outside the target. Copy the active theme into
         # the installed tree so password/account dialogs retain the selected

@@ -57,6 +57,20 @@ grep -Fq 's|/tmp/lfs-tools/bin/m4|/usr/bin/m4|g' ports/core/autoconf/spkgbuild |
     fail "autoconf recipe bakes in the temporary-toolchain m4 path"
 grep -Fq 'M4=/usr/bin/m4 ./bootstrap.sh' ports/core/rdfind/spkgbuild || \
     fail "rdfind bootstrap does not use the target m4"
+# CONFIG_THUNDERBOLT was replaced by CONFIG_USB4. Older base archives carry
+# the obsolete guard, so refresh the BFSOS kernel ports before building them.
+grep -Fq 'for kernel_port in linux linux-lts; do' "$inst" || \
+    fail "installer does not refresh both BFSOS kernel ports"
+grep -Fq 'PROJECT_DIR/ports/core/$kernel_port' "$inst" || \
+    fail "installer does not copy the refreshed BFSOS kernel port"
+for kernel_port in linux linux-lts; do
+    grep -Fq 'scripts/config --module USB4' "ports/core/$kernel_port/spkgbuild" || \
+        fail "$kernel_port recipe does not enable USB4"
+    if grep -Fq -- '--module THUNDERBOLT' "ports/core/$kernel_port/spkgbuild" || \
+       grep -Fq 'CONFIG_THUNDERBOLT=' "ports/core/$kernel_port/config"; then
+        fail "$kernel_port still references the retired THUNDERBOLT symbol"
+    fi
+done
 for repo in core extra nonfree multilib s6 kde-lxqt mate xfce s6-services; do
     grep -Fq "https://codeberg.org/venomlinux/$repo.git" "$inst" || fail "installer Venom repository missing: $repo"
     grep -Fq "https://codeberg.org/venomlinux/$repo.git" ports/core/scratchpkg/scratchpkg.repo || fail "default scratchpkg repository missing: $repo"

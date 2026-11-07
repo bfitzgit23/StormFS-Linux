@@ -32,6 +32,10 @@ bad=[]
 for p in configs:
     vals=load(p)
     recipe=(p.parent/'spkgbuild').read_text(errors='replace')
+    if 'CONFIG_THUNDERBOLT=' in p.read_text():
+        bad.append(f'{p.relative_to(ROOT)}: obsolete CONFIG_THUNDERBOLT; use CONFIG_USB4')
+    if '--module THUNDERBOLT' in recipe:
+        bad.append(f'{p.parent.relative_to(ROOT)}/spkgbuild: obsolete --module THUNDERBOLT; use USB4')
     for cat,syms in required.items():
         for sym in syms:
             enabled = vals.get(sym) in {'y','m'}

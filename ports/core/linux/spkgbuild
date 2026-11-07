@@ -107,7 +107,6 @@ build() {
     scripts/config --module INTEL_PMT_CRASHLOG
     scripts/config --module INTEL_PMT_DISCOVERY
     scripts/config --module INTEL_VSEC
-    scripts/config --module THUNDERBOLT
     scripts/config --module USB4
 
     scripts/config --enable INOTIFY_USER
@@ -203,7 +202,7 @@ build() {
     done
     # Hybrid GPU stack must survive Kconfig reconciliation: i915/xe/nouveau as
     # modules, XE display + IVPU enabled, PCI power control and MEI GSC present.
-    for hybrid_mod in DRM_I915 DRM_XE DRM_NOUVEAU PCI_PWRCTRL PCI_PWRCTRL_GENERIC PCI_PWRCTRL_TC9563 INTEL_MEI_GSC INTEL_MEI_GSC_PROXY INTEL_MEI_CSC INTEL_MEI_VSC INTEL_MEI_PXP INTEL_MEI_HDCP INTEL_PMC_CORE INTEL_PMT_CLASS INTEL_PMT_TELEMETRY INTEL_PMT_CRASHLOG INTEL_PMT_DISCOVERY THUNDERBOLT USB4 DRM_ACCEL_IVPU INTEL_VSEC; do
+    for hybrid_mod in DRM_I915 DRM_XE DRM_NOUVEAU PCI_PWRCTRL PCI_PWRCTRL_GENERIC PCI_PWRCTRL_TC9563 INTEL_MEI_GSC INTEL_MEI_GSC_PROXY INTEL_MEI_CSC INTEL_MEI_VSC INTEL_MEI_PXP INTEL_MEI_HDCP INTEL_PMC_CORE INTEL_PMT_CLASS INTEL_PMT_TELEMETRY INTEL_PMT_CRASHLOG INTEL_PMT_DISCOVERY USB4 DRM_ACCEL_IVPU INTEL_VSEC; do
         grep -q "^CONFIG_${hybrid_mod}=m$" .config || {
             echo "Kernel configuration error: CONFIG_${hybrid_mod} is not modular (hybrid GPU)." >&2
             return 1
