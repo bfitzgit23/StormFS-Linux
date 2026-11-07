@@ -3221,12 +3221,29 @@ _rootfs_cache_archive_restore() {
     echo "Restoring the cached build state from:"
     echo "  $BFS_ROOTFS_CACHE_ARCHIVE"
 
-    if ! /usr/bin/nice -n 19 /bin/tar -C "$LFS" -I 'zstd -d -T0' -xpf "$BFS_ROOTFS_CACHE_ARCHIVE"; then
-        echo "ERROR: Cached build state is unreadable; refusing to discard it." >&2
+    # Windows bind mounts can return a transient read error while extracting a
+    # multi-gigabyte checkpoint.  The checkpoint is valid, so retry the whole
+    # extraction a few times instead of discarding a resumable build state.
+    local attempt=0 status=0
+    while [ "$attempt" -lt 3 ]; do
+        attempt=$((attempt + 1))
+        if /usr/bin/nice -n 19 /bin/tar -C "$LFS" -I 'zstd -d -T0' -xpf "$BFS_ROOTFS_CACHE_ARCHIVE"; then
+            return 0
+        else
+            status=$?
+        fi
+
+        echo "WARNING: Cached build-state restore attempt $attempt/3 failed (status $status)." >&2
         /usr/bin/find "$LFS" -mindepth 1 -maxdepth 1 -exec /usr/bin/rm -rf -- {} + 2>/dev/null || true
-        return 1
-    fi
-    return 0
+
+        if [ "$attempt" -lt 3 ]; then
+            echo "Retrying the cached build-state restore..." >&2
+            /usr/bin/sleep 2
+        fi
+    done
+
+    echo "ERROR: Cached build state is unreadable; refusing to discard it." >&2
+    return 1
 }
 
 _attach_rootfs_cache() {
