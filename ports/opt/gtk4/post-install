@@ -1,3 +1,11 @@
 #!/bin/sh
 update-desktop-database --quiet
-glib-compile-schemas /usr/share/glib-2.0/schemas
+
+# Compile GLib schemas only when the directory contains real schema sources.
+schemas=/usr/share/glib-2.0/schemas
+if [ -d "$schemas" ] &&
+   find "$schemas" -maxdepth 1 -type f \
+       \( -name '*.gschema.xml' -o -name '*.gschema.override' \) \
+       -print -quit | grep -q .; then
+    glib-compile-schemas "$schemas"
+fi

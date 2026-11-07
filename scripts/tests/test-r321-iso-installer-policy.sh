@@ -103,6 +103,24 @@ for nss_port in opt/nss compat-32/nss-32; do
     [ "$nss_url" = 'https://archive.mozilla.org/pub/security/nss/releases/NSS_3_129_RTM/src/nss-3.129.tar.gz' ] || \
         fail "$nss_port generates the wrong NSS source URL: $nss_url"
 done
+# GLib installs gschema.dtd, which is not a schema source. The packaged
+# scratchpkg port and the installer compatibility repair must ignore it so
+# minimal installs do not run glib-compile-schemas with no schema files.
+scratchpkg_port=ports/core/scratchpkg
+grep -Fq 'release=2' "$scratchpkg_port/spkgbuild" || \
+    fail "scratchpkg trigger repair release is missing"
+grep -Fq 'grep -Eq "^usr/share/glib-2.0/schemas/.*[.]gschema[.](xml|override)$"' \
+    "$scratchpkg_port/spkgbuild" || \
+    fail "scratchpkg trigger still matches gschema.dtd"
+grep -Fq 'repair_scratchpkg_glib_schema_trigger' "$inst" || \
+    fail "installer does not repair existing scratchpkg installations"
+for hook in ports/opt/glib/post-install ports/opt/gtk4/post-install; do
+    grep -Fq "*.gschema.xml" "$hook" || \
+        fail "$hook compiles an empty GLib schema directory"
+done
+grep -Fq 'for glib_hook_port in opt/glib opt/gtk4; do' "$inst" || \
+    fail "installer does not refresh the guarded GLib/GTK4 hooks"
+
 for repo in core extra nonfree multilib s6 kde-lxqt mate xfce s6-services; do
     grep -Fq "https://codeberg.org/venomlinux/$repo.git" "$inst" || fail "installer Venom repository missing: $repo"
     grep -Fq "https://codeberg.org/venomlinux/$repo.git" ports/core/scratchpkg/scratchpkg.repo || fail "default scratchpkg repository missing: $repo"

@@ -7438,6 +7438,19 @@ write_chroot_installer() {
         rm -f "$TARGET"/var/cache/scratchpkg/packages/nss#*.pkg.tar.*
         rm -f "$TARGET"/var/cache/scratchpkg/packages/nss-32#*.pkg.tar.*
 
+        # Existing base archives carry the unconditional GLib schema hook,
+        # which prints "No schema files found" when only gschema.dtd exists.
+        # Refresh both hooks so a rebuilt GLib/GTK4 uses the guarded step.
+        local glib_hook_port
+        for glib_hook_port in opt/glib opt/gtk4; do
+                if [[ -d "$PROJECT_DIR/ports/$glib_hook_port" ]]; then
+                        install -d -m 0755 "$TARGET/usr/ports/${glib_hook_port%/*}"
+                        rm -rf "$TARGET/usr/ports/$glib_hook_port"
+                        cp -a "$PROJECT_DIR/ports/$glib_hook_port" \
+                                "$TARGET/usr/ports/$glib_hook_port"
+                fi
+        done
+
         # The chroot is launched with `env -i`, and the live-environment
         # DIALOGRC points at /tmp outside the target. Copy the active theme into
         # the installed tree so password/account dialogs retain the selected
@@ -8081,6 +8094,29 @@ IGNORE_CHECKSUM="%s"
 }
 
 configure_scratchpkg_integrity_settings_early
+
+# The upstream GLib trigger treats gschema.dtd as a compiled schema and
+# prints "No schema files found" on minimal systems. Repair the installed
+# scratch script before any package transaction, including the early Git
+# install, without modifying the scratchpkg submodule in the source tree.
+repair_scratchpkg_glib_schema_trigger() {
+        local scratch=/usr/bin/scratch
+        local repaired='grep -Eq "^usr/share/glib-2.0/schemas/.*[.]gschema[.](xml|override)$"'
+
+        [[ -f "$scratch" ]] || return 0
+        grep -Fq "$repaired" "$scratch" && return 0
+
+        sed -i \
+                's#grep -q "\^usr/share/glib-2.0/schemas/"#grep -Eq "^usr/share/glib-2.0/schemas/.*[.]gschema[.](xml|override)$"#' \
+                "$scratch" || return 1
+
+        grep -Fq "$repaired" "$scratch"
+}
+
+log "Repairing scratchpkg's GLib schema trigger"
+if ! repair_scratchpkg_glib_schema_trigger; then
+        echo "WARNING: scratchpkg's GLib schema trigger could not be repaired; the harmless 'No schema files found' notice may still appear." >&2
+fi
 
 configure_venom_ports_repositories() {
         local repo_file=/etc/scratchpkg.repo

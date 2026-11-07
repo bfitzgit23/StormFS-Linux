@@ -11,7 +11,7 @@
 description="Package manager for StormFS Linux (Venom Linux scratchpkg)"
 name=scratchpkg
 version=fdd643ab
-release=1
+release=2
 # Codeberg runs Forgejo, which serves /archive/<ref>.tar.gz and does not
 # understand GitHub's /archive/<ref>/<name>.tar.gz, so name the file
 # explicitly; the archive unpacks to scratchpkg/, which build() handles.
@@ -21,6 +21,14 @@ source="scratchpkg-$version.tar.gz::https://codeberg.org/venomlinux/scratchpkg/a
 
 build() {
 	cd "scratchpkg-$version" 2>/dev/null || cd scratchpkg || return 1
+
+	# The upstream trigger matches gschema.dtd, which is not a compiled
+	# schema, and prints "No schema files found" during minimal installs.
+	# Only compile when a real schema or override was installed.
+	sed -i \
+		's#grep -q "\^usr/share/glib-2.0/schemas/"#grep -Eq "^usr/share/glib-2.0/schemas/.*[.]gschema[.](xml|override)$"#' \
+		scratch || return 1
+	grep -Fq 'grep -Eq "^usr/share/glib-2.0/schemas/.*[.]gschema[.](xml|override)$"' scratch || return 1
 
 	# INSTALL.sh honours DESTDIR and installs pkgbuild, pkgadd, pkgdel,
 	# scratch, portsync, pkgbase, pkgrebuild, revdep and the configs.
