@@ -37,6 +37,17 @@ grep -Fq 'for dependency in $dependency_closure' "$inst" || \
     fail "installed-system dependency preflight does not check each package"
 grep -Fq 'if ! scratch isinstalled "$dependency"' "$inst" || \
     fail "installed-system dependency preflight does not use isinstalled's status"
+# Older base archives contain stale BFSOS recipes. Refresh Git and cpio from
+# the checked-out tree before entering the chroot so installer-side recipe
+# fixes apply without a base-archive rebuild.
+grep -Fq 'for transitional_port in git cpio' "$inst" || \
+    fail "installer does not refresh the Git/cpio provisioning recipes"
+grep -Fq 'PROJECT_DIR/ports/opt/$transitional_port' "$inst" || \
+    fail "installer recipe refresh is not sourced from the project tree"
+! grep -Fq 'autoreconf -fi' ports/opt/cpio/spkgbuild || \
+    fail "cpio still regenerates autotools files instead of using its shipped configure"
+grep -Fq 'bfs_autobuild' ports/opt/cpio/spkgbuild || \
+    fail "cpio recipe lost its build hook"
 for repo in core extra nonfree multilib s6 kde-lxqt mate xfce s6-services; do
     grep -Fq "https://codeberg.org/venomlinux/$repo.git" "$inst" || fail "installer Venom repository missing: $repo"
     grep -Fq "https://codeberg.org/venomlinux/$repo.git" ports/core/scratchpkg/scratchpkg.repo || fail "default scratchpkg repository missing: $repo"

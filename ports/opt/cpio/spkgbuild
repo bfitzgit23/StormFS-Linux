@@ -24,6 +24,8 @@ sed -e "/^extern int (\*xstat)/s/()/(const char * restrict,  struct stat * restr
 sed -e "/^int (\*xstat)/s/()/(const char * restrict,  struct stat * restrict)/" \
     -i src/global.c
 CFLAGS+=' -fcommon'
-autoreconf -fi
+	# The release archive ships a generated configure. Regenerating it here
+	# forces autopoint/gettext m4 updates and can fail before the build; the
+	# source edits above do not change configure.ac.
 	bfs_autobuild
 }

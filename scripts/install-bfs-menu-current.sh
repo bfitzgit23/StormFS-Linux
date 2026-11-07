@@ -7371,13 +7371,18 @@ write_chroot_installer() {
 
         # Transitional support for installs made from an older base archive:
         # seed the current Git port so Git can be installed before the first
-        # portsync run, independently of which Git package release the base
-        # archive contains.
-        if [[ -d "$PROJECT_DIR/ports/opt/git" ]]; then
-                install -d -m 0755 "$TARGET/usr/ports/opt"
-                rm -rf "$TARGET/usr/ports/opt/git"
-                cp -a "$PROJECT_DIR/ports/opt/git" "$TARGET/usr/ports/opt/git"
-        fi
+        # portsync run, and seed cpio so it uses its shipped configure instead
+        # of running autoreconf inside the target. This keeps recipe fixes
+        # effective without requiring a rebuilt base archive.
+        local transitional_port
+        for transitional_port in git cpio; do
+                if [[ -d "$PROJECT_DIR/ports/opt/$transitional_port" ]]; then
+                        install -d -m 0755 "$TARGET/usr/ports/opt"
+                        rm -rf "$TARGET/usr/ports/opt/$transitional_port"
+                        cp -a "$PROJECT_DIR/ports/opt/$transitional_port" \
+                                "$TARGET/usr/ports/opt/$transitional_port"
+                fi
+        done
 
         # The chroot is launched with `env -i`, and the live-environment
         # DIALOGRC points at /tmp outside the target. Copy the active theme into
