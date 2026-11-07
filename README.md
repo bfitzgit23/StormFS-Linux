@@ -209,7 +209,7 @@ Individual stages can also be invoked directly:
 ./bootstrap.sh 5
 ```
 
-See `docs/COMMAND-LINE.md` for the maintained script entry points and `docs/INSTALL.md` for the installer workflow.
+See `docs/COMMAND-LINE.md` for the maintained script entry points, including the noninteractive host bootstrap command, and `docs/INSTALL.md` for the installer workflow.
 
 ## Bootstrap stages
 

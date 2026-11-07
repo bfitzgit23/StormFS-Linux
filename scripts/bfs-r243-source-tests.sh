@@ -69,3 +69,7 @@ printf "\n== pkgbuild payload guard regression ==\n"
 echo
 echo '== ISO builder source regression =='
 "$ROOT/scripts/tests/test-iso-builder-source.sh"
+
+echo
+echo '== noninteractive host bootstrap command regression =='
+"$ROOT/scripts/tests/test-host-bootstrap-command.sh"

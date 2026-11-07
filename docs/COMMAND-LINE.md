@@ -23,6 +23,29 @@ The interactive menus remain the default user interface, but Bootstrap and the I
 
 Invalid arguments fail instead of silently opening the menu.
 
+## Noninteractive host bootstrap
+
+Run this from the repository root on the host. It requires a regular user and
+sudo; Stage 1 must not be run as root. The `sudo -v` at the start is the only
+intended interactive step, and the state directory persists across interrupted
+builds.
+
+<!-- noninteractive-host-bootstrap:start -->
+```sh
+sudo -v || exit 1
+BFS_STATE_DIR="${BFS_STATE_DIR:-${XDG_CACHE_HOME:-$HOME/.cache}/bfsos/bootstrap}" \
+BFS_FULL_BOOTSTRAP_ASSUME_YES=yes \
+BFS_FULL_BOOTSTRAP_NO_INSTALL_PROMPT=yes \
+./bootstrap.sh full
+```
+<!-- noninteractive-host-bootstrap:end -->
+
+`BFS_FULL_BOOTSTRAP_ASSUME_YES=yes` skips the full-build confirmation.
+`BFS_FULL_BOOTSTRAP_NO_INSTALL_PROMPT=yes` skips the final installer handoff.
+Keep `BFS_STATE_DIR` on persistent storage and use the same path if you later
+resume with `./bootstrap.sh resume-full`. A long unattended build also needs a
+sudo policy whose timestamp does not expire before the root stages run.
+
 ## ISO builder
 
 ```text
