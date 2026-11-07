@@ -7466,7 +7466,7 @@ write_chroot_installer() {
         # the X.Org archive returns as 404. Refresh both the native and
         # compat-32 recipes so dependency builds use the correct filename.
         local libxau_port
-        for libxau_port in xorg/libXau compat-32/libxau-32; do
+        for libxau_port in xorg/libxau compat-32/libXau-32; do
                 if [[ -d "$PROJECT_DIR/ports/$libxau_port" ]]; then
                         install -d -m 0755 "$TARGET/usr/ports/${libxau_port%/*}"
                         rm -rf "$TARGET/usr/ports/$libxau_port"

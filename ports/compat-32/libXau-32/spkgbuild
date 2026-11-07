@@ -5,8 +5,8 @@
 description="X Authorization routines"
 name=libxau-32
 version=1.0.12
-release=2
-source="https://www.x.org/releases/individual/lib/libxau-$version.tar.xz"
+release=3
+source="https://www.x.org/releases/individual/lib/libXau-$version.tar.xz"
 
 build() {
 	. /usr/share/bfsos/spkgbuild.helper || return 1
