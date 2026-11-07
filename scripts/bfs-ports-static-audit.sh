@@ -11,6 +11,12 @@ report() {
     fail=1
 }
 
+depends_has() {
+    local dir="$1" dep="$2"
+    [ -f "$dir/depends" ] &&
+        grep -Eq "(^|[[:space:]])${dep}([[:space:]]|$)" "$dir/depends"
+}
+
 while IFS= read -r -d '' pkgfile; do
     if ! bash -n "$pkgfile"; then
         report "shell syntax failed: $pkgfile"
@@ -22,7 +28,7 @@ while IFS=: read -r file line text; do
     report "bad JOBS default expansion: $file:$line: $text"
 done < <(grep -Rns --include=spkgbuild '\${JOBS-1}' ports || true)
 
-# BFSOS pkgbuild's extension enters the extracted source directory before pkg_build().
+# scratchpkg's build() hook runs from the extracted source directory.
 # These source-dir forms therefore point at a nonexistent nested directory.
 python3 - "$ROOT" <<'PY' || fail=1
 from pathlib import Path
@@ -35,7 +41,7 @@ for p in root.glob('ports/*/*/spkgbuild'):
     depth = 0
     for n, line in enumerate(lines, 1):
         stripped = line.strip()
-        if stripped.startswith('pkg_build()'):
+        if stripped.startswith('build()'):
             inside = True
             depth = line.count('{') - line.count('}')
             continue
@@ -72,15 +78,15 @@ if [ -e ports/xorg/util-macros/pre-install ]; then
 fi
 
 # libX11 directly requires the protocol headers as well as libxcb/xtrans.
-if ! grep -Eq '^# Depends on:.*(^|[[:space:]])xorgproto([[:space:]]|$)' ports/xorg/libX11/spkgbuild; then
+if ! depends_has ports/xorg/libx11 xorgproto; then
     report "libX11 dependency metadata is missing xorgproto"
 fi
 
-# All maintained 64-bit collections use the BFSOS pkg_build() extension.
+# All maintained 64-bit collections use scratchpkg's build() hook.
 # compat-32 is intentionally excluded until its separate multilib redesign.
 while IFS=: read -r file line text; do
-    report "legacy build() recipe remains in maintained 64-bit tree: $file:$line: $text"
-done < <(grep -RnsE --include=spkgbuild '^[[:space:]]*build[[:space:]]*\([[:space:]]*\)[[:space:]]*\{' \
+    report "legacy CRUX pkg_build() recipe remains in maintained 64-bit tree: $file:$line: $text"
+done < <(grep -RnsE --include=spkgbuild '^[[:space:]]*pkg_build[[:space:]]*\([[:space:]]*\)[[:space:]]*\{' \
     ports/core ports/opt ports/xorg ports/plasma ports/contrib ports/gnome \
     ports/lxqt ports/xfce ports/compiz || true)
 
@@ -93,33 +99,33 @@ if [ ! -f ports/opt/qtwebengine5/spkgbuild ]; then
 fi
 
 # Plasma's default closure must include a display manager and the tested Qt6 Phonon VLC backend once.
-if ! grep -Eq '^# Depends on:.*(^|[[:space:]])sddm([[:space:]]|$)' ports/plasma/plasma-meta/spkgbuild; then
+if ! depends_has ports/plasma/plasma-meta sddm; then
     report "plasma-meta dependency metadata is missing sddm"
 fi
-phonon_count=$(grep '^# Depends on:' ports/plasma/plasma-meta/spkgbuild | grep -o 'phonon-backend-vlc' | wc -l)
+phonon_count=$(grep -o 'phonon-backend-vlc' ports/plasma/plasma-meta/depends 2>/dev/null | wc -l)
 if [ "$phonon_count" -ne 1 ]; then
     report "plasma-meta must contain phonon-backend-vlc exactly once (found $phonon_count)"
 fi
 
-# Package builds invoked through sudo/scratch must get the /opt toolchain prefixes explicitly.
-for required in /opt/qt6 /opt/kf6 /opt/qt5; do
-    if ! grep -Fq "$required" ports/core/pkgutils/pkgbuild.conf; then
-        report "pkgbuild.conf is missing build prefix $required"
+# Package builds invoked through scratchpkg must get the /opt toolchain prefixes explicitly.
+for required in /opt/qt6 /opt/kf6; do
+    if ! grep -Fq "$required" ports/core/scratchpkg/scratchpkg.conf; then
+        report "scratchpkg.conf is missing build prefix $required"
     fi
 done
 
 # The trust-stack dependency direction is make-ca -> p11-kit, never p11-kit -> make-ca.
-if grep -Eq '^# Depends on:.*(^|[[:space:]])make-ca([[:space:]]|$)' ports/opt/p11-kit/spkgbuild; then
+if depends_has ports/opt/p11-kit make-ca; then
     report "p11-kit incorrectly depends on make-ca"
 fi
-if ! grep -Eq '^# Depends on:.*(^|[[:space:]])p11-kit([[:space:]]|$)' ports/core/make-ca/spkgbuild; then
+if ! depends_has ports/core/make-ca p11-kit; then
     report "make-ca dependency metadata is missing p11-kit"
 fi
-if ! grep -Eq '^# Depends on:.*(^|[[:space:]])meson([[:space:]]|$)' ports/opt/p11-kit/spkgbuild; then
+if ! depends_has ports/opt/p11-kit meson; then
     report "p11-kit dependency metadata is missing meson"
 fi
-if ! grep -Eq '^# Depends on:.*(^|[[:space:]])ninja([[:space:]]|$)' ports/core/meson/spkgbuild ||
-   ! grep -Eq '^# Depends on:.*(^|[[:space:]])python3-pip([[:space:]]|$)' ports/core/meson/spkgbuild; then
+if ! depends_has ports/core/meson ninja ||
+   ! depends_has ports/core/meson python3-pip; then
     report "meson dependency metadata must include ninja and python3-pip"
 fi
 
@@ -160,17 +166,17 @@ for spec in \
 done
 
 [ -f ports/xfce/xfce4-meta/spkgbuild ] || report "complete Xfce xfce4-meta package missing"
-xfce_meta_deps=$(grep '^# Depends on:' ports/xfce/xfce4-meta/spkgbuild 2>/dev/null || true)
+xfce_meta_deps=$(cat ports/xfce/xfce4-meta/depends 2>/dev/null || true)
 for dep in xfce4-session xfce4-settings xfce4-panel xfdesktop xfwm4 xfce4-appfinder thunar thunar-volman tumbler xfce4-power-manager xfce4-apps-meta; do
     grep -qw "$dep" <<<"$xfce_meta_deps" || report "xfce4-meta dependency metadata is missing $dep"
 done
 
-for pkg in compiz compiz-bcop libcompizconfig compizconfig-python ccsm compiz-plugins-main compiz-plugins-extra compiz-plugins-experimental emerald emerald-themes compiz-meta; do
+for pkg in compiz compiz-bcop libcompizconfig compizconfig-python ccsm compiz-plugins-main compiz-plugins-extra compiz-plugins-experimental emerald-decorator emerald-themes compiz-meta; do
     [ -f "ports/compiz/$pkg/spkgbuild" ] || { report "Compiz Reloaded component missing: $pkg"; continue; }
     check_version "ports/compiz/$pkg/spkgbuild" 0.8.18
 done
-compiz_meta_deps=$(grep '^# Depends on:' ports/compiz/compiz-meta/spkgbuild 2>/dev/null || true)
-for dep in compiz compiz-bcop libcompizconfig compizconfig-python ccsm compiz-plugins-main compiz-plugins-extra compiz-plugins-experimental emerald emerald-themes fusion-icon; do
+compiz_meta_deps=$(cat ports/compiz/compiz-meta/depends 2>/dev/null || true)
+for dep in compiz compiz-bcop libcompizconfig compizconfig-python ccsm compiz-plugins-main compiz-plugins-extra compiz-plugins-experimental emerald-decorator emerald-themes fusion-icon; do
     grep -qw "$dep" <<<"$compiz_meta_deps" || report "compiz-meta dependency metadata is missing $dep"
 done
 
@@ -178,11 +184,6 @@ check_version ports/compiz/fusion-icon/spkgbuild 0.2.4
 check_version ports/xorg/glew/spkgbuild 2.3.1
 
 # r223-r232 systemic package/desktop policy guards.
-grep -q '_bfs_collect_build_opts' ports/core/bfs-spkgbuild-macros/helper.sh || report "pkgutils generic extension lacks array-safe build_opt collection"
-grep -Fq "\${build_opt//\$'\\n'/ }" ports/core/bfs-spkgbuild-macros/helper.sh || report "pkgutils generic extension lacks multiline scalar build_opt normalization"
-grep -q 'PKGMK_CMAKE_POLICY_VERSION_MINIMUM' ports/core/bfs-spkgbuild-macros/helper.sh || report "pkgutils CMake policy compatibility default missing"
-grep -q '_bfs_meson_disable_supported_tests' ports/core/bfs-spkgbuild-macros/helper.sh || report "pkgutils Meson supported-test default logic missing"
-grep -q '_bfs_configure_test_defaults' ports/core/bfs-spkgbuild-macros/helper.sh || report "pkgutils Autotools supported-test default logic missing"
 ! grep -q 'vte\.sh\|vte\.csh' ports/core/aaa_filesystem/spkgbuild || report "aaa_filesystem still owns VTE profile scripts"
 [ -f ports/opt/wireplumber/90-bfsos-audio.preset ] || report "BFSOS desktop-audio user preset missing"
 for unit in pipewire.socket pipewire-pulse.socket wireplumber.service; do
@@ -192,18 +193,10 @@ done
 for plugin in notification-plugin power-manager-plugin pulseaudio systray; do
     grep -q "value=\"$plugin\"" ports/xfce/xfce4-panel/default.xml || report "Xfce default panel missing $plugin"
 done
-grep -q 'bfs_refresh_new_deps' ports/core/scratch/spkgbuild || report "scratch wrapper lacks newly-added dependency refresh"
-
-# Bootstrap and installed pkgbuild must agree on the package-namespaced source-cache layout.
-grep -Fq 'PKGMK_SOURCE_ROOT="$sourcedir"' bootstrap.sh || report "Stage-1 bootstrap source-cache root is not explicit"
-grep -Fq 'PKGMK_SOURCE_DIR="\$PKGMK_SOURCE_ROOT/\$name"' bootstrap.sh || report "bootstrap generated pkgbuild configs are not package-namespaced"
-grep -Fq '$sourcedir/pkgutils/pkgutils-5.40.12.tar.xz' bootstrap.sh || report "initial pkgutils source is not seeded into its package namespace"
-for fallback in \
-    'https://download.savannah.gnu.org/releases/|https://mirror.fi.ossplanet.net/nongnu/' \
-    'https://cdn.kernel.org/pub/|https://mirrors.edge.kernel.org/pub/'; do
-    grep -Fq "$fallback" ports/core/pkgutils/pkgbuild.conf || report "installed pkgbuild fallback missing $fallback"
-    grep -Fq "$fallback" bootstrap.sh || report "bootstrap pkgbuild fallback missing $fallback"
-done
+# Bootstrap and installed scratchpkg must agree on the source-cache layout.
+grep -Fq 'SOURCE_DIR="$sourcedir"' bootstrap.sh || report "Stage-1 bootstrap source-cache root is not explicit"
+grep -Fq 'sourcedir="$PWD/sources"' bootstrap.sh || report "Stage-1 source-cache directory is not explicit"
+grep -Fq 'SOURCE_DIR="/$spkgsrc"' bootstrap.sh || report "bootstrap generated scratchpkg source cache is not package-namespaced"
 
 # Firefox rapid/ESR channels are tracked independently; binary and source rapid ports must match.
 check_version ports/opt/firefox/spkgbuild 155.0.1
@@ -223,13 +216,13 @@ for pkg in lximage-qt lxqt-archiver lxqt-notificationd pavucontrol-qt qps qtermw
     [ -f "ports/lxqt/$pkg/spkgbuild" ] || report "BLFS LXQt application missing: $pkg"
 done
 [ -f ports/lxqt/lxqt-meta/spkgbuild ] || report "LXQt desktop component missing: lxqt-meta"
-lxqt_meta_deps=$(grep '^# Depends on:' ports/lxqt/lxqt-meta/spkgbuild 2>/dev/null || true)
+lxqt_meta_deps=$(cat ports/lxqt/lxqt-meta/depends 2>/dev/null || true)
 for dep in lxqt-session lxqt-panel pcmanfm-qt lxqt-notificationd lxqt-wayland-session     lximage-qt lxqt-archiver pavucontrol-qt qps qtermwidget qterminal screengrab     xdg-desktop-portal-lxqt openbox obconf-qt breeze-icons desktop-file-utils     sddm pipewire wireplumber; do
     grep -qw "$dep" <<<"$lxqt_meta_deps" || report "lxqt-meta dependency metadata is missing $dep"
 done
 # BLFS requires liblxqt for these two applications; keep the dependency explicit.
 for pkg in lxqt-archiver pavucontrol-qt; do
-    grep '^# Depends on:' "ports/lxqt/$pkg/spkgbuild" | grep -qw liblxqt || report "$pkg is missing required liblxqt dependency"
+    depends_has "ports/lxqt/$pkg" liblxqt || report "$pkg is missing required liblxqt dependency"
 done
 
 # Duplicate package identities across maintained collections are never silent.
@@ -258,10 +251,10 @@ check_version ports/xorg/xscreensaver/spkgbuild 6.15
 if ! grep -q 'bsod' ports/xorg/xscreensaver/spkgbuild; then
     report "XScreenSaver recipe does not disable the bsod fake-security saver from default random rotation"
 fi
-check_version ports/opt/avahi/spkgbuild 0.9-rc5
+check_version ports/opt/avahi/spkgbuild 0.9_rc5
 check_version ports/opt/xdg-dbus-proxy/spkgbuild 0.1.8
 [ -f ports/core/python3-vcs-versioning/spkgbuild ] || report "python3-vcs-versioning port missing"
-if ! grep -Eq '^# Depends on:.*(^|[[:space:]])rustc([[:space:]]|$)' ports/opt/corrosion/spkgbuild; then
+if ! depends_has ports/opt/corrosion rustc; then
     report "corrosion dependency metadata must use rustc"
 fi
 if [ -e ports/compiz/cython3/.checksums ] || [ -e ports/compiz/cython3/.pkgfiles ]; then

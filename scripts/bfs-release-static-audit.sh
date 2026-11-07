@@ -6,6 +6,12 @@ cd "$ROOT"
 fail=0
 say_fail(){ printf 'RELEASE-AUDIT: %s\n' "$*" >&2; fail=1; }
 
+depends_has() {
+    local dir="$1" dep="$2"
+    [ -f "$dir/depends" ] &&
+        grep -Eq "(^|[[:space:]])${dep}([[:space:]]|$)" "$dir/depends"
+}
+
 bash scripts/bfs-ports-static-audit.sh || fail=1
 bash -n bootstrap.sh || say_fail "bootstrap.sh syntax"
 bash -n scripts/install-bfs-menu-current.sh || say_fail "current installer syntax"
@@ -32,11 +38,11 @@ grep -Fq 'install-bfs-menu-current.sh' scripts/bfs-build-iso.sh || say_fail "ISO
 
 # Base diagnostics and trust stack.
 [ -f ports/core/traceroute/spkgbuild ] || say_fail "traceroute diagnostic port missing"
-grep -Eq '^# Depends on:.*(^|[[:space:]])p11-kit([[:space:]]|$)' ports/core/make-ca/spkgbuild || say_fail "make-ca must depend on p11-kit"
-! grep -Eq '^# Depends on:.*(^|[[:space:]])make-ca([[:space:]]|$)' ports/opt/p11-kit/spkgbuild || say_fail "p11-kit must not depend on make-ca"
-grep -Eq '^# Depends on:.*(^|[[:space:]])meson([[:space:]]|$)' ports/opt/p11-kit/spkgbuild || say_fail "p11-kit must depend on meson"
-grep -Eq '^# Depends on:.*(^|[[:space:]])ninja([[:space:]]|$)' ports/core/meson/spkgbuild || say_fail "meson must depend on ninja"
-grep -Eq '^# Depends on:.*(^|[[:space:]])python3-pip([[:space:]]|$)' ports/core/meson/spkgbuild || say_fail "meson must depend on python3-pip"
+depends_has ports/core/make-ca p11-kit || say_fail "make-ca must depend on p11-kit"
+! depends_has ports/opt/p11-kit make-ca || say_fail "p11-kit must not depend on make-ca"
+depends_has ports/opt/p11-kit meson || say_fail "p11-kit must depend on meson"
+depends_has ports/core/meson ninja || say_fail "meson must depend on ninja"
+depends_has ports/core/meson python3-pip || say_fail "meson must depend on python3-pip"
 python3 - <<'PY_ORDER' || say_fail "Stage-2 basepkg must build meson before p11-kit and p11-kit before make-ca"
 from pathlib import Path
 s=Path('bootstrap.sh').read_text()
@@ -53,25 +59,25 @@ grep -q -- '-skip qtwebengine' ports/opt/qt5/spkgbuild || say_fail "Qt5 WebEngin
 [ -f ports/opt/qtwebengine5/spkgbuild ] || say_fail "qtwebengine5 port missing"
 [ -f ports/opt/qt6-webengine/spkgbuild ] || say_fail "qt6-webengine port missing"
 grep -q 'rm -rf qtwebengine' ports/opt/qt6/spkgbuild || say_fail "Qt6 WebEngine not excluded from qt6"
-grep -q 'qt6-webengine' ports/plasma/khelpcenter/spkgbuild || say_fail "known Qt6 WebEngine consumer khelpcenter missing dependency"
+depends_has ports/plasma/khelpcenter qt6-webengine || say_fail "known Qt6 WebEngine consumer khelpcenter missing dependency"
 
 # Plasma desktop baseline.
-deps="$(grep '^# Depends on:' ports/plasma/plasma-meta/spkgbuild)"
+deps="$(cat ports/plasma/plasma-meta/depends 2>/dev/null || true)"
 for dep in sddm pipewire wireplumber phonon-backend-vlc xdg-desktop-portal-kde; do
   grep -qw "$dep" <<<"$deps" || say_fail "plasma-meta missing $dep"
 done
-[ "$(grep -o 'phonon-backend-vlc' <<<"$deps" | wc -l)" -eq 1 ] || say_fail "phonon-backend-vlc dependency duplicated"
+[ "$(grep -o 'phonon-backend-vlc' ports/plasma/plasma-meta/depends 2>/dev/null | wc -l)" -eq 1 ] || say_fail "phonon-backend-vlc dependency duplicated"
 ! grep -qw consolekit ports/plasma/kscreenlocker/spkgbuild || say_fail "kscreenlocker still depends on ConsoleKit"
 
 # Xfce and Compiz must each provide a one-command complete desktop/stack meta package.
 [ -f ports/xfce/xfce4-meta/spkgbuild ] || say_fail "xfce4-meta complete desktop package missing"
-xfce_deps="$(grep '^# Depends on:' ports/xfce/xfce4-meta/spkgbuild 2>/dev/null || true)"
+xfce_deps="$(cat ports/xfce/xfce4-meta/depends 2>/dev/null || true)"
 for dep in xfce4-session xfce4-settings xfce4-panel xfdesktop xfwm4 xfce4-appfinder thunar thunar-volman tumbler xfce4-power-manager xfce4-apps-meta; do
   grep -qw "$dep" <<<"$xfce_deps" || say_fail "xfce4-meta missing $dep"
 done
 [ -f ports/compiz/compiz-meta/spkgbuild ] || say_fail "compiz-meta package missing"
-compiz_deps="$(grep '^# Depends on:' ports/compiz/compiz-meta/spkgbuild 2>/dev/null || true)"
-for dep in compiz compiz-bcop libcompizconfig compizconfig-python ccsm compiz-plugins-main compiz-plugins-extra compiz-plugins-experimental emerald emerald-themes fusion-icon; do
+compiz_deps="$(cat ports/compiz/compiz-meta/depends 2>/dev/null || true)"
+for dep in compiz compiz-bcop libcompizconfig compizconfig-python ccsm compiz-plugins-main compiz-plugins-extra compiz-plugins-experimental emerald-decorator emerald-themes fusion-icon; do
   grep -qw "$dep" <<<"$compiz_deps" || say_fail "compiz-meta missing $dep"
 done
 
@@ -84,7 +90,7 @@ for plugin in notification-plugin power-manager-plugin pulseaudio systray; do
   grep -q "value=\"$plugin\"" ports/xfce/xfce4-panel/default.xml || say_fail "Xfce default panel missing $plugin"
 done
 [ -f ports/lxqt/lxqt-meta/spkgbuild ] || say_fail "lxqt-meta complete desktop package missing"
-lxqt_deps="$(grep '^# Depends on:' ports/lxqt/lxqt-meta/spkgbuild 2>/dev/null || true)"
+lxqt_deps="$(cat ports/lxqt/lxqt-meta/depends 2>/dev/null || true)"
 for dep in lxqt-session lxqt-panel pcmanfm-qt lxqt-notificationd lxqt-wayland-session   lximage-qt lxqt-archiver pavucontrol-qt qps qtermwidget qterminal screengrab   xdg-desktop-portal-lxqt openbox obconf-qt breeze-icons desktop-file-utils   sddm pipewire wireplumber; do
   grep -qw "$dep" <<<"$lxqt_deps" || say_fail "lxqt-meta missing $dep"
 done
@@ -98,10 +104,10 @@ for f in \
   [ -f "$f" ] || say_fail "GNOME/BLFS coverage missing $f"
 done
 
-grep -qw gweather-locations ports/gnome/libgweather/spkgbuild || say_fail "libgweather missing gweather-locations dependency"
+depends_has ports/gnome/libgweather gweather-locations || say_fail "libgweather missing gweather-locations dependency"
 
 [ -f ports/gnome/gnome-apps-meta/spkgbuild ] || say_fail "gnome-apps-meta missing"
-gnome_apps_deps="$(grep '^# Depends on:' ports/gnome/gnome-apps-meta/spkgbuild 2>/dev/null || true)"
+gnome_apps_deps="$(cat ports/gnome/gnome-apps-meta/depends 2>/dev/null || true)"
 for dep in baobab brasero evince evolution file-roller gnome-calculator gnome-color-manager   gnome-connections gnome-disk-utility gnome-logs gnome-maps gnome-nettool   gnome-power-manager gnome-system-monitor gnome-terminal gnome-weather gucharmap   loupe seahorse showtime snapshot; do
   grep -qw "$dep" <<<"$gnome_apps_deps" || say_fail "gnome-apps-meta missing current BLFS app $dep"
 done
@@ -109,13 +115,10 @@ done
 ! grep -qw gnome-screenshot <<<"$gnome_apps_deps" || say_fail "gnome-apps-meta still hard-depends on legacy gnome-screenshot"
 
 [ -f ports/gnome/gnome-meta/spkgbuild ] || say_fail "gnome-meta complete desktop package missing"
-gnome_deps="$(grep '^# Depends on:' ports/gnome/gnome-meta/spkgbuild 2>/dev/null || true)"
+gnome_deps="$(cat ports/gnome/gnome-meta/depends 2>/dev/null || true)"
 for dep in gdm gnome-session gnome-shell gnome-shell-extensions gnome-control-center   gnome-settings-daemon nautilus gnome-tweaks gnome-user-docs yelp dconf-editor   gnome-apps-meta xdg-desktop-portal-gnome pipewire wireplumber; do
   grep -qw "$dep" <<<"$gnome_deps" || say_fail "gnome-meta missing $dep"
 done
-
-# New hard dependencies added to installed packages must be discovered before update/sysup.
-grep -q 'bfs_refresh_new_deps' ports/core/scratch/spkgbuild || say_fail "scratch missing new-dependency refresh"
 
 # Mainline/LTS MD policy must agree: core built in, personalities modular.
 for f in ports/core/linux/spkgbuild ports/core/linux-lts/spkgbuild; do
@@ -134,7 +137,7 @@ for f in ports/core/linux/spkgbuild ports/core/linux-lts/spkgbuild; do
   grep -q 'scripts/config --enable MODULE_COMPRESS_ZSTD' "$f" || say_fail "$f does not select Zstd module compression"
   grep -q 'scripts/config --enable MODULE_COMPRESS_ALL' "$f" || say_fail "$f does not compress all modules during modules_install"
   grep -Fq -- "-name '*.ko.zst'" "$f" || say_fail "$f lacks post-install .ko.zst verification"
-  grep -Eq '^# Depends on:.*(^|[[:space:]])zstd([[:space:]]|$)' "$f" || say_fail "$f does not depend on zstd"
+  depends_has "${f%/spkgbuild}" zstd || say_fail "$f does not depend on zstd"
 done
 for cfg in ports/core/linux/config ports/core/linux-lts/config; do
   grep -q '^CONFIG_KERNEL_ZSTD=y$' "$cfg" || say_fail "$cfg does not select KERNEL_ZSTD"
@@ -149,33 +152,21 @@ grep -q 'state=y' scripts/install-bfs-menu-current.sh || say_fail "initramfs ver
 grep -q 'state=m' scripts/install-bfs-menu-current.sh || say_fail "initramfs verifier does not recognize modular support"
 
 # Global package-build environment and source-cache identity.
-for prefix in /opt/qt6 /opt/kf6 /opt/qt5; do
-  grep -Fq "$prefix" ports/core/pkgutils/pkgbuild.conf || say_fail "pkgbuild build environment missing $prefix"
+for prefix in /opt/qt6 /opt/kf6; do
+  grep -Fq "$prefix" ports/core/scratchpkg/scratchpkg.conf || say_fail "scratchpkg build environment missing $prefix"
 done
-grep -Fq 'PKGMK_SOURCE_DIR="$PKGMK_SOURCE_ROOT/$name"' ports/core/pkgutils/pkgbuild.conf || say_fail "source cache is not package-namespaced"
-grep -Fq 'PKGMK_SOURCE_ROOT="$sourcedir"' bootstrap.sh || say_fail "Stage-1 source-cache root does not reuse the authoritative source tree"
-grep -Fq 'PKGMK_SOURCE_DIR="\$PKGMK_SOURCE_ROOT/\$name"' bootstrap.sh || say_fail "bootstrap generated pkgbuild source cache is not package-namespaced"
-grep -Fq '$sourcedir/pkgutils/pkgutils-5.40.12.tar.xz' bootstrap.sh || say_fail "initial pkgutils archive is outside its package namespace"
-for fallback in \
-  'https://download.savannah.gnu.org/releases/|https://mirror.fi.ossplanet.net/nongnu/' \
-  'https://cdn.kernel.org/pub/|https://mirrors.edge.kernel.org/pub/'; do
-  grep -Fq "$fallback" ports/core/pkgutils/pkgbuild.conf || say_fail "installed pkgbuild source fallback missing $fallback"
-  grep -Fq "$fallback" bootstrap.sh || say_fail "bootstrap source fallback missing $fallback"
-done
-
-# Sysup must bring package tooling current first.
-grep -q 'BFSOS sysup preflight' ports/core/scratch/spkgbuild || say_fail "scratch sysup -y pkgutils preflight missing"
+grep -Fq 'SOURCE_DIR="$sourcedir"' bootstrap.sh || say_fail "Stage-1 source-cache root does not reuse the authoritative source tree"
+grep -Fq 'sourcedir="$PWD/sources"' bootstrap.sh || say_fail "Stage-1 source-cache directory is not explicit"
+grep -Fq 'SOURCE_DIR="/$spkgsrc"' bootstrap.sh || say_fail "bootstrap generated scratchpkg source cache is not package-namespaced"
 
 # No duplicated hard dependency tokens anywhere in maintained spkgbuilds.
 python3 - <<'PY' || fail=1
 from pathlib import Path
 from collections import Counter
 bad=[]
-for p in Path('ports').glob('*/*/spkgbuild'):
-    for line in p.read_text(errors='replace').splitlines():
-        if line.startswith('# Depends on:'):
-            vals=line.split(':',1)[1].split(); dup=[x for x,c in Counter(vals).items() if c>1]
-            if dup: bad.append((p,dup))
+for p in Path('ports').glob('*/*/depends'):
+    vals=p.read_text(errors='replace').split(); dup=[x for x,c in Counter(vals).items() if c>1]
+    if dup: bad.append((p,dup))
 if bad:
     for p,d in bad: print(f'RELEASE-AUDIT: duplicate dependencies in {p}: {", ".join(d)}')
     raise SystemExit(1)
