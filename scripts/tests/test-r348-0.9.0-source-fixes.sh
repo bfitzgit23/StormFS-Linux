@@ -22,7 +22,22 @@ line_func=$(grep -n '^ensure_glib_introspection_ready()' scripts/install-bfs-men
 line_sysup=$(grep -n 'mandatory package upgrade (scratch sysup -y)' scripts/install-bfs-menu-current.sh | cut -d: -f1)
 (( line_func < line_sysup )) || fail 'GI preflight must be defined before mandatory sysup'
 grep -q 'rm -f "$glib_footprint"' scripts/install-bfs-menu-current.sh || fail 'bootstrap GLib footprint cleanup missing'
-pass 'GLib/GI/Polkit bootstrap ordering source policy'
+! grep -Fq 'scratch quickdiff' scripts/install-bfs-menu-current.sh || fail 'retired scratch quickdiff command remains'
+! grep -Fq 'scratch quickdep' scripts/install-bfs-menu-current.sh || fail 'retired scratch quickdep command remains'
+grep -Fq 'scratch outdate' scripts/install-bfs-menu-current.sh || fail 'installer does not query scratch outdated ports'
+grep -Fq 'scratch deplist -q' scripts/install-bfs-menu-current.sh || fail 'installer does not query scratch dependency closure'
+grep -Fq "closure=\"\${closure//\$'\\n'/ }\"" scripts/install-bfs-menu-current.sh || fail 'GLib preflight does not normalize newline-separated package lists'
+grep -Fq 'scratch install -f -r -y glib' scripts/install-bfs-menu-current.sh || fail 'GLib introspection rebuild command is invalid'
+! grep -Fq 'scratch -fr update glib' scripts/install-bfs-menu-current.sh || fail 'invalid scratch option order remains'
+grep -Fq 'ensure_glib_introspection_ready "$outdated_packages $dependency_closure"' scripts/install-bfs-menu-current.sh || fail 'installed GLib preflight omits outdated package names'
+line_glib_check=$(grep -n 'ensure_glib_introspection_ready "$outdated_packages $dependency_closure"' scripts/install-bfs-menu-current.sh | cut -d: -f1)
+line_glib_closure=$(grep -n 'if \[\[ -n "$dependency_closure" \]\]; then' scripts/install-bfs-menu-current.sh | cut -d: -f1 | tail -n1)
+(( line_glib_check < line_glib_closure )) || fail 'GLib preflight is gated behind a nonempty dependency closure'
+! grep -Fq 'pkgbuild -d' scripts/bfs-build-iso.sh || fail 'ISO GLib rebuild uses an invalid pkgbuild option'
+grep -Fq 'pkgbuild -f' scripts/bfs-build-iso.sh || fail 'ISO GLib rebuild command is missing'
+grep -Fq 'glib#*.pkg.tar.*' scripts/bfs-build-iso.sh || fail 'ISO GLib package lookup assumes zstd packaging'
+! grep -Fq 'glib#*.pkg.tar.zst' scripts/bfs-build-iso.sh || fail 'ISO GLib package lookup still assumes zstd packaging'
+pass 'GLib/GI/Polkit bootstrap ordering and scratch command policy'
 
 grep -q 'No usable partitions found; returning to the previous storage menu' scripts/install-bfs-menu-current.sh || fail 'blank-disk recovery missing'
 grep -q 'mount -t btrfs "$device" "$temp_mount"' scripts/install-bfs-menu-current.sh || fail 'explicit Btrfs mount missing'

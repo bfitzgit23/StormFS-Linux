@@ -872,11 +872,11 @@ build_iso_package_set() {
         /bin/bash -lc '
             if [ ! -r /usr/share/gir-1.0/Gio-2.0.gir ] || \
                [ ! -r /usr/lib/girepository-1.0/Gio-2.0.typelib ]; then
-                rm -f /var/cache/scratchpkg/packages/glib#*.pkg.tar.zst
+                rm -f /var/cache/scratchpkg/packages/glib#*.pkg.tar.*
                 rm -rf /var/cache/scratchpkg/build-work/pkgbuild-glib
                 cd /usr/ports/opt/glib || exit 1
-                pkgbuild -d -if || exit 1
-                glib_pkg="$(ls -1t /var/cache/scratchpkg/packages/glib#*.pkg.tar.zst 2>/dev/null | head -n1)"
+                pkgbuild -f || exit 1
+                glib_pkg="$(ls -1t /var/cache/scratchpkg/packages/glib#*.pkg.tar.* 2>/dev/null | head -n1)"
                 [ -n "$glib_pkg" ] || exit 1
                 pkgadd -u "$glib_pkg" || exit 1
             fi

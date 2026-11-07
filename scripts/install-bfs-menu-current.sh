@@ -8206,6 +8206,7 @@ run_package_operation "Venom Linux ports synchronization (portsync -r)" sync_ven
 # installed, rebuild GLib once so its GIR files exist before Polkit is built.
 ensure_glib_introspection_ready() {
         local closure="${1:-}"
+        closure="${closure//$'\n'/ }"
         local glib_port="/usr/ports/opt/glib"
         local glib_footprint="$glib_port/.footprint"
         local gir=""
@@ -8230,7 +8231,7 @@ ensure_glib_introspection_ready() {
                 rm -f "$glib_footprint"
                 rm -f /var/cache/scratchpkg/packages/glib#*.pkg.tar.*
                 run_package_operation "GLib introspection rebuild" \
-                        scratch -fr update glib
+                        scratch install -f -r -y glib
         fi
 
         for gir in GLib-2.0.gir GObject-2.0.gir Gio-2.0.gir GioUnix-2.0.gir GModule-2.0.gir GLibUnix-2.0.gir; do
@@ -8248,11 +8249,11 @@ log "Running mandatory installed-system upgrade"
 # scratch sysup -y/sysup intentionally do not install dependencies newly added
 # since a package was first installed. Resolve those missing dependencies first
 # using the dependency-preflight pattern documented by CRUX.
-outdated_packages="$(scratch quickdiff 2>/dev/null || true)"
+outdated_packages="$(scratch outdate | awk '/ => / && $0 !~ /\[masked\]/ {print $1}' | tr '\n' ' ')"
 if [[ -n "$outdated_packages" ]]; then
-        dependency_closure="$(scratch quickdep $outdated_packages 2>/dev/null || true)"
+        dependency_closure="$(scratch deplist -q $outdated_packages | tr '\n' ' ')"
+        ensure_glib_introspection_ready "$outdated_packages $dependency_closure" || exit 1
         if [[ -n "$dependency_closure" ]]; then
-                ensure_glib_introspection_ready "$dependency_closure" || exit 1
                 # scratch isinstalled is a single-package status check: it
                 # returns 1 and prints nothing for a missing package.  Do not
                 # pipe a whole closure through it under pipefail, because that
@@ -8293,8 +8294,8 @@ if [[ -n "$PACKAGE_LIST_VALUE" ]]; then
                 fi
         done
         if ((${#MISSING_PACKAGES[@]} > 0)); then
-                dependency_closure="$(scratch quickdep "${MISSING_PACKAGES[@]}" 2>/dev/null || true)"
-                ensure_glib_introspection_ready "$dependency_closure" || exit 1
+                dependency_closure="$(scratch deplist -q "${MISSING_PACKAGES[@]}" | tr '\n' ' ')"
+                ensure_glib_introspection_ready "${MISSING_PACKAGES[*]} $dependency_closure" || exit 1
 
                 log "Installing missing packages: ${MISSING_PACKAGES[*]}"
                 run_package_operation "optional package installation (${MISSING_PACKAGES[*]})" scratch install -y "${MISSING_PACKAGES[@]}"
