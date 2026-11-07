@@ -7438,6 +7438,17 @@ write_chroot_installer() {
         rm -f "$TARGET"/var/cache/scratchpkg/packages/nss#*.pkg.tar.*
         rm -f "$TARGET"/var/cache/scratchpkg/packages/nss-32#*.pkg.tar.*
 
+        # Existing base archives carry the old docbook-xml recipe, which
+        # extracted nonexistent .zyp files. Refresh it so each ZIP is unpacked
+        # into its own DocBook version directory.
+        local docbook_xml_port=opt/docbook-xml
+        if [[ -d "$PROJECT_DIR/ports/$docbook_xml_port" ]]; then
+                install -d -m 0755 "$TARGET/usr/ports/${docbook_xml_port%/*}"
+                rm -rf "$TARGET/usr/ports/$docbook_xml_port"
+                cp -a "$PROJECT_DIR/ports/$docbook_xml_port" \
+                        "$TARGET/usr/ports/$docbook_xml_port"
+        fi
+
         # Existing base archives carry the unconditional GLib schema hook,
         # which prints "No schema files found" when only gschema.dtd exists.
         # Refresh both hooks so a rebuilt GLib/GTK4 uses the guarded step.

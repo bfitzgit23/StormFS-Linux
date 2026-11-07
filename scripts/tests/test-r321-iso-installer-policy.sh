@@ -120,6 +120,23 @@ for hook in ports/opt/glib/post-install ports/opt/gtk4/post-install; do
 done
 grep -Fq 'for glib_hook_port in opt/glib opt/gtk4; do' "$inst" || \
     fail "installer does not refresh the guarded GLib/GTK4 hooks"
+# scratchpkg auto-extracts every .zip into $SRC, so the four DocBook releases
+# must stay packed until each is unpacked into its own version directory. The
+# old recipe looked for nonexistent .zyp files and then failed at its 4.1.2
+# catalog workaround.
+docbook_port=ports/opt/docbook-xml
+! grep -Fq 'bsdtar xf "$SRC/$name-4.$vminor.zyp"' "$docbook_port/spkgbuild" || \
+    fail "docbook-xml still reads nonexistent .zyp archives"
+grep -Fq 'release=10' "$docbook_port/spkgbuild" || \
+    fail "docbook-xml ZIP extraction fix release is missing"
+grep -Fq 'noextract="$name-4.5.zip $name-4.4.zip $name-4.3.zip $name-4.2.zip"' \
+    "$docbook_port/spkgbuild" || \
+    fail "docbook-xml does not keep overlapping ZIP sources packed"
+grep -Fq 'unzip -q "$SRC/$name-4.$vminor.zip" -d "$PKG$dest" || return 1' \
+    "$docbook_port/spkgbuild" || \
+    fail "docbook-xml does not unpack each ZIP into its version directory"
+grep -Fq 'docbook_xml_port=opt/docbook-xml' "$inst" || \
+    fail "installer does not refresh the docbook-xml recipe"
 
 for repo in core extra nonfree multilib s6 kde-lxqt mate xfce s6-services; do
     grep -Fq "https://codeberg.org/venomlinux/$repo.git" "$inst" || fail "installer Venom repository missing: $repo"

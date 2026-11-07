@@ -5,18 +5,18 @@
 description="An document type definitions for verification of XML data files against the DocBook rule set."
 name=docbook-xml
 version=4.5
-release=9
+release=10
 renames=($name-$version.zyp
          $name-4.4.zyp
          $name-4.3.zyp
          $name-4.2.zyp)
 source="https://archive.docbook.org/xml/4.5/$name-4.5.zip https://archive.docbook.org/xml/4.4/$name-4.4.zip https://archive.docbook.org/xml/4.3/$name-4.3.zip https://archive.docbook.org/xml/4.2/$name-4.2.zip"
+noextract="$name-4.5.zip $name-4.4.zip $name-4.3.zip $name-4.2.zip"
 
 build() {
-	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
-	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
-	[ -n "$_bfs_src" ] || return 1
-	cd "$_bfs_src" || return 1
+	# scratchpkg extracts .zip sources into $SRC by default. Keep these four
+	# releases packed because they contain identically named files; each one
+	# is unpacked into its own version directory below.
 	# map module filenames to their descriptions
 	declare -A DB_DESC
 	DB_DESC["docbookx.dtd"]="DTD DocBook\$xml V 4.\$vminor"
@@ -38,8 +38,8 @@ build() {
 	for vminor in 5 4 3 2; do
 		dest="/usr/share/xml/docbook/xml-dtd-4.$vminor"
 		install -d -m755 "$PKG$dest"
-		bsdtar xf "$SRC/$name-4.$vminor.zyp" --uid 0 --gid 0 -C "$PKG$dest" \
-			&& mv "$PKG$dest/catalog.xml" "$PKG$dest/catalog"
+		unzip -q "$SRC/$name-4.$vminor.zip" -d "$PKG$dest" || return 1
+		mv "$PKG$dest/catalog.xml" "$PKG$dest/catalog" || return 1
 
 		[ "$vminor" -lt 4 ] && xml="" || xml=" XML"
 		cd "$PKG$dest"
