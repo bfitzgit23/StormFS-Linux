@@ -7369,6 +7369,13 @@ write_chroot_installer() {
         log "Preparing chroot configuration"
         install -d -m 0755 "$TARGET/root"
 
+        # Older base archives embed the temporary-toolchain m4 path in
+        # autoconf's installed autom4te. Optional packages are built after that
+        # toolchain is removed, so repair the path in the current target.
+        if [[ -x "$TARGET/usr/bin/m4" && -f "$TARGET/usr/bin/autom4te" ]]; then
+                sed -i 's|/tmp/lfs-tools/bin/m4|/usr/bin/m4|g' "$TARGET/usr/bin/autom4te"
+        fi
+
         # Transitional support for installs made from an older base archive:
         # seed the current Git port so Git can be installed before the first
         # portsync run, and seed cpio so it uses its shipped configure instead

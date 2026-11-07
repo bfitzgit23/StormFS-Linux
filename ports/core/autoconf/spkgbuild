@@ -14,4 +14,9 @@ build() {
 	[ -n "$_bfs_src" ] || return 1
 	cd "$_bfs_src" || return 1
 	bfs_autobuild
+
+	# autoconf is built before the target m4 package is installed, so its
+	# configure records the temporary toolchain path. The installed autom4te
+	# must use the target m4 instead.
+	sed -i 's|/tmp/lfs-tools/bin/m4|/usr/bin/m4|g' "$PKG/usr/bin/autom4te" || return 1
 }

@@ -16,7 +16,9 @@ build() {
 	cd "$_bfs_src" || return 1
 
 
-  ./bootstrap.sh
+  # Older base archives have autoconf's autom4te pointing at the temporary
+  # toolchain m4, which is removed before optional packages are built.
+  M4=/usr/bin/m4 ./bootstrap.sh
   ./configure --prefix=/usr
   make
   make DESTDIR=$PKG install

@@ -48,6 +48,15 @@ grep -Fq 'PROJECT_DIR/ports/opt/$transitional_port' "$inst" || \
     fail "cpio still regenerates autotools files instead of using its shipped configure"
 grep -Fq 'bfs_autobuild' ports/opt/cpio/spkgbuild || \
     fail "cpio recipe lost its build hook"
+# Stage 2 builds autoconf before m4, so the installed autom4te records the
+# temporary toolchain's m4. Repair that path for existing base archives and
+# prevent it from being baked into new ones.
+grep -Fq 's|/tmp/lfs-tools/bin/m4|/usr/bin/m4|g' "$inst" || \
+    fail "installer does not repair autom4te's temporary-toolchain m4 path"
+grep -Fq 's|/tmp/lfs-tools/bin/m4|/usr/bin/m4|g' ports/core/autoconf/spkgbuild || \
+    fail "autoconf recipe bakes in the temporary-toolchain m4 path"
+grep -Fq 'M4=/usr/bin/m4 ./bootstrap.sh' ports/core/rdfind/spkgbuild || \
+    fail "rdfind bootstrap does not use the target m4"
 for repo in core extra nonfree multilib s6 kde-lxqt mate xfce s6-services; do
     grep -Fq "https://codeberg.org/venomlinux/$repo.git" "$inst" || fail "installer Venom repository missing: $repo"
     grep -Fq "https://codeberg.org/venomlinux/$repo.git" ports/core/scratchpkg/scratchpkg.repo || fail "default scratchpkg repository missing: $repo"
