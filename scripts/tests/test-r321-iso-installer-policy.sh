@@ -20,4 +20,11 @@ grep -Fq 'rm -f "$root"/etc/ssh/ssh_host_*' "$iso" || fail "ISO build does not r
 grep -Fq '(fd|sr|loop)[0-9]+$/' "$inst" || fail "installer does not filter floppy/optical/loop pseudo-disks"
 grep -Fq '# Back from Ready to install returns to the main installer menu.' "$inst" || fail "review Back-loop fix missing"
 
+# The target is OpenRC-only.  Do not make a completed install depend on the
+# systemd package just to create the machine ID required by D-Bus.
+! grep -Eq '^[[:space:]]*systemd-machine-id-setup([[:space:]]|$)' "$inst" || fail "installer still invokes systemd-machine-id-setup"
+grep -Fq 'ensure_machine_id() {' "$inst" || fail "portable machine-id generator missing"
+grep -Fq 'dbus-uuidgen' "$inst" || fail "machine-id generator has no D-Bus fallback"
+grep -Fq '/proc/sys/kernel/random/uuid' "$inst" || fail "machine-id generator has no kernel fallback"
+
 echo "r321 ISO/installer policy regression: PASS"

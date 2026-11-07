@@ -7591,7 +7591,38 @@ set bell-style none
 EOF_INPUTRC
 
 log "Configuring systemd"
-systemd-machine-id-setup
+
+# BFSOS boots with OpenRC.  systemd-machine-id-setup is therefore not part of
+# the installed system, but freedesktop services (notably D-Bus) still expect a
+# stable /etc/machine-id.  Generate it with the tools that are present instead
+# of making a successful install depend on the systemd package.
+ensure_machine_id() {
+        local machine_id=""
+
+        if [[ -s /etc/machine-id ]]; then
+                chmod 0444 /etc/machine-id
+                return 0
+        fi
+
+        if command -v dbus-uuidgen >/dev/null 2>&1; then
+                machine_id="$(dbus-uuidgen 2>/dev/null || true)"
+        fi
+
+        if [[ ! "$machine_id" =~ ^[0-9a-fA-F]{32}$ ]] &&
+           [[ -r /proc/sys/kernel/random/uuid ]]; then
+                machine_id="$(tr -d '-' < /proc/sys/kernel/random/uuid)"
+        fi
+
+        if [[ ! "$machine_id" =~ ^[0-9a-fA-F]{32}$ ]]; then
+                echo "Could not generate /etc/machine-id." >&2
+                exit 1
+        fi
+
+        printf '%s\n' "$machine_id" > /etc/machine-id
+        chmod 0444 /etc/machine-id
+}
+
+ensure_machine_id
 mkdir -p /etc/systemd/system/getty@tty1.service.d
 rm -f /etc/systemd/system/getty@tty1.service.d/noclear.conf
 cat > /etc/systemd/system/getty@tty1.service.d/clear.conf <<'EOF_GETTY'
