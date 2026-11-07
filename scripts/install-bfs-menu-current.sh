@@ -8038,6 +8038,11 @@ configure_venom_ports_repositories() {
                 case "${repo_dir##*/}" in
                         venom-*) continue ;;
                 esac
+                # /usr/ports/main is the compatibility view for portnews, not
+                # a separate local collection.
+                if [[ "$repo_dir" == /usr/ports/main && -L "$repo_dir/NEWS" ]]; then
+                        continue
+                fi
                 printf '%s\n' "$repo_dir" >> "$repo_file"
         done
         cat >> "$repo_file" <<'EOF_VENOM_PORTS'
@@ -8051,6 +8056,14 @@ configure_venom_ports_repositories() {
 /usr/ports/venom-xfce https://codeberg.org/venomlinux/xfce.git main
 /usr/ports/venom-s6-services https://codeberg.org/venomlinux/s6-services.git main
 EOF_VENOM_PORTS
+
+        # scratchpkg's portnews expects /usr/ports/main/NEWS, while BFSOS
+        # stages Venom's core collection under venom-core.  Expose core's real
+        # NEWS directory at the expected path before portsync's news step.
+        mkdir -p /usr/ports/main
+        if [[ -L /usr/ports/main/NEWS || ! -e /usr/ports/main/NEWS ]]; then
+                ln -sfn ../venom-core/NEWS /usr/ports/main/NEWS
+        fi
 
         rm -f /etc/ports/bfsos.git
 

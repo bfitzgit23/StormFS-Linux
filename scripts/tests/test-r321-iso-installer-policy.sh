@@ -26,6 +26,8 @@ grep -Fq '# Back from Ready to install returns to the main installer menu.' "$in
 ! grep -Eq '^[[:space:]]*command -v ports([[:space:]]|$)' "$inst" || fail "installer still requires the removed ports command"
 grep -Fq 'portsync -r' "$inst" || fail "installer does not synchronize ports with scratchpkg"
 grep -Fq 'configure_venom_ports_repositories' "$inst" || fail "installer Venom repository setup missing"
+grep -Fq 'ln -sfn ../venom-core/NEWS /usr/ports/main/NEWS' "$inst" || \
+    fail "portnews news-directory compatibility link missing"
 for repo in core extra nonfree multilib s6 kde-lxqt mate xfce s6-services; do
     grep -Fq "https://codeberg.org/venomlinux/$repo.git" "$inst" || fail "installer Venom repository missing: $repo"
     grep -Fq "https://codeberg.org/venomlinux/$repo.git" ports/core/scratchpkg/scratchpkg.repo || fail "default scratchpkg repository missing: $repo"
