@@ -5,8 +5,8 @@
 description="X Input client library"
 name=libxi
 version=1.8.3
-release=3
-source="https://xorg.freedesktop.org/archive/individual/lib/libxi-$version.tar.xz"
+release=4
+source="https://xorg.freedesktop.org/archive/individual/lib/libXi-$version.tar.xz"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)

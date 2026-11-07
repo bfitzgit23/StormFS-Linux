@@ -23,14 +23,72 @@ grep -Fq 'session_tracking=ConsoleKit' ports/opt/polkit/spkgbuild || fail 'polki
 ! grep -Fq 'session_tracking=logind' ports/opt/polkit/spkgbuild || fail 'polkit still requests the libsystemd logind backend'
 grep -Fq 'release=4' ports/opt/polkit/spkgbuild || fail 'polkit ConsoleKit recipe release missing'
 grep -Fq 'for polkit_port in opt/polkit opt/consolekit; do' scripts/install-bfs-menu-current.sh || fail 'installer does not refresh the Polkit/ConsoleKit recipes'
-for libxau_port in xorg/libxau compat-32/libXau-32; do
-    grep -Fq 'https://www.x.org/releases/individual/lib/libXau-$version.tar.xz' "ports/$libxau_port/spkgbuild" || \
-        fail "$libxau_port does not use the case-correct libXau archive"
-    ! grep -Fq '/libxau-$version.tar.xz' "ports/$libxau_port/spkgbuild" || \
-        fail "$libxau_port still requests the missing lowercase archive"
-done
-grep -Fq 'for libxau_port in xorg/libxau compat-32/libXau-32; do' scripts/install-bfs-menu-current.sh || \
-    fail 'installer does not refresh the native and compat-32 libXau recipes'
+xorg_case_ports='
+xorg/libxau libXau
+xorg/libfs libFS
+xorg/libice libICE
+xorg/libsm libSM
+xorg/libx11 libX11
+xorg/libxaw libXaw
+xorg/libxcomposite libXcomposite
+xorg/libxcursor libXcursor
+xorg/libxdamage libXdamage
+xorg/libxdmcp libXdmcp
+xorg/libxext libXext
+xorg/libxfixes libXfixes
+xorg/libxfont2 libXfont2
+xorg/libxft libXft
+xorg/libxi libXi
+xorg/libxinerama libXinerama
+xorg/libxmu libXmu
+xorg/libxpm libXpm
+xorg/libxpresent libXpresent
+xorg/libxrandr libXrandr
+xorg/libxrender libXrender
+xorg/libxres libXres
+xorg/libxscrnsaver libXScrnSaver
+xorg/libxt libXt
+xorg/libxtst libXtst
+xorg/libxv libXv
+xorg/libxvmc libXvMC
+xorg/libxxf86dga libXxf86dga
+xorg/libxxf86vm libXxf86vm
+compat-32/libXau-32 libXau
+compat-32/libSM-32 libSM
+compat-32/libX11-32 libX11
+compat-32/libXScrnSaver-32 libXScrnSaver
+compat-32/libXcomposite-32 libXcomposite
+compat-32/libXcursor-32 libXcursor
+compat-32/libXdamage-32 libXdamage
+compat-32/libXdmcp-32 libXdmcp
+compat-32/libXext-32 libXext
+compat-32/libXfixes-32 libXfixes
+compat-32/libXft-32 libXft
+compat-32/libXi-32 libXi
+compat-32/libXinerama-32 libXinerama
+compat-32/libXmu-32 libXmu
+compat-32/libXrandr-32 libXrandr
+compat-32/libXrender-32 libXrender
+compat-32/libXt-32 libXt
+compat-32/libXtst-32 libXtst
+compat-32/libXv-32 libXv
+compat-32/libXvMC-32 libXvMC
+compat-32/libXxf86vm-32 libXxf86vm
+compat-32/libice-32 libICE
+'
+while read -r xorg_case_port xorg_case_archive; do
+    [[ -n "$xorg_case_port" ]] || continue
+    grep -Fq "/$xorg_case_archive-\$version.tar.xz" "ports/$xorg_case_port/spkgbuild" || \
+        fail "$xorg_case_port does not use the case-correct $xorg_case_archive archive"
+    xorg_case_lower=$(printf '%s' "$xorg_case_archive" | tr '[:upper:]' '[:lower:]')
+    if [[ "$xorg_case_lower" != "$xorg_case_archive" ]]; then
+        ! grep -Fq "/$xorg_case_lower-\$version.tar.xz" "ports/$xorg_case_port/spkgbuild" || \
+            fail "$xorg_case_port still requests the missing lowercase archive"
+    fi
+    grep -Fq "$xorg_case_port" scripts/install-bfs-menu-current.sh || \
+        fail "installer does not refresh $xorg_case_port"
+done <<< "$xorg_case_ports"
+pass 'native and compat-32 X.Org CamelCase archive names and installer refresh'
 line_func=$(grep -n '^ensure_glib_introspection_ready()' scripts/install-bfs-menu-current.sh | cut -d: -f1)
 line_sysup=$(grep -n 'mandatory package upgrade (scratch sysup -y)' scripts/install-bfs-menu-current.sh | cut -d: -f1)
 (( line_func < line_sysup )) || fail 'GI preflight must be defined before mandatory sysup'

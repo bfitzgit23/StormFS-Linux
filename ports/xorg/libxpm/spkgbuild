@@ -5,8 +5,8 @@
 description="xorg lib libxpm"
 name=libxpm
 version=3.5.19
-release=3
-source="https://xorg.freedesktop.org/archive/individual/lib/libxpm-$version.tar.xz"
+release=4
+source="https://xorg.freedesktop.org/archive/individual/lib/libXpm-$version.tar.xz"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)

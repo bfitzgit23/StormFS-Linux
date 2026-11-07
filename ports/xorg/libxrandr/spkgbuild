@@ -5,8 +5,8 @@
 description="X Resize and Rotate extension client library"
 name=libxrandr
 version=1.5.5
-release=3
-source="https://xorg.freedesktop.org/archive/individual/lib/libxrandr-$version.tar.xz"
+release=4
+source="https://xorg.freedesktop.org/archive/individual/lib/libXrandr-$version.tar.xz"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)

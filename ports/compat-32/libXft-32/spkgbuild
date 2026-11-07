@@ -5,8 +5,8 @@
 description="X font rendering client library"
 name=libxft-32
 version=2.3.9
-release=2
-source="https://www.x.org/releases/individual/lib/libxft-$version.tar.xz"
+release=3
+source="https://xorg.freedesktop.org/archive/individual/lib/libXft-$version.tar.xz"
 
 build() {
 	. /usr/share/bfsos/spkgbuild.helper || return 1

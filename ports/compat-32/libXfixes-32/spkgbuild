@@ -5,8 +5,8 @@
 description="X Fixes extension client library"
 name=libxfixes-32
 version=6.0.2
-release=2
-source="https://www.x.org/releases/individual/lib/libxfixes-$version.tar.xz"
+release=3
+source="https://xorg.freedesktop.org/archive/individual/lib/libXfixes-$version.tar.xz"
 
 build() {
 	. /usr/share/bfsos/spkgbuild.helper || return 1

@@ -5,8 +5,8 @@
 description="X font rendering client library"
 name=libxft
 version=2.3.9
-release=3
-source="https://xorg.freedesktop.org/archive/individual/lib/libxft-$version.tar.xz"
+release=4
+source="https://xorg.freedesktop.org/archive/individual/lib/libXft-$version.tar.xz"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)

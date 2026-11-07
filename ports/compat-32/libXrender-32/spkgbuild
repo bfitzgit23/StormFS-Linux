@@ -5,8 +5,8 @@
 description="X Render extension client library"
 name=libxrender-32
 version=0.9.12
-release=2
-source="https://www.x.org/releases/individual/lib/libxrender-$version.tar.xz"
+release=3
+source="https://xorg.freedesktop.org/archive/individual/lib/libXrender-$version.tar.xz"
 
 build() {
 	. /usr/share/bfsos/spkgbuild.helper || return 1

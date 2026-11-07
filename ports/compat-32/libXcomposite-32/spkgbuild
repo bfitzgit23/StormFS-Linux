@@ -5,8 +5,8 @@
 description="X Composite extension client library"
 name=libxcomposite-32
 version=0.4.7
-release=2
-source="https://www.x.org/releases/individual/lib/libxcomposite-$version.tar.xz"
+release=3
+source="https://xorg.freedesktop.org/archive/individual/lib/libXcomposite-$version.tar.xz"
 
 build() {
 	. /usr/share/bfsos/spkgbuild.helper || return 1

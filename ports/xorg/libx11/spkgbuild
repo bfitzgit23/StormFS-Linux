@@ -5,8 +5,8 @@
 description="X client library"
 name=libx11
 version=1.8.13
-release=3
-source="https://xorg.freedesktop.org/archive/individual/lib/libx11-$version.tar.xz"
+release=4
+source="https://xorg.freedesktop.org/archive/individual/lib/libX11-$version.tar.xz"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)

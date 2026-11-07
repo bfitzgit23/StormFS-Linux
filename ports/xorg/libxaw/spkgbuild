@@ -5,8 +5,8 @@
 description="X Athena Widgets toolkit"
 name=libxaw
 version=1.0.16
-release=2
-source="https://xorg.freedesktop.org/archive/individual/lib/libxaw-$version.tar.xz"
+release=3
+source="https://xorg.freedesktop.org/archive/individual/lib/libXaw-$version.tar.xz"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)

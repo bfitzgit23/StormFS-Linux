@@ -5,8 +5,8 @@
 description="X Screen Saver extension client library"
 name=libxscrnsaver
 version=1.2.5
-release=3
-source="https://xorg.freedesktop.org/archive/individual/lib/libxscrnsaver-$version.tar.xz"
+release=4
+source="https://xorg.freedesktop.org/archive/individual/lib/libXScrnSaver-$version.tar.xz"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)

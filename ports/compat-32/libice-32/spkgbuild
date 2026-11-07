@@ -5,9 +5,9 @@
 description="xorg lib libice"
 name=libice-32
 version=1.1.2
-release=3
+release=4
 build_opt="--disable-docs"
-source="https://www.x.org/releases/individual/lib/libice-$version.tar.xz"
+source="https://xorg.freedesktop.org/archive/individual/lib/libICE-$version.tar.xz"
 
 build() {
 	. /usr/share/bfsos/spkgbuild.helper || return 1

@@ -7462,16 +7462,68 @@ write_chroot_installer() {
                 fi
         done
 
-        # Existing base archives request libXau with a lowercase filename that
-        # the X.Org archive returns as 404. Refresh both the native and
-        # compat-32 recipes so dependency builds use the correct filename.
-        local libxau_port
-        for libxau_port in xorg/libxau compat-32/libXau-32; do
-                if [[ -d "$PROJECT_DIR/ports/$libxau_port" ]]; then
-                        install -d -m 0755 "$TARGET/usr/ports/${libxau_port%/*}"
-                        rm -rf "$TARGET/usr/ports/$libxau_port"
-                        cp -a "$PROJECT_DIR/ports/$libxau_port" \
-                                "$TARGET/usr/ports/$libxau_port"
+        # Existing base archives request several CamelCase X.Org library
+        # archives with lowercase filenames, which the case-sensitive X.Org
+        # server returns as 404. Refresh every affected native and compat-32
+        # recipe so dependency builds use the canonical filenames.
+        local xorg_case_port
+        for xorg_case_port in \
+                xorg/libxau \
+                xorg/libfs \
+                xorg/libice \
+                xorg/libsm \
+                xorg/libx11 \
+                xorg/libxaw \
+                xorg/libxcomposite \
+                xorg/libxcursor \
+                xorg/libxdamage \
+                xorg/libxdmcp \
+                xorg/libxext \
+                xorg/libxfixes \
+                xorg/libxfont2 \
+                xorg/libxft \
+                xorg/libxi \
+                xorg/libxinerama \
+                xorg/libxmu \
+                xorg/libxpm \
+                xorg/libxpresent \
+                xorg/libxrandr \
+                xorg/libxrender \
+                xorg/libxres \
+                xorg/libxscrnsaver \
+                xorg/libxt \
+                xorg/libxtst \
+                xorg/libxv \
+                xorg/libxvmc \
+                xorg/libxxf86dga \
+                xorg/libxxf86vm \
+                compat-32/libXau-32 \
+                compat-32/libSM-32 \
+                compat-32/libX11-32 \
+                compat-32/libXScrnSaver-32 \
+                compat-32/libXcomposite-32 \
+                compat-32/libXcursor-32 \
+                compat-32/libXdamage-32 \
+                compat-32/libXdmcp-32 \
+                compat-32/libXext-32 \
+                compat-32/libXfixes-32 \
+                compat-32/libXft-32 \
+                compat-32/libXi-32 \
+                compat-32/libXinerama-32 \
+                compat-32/libXmu-32 \
+                compat-32/libXrandr-32 \
+                compat-32/libXrender-32 \
+                compat-32/libXt-32 \
+                compat-32/libXtst-32 \
+                compat-32/libXv-32 \
+                compat-32/libXvMC-32 \
+                compat-32/libXxf86vm-32 \
+                compat-32/libice-32; do
+                if [[ -d "$PROJECT_DIR/ports/$xorg_case_port" ]]; then
+                        install -d -m 0755 "$TARGET/usr/ports/${xorg_case_port%/*}"
+                        rm -rf "$TARGET/usr/ports/$xorg_case_port"
+                        cp -a "$PROJECT_DIR/ports/$xorg_case_port" \
+                                "$TARGET/usr/ports/$xorg_case_port"
                 fi
         done
 

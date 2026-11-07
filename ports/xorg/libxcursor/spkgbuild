@@ -5,8 +5,8 @@
 description="X cursor management library"
 name=libxcursor
 version=1.2.3
-release=2
-source="https://xorg.freedesktop.org/archive/individual/lib/libxcursor-$version.tar.xz"
+release=3
+source="https://xorg.freedesktop.org/archive/individual/lib/libXcursor-$version.tar.xz"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)

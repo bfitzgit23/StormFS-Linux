@@ -5,8 +5,8 @@
 description="X11 Testing resource extension library"
 name=libxtst-32
 version=1.2.5
-release=2
-source="https://www.x.org/releases/individual/lib/libxtst-$version.tar.xz"
+release=3
+source="https://xorg.freedesktop.org/archive/individual/lib/libXtst-$version.tar.xz"
 
 build() {
 	. /usr/share/bfsos/spkgbuild.helper || return 1
