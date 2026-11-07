@@ -23,7 +23,9 @@ for token in \
     '_run_full_bootstrap' \
     'full|full-bootstrap|all' \
     'read -r answer </dev/tty' \
-    'Clean-start confirmation requires an interactive terminal'
+    'Clean-start confirmation requires an interactive terminal' \
+    'Stage 1 requires sudo' \
+    'Could not clear the package directory'
 do
     grep -Fq -- "$token" "$BOOT" || fail "bootstrap is missing contract token: $token"
 done

@@ -2624,37 +2624,55 @@ _clean_start() {
         fi
     fi
 
-    sudo mkdir -p "$packagedir" "$buildworkdir"
+    if ! sudo /usr/bin/mkdir -p "$packagedir" "$buildworkdir"; then
+        echo "ERROR: Could not create the package and build-work directories." >&2
+        return 1
+    fi
 
-    sudo find "$packagedir" \
+    if ! sudo /usr/bin/find "$packagedir" \
         -mindepth 1 \
         -maxdepth 1 \
         -print \
-        -exec rm -rf -- {} +
+        -exec rm -rf -- {} +; then
+        echo "ERROR: Could not clear the package directory." >&2
+        return 1
+    fi
 
-    sudo find "$buildworkdir" \
+    if ! sudo /usr/bin/find "$buildworkdir" \
         -mindepth 1 \
         -maxdepth 1 \
         -print \
-        -exec rm -rf -- {} +
+        -exec rm -rf -- {} +; then
+        echo "ERROR: Could not clear the build-work directory." >&2
+        return 1
+    fi
 
-    _ensure_archive_dirs
+    if ! _ensure_archive_dirs; then
+        echo "ERROR: Could not create the bootstrap archive directories." >&2
+        return 1
+    fi
 
-    sudo find "$TOOLCHAIN_ARCHIVE_DIR" \
+    if ! sudo /usr/bin/find "$TOOLCHAIN_ARCHIVE_DIR" \
         -mindepth 1 \
         -maxdepth 1 \
         -type f \
         \( -name 'bfs-toolchain-*.tar.zst' -o -name 'bfs-toolchain-*.tar.xz' \) \
         -print \
-        -delete
+        -delete; then
+        echo "ERROR: Could not clear old temporary-toolchain archives." >&2
+        return 1
+    fi
 
-    sudo find "$BASE_ARCHIVE_DIR" \
+    if ! sudo /usr/bin/find "$BASE_ARCHIVE_DIR" \
         -mindepth 1 \
         -maxdepth 1 \
         -type f \
         \( -name 'bfs-rootfs-*.tar.zst' -o -name 'bfs-rootfs-*.tar.xz' \) \
         -print \
-        -delete
+        -delete; then
+        echo "ERROR: Could not clear old base rootfs archives." >&2
+        return 1
+    fi
 
     echo
     echo "Clean start completed."
@@ -3310,7 +3328,10 @@ _attach_rootfs_cache() {
 }
 
 _buildtoolchain() {
-    _ensure_archive_dirs
+    _ensure_archive_dirs || {
+        echo "ERROR: Could not create the bootstrap archive directories." >&2
+        return 1
+    }
     _start_stage_preflight_log 1 || {
         echo "ERROR: Could not create the Stage-1 preflight log." >&2
         return 1
@@ -3318,6 +3339,19 @@ _buildtoolchain() {
 
     if [ "$(id -u)" = 0 ]; then
         _stage_preflight_note "ERROR: Temporary toolchain needs to be built as a regular user."
+        return 1
+    fi
+
+    # Stage 1 cleans /tmp and prepares the persistent cache with sudo before it
+    # starts compiling.  Authenticate once up front so a missing sudo setup or
+    # an expired credential fails here with an actionable error instead of after
+    # the cleanup banner.
+    if ! command -v sudo >/dev/null 2>&1; then
+        _stage_preflight_note "ERROR: Stage 1 requires sudo for clean-start and cache preparation."
+        return 1
+    fi
+    if ! sudo -v; then
+        _stage_preflight_note "ERROR: sudo authentication failed; Stage 1 cannot prepare the build state."
         return 1
     fi
 
