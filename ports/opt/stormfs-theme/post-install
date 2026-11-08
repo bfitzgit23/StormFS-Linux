@@ -1,0 +1,8 @@
+#!/bin/sh
+
+if command -v gtk-update-icon-cache >/dev/null 2>&1 &&
+   [ -d /usr/share/icons/StormFS-Icons ]; then
+	gtk-update-icon-cache -q -t -f /usr/share/icons/StormFS-Icons || true
+fi
+
+exit 0

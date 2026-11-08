@@ -6,7 +6,7 @@
 description="GTK3 greeter for the LightDM display manager"
 name=lightdm-gtk-greeter
 version=2.0.9
-release=1
+release=2
 build_opt="\
     --libexecdir=/usr/lib/lightdm \
     --sbindir=/usr/bin \
@@ -18,9 +18,10 @@ build_opt="\
     --disable-static \
     --disable-maintainer-mode \
     --docdir=/usr/share/doc/lightdm-gtk-greeter-$version"
-source="https://github.com/Xubuntu/lightdm-gtk-greeter/releases/download/lightdm-gtk-greeter-$version/lightdm-gtk-greeter-$version.tar.gz"
+source="https://github.com/Xubuntu/lightdm-gtk-greeter/releases/download/lightdm-gtk-greeter-$version/lightdm-gtk-greeter-$version.tar.gz greeter.conf"
 
 build() {
+	install -Dm644 greeter.conf "$PKG/etc/lightdm/lightdm-gtk-greeter.conf" || return 1
 	. /usr/share/bfsos/spkgbuild.helper || return 1
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
 	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)

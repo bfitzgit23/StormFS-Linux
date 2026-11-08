@@ -21,6 +21,9 @@ done
 for pkg in xfce4-meta lightdm lightdm-gtk-greeter chromium firefox-bin fastfetch mousepad libreoffice-bin flameshot galculator vlc gparted; do
     grep -q "\b$pkg\b" "$iso" || fail "ISO desktop package set is missing $pkg"
 done
+for pkg in calamares adw-gtk3 tela-icon-theme stormfs-theme oh-my-bash; do
+    grep -q "\b$pkg\b" "$iso" || fail "ISO installer/theme package set is missing $pkg"
+done
 
 [ -f "$ROOT/ports/iso/networkmanager-iso/spkgbuild" ] || fail 'networkmanager-iso port is missing'
 [ -f "$ROOT/ports/iso/lynx-iso/spkgbuild" ] || fail 'lynx-iso port is missing'

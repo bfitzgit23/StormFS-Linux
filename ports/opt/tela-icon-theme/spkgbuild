@@ -1,0 +1,17 @@
+# description	: Tela icon theme with light and dark variants
+# homepage	: https://github.com/vinceliuice/Tela-icon-theme
+# maintainer	: StormFS maintainers
+
+description="Tela icon theme with light and dark variants"
+name=tela-icon-theme
+version=2026-07-07
+release=1
+source="https://github.com/vinceliuice/Tela-icon-theme/archive/refs/tags/$version.tar.gz"
+
+build() {
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "Tela-icon-theme-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
+	bash ./install.sh -d "$PKG/usr/share/icons"
+}

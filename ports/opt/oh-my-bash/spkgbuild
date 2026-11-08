@@ -1,0 +1,20 @@
+# description	: Bash configuration framework with themes, plugins and aliases
+# homepage	: https://github.com/ohmybash/oh-my-bash
+# maintainer	: StormFS maintainers
+
+description="Bash configuration framework with themes, plugins and aliases"
+name=oh-my-bash
+version=2026.10.28
+release=1
+source="https://github.com/ohmybash/oh-my-bash/archive/94c2977eda06f230aafa9628fcd869123f01896b.tar.gz profile.sh"
+
+build() {
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname 'oh-my-bash-*' -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	install -d "$PKG/usr/share/oh-my-bash" "$PKG/etc/profile.d" || return 1
+	cp -a "$_bfs_src"/aliases "$_bfs_src"/completions "$_bfs_src"/custom \
+		"$_bfs_src"/lib "$_bfs_src"/plugins "$_bfs_src"/themes \
+		"$_bfs_src"/templates "$_bfs_src"/tools "$_bfs_src"/oh-my-bash.sh \
+		"$PKG/usr/share/oh-my-bash/" || return 1
+	install -m 0644 profile.sh "$PKG/etc/profile.d/oh-my-bash.sh" || return 1
+}

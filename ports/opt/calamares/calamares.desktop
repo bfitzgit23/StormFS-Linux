@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Install StormFS Linux
+Comment=Install StormFS Linux to disk
+Exec=sudo calamares
+Icon=stormfs-logo
+Terminal=true
+StartupNotify=true
+Categories=System;Settings;
+Keywords=install;setup;calamares;
