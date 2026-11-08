@@ -48,6 +48,8 @@ grep -Fq 'local wpa_port=core/wpa_supplicant' "$inst" || \
     fail "installer does not refresh the wpa_supplicant recipe"
 grep -Fq 'local networkmanager_port=opt/networkmanager' "$inst" || \
     fail "installer does not refresh the NetworkManager recipe"
+grep -Fq 'local brotli_port=opt/brotli' "$inst" || \
+    fail "installer does not refresh the brotli recipe"
 ! grep -Fq 'autoreconf -fi' ports/opt/cpio/spkgbuild || \
     fail "cpio still regenerates autotools files instead of using its shipped configure"
 grep -Fq 'bfs_autobuild' ports/opt/cpio/spkgbuild || \

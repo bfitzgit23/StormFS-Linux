@@ -7484,6 +7484,17 @@ write_chroot_installer() {
                         "$TARGET/usr/ports/$networkmanager_port"
         fi
 
+        # Existing base archives run brotli's cmake from the work source root
+        # instead of the extracted brotli-<version> directory. Refresh it so
+        # dependencies such as lynx and Chromium build against the fixed recipe.
+        local brotli_port=opt/brotli
+        if [[ -d "$PROJECT_DIR/ports/$brotli_port" ]]; then
+                install -d -m 0755 "$TARGET/usr/ports/${brotli_port%/*}"
+                rm -rf "$TARGET/usr/ports/$brotli_port"
+                cp -a "$PROJECT_DIR/ports/$brotli_port" \
+                        "$TARGET/usr/ports/$brotli_port"
+        fi
+
         # Existing base archives request several CamelCase X.Org library
         # archives with lowercase filenames, which the case-sensitive X.Org
         # server returns as 404. Refresh every affected native and compat-32

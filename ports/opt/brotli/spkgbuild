@@ -6,10 +6,15 @@
 description="Brotli compression library"
 name=brotli
 version=1.2.0
-release=2
+release=3
 source="https://github.com/google/$name/archive/v$version/$name-v$version.tar.gz"
 
 build() {
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
+
   mkdir build &&
 cd    build &&
 
