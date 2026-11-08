@@ -15,6 +15,19 @@ for f in bootstrap.sh bootstrap-clean-start.sh scripts/bfs-build-iso.sh scripts/
 done
 pass 'bootstrap/ISO/installer/publisher shell syntax'
 
+openrc_recipe=ports/opt/openrc/spkgbuild
+grep -Fq 'https://www.linuxfromscratch.org/glfs/view/dev/download/openrc/openrc-$version-lock-1.patch' "$openrc_recipe" || \
+    fail 'OpenRC lock patch source missing'
+grep -Fq 'for _bfs_patch in "$SRC"/*.patch "$SRC"/*.diff; do' "$openrc_recipe" || \
+    fail 'OpenRC lock patch is not applied'
+grep -Fq -- '-D uucp_group=root' "$openrc_recipe" || \
+    fail 'OpenRC root lock group option missing'
+grep -qx 'release=3' "$openrc_recipe" || fail 'OpenRC recipe release missing'
+line_openrc_patch=$(grep -n 'patch -t "${patch_opt:--p1}" -i "$_bfs_patch"' "$openrc_recipe" | cut -d: -f1)
+line_openrc_meson=$(grep -n 'meson setup' "$openrc_recipe" | cut -d: -f1)
+(( line_openrc_patch < line_openrc_meson )) || fail 'OpenRC lock patch must be applied before meson setup'
+pass 'OpenRC lock patch and uucp_group option'
+
 [[ ! -e ports/opt/glib/.footprint ]] || fail 'generated final GLib footprint must not be committed for bootstrap pass'
 grep -qx 'glib' ports/opt/gobject-introspection/depends || fail 'GI must depend on glib'
 grep -qx 'gobject-introspection' ports/opt/polkit/depends || fail 'polkit must depend on GI'
