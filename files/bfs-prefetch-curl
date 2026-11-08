@@ -20,11 +20,17 @@
 set -u
 
 health_file="${BFS_PREFETCH_HEALTH_FILE:-/tmp/bfsos-prefetch-unhealthy-origins}"
-prefixes="${BFS_PREFETCH_SOURCE_PREFIXES-https://ftp.gnu.org/gnu/ https://xorg.freedesktop.org/archive/individual/ https://www.x.org/releases/individual/}"
+# NuTyX's primary source host is frequently unreachable; its SourceForge
+# project stores the same release archives under a path-compatible prefix.
+nutyx_broadcom_http='http://download.tuxfamily.org/nutyx/sources/broadcom-wl/'
+nutyx_broadcom_https='https://download.tuxfamily.org/nutyx/sources/broadcom-wl/'
+nutyx_sourceforge='https://downloads.sourceforge.net/project/nutyx/files/'
+
+prefixes="${BFS_PREFETCH_SOURCE_PREFIXES-https://ftp.gnu.org/gnu/ https://xorg.freedesktop.org/archive/individual/ https://www.x.org/releases/individual/ $nutyx_broadcom_http $nutyx_broadcom_https}"
 # The single-origin xorg.freedesktop.org archive intermittently fails DNS
 # resolution, so X.Org files fall back to the Fastly-backed X.Org mirrors,
 # which serve byte-identical release archives at a path-compatible layout.
-mirror_map="${BFS_PREFETCH_MIRROR_MAP-"https://ftp.gnu.org/gnu/=https://ftpmirror.gnu.org/,https://mirrors.kernel.org/gnu/ https://xorg.freedesktop.org/archive/individual/=https://www.x.org/releases/individual/,https://ftp.x.org/pub/individual/ https://www.x.org/releases/individual/=https://ftp.x.org/pub/individual/"}"
+mirror_map="${BFS_PREFETCH_MIRROR_MAP-"https://ftp.gnu.org/gnu/=https://ftpmirror.gnu.org/,https://mirrors.kernel.org/gnu/ https://xorg.freedesktop.org/archive/individual/=https://www.x.org/releases/individual/,https://ftp.x.org/pub/individual/ https://www.x.org/releases/individual/=https://ftp.x.org/pub/individual/ $nutyx_broadcom_http=$nutyx_sourceforge $nutyx_broadcom_https=$nutyx_sourceforge"}"
 
 if [ "$#" -eq 0 ]; then
     printf 'pkgmk prefetch: curl shim requires a URL\n' >&2

@@ -21,7 +21,7 @@ for a in "$@"; do
 done
 
 case "${!#}" in
-    *ftpmirror*|*mirrors.kernel.org*|*ftp.x.org*)
+    *ftpmirror*|*mirrors.kernel.org*|*ftp.x.org*|*downloads.sourceforge.net*)
         status=0
         ;;
     *www.x.org*)
@@ -311,5 +311,31 @@ mapfile -t args <"$tmp/args"
 }
 
 unset FAKE_CURL_WWW_STATUS
+
+#
+# 11. The default map must recover the NuTyX Broadcom source from SourceForge.
+#
+unset BFS_PREFETCH_SOURCE_PREFIXES BFS_PREFETCH_MIRROR_MAP
+rm -f "$health" "$tmp/args" "$tmp/broadcom"
+export FAKE_CURL_STATUS=28
+
+"$WRAPPER"     -o "$tmp/broadcom"     http://download.tuxfamily.org/nutyx/sources/broadcom-wl/broadcom-wl-6.30.223.271.tar.xz     >/dev/null     2>"$tmp/broadcom.err"
+
+[[ -s "$tmp/broadcom" ]] || {
+    echo 'FAIL: Broadcom source fallback produced no output file' >&2
+    exit 1
+}
+
+mapfile -t args <"$tmp/args"
+[[ "${args[*]}" == *"https://downloads.sourceforge.net/project/nutyx/files/broadcom-wl-6.30.223.271.tar.xz"* ]] || {
+    printf 'FAIL: Broadcom SourceForge mirror URL was not used: %q
+' "${args[*]}" >&2
+    exit 1
+}
+
+grep -Fxq 'http://download.tuxfamily.org/nutyx/sources/broadcom-wl/' "$health" || {
+    echo 'FAIL: failed Broadcom origin was not recorded' >&2
+    exit 1
+}
 
 echo 'prefetch curl wrapper regression: PASS'
