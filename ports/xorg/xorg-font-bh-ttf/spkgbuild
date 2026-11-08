@@ -6,7 +6,7 @@ description="xorg font font-bh-ttf"
 name=xorg-font-bh-ttf
 version=1.0.3
 release=2
-source="https://xorg.freedesktop.org/archive/individual/font/font-bh-ttf-$version.tar.bz2"
+source="https://www.x.org/releases/individual/font/font-bh-ttf-$version.tar.bz2"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)

@@ -6,7 +6,7 @@ description="X Session Management client library"
 name=libsm
 version=1.2.6
 release=4
-source="https://xorg.freedesktop.org/archive/individual/lib/libSM-$version.tar.xz"
+source="https://www.x.org/releases/individual/lib/libSM-$version.tar.xz"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)

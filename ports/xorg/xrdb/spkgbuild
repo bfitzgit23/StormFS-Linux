@@ -6,7 +6,7 @@ description="x server resource database utility"
 name=xrdb
 version=1.2.3
 release=2
-source="https://xorg.freedesktop.org/archive/individual/app/xrdb-$version.tar.xz"
+source="https://www.x.org/releases/individual/app/xrdb-$version.tar.xz"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)

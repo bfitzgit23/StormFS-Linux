@@ -6,7 +6,7 @@ description="X compat server to be used with wayland"
 name=xwayland
 version=24.1.13
 release=2
-source="https://xorg.freedesktop.org/archive/individual/xserver/$name-$version.tar.xz"
+source="https://www.x.org/releases/individual/xserver/$name-$version.tar.xz"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)

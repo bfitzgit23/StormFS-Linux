@@ -7,7 +7,7 @@ name=xorgproto-32
 version=2025.1
 release=3
 build_opt="--datadir=/usr/lib32 -D legacy=false"
-source="https://xorg.freedesktop.org/archive/individual/proto/xorgproto-$version.tar.xz"
+source="https://www.x.org/releases/individual/proto/xorgproto-$version.tar.xz"
 
 build() {
 	. /usr/share/bfsos/spkgbuild.helper || return 1

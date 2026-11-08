@@ -6,7 +6,7 @@ description="Query or set X gamma correction"
 name=xgamma
 version=1.0.8
 release=2
-source="https://xorg.freedesktop.org/archive/individual/app/xgamma-$version.tar.xz"
+source="https://www.x.org/releases/individual/app/xgamma-$version.tar.xz"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)

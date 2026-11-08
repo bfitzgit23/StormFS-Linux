@@ -6,7 +6,7 @@ description="X-Video information utility"
 name=xwd
 version=1.0.10
 release=2
-source="https://xorg.freedesktop.org/archive/individual/app/xwd-$version.tar.xz"
+source="https://www.x.org/releases/individual/app/xwd-$version.tar.xz"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)

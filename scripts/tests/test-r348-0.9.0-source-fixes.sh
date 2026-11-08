@@ -188,6 +188,17 @@ grep -Fq 'release=4' ports/xorg/libfontenc/spkgbuild || fail 'libfontenc mirror 
 grep -Fq 'xorg/libfontenc' scripts/install-bfs-menu-current.sh || \
     fail 'installer does not refresh xorg/libfontenc'
 pass 'libfontenc mirror source and installer refresh'
+! grep -rq '^source=.*xorg\.freedesktop\.org' ports --include=spkgbuild || \
+    fail 'X.Org recipes still fetch from the host that times out on some networks'
+grep -Fq 'https://www.x.org/releases/individual/' ports/xorg/libx11/spkgbuild || \
+    fail 'X.Org recipes do not use the CDN release host'
+grep -Fq 'https://xorg.freedesktop.org/archive/individual/' files/bfs-prefetch-curl || \
+    fail 'prefetch shim dropped the X.Org origin fallback'
+grep -Fq 'https://ftp.x.org/pub/individual/' files/bfs-prefetch-curl || \
+    fail 'prefetch shim has no second X.Org mirror'
+grep -Fq 'for xorg_tree_dir in "$PROJECT_DIR"/ports/xorg/*' scripts/install-bfs-menu-current.sh || \
+    fail 'installer does not refresh the X.Org recipe tree'
+pass 'X.Org CDN source host and prefetch mirror fallback'
 line_func=$(grep -n '^ensure_glib_introspection_ready()' scripts/install-bfs-menu-current.sh | cut -d: -f1)
 line_sysup=$(grep -n 'mandatory package upgrade (scratch sysup -y)' scripts/install-bfs-menu-current.sh | cut -d: -f1)
 (( line_func < line_sysup )) || fail 'GI preflight must be defined before mandatory sysup'

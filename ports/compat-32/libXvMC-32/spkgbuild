@@ -6,7 +6,7 @@ description="X Video Motion Compensation extension client library"
 name=libxvmc-32
 version=1.0.15
 release=3
-source="https://xorg.freedesktop.org/archive/individual/lib/libXvMC-$version.tar.xz"
+source="https://www.x.org/releases/individual/lib/libXvMC-$version.tar.xz"
 
 build() {
 	. /usr/share/bfsos/spkgbuild.helper || return 1

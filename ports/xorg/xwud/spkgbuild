@@ -6,7 +6,7 @@ description="Window information utility for X"
 name=xwud
 version=1.0.8
 release=2
-source="https://xorg.freedesktop.org/archive/individual/app/xwud-$version.tar.xz"
+source="https://www.x.org/releases/individual/app/xwud-$version.tar.xz"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)

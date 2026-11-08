@@ -6,7 +6,7 @@ description="X font handling library version 2 for server & utilities"
 name=libxfont2
 version=2.0.9
 release=4
-source="https://xorg.freedesktop.org/archive/individual/lib/libXfont2-$version.tar.xz"
+source="https://www.x.org/releases/individual/lib/libXfont2-$version.tar.xz"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)

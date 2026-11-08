@@ -6,7 +6,7 @@ description="xorg driver xf86-video-sis"
 name=xf86-video-sis
 version=0.12.0
 release=1
-source="https://xorg.freedesktop.org/archive/individual/driver/xf86-video-sis-$version.tar.bz2"
+source="https://www.x.org/releases/individual/driver/xf86-video-sis-$version.tar.bz2"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)

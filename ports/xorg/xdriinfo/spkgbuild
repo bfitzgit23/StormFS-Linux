@@ -6,7 +6,7 @@ description="Query configuration information of DRI drivers"
 name=xdriinfo
 version=1.0.8
 release=2
-source="https://xorg.freedesktop.org/archive/individual/app/xdriinfo-$version.tar.xz"
+source="https://www.x.org/releases/individual/app/xdriinfo-$version.tar.xz"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)

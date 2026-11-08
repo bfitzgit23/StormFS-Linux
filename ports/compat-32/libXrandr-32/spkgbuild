@@ -6,7 +6,7 @@ description="X Resize and Rotate extension client library"
 name=libxrandr-32
 version=1.5.5
 release=3
-source="https://xorg.freedesktop.org/archive/individual/lib/libXrandr-$version.tar.xz"
+source="https://www.x.org/releases/individual/lib/libXrandr-$version.tar.xz"
 
 build() {
 	. /usr/share/bfsos/spkgbuild.helper || return 1

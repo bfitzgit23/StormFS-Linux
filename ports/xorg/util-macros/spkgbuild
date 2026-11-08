@@ -6,7 +6,7 @@ description="xorg m4 macros"
 name=util-macros
 version=1.20.2
 release=2
-source="https://xorg.freedesktop.org/archive/individual/util/util-macros-$version.tar.xz"
+source="https://www.x.org/releases/individual/util/util-macros-$version.tar.xz"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)

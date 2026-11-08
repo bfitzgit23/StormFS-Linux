@@ -6,7 +6,7 @@ description="xorg font font-sony-misc"
 name=xorg-font-sony-misc
 version=1.0.3
 release=1
-source="https://xorg.freedesktop.org/archive/individual/font/font-sony-misc-$version.tar.bz2"
+source="https://www.x.org/releases/individual/font/font-sony-misc-$version.tar.bz2"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)

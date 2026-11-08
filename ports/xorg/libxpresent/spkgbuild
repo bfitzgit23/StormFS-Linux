@@ -6,7 +6,7 @@ description="Xlib-based library for the X Present Extension"
 name=libxpresent
 version=1.0.2
 release=4
-source="https://xorg.freedesktop.org/archive/individual/lib/libXpresent-$version.tar.xz"
+source="https://www.x.org/releases/individual/lib/libXpresent-$version.tar.xz"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)

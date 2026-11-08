@@ -6,7 +6,7 @@ description="X Font Service client library"
 name=libfs
 version=1.0.10
 release=4
-source="https://xorg.freedesktop.org/archive/individual/lib/libFS-$version.tar.xz"
+source="https://www.x.org/releases/individual/lib/libFS-$version.tar.xz"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)

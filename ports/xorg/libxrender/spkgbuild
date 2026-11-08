@@ -6,7 +6,7 @@ description="X Render extension client library"
 name=libxrender
 version=0.9.12
 release=3
-source="https://xorg.freedesktop.org/archive/individual/lib/libXrender-$version.tar.xz"
+source="https://www.x.org/releases/individual/lib/libXrender-$version.tar.xz"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)

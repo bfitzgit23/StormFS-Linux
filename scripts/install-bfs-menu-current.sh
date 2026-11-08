@@ -7632,6 +7632,28 @@ write_chroot_installer() {
                 fi
         done
 
+        # X.Org recipes fetch from the Fastly-backed www.x.org CDN because the
+        # single-origin xorg.freedesktop.org archive intermittently fails DNS
+        # resolution. Refresh the whole X.Org tree, plus the compat-32 ports
+        # that download X.Org sources, so installed builds inherit the fix.
+        local xorg_tree_dir xorg_tree_port
+        for xorg_tree_dir in "$PROJECT_DIR"/ports/xorg/*; do
+                [[ -d "$xorg_tree_dir" ]] || continue
+                xorg_tree_port="xorg/${xorg_tree_dir##*/}"
+                install -d -m 0755 "$TARGET/usr/ports/xorg"
+                rm -rf "$TARGET/usr/ports/$xorg_tree_port"
+                cp -a "$xorg_tree_dir" "$TARGET/usr/ports/$xorg_tree_port"
+        done
+        for xorg_tree_dir in "$PROJECT_DIR"/ports/compat-32/*; do
+                [[ -f "$xorg_tree_dir/spkgbuild" ]] || continue
+                grep -Eq 'x\.org/(archive|releases)/|x\.org/pub/' \
+                        "$xorg_tree_dir/spkgbuild" || continue
+                xorg_tree_port="compat-32/${xorg_tree_dir##*/}"
+                install -d -m 0755 "$TARGET/usr/ports/compat-32"
+                rm -rf "$TARGET/usr/ports/$xorg_tree_port"
+                cp -a "$xorg_tree_dir" "$TARGET/usr/ports/$xorg_tree_port"
+        done
+
         # xorg.freedesktop.org intermittently fails to resolve on some
         # networks, which aborts libfontenc builds. Refresh the recipe so the
         # installed tree fetches the byte-identical Alpine distfiles mirror.

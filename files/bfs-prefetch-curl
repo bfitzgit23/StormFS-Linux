@@ -13,14 +13,18 @@
 #   BFS_PREFETCH_HEALTH_FILE  file recording origins that failed this run
 #                             (default /tmp/bfsos-prefetch-unhealthy-origins)
 #   BFS_PREFETCH_SOURCE_PREFIXES  space separated origin prefixes to watch
-#                             (default https://ftp.gnu.org/gnu/)
+#                             (default https://ftp.gnu.org/gnu/ plus the X.Org
+#                             archive hosts)
 #   BFS_PREFETCH_MIRROR_MAP   "<prefix>=<mirror>[,<mirror>]" entries; set to
 #                             "none" to disable mirror fallback entirely
 set -u
 
 health_file="${BFS_PREFETCH_HEALTH_FILE:-/tmp/bfsos-prefetch-unhealthy-origins}"
-prefixes="${BFS_PREFETCH_SOURCE_PREFIXES-https://ftp.gnu.org/gnu/}"
-mirror_map="${BFS_PREFETCH_MIRROR_MAP-"https://ftp.gnu.org/gnu/=https://ftpmirror.gnu.org/,https://mirrors.kernel.org/gnu/"}"
+prefixes="${BFS_PREFETCH_SOURCE_PREFIXES-https://ftp.gnu.org/gnu/ https://xorg.freedesktop.org/archive/individual/ https://www.x.org/releases/individual/}"
+# The single-origin xorg.freedesktop.org archive intermittently fails DNS
+# resolution, so X.Org files fall back to the Fastly-backed X.Org mirrors,
+# which serve byte-identical release archives at a path-compatible layout.
+mirror_map="${BFS_PREFETCH_MIRROR_MAP-"https://ftp.gnu.org/gnu/=https://ftpmirror.gnu.org/,https://mirrors.kernel.org/gnu/ https://xorg.freedesktop.org/archive/individual/=https://www.x.org/releases/individual/,https://ftp.x.org/pub/individual/ https://www.x.org/releases/individual/=https://ftp.x.org/pub/individual/"}"
 
 if [ "$#" -eq 0 ]; then
     printf 'pkgmk prefetch: curl shim requires a URL\n' >&2
@@ -86,7 +90,7 @@ while IFS= read -r prefix; do
             break
             ;;
     esac
-done <<<"$prefixes"
+done < <(printf '%s\n' $prefixes)
 
 # Build the mirror candidates for this URL by substituting the matched origin
 # prefix, so https://ftp.gnu.org/gnu/gmp/gmp-6.3.0.tar.xz becomes

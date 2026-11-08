@@ -6,7 +6,7 @@ description="pthread dummy implementation"
 name=libpthread-stubs-32
 version=0.5
 release=2
-source="https://xorg.freedesktop.org/archive/individual/lib/libpthread-stubs-$version.tar.xz"
+source="https://www.x.org/releases/individual/lib/libpthread-stubs-$version.tar.xz"
 
 build() {
 	. /usr/share/bfsos/spkgbuild.helper || return 1

@@ -6,7 +6,7 @@ description="xorg XKB keyboard description compiler"
 name=xkbutils
 version=1.0.7
 release=3
-source="https://xorg.freedesktop.org/archive/individual/app/xkbutils-$version.tar.xz"
+source="https://www.x.org/releases/individual/app/xkbutils-$version.tar.xz"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)

@@ -6,7 +6,7 @@ description="x window sniper"
 name=xmessage
 version=1.0.7
 release=2
-source="https://xorg.freedesktop.org/archive/individual/app/xmessage-$version.tar.xz"
+source="https://www.x.org/releases/individual/app/xmessage-$version.tar.xz"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)

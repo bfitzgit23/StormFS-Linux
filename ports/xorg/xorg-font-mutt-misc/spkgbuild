@@ -6,7 +6,7 @@ description="xorg font font-mutt-misc"
 name=xorg-font-mutt-misc
 version=1.0.4
 release=1
-source="https://xorg.freedesktop.org/archive/individual/font/font-mutt-misc-$version.tar.xz"
+source="https://www.x.org/releases/individual/font/font-mutt-misc-$version.tar.xz"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)

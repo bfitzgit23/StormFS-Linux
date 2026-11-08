@@ -6,7 +6,7 @@ description="library providing a standalone version of the X server implementati
 name=libxcvt
 version=0.1.3
 release=1
-source="https://xorg.freedesktop.org/archive/individual/lib/libxcvt-$version.tar.xz"
+source="https://www.x.org/releases/individual/lib/libxcvt-$version.tar.xz"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)

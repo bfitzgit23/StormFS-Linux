@@ -6,7 +6,7 @@ description="XCB X protocol descriptions"
 name=xcb-proto
 version=1.17.0
 release=1
-source="https://xorg.freedesktop.org/archive/individual/proto/xcb-proto-$version.tar.xz"
+source="https://www.x.org/releases/individual/proto/xcb-proto-$version.tar.xz"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)

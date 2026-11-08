@@ -6,7 +6,7 @@ description="unaccelerated VESA display driver"
 name=xf86-video-vesa
 version=2.6.0
 release=1
-source="https://xorg.freedesktop.org/archive/individual/driver/xf86-video-vesa-$version.tar.xz"
+source="https://www.x.org/releases/individual/driver/xf86-video-vesa-$version.tar.xz"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)

@@ -6,7 +6,7 @@ description="Tool for modifying keymaps and pointer button mappings in X"
 name=xpr
 version=1.2.1
 release=1
-source="https://xorg.freedesktop.org/archive/individual/app/xpr-$version.tar.xz"
+source="https://www.x.org/releases/individual/app/xpr-$version.tar.xz"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)

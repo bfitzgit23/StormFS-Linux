@@ -6,7 +6,7 @@ description="Program for managing utmp/wtmp entries for xdm sessions"
 name=sessreg
 version=1.1.4
 release=2
-source="https://xorg.freedesktop.org/archive/individual/app/sessreg-$version.tar.xz"
+source="https://www.x.org/releases/individual/app/sessreg-$version.tar.xz"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)

@@ -21,8 +21,11 @@ for a in "$@"; do
 done
 
 case "${!#}" in
-    *ftpmirror*|*mirrors.kernel.org*)
+    *ftpmirror*|*mirrors.kernel.org*|*ftp.x.org*)
         status=0
+        ;;
+    *www.x.org*)
+        status="${FAKE_CURL_WWW_STATUS:-0}"
         ;;
     *)
         status="${FAKE_CURL_STATUS:-0}"
@@ -250,5 +253,63 @@ mapfile -t args <"$tmp/args"
     echo 'FAIL: HTTP failure poisoned the origin for the rest of the run' >&2
     exit 1
 }
+
+#
+# 9. The default mirror map must cover the X.Org origin with the CDN hosts.
+#
+unset BFS_PREFETCH_SOURCE_PREFIXES BFS_PREFETCH_MIRROR_MAP
+rm -f "$health" "$tmp/args" "$tmp/x"
+export FAKE_CURL_STATUS=28
+
+set +e
+"$WRAPPER" \
+    -o "$tmp/x" \
+    https://xorg.freedesktop.org/archive/individual/lib/libX11-1.8.13.tar.xz \
+    >/dev/null \
+    2>"$tmp/xorg.err"
+status=$?
+set -e
+
+[[ $status -eq 0 ]] || {
+    echo "FAIL: X.Org files were not recovered from a mirror: $status" >&2
+    exit 1
+}
+
+[[ -s "$tmp/x" ]] || {
+    echo 'FAIL: X.Org mirror fallback produced no output file' >&2
+    exit 1
+}
+
+mapfile -t args <"$tmp/args"
+[[ "${args[*]}" == *"https://www.x.org/releases/individual/lib/libX11-1.8.13.tar.xz"* ]] || {
+    printf 'FAIL: X.Org mirror URL was not used: %q\n' "${args[*]}" >&2
+    exit 1
+}
+
+grep -Fxq 'https://xorg.freedesktop.org/archive/individual/' "$health" || {
+    echo 'FAIL: failed X.Org origin was not recorded' >&2
+    exit 1
+}
+
+#
+# 10. A failing www.x.org CDN host must fall back to ftp.x.org.
+#
+rm -f "$health" "$tmp/args" "$tmp/y"
+export FAKE_CURL_STATUS=28
+export FAKE_CURL_WWW_STATUS=28
+
+"$WRAPPER" \
+    -o "$tmp/y" \
+    https://www.x.org/releases/individual/app/xauth-1.1.5.tar.xz \
+    >/dev/null \
+    2>"$tmp/xorg-cdn.err"
+
+mapfile -t args <"$tmp/args"
+[[ "${args[*]}" == *"https://ftp.x.org/pub/individual/app/xauth-1.1.5.tar.xz"* ]] || {
+    printf 'FAIL: second X.Org mirror was not used: %q\n' "${args[*]}" >&2
+    exit 1
+}
+
+unset FAKE_CURL_WWW_STATUS
 
 echo 'prefetch curl wrapper regression: PASS'

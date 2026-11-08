@@ -6,7 +6,7 @@ description="XCB utilities library"
 name=xcb-util
 version=0.4.1
 release=2
-source="https://xorg.freedesktop.org/archive/individual/lib/xcb-util-$version.tar.xz"
+source="https://www.x.org/releases/individual/lib/xcb-util-$version.tar.xz"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
