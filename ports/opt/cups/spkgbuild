@@ -5,7 +5,7 @@
 description="CUPS - Common UNIX Printing System"
 name=cups
 version=2.4.19
-release=3
+release=4
 source="https://github.com/OpenPrinting/cups/releases/download/v$version/$name-$version-source.tar.gz"
 
 build() {
@@ -27,7 +27,8 @@ build() {
     rm -rf "$PKG/usr/lib/systemd" "$PKG/lib/systemd" "$PKG/etc/init.d" \
         || return 1
 
-    ln -sfn "../cups/doc-$version" "$PKG/usr/share/doc/$name-$version"
+    install -d "$PKG/usr/share/doc" || return 1
+    ln -sfn "../cups/doc-$version" "$PKG/usr/share/doc/$name-$version" || return 1
     printf '%s\n' 'ServerName /run/cups/cups.sock' > "$PKG/etc/cups/client.conf" || return 1
 
     install -d "$PKG/etc/pam.d"

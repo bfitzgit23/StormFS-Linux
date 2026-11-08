@@ -76,9 +76,11 @@ grep -qx 'release=3' ports/opt/chrony/spkgbuild || fail 'Chrony OpenRC-only rele
 grep -qx 'release=4' ports/opt/avahi/spkgbuild || fail 'Avahi OpenRC-only release missing'
 grep -Fq -- '--with-systemdsystemunitdir=no' ports/opt/avahi/spkgbuild || \
     fail 'Avahi still installs systemd units'
-grep -qx 'release=3' ports/opt/cups/spkgbuild || fail 'CUPS OpenRC-only release missing'
+grep -qx 'release=4' ports/opt/cups/spkgbuild || fail 'CUPS OpenRC-only release missing'
 grep -Fq -- '--without-systemd' ports/opt/cups/spkgbuild || fail 'CUPS still enables systemd integration'
 grep -Fq -- '--without-rcdir' ports/opt/cups/spkgbuild || fail 'CUPS still installs a SysV init script'
+grep -Fq 'install -d "$PKG/usr/share/doc"' ports/opt/cups/spkgbuild || \
+    fail 'CUPS doc symlink parent is not created'
 grep -qx 'release=3' ports/opt/smartmontools/spkgbuild || fail 'smartmontools OpenRC-only release missing'
 grep -Fq -- '--with-libsystemd=no' ports/opt/smartmontools/spkgbuild || \
     fail 'smartmontools still links libsystemd'
