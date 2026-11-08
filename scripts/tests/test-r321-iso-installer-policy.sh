@@ -219,6 +219,10 @@ grep -Fq 'packages/$service_pkg' "$inst" || \
 for service_pkg in chrony avahi cups smartmontools accountsservice upower udisks lightdm sddm wireplumber polkit linux-pam; do
     grep -Fq "$service_pkg" "$inst" || fail "installer service-package list omits $service_pkg"
 done
+grep -Fq 'for desktop_port in opt/libedit plasma/plasma-login-manager; do' "$inst" || \
+    fail "installer does not refresh the libedit/Plasma Login Manager recipes"
+grep -Fq 'packages/$desktop_pkg' "$inst" || \
+    fail "installer libedit/Plasma Login Manager cache cleanup is missing"
 grep -Fq 'rc-update add bluetooth default' docs/openrc-book/chapters/12-bluetooth.md || \
     fail "BlueZ documentation still enables the nonexistent bluez service"
 grep -Fq 'prt-get install bluez openrc-init-scripts' docs/openrc-book/chapters/12-bluetooth.md || \

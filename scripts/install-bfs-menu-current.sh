@@ -7518,6 +7518,22 @@ write_chroot_installer() {
                 rm -f "$TARGET/var/cache/scratchpkg/packages/$service_pkg"#*.pkg.tar.*
         done
 
+        # Refresh the libedit man-page fix and the OpenRC-converted Plasma
+        # Login Manager so existing targets do not rebuild stale recipes.
+        local desktop_port
+        for desktop_port in opt/libedit plasma/plasma-login-manager; do
+                if [[ -d "$PROJECT_DIR/ports/$desktop_port" ]]; then
+                        install -d -m 0755 "$TARGET/usr/ports/${desktop_port%/*}"
+                        rm -rf "$TARGET/usr/ports/$desktop_port"
+                        cp -a "$PROJECT_DIR/ports/$desktop_port" \
+                                "$TARGET/usr/ports/$desktop_port"
+                fi
+        done
+        local desktop_pkg
+        for desktop_pkg in libedit plasma-login-manager; do
+                rm -f "$TARGET/var/cache/scratchpkg/packages/$desktop_pkg"#*.pkg.tar.*
+        done
+
         # Existing base archives carry the truncated wpa_supplicant recipe whose
         # dangling continuation runs the D-Bus service directory as a command.
         # Refresh it so the installer builds the corrected release.

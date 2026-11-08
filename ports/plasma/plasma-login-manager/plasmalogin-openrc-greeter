@@ -1,0 +1,74 @@
+#!/bin/sh
+# BFSOS OpenRC: start the Plasma Login greeter without a systemd user session.
+# This runs as the plasmalogin user inside the PAM greeter session.
+set -eu
+
+PATH="/opt/kf6/bin:/opt/kf6/lib/libexec:/opt/kf6/lib64/libexec:/opt/kf6/libexec:${PATH:-/usr/bin:/bin}"
+export PATH
+
+if [ -z "${XDG_RUNTIME_DIR:-}" ] || [ ! -d "$XDG_RUNTIME_DIR" ]; then
+    echo "plasmalogin: XDG_RUNTIME_DIR is missing or not a directory" >&2
+    exit 1
+fi
+if [ ! -O "$XDG_RUNTIME_DIR" ]; then
+    echo "plasmalogin: XDG_RUNTIME_DIR is not owned by the greeter user" >&2
+    exit 1
+fi
+
+kwin_wayland=$(command -v kwin_wayland) || {
+    echo "plasmalogin: kwin_wayland is not installed" >&2
+    exit 1
+}
+greeter=$(command -v plasma-login-greeter) || {
+    echo "plasmalogin: plasma-login-greeter is not installed" >&2
+    exit 1
+}
+wallpaper=$(command -v plasma-login-wallpaper) || {
+    echo "plasmalogin: plasma-login-wallpaper is not installed" >&2
+    exit 1
+}
+
+socket_name="plasmalogin-$$"
+kwin_pid=
+wallpaper_pid=
+
+cleanup() {
+    trap - EXIT INT TERM HUP
+    if [ -n "$wallpaper_pid" ]; then
+        kill "$wallpaper_pid" 2>/dev/null || true
+    fi
+    if [ -n "$kwin_pid" ]; then
+        kill "$kwin_pid" 2>/dev/null || true
+    fi
+    wait 2>/dev/null || true
+}
+trap cleanup EXIT INT TERM HUP
+
+set -- --socket "$socket_name" --no-lockscreen --no-global-shortcuts \
+    --no-kactivities --locale1
+if command -v plasma-keyboard >/dev/null 2>&1; then
+    set -- --inputmethod plasma-keyboard "$@"
+fi
+
+KWIN_USE_OVERLAYS=0 "$kwin_wayland" "$@" &
+kwin_pid=$!
+
+attempt=0
+while [ ! -S "$XDG_RUNTIME_DIR/$socket_name" ]; do
+    if ! kill -0 "$kwin_pid" 2>/dev/null; then
+        echo "plasmalogin: kwin_wayland exited before creating its Wayland socket" >&2
+        exit 1
+    fi
+    attempt=$((attempt + 1))
+    if [ "$attempt" -ge 100 ]; then
+        echo "plasmalogin: timed out waiting for kwin_wayland" >&2
+        exit 1
+    fi
+    sleep 0.1
+done
+
+export WAYLAND_DISPLAY="$socket_name"
+"$wallpaper" &
+wallpaper_pid=$!
+
+"$greeter"

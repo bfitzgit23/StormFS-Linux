@@ -20,10 +20,13 @@ unit_exists() {
 status() {
     selected=$(cat "$state_file" 2>/dev/null || printf '%s' 'unselected')
     printf 'Selected BFSOS display manager: %s\n' "$selected"
-    for unit in sddm.service plasmalogin.service; do
-        if command -v rc-update >/dev/null 2>&1; then
-            printf '%-24s %s\n' "$unit" "$(rc-update show default 2>/dev/null | grep -qx "$unit" && echo enabled || echo disabled)"
+    for unit in sddm plasmalogin; do
+        if [ -e "/etc/runlevels/default/$unit" ]; then
+            state=enabled
+        else
+            state=disabled
         fi
+        printf '%-24s %s\n' "$unit" "$state"
     done
 }
 
@@ -35,13 +38,13 @@ case "$1" in
         ;;
     sddm)
         selected=sddm
-        unit=sddm.service
-        other=plasmalogin.service
+        unit=sddm
+        other=plasmalogin
         ;;
     plasmalogin)
         selected=plasmalogin
-        unit=plasmalogin.service
-        other=sddm.service
+        unit=plasmalogin
+        other=sddm
         ;;
     *)
         usage >&2
@@ -50,7 +53,7 @@ case "$1" in
 esac
 
 unit_exists "$unit" || {
-    echo "Cannot select $selected: $unit is not installed." >&2
+    echo "Cannot select $selected: /etc/init.d/$unit is not installed." >&2
     exit 1
 }
 

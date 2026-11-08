@@ -75,6 +75,23 @@ DisplayServer=wayland
 Current=breeze
 ```
 
+## Plasma Login Manager
+
+Plasma Login Manager (`plasmalogin`) is KDE's native Plasma greeter. BFSOS
+builds it without systemd/libsystemd and starts it as an OpenRC service.
+
+```bash
+prt-get install plasma-login-manager openrc-init-scripts
+sudo rc-update add plasmalogin default
+sudo rc-service plasmalogin start
+```
+
+`plasmalogin` uses `/run/plasmalogin/greeter` for its Wayland greeter runtime
+directory. The OpenRC service creates it on every boot and starts KWin, the
+greeter, and the login wallpaper directly; no systemd user session is needed.
+Select it with `bfs-display-manager plasmalogin` rather than enabling it
+alongside SDDM.
+
 ## LXDM
 
 LXDM is the display manager for LXDE.

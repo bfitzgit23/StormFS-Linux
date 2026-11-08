@@ -68,6 +68,19 @@ MaximumUid=60000
 MinimumUid=1000
 ```
 
+### Plasma Login Manager
+
+For KDE's native Plasma greeter, install `plasma-login-manager` and
+`openrc-init-scripts`, then select it explicitly:
+
+```bash
+sudo bfs-display-manager plasmalogin
+sudo rc-service plasmalogin start
+```
+
+This starts KWin and the greeter without a systemd user session. Do not enable
+it alongside SDDM or LightDM.
+
 ### LightDM
 
 LightDM can also be used with KDE Plasma.

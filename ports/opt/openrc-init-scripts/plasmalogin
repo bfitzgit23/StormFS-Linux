@@ -1,15 +1,27 @@
 #!/sbin/openrc-run
 name="plasmalogin"
 description="KDE Plasma Login Manager"
-# Same greeter handshake as plasmalogin.service shipped by the port.
 export PLASMALOGIN_GREETER_EXEC=/opt/kf6/bin/startplasma-login-wayland
+export XDG_RUNTIME_DIR=/run/plasmalogin/greeter
+export PATH=/opt/kf6/bin:/opt/qt6/bin:${PATH}
+export XDG_DATA_DIRS=/usr/local/share:/usr/share:/opt/kf6/share
+export XDG_CONFIG_DIRS=/etc/xdg:/opt/kf6/etc/xdg
+export QT_PLUGIN_PATH=/opt/kf6/lib/plugins:/opt/kf6/lib/plugins/kcms
+export QML2_IMPORT_PATH=/opt/kf6/lib/qml
 command="/opt/kf6/bin/plasmalogin"
 command_background=true
 pidfile="/run/${RC_SVCNAME}.pid"
 
+start_pre() {
+    checkpath -d -m 0755 /run/plasmalogin || return 1
+    checkpath -d -m 0700 -o plasmalogin:plasmalogin "$XDG_RUNTIME_DIR" || return 1
+    checkpath -d -m 0750 -o plasmalogin:plasmalogin /var/lib/plasmalogin || return 1
+}
+
 depend() {
     need localmount
-    after bootmisc modules dbus
+    need dbus
+    after bootmisc modules
     use logger
 }
 

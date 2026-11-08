@@ -36,9 +36,39 @@ grep -Fq 'rm -rf "$PKG/usr/lib/systemd" "$PKG/lib/systemd"' ports/opt/bluez/spkg
     fail 'BlueZ does not strip packaged systemd units'
 grep -Fq 'need dbus' ports/opt/openrc-init-scripts/bluetooth || \
     fail 'BlueZ OpenRC service does not require dbus'
-grep -qx 'release=4' ports/opt/openrc-init-scripts/spkgbuild || \
+grep -qx 'release=5' ports/opt/openrc-init-scripts/spkgbuild || \
     fail 'OpenRC service-script release missing'
 pass 'BlueZ OpenRC-only build and service dependency'
+
+grep -qx 'release=2' ports/opt/libedit/spkgbuild || fail 'libedit man-page fix release missing'
+grep -Fq 'rm -f "$PKG/usr/share/man/man3/history.3"' ports/opt/libedit/spkgbuild || \
+    fail 'libedit still removes the absent history man page unconditionally'
+! grep -Fq 'rm $PKG/usr/share/man/man3/history.3' ports/opt/libedit/spkgbuild || \
+    fail 'libedit still has the failing history man page command'
+grep -Fq 'ln -sfn editline.3 "$PKG/usr/share/man/man3/el.3"' ports/opt/libedit/spkgbuild || \
+    fail 'libedit el.3 compatibility link is not idempotent'
+
+grep -qx 'release=3' ports/plasma/plasma-login-manager/spkgbuild || \
+    fail 'Plasma Login Manager OpenRC release missing'
+grep -Fq 'openrc-no-systemd.patch' ports/plasma/plasma-login-manager/spkgbuild || \
+    fail 'Plasma Login Manager OpenRC patch is not packaged'
+grep -Fq 'plasmalogin-openrc-greeter' ports/plasma/plasma-login-manager/spkgbuild || \
+    fail 'Plasma Login Manager OpenRC greeter launcher is not packaged'
+grep -Fq 'dbus-run-session' ports/plasma/plasma-login-manager/openrc-no-systemd.patch || \
+    fail 'Plasma Login Manager sessions do not start a D-Bus user bus'
+! grep -Fq 'sysusers.d' ports/plasma/plasma-login-manager/spkgbuild || \
+    fail 'Plasma Login Manager still packages sysusers data'
+! grep -Fq 'tmpfiles.d' ports/plasma/plasma-login-manager/spkgbuild || \
+    fail 'Plasma Login Manager still packages tmpfiles data'
+grep -qx 'consolekit' ports/plasma/plasma-login-manager/depends || \
+    fail 'Plasma Login Manager does not depend on ConsoleKit'
+grep -Fq 'pam_ck_connector' ports/plasma/plasma-login-manager/plasmalogin-greeter.pam || \
+    fail 'Plasma Login Manager greeter PAM is not ConsoleKit-based'
+! grep -Fq 'pam_systemd' ports/plasma/plasma-login-manager/plasmalogin-greeter.pam || \
+    fail 'Plasma Login Manager greeter PAM still references pam_systemd'
+grep -Fq 'XDG_RUNTIME_DIR=/run/plasmalogin/greeter' ports/opt/openrc-init-scripts/plasmalogin || \
+    fail 'Plasma Login Manager OpenRC service does not provide its greeter runtime directory'
+pass 'libedit and Plasma Login Manager OpenRC ports'
 
 grep -qx 'release=3' ports/opt/chrony/spkgbuild || fail 'Chrony OpenRC-only release missing'
 ! grep -Fq 'usr/lib/sysusers.d' ports/opt/chrony/spkgbuild || fail 'Chrony still packages systemd sysusers data'

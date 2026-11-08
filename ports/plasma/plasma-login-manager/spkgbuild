@@ -5,8 +5,8 @@
 description="KDE Plasma integrated display/login manager and configuration KCM"
 name=plasma-login-manager
 version=6.7.6
-release=2
-source="https://download.kde.org/stable/plasma/$version/$name-$version.tar.xz bfs-display-manager plasmalogin.pam plasmalogin-autologin.pam plasmalogin-greeter.pam remember-session-binding-fix.patch"
+release=3
+source="https://download.kde.org/stable/plasma/$version/$name-$version.tar.xz bfs-display-manager plasmalogin.pam plasmalogin-autologin.pam plasmalogin-greeter.pam plasmalogin-openrc-greeter openrc-no-systemd.patch remember-session-binding-fix.patch"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
@@ -29,27 +29,20 @@ build() {
     cmake --build build -j "${JOBS:-1}" || return 1
     DESTDIR="$PKG" cmake --install build || return 1
 
-    # systemd, sysusers, tmpfiles, PAM and system-bus policy are host services;
-    # keep them in standard system paths even though KDE itself lives in /opt/kf6.
+    # D-Bus system policy and PAM are host services; keep them in standard
+    # system paths even though KDE itself lives in /opt/kf6.
     install -d \
-        "$PKG/usr/lib/sysusers.d" "$PKG/usr/lib/tmpfiles.d" \
-        "$PKG/usr/share/dbus-1/system.d" "$PKG/etc/pam.d" "$PKG/usr/sbin" || return 1
+        "$PKG/usr/share/dbus-1/system.d" "$PKG/etc/pam.d" "$PKG/usr/sbin" \
+        "$PKG/opt/kf6/bin" || return 1
 
-    for f in "$PKG"/opt/kf6/lib/sysusers.d/*; do
-        [ -e "$f" ] || continue
-        mv "$f" "$PKG/usr/lib/sysusers.d/" || return 1
-    done
-    for f in "$PKG"/opt/kf6/lib/tmpfiles.d/*; do
-        [ -e "$f" ] || continue
-        mv "$f" "$PKG/usr/lib/tmpfiles.d/" || return 1
-    done
     for f in "$PKG"/opt/kf6/share/dbus-1/system.d/*; do
         [ -e "$f" ] || continue
         mv "$f" "$PKG/usr/share/dbus-1/system.d/" || return 1
     done
 
-    # plasmalogin is started by systemd, whose default PATH does not contain
-    # /opt/kf6/bin. Tell the daemon exactly where its Wayland greeter launcher is.
+    # OpenRC has no systemd user session to activate the greeter target.
+    install -m0755 "$SRC/plasmalogin-openrc-greeter" \
+        "$PKG/opt/kf6/bin/plasmalogin-openrc-greeter" || return 1
 
     # Use the BFSOS PAM policy regardless of any distro-specific upstream sample.
     install -m0644 "$SRC/plasmalogin.pam" "$PKG/etc/pam.d/plasmalogin" || return 1

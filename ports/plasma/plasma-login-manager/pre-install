@@ -1,0 +1,23 @@
+#!/bin/sh
+set -eu
+
+# OpenRC does not process upstream systemd-sysusers files. Create the greeter
+# account idempotently when the package is installed.
+if ! getent group plasmalogin >/dev/null 2>&1; then
+    groupadd -r plasmalogin
+fi
+
+if ! getent passwd plasmalogin >/dev/null 2>&1; then
+    useradd -r -M -g plasmalogin -d /var/lib/plasmalogin -s /bin/false \
+        -c "Plasma Login Manager" plasmalogin
+fi
+
+# The greeter is a Wayland compositor, so it needs the usual local console
+# device groups when ConsoleKit ACLs are not available during startup.
+for group in video input; do
+    if getent group "$group" >/dev/null 2>&1; then
+        usermod -a -G "$group" plasmalogin
+    fi
+done
+
+exit 0

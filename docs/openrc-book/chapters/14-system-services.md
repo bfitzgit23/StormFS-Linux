@@ -17,7 +17,7 @@ This chapter covers configuring various system services with OpenRC. The service
 | Time synchronization | `chrony` | `chronyd` | `boot` | Requires network |
 | Cron jobs | `cronie` | `crond` | `boot` | Timers become cron entries |
 | SSH server | `openssh` + scripts | `sshd` | `default` | Requires network and logger |
-| Display manager | `lightdm`, `sddm`, `lxdm`, or `gdm` | matching name | `default` | Requires `dbus` and `xdm`; enable one only |
+| Display manager | `lightdm`, `sddm`, `plasma-login-manager`, `lxdm`, or `gdm` | matching name (`plasmalogin` for Plasma Login) | `default` | Requires `dbus`; enable one only |
 | Bluetooth | `bluez` + scripts | `bluetooth` | `default` | Requires `dbus` |
 | Audio | `alsa-utils`, `pipewire`, or `pulseaudio` | matching script | `boot`/`default` | Prefer per-user audio for desktops |
 | Storage | `udisks` | `udisks2` (D-Bus activated) | none | Requires `dbus` and PolicyKit |

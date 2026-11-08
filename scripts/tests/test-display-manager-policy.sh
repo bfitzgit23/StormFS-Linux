@@ -17,7 +17,7 @@ done
 selector=ports/plasma/plasma-login-manager/bfs-display-manager
 grep -Fq 'unselected' "$selector"
 grep -Fq 'rc-update add "$unit" default' "$selector"  # explicit admin action remains supported
-if grep -Eq 'systemctl|/etc/systemd' "$selector"; then
+if grep -Eq 'systemctl|/etc/systemd|\.service' "$selector"; then
     echo "display-manager selector still references systemd" >&2
     exit 1
 fi

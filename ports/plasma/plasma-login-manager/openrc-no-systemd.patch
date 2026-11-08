@@ -1,0 +1,257 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -57,15 +57,4 @@
+-pkg_check_modules(SYSTEMD REQUIRED "systemd")
+-
+-pkg_check_modules(LIBSYSTEMD REQUIRED "libsystemd" IMPORTED_TARGET)
+-
+-if (NOT DEFINED SYSTEMD_SYSTEM_UNIT_DIR)
+-    pkg_get_variable(SYSTEMD_SYSTEM_UNIT_DIR systemd systemdsystemunitdir)
+-endif()
+-
+-if (NOT DEFINED SYSTEMD_SYSUSERS_DIR)
+-    pkg_get_variable(SYSTEMD_SYSUSERS_DIR systemd sysusersdir)
+-endif()
+-
+-if (NOT DEFINED SYSTEMD_TMPFILES_DIR)
+-    pkg_get_variable(SYSTEMD_TMPFILES_DIR systemd tmpfilesdir)
+-endif()
++# BFSOS runs plasmalogin from OpenRC.  Keep systemd/libsystemd entirely out
++# of the build and install layout; the port supplies the account and
++# directories that systemd-sysusers/tmpfiles would otherwise create.
++set(SYSTEMD_FOUND FALSE)
+--- a/data/scripts/wayland-session
++++ b/data/scripts/wayland-session
+@@ -49 +49,6 @@
+-exec $@
++# BFSOS OpenRC has no systemd user manager to start the session bus.
++if [ -z "${DBUS_SESSION_BUS_ADDRESS:-}" ] && [ -x /usr/bin/dbus-run-session ]; then
++    exec /usr/bin/dbus-run-session -- "$@"
++fi
++
++exec "$@"
+--- a/data/scripts/Xsession
++++ b/data/scripts/Xsession
+@@ -92,2 +91,0 @@
+-else
+-    exec $@
+@@ -94,0 +93,7 @@
++
++# BFSOS OpenRC has no systemd user manager to start the session bus.
++if [ -z "${DBUS_SESSION_BUS_ADDRESS:-}" ] && [ -x /usr/bin/dbus-run-session ]; then
++    exec /usr/bin/dbus-run-session -- "$@"
++fi
++
++exec "$@"
+--- a/services/CMakeLists.txt
++++ b/services/CMakeLists.txt
+@@ -1,24 +1,3 @@
+-if(SYSTEMD_FOUND)
+-    configure_file(plasmalogin.service.in plasmalogin.service)
+-    install(
+-        FILES "${CMAKE_CURRENT_BINARY_DIR}/plasmalogin.service"
+-        DESTINATION "${KDE_INSTALL_SYSTEMDUNITDIR}/system"
+-    )
+-
+-    configure_file(plasmalogin-sysuser.conf.in plasmalogin-sysuser.conf)
+-    install(
+-        FILES "${CMAKE_CURRENT_BINARY_DIR}/plasmalogin-sysuser.conf"
+-        DESTINATION "lib/sysusers.d"
+-        RENAME plasmalogin.conf
+-    )
+-endif()
+-
+-# systemd-tmpfiles can be used standalone without other systemd parts
+-if(DEFINED SYSTEMD_TMPFILES_DIR)
+-    configure_file(plasmalogin-tmpfiles.conf.in plasmalogin-tmpfiles.conf)
+-    install(
+-        FILES "${CMAKE_CURRENT_BINARY_DIR}/plasmalogin-tmpfiles.conf"
+-        DESTINATION "lib/tmpfiles.d"
+-        RENAME plasmalogin.conf
+-    )
+-endif()
++# BFSOS OpenRC: the runtime account and directories are created by the port's
++# pre-install/post-install hooks and the OpenRC service, not systemd units,
++# sysusers or tmpfiles.
+--- a/src/common/MessageHandler.h
++++ b/src/common/MessageHandler.h
+@@ -31,2 +30,0 @@
+-#include <systemd/sd-journal.h>
+-
+@@ -35,30 +32,0 @@
+-static void journaldLogger(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+-{
+-    int priority = LOG_INFO;
+-    switch (type) {
+-    case QtDebugMsg:
+-        priority = LOG_DEBUG;
+-        break;
+-    case QtInfoMsg:
+-        priority = LOG_INFO;
+-        break;
+-    case QtWarningMsg:
+-        priority = LOG_WARNING;
+-        break;
+-    case QtCriticalMsg:
+-        priority = LOG_CRIT;
+-        break;
+-    case QtFatalMsg:
+-        priority = LOG_ALERT;
+-        break;
+-    }
+-
+-    char fileBuffer[PATH_MAX + sizeof("CODE_FILE=")];
+-    snprintf(fileBuffer, sizeof(fileBuffer), "CODE_FILE=%s", context.file ? context.file : "unknown");
+-
+-    char lineBuffer[32];
+-    snprintf(lineBuffer, sizeof(lineBuffer), "CODE_LINE=%d", context.line);
+-
+-    sd_journal_print_with_location(priority, fileBuffer, lineBuffer, context.function ? context.function : "unknown", "%s", qPrintable(msg));
+-}
+-
+@@ -119,9 +87,4 @@
+-    // don't log to journald if running interactively, this is likely
+-    // the case when running plasmalogin in test mode
+-    static bool isInteractive = isatty(STDERR_FILENO) && qgetenv("USER") != "plasmalogin";
+-    if (!isInteractive) {
+-        // log to journald
+-        journaldLogger(type, context, msg);
+-        return;
+-    }
+-    // prepend program name
++    Q_UNUSED(context);
++
++    // standardLogger writes to stderr for interactive test runs and to
++    // LOG_FILE when plasmalogin is running as the OpenRC service.
+--- a/src/daemon/CMakeLists.txt
++++ b/src/daemon/CMakeLists.txt
+@@ -51,2 +51 @@
+-                      KF6::ConfigGui
+-                      PkgConfig::LIBSYSTEMD)
++                      KF6::ConfigGui)
+--- a/src/daemon/Greeter.cpp
++++ b/src/daemon/Greeter.cpp
+@@ -92,0 +93,2 @@
++                               QStringLiteral("XDG_CONFIG_DIRS"),
++                               QStringLiteral("XDG_RUNTIME_DIR"),
+--- a/src/frontend/greeter/CMakeLists.txt
++++ b/src/frontend/greeter/CMakeLists.txt
+@@ -65 +64,0 @@
+-ecm_install_configured_files(INPUT plasma-login.service.in DESTINATION ${KDE_INSTALL_SYSTEMDUSERUNITDIR})
+--- a/src/frontend/kcm/plasmalogindata.cpp
++++ b/src/frontend/kcm/plasmalogindata.cpp
+@@ -8,3 +8 @@
+-#include <QDBusConnection>
+-#include <QDBusMessage>
+-#include <QDBusReply>
++#include <QFileInfo>
+@@ -20,15 +18,3 @@
+-    QDBusMessage msg = QDBusMessage::createMethodCall(QStringLiteral("org.freedesktop.systemd1"),
+-                                                      QStringLiteral("/org/freedesktop/systemd1"),
+-                                                      QStringLiteral("org.freedesktop.systemd1.Manager"),
+-                                                      QStringLiteral("GetUnitFileState"));
+-    msg << QStringLiteral("plasmalogin.service");
+-
+-    // it seems system settings wants things to be sync
+-    // It's not like systemd will ever be down
+-    QDBusReply<QString> hasPlasmaLoginReply = QDBusConnection::systemBus().call(msg);
+-    // a quirk is that if plasmalogin is uninstalled systemd replies with an error of invalid args
+-    if (hasPlasmaLoginReply.value() == QLatin1String("enabled")) {
+-        setRelevant(true);
+-    } else {
+-        setRelevant(false);
+-    }
++    // BFSOS OpenRC: there is no systemd unit state to query.  The service
++    // script is supplied by the openrc-init-scripts package.
++    setRelevant(QFileInfo::exists(QStringLiteral("/etc/init.d/plasmalogin")));
+--- a/src/frontend/startkde/CMakeLists.txt
++++ b/src/frontend/startkde/CMakeLists.txt
+@@ -1,3 +0,0 @@
+-install(FILES plasma-login-wayland.target DESTINATION ${KDE_INSTALL_SYSTEMDUSERUNITDIR})
+-ecm_install_configured_files(INPUT plasma-login-kwin_wayland.service.in DESTINATION ${KDE_INSTALL_SYSTEMDUSERUNITDIR})
+-
+--- a/src/frontend/startkde/startplasmalogin-wayland.cpp
++++ b/src/frontend/startkde/startplasmalogin-wayland.cpp
+@@ -14,0 +15 @@
++#include <QProcess>
+@@ -72,9 +73,6 @@
+-    {
+-        auto msg = QDBusMessage::createMethodCall(QStringLiteral("org.freedesktop.systemd1"),
+-                                                  QStringLiteral("/org/freedesktop/systemd1"),
+-                                                  QStringLiteral("org.freedesktop.systemd1.Manager"),
+-                                                  QStringLiteral("StartUnit"));
+-        msg << QStringLiteral("plasma-login-wayland.target") << QStringLiteral("fail");
+-        QDBusReply<QDBusObjectPath> reply = QDBusConnection::sessionBus().call(msg);
+-        if (!reply.isValid()) {
+-            qWarning() << "Could not start systemd managed Plasma session:" << reply.error().name() << reply.error().message();
++    const QString greeterLauncher = QCoreApplication::applicationDirPath() + QStringLiteral("/plasmalogin-openrc-greeter");
++    QProcess greeter;
++    greeter.setProcessChannelMode(QProcess::ForwardedChannels);
++    QObject::connect(&greeter, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), &app, [&app](int exitCode, QProcess::ExitStatus exitStatus) {
++        if (exitStatus != QProcess::NormalExit || exitCode != 0) {
++            qWarning() << "OpenRC greeter launcher exited:" << exitCode << static_cast<int>(exitStatus);
+@@ -81,0 +80,15 @@
++        app.quit();
++    });
++    QObject::connect(&app, &QCoreApplication::aboutToQuit, &greeter, [&greeter] {
++        if (greeter.state() != QProcess::NotRunning) {
++            greeter.terminate();
++            if (!greeter.waitForFinished(5000)) {
++                greeter.kill();
++                greeter.waitForFinished(5000);
++            }
++        }
++    });
++    greeter.start(greeterLauncher);
++    if (!greeter.waitForStarted()) {
++        qWarning() << "Could not start OpenRC greeter launcher:" << greeterLauncher;
++        return 1;
+@@ -84 +97,2 @@
+-    // stopped by the sigterm handler
++    // stopped by the sigterm handler; the launcher owns kwin, the greeter and
++    // the wallpaper process
+@@ -88,29 +101,0 @@
+-
+-    {
+-        auto msg = QDBusMessage::createMethodCall(QStringLiteral("org.freedesktop.systemd1"),
+-                                                  QStringLiteral("/org/freedesktop/systemd1"),
+-                                                  QStringLiteral("org.freedesktop.systemd1.Manager"),
+-                                                  QStringLiteral("StopUnit"));
+-        msg << QStringLiteral("plasma-login-wayland.target") << QStringLiteral("fail");
+-        QDBusReply<QDBusObjectPath> reply = QDBusConnection::sessionBus().call(msg);
+-        if (!reply.isValid()) {
+-            qWarning() << "Could not stop systemd managed Plasma session:" << reply.error().name() << reply.error().message();
+-        }
+-    }
+-
+-    qDebug() << "final cleanup";
+-
+-    // systemd returns when the call is made, but not all jobs are torn down
+-    // this waits until kwin is definitely gone too, which helps logind
+-    {
+-        auto msg = QDBusMessage::createMethodCall(QStringLiteral("org.freedesktop.systemd1"),
+-                                                  QStringLiteral("/org/freedesktop/systemd1"),
+-                                                  QStringLiteral("org.freedesktop.systemd1.Manager"),
+-                                                  QStringLiteral("StopUnit"));
+-        msg << QStringLiteral("plasma-login-kwin_wayland.service") << QStringLiteral("fail");
+-        QDBusReply<QDBusObjectPath> reply = QDBusConnection::sessionBus().call(msg);
+-        if (!reply.isValid()) {
+-            qWarning() << "Could not close up systemd managed Plasma session:" << reply.error().name() << reply.error().message();
+-        }
+-    }
+-
+--- a/src/frontend/wallpaper/CMakeLists.txt
++++ b/src/frontend/wallpaper/CMakeLists.txt
+@@ -43 +42,0 @@
+-ecm_install_configured_files(INPUT plasma-wallpaper.service.in DESTINATION ${KDE_INSTALL_SYSTEMDUSERUNITDIR})
+--- a/src/helper/CMakeLists.txt
++++ b/src/helper/CMakeLists.txt
+@@ -25,2 +25 @@
+-                      KF6::ConfigGui
+-                      PkgConfig::LIBSYSTEMD)
++                      KF6::ConfigGui)
+@@ -34 +33 @@
+-target_link_libraries(plasmalogin-helper-start-x11user Qt6::Core KF6::CoreAddons PkgConfig::LIBXAU PkgConfig::LIBSYSTEMD)
++target_link_libraries(plasmalogin-helper-start-x11user Qt6::Core KF6::CoreAddons PkgConfig::LIBXAU)
+@@ -39 +37,0 @@
+-                      PkgConfig::LIBSYSTEMD
