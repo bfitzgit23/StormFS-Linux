@@ -1095,23 +1095,22 @@ printf 'SSH is disabled by default. Enter 3) Shell from the live menu for manual
 # SSH host keys are intentionally not generated during normal live boot.
 # Users who need SSH explicitly generate keys and start the service from Shell.
 
-# Accessibility choice must happen before the normal live menu appears.
-/usr/local/sbin/bfs-live-console-font || true
+# Font selection is menu-only; prompting here would block OpenRC's local service.
 
-if command -v nm-online >/dev/null 2>&1 && nm-online -q --timeout=20; then
+if command -v nm-online >/dev/null 2>&1 && timeout 10 nm-online -q --timeout=5; then
     printf '\nNetwork is available. Starting live time synchronization...\n'
     if command -v chronyd >/dev/null 2>&1; then
         rc-service chronyd.service start 2>/dev/null || \
             rc-service chrony.service start 2>/dev/null || \
             chronyd >/dev/null 2>&1 || true
         if command -v chronyc >/dev/null 2>&1; then
-            chronyc waitsync 10 0.5 >/dev/null 2>&1 || true
+            chronyc waitsync 5 0.5 >/dev/null 2>&1 || true
         fi
     fi
 
     printf '\nRefreshing the bundled BFSOS project tree...\n'
     if [ -d /home/bfs/BFSOS/.git ]; then
-        runuser -u bfs -- bash -c 'cd /home/bfs/BFSOS && if git diff --quiet && git diff --cached --quiet; then git pull --ff-only || true; else echo "Local BFSOS tree has changes; automatic pull skipped."; fi'
+        timeout 15 runuser -u bfs -- env GIT_TERMINAL_PROMPT=0 bash -c 'cd /home/bfs/BFSOS && if git diff --quiet && git diff --cached --quiet; then git pull --ff-only || true; else echo "Local BFSOS tree has changes; automatic pull skipped."; fi'
     fi
 else
     printf '\nNo network detected; using the BFSOS project tree shipped on the ISO.\n'

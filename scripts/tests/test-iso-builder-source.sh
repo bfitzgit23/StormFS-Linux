@@ -58,6 +58,8 @@ grep -q 'GIT_COMMIT_FULL' "$iso" || fail 'full Git commit provenance is missing'
 grep -q '/etc/bfs-build-info' "$iso" || fail 'embedded build provenance is missing'
 
 grep -q 'git pull --ff-only' "$iso" || fail 'safe live online project refresh is missing'
+grep -q 'GIT_TERMINAL_PROMPT=0' "$iso" || fail 'live project refresh can block on Git credentials'
+! grep -q '/usr/local/sbin/bfs-live-console-font || true' "$iso" || fail 'boot-time console-font prompt blocks local'
 grep -q 'passwd bfs' "$iso" || fail 'temporary bfs live-password prompt is missing'
 grep -q 'ssh-keygen -A' "$iso" || fail 'runtime SSH host-key generation is missing'
 grep -q 'rc-service sshd' "$iso" || fail 'runtime SSH startup is missing'
