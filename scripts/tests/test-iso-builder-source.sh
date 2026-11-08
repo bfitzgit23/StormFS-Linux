@@ -55,7 +55,7 @@ grep -q 'git pull --ff-only' "$iso" || fail 'safe live online project refresh is
 grep -q 'passwd bfs' "$iso" || fail 'temporary bfs live-password prompt is missing'
 grep -q 'ssh-keygen -A' "$iso" || fail 'runtime SSH host-key generation is missing'
 grep -q 'rc-service sshd' "$iso" || fail 'runtime SSH startup is missing'
-grep -q 'rc-update add NetworkManager default' "$iso" \
+grep -q 'rc-update add networkmanager default' "$iso" \
 	|| fail 'NetworkManager live default is missing'
 grep -q 'rootfs.squashfs' "$iso" || fail 'SquashFS live-root staging is missing'
 grep -q 'mount -t overlay overlay' "$iso" || fail 'writable overlay root is missing'

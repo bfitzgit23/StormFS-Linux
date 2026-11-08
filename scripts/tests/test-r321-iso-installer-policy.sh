@@ -156,4 +156,19 @@ grep -Fq 'ensure_machine_id() {' "$inst" || fail "portable machine-id generator 
 grep -Fq 'dbus-uuidgen' "$inst" || fail "machine-id generator has no D-Bus fallback"
 grep -Fq '/proc/sys/kernel/random/uuid' "$inst" || fail "machine-id generator has no kernel fallback"
 
+# OpenRC services must be enabled by their /etc/init.d names.  The chroot
+# installer already runs inside the target, so a second chroot with an unset
+# ROOT previously made every service enable a silent no-op.
+! grep -Fq 'chroot "$ROOT" rc-update' "$inst" || fail "installer still double-chroots rc-update"
+grep -Fq 'offline_rc_present gpm' "$inst" || fail "gpm OpenRC service check missing"
+grep -Fq '/etc/runlevels/default/gpm' "$inst" || fail "gpm enablement verification missing"
+! grep -Fq '/usr/lib/systemd/system/gpm.service' "$inst" || \
+    fail "installer still gates gpm on a systemd unit"
+grep -Fq 'offline_rc_enable networkmanager' "$inst" || \
+    fail "NetworkManager OpenRC service enable missing"
+! grep -Fq 'offline_rc_present NetworkManager.service' "$inst" || \
+    fail "installer still checks NetworkManager.service"
+grep -Fq 'service="/etc/init.d/bfs-zram"' "$inst" || fail "ZRAM OpenRC service path missing"
+! grep -Fq 'WantedBy=swap.target' "$inst" || fail "installer still writes a systemd ZRAM unit"
+
 echo "r321 ISO/installer policy regression: PASS"

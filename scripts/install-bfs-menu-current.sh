@@ -8423,12 +8423,29 @@ else
         log "Package transaction checkpoint already complete; skipping ports/sysup/depinst"
 fi
 
+# OpenRC service helpers for the installed system.  This script is already
+# running inside the target chroot, so rc-update and /etc/init.d refer to the
+# target root without a second chroot.
+offline_rc_enable() {
+        rc-update add "${1%.service}" default 2>/dev/null || true
+}
+
+offline_rc_disable() {
+        rc-update del "${1%.service}" default 2>/dev/null || true
+}
+
+offline_rc_present() {
+        test -x "/etc/init.d/${1%.service}"
+}
+
 if [[ "$INSTALL_GPM_VALUE" == yes ]]; then
-        if [[ -f /usr/lib/systemd/system/gpm.service || -f /etc/systemd/system/gpm.service ]]; then
-                offline_rc_enable gpm.service 2>/dev/null ||
-                        echo "WARNING: gpm was installed but gpm.service could not be enabled automatically." >&2
+        if offline_rc_present gpm; then
+                offline_rc_enable gpm
+                if [[ ! -L /etc/runlevels/default/gpm ]]; then
+                        echo "WARNING: gpm was installed but its OpenRC service could not be enabled automatically." >&2
+                fi
         else
-                echo "WARNING: gpm was selected/installed but no gpm.service unit was found." >&2
+                echo "WARNING: gpm was selected/installed but no OpenRC service script was found." >&2
         fi
 fi
 
@@ -8463,47 +8480,29 @@ else
         rm -f /etc/sudoers.d/10-wheel
 fi
 
-# OpenRC service helpers for the target root filesystem.
-# The installer no longer manages systemd units: init is OpenRC.
-offline_rc_enable() {
-    chroot "$ROOT" rc-update add "${1%.service}" default 2>/dev/null || true
-}
-
-offline_rc_disable() {
-    chroot "$ROOT" rc-update del "${1%.service}" default 2>/dev/null || true
-}
-
-offline_rc_present() {
-    test -x "$ROOT/etc/init.d/${1%.service}"
-}
-
 command -v ssh-keygen >/dev/null 2>&1 && ssh-keygen -A
 ldconfig
 true
 
-if [[ "$INSTALL_NETWORKMANAGER_VALUE" == yes ]] && offline_rc_present NetworkManager.service >/dev/null 2>&1; then
-        log "Enabling NetworkManager and disabling systemd-networkd"
-        offline_rc_enable NetworkManager.service
-        offline_rc_disable systemd-networkd.service 2>/dev/null || true
-        offline_rc_disable systemd-networkd-wait-online.service 2>/dev/null || true
-elif offline_rc_present systemd-networkd.service >/dev/null 2>&1; then
-        log "Enabling systemd-networkd"
-        offline_rc_enable systemd-networkd.service
-        offline_rc_disable systemd-networkd-wait-online.service 2>/dev/null || true
-fi
-
-if offline_rc_present systemd-resolved.service >/dev/null 2>&1; then
-        offline_rc_enable systemd-resolved.service
-        ln -sfn /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
+if [[ "$INSTALL_NETWORKMANAGER_VALUE" == yes ]]; then
+        if offline_rc_present networkmanager; then
+                log "Enabling NetworkManager"
+                offline_rc_enable networkmanager
+        elif offline_rc_present NetworkManager; then
+                log "Enabling NetworkManager"
+                offline_rc_enable NetworkManager
+        else
+                echo "WARNING: NetworkManager was selected but no OpenRC service script was found." >&2
+        fi
 fi
 
 if [[ "$ENABLE_OPENSSH_VALUE" == yes ]]; then
-        if offline_rc_present sshd.service >/dev/null 2>&1; then
-                offline_rc_enable sshd.service
-        elif offline_rc_present ssh.service >/dev/null 2>&1; then
-                offline_rc_enable ssh.service
+        if offline_rc_present sshd; then
+                offline_rc_enable sshd
+        elif offline_rc_present ssh; then
+                offline_rc_enable ssh
         else
-                echo "WARNING: No OpenSSH service unit was found." >&2
+                echo "WARNING: No OpenSSH OpenRC service script was found." >&2
         fi
 fi
 
@@ -8513,7 +8512,9 @@ if [[ "$AUTO_LVM2_VALUE" == yes ]] &&
                 mkdir -p /etc/lvm
                 lvmconfig --type full --withcomments > /etc/lvm/lvm.conf
         fi
-        offline_rc_enable lvm2-monitor.service 2>/dev/null || true
+        if offline_rc_present lvm2-monitor; then
+                offline_rc_enable lvm2-monitor
+        fi
 fi
 
 configure_required_mdadm_conf() {
@@ -9206,10 +9207,12 @@ configure_md_618_compat_policy || exit 1
 configure_grub_storage_cmdline
 
 configure_zram_swap() {
-        local config="" module_found=no service="/usr/lib/systemd/system/bfs-zram.service"
+        local config="" module_found=no service="/etc/init.d/bfs-zram"
+        rm -f /usr/lib/systemd/system/bfs-zram.service \
+              /etc/systemd/system/swap.target.wants/bfs-zram.service
         [[ "$ZRAM_SWAP_VALUE" == yes ]] || {
                 rm -f "$service" /usr/libexec/bfs-zram-setup /usr/libexec/bfs-zram-stop
-                rm -f /etc/systemd/system/swap.target.wants/bfs-zram.service
+                rm -f /etc/runlevels/*/bfs-zram
                 return 0
         }
 
@@ -9225,7 +9228,7 @@ configure_zram_swap() {
                 exit 1
         }
 
-        mkdir -p /usr/libexec /usr/lib/systemd/system
+        mkdir -p /etc/init.d /usr/libexec
         cat > /usr/libexec/bfs-zram-setup <<'EOF_ZRAM_SETUP'
 #!/usr/bin/env bash
 set -e
@@ -9270,24 +9273,30 @@ EOF_ZRAM_STOP
         chmod 0755 /usr/libexec/bfs-zram-stop
 
         cat > "$service" <<'EOF_ZRAM_SERVICE'
-[Unit]
-Description=BFSOS compressed ZRAM swap
-DefaultDependencies=no
-After=systemd-modules-load.service
-Before=swap.target
+#!/sbin/openrc-run
+description="BFSOS compressed ZRAM swap"
 
-[Service]
-Type=oneshot
-RemainAfterExit=yes
-ExecStart=/usr/libexec/bfs-zram-setup
-ExecStop=/usr/libexec/bfs-zram-stop
+depend() {
+        after modules
+        before swap
+}
 
-[Install]
-WantedBy=swap.target
+start() {
+        ebegin "Starting BFSOS ZRAM swap"
+        /usr/libexec/bfs-zram-setup
+        eend $?
+}
+
+stop() {
+        ebegin "Stopping BFSOS ZRAM swap"
+        /usr/libexec/bfs-zram-stop
+        eend $?
+}
 EOF_ZRAM_SERVICE
 
-        offline_rc_enable bfs-zram.service
-        [[ -L /etc/systemd/system/swap.target.wants/bfs-zram.service ]] || {
+        chmod 0755 "$service"
+        rc-update add bfs-zram boot 2>/dev/null || true
+        [[ -L /etc/runlevels/boot/bfs-zram ]] || {
                 echo "ZRAM service was created but was not enabled successfully." >&2
                 exit 1
         }

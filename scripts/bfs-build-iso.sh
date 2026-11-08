@@ -1188,7 +1188,7 @@ EOS
     rm -f "$root"/etc/ssh/ssh_host_*
     chroot "$root" /bin/bash -lc '
         rc-update add bfs-live-init default 2>/dev/null || true
-        rc-update add NetworkManager default 2>/dev/null || true
+        rc-update add networkmanager default 2>/dev/null || true
         # Chrony is the live ISO time-sync policy; bfs-live-init starts it only
         # after NetworkManager reports usable connectivity.
         rc-update del chronyd default 2>/dev/null || true
