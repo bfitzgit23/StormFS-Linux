@@ -7473,6 +7473,17 @@ write_chroot_installer() {
                         "$TARGET/usr/ports/$wpa_port"
         fi
 
+        # NetworkManager 1.58 accepts only session_tracking=systemd, elogind
+        # or no. Refresh the recipe so installer builds stop passing the
+        # removed "auto" value; ConsoleKit tracking remains enabled by default.
+        local networkmanager_port=opt/networkmanager
+        if [[ -d "$PROJECT_DIR/ports/$networkmanager_port" ]]; then
+                install -d -m 0755 "$TARGET/usr/ports/${networkmanager_port%/*}"
+                rm -rf "$TARGET/usr/ports/$networkmanager_port"
+                cp -a "$PROJECT_DIR/ports/$networkmanager_port" \
+                        "$TARGET/usr/ports/$networkmanager_port"
+        fi
+
         # Existing base archives request several CamelCase X.Org library
         # archives with lowercase filenames, which the case-sensitive X.Org
         # server returns as 404. Refresh every affected native and compat-32

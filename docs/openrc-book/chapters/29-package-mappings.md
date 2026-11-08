@@ -27,7 +27,7 @@ Status values mean:
 
 | BLFS package | Port | OpenRC service | OpenRC build or configuration | Status |
 |--------------|------|----------------|------------------------------|--------|
-| NetworkManager | `networkmanager` | `networkmanager` | Build with `-D session_tracking=none`, `-D systemdsystemunitdir=no`, and `-D systemd_journal=false`; enable only this network manager for interfaces it controls. | Ready |
+| NetworkManager | `networkmanager` | `networkmanager` | Build with `-D session_tracking=no`, `-D systemdsystemunitdir=no`, and `-D systemd_journal=false`; enable only this network manager for interfaces it controls. | Ready |
 | dhcpcd | `dhcpcd` | `dhcpcd` | The port uses the shared OpenRC wrapper; do not run it against the same interface as NetworkManager. | Ready |
 | iwd | `iwd` | `iwd` | Build with `--disable-systemd-service`; choose it instead of `wpa_supplicant` for Wi-Fi authentication. | Ready |
 | wpa_supplicant | `wpa_supplicant` | `wpa_supplicant` | The port installs D-Bus integration and `/etc/wpa_supplicant/wpa_supplicant.conf`; the OpenRC wrapper supplies the service. Enable only one Wi-Fi manager. | Ready |

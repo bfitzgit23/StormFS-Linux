@@ -13,7 +13,7 @@ This chapter covers configuring various system services with OpenRC. The service
 | Message bus | `dbus` | `dbus` | `boot` | Required by most desktop daemons |
 | DHCP | `dhcpcd` | `dhcpcd` | `default` | Coordinate with `networking` or NetworkManager |
 | Wi-Fi | `iwd` | `iwd` | `default` | Uses D-Bus; do not run with conflicting Wi-Fi managers |
-| Network manager | `networkmanager` | `networkmanager` | `default` | Requires `dbus`; use `session_tracking=none` |
+| Network manager | `networkmanager` | `networkmanager` | `default` | Requires `dbus`; use `session_tracking=no` |
 | Time synchronization | `chrony` | `chronyd` | `boot` | Requires network |
 | Cron jobs | `cronie` | `crond` | `boot` | Timers become cron entries |
 | SSH server | `openssh` + scripts | `sshd` | `default` | Requires network and logger |

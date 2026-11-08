@@ -168,7 +168,7 @@ For an OpenRC bridge, replace the bond commands with `ip link add br0 type bridg
 
 ### OpenRC NetworkManager Alternative
 
-NetworkManager already has an OpenRC service in `openrc-init-scripts`. Build it with `-D session_tracking=none` for the OpenRC profile; ConsoleKit2 supplies the desktop session/seat API separately when needed. Do not use the systemd session-tracking backend on an OpenRC-only system.
+NetworkManager already has an OpenRC service in `openrc-init-scripts`. Build it with `-D session_tracking=no` for the OpenRC profile; ConsoleKit2 supplies the desktop session/seat API separately when needed. Do not use the systemd session-tracking backend on an OpenRC-only system.
 
 ```bash
 prt-get install networkmanager openrc-init-scripts
