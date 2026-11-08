@@ -5,7 +5,7 @@
 description="Dependency-based service manager and init system"
 name=openrc
 version=0.63
-release=3
+release=4
 source="https://github.com/OpenRC/openrc/archive/$version/openrc-$version.tar.gz https://www.linuxfromscratch.org/glfs/view/dev/download/openrc/openrc-$version-lock-1.patch inittab"
 
 build() {
@@ -34,5 +34,5 @@ build() {
 
     # openrc-init reads /etc/inittab for the sysinit/wait states and the
     # console gettys; without it the system never reaches a login prompt.
-    install -m 0644 inittab "$PKG/etc/inittab" || return 1
+    install -m 0644 "$SRC/inittab" "$PKG/etc/inittab" || return 1
 }

@@ -22,7 +22,9 @@ grep -Fq 'for _bfs_patch in "$SRC"/*.patch "$SRC"/*.diff; do' "$openrc_recipe" |
     fail 'OpenRC lock patch is not applied'
 grep -Fq -- '-D uucp_group=root' "$openrc_recipe" || \
     fail 'OpenRC root lock group option missing'
-grep -qx 'release=3' "$openrc_recipe" || fail 'OpenRC recipe release missing'
+grep -qx 'release=4' "$openrc_recipe" || fail 'OpenRC recipe release missing'
+grep -Fq 'install -m 0644 "$SRC/inittab" "$PKG/etc/inittab"' "$openrc_recipe" || \
+    fail 'OpenRC inittab is not installed from the source root'
 line_openrc_patch=$(grep -n 'patch -t "${patch_opt:--p1}" -i "$_bfs_patch"' "$openrc_recipe" | cut -d: -f1)
 line_openrc_meson=$(grep -n 'meson setup' "$openrc_recipe" | cut -d: -f1)
 (( line_openrc_patch < line_openrc_meson )) || fail 'OpenRC lock patch must be applied before meson setup'
