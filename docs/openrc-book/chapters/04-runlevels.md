@@ -42,7 +42,7 @@ The default runlevel contains services for normal operation:
 - networkmanager (network management)
 - iwd (wireless daemon, when used)
 - lightdm (display manager)
-- bluez (Bluetooth support)
+- bluetooth (Bluetooth support)
 - sshd (SSH server)
 - smartd (disk monitoring)
 - udisks2 (disk management)
@@ -87,7 +87,7 @@ sudo rc-update add networkmanager default
 
 # Add multiple services
 sudo rc-update add lightdm default
-sudo rc-update add bluez default
+sudo rc-update add bluetooth default
 ```
 
 ### Removing Services from Runlevels
@@ -98,7 +98,7 @@ sudo rc-update delete networkmanager default
 
 # Remove multiple services
 sudo rc-update delete lightdm default
-sudo rc-update delete bluez default
+sudo rc-update delete bluetooth default
 ```
 
 ## Switching Runlevels
@@ -139,7 +139,7 @@ sudo mkdir -p /etc/runlevels/gui
 sudo rc-update add dbus gui
 sudo rc-update add lightdm gui
 sudo rc-update add networkmanager gui
-sudo rc-update add bluez gui
+sudo rc-update add bluetooth gui
 ```
 
 ### Example: Server Runlevel

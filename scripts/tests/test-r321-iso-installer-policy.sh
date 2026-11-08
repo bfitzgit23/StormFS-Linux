@@ -204,6 +204,18 @@ grep -Fq 'build_user=pkgbuild' ports/core/ccache/post-install || \
     fail "ccache hook does not prefer the pkgbuild account"
 grep -Fq 'build_user=pkgmk' ports/core/ccache/post-install || \
     fail "ccache hook does not support legacy pkgmk bases"
+# Older base archives build BlueZ with systemd integration. Refresh the
+# recipe and discard cached artifacts before the package phase uses them.
+grep -Fq 'local bluez_port=opt/bluez' "$inst" || \
+    fail "installer does not refresh the BlueZ recipe"
+grep -Fq 'packages/bluez#*.pkg.tar.*' "$inst" || \
+    fail "installer does not discard stale BlueZ packages"
+grep -Fq 'rc-update add bluetooth default' docs/openrc-book/chapters/12-bluetooth.md || \
+    fail "BlueZ documentation still enables the nonexistent bluez service"
+grep -Fq 'prt-get install bluez openrc-init-scripts' docs/openrc-book/chapters/12-bluetooth.md || \
+    fail "BlueZ documentation omits the OpenRC service scripts"
+[ -x ports/opt/openrc-init-scripts/bluetooth ] || \
+    fail "openrc-init-scripts is missing bluetooth"
 for openrc_service in gpm networkmanager sshd; do
     [ -x "ports/opt/openrc-init-scripts/$openrc_service" ] || \
         fail "openrc-init-scripts is missing $openrc_service"

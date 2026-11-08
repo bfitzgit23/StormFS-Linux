@@ -7485,6 +7485,18 @@ write_chroot_installer() {
         fi
         rm -f "$TARGET"/var/cache/scratchpkg/packages/openrc#*.pkg.tar.*
 
+        # Existing base archives build BlueZ without --disable-systemd and can
+        # package upstream systemd units. Refresh the recipe and discard cached
+        # artifacts so the OpenRC-only release is used.
+        local bluez_port=opt/bluez
+        if [[ -d "$PROJECT_DIR/ports/$bluez_port" ]]; then
+                install -d -m 0755 "$TARGET/usr/ports/${bluez_port%/*}"
+                rm -rf "$TARGET/usr/ports/$bluez_port"
+                cp -a "$PROJECT_DIR/ports/$bluez_port" \
+                        "$TARGET/usr/ports/$bluez_port"
+        fi
+        rm -f "$TARGET"/var/cache/scratchpkg/packages/bluez#*.pkg.tar.*
+
         # Existing base archives carry the truncated wpa_supplicant recipe whose
         # dangling continuation runs the D-Bus service directory as a command.
         # Refresh it so the installer builds the corrected release.

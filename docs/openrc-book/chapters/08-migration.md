@@ -149,11 +149,11 @@ sudo rc-update add lightdm default
 
 # Optional hardware and access services
 sudo rc-update add alsa boot
-sudo rc-update add bluez default
+sudo rc-update add bluetooth default
 sudo rc-update add sshd default
 ```
 
-`dbus` must be available before `bluez`, display managers, PolicyKit, UDisks2, AccountsService, UPower, and PipeWire. `networkmanager` and `dhcpcd` should not both manage the same interface.
+`dbus` must be available before `bluetooth`, display managers, PolicyKit, UDisks2, AccountsService, UPower, and PipeWire. `networkmanager` and `dhcpcd` should not both manage the same interface.
 
 ### Step 5: Remove Systemd
 

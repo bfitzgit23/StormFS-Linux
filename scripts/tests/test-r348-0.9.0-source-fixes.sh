@@ -30,6 +30,16 @@ line_openrc_meson=$(grep -n 'meson setup' "$openrc_recipe" | cut -d: -f1)
 (( line_openrc_patch < line_openrc_meson )) || fail 'OpenRC lock patch must be applied before meson setup'
 pass 'OpenRC lock patch and uucp_group option'
 
+grep -qx 'release=3' ports/opt/bluez/spkgbuild || fail 'BlueZ OpenRC-only recipe release missing'
+grep -Fq -- '--disable-systemd' ports/opt/bluez/spkgbuild || fail 'BlueZ still enables systemd integration'
+grep -Fq 'rm -rf "$PKG/usr/lib/systemd" "$PKG/lib/systemd"' ports/opt/bluez/spkgbuild || \
+    fail 'BlueZ does not strip packaged systemd units'
+grep -Fq 'need dbus' ports/opt/openrc-init-scripts/bluetooth || \
+    fail 'BlueZ OpenRC service does not require dbus'
+grep -qx 'release=3' ports/opt/openrc-init-scripts/spkgbuild || \
+    fail 'OpenRC service-script dependency update release missing'
+pass 'BlueZ OpenRC-only build and service dependency'
+
 [[ ! -e ports/opt/glib/.footprint ]] || fail 'generated final GLib footprint must not be committed for bootstrap pass'
 grep -qx 'glib' ports/opt/gobject-introspection/depends || fail 'GI must depend on glib'
 grep -qx 'gobject-introspection' ports/opt/polkit/depends || fail 'polkit must depend on GI'

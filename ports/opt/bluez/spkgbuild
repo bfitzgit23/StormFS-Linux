@@ -6,11 +6,12 @@
 description="The BlueZ package contains the Bluetooth protocol stack for Linux."
 name=bluez
 version=5.87
-release=2
+release=3
 build_opt="--prefix=/usr
             --sysconfdir=/etc
             --localstatedir=/var
             --disable-manpages
+            --disable-systemd
             --enable-library"
 source="https://www.kernel.org/pub/linux/bluetooth/$name-$version.tar.xz"
 
@@ -20,8 +21,12 @@ build() {
 	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
 	[ -n "$_bfs_src" ] || return 1
 	cd "$_bfs_src" || return 1
-	bfs_autobuild
+	bfs_autobuild || return 1
 
-install -v -dm755 $PKG/etc/bluetooth &&
-install -v -m644 src/main.conf $PKG/etc/bluetooth/main.conf
+	# BFSOS uses OpenRC; keep upstream systemd units out of the package even
+	# if a future BlueZ release changes what --disable-systemd installs.
+	rm -rf "$PKG/usr/lib/systemd" "$PKG/lib/systemd" || return 1
+
+	install -v -dm755 "$PKG/etc/bluetooth" || return 1
+	install -v -m644 src/main.conf "$PKG/etc/bluetooth/main.conf" || return 1
 }

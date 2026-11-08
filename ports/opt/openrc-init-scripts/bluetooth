@@ -4,3 +4,7 @@ command="/usr/libexec/bluetooth/bluetoothd"
 command_args="--nodetach"
 command_background=true
 pidfile="/run/${RC_SVCNAME}.pid"
+
+depend() {
+	need dbus
+}

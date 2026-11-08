@@ -18,7 +18,7 @@ This chapter covers configuring various system services with OpenRC. The service
 | Cron jobs | `cronie` | `crond` | `boot` | Timers become cron entries |
 | SSH server | `openssh` + scripts | `sshd` | `default` | Requires network and logger |
 | Display manager | `lightdm`, `sddm`, `lxdm`, or `gdm` | matching name | `default` | Requires `dbus` and `xdm`; enable one only |
-| Bluetooth | `bluez` + scripts | `bluez` | `default` | Requires `dbus` |
+| Bluetooth | `bluez` + scripts | `bluetooth` | `default` | Requires `dbus` |
 | Audio | `alsa-utils`, `pipewire`, or `pulseaudio` | matching script | `boot`/`default` | Prefer per-user audio for desktops |
 | Storage | `udisks2` | `udisks2` | `default` | Requires `dbus` and PolicyKit |
 | Authorization | `polkit` | `polkitd` | `default` | Requires `dbus` |

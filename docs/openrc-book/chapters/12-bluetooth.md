@@ -11,17 +11,17 @@ BlueZ is the official Linux Bluetooth stack.
 ### Installation
 
 ```bash
-prt-get install bluez
+prt-get install bluez openrc-init-scripts
 ```
 
 ### Configuration
 
 ```bash
 # Enable the BlueZ OpenRC service
-sudo rc-update add bluez default
+sudo rc-update add bluetooth default
 
 # Start BlueZ
-sudo rc-service bluez start
+sudo rc-service bluetooth start
 ```
 
 ### Configuration File
@@ -107,9 +107,9 @@ OBEX support is normally provided by the BlueZ/desktop D-Bus services rather tha
 
 ```bash
 sudo rc-update add dbus boot
-sudo rc-update add bluez default
+sudo rc-update add bluetooth default
 sudo rc-service dbus start
-sudo rc-service bluez start
+sudo rc-service bluetooth start
 ```
 
 Check that the OBEX client is available before using it:
