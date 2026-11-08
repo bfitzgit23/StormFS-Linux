@@ -44,6 +44,8 @@ grep -Fq 'for transitional_port in git cpio' "$inst" || \
     fail "installer does not refresh the Git/cpio provisioning recipes"
 grep -Fq 'PROJECT_DIR/ports/opt/$transitional_port' "$inst" || \
     fail "installer recipe refresh is not sourced from the project tree"
+grep -Fq 'local wpa_port=core/wpa_supplicant' "$inst" || \
+    fail "installer does not refresh the wpa_supplicant recipe"
 ! grep -Fq 'autoreconf -fi' ports/opt/cpio/spkgbuild || \
     fail "cpio still regenerates autotools files instead of using its shipped configure"
 grep -Fq 'bfs_autobuild' ports/opt/cpio/spkgbuild || \

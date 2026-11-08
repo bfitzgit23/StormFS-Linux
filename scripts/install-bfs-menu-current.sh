@@ -7462,6 +7462,17 @@ write_chroot_installer() {
                 fi
         done
 
+        # Existing base archives carry the truncated wpa_supplicant recipe whose
+        # dangling continuation runs the D-Bus service directory as a command.
+        # Refresh it so the installer builds the corrected release.
+        local wpa_port=core/wpa_supplicant
+        if [[ -d "$PROJECT_DIR/ports/$wpa_port" ]]; then
+                install -d -m 0755 "$TARGET/usr/ports/${wpa_port%/*}"
+                rm -rf "$TARGET/usr/ports/$wpa_port"
+                cp -a "$PROJECT_DIR/ports/$wpa_port" \
+                        "$TARGET/usr/ports/$wpa_port"
+        fi
+
         # Existing base archives request several CamelCase X.Org library
         # archives with lowercase filenames, which the case-sensitive X.Org
         # server returns as 404. Refresh every affected native and compat-32
