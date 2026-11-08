@@ -7632,6 +7632,17 @@ write_chroot_installer() {
                 fi
         done
 
+        # xorg.freedesktop.org intermittently fails to resolve on some
+        # networks, which aborts libfontenc builds. Refresh the recipe so the
+        # installed tree fetches the byte-identical Alpine distfiles mirror.
+        local libfontenc_port=xorg/libfontenc
+        if [[ -d "$PROJECT_DIR/ports/$libfontenc_port" ]]; then
+                install -d -m 0755 "$TARGET/usr/ports/${libfontenc_port%/*}"
+                rm -rf "$TARGET/usr/ports/$libfontenc_port"
+                cp -a "$PROJECT_DIR/ports/$libfontenc_port" \
+                        "$TARGET/usr/ports/$libfontenc_port"
+        fi
+
         # Existing base archives carry the unconditional GLib schema hook,
         # which prints "No schema files found" when only gschema.dtd exists.
         # Refresh both hooks so a rebuilt GLib/GTK4 uses the guarded step.

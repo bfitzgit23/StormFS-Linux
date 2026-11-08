@@ -5,8 +5,10 @@
 description="xorg lib libfontenc"
 name=libfontenc
 version=1.1.9
-release=3
-source="https://xorg.freedesktop.org/archive/individual/lib/libfontenc-$version.tar.xz"
+release=4
+# xorg.freedesktop.org intermittently fails DNS resolution/timeouts on some
+# networks. The Alpine distfiles mirror serves a byte-identical tarball.
+source="https://distfiles.alpinelinux.org/distfiles/v3.24/libfontenc-$version.tar.xz"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)

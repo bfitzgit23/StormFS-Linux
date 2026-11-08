@@ -180,6 +180,14 @@ while read -r xorg_case_port xorg_case_archive; do
         fail "installer does not refresh $xorg_case_port"
 done <<< "$xorg_case_ports"
 pass 'native and compat-32 X.Org CamelCase archive names and installer refresh'
+grep -Fq 'https://distfiles.alpinelinux.org/distfiles/v3.24/libfontenc-$version.tar.xz' ports/xorg/libfontenc/spkgbuild || \
+    fail 'libfontenc does not use the reachable Alpine mirror'
+! grep -Fq 'xorg.freedesktop.org/archive/individual/lib/libfontenc' ports/xorg/libfontenc/spkgbuild || \
+    fail 'libfontenc still requests the X.Org archive host that times out on some networks'
+grep -Fq 'release=4' ports/xorg/libfontenc/spkgbuild || fail 'libfontenc mirror recipe release missing'
+grep -Fq 'xorg/libfontenc' scripts/install-bfs-menu-current.sh || \
+    fail 'installer does not refresh xorg/libfontenc'
+pass 'libfontenc mirror source and installer refresh'
 line_func=$(grep -n '^ensure_glib_introspection_ready()' scripts/install-bfs-menu-current.sh | cut -d: -f1)
 line_sysup=$(grep -n 'mandatory package upgrade (scratch sysup -y)' scripts/install-bfs-menu-current.sh | cut -d: -f1)
 (( line_func < line_sysup )) || fail 'GI preflight must be defined before mandatory sysup'
