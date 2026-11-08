@@ -21,11 +21,12 @@ build_opt="\
 source="https://github.com/Xubuntu/lightdm-gtk-greeter/releases/download/lightdm-gtk-greeter-$version/lightdm-gtk-greeter-$version.tar.gz greeter.conf"
 
 build() {
-	install -Dm644 greeter.conf "$PKG/etc/lightdm/lightdm-gtk-greeter.conf" || return 1
+	_bfs_greeter="$PWD/greeter.conf"
 	. /usr/share/bfsos/spkgbuild.helper || return 1
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
 	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
 	[ -n "$_bfs_src" ] || return 1
 	cd "$_bfs_src" || return 1
-	bfs_autobuild
+	bfs_autobuild || return 1
+	install -Dm644 "$_bfs_greeter" "$PKG/etc/lightdm/lightdm-gtk-greeter.conf" || return 1
 }
