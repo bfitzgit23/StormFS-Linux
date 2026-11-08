@@ -44,6 +44,8 @@ fi
 grep -q '^  - shellprocess$' "$cal/settings.conf" || fail 'Calamares sequence has no cleanup job'
 [ -f "$cal/shellprocess.conf" ] || fail 'Calamares cleanup configuration is missing'
 grep -q 'scratch remove -y calamares' "$cal/shellprocess.conf" || fail 'cleanup does not uninstall Calamares'
+grep -q '/usr/bin/calamares' "$cal/shellprocess.conf" || fail 'cleanup has no binary-removal fallback'
+grep -Fq 'forbidden_names: [ root, bfs ]' "$cal/users.conf" || fail 'live account name is not reserved'
 grep -q 'userdel -r bfs' "$cal/shellprocess.conf" || fail 'cleanup does not delete the live user'
 grep -q '90-bfs-live' "$cal/shellprocess.conf" || fail 'cleanup does not remove the live sudoers rule'
 grep -q -- '--autologin bfs' "$cal/shellprocess.conf" || fail 'cleanup does not restore the target inittab'
