@@ -5,19 +5,25 @@
 description="Broadcom IEEE 802.11 STA wireless driver (wl)"
 name=broadcom-wl
 version=6.30.223.271
-release=4
-source="https://downloads.sourceforge.net/project/nutyx/files/$name-$version.tar.xz"
+release=5
+source="https://docs.broadcom.com/docs-and-downloads/docs/linux_sta/hybrid-v35_64-nodebug-pcoem-6_30_223_271.tar.gz patches/001-null-pointer-fix.patch patches/002-rdtscl.patch patches/003-linux407.patch patches/004-linux408.patch patches/005-debian-fix-kernel-warnings.patch patches/006-linux411.patch patches/007-linux412.patch patches/008-linux415.patch patches/009-fix_mac_profile_discrepancy.patch patches/010-linux506.patch patches/011-linux509.patch patches/012-linux517.patch patches/013-linux518.patch patches/014-linux414.patch patches/015-linux600.patch patches/016-linux601.patch patches/017-linux612.patch patches/018-linux613.patch patches/019-linux614.patch patches/020-linux615.patch patches/021-linux617.patch patches/022-linux701.patch patches/023-linux702.patch patches/024-linux704.patch patches/900-fixup-gcc-detection-logic.patch patches/901-remove-already-backported-eth_hw_addr_set-shim.patch"
 
 build() {
-    local src_dir kdir kver built=0
+    local kdir kver p built=0
 
-    src_dir=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
-    [ -n "$src_dir" ] || src_dir=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
-    [ -n "$src_dir" ] || {
-        echo "broadcom-wl: source directory not found" >&2
+    # The official Broadcom tarball is flat. Apply the maintained kernel
+    # compatibility series before kbuild; 6.17 removed EXTRA_CFLAGS and
+    # EXTRA_LDFLAGS, which otherwise leaves typedefs.h and the shipped
+    # wlc_hybrid blob out of the compile/link.
+    [ -f Makefile ] && [ -d src ] || {
+        echo "broadcom-wl: unexpected source layout" >&2
         return 1
     }
-    cd "$src_dir" || return 1
+    for p in "$PWD"/0*.patch "$PWD"/901-*.patch "$PWD"/900-*.patch; do
+        [ -f "$p" ] || continue
+        echo "broadcom-wl: applying $(basename "$p")"
+        patch -Np1 --batch --forward -i "$p" || return 1
+    done
 
     for kdir in /lib/modules/*; do
         [ -d "$kdir/build" ] || continue

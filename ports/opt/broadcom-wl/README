@@ -1,0 +1,13 @@
+Broadcom wl 6.30.223.271
+
+The upstream source is Broadcom's official hybrid-v35_64-nodebug-pcoem
+tarball. The patches directory vendors the maintained compatibility
+series from https://github.com/joanbm/broadcom-wl-linux-mainline
+(master, 2026-10). It covers the Linux 6.17 kbuild flag removal, the
+timer/cfg80211 changes through Linux 7.4, and the objtool workaround
+needed for Broadcom's shipped binary blob.
+
+Release 4 used a different upstream archive. After updating an existing
+release-4 port tree, remove its generated .checksums file (or run
+`pkgbuild -g`) once so the checksum manifest is regenerated for the
+official archive and the vendored patches.
