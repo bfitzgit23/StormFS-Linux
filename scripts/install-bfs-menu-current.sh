@@ -7462,6 +7462,18 @@ write_chroot_installer() {
                 fi
         done
 
+        # Older base archives predate the BFSOS OpenRC service scripts, so
+        # /etc/init.d can be empty even though OpenRC itself is installed.
+        # Refresh the package so the chroot installs the current scripts.
+        local openrc_scripts_port=opt/openrc-init-scripts
+        if [[ -d "$PROJECT_DIR/ports/$openrc_scripts_port" ]]; then
+                install -d -m 0755 "$TARGET/usr/ports/${openrc_scripts_port%/*}"
+                rm -rf "$TARGET/usr/ports/$openrc_scripts_port"
+                cp -a "$PROJECT_DIR/ports/$openrc_scripts_port" \
+                        "$TARGET/usr/ports/$openrc_scripts_port"
+        fi
+        rm -f "$TARGET"/var/cache/scratchpkg/packages/openrc-init-scripts#*.pkg.tar.*
+
         # Existing base archives carry the truncated wpa_supplicant recipe whose
         # dangling continuation runs the D-Bus service directory as a command.
         # Refresh it so the installer builds the corrected release.
@@ -8421,6 +8433,27 @@ touch "$STATE_DIR/packages_complete"
 rm -f "$STATE_DIR/last_failure" /run/bfs-install-failure /root/.bfsos-git-driver
 else
         log "Package transaction checkpoint already complete; skipping ports/sysup/depinst"
+fi
+
+# Older base archives predate openrc-init-scripts, so /etc/init.d may be
+# empty. Install it even when the package checkpoint is already complete;
+# force the reinstall when the package database says it is present but its
+# service scripts are missing.
+bfs_openrc_scripts_missing=no
+for bfs_openrc_script in gpm networkmanager sshd dbus cups nftables rsyncd; do
+        [[ -x "/etc/init.d/$bfs_openrc_script" ]] || bfs_openrc_scripts_missing=yes
+done
+if ! scratch isinstalled openrc-init-scripts >/dev/null 2>&1 ||
+   [[ "$bfs_openrc_scripts_missing" == yes ]]; then
+        log "Installing BFSOS OpenRC service scripts"
+        scratch install -f -r -y openrc-init-scripts || {
+                echo "ERROR: installing openrc-init-scripts failed" >&2
+                exit 1
+        }
+fi
+if [[ ! -x /etc/init.d/gpm || ! -x /etc/init.d/networkmanager ]]; then
+        echo "ERROR: openrc-init-scripts did not install the expected /etc/init.d scripts." >&2
+        exit 1
 fi
 
 # OpenRC service helpers for the installed system.  This script is already

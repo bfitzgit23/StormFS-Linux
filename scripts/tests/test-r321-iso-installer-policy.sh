@@ -171,4 +171,19 @@ grep -Fq 'offline_rc_enable networkmanager' "$inst" || \
 grep -Fq 'service="/etc/init.d/bfs-zram"' "$inst" || fail "ZRAM OpenRC service path missing"
 ! grep -Fq 'WantedBy=swap.target' "$inst" || fail "installer still writes a systemd ZRAM unit"
 
+# The base archive may predate the OpenRC service-script package.  The
+# installer must refresh and install it even when packages_complete exists.
+grep -Fq 'local openrc_scripts_port=opt/openrc-init-scripts' "$inst" || \
+    fail "installer does not refresh the OpenRC service-script recipe"
+grep -Fq 'scratch install -f -r -y openrc-init-scripts' "$inst" || \
+    fail "installer does not rebuild and install the OpenRC service scripts"
+grep -Fq 'packages/openrc-init-scripts#*.pkg.tar.*' "$inst" || \
+    fail "installer does not discard the stale OpenRC service-script package"
+for openrc_service in gpm networkmanager sshd; do
+    [ -x "ports/opt/openrc-init-scripts/$openrc_service" ] || \
+        fail "openrc-init-scripts is missing $openrc_service"
+done
+grep -qx 'openrc' ports/opt/openrc-init-scripts/depends || \
+    fail "openrc-init-scripts still hard-depends on every daemon"
+
 echo "r321 ISO/installer policy regression: PASS"

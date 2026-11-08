@@ -57,6 +57,9 @@ grep -q 'ssh-keygen -A' "$iso" || fail 'runtime SSH host-key generation is missi
 grep -q 'rc-service sshd' "$iso" || fail 'runtime SSH startup is missing'
 grep -q 'rc-update add networkmanager default' "$iso" \
 	|| fail 'NetworkManager live default is missing'
+grep -q 'openrc-init-scripts' "$iso" || fail 'ISO package set does not install the OpenRC service scripts'
+grep -q 'need networkmanager' "$iso" || fail 'live init does not depend on networkmanager'
+! grep -q 'need NetworkManager' "$iso" || fail 'live init still uses the systemd-style NetworkManager name'
 grep -q 'rootfs.squashfs' "$iso" || fail 'SquashFS live-root staging is missing'
 grep -q 'mount -t overlay overlay' "$iso" || fail 'writable overlay root is missing'
 

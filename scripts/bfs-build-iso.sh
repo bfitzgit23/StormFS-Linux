@@ -67,7 +67,7 @@ declare -A tool_packages=(
 # the live-media services/tools. Dependencies are resolved by scratch.
 iso_packages=(
     linux-firmware dracut
-    networkmanager-iso openssh git sudo wget wpa_supplicant wireless-regdb gpm lynx-iso chrony kbd
+    networkmanager-iso openrc-init-scripts openssh git sudo wget wpa_supplicant wireless-regdb gpm lynx-iso chrony kbd
     cryptsetup lvm2 mdadm snapper pciutils parted
     dialog squashfs-tools grub grub-efi dosfstools mtools efibootmgr libisoburn syslinux
     meson ninja scratch
@@ -1119,7 +1119,7 @@ EOS
 description="BFSOS live-session initialization"
 
 depend() {
-    need NetworkManager
+    need networkmanager
     before local
 }
 
