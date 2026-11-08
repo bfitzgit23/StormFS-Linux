@@ -183,6 +183,10 @@ grep -Fq 'scratch install -f -y openrc-init-scripts' "$inst" || \
     fail "installer does not install the OpenRC service scripts when absent"
 grep -Fq 'packages/openrc-init-scripts#*.pkg.tar.*' "$inst" || \
     fail "installer does not discard the stale OpenRC service-script package"
+grep -Fq 'local openrc_port=opt/openrc' "$inst" || \
+    fail "installer does not refresh the OpenRC recipe"
+grep -Fq 'packages/openrc#*.pkg.tar.*' "$inst" || \
+    fail "installer does not discard the stale OpenRC package"
 for openrc_service in gpm networkmanager sshd; do
     [ -x "ports/opt/openrc-init-scripts/$openrc_service" ] || \
         fail "openrc-init-scripts is missing $openrc_service"

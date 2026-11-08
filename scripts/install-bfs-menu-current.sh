@@ -7474,6 +7474,17 @@ write_chroot_installer() {
         fi
         rm -f "$TARGET"/var/cache/scratchpkg/packages/openrc-init-scripts#*.pkg.tar.*
 
+        # Existing base archives may also carry the OpenRC recipe that passes
+        # uucp_group before applying the Meson patch which defines it.
+        local openrc_port=opt/openrc
+        if [[ -d "$PROJECT_DIR/ports/$openrc_port" ]]; then
+                install -d -m 0755 "$TARGET/usr/ports/${openrc_port%/*}"
+                rm -rf "$TARGET/usr/ports/$openrc_port"
+                cp -a "$PROJECT_DIR/ports/$openrc_port" \
+                        "$TARGET/usr/ports/$openrc_port"
+        fi
+        rm -f "$TARGET"/var/cache/scratchpkg/packages/openrc#*.pkg.tar.*
+
         # Existing base archives carry the truncated wpa_supplicant recipe whose
         # dangling continuation runs the D-Bus service directory as a command.
         # Refresh it so the installer builds the corrected release.
