@@ -9359,6 +9359,53 @@ EOF_ZRAM_SERVICE
         log "Configured ZRAM swap for boot"
 }
 
+# Older base archives name UID/GID 82 "pkgmk" while scratchpkg's build
+# workspace and ccache use "pkgbuild". Rename the legacy account in place so
+# existing cache ownership and the fixed 82:82 tmpfs mount stay consistent.
+ensure_pkgbuild_account() {
+        local build_gid=""
+
+        if ! getent group pkgbuild >/dev/null 2>&1; then
+                if getent group pkgmk >/dev/null 2>&1; then
+                        groupmod -n pkgbuild pkgmk || {
+                                echo "Could not rename the pkgmk group to pkgbuild." >&2
+                                return 1
+                        }
+                else
+                        groupadd -r -g 82 pkgbuild || {
+                                echo "Could not create the pkgbuild group." >&2
+                                return 1
+                        }
+                fi
+        fi
+
+        build_gid="$(getent group pkgbuild | cut -d: -f3)"
+        [[ -n "$build_gid" ]] || {
+                echo "Could not determine the pkgbuild group ID." >&2
+                return 1
+        }
+
+        if ! getent passwd pkgbuild >/dev/null 2>&1; then
+                if getent passwd pkgmk >/dev/null 2>&1; then
+                        usermod -l pkgbuild -d /var/lib/scratchpkg pkgmk || {
+                                echo "Could not rename the pkgmk user to pkgbuild." >&2
+                                return 1
+                        }
+                else
+                        useradd -r -M -u 82 -g "$build_gid" \
+                                -d /var/lib/scratchpkg -s /usr/bin/false pkgbuild || {
+                                echo "Could not create the pkgbuild user." >&2
+                                return 1
+                        }
+                fi
+        fi
+
+        usermod -g "$build_gid" -s /usr/bin/false pkgbuild || {
+                echo "Could not normalize the pkgbuild account." >&2
+                return 1
+        }
+}
+
 configure_scratchpkg_tmpfs() {
         local mountpoint=/var/cache/scratchpkg/build-work size="$BUILD_TMPFS_SIZE_VALUE"
         local kb=0 gib=0 recommended="" fstab_line=""
@@ -9481,6 +9528,7 @@ IGNORE_CHECKSUM="%s"
         fi
 }
 
+ensure_pkgbuild_account
 configure_scratchpkg_tmpfs
 configure_scratchpkg_build_settings
 configure_scratchpkg_integrity_settings

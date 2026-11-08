@@ -187,6 +187,23 @@ grep -Fq 'local openrc_port=opt/openrc' "$inst" || \
     fail "installer does not refresh the OpenRC recipe"
 grep -Fq 'packages/openrc#*.pkg.tar.*' "$inst" || \
     fail "installer does not discard the stale OpenRC package"
+# Base archives still name UID/GID 82 pkgmk. The scratchpkg build-work tmpfs
+# and ccache paths use pkgbuild, so the installer must migrate the account
+# before either path runs.
+grep -Fq 'ensure_pkgbuild_account()' "$inst" || \
+    fail "installer does not define the pkgbuild account migration"
+grep -Fq 'groupmod -n pkgbuild pkgmk' "$inst" || \
+    fail "installer does not rename the legacy pkgmk group"
+grep -Fq 'usermod -l pkgbuild' "$inst" || \
+    fail "installer does not rename the legacy pkgmk user"
+line_pkgbuild_account=$(grep -n '^ensure_pkgbuild_account$' "$inst" | cut -d: -f1)
+line_pkgbuild_tmpfs=$(grep -n '^configure_scratchpkg_tmpfs$' "$inst" | cut -d: -f1)
+(( line_pkgbuild_account < line_pkgbuild_tmpfs )) || \
+    fail "pkgbuild account migration must precede build-work tmpfs setup"
+grep -Fq 'build_user=pkgbuild' ports/core/ccache/post-install || \
+    fail "ccache hook does not prefer the pkgbuild account"
+grep -Fq 'build_user=pkgmk' ports/core/ccache/post-install || \
+    fail "ccache hook does not support legacy pkgmk bases"
 for openrc_service in gpm networkmanager sshd; do
     [ -x "ports/opt/openrc-init-scripts/$openrc_service" ] || \
         fail "openrc-init-scripts is missing $openrc_service"

@@ -1,7 +1,15 @@
 #!/bin/sh
 set -eu
 cache=/var/cache/ccache
-install -d -m 0775 -o pkgmk -g pkgmk "$cache"
+build_user=pkgbuild
+if ! getent passwd "$build_user" >/dev/null 2>&1; then
+    build_user=pkgmk
+fi
+getent passwd "$build_user" >/dev/null 2>&1 || {
+    echo "ccache: package build account is missing" >&2
+    exit 1
+}
+install -d -m 0775 -o "$build_user" -g "$build_user" "$cache"
 if command -v systemd-detect-virt >/dev/null 2>&1 && systemd-detect-virt -q; then
     size=20G
 else
@@ -11,5 +19,5 @@ else
     size="${gib}G"
 fi
 CCACHE_DIR="$cache" ccache --set-config="max_size=$size"
-chown -R pkgmk:pkgmk "$cache"
+chown -R "$build_user:$build_user" "$cache"
 echo "ccache default maximum size: $size"
