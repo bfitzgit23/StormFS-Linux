@@ -53,6 +53,21 @@ grep -q -- '--autologin bfs' "$cal/shellprocess.conf" || fail 'cleanup does not 
 grep -q 'calamares.desktop' "$cal/spkgbuild" || fail 'Calamares launcher is not installed'
 grep -q 'stormfs-logo.png' "$cal/spkgbuild" || fail 'Calamares launcher icon is not installed'
 
+broadcom="$ROOT/ports/opt/broadcom-wl"
+[ -f "$broadcom/spkgbuild" ] || fail 'Broadcom wireless port is missing'
+grep -q '^name=broadcom-wl$' "$broadcom/spkgbuild" || fail 'Broadcom package name changed'
+grep -q '^version=6.30.223.271$' "$broadcom/spkgbuild" || fail 'Broadcom version changed'
+grep -Fq 'https://downloads.sourceforge.net/project/nutyx/files/$name-$version.tar.xz' "$broadcom/spkgbuild" ||     fail 'Broadcom source is not the verified SourceForge URL'
+! grep -q 'download.tuxfamily.org' "$broadcom/spkgbuild" || fail 'Broadcom source still uses TuxFamily'
+grep -Fq 'kernel/drivers/net/wireless/wl.ko' "$broadcom/spkgbuild" || fail 'Broadcom module install path changed'
+[ -f "$broadcom/post-install" ] || fail 'Broadcom post-install hook is missing'
+grep -q 'depmod -a' "$broadcom/post-install" || fail 'Broadcom post-install does not rebuild module dependencies'
+
+grep -Fq 'local_start' "$cal/shellprocess.conf" || fail 'Calamares cleanup does not handle local_start'
+grep -Fq 'local.bfsos-disabled' "$cal/shellprocess.conf" || fail 'Calamares cleanup does not disable the legacy local hook'
+grep -Fq 'remove_deprecated_local_start_hook' "$ROOT/scripts/install-bfs-menu-current.sh" ||     fail 'menu installer has no local_start cleanup'
+grep -Fq 'local.bfsos-disabled' "$ROOT/scripts/install-bfs-menu-current.sh" ||     fail 'menu installer does not disable the legacy local hook'
+
 for conf in "$ROOT/ports/opt/lightdm-gtk-greeter/greeter.conf" \
             "$ROOT/iso-builder/liverootfs/etc/lightdm/lightdm-gtk-greeter.conf"; do
     [ -f "$conf" ] || fail "greeter configuration is missing: $conf"

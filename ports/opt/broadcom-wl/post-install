@@ -1,0 +1,7 @@
+#!/bin/sh
+set -eu
+
+for kdir in /lib/modules/*; do
+    [ -d "$kdir" ] || continue
+    depmod -a "${kdir##*/}"
+done

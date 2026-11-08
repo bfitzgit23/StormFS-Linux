@@ -1,0 +1,48 @@
+# description	: Broadcom IEEE 802.11 STA wireless driver (wl)
+# homepage	: https://www.broadcom.com/support/download-search/?pf=Wireless+LAN+Infrastructure
+# maintainer	: BFSOS maintainers
+
+description="Broadcom IEEE 802.11 STA wireless driver (wl)"
+name=broadcom-wl
+version=6.30.223.271
+release=4
+source="https://downloads.sourceforge.net/project/nutyx/files/$name-$version.tar.xz"
+
+build() {
+    local src_dir kdir kver built=0
+
+    src_dir=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+    [ -n "$src_dir" ] || src_dir=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+    [ -n "$src_dir" ] || {
+        echo "broadcom-wl: source directory not found" >&2
+        return 1
+    }
+    cd "$src_dir" || return 1
+
+    for kdir in /lib/modules/*; do
+        [ -d "$kdir/build" ] || continue
+        kver=${kdir##*/}
+        echo "broadcom-wl: building wl.ko for $kver"
+        make -C "$kdir/build" M="$PWD" || return 1
+        [ -f wl.ko ] || {
+            echo "broadcom-wl: wl.ko was not produced for $kver" >&2
+            return 1
+        }
+        install -Dm755 wl.ko "$PKG/lib/modules/$kver/kernel/drivers/net/wireless/wl.ko" || return 1
+        built=1
+    done
+
+    [ "$built" -eq 1 ] || {
+        echo "broadcom-wl: no kernel build tree found under /lib/modules" >&2
+        return 1
+    }
+
+    install -d "$PKG/etc/modprobe.d" || return 1
+    cat > "$PKG/etc/modprobe.d/broadcom-wl-kernel.conf" <<'EOF'
+# Wireless drivers that conflict with the Broadcom hybrid driver 'wl'
+blacklist ssb
+blacklist bcma
+blacklist b43
+blacklist brcmsmac
+EOF
+}

@@ -8576,6 +8576,18 @@ offline_rc_present() {
         test -x "/etc/init.d/${1%.service}"
 }
 
+# OpenRC's local service still executes the deprecated local_start() hook
+# from /etc/conf.d/local with no timeout. An inherited hook can block the
+# installed system at "Starting local", so preserve it but disable it.
+remove_deprecated_local_start_hook() {
+        local local_conf="/etc/conf.d/local"
+        if [ -f "$local_conf" ] &&
+           grep -q "^[[:space:]]*local_start[[:space:]]*(" "$local_conf"; then
+                mv "$local_conf" "/etc/conf.d/local.bfsos-disabled"
+                log "Disabled deprecated OpenRC local_start hook: $local_conf"
+        fi
+}
+
 if [[ "$INSTALL_GPM_VALUE" == yes ]]; then
         if offline_rc_present gpm; then
                 offline_rc_enable gpm
@@ -10069,6 +10081,8 @@ fi
 for command in bash sh env sed grep awk find tar gzip xz make gcc g++ ld ar nm strip readelf mount umount ls cp mv rm chmod chown pkgbuild pkgadd scratch info; do
         command -v "$command" >/dev/null 2>&1 || printf 'MISSING COMMAND: %s\n' "$command" >&2
 done
+
+remove_deprecated_local_start_hook
 
 cat > /tmp/bfs-test.c <<'EOF_TEST'
 #include <stdio.h>
