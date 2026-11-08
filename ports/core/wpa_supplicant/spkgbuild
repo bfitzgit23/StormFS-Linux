@@ -5,7 +5,7 @@
 description="WPA/WPA2/WPA3 supplicant and IEEE 802.1X client"
 name=wpa_supplicant
 version=2.12
-release=6
+release=7
 source="https://w1.fi/releases/wpa_supplicant-$version.tar.gz wpa_supplicant.conf"
 
 build() {
@@ -61,6 +61,7 @@ EOF
 
 
     install -d "$PKG/usr/share/dbus-1/system-services" "$PKG/etc/dbus-1/system.d" || return 1
+    install -m644 dbus/fi.w1.wpa_supplicant1.service \
         "$PKG/usr/share/dbus-1/system-services/" || return 1
     install -m644 dbus/dbus-wpa_supplicant.conf \
         "$PKG/etc/dbus-1/system.d/wpa_supplicant.conf" || return 1
