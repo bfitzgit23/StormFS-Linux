@@ -4,7 +4,7 @@
 description="libclc package"
 name=libclc
 version=23.1.1
-release=7
+release=8
 source="https://github.com/llvm/llvm-project/releases/download/llvmorg-$version/llvm-project-$version.src.tar.xz"
 
 build() {
@@ -12,7 +12,7 @@ build() {
 	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
 	[ -n "$_bfs_src" ] || return 1
 	cd "$_bfs_src" || return 1
-    rm -rf build build-spirv-unknown-mesa3d build-spirv64-unknown-mesa3d
+    rm -rf build build-spirv32-unknown-unknown build-spirv64-unknown-unknown
 
     cmake -S llvm -B build \
         -G Ninja \
@@ -33,7 +33,10 @@ build() {
         cmake -P build/runtimes/cmake_install.cmake \
         || return 1
 
-    for target in spirv-unknown-mesa3d spirv64-unknown-mesa3d; do
+    # Mesa 26 loads the flat spirv*-mesa3d-.spv names, but Clang no
+    # longer accepts mesa3d as a SPIR-V OS. Build the generic physical
+    # targets and install them under the names Mesa expects.
+    for target in spirv32-unknown-unknown spirv64-unknown-unknown; do
         bdir="build-$target"
 
         # CMake's CLC language otherwise inherits CC, which is the
@@ -52,6 +55,15 @@ build() {
             || return 1
 
         DESTDIR="$PKG" cmake --install "$bdir" \
+            || return 1
+
+        case "$target" in
+            spirv32-unknown-unknown) mesa_name=spirv-mesa3d- ;;
+            spirv64-unknown-unknown) mesa_name=spirv64-mesa3d- ;;
+        esac
+
+        install -Dm644 "$bdir/$target/libclc.spv" \
+            "$PKG/usr/share/clc/$mesa_name.spv" \
             || return 1
     done
 

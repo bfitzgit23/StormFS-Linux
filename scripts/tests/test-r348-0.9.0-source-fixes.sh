@@ -259,7 +259,13 @@ grep -Fq "LLVM_TARGETS_TO_BUILD='host;AMDGPU;BPF;SPIRV'" ports/opt/llvm/spkgbuil
 grep -qx 'release=3' ports/opt/llvm/spkgbuild || fail 'LLVM SPIR-V release missing'
 grep -Fq -- '-DCMAKE_CLC_COMPILER=/usr/bin/clang' ports/opt/libclc/spkgbuild || \
     fail 'libclc CLC compiler is not pinned to Clang'
-grep -qx 'release=7' ports/opt/libclc/spkgbuild || fail 'libclc CLC compiler rebuild release missing'
-pass 'LLVM SPIR-V target and Clang CLC compiler for libclc'
+grep -Fq 'for target in spirv32-unknown-unknown spirv64-unknown-unknown; do' ports/opt/libclc/spkgbuild || \
+    fail 'libclc uses a logical SPIR-V target that requires Vulkan'
+grep -Fq 'mesa_name=spirv-mesa3d-' ports/opt/libclc/spkgbuild || \
+    fail 'libclc does not install Mesa 32-bit SPIR-V names'
+grep -Fq 'mesa_name=spirv64-mesa3d-' ports/opt/libclc/spkgbuild || \
+    fail 'libclc does not install Mesa 64-bit SPIR-V names'
+grep -qx 'release=8' ports/opt/libclc/spkgbuild || fail 'libclc target rebuild release missing'
+pass 'LLVM SPIR-V target, Clang CLC compiler, and Mesa libclc names'
 
 echo 'r348 0.9.0 source regression checks passed.' 
