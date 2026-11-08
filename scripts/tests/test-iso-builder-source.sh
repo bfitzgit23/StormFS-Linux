@@ -18,6 +18,9 @@ done
 for pkg in networkmanager-iso openssh git sudo wget wpa_supplicant wireless-regdb gpm lynx-iso chrony cryptsetup lvm2 mdadm snapper grub grub-efi squashfs-tools libisoburn; do
     grep -q "\b$pkg\b" "$iso" || fail "ISO package set is missing $pkg"
 done
+for pkg in xfce4-meta lightdm lightdm-gtk-greeter chromium firefox-bin fastfetch mousepad libreoffice-bin flameshot galculator vlc gparted; do
+    grep -q "\b$pkg\b" "$iso" || fail "ISO desktop package set is missing $pkg"
+done
 
 [ -f "$ROOT/ports/iso/networkmanager-iso/spkgbuild" ] || fail 'networkmanager-iso port is missing'
 [ -f "$ROOT/ports/iso/lynx-iso/spkgbuild" ] || fail 'lynx-iso port is missing'

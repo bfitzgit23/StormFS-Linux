@@ -71,7 +71,14 @@ iso_packages=(
     cryptsetup lvm2 mdadm snapper pciutils parted
     dialog squashfs-tools grub grub-efi dosfstools mtools efibootmgr libisoburn syslinux
     meson ninja scratch
+    # Desktop, session and display manager
+    xfce4-meta lightdm lightdm-gtk-greeter
+    # Live applications
+    chromium firefox-bin fastfetch mousepad libreoffice-bin flameshot galculator vlc gparted
 )
+# oh-my-bash, adw-gtk3-dark and tela-icon-theme have no spkgbuild in this tree
+# or in the Venom collections yet, so scratch cannot install them. They remain
+# available from the released theme-pack asset.
 
 log() { printf '[BFSOS ISO] %s\n' "$*"; }
 die() { printf '[BFSOS ISO] ERROR: %s\n' "$*" >&2; exit 1; }
