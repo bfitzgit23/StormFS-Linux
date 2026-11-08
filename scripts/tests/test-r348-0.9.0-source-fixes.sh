@@ -257,7 +257,9 @@ pass 'r341-r347 release hardening source fixes'
 grep -Fq "LLVM_TARGETS_TO_BUILD='host;AMDGPU;BPF;SPIRV'" ports/opt/llvm/spkgbuild || \
     fail 'LLVM omits the SPIR-V target required by libclc'
 grep -qx 'release=3' ports/opt/llvm/spkgbuild || fail 'LLVM SPIR-V release missing'
-grep -qx 'release=6' ports/opt/libclc/spkgbuild || fail 'libclc SPIR-V rebuild release missing'
-pass 'LLVM SPIR-V target for libclc'
+grep -Fq -- '-DCMAKE_CLC_COMPILER=/usr/bin/clang' ports/opt/libclc/spkgbuild || \
+    fail 'libclc CLC compiler is not pinned to Clang'
+grep -qx 'release=7' ports/opt/libclc/spkgbuild || fail 'libclc CLC compiler rebuild release missing'
+pass 'LLVM SPIR-V target and Clang CLC compiler for libclc'
 
 echo 'r348 0.9.0 source regression checks passed.' 

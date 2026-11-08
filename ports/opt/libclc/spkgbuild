@@ -4,7 +4,7 @@
 description="libclc package"
 name=libclc
 version=23.1.1
-release=6
+release=7
 source="https://github.com/llvm/llvm-project/releases/download/llvmorg-$version/llvm-project-$version.src.tar.xz"
 
 build() {
@@ -36,12 +36,15 @@ build() {
     for target in spirv-unknown-mesa3d spirv64-unknown-mesa3d; do
         bdir="build-$target"
 
+        # CMake's CLC language otherwise inherits CC, which is the
+        # ccache-wrapped GCC here and cannot compile OpenCL C.
         cmake -S libclc -B "$bdir" \
             -G Ninja \
             -DCMAKE_INSTALL_PREFIX=/usr \
             -DCMAKE_BUILD_TYPE=Release \
             -DLLVM_DIR=/usr/lib/cmake/llvm \
             -DLLVM_TOOLS_BINARY_DIR=/usr/bin \
+            -DCMAKE_CLC_COMPILER=/usr/bin/clang \
             -DLLVM_DEFAULT_TARGET_TRIPLE="$target" \
             || return 1
 
