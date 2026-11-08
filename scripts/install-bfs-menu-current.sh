@@ -8436,20 +8436,32 @@ else
 fi
 
 # Older base archives predate openrc-init-scripts, so /etc/init.d may be
-# empty. Install it even when the package checkpoint is already complete;
-# force the reinstall when the package database says it is present but its
-# service scripts are missing.
+# empty. Install it even when the package checkpoint is already complete.
+# scratch's -r path only reinstalls an existing package and refuses an
+# absent one, so use a plain forced install unless the database says the
+# package is present but its service scripts are missing.
 bfs_openrc_scripts_missing=no
 for bfs_openrc_script in gpm networkmanager sshd dbus cups nftables rsyncd; do
         [[ -x "/etc/init.d/$bfs_openrc_script" ]] || bfs_openrc_scripts_missing=yes
 done
-if ! scratch isinstalled openrc-init-scripts >/dev/null 2>&1 ||
-   [[ "$bfs_openrc_scripts_missing" == yes ]]; then
+bfs_openrc_scripts_installed=no
+if scratch isinstalled openrc-init-scripts >/dev/null 2>&1; then
+        bfs_openrc_scripts_installed=yes
+fi
+if [[ "$bfs_openrc_scripts_installed" == no ||
+      "$bfs_openrc_scripts_missing" == yes ]]; then
         log "Installing BFSOS OpenRC service scripts"
-        scratch install -f -r -y openrc-init-scripts || {
-                echo "ERROR: installing openrc-init-scripts failed" >&2
-                exit 1
-        }
+        if [[ "$bfs_openrc_scripts_installed" == yes ]]; then
+                scratch install -f -r -y openrc-init-scripts || {
+                        echo "ERROR: reinstalling openrc-init-scripts failed" >&2
+                        exit 1
+                }
+        else
+                scratch install -f -y openrc-init-scripts || {
+                        echo "ERROR: installing openrc-init-scripts failed" >&2
+                        exit 1
+                }
+        fi
 fi
 if [[ ! -x /etc/init.d/gpm || ! -x /etc/init.d/networkmanager ]]; then
         echo "ERROR: openrc-init-scripts did not install the expected /etc/init.d scripts." >&2

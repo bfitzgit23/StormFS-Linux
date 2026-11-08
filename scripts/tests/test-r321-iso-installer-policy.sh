@@ -175,8 +175,12 @@ grep -Fq 'service="/etc/init.d/bfs-zram"' "$inst" || fail "ZRAM OpenRC service p
 # installer must refresh and install it even when packages_complete exists.
 grep -Fq 'local openrc_scripts_port=opt/openrc-init-scripts' "$inst" || \
     fail "installer does not refresh the OpenRC service-script recipe"
+grep -Fq 'bfs_openrc_scripts_installed=no' "$inst" || \
+    fail "installer does not distinguish an absent OpenRC service-script package"
 grep -Fq 'scratch install -f -r -y openrc-init-scripts' "$inst" || \
-    fail "installer does not rebuild and install the OpenRC service scripts"
+    fail "installer does not reinstall the OpenRC service scripts when present"
+grep -Fq 'scratch install -f -y openrc-init-scripts' "$inst" || \
+    fail "installer does not install the OpenRC service scripts when absent"
 grep -Fq 'packages/openrc-init-scripts#*.pkg.tar.*' "$inst" || \
     fail "installer does not discard the stale OpenRC service-script package"
 for openrc_service in gpm networkmanager sshd; do
