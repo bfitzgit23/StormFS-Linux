@@ -21,7 +21,7 @@ done
 for pkg in xfce4-meta lightdm lightdm-gtk-greeter chromium firefox-bin fastfetch mousepad libreoffice-bin flameshot galculator vlc gparted; do
     grep -q "\b$pkg\b" "$iso" || fail "ISO desktop package set is missing $pkg"
 done
-for pkg in calamares adw-gtk3 tela-icon-theme stormfs-theme oh-my-bash; do
+for pkg in calamares adw-gtk3 tela-icon-theme stormfs-theme oh-my-bash xinit xauth shadow; do
     grep -q "\b$pkg\b" "$iso" || fail "ISO installer/theme package set is missing $pkg"
 done
 

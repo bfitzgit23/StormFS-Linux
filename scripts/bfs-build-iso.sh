@@ -67,12 +67,12 @@ declare -A tool_packages=(
 # the live-media services/tools. Dependencies are resolved by scratch.
 iso_packages=(
     linux-firmware dracut
-    networkmanager-iso openrc-init-scripts openssh git sudo wget wpa_supplicant wireless-regdb gpm lynx-iso chrony kbd
+    networkmanager-iso openrc-init-scripts openssh git sudo wget wpa_supplicant wireless-regdb gpm lynx-iso chrony kbd shadow
     cryptsetup lvm2 mdadm snapper pciutils parted
     dialog squashfs-tools grub grub-efi dosfstools mtools efibootmgr libisoburn syslinux
     meson ninja scratch
     # Desktop, session, display manager and installer
-    xfce4-meta lightdm lightdm-gtk-greeter calamares
+    xfce4-meta lightdm lightdm-gtk-greeter calamares xinit xauth
     # Live applications
     chromium firefox-bin fastfetch mousepad libreoffice-bin flameshot galculator vlc gparted
     # Desktop themes and shell customisation
@@ -963,6 +963,7 @@ install_live_runtime() {
 # Disposable live-media account. Local console auto-login is enabled.
 # Passwordless sudo applies only to the live image and must never be copied to an installed system.
 bfs ALL=(ALL:ALL) NOPASSWD: ALL
+Defaults env_keep += "DISPLAY XAUTHORITY DBUS_SESSION_BUS_ADDRESS"
 EOS
     chmod 0440 "$root/etc/sudoers.d/90-bfs-live"
 
@@ -1185,11 +1186,32 @@ EOS
     chmod 0755 "$root/usr/local/sbin/bfs-live-menu"
 
     cat > "$root/home/bfs/.bash_profile" <<'EOS'
+if [ -z "${DISPLAY-}" ] && [ "$(tty 2>/dev/null)" = "/dev/tty1" ]; then
+    startx
+fi
 if [ -z "${BFS_LIVE_MENU_STARTED:-}" ] && [ -t 0 ]; then
     export BFS_LIVE_MENU_STARTED=1
     /usr/local/sbin/bfs-live-menu
 fi
 EOS
+    cat > "$root/home/bfs/.xinitrc" <<'EOS'
+#!/bin/sh
+exec startxfce4
+EOS
+    mkdir -p "$root/home/bfs/.config/autostart"
+    cat > "$root/home/bfs/.config/autostart/calamares.desktop" <<'EOS'
+[Desktop Entry]
+Type=Application
+Name=Install StormFS Linux
+Comment=Install StormFS Linux to disk
+Exec=sudo -n calamares
+Icon=stormfs-logo
+Terminal=false
+X-GNOME-Autostart-enabled=true
+EOS
+    chmod 0755 "$root/home/bfs/.xinitrc"
+    chown bfs:bfs "$root/home/bfs/.bash_profile" "$root/home/bfs/.xinitrc"
+    chown -R bfs:bfs "$root/home/bfs/.config"
     chown 0:0 "$root/etc/init.d/bfs-live-init"
     rm -f "$root"/etc/ssh/ssh_host_*
     chroot "$root" /bin/bash -lc '

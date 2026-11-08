@@ -5,8 +5,8 @@
 description="Graphical installer configured for StormFS and selectable init profiles"
 name=calamares
 version=3.4.3
-release=4
-source="https://codeberg.org/Calamares/calamares/archive/calamares-$version.tar.gz branding.desc stylesheet.qss show.qml settings.conf services-openrc.conf partition.conf bootloader.conf grubcfg.conf users.conf locale.conf keyboard.conf mount.conf initramfs.conf StormFS-Wallpaper-01-Horizon.jpg StormFS-Wallpaper-02-Lightning.jpg StormFS-Wallpaper-03-Circuit.jpg StormFS-Wallpaper-04-Aurora.jpg StormFS-Wallpaper-05-Hex.jpg StormFS-Wallpaper-06-Orbit.jpg stormfs-logo.png calamares.desktop"
+release=5
+source="https://codeberg.org/Calamares/calamares/archive/calamares-$version.tar.gz branding.desc stylesheet.qss show.qml settings.conf services-openrc.conf partition.conf bootloader.conf grubcfg.conf users.conf locale.conf keyboard.conf mount.conf initramfs.conf StormFS-Wallpaper-01-Horizon.jpg StormFS-Wallpaper-02-Lightning.jpg StormFS-Wallpaper-03-Circuit.jpg StormFS-Wallpaper-04-Aurora.jpg StormFS-Wallpaper-05-Hex.jpg StormFS-Wallpaper-06-Orbit.jpg stormfs-logo.png calamares.desktop shellprocess.conf"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
@@ -21,6 +21,7 @@ build() {
         -DWITH_NETWORKMANAGER=ON \
         -DWITH_KPMCORE=ON \
         -DWITH_MODULE_INITRAMFS=ON \
+        -DWITH_MODULE_SHELLPROCESS=ON \
         -DWITH_MODULE_SERVICES_OPENRC=ON || return 1
     cmake --build build -j "${JOBS:-1}" || return 1
     DESTDIR="$PKG" cmake --install build || return 1
@@ -30,9 +31,9 @@ build() {
         "$PKG/etc/calamares/branding/stormfs/"
     install -m 0644 StormFS-*.jpg stormfs-logo.png \
         "$PKG/etc/calamares/branding/stormfs/"
-    install -m 0644 settings.conf services-openrc.conf partition.conf \
-        bootloader.conf grubcfg.conf users.conf locale.conf keyboard.conf \
-        mount.conf initramfs.conf "$PKG/etc/calamares/modules/"
+    install -m 0644 settings.conf services-openrc.conf shellprocess.conf \
+        partition.conf bootloader.conf grubcfg.conf users.conf locale.conf \
+        keyboard.conf mount.conf initramfs.conf "$PKG/etc/calamares/modules/"
 
     install -d -m 0755 "$PKG/usr/share/applications" "$PKG/usr/share/pixmaps"
     install -m 0644 calamares.desktop "$PKG/usr/share/applications/"
