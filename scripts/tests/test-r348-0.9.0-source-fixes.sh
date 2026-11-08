@@ -254,4 +254,10 @@ grep -q '^version=7.2.8$' ports/core/linux/spkgbuild || fail 'current kernel 7.2
 grep -q '^version=7.3.1$' ports/core/linux-lts/spkgbuild || fail 'default kernel 7.3.1 update missing'
 pass 'r341-r347 release hardening source fixes'
 
+grep -Fq "LLVM_TARGETS_TO_BUILD='host;AMDGPU;BPF;SPIRV'" ports/opt/llvm/spkgbuild || \
+    fail 'LLVM omits the SPIR-V target required by libclc'
+grep -qx 'release=3' ports/opt/llvm/spkgbuild || fail 'LLVM SPIR-V release missing'
+grep -qx 'release=6' ports/opt/libclc/spkgbuild || fail 'libclc SPIR-V rebuild release missing'
+pass 'LLVM SPIR-V target for libclc'
+
 echo 'r348 0.9.0 source regression checks passed.' 

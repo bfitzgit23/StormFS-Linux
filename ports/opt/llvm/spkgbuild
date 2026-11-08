@@ -6,7 +6,7 @@
 description="LLVM compiler infrastructure with Clang and compiler-rt"
 name=llvm
 version=23.1.1
-release=2
+release=3
 keep_static=1
 source="https://github.com/llvm/llvm-project/releases/download/llvmorg-$version/llvm-project-$version.src.tar.xz"
 
@@ -20,6 +20,8 @@ build() {
     mkdir -p llvm/build
     cd llvm/build
 
+    # libclc's standalone Mesa builds use the installed Clang, so it must
+    # expose the SPIR-V target even though llvm-spirv does the translation.
     CC=gcc CXX=g++ cmake \
         -DCMAKE_INSTALL_PREFIX=/usr \
         -DCMAKE_SKIP_INSTALL_RPATH=ON \
@@ -28,7 +30,7 @@ build() {
         -DLLVM_BUILD_LLVM_DYLIB=ON \
         -DLLVM_LINK_LLVM_DYLIB=ON \
         -DLLVM_ENABLE_RTTI=ON \
-        -DLLVM_TARGETS_TO_BUILD='host;AMDGPU;BPF' \
+        -DLLVM_TARGETS_TO_BUILD='host;AMDGPU;BPF;SPIRV' \
         -DLLVM_ENABLE_PROJECTS='clang;lld' \
         -DLLVM_ENABLE_RUNTIMES=compiler-rt \
         -DLLVM_BINUTILS_INCDIR=/usr/include \
