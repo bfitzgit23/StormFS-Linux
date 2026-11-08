@@ -36,9 +36,45 @@ grep -Fq 'rm -rf "$PKG/usr/lib/systemd" "$PKG/lib/systemd"' ports/opt/bluez/spkg
     fail 'BlueZ does not strip packaged systemd units'
 grep -Fq 'need dbus' ports/opt/openrc-init-scripts/bluetooth || \
     fail 'BlueZ OpenRC service does not require dbus'
-grep -qx 'release=3' ports/opt/openrc-init-scripts/spkgbuild || \
-    fail 'OpenRC service-script dependency update release missing'
+grep -qx 'release=4' ports/opt/openrc-init-scripts/spkgbuild || \
+    fail 'OpenRC service-script release missing'
 pass 'BlueZ OpenRC-only build and service dependency'
+
+grep -qx 'release=3' ports/opt/chrony/spkgbuild || fail 'Chrony OpenRC-only release missing'
+! grep -Fq 'usr/lib/sysusers.d' ports/opt/chrony/spkgbuild || fail 'Chrony still packages systemd sysusers data'
+! grep -Fq 'usr/lib/tmpfiles.d' ports/opt/chrony/spkgbuild || fail 'Chrony still packages systemd tmpfiles data'
+grep -qx 'release=4' ports/opt/avahi/spkgbuild || fail 'Avahi OpenRC-only release missing'
+grep -Fq -- '--with-systemdsystemunitdir=no' ports/opt/avahi/spkgbuild || \
+    fail 'Avahi still installs systemd units'
+grep -qx 'release=3' ports/opt/cups/spkgbuild || fail 'CUPS OpenRC-only release missing'
+grep -Fq -- '--without-systemd' ports/opt/cups/spkgbuild || fail 'CUPS still enables systemd integration'
+grep -Fq -- '--without-rcdir' ports/opt/cups/spkgbuild || fail 'CUPS still installs a SysV init script'
+grep -qx 'release=3' ports/opt/smartmontools/spkgbuild || fail 'smartmontools OpenRC-only release missing'
+grep -Fq -- '--with-libsystemd=no' ports/opt/smartmontools/spkgbuild || \
+    fail 'smartmontools still links libsystemd'
+! grep -Fq 'systemctl' ports/opt/accountsservice/post-install || \
+    fail 'AccountsService still calls systemctl from post-install'
+grep -qx 'release=3' ports/opt/accountsservice/spkgbuild || fail 'AccountsService release missing'
+grep -qx 'release=3' ports/opt/upower/spkgbuild || fail 'UPower release missing'
+grep -Fq 'systemdsystemunitdir=no' ports/opt/upower/spkgbuild || fail 'UPower still installs systemd units'
+grep -qx 'release=3' ports/opt/udisks/spkgbuild || fail 'UDisks release missing'
+grep -Fq 'with-tmpfilesdir=no' ports/opt/udisks/spkgbuild || fail 'UDisks still packages systemd tmpfiles'
+grep -qx 'release=4' ports/opt/lightdm/spkgbuild || fail 'LightDM ConsoleKit release missing'
+grep -Fq 'pam_ck_connector' ports/opt/lightdm/spkgbuild || fail 'LightDM still references pam_systemd'
+grep -qx 'release=5' ports/plasma/sddm/spkgbuild || fail 'SDDM OpenRC-only release missing'
+grep -Fq 'NO_SYSTEMD=ON' ports/plasma/sddm/spkgbuild || fail 'SDDM still builds systemd support'
+! grep -Fq 'pam_systemd' ports/plasma/sddm/post-install || fail 'SDDM PAM policy still references pam_systemd'
+grep -qx 'release=5' ports/core/linux-pam/spkgbuild || fail 'Linux-PAM ConsoleKit release missing'
+grep -Fq 'pam_ck_connector' ports/core/linux-pam/system-session || \
+    fail 'system-session still references pam_systemd'
+grep -Fq 'systemd=disabled' ports/opt/wireplumber/spkgbuild || fail 'WirePlumber still enables systemd units'
+grep -Fq 'smartd' ports/opt/openrc-init-scripts/spkgbuild || fail 'OpenRC service package omits smartd'
+[ -x ports/opt/openrc-init-scripts/smartd ] || fail 'openrc-init-scripts is missing smartd'
+grep -Fq 'command_args="-n"' ports/opt/openrc-init-scripts/smartd || \
+    fail 'smartd wrapper does not keep smartd in the foreground'
+grep -Fq 'prt-get install smartmontools openrc-init-scripts' docs/openrc-book/chapters/14-system-services.md || \
+    fail 'smartd documentation omits the OpenRC service package'
+pass 'system service packages install OpenRC/ConsoleKit integration only'
 
 [[ ! -e ports/opt/glib/.footprint ]] || fail 'generated final GLib footprint must not be committed for bootstrap pass'
 grep -qx 'glib' ports/opt/gobject-introspection/depends || fail 'GI must depend on glib'
@@ -46,7 +82,7 @@ grep -qx 'gobject-introspection' ports/opt/polkit/depends || fail 'polkit must d
 grep -qx 'consolekit' ports/opt/polkit/depends || fail 'polkit must depend on its ConsoleKit session provider'
 grep -Fq 'session_tracking=ConsoleKit' ports/opt/polkit/spkgbuild || fail 'polkit still requests the libsystemd logind backend'
 ! grep -Fq 'session_tracking=logind' ports/opt/polkit/spkgbuild || fail 'polkit still requests the libsystemd logind backend'
-grep -Fq 'release=4' ports/opt/polkit/spkgbuild || fail 'polkit ConsoleKit recipe release missing'
+grep -Fq 'release=5' ports/opt/polkit/spkgbuild || fail 'polkit ConsoleKit recipe release missing'
 grep -Fq 'for polkit_port in opt/polkit opt/consolekit; do' scripts/install-bfs-menu-current.sh || fail 'installer does not refresh the Polkit/ConsoleKit recipes'
 xorg_case_ports='
 xorg/libxau libXau

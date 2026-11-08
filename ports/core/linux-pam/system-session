@@ -1,6 +1,7 @@
 # Begin /etc/pam.d/system-session
 
 session   required    pam_unix.so
-session   optional    pam_systemd.so
+# BFSOS OpenRC uses ConsoleKit2; systemd-logind and pam_systemd are absent.
+session   optional    pam_ck_connector.so nox11
 
 # End /etc/pam.d/system-session

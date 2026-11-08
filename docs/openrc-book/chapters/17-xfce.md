@@ -41,10 +41,9 @@ OpenRC starts the system services required by XFCE. The display manager creates 
 ### System Services
 
 ```bash
-# Enable the system bus and selected desktop services
+# polkitd and upowerd are D-Bus activated; only dbus and the display manager
+# belong in runlevels.
 sudo rc-update add dbus boot
-sudo rc-update add polkitd default
-sudo rc-update add upowerd default
 sudo rc-update add lightdm default
 
 # Start the display manager after its dependencies
@@ -65,9 +64,8 @@ Use `~/.config/autostart/*.desktop` for `xfce4-power-manager` and panel plugins.
 ### Power Management Service
 
 ```bash
-# System-level power policy
-sudo rc-update add upowerd default
-sudo rc-service upowerd status
+# UPower is D-Bus activated; check the system bus instead of a runlevel entry.
+sudo rc-service dbus status
 
 # User-level XFCE power manager, launched by XFCE
 xfce4-power-manager &

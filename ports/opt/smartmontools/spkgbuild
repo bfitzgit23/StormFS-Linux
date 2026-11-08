@@ -6,7 +6,7 @@
 description="The smartmontools package contains utility programs (smartctl, smartd) to control/monitor storage systems using the Self-Monitoring, Analysis and Reporting Technology System (S.M.A.R.T.) built into most modern ATA and SCSI disks."
 name=smartmontools
 version=7.5
-release=2
+release=3
 source="https://downloads.sourceforge.net/$name/$name-$version.tar.gz"
 
 build() {
@@ -17,7 +17,13 @@ build() {
 
 	./configure --prefix=/usr           \
             --sysconfdir=/etc       \
-            --docdir=/usr/share/doc/$name-$version &&
-make
-	make DESTDIR=$PKG install
+            --docdir=/usr/share/doc/$name-$version \
+            --with-libsystemd=no \
+            --with-systemdsystemunitdir=no \
+            --with-systemdenvfile=no || return 1
+make || return 1
+	make DESTDIR=$PKG install || return 1
+
+    # smartd is supervised by the OpenRC wrapper, not a systemd unit.
+    rm -rf "$PKG/usr/lib/systemd" "$PKG/lib/systemd" || return 1
 }

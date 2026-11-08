@@ -1,13 +1,13 @@
 # description	: BFSOS OpenRC service scripts
 # homepage	: https://github.com/OpenRC/openrc
 # maintainer	: BFSOS maintainers
-# optional	: cups openssh samba avahi nftables rsync kerberos wpa_supplicant lightdm sddm plasma-login-manager libvirt bfs-kernel-maintenance
+# optional	: cups openssh samba avahi nftables rsync kerberos smartmontools wpa_supplicant lightdm sddm plasma-login-manager libvirt bfs-kernel-maintenance
 
 description="BFSOS OpenRC service scripts"
 name=openrc-init-scripts
 version=4
-release=3
-source="networkmanager acpid bluetooth dbus gpm chronyd cups sshd samba avahi-daemon nftables rsyncd krb5-kdc krb5-kadmind wpa_supplicant bfs-kernel-finalize sddm lightdm plasmalogin virtlogd libvirtd pipewire.desktop pipewire-pulse.desktop wireplumber.desktop"
+release=4
+source="networkmanager acpid bluetooth dbus gpm chronyd cups sshd samba avahi-daemon nftables rsyncd krb5-kdc krb5-kadmind wpa_supplicant smartd bfs-kernel-finalize sddm lightdm plasmalogin virtlogd libvirtd pipewire.desktop pipewire-pulse.desktop wireplumber.desktop"
 
 build() {
     install -d -m 0755 "$PKG/etc/init.d" \
@@ -23,7 +23,7 @@ build() {
     #   rc-update add sddm default   (after configuring the VT/inittab)
     for service in networkmanager acpid bluetooth dbus gpm chronyd \
                    cups sshd samba avahi-daemon nftables rsyncd \
-                   krb5-kdc krb5-kadmind wpa_supplicant \
+                   krb5-kdc krb5-kadmind wpa_supplicant smartd \
                    bfs-kernel-finalize sddm lightdm plasmalogin \
                    virtlogd libvirtd; do
         install -m 0755 "$service" "$PKG/etc/init.d/$service" || return 1

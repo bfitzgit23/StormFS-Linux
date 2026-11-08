@@ -2,9 +2,8 @@
 set -eu
 
 # Create the unprivileged chrony user used by chronyd (the package is built
-# with --with-user=chrony). On the systemd profile sysusers.d would normally
-# provision this account; OpenRC and SysVinit profiles have no sysusers
-# processor, so pkgadd runs this script at install time instead. Idempotent.
+# with --with-user=chrony). OpenRC has no sysusers processor, so pkgadd runs
+# this script at install time instead. Idempotent.
 CHRONY_GID=
 if ! getent group chrony >/dev/null 2>&1; then
     groupadd -r chrony

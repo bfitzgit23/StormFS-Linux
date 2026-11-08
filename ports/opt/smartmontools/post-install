@@ -1,2 +1,6 @@
-#!/bin/bash
-systemctl enable smartd
+#!/bin/sh
+set -eu
+
+# smartd is enabled explicitly with rc-update by the administrator; package
+# installation must not activate a service.
+exit 0

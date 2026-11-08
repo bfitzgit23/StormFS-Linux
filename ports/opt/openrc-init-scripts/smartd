@@ -1,0 +1,14 @@
+#!/sbin/openrc-run
+name="smartd"
+description="S.M.A.R.T. disk health monitoring daemon"
+command="/usr/sbin/smartd"
+command_args="-n"
+command_background=true
+pidfile="/run/${RC_SVCNAME}.pid"
+required_files="/etc/smartd.conf"
+
+depend() {
+    need localmount
+    after bootmisc
+    use logger
+}

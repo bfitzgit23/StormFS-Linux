@@ -45,7 +45,9 @@ The default runlevel contains services for normal operation:
 - bluetooth (Bluetooth support)
 - sshd (SSH server)
 - smartd (disk monitoring)
-- udisks2 (disk management)
+
+D-Bus-activated helpers such as `polkitd`, `upowerd`, `udisks2`, `colord`, and
+`accounts-daemon` are started on demand and do not belong in a runlevel.
 
 ```bash
 # List default services

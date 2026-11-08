@@ -20,13 +20,15 @@ This chapter covers configuring various system services with OpenRC. The service
 | Display manager | `lightdm`, `sddm`, `lxdm`, or `gdm` | matching name | `default` | Requires `dbus` and `xdm`; enable one only |
 | Bluetooth | `bluez` + scripts | `bluetooth` | `default` | Requires `dbus` |
 | Audio | `alsa-utils`, `pipewire`, or `pulseaudio` | matching script | `boot`/`default` | Prefer per-user audio for desktops |
-| Storage | `udisks2` | `udisks2` | `default` | Requires `dbus` and PolicyKit |
-| Authorization | `polkit` | `polkitd` | `default` | Requires `dbus` |
-| Power policy | `upower` | `upowerd` | `default` | Requires `dbus` |
+| Storage | `udisks` | `udisks2` (D-Bus activated) | none | Requires `dbus` and PolicyKit |
+| Authorization | `polkit` | `polkitd` (D-Bus activated) | none | Requires `dbus` |
+| Power policy | `upower` | `upowerd` (D-Bus activated) | none | Requires `dbus` |
+| User accounts | `accountsservice` | `accounts-daemon` (D-Bus activated) | none | Requires `dbus` and PolicyKit |
+| Color management | `colord` | `colord` (D-Bus activated) | none | Requires `dbus` |
 | ACPI events | `acpid` | `acpid` | `boot` | Requires local mounts and logger |
 | Console mouse | `gpm` | `gpm` | `default` | Optional; uses `/dev/input/mice` |
-| Disk health | `smartmontools` | `smartd` | `default` | Requires local mounts |
-| mDNS | `avahi` | `avahi-daemon`, `avahi-dnsconfd` | `default` | Start Avahi before DNS configuration helper |
+| Disk health | `smartmontools` + scripts | `smartd` | `default` | Requires local mounts |
+| mDNS | `avahi` | `avahi-daemon` | `default` | DNS configuration helper is optional and not a runlevel service |
 | Remote desktop | `rustdesk-bin`, `anydesk`, or `teamviewer` | matching name | `default` | Enable only the selected product |
 
 Inspect the installed scripts before enabling a service:
@@ -168,8 +170,8 @@ Edit `/etc/acpi/actions/powerbtn.sh`:
 smartd monitors disk health:
 
 ```bash
-# Install smartmontools
-prt-get install smartmontools
+# Install smartmontools and the OpenRC service script
+prt-get install smartmontools openrc-init-scripts
 
 # Enable smartd
 sudo rc-update add smartd default
@@ -197,14 +199,12 @@ Edit `/etc/smartd.conf`:
 udisks2 provides disk management:
 
 ```bash
-# Install udisks2
-prt-get install udisks2
+# Install UDisks
+prt-get install udisks
 
-# Enable udisks2
-sudo rc-update add udisks2 default
-
-# Start udisks2
-sudo rc-service udisks2 start
+# udisksd is D-Bus activated; ensure the system bus is running.
+sudo rc-update add dbus boot
+sudo rc-service dbus start
 ```
 
 ## PolicyKit
@@ -217,11 +217,9 @@ polkitd provides authorization:
 # Install polkit
 prt-get install polkit
 
-# Enable polkitd
-sudo rc-update add polkitd default
-
-# Start polkitd
-sudo rc-service polkitd start
+# polkitd is D-Bus activated; ensure the system bus is running.
+sudo rc-update add dbus boot
+sudo rc-service dbus start
 ```
 
 ## Color Management
@@ -234,11 +232,9 @@ colord manages color profiles:
 # Install colord
 prt-get install colord
 
-# Enable colord
-sudo rc-update add colord default
-
-# Start colord
-sudo rc-service colord start
+# colord is D-Bus activated; ensure the system bus is running.
+sudo rc-update add dbus boot
+sudo rc-service dbus start
 ```
 
 ## Power Management
@@ -251,11 +247,9 @@ upowerd monitors power devices:
 # Install upower
 prt-get install upower
 
-# Enable upowerd
-sudo rc-update add upowerd default
-
-# Start upowerd
-sudo rc-service upowerd start
+# upowerd is D-Bus activated; ensure the system bus is running.
+sudo rc-update add dbus boot
+sudo rc-service dbus start
 ```
 
 ## Accounts Service
@@ -266,13 +260,11 @@ accounts-daemon manages user accounts:
 
 ```bash
 # Install AccountsService
-prt-get install accountsservice openrc-init-scripts
+prt-get install accountsservice
 
-# Enable accounts-daemon
-sudo rc-update add accounts-daemon default
-
-# Start accounts-daemon
-sudo rc-service accounts-daemon start
+# accounts-daemon is D-Bus activated; ensure the system bus is running.
+sudo rc-update add dbus boot
+sudo rc-service dbus start
 ```
 
 ## Avahi (mDNS)
@@ -287,11 +279,12 @@ prt-get install avahi openrc-init-scripts
 
 # Enable avahi
 sudo rc-update add avahi-daemon default
-sudo rc-update add avahi-dnsconfd default
 
 # Start avahi
 sudo rc-service avahi-daemon start
-sudo rc-service avahi-dnsconfd start
+
+# avahi-dnsconfd is an optional helper; it is not installed as a runlevel
+# service. Start it only for a DNS configuration setup that needs it.
 ```
 
 ## Next Steps

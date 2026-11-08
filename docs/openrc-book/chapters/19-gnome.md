@@ -74,13 +74,10 @@ Enable=false
 ### Essential Services
 
 ```bash
-# Enable GNOME-related services
+# polkitd, upowerd, accounts-daemon, and colord are D-Bus activated; only
+# dbus, the display manager, and avahi-daemon belong in runlevels.
 sudo rc-update add dbus boot
 sudo rc-update add gdm default
-sudo rc-update add polkitd default
-sudo rc-update add upowerd default
-sudo rc-update add accounts-daemon default
-sudo rc-update add colord default
 sudo rc-update add avahi-daemon default
 ```
 

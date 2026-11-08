@@ -210,6 +210,15 @@ grep -Fq 'local bluez_port=opt/bluez' "$inst" || \
     fail "installer does not refresh the BlueZ recipe"
 grep -Fq 'packages/bluez#*.pkg.tar.*' "$inst" || \
     fail "installer does not discard stale BlueZ packages"
+grep -Fq 'for service_port in opt/chrony opt/avahi opt/cups opt/smartmontools' "$inst" || \
+    fail "installer does not refresh the OpenRC service-package recipes"
+grep -Fq 'for service_pkg in chrony avahi cups smartmontools accountsservice' "$inst" || \
+    fail "installer does not discard stale OpenRC service packages"
+grep -Fq 'packages/$service_pkg' "$inst" || \
+    fail "installer service-package cache cleanup is missing"
+for service_pkg in chrony avahi cups smartmontools accountsservice upower udisks lightdm sddm wireplumber polkit linux-pam; do
+    grep -Fq "$service_pkg" "$inst" || fail "installer service-package list omits $service_pkg"
+done
 grep -Fq 'rc-update add bluetooth default' docs/openrc-book/chapters/12-bluetooth.md || \
     fail "BlueZ documentation still enables the nonexistent bluez service"
 grep -Fq 'prt-get install bluez openrc-init-scripts' docs/openrc-book/chapters/12-bluetooth.md || \

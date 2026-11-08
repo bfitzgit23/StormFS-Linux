@@ -46,11 +46,11 @@ Status values mean:
 | SDDM | `sddm` | `sddm` | Provides the `xdm` virtual; enable it instead of LightDM, LXDM, or GDM. | Ready |
 | LXDM | `lxdm` | `lxdm` | Build with `--with-systemdsystemunitdir=no`; provides the `xdm` virtual. | Flag required |
 | GDM | `gdm` | `gdm` | Enable after `dbus`; GDM starts the user session and is not a replacement for session services. | Ready |
-| PolicyKit | `polkit` | `polkitd` | Build with `-D session_tracking=ConsoleKit` and `-D systemdsystemunitdir=no`; the shared wrapper starts the D-Bus daemon. | Ready |
-| AccountsService | `accountsservice` | `accounts-daemon` | It is D-Bus activated; the OpenRC variant removes the hard `systemd` dependency and installs the daemon under `/usr/lib`. | Ready |
-| UPower | `upower` | `upowerd` | D-Bus service used by desktop power tools; enable the wrapper only when a system daemon is needed. | Ready |
-| UDisks2 | `udisks2` | `udisks2` | Requires D-Bus and PolicyKit; enable in `default` when desktop disk management is used. | Ready |
-| colord | `colord` | `colord` | Build with `-D systemd=false` and use the D-Bus service with the OpenRC wrapper. | Ready |
+| PolicyKit | `polkit` | D-Bus activation | Build with `-D session_tracking=ConsoleKit` and strip its systemd unit/sysusers/tmpfiles data; `polkitd` starts on demand from the system bus. | Ready |
+| AccountsService | `accountsservice` | D-Bus activation | Build with `-D systemdsystemunitdir=no`; `accounts-daemon` starts on demand and is not a runlevel service. | Ready |
+| UPower | `upower` | D-Bus activation | Build with `-D systemdsystemunitdir=no`; `upowerd` starts on demand from the system bus. | Ready |
+| UDisks2 | `udisks` | D-Bus activation | Build with `--with-systemdsystemunitdir=no` and `--with-tmpfilesdir=no`; requires D-Bus and PolicyKit. | Ready |
+| colord | `colord` | D-Bus activation | Build with `-D systemd=disabled`; `colord` starts on demand from the system bus. | Ready |
 | Avahi | `avahi` | `avahi-daemon`, `avahi-dnsconfd` | Enable the daemon first; enable the DNS configuration helper only when it is needed. | Ready |
 
 ## Audio and Desktop Sessions

@@ -6,8 +6,8 @@
 description="Session and policy manager for PipeWire"
 name=wireplumber
 version=0.5.17
-release=1
-build_opt="--prefix=/usr --buildtype=release -Dsystem-lua=true"
+release=2
+build_opt="--prefix=/usr --buildtype=release -Dsystem-lua=true -Dsystemd=disabled"
 source="https://gitlab.freedesktop.org/pipewire/$name/-/archive/$version/$name-$version.tar.gz"
 
 build() {

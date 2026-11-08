@@ -6,7 +6,7 @@
 description="D-Bus interfaces and daemon for querying and manipulating user accounts"
 name=accountsservice
 version=26.27.3
-release=2
+release=3
 source="https://gitlab.freedesktop.org/accountsservice/accountsservice/-/archive/$version/accountsservice-$version.tar.bz2"
 
 build() {
@@ -19,7 +19,11 @@ build() {
     meson setup build \
         --prefix=/usr \
         --buildtype=release \
-        -Dadmin_group=adm
-    meson compile -C build -j "${JOBS:-1}"
-    DESTDIR="$PKG" meson install -C build
+        -Dsystemdsystemunitdir=no \
+        -Dadmin_group=adm || return 1
+    meson compile -C build -j "${JOBS:-1}" || return 1
+    DESTDIR="$PKG" meson install -C build || return 1
+
+    # accounts-daemon is D-Bus activated on OpenRC; do not package a unit.
+    rm -rf "$PKG/usr/lib/systemd" "$PKG/lib/systemd" || return 1
 }

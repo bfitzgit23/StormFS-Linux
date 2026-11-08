@@ -8,7 +8,7 @@
 description="Lightweight NTP client/server used by the BFSOS live environment"
 name=chrony
 version=4.9
-release=2
+release=3
 build_opt="--with-user=chrony"
 source="https://chrony-project.org/releases/chrony-$version.tar.gz"
 
@@ -18,8 +18,7 @@ build() {
 	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
 	[ -n "$_bfs_src" ] || return 1
 	cd "$_bfs_src" || return 1
-	bfs_autobuild
-    install -d "$PKG/usr/lib/sysusers.d" "$PKG/usr/lib/tmpfiles.d" || return 1
+	bfs_autobuild || return 1
 
     cat > "$PKG/etc/chrony.conf" <<'EOC'
 pool pool.ntp.org iburst
@@ -30,15 +29,6 @@ rtcsync
 
 # NetworkManager may drop transient source fragments here on live systems.
 sourcedir /run/chrony-dhcp
-EOC
-
-    cat > "$PKG/usr/lib/sysusers.d/chrony.conf" <<'EOC'
-u chrony - "chrony time synchronization" /var/lib/chrony
-EOC
-
-    cat > "$PKG/usr/lib/tmpfiles.d/chrony.conf" <<'EOC'
-d /var/lib/chrony 0750 chrony chrony -
-d /run/chrony-dhcp 0755 chrony chrony -
 EOC
 
 }

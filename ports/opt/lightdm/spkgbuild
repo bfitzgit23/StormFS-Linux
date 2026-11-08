@@ -6,7 +6,7 @@
 description="Lightweight cross-desktop display manager"
 name=lightdm
 version=1.33.1
-release=3
+release=4
 source="https://github.com/ubuntu/lightdm/archive/$version/$name-$version.tar.gz"
 
 build() {
@@ -23,6 +23,13 @@ build() {
 
     autoreconf -fiv || return 1
 
+    # BFSOS uses ConsoleKit2 for session tracking, not systemd-logind.
+    sed -i 's/pam_systemd\.so/pam_ck_connector.so nox11/' \
+        data/pam/lightdm \
+        data/pam/lightdm-autologin \
+        data/pam/lightdm-greeter \
+        || return 1
+
     ./configure \
         --prefix=/usr \
         --libexecdir=/usr/lib/lightdm \
@@ -37,6 +44,13 @@ build() {
 
     make -j"${JOBS:-1}" || return 1
     make DESTDIR="$PKG" install || return 1
+
+    # Fail the build rather than shipping a PAM stack that references the
+    # unavailable systemd module.
+    if grep -Rq 'pam_systemd' "$PKG/etc/pam.d"; then
+        echo 'ERROR: LightDM PAM files still reference pam_systemd' >&2
+        return 1
+    fi
 
     # Ensure graphical sessions use the normal BFSOS login environment.
     install -Dm755 \

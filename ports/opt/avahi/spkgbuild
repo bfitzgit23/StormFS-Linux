@@ -7,7 +7,7 @@ description="Multicast DNS/DNS-SD service discovery stack"
 name=avahi
 version=0.9_rc5
 srcver=0.9-rc5
-release=3
+release=4
 build_opt="\
     --disable-static \
     --disable-libevent \
@@ -18,6 +18,8 @@ build_opt="\
     --disable-qt4 \
     --disable-manpages \
     --enable-core-docs \
+    --disable-libsystemd \
+    --with-systemdsystemunitdir=no \
     --with-distro=none"
 source="https://github.com/avahi/avahi/archive/v$srcver/avahi-$srcver.tar.gz https://www.linuxfromscratch.org/patches/blfs/svn/avahi-$srcver-ipv6_race_condition_fix-1.patch"
 
@@ -41,5 +43,9 @@ build() {
     else
         build_opt="$build_opt --disable-qt5"
     fi
-	bfs_autobuild
+	bfs_autobuild || return 1
+
+    # The OpenRC wrapper is the only supported service definition on BFSOS.
+    rm -rf "$PKG/usr/lib/systemd" "$PKG/lib/systemd" \
+        "$PKG/usr/lib/sysusers.d" "$PKG/usr/lib/tmpfiles.d" || return 1
 }

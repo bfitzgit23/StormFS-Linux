@@ -1,6 +1,7 @@
 glib
 libgcrypt
 linux-pam
+consolekit
 intltool
 itstool
 xorg-server

@@ -7497,6 +7497,27 @@ write_chroot_installer() {
         fi
         rm -f "$TARGET"/var/cache/scratchpkg/packages/bluez#*.pkg.tar.*
 
+        # Existing base archives contain the earlier service-package recipes,
+        # which installed systemd units, sysusers/tmpfiles data, or called
+        # systemctl from post-install hooks. Refresh them so an OpenRC target
+        # only receives the OpenRC/ConsoleKit integration.
+        local service_port
+        for service_port in opt/chrony opt/avahi opt/cups opt/smartmontools \
+                opt/accountsservice opt/upower opt/udisks opt/lightdm \
+                plasma/sddm opt/wireplumber opt/polkit core/linux-pam; do
+                if [[ -d "$PROJECT_DIR/ports/$service_port" ]]; then
+                        install -d -m 0755 "$TARGET/usr/ports/${service_port%/*}"
+                        rm -rf "$TARGET/usr/ports/$service_port"
+                        cp -a "$PROJECT_DIR/ports/$service_port" \
+                                "$TARGET/usr/ports/$service_port"
+                fi
+        done
+        local service_pkg
+        for service_pkg in chrony avahi cups smartmontools accountsservice \
+                upower udisks lightdm sddm wireplumber polkit linux-pam; do
+                rm -f "$TARGET/var/cache/scratchpkg/packages/$service_pkg"#*.pkg.tar.*
+        done
+
         # Existing base archives carry the truncated wpa_supplicant recipe whose
         # dangling continuation runs the D-Bus service directory as a command.
         # Refresh it so the installer builds the corrected release.

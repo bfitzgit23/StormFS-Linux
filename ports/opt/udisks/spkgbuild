@@ -6,7 +6,7 @@
 description="The UDisks package provides a daemon, tools and libraries to access and manipulate disks and storage devices."
 name=udisks
 version=2.11.2
-release=2
+release=3
 source="https://github.com/storaged-project/$name/releases/download/$name-$version/$name-$version.tar.bz2"
 
 build() {
@@ -18,8 +18,15 @@ build() {
             --sysconfdir=/etc    \
             --localstatedir=/var \
             --disable-static     \
-            --enable-available-modules &&
-make
+            --with-systemdsystemunitdir=no \
+            --with-tmpfilesdir=no \
+            --enable-available-modules || return 1
+make || return 1
 
-	make DESTDIR=$PKG install
+	make DESTDIR=$PKG install || return 1
+
+    # udisksd is D-Bus activated on OpenRC; its runtime directories are
+    # created by the daemon and udev rules, not systemd-tmpfiles.
+    rm -rf "$PKG/usr/lib/systemd" "$PKG/lib/systemd" \
+        "$PKG/usr/lib/tmpfiles.d" || return 1
 }

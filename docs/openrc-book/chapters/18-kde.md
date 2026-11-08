@@ -98,12 +98,10 @@ greeter-session=lightdm-gtk-greeter
 ### Essential Services
 
 ```bash
-# Enable core KDE services
+# polkitd, upowerd, and accounts-daemon are D-Bus activated; only dbus and
+# the display manager belong in runlevels.
 sudo rc-update add dbus boot
 sudo rc-update add sddm default
-sudo rc-update add polkitd default
-sudo rc-update add upowerd default
-sudo rc-update add accounts-daemon default
 ```
 
 ### Session Services
@@ -125,7 +123,7 @@ pgrep -a 'plasmashell|kwin|powerdevil'
 ```bash
 # Check service dependencies
 rc-depend -v sddm
-rc-depend -v polkitd
+rc-depend -v dbus
 
 # List all KDE-related services
 ls /etc/init.d/ | grep -E "(sddm|kde|plasma|power)"

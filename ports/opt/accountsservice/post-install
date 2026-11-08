@@ -4,4 +4,7 @@ polkit.addAdminRule(function(action, subject) {
    return ["unix-group:adm"];
    });
 EOF
-systemctl enable accounts-daemon
+
+# accounts-daemon is D-Bus activated. Enabling a runlevel service would start
+# a second copy that cannot own the well-known bus name.
+exit 0

@@ -90,11 +90,10 @@ greeter-session=lightdm-gtk-greeter
 ### Essential Services
 
 ```bash
-# Enable LXQt-related services
+# polkitd and upowerd are D-Bus activated; only dbus and the display manager
+# belong in runlevels.
 sudo rc-update add dbus boot
 sudo rc-update add sddm default
-sudo rc-update add polkitd default
-sudo rc-update add upowerd default
 ```
 
 ### Session Services
