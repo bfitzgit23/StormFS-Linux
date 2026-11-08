@@ -1087,6 +1087,12 @@ EOS
     cat > "$root/usr/local/sbin/bfs-live-init" <<'EOS'
 #!/usr/bin/env bash
 set -u
+
+# Live-media only: an installed system may have inherited this service.
+if ! grep -qw 'bfs.live=1' /proc/cmdline; then
+    exit 0
+fi
+
 exec </dev/tty1 >/dev/tty1 2>&1
 printf '\nBFSOS live environment\n======================\n'
 printf 'Local console: automatic login as bfs with passwordless sudo.\n'

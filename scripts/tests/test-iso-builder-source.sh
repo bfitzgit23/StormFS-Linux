@@ -59,6 +59,7 @@ grep -q '/etc/bfs-build-info' "$iso" || fail 'embedded build provenance is missi
 
 grep -q 'git pull --ff-only' "$iso" || fail 'safe live online project refresh is missing'
 grep -q 'GIT_TERMINAL_PROMPT=0' "$iso" || fail 'live project refresh can block on Git credentials'
+grep -Fq "grep -qw 'bfs.live=1' /proc/cmdline" "$iso" || fail 'live init has no installed-system guard'
 ! grep -q '/usr/local/sbin/bfs-live-console-font || true' "$iso" || fail 'boot-time console-font prompt blocks local'
 grep -q 'passwd bfs' "$iso" || fail 'temporary bfs live-password prompt is missing'
 grep -q 'ssh-keygen -A' "$iso" || fail 'runtime SSH host-key generation is missing'
