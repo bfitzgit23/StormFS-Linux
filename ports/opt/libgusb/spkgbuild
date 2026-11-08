@@ -4,7 +4,7 @@
 description="libgusb package"
 name=libgusb
 version=0.4.9
-release=1
+release=2
 source="https://github.com/hughsie/${name}/releases/download/${version}/${name}-${version}.tar.xz"
 
 build() {
@@ -15,14 +15,12 @@ build() {
 mkdir build &&
 cd    build &&
 
+# HTML docs are optional; keeping them off avoids a hard gi-docgen
+# build dependency for the library itself.
 meson setup ..            \
       --prefix=/usr       \
       --buildtype=release \
       -Ddocs=false        &&
-ninja
-sed -E "/output|install_dir/s/('libgusb)'/\1-0.4.9'/" \
-    -i ../docs/meson.build                            &&
-meson configure -Ddocs=true                           &&
-ninja
+ninja &&
 DESTDIR=$PKG ninja install
 }
