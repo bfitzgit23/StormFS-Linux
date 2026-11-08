@@ -24,6 +24,16 @@ done
 grep -q -- '-Dwifi=true' "$ROOT/ports/iso/networkmanager-iso/spkgbuild" || fail 'ISO NetworkManager lost Wi-Fi support'
 grep -q -- '-Dnmcli=true' "$ROOT/ports/iso/networkmanager-iso/spkgbuild" || fail 'ISO NetworkManager lost nmcli'
 grep -q -- '-Dnmtui=true' "$ROOT/ports/iso/networkmanager-iso/spkgbuild" || fail 'ISO NetworkManager lost nmtui'
+for nm_recipe in opt/networkmanager iso/networkmanager-iso; do
+    nm_file="$ROOT/ports/$nm_recipe/spkgbuild"
+    for nm_opt in session_tracking=no session_tracking_consolekit=true \
+        suspend_resume=consolekit systemd_journal=false \
+        systemdsystemunitdir=no systemdsystemgeneratordir=no; do
+        grep -q -- "-D$nm_opt" "$nm_file" || fail "$nm_recipe is missing -D$nm_opt"
+    done
+done
+grep -q -- '-Dsystemdsystemgeneratordir=no' "$ROOT/ports/compat-32/libnm-32/spkgbuild" || \
+    fail 'libnm-32 still requires a systemd generator directory'
 
 grep -q 'downloads.sourceforge.net/project/bfsos/BFSOS/base/latest' "$iso" || fail 'SourceForge base URL is missing'
 grep -q 'BASE_SHA256_URL' "$iso" || fail 'SourceForge base checksum verification is missing'

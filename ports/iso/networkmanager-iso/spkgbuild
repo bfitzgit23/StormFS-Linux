@@ -5,7 +5,7 @@
 description="Minimal NetworkManager daemon plus nmcli/nmtui for BFSOS live media"
 name=networkmanager-iso
 version=1.58.1
-release=2
+release=3
 build_opt="-Dlibaudit=no
 -Dwifi=true
 -Dnmcli=true
@@ -20,6 +20,11 @@ build_opt="-Dlibaudit=no
 -Dselinux=false
 -Dqt=false
 -Dsession_tracking=no
+-Dsession_tracking_consolekit=true
+-Dsuspend_resume=consolekit
+-Dsystemd_journal=false
+-Dsystemdsystemunitdir=no
+-Dsystemdsystemgeneratordir=no
 -Dnm_cloud_setup=false
 -Dclat=false
 -Dmodem_manager=false
