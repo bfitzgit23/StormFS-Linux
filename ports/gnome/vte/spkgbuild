@@ -4,7 +4,7 @@
 description="vte package"
 name=vte
 version=0.84.1
-release=1
+release=2
 source="https://gitlab.gnome.org/GNOME/${name}/-/archive/${version}/${name}-${version}.tar.gz"
 
 build() {
@@ -15,9 +15,11 @@ build() {
 mkdir build &&
 cd    build &&
 
-meson setup --prefix=/usr --buildtype=release .. &&
+meson setup --prefix=/usr --buildtype=release \
+            -D_systemd=false \
+            .. &&
 ninja
-ninja install
+DESTDIR="$PKG" ninja install
 }
 
 post_install () {

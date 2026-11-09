@@ -294,4 +294,14 @@ grep -Fq 'source="$name-$version.tar.gz::https://github.com/rrthomas/$name/relea
     fail 'Enchant release asset does not use the working download query and filename alias'
 pass 'Enchant release asset uses the working download query and keeps its archive name'
 
+grep -qx 'release=2' ports/gnome/librest/spkgbuild || fail 'librest staging fix release missing'
+grep -Fq 'DESTDIR="$PKG" ninja install' ports/gnome/librest/spkgbuild || \
+    fail 'librest still installs outside the package staging root'
+grep -qx 'release=2' ports/gnome/vte/spkgbuild || fail 'VTE OpenRC-only release missing'
+grep -Fq -- '-D_systemd=false' ports/gnome/vte/spkgbuild || \
+    fail 'VTE still enables libsystemd'
+grep -Fq 'DESTDIR="$PKG" ninja install' ports/gnome/vte/spkgbuild || \
+    fail 'VTE still installs outside the package staging root'
+pass 'librest stages its payload and VTE builds without systemd'
+
 echo 'r348 0.9.0 source regression checks passed.' 
