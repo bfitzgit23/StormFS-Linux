@@ -1,0 +1,32 @@
+--- a/experimental/CMakeLists.txt
++++ b/experimental/CMakeLists.txt
+@@ -22,4 +22,6 @@
+ endif(BUILDING_EXPERIMENTAL_SEPARATELY)
+ 
+ 
+-add_subdirectory(libkdeclarative)
++if (QT_QTDECLARATIVE_LIBRARY AND QT_QTSCRIPT_LIBRARY)
++   add_subdirectory(libkdeclarative)
++endif (QT_QTDECLARATIVE_LIBRARY AND QT_QTSCRIPT_LIBRARY)
+--- a/plasma/CMakeLists.txt
++++ b/plasma/CMakeLists.txt
+@@ -273,6 +273,19 @@
+         widgets/videowidget.cpp)
+ endif(PHONON_FOUND)
+ 
++if (NOT QT_QTDECLARATIVE_LIBRARY OR NOT QT_QTSCRIPT_LIBRARY)
++    list(REMOVE_ITEM plasma_LIB_SRCS
++        ${CMAKE_SOURCE_DIR}/experimental/libkdeclarative/kdeclarative.cpp
++        ${CMAKE_SOURCE_DIR}/experimental/libkdeclarative/private/engineaccess.cpp
++        ${CMAKE_SOURCE_DIR}/experimental/libkdeclarative/private/kiconprovider.cpp
++        ${CMAKE_SOURCE_DIR}/experimental/libkdeclarative/bindings/qscriptnonguibookkeeping.cpp
++        ${CMAKE_SOURCE_DIR}/experimental/libkdeclarative/bindings/i18n.cpp
++        ${CMAKE_SOURCE_DIR}/experimental/libkdeclarative/bindings/icon.cpp
++        ${CMAKE_SOURCE_DIR}/experimental/libkdeclarative/bindings/url.cpp
++        private/declarative/declarativenetworkaccessmanagerfactory.cpp
++        widgets/declarativewidget.cpp)
++endif (NOT QT_QTDECLARATIVE_LIBRARY OR NOT QT_QTSCRIPT_LIBRARY)
++
+ kde4_add_library(plasma ${LIBRARY_TYPE} ${plasma_LIB_SRCS})
+ 
+ target_link_libraries(plasma ${QT_QTUITOOLS_LIBRARY} ${QT_QTWEBKIT_LIBRARY}
