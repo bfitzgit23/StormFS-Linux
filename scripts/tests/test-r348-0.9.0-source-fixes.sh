@@ -405,6 +405,15 @@ grep -qx 'libxkbcommon' ports/opt/xdotool/depends || \
     fail 'xdotool is missing its X11 runtime dependencies'
 pass 'xdotool downloads the tag archive that upstream actually publishes'
 
+grep -qx 'release=14' ports/opt/qt5/spkgbuild || \
+    fail 'qt5 rebuild release missing'
+if grep -Fq 'qtbase-opensource-src_5.15.19+dfsg-4' ports/opt/qt5/spkgbuild; then
+    fail 'qt5 references a Debian revision that is no longer in the pool'
+fi
+grep -Fq 'qtbase-opensource-src_5.15.19+dfsg-7.debian.tar.xz' ports/opt/qt5/spkgbuild || \
+    fail 'qt5 does not use the current Debian qtbase revision'
+pass 'qt5 uses the current Debian qtbase patch archive'
+
 grep -qx 'version=26.2.7' ports/opt/libreoffice-bin/spkgbuild || \
     fail 'libreoffice-bin does not pin a published release'
 grep -Fq 'deb/x86_64/LibreOffice_${version}_Linux_x86-64_deb.tar.gz' ports/opt/libreoffice-bin/spkgbuild || \

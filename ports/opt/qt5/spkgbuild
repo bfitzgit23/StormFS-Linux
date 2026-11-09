@@ -7,7 +7,7 @@ keep_static=1
 description="Qt 5 compatibility framework (QtWebEngine packaged separately)"
 name=qt5
 version=5.15.19
-release=13
+release=14
 # Keep Debian's small quilt metadata archives as opaque build inputs.  BFSOS
 # uses the official complete Qt source archive, but Debian currently carries
 # compatibility fixes needed by modern OpenSSL/GCC/ICU/glibc.  QtWebEngine is
@@ -21,7 +21,7 @@ renames=(
     qtlocation-debian-patches.xzblob
     SKIP
 )
-source="https://download.qt.io/archive/qt/5.15/$version/single/qt-everywhere-opensource-src-$version.tar.xz https://deb.debian.org/debian/pool/main/q/qtbase-opensource-src/qtbase-opensource-src_5.15.19+dfsg-4.debian.tar.xz https://deb.debian.org/debian/pool/main/q/qtlocation-opensource-src/qtlocation-opensource-src_5.15.19+dfsg-2.debian.tar.xz qtlocation-rapidjson-gcc16.patch.manual"
+source="https://download.qt.io/archive/qt/5.15/$version/single/qt-everywhere-opensource-src-$version.tar.xz https://deb.debian.org/debian/pool/main/q/qtbase-opensource-src/qtbase-opensource-src_5.15.19+dfsg-7.debian.tar.xz https://deb.debian.org/debian/pool/main/q/qtlocation-opensource-src/qtlocation-opensource-src_5.15.19+dfsg-2.debian.tar.xz qtlocation-rapidjson-gcc16.patch.manual"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
