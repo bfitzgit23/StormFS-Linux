@@ -6,7 +6,7 @@
 description="Qt 4.8 compatibility framework for KDE 4"
 name=qt4
 version=4.8.7
-release=2
+release=3
 source="https://download.qt.io/archive/qt/4.8/$version/qt-everywhere-opensource-src-$version.tar.gz qt4-gcc-requires.patch.manual qt4-4.8.7-qforeach-gcc9.patch.manual"
 
 build() {
@@ -32,6 +32,11 @@ build() {
 	# APIs. Qt4 is C++98 and only consumes ICU's C ABI.
 	export CXXFLAGS="${CXXFLAGS:+$CXXFLAGS }-std=gnu++98 -fpermissive -Wno-deprecated-declarations"
 	export CXXFLAGS="$CXXFLAGS -DU_SHOW_CPLUSPLUS_API=0 -DU_SHOW_CPLUSPLUS_HEADER_API=0 -DUCHAR_TYPE=uint16_t"
+
+	# libQtHelp has a transitive dependency on the build-tree libQtCLucene.
+	# Modern binutils will not resolve that from -L alone; it needs the
+	# build-tree lib directory in the linker's rpath-link search path.
+	export LDFLAGS="${LDFLAGS:+$LDFLAGS }-Wl,-rpath-link,$PWD/lib"
 
 	./configure \
 		-prefix /opt/qt4 \
