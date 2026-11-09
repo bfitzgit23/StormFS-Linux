@@ -268,4 +268,9 @@ grep -Fq 'mesa_name=spirv64-mesa3d-' ports/opt/libclc/spkgbuild || \
 grep -qx 'release=8' ports/opt/libclc/spkgbuild || fail 'libclc target rebuild release missing'
 pass 'LLVM SPIR-V target, Clang CLC compiler, and Mesa libclc names'
 
+grep -qx 'release=3' ports/opt/gtk-doc/spkgbuild || fail 'gtk-doc runtime-data release missing'
+grep -qx 'KEEP_DOC=yes' ports/opt/gtk-doc/spkgbuild || \
+    fail 'gtk-doc Python runtime is still stripped by the docs cleanup'
+pass 'gtk-doc preserves its Python runtime under share/gtk-doc'
+
 echo 'r348 0.9.0 source regression checks passed.' 
