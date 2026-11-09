@@ -7,13 +7,18 @@ description="Qt 4.8 compatibility framework for KDE 4"
 name=qt4
 version=4.8.7
 release=1
-source="https://download.qt.io/archive/qt/4.8/$version/qt-everywhere-opensource-src-$version.tar.gz"
+source="https://download.qt.io/archive/qt/4.8/$version/qt-everywhere-opensource-src-$version.tar.gz qt4-gcc-requires.patch.manual"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "qt-everywhere-opensource-src-$version" -print -quit)
 	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
 	[ -n "$_bfs_src" ] || return 1
 	cd "$_bfs_src" || return 1
+
+	# GCC 16 reserves 'requires' as a C++20 keyword, but qmake uses it as a
+	# local identifier. Keep this patch manual so it is not picked up by an
+	# automatic *.patch loop and applied twice.
+	patch -p1 -i "$SRC/qt4-gcc-requires.patch.manual" || return 1
 
 	export CFLAGS="${CFLAGS:+$CFLAGS }-std=gnu99"
 	export CXXFLAGS="${CXXFLAGS:+$CXXFLAGS }-std=gnu++98 -fpermissive -Wno-deprecated-declarations"
