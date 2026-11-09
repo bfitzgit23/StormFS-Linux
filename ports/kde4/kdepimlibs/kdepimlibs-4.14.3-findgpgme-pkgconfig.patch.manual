@@ -1,0 +1,29 @@
+--- a/cmake/modules/FindGpgme.cmake
++++ b/cmake/modules/FindGpgme.cmake
+@@ -181,6 +181,26 @@
+     set( GPGME_PTH_FOUND     false )
+ 
+     find_program( _GPGMECONFIG_EXECUTABLE NAMES gpgme-config )
++    # gpgme >= 1.18 no longer installs gpgme-config; it ships gpgme.pc and a
++    # plain header/library pair instead.  Fall back to those so an installed
++    # gpgme is detected rather than reported missing.
++    if ( NOT _GPGMECONFIG_EXECUTABLE )
++      find_package( PkgConfig QUIET )
++      if ( PKG_CONFIG_FOUND )
++        pkg_check_modules( _GPGME_PC QUIET gpgme )
++      endif()
++      find_path( _gpgme_include_dir gpgme.h
++        HINTS ${_GPGME_PC_INCLUDE_DIRS} )
++      find_library( _gpgme_vanilla_lib NAMES gpgme
++        HINTS ${_GPGME_PC_LIBRARY_DIRS} )
++      if ( _gpgme_include_dir AND _gpgme_vanilla_lib )
++        set( GPGME_INCLUDES          ${_gpgme_include_dir} )
++        set( GPGME_VANILLA_LIBRARIES ${_gpgme_vanilla_lib} )
++        set( GPGME_VANILLA_FOUND     true )
++        set( GPGME_FOUND             true )
++        message( STATUS "Found gpgme without gpgme-config: ${_gpgme_vanilla_lib}" )
++      endif()
++    endif()
+ 
+     # if gpgme-config has been found
+     if ( _GPGMECONFIG_EXECUTABLE )

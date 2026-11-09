@@ -5,8 +5,8 @@
 description="KDE 4 PIM libraries"
 name=kdepimlibs
 version=4.14.3
-release=4
-source="https://download.kde.org/Attic/4.14.3/src/kdepimlibs-$version.tar.xz kdepimlibs-4.14.3-cmake-minimum.patch.manual kdepimlibs-4.14.3-export-library-dependencies.patch.manual"
+release=5
+source="https://download.kde.org/Attic/4.14.3/src/kdepimlibs-$version.tar.xz kdepimlibs-4.14.3-cmake-minimum.patch.manual kdepimlibs-4.14.3-export-library-dependencies.patch.manual kdepimlibs-4.14.3-findgpgme-pkgconfig.patch.manual"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
@@ -22,6 +22,7 @@ build() {
 
 	patch -p1 -i "$SRC/kdepimlibs-4.14.3-cmake-minimum.patch.manual" || return 1
 	patch -p1 -i "$SRC/kdepimlibs-4.14.3-export-library-dependencies.patch.manual" || return 1
+	patch -p1 -i "$SRC/kdepimlibs-4.14.3-findgpgme-pkgconfig.patch.manual" || return 1
 
 	# kdelibs before 4.14.3-21 shipped cmake modules that read the location of a
 	# kauth-policy-gen target its exported tools file never contained, so every
