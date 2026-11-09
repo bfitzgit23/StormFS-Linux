@@ -6,6 +6,7 @@ poppler
 qpdf
 libexif
 libjpeg-turbo
+libjxl
 libpng
 libtiff
 mupdf
