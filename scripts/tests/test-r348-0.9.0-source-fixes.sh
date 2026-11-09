@@ -405,14 +405,24 @@ grep -qx 'libxkbcommon' ports/opt/xdotool/depends || \
     fail 'xdotool is missing its X11 runtime dependencies'
 pass 'xdotool downloads the tag archive that upstream actually publishes'
 
-grep -qx 'release=14' ports/opt/qt5/spkgbuild || \
+grep -qx 'release=15' ports/opt/qt5/spkgbuild || \
     fail 'qt5 rebuild release missing'
 if grep -Fq 'qtbase-opensource-src_5.15.19+dfsg-4' ports/opt/qt5/spkgbuild; then
     fail 'qt5 references a Debian revision that is no longer in the pool'
 fi
 grep -Fq 'qtbase-opensource-src_5.15.19+dfsg-7.debian.tar.xz' ports/opt/qt5/spkgbuild || \
     fail 'qt5 does not use the current Debian qtbase revision'
-pass 'qt5 uses the current Debian qtbase patch archive'
+if grep -q 'debian-patches.xzblob' ports/opt/qt5/spkgbuild; then
+    fail 'qt5 expects renamed patch archives that pkgbuild never creates'
+fi
+grep -Fq 'noextract="$qtbase_debian $qtlocation_debian"' ports/opt/qt5/spkgbuild || \
+    fail 'qt5 does not keep the Debian patch archives opaque'
+if grep -q 'debian-patches.xzblob' ports/opt/qtwebengine5/spkgbuild; then
+    fail 'qtwebengine5 expects renamed patch archives that pkgbuild never creates'
+fi
+grep -Fq 'noextract="$qtwebengine_debian"' ports/opt/qtwebengine5/spkgbuild || \
+    fail 'qtwebengine5 does not keep the Debian patch archive opaque'
+pass 'qt5 and qtwebengine5 copy Debian patch archives without extracting them'
 
 grep -qx 'release=4' ports/opt/speex/spkgbuild || \
     fail 'speex rebuild release missing'

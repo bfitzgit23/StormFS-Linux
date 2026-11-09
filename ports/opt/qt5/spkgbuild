@@ -7,21 +7,17 @@ keep_static=1
 description="Qt 5 compatibility framework (QtWebEngine packaged separately)"
 name=qt5
 version=5.15.19
-release=14
+release=15
 # Keep Debian's small quilt metadata archives as opaque build inputs.  BFSOS
 # uses the official complete Qt source archive, but Debian currently carries
 # compatibility fixes needed by modern OpenSSL/GCC/ICU/glibc.  QtWebEngine is
 # intentionally excluded here and is packaged by qtwebengine5.
-# BFSOS pkgbuild uses a parallel renames array instead of filename::URL syntax.
-# Keep the Debian archives opaque so pkgbuild does not unpack their debian/
-# directories into the main source tree.
-renames=(
-    SKIP
-    qtbase-debian-patches.xzblob
-    qtlocation-debian-patches.xzblob
-    SKIP
-)
-source="https://download.qt.io/archive/qt/5.15/$version/single/qt-everywhere-opensource-src-$version.tar.xz https://deb.debian.org/debian/pool/main/q/qtbase-opensource-src/qtbase-opensource-src_5.15.19+dfsg-7.debian.tar.xz https://deb.debian.org/debian/pool/main/q/qtlocation-opensource-src/qtlocation-opensource-src_5.15.19+dfsg-2.debian.tar.xz qtlocation-rapidjson-gcc16.patch.manual"
+# These Debian archives are opaque build inputs: noextract copies them into
+# $SRC unchanged, so their debian/ directories never land in the Qt tree.
+qtbase_debian="qtbase-opensource-src_5.15.19+dfsg-7.debian.tar.xz"
+qtlocation_debian="qtlocation-opensource-src_5.15.19+dfsg-2.debian.tar.xz"
+noextract="$qtbase_debian $qtlocation_debian"
+source="https://download.qt.io/archive/qt/5.15/$version/single/qt-everywhere-opensource-src-$version.tar.xz https://deb.debian.org/debian/pool/main/q/qtbase-opensource-src/$qtbase_debian https://deb.debian.org/debian/pool/main/q/qtlocation-opensource-src/$qtlocation_debian qtlocation-rapidjson-gcc16.patch.manual"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
@@ -74,10 +70,10 @@ apply_qt5_compat_patches() {
     rm -rf "$SRC/qtbase-debian" "$SRC/qtlocation-debian"
     mkdir -p "$SRC/qtbase-debian" "$SRC/qtlocation-debian"
 
-    tar -xJf "$SRC/qtbase-debian-patches.xzblob" \
+    tar -xJf "$SRC/$qtbase_debian" \
         -C "$SRC/qtbase-debian" || return 1
 
-    tar -xJf "$SRC/qtlocation-debian-patches.xzblob" \
+    tar -xJf "$SRC/$qtlocation_debian" \
         -C "$SRC/qtlocation-debian" || return 1
 
     # Apply the QtBase OpenSSL compatibility backports in Debian series order.

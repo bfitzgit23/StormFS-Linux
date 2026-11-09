@@ -6,12 +6,12 @@
 description="Qt 5 WebEngine module"
 name=qtwebengine5
 version=5.15.19
-release=1
-renames=(
-    SKIP
-    qtwebengine-debian-patches.xzblob
-)
-source="https://download.qt.io/archive/qt/5.15/$version/submodules/qtwebengine-everywhere-opensource-src-$version.tar.xz https://deb.debian.org/debian/pool/main/q/qtwebengine-opensource-src/qtwebengine-opensource-src_5.15.19+dfsg2-7.debian.tar.xz"
+release=2
+# noextract keeps the Debian quilt archive opaque, without unpacking its
+# debian/ directory into the QtWebEngine source tree.
+qtwebengine_debian="qtwebengine-opensource-src_5.15.19+dfsg2-7.debian.tar.xz"
+noextract="$qtwebengine_debian"
+source="https://download.qt.io/archive/qt/5.15/$version/submodules/qtwebengine-everywhere-opensource-src-$version.tar.xz https://deb.debian.org/debian/pool/main/q/qtwebengine-opensource-src/$qtwebengine_debian"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
@@ -43,7 +43,7 @@ apply_qtwebengine5_compat_patches() {
     rm -rf "$SRC/qtwebengine-debian"
     mkdir -p "$SRC/qtwebengine-debian" || return 1
 
-    tar -xJf "$SRC/qtwebengine-debian-patches.xzblob" \
+    tar -xJf "$SRC/$qtwebengine_debian" \
         -C "$SRC/qtwebengine-debian" || return 1
 
     patchroot="$SRC/qtwebengine-debian/debian/patches"
