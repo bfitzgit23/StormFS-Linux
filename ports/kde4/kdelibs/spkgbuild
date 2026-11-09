@@ -1,0 +1,56 @@
+# description	: KDE 4 core libraries
+# homepage	: https://kde.org/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+description="KDE 4 core libraries"
+name=kdelibs
+version=4.14.3
+release=1
+source="https://download.kde.org/Attic/4.14.3/src/kdelibs-$version.tar.xz"
+
+build() {
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
+
+	export CMAKE_PREFIX_PATH="/opt/qt4:/usr"
+	export CFLAGS="${CFLAGS:+$CFLAGS }-std=gnu99"
+	export CXXFLAGS="${CXXFLAGS:+$CXXFLAGS }-std=gnu++98 -fpermissive -Wno-deprecated-declarations"
+
+	cmake -S . -B build -G Ninja \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+		-DKHTML_BUILD_TESTREGRESSION=OFF \
+		-DSTATIC_LIBRARY=OFF \
+		-DWITH_SOLID_UDISKS2=OFF \
+		-DWITH_SOLID_WMI=OFF \
+		-DCMAKE_DISABLE_FIND_PACKAGE_OpenSSL=TRUE \
+		-DCMAKE_DISABLE_FIND_PACKAGE_DBusMenuQt=TRUE \
+		-DCMAKE_DISABLE_FIND_PACKAGE_QCA2=TRUE \
+		-DWITH_ASPELL=OFF \
+		-DWITH_ENCHANT=OFF \
+		-DWITH_HUNSPELL=OFF \
+		-DWITH_KDE3SUPPORT=OFF \
+		-DWITH_QtWebKit=OFF \
+		-DWITH_PolkitQt=OFF \
+		-DWITH_PolkitQt1=OFF \
+		-DWITH_UDISKS=OFF \
+		-DWITH_UDISKS2=OFF \
+		-DWITH_UDEV=OFF \
+		-DWITH_OPENGL=ON \
+		-DWITH_ACL=ON \
+		-DWITH_Soprano=ON \
+		-DWITH_Strigi=ON \
+		-DWITH_Attica=ON \
+		-DWITH_Phonon=ON \
+		-DWITH_Nepomuk=ON \
+		-DWITH_SAMBA=OFF \
+		-DWITH_BlueZ=OFF \
+		-DWITH_NetworkManager=OFF \
+		-DWITH_LibSSH=OFF || return 1
+
+	cmake --build build -j "${JOBS:-1}" || return 1
+	DESTDIR="$PKG" cmake --install build || return 1
+}

@@ -1,0 +1,36 @@
+# description	: Soprano RDF framework for KDE 4
+# homepage	: https://sourceforge.net/projects/soprano/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+description="Soprano RDF framework for KDE 4"
+name=soprano
+version=2.9.3
+release=1
+source="https://github.com/KDE/soprano/archive/refs/tags/v$version.tar.gz"
+
+build() {
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
+
+	export CMAKE_PREFIX_PATH="/opt/qt4:/usr"
+	export CFLAGS="${CFLAGS:+$CFLAGS }-std=gnu99"
+	export CXXFLAGS="${CXXFLAGS:+$CXXFLAGS }-std=gnu++98 -fpermissive -Wno-deprecated-declarations"
+
+	cmake -S . -B build -G Ninja \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+		-DSOPRANO_BUILD_TESTS=OFF \
+		-DSOPRANO_BUILD_API_DOCS=OFF \
+		-DSOPRANO_DISABLE_REDLAND_BACKEND=ON \
+		-DSOPRANO_DISABLE_SESAME2_BACKEND=ON \
+		-DSOPRANO_DISABLE_VIRTUOSO_BACKEND=ON \
+		-DSOPRANO_DISABLE_CLUCENE_INDEX=ON \
+		-DSOPRANO_DISABLE_RAPTOR_PARSER=ON \
+		-DSOPRANO_DISABLE_RAPTOR_SERIALIZER=ON || return 1
+
+	cmake --build build -j "${JOBS:-1}" || return 1
+	DESTDIR="$PKG" cmake --install build || return 1
+}

@@ -1,0 +1,14 @@
+attica4
+dbus
+desktop-file-utils
+hicolor-icon-theme
+kactivities
+kdelibs
+kdepimlibs
+libcanberra
+libgcrypt
+libxml2
+libxslt
+qt4
+shared-mime-info
+xdg-utils

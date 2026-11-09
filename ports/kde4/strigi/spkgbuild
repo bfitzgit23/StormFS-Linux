@@ -1,0 +1,35 @@
+# description	: Strigi desktop search framework for KDE 4
+# homepage	: https://strigi.sourceforge.net/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+description="Strigi desktop search framework for KDE 4"
+name=strigi
+version=0.7.8
+release=1
+source="https://github.com/KDE/strigi/archive/refs/tags/v$version.tar.gz"
+
+build() {
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
+
+	export CMAKE_PREFIX_PATH="/opt/qt4:/usr"
+	export CFLAGS="${CFLAGS:+$CFLAGS }-std=gnu99"
+	export CXXFLAGS="${CXXFLAGS:+$CXXFLAGS }-std=gnu++98 -fpermissive -Wno-deprecated-declarations"
+
+	cmake -S . -B build -G Ninja \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+		-DSTRIGI_SYNC_SUBMODULES=OFF \
+		-DENABLE_CLUCENE=OFF \
+		-DENABLE_EXPAT=OFF \
+		-DENABLE_LIBXML2=ON \
+		-DENABLE_QT4=ON \
+		-DENABLE_DBUS=ON \
+		-DBUILD_TESTING=OFF || return 1
+
+	cmake --build build -j "${JOBS:-1}" || return 1
+	DESTDIR="$PKG" cmake --install build || return 1
+}

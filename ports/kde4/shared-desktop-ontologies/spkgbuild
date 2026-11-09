@@ -1,0 +1,26 @@
+# description	: Shared desktop ontologies for KDE 4 Nepomuk
+# homepage	: https://oscaf.sourceforge.net/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+description="Shared desktop ontologies for KDE 4 Nepomuk"
+name=shared-desktop-ontologies
+version=0.11.0
+release=1
+source="https://launchpad.net/ubuntu/+archive/primary/+sourcefiles/shared-desktop-ontologies/0.11.0-1/shared-desktop-ontologies_0.11.0.orig.tar.bz2"
+
+build() {
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
+
+	export CFLAGS="${CFLAGS:+$CFLAGS }-std=gnu99"
+
+	cmake -S . -B build -G Ninja \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_POLICY_VERSION_MINIMUM=3.5 || return 1
+
+	cmake --build build -j "${JOBS:-1}" || return 1
+	DESTDIR="$PKG" cmake --install build || return 1
+}

@@ -1,0 +1,31 @@
+# description	: Phonon GStreamer backend for Qt 4 and KDE 4
+# homepage	: https://phonon.kde.org/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+description="Phonon GStreamer backend for Qt 4 and KDE 4"
+name=phonon-backend-gstreamer
+version=4.9.1
+release=1
+source="https://download.kde.org/stable/phonon/phonon-backend-gstreamer/$version/phonon-backend-gstreamer-$version.tar.xz"
+
+build() {
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "phonon-gstreamer-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
+
+	export CMAKE_PREFIX_PATH="/opt/qt4:/usr"
+	export CFLAGS="${CFLAGS:+$CFLAGS }-std=gnu99"
+	export CXXFLAGS="${CXXFLAGS:+$CXXFLAGS }-std=gnu++98 -fpermissive -Wno-deprecated-declarations"
+
+	cmake -S . -B build -G Ninja \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+		-DPHONON_BUILD_PHONON4QT5=OFF \
+		-DPHONON_GSTREAMER_BUILD_TESTS=OFF \
+		-DCMAKE_DISABLE_FIND_PACKAGE_Qt5=TRUE || return 1
+
+	cmake --build build -j "${JOBS:-1}" || return 1
+	DESTDIR="$PKG" cmake --install build || return 1
+}

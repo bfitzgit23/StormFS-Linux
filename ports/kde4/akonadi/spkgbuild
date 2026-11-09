@@ -1,0 +1,34 @@
+# description	: Akonadi personal information management service for KDE 4
+# homepage	: https://community.kde.org/Akonadi
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+description="Akonadi personal information management service for KDE 4"
+name=akonadi
+version=1.13.0
+release=1
+source="https://github.com/KDE/akonadi/archive/refs/tags/v$version.tar.gz"
+
+build() {
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
+
+	export CMAKE_PREFIX_PATH="/opt/qt4:/usr"
+	export CFLAGS="${CFLAGS:+$CFLAGS }-std=gnu99"
+	export CXXFLAGS="${CXXFLAGS:+$CXXFLAGS }-std=gnu++98 -fpermissive -Wno-deprecated-declarations"
+
+	cmake -S . -B build -G Ninja \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+		-DQT5_BUILD=OFF \
+		-DAKONADI_BUILD_TESTS=OFF \
+		-DAKONADI_BUILD_QSQLITE=ON \
+		-DINSTALL_QSQLITE_IN_QT_PREFIX=OFF \
+		-DWITH_SOPRANO=ON \
+		-DSTATIC_LIBRARY=OFF || return 1
+
+	cmake --build build -j "${JOBS:-1}" || return 1
+	DESTDIR="$PKG" cmake --install build || return 1
+}

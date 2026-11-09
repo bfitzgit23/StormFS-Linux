@@ -1,0 +1,54 @@
+# description	: Qt 4.8 compatibility framework for KDE 4
+# homepage	: https://www.qt.io/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+# optional	: cups
+
+description="Qt 4.8 compatibility framework for KDE 4"
+name=qt4
+version=4.8.7
+release=1
+source="https://download.qt.io/archive/qt/4.8/$version/qt-everywhere-opensource-src-$version.tar.gz"
+
+build() {
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "qt-everywhere-opensource-src-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
+
+	export CFLAGS="${CFLAGS:+$CFLAGS }-std=gnu99"
+	export CXXFLAGS="${CXXFLAGS:+$CXXFLAGS }-std=gnu++98 -fpermissive -Wno-deprecated-declarations"
+
+	./configure \
+		-prefix /opt/qt4 \
+		-sysconfdir /etc/xdg \
+		-opensource \
+		-confirm-license \
+		-release \
+		-shared \
+		-system-zlib \
+		-system-libpng \
+		-system-libjpeg \
+		-system-libtiff \
+		-system-libmng \
+		-system-sqlite \
+		-dbus-linked \
+		-no-openssl \
+		-no-webkit \
+		-no-phonon \
+		-no-declarative \
+		-no-multimedia \
+		-no-gstreamer \
+		-nomake examples \
+		-nomake demos || return 1
+
+	make -j "${JOBS:-1}" || return 1
+	make -j1 INSTALL_ROOT="$PKG" install || return 1
+
+	install -d "$PKG/etc/ld.so.conf.d" "$PKG/etc/profile.d" || return 1
+	printf '%s\n' '/opt/qt4/lib' > "$PKG/etc/ld.so.conf.d/qt4.conf" || return 1
+	cat > "$PKG/etc/profile.d/qt4.sh" <<'EOF' || return 1
+export QT4DIR=/opt/qt4
+export PATH="/opt/qt4/bin:$PATH"
+export CMAKE_PREFIX_PATH="/opt/qt4${CMAKE_PREFIX_PATH:+:$CMAKE_PREFIX_PATH}"
+EOF
+}

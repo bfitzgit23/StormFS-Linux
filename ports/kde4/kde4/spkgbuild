@@ -1,0 +1,14 @@
+# description	: KDE Software Compilation 4.14 desktop stack
+# homepage	: https://kde.org/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+description="KDE Software Compilation 4.14 desktop stack"
+name=kde4
+version=4.14.3
+release=1
+source=""
+
+build() {
+	install -d "$PKG/usr/share/bfsos/metapackages" || return 1
+	printf '%s\n' "$name $version" > "$PKG/usr/share/bfsos/metapackages/$name" || return 1
+}

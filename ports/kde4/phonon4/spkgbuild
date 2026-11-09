@@ -1,0 +1,37 @@
+# description	: Phonon multimedia framework for Qt 4 and KDE 4
+# homepage	: https://phonon.kde.org/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+description="Phonon multimedia framework for Qt 4 and KDE 4"
+name=phonon4
+version=4.10.3
+release=1
+source="https://download.kde.org/Attic/phonon/$version/phonon-$version.tar.xz"
+
+build() {
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "phonon-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
+
+	export CMAKE_PREFIX_PATH="/opt/qt4:/usr"
+	export CFLAGS="${CFLAGS:+$CFLAGS }-std=gnu99"
+	export CXXFLAGS="${CXXFLAGS:+$CXXFLAGS }-std=gnu++98 -fpermissive -Wno-deprecated-declarations"
+
+	cmake -S . -B build -G Ninja \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+		-DPHONON_BUILD_PHONON4QT5=OFF \
+		-DPHONON_BUILD_DESIGNER_PLUGIN=OFF \
+		-DPHONON_BUILD_DECLARATIVE_PLUGIN=OFF \
+		-DPHONON_BUILD_DEMOS=OFF \
+		-DPHONON_BUILD_DOC=OFF \
+		-DPHONON_BUILD_EXPERIMENTAL=OFF \
+		-DPHONON_ASSERT_STATES=OFF \
+		-DPHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT=OFF \
+		-DPHONON_BUILD_TESTS=OFF || return 1
+
+	cmake --build build -j "${JOBS:-1}" || return 1
+	DESTDIR="$PKG" cmake --install build || return 1
+}

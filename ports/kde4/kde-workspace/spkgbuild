@@ -1,0 +1,69 @@
+# description	: KDE 4 Plasma workspace and window manager
+# homepage	: https://kde.org/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+description="KDE 4 Plasma workspace and window manager"
+name=kde-workspace
+version=4.11.14
+release=1
+source="https://download.kde.org/Attic/4.14.3/src/kde-workspace-$version.tar.xz"
+
+build() {
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
+
+	export CMAKE_PREFIX_PATH="/opt/qt4:/usr"
+	export CFLAGS="${CFLAGS:+$CFLAGS }-std=gnu99"
+	export CXXFLAGS="${CXXFLAGS:+$CXXFLAGS }-std=gnu++98 -fpermissive -Wno-deprecated-declarations"
+
+	cmake -S . -B build -G Ninja \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+		-DKDE4_BUILD_TESTS=OFF \
+		-DBUILD_TESTING=OFF \
+		-DWITH_XINERAMA=ON \
+		-DWITH_OpenGL=ON \
+		-DWITH_XComposite=ON \
+		-DWITH_XDamage=ON \
+		-DWITH_XRandR=ON \
+		-DWITH_XTest=ON \
+		-DWITH_XCursor=ON \
+		-DWITH_Xfixes=ON \
+		-DWITH_XSCREENSAVER=ON \
+		-DWITH_Xscreensaver=ON \
+		-DWITH_KDM=OFF \
+		-DWITH_Xmms=OFF \
+		-DWITH_XKB=ON \
+		-DWITH_GLIB2=ON \
+		-DWITH_Fontconfig=ON \
+		-DWITH_Strigi=ON \
+		-DWITH_Soprano=ON \
+		-DWITH_Nepomuk=ON \
+		-DWITH_Akonadi=ON \
+		-DWITH_KdepimLibs=ON \
+		-DWITH_Boost=ON \
+		-DWITH_UDev=ON \
+		-DWITH_UPower=ON \
+		-DWITH_UDisks=OFF \
+		-DWITH_UDisks2=OFF \
+		-DWITH_PolkitQt=OFF \
+		-DWITH_PolkitQt1=OFF \
+		-DWITH_Wayland=OFF \
+		-DWITH_OpenGLES=OFF \
+		-DWITH_NetworkManager=OFF \
+		-DWITH_ModemManager=OFF \
+		-DWITH_BlueZ=OFF \
+		-DCMAKE_DISABLE_FIND_PACKAGE_DBusMenuQt=TRUE \
+		-DCMAKE_DISABLE_FIND_PACKAGE_QImageBlitz=TRUE \
+		-DCMAKE_DISABLE_FIND_PACKAGE_QJSON=TRUE \
+		-DCMAKE_DISABLE_FIND_PACKAGE_PythonLibrary=TRUE \
+		-DCMAKE_DISABLE_FIND_PACKAGE_LibUSB=TRUE \
+		-DCMAKE_DISABLE_FIND_PACKAGE_OpenGLES=TRUE \
+		-DCMAKE_DISABLE_FIND_PACKAGE_Wayland=TRUE || return 1
+
+	cmake --build build -j "${JOBS:-1}" || return 1
+	DESTDIR="$PKG" cmake --install build || return 1
+}

@@ -1,0 +1,29 @@
+# description	: KDE 4 desktop wallpapers
+# homepage	: https://kde.org/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+description="KDE 4 desktop wallpapers"
+name=kde-wallpapers
+version=4.14.3
+release=1
+source="https://download.kde.org/Attic/4.14.3/src/kde-wallpapers-$version.tar.xz"
+
+build() {
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
+
+	if [ -f CMakeLists.txt ]; then
+		cmake -S . -B build -G Ninja \
+			-DCMAKE_INSTALL_PREFIX=/usr \
+			-DCMAKE_BUILD_TYPE=Release \
+			-DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+			-DBUILD_TESTING=OFF || return 1
+		cmake --build build -j "${JOBS:-1}" || return 1
+		DESTDIR="$PKG" cmake --install build || return 1
+	else
+		install -d "$PKG/usr/share/wallpapers" || return 1
+		cp -a . "$PKG/usr/share/wallpapers/" || return 1
+	fi
+}
