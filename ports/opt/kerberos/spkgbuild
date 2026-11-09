@@ -6,8 +6,8 @@
 description="MIT Kerberos V5 network authentication implementation"
 name=kerberos
 version=1.22.2
-release=3
-source="https://kerberos.org/dist/krb5/${version%.*}/krb5-$version.tar.gz https://www.linuxfromscratch.org/patches/blfs/svn/mitkrb-$version-upstream_fix-1.patch https://www.linuxfromscratch.org/patches/blfs/svn/mitkrb-$version-security_fix-1.patch https://www.linuxfromscratch.org/patches/blfs/svn/mitkrb-$version-openssl_4_fixes-1.patch"
+release=4
+source="https://kerberos.org/dist/krb5/${version%.*}/krb5-$version.tar.gz https://www.linuxfromscratch.org/patches/blfs/13.1/mitkrb-$version-upstream_fix-1.patch https://www.linuxfromscratch.org/patches/blfs/13.1/mitkrb-$version-security_fix-1.patch https://www.linuxfromscratch.org/patches/blfs/13.1/mitkrb-$version-openssl_4_fixes-1.patch krb5-$version-remove-openssl-1.0.patch"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
@@ -15,9 +15,15 @@ build() {
 	[ -n "$_bfs_src" ] || return 1
 	cd "$_bfs_src" || return 1
 
-	# Apply patch sources; pkgbuild does this automatically.
-	for _bfs_patch in "$SRC"/*.patch "$SRC"/*.diff; do
-		[ -f "$_bfs_patch" ] || continue
+	# Apply patches in dependency order. The upstream OpenSSL-1.0 removal
+	# backport must follow the BLFS OpenSSL-4 compatibility fixes.
+	for _bfs_patch in \
+		"$SRC/mitkrb-$version-upstream_fix-1.patch" \
+		"$SRC/mitkrb-$version-security_fix-1.patch" \
+		"$SRC/mitkrb-$version-openssl_4_fixes-1.patch" \
+		"$SRC/krb5-$version-remove-openssl-1.0.patch"
+	do
+		[ -f "$_bfs_patch" ] || return 1
 		patch -t "${patch_opt:--p1}" -i "$_bfs_patch" || return 1
 	done
     cd src || return 1
