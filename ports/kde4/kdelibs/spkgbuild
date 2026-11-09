@@ -5,8 +5,8 @@
 description="KDE 4 core libraries"
 name=kdelibs
 version=4.14.3
-release=7
-source="https://download.kde.org/Attic/4.14.3/src/kdelibs-$version.tar.xz kdelibs-4.14.3-cmake4.patch.manual"
+release=8
+source="https://download.kde.org/Attic/4.14.3/src/kdelibs-$version.tar.xz kdelibs-4.14.3-cmake4.patch.manual kdelibs-4.14.3-cmake4-interface-libs.patch.manual"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
@@ -18,12 +18,13 @@ build() {
 	# behavior, treats a bare TEST argument as the if() operator, and kdeui has
 	# a duplicate else() branch.  Use target-file generator expressions, quote
 	# comparisons, drop the duplicate branch, and use the 3.5 policy baseline.
-	# CMake 4 enables CMP0022, so mark the library export as carrying the
-	# old-style LINK_INTERFACE_LIBRARIES properties used by KDE4.
+	# CMake 4 enables CMP0022, so use INTERFACE_LINK_LIBRARIES for KDE4's
+	# target link interfaces instead of the removed old-style properties.
 	#
 	# Qt 4 is built without QtWebKit, so omit the optional kdewebkit module
 	# and its Plasma and designer-plugin consumers.
 	patch -p1 -i "$SRC/kdelibs-4.14.3-cmake4.patch.manual" || return 1
+	patch -p1 -i "$SRC/kdelibs-4.14.3-cmake4-interface-libs.patch.manual" || return 1
 
 	export CMAKE_PREFIX_PATH="/opt/qt4:/usr"
 	export PATH="/opt/qt4/bin:$PATH"

@@ -1,0 +1,154 @@
+--- a/cmake/modules/FindKDE4Internal.cmake
++++ b/cmake/modules/FindKDE4Internal.cmake
+@@ -237 +237 @@
+-#    includes automoc-handling and sets LINK_INTERFACE_LIBRARIES target property empty.
++#    includes automoc-handling and sets INTERFACE_LINK_LIBRARIES target property empty.
+--- a/cmake/modules/KDE4Macros.cmake
++++ b/cmake/modules/KDE4Macros.cmake
+@@ -1108 +1108 @@
+-      set_target_properties(${_target_NAME} PROPERTIES LINK_INTERFACE_LIBRARIES "" )
++      set_target_properties(${_target_NAME} PROPERTIES INTERFACE_LINK_LIBRARIES "" )
+@@ -1392 +1392 @@
+-   message(FATAL_ERROR "_KDE4_TARGET_LINK_INTERFACE_LIBRARIES() doesn't exist anymore. Set the LINK_INTERFACE_LIBRARIES target property instead. See kdelibs/kdecore/CMakeLists.txt for an example.")
++   message(FATAL_ERROR "_KDE4_TARGET_LINK_INTERFACE_LIBRARIES() doesn't exist anymore. Set the INTERFACE_LINK_LIBRARIES target property instead. See kdelibs/kdecore/CMakeLists.txt for an example.")
+@@ -1396 +1396 @@
+-   message(FATAL_ERROR "KDE4_TARGET_LINK_INTERFACE_LIBRARIES() doesn't exist anymore. Set the LINK_INTERFACE_LIBRARIES target property instead. See kdelibs/kdecore/CMakeLists.txt for an example.")
++   message(FATAL_ERROR "KDE4_TARGET_LINK_INTERFACE_LIBRARIES() doesn't exist anymore. Set the INTERFACE_LINK_LIBRARIES target property instead. See kdelibs/kdecore/CMakeLists.txt for an example.")
+--- a/dnssd/CMakeLists.txt
++++ b/dnssd/CMakeLists.txt
+@@ -83 +83 @@
+-target_link_libraries(kdnssd  LINK_INTERFACE_LIBRARIES kdecore ${QT_QTCORE_LIBRARY} )
++target_link_libraries(kdnssd  INTERFACE kdecore ${QT_QTCORE_LIBRARY} )
+--- a/interfaces/kimproxy/library/CMakeLists.txt
++++ b/interfaces/kimproxy/library/CMakeLists.txt
+@@ -20 +20 @@
+-target_link_libraries(kimproxy  LINK_INTERFACE_LIBRARIES ${QT_QTCORE_LIBRARY} )
++target_link_libraries(kimproxy  INTERFACE ${QT_QTCORE_LIBRARY} )
+--- a/interfaces/kmediaplayer/CMakeLists.txt
++++ b/interfaces/kmediaplayer/CMakeLists.txt
+@@ -18 +18 @@
+-target_link_libraries(kmediaplayer  LINK_INTERFACE_LIBRARIES ${KDE4_KPARTS_LIBS} ${QT_QTGUI_LIBRARY} )
++target_link_libraries(kmediaplayer  INTERFACE ${KDE4_KPARTS_LIBS} ${QT_QTGUI_LIBRARY} )
+--- a/interfaces/ktexteditor/CMakeLists.txt
++++ b/interfaces/ktexteditor/CMakeLists.txt
+@@ -37 +37 @@
+-target_link_libraries(ktexteditor  LINK_INTERFACE_LIBRARIES ${KDE4_KPARTS_LIBS} )
++target_link_libraries(ktexteditor  INTERFACE ${KDE4_KPARTS_LIBS} )
+--- a/kde3support/CMakeLists.txt
++++ b/kde3support/CMakeLists.txt
+@@ -87 +87 @@
+-target_link_libraries(kde3support  LINK_INTERFACE_LIBRARIES kio kdeui kdecore ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QT3SUPPORT_LIBRARY} )
++target_link_libraries(kde3support  INTERFACE kio kdeui kdecore ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QT3SUPPORT_LIBRARY} )
+--- a/kde3support/kunittest/CMakeLists.txt
++++ b/kde3support/kunittest/CMakeLists.txt
+@@ -12 +12 @@
+-target_link_libraries(kunittest LINK_INTERFACE_LIBRARIES kdecore ${QT_QTCORE_LIBRARY} )
++target_link_libraries(kunittest INTERFACE kdecore ${QT_QTCORE_LIBRARY} )
+--- a/kdecore/CMakeLists.txt
++++ b/kdecore/CMakeLists.txt
+@@ -450 +450 @@
+-target_link_libraries(kdecore LINK_INTERFACE_LIBRARIES ${kdecore_LINK_INTERFACE_LIBRARIES} )
++target_link_libraries(kdecore INTERFACE ${kdecore_LINK_INTERFACE_LIBRARIES} )
+--- a/kdesu/CMakeLists.txt
++++ b/kdesu/CMakeLists.txt
+@@ -30 +30 @@
+-target_link_libraries(kdesu LINK_INTERFACE_LIBRARIES ${QT_QTCORE_LIBRARY} )
++target_link_libraries(kdesu INTERFACE ${QT_QTCORE_LIBRARY} )
+--- a/kdeui/CMakeLists.txt
++++ b/kdeui/CMakeLists.txt
+@@ -460 +460 @@
+-target_link_libraries(kdeui LINK_INTERFACE_LIBRARIES kdecore ${QT_QTGUI_LIBRARY})
++target_link_libraries(kdeui INTERFACE kdecore ${QT_QTGUI_LIBRARY})
+@@ -463 +463 @@
+-target_link_libraries(kdeui LINK_INTERFACE_LIBRARIES ${QT_QTSVG_LIBRARY})
++target_link_libraries(kdeui INTERFACE ${QT_QTSVG_LIBRARY})
+--- a/kdewebkit/CMakeLists.txt
++++ b/kdewebkit/CMakeLists.txt
+@@ -28 +28 @@
+-target_link_libraries(kdewebkit LINK_INTERFACE_LIBRARIES kparts kio kdecore ${QT_QTWEBKIT_LIBRARY} ${QT_QTNETWORK_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTCORE_LIBRARY})
++target_link_libraries(kdewebkit INTERFACE kparts kio kdecore ${QT_QTWEBKIT_LIBRARY} ${QT_QTNETWORK_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTCORE_LIBRARY})
+--- a/kfile/CMakeLists.txt
++++ b/kfile/CMakeLists.txt
+@@ -53 +53 @@
+-target_link_libraries(kfile LINK_INTERFACE_LIBRARIES kio kdeui kdecore ${QT_QTGUI_LIBRARY} )
++target_link_libraries(kfile INTERFACE kio kdeui kdecore ${QT_QTGUI_LIBRARY} )
+--- a/khtml/CMakeLists.txt
++++ b/khtml/CMakeLists.txt
+@@ -556 +556 @@
+-target_link_libraries(khtml LINK_INTERFACE_LIBRARIES ${KDE4_PHONON_LIBRARY} kparts kjs kio kdeui kdecore ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} )
++target_link_libraries(khtml INTERFACE ${KDE4_PHONON_LIBRARY} kparts kjs kio kdeui kdecore ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} )
+--- a/kio/CMakeLists.txt
++++ b/kio/CMakeLists.txt
+@@ -335 +335 @@
+-target_link_libraries(kio LINK_INTERFACE_LIBRARIES kdeui kdecore ${QT_QTNETWORK_LIBRARY} ${QT_QTXML_LIBRARY} ${QT_QTGUI_LIBRARY} )
++target_link_libraries(kio INTERFACE kdeui kdecore ${QT_QTNETWORK_LIBRARY} ${QT_QTXML_LIBRARY} ${QT_QTGUI_LIBRARY} )
+--- a/knewstuff/knewstuff2/CMakeLists.txt
++++ b/knewstuff/knewstuff2/CMakeLists.txt
+@@ -57 +57 @@
+-target_link_libraries(knewstuff2 LINK_INTERFACE_LIBRARIES kdeui kdecore ${QT_QTGUI_LIBRARY} )
++target_link_libraries(knewstuff2 INTERFACE kdeui kdecore ${QT_QTGUI_LIBRARY} )
+--- a/knewstuff/knewstuff3/CMakeLists.txt
++++ b/knewstuff/knewstuff3/CMakeLists.txt
+@@ -51 +51 @@
+-target_link_libraries(knewstuff3 LINK_INTERFACE_LIBRARIES kdeui kdecore ${QT_QTGUI_LIBRARY})
++target_link_libraries(knewstuff3 INTERFACE kdeui kdecore ${QT_QTGUI_LIBRARY})
+--- a/knotify/config/CMakeLists.txt
++++ b/knotify/config/CMakeLists.txt
+@@ -22 +22 @@
+-target_link_libraries(knotifyconfig  LINK_INTERFACE_LIBRARIES kdecore ${QT_QTGUI_LIBRARY})
++target_link_libraries(knotifyconfig  INTERFACE kdecore ${QT_QTGUI_LIBRARY})
+--- a/kparts/CMakeLists.txt
++++ b/kparts/CMakeLists.txt
+@@ -39 +39 @@
+-target_link_libraries(kparts  LINK_INTERFACE_LIBRARIES kio kdeui kdecore ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} )
++target_link_libraries(kparts  INTERFACE kio kdeui kdecore ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} )
+@@ -42 +42 @@
+-  target_link_libraries(kparts  LINK_INTERFACE_LIBRARIES nepomuk nepomukutils )
++  target_link_libraries(kparts  INTERFACE nepomuk nepomukutils )
+--- a/kpty/CMakeLists.txt
++++ b/kpty/CMakeLists.txt
+@@ -15 +15 @@
+-target_link_libraries(kpty LINK_INTERFACE_LIBRARIES kdecore ${QT_QTCORE_LIBRARY} )
++target_link_libraries(kpty INTERFACE kdecore ${QT_QTCORE_LIBRARY} )
+--- a/kross/core/CMakeLists.txt
++++ b/kross/core/CMakeLists.txt
+@@ -15 +15 @@
+-target_link_libraries(krosscore LINK_INTERFACE_LIBRARIES kdecore ${QT_QTSCRIPT_LIBRARY} ${QT_QTXML_LIBRARY} )
++target_link_libraries(krosscore INTERFACE kdecore ${QT_QTSCRIPT_LIBRARY} ${QT_QTXML_LIBRARY} )
+--- a/kutils/CMakeLists.txt
++++ b/kutils/CMakeLists.txt
+@@ -15 +15 @@
+-target_link_libraries(kemoticons LINK_INTERFACE_LIBRARIES kdecore kdeui ${QT_QTGUI_LIBRARY})
++target_link_libraries(kemoticons INTERFACE kdecore kdeui ${QT_QTGUI_LIBRARY})
+@@ -60 +60 @@
+-target_link_libraries(kidletime LINK_INTERFACE_LIBRARIES kdecore kdeui ${QT_QTGUI_LIBRARY})
++target_link_libraries(kidletime INTERFACE kdecore kdeui ${QT_QTGUI_LIBRARY})
+@@ -102 +102 @@
+-target_link_libraries(kcmutils LINK_INTERFACE_LIBRARIES kdecore kdeui ${QT_QTGUI_LIBRARY})
++target_link_libraries(kcmutils INTERFACE kdecore kdeui ${QT_QTGUI_LIBRARY})
+@@ -135 +135 @@
+-target_link_libraries(kprintutils LINK_INTERFACE_LIBRARIES kdecore kdeui ${QT_QTGUI_LIBRARY})
++target_link_libraries(kprintutils INTERFACE kdecore kdeui ${QT_QTGUI_LIBRARY})
+@@ -158 +158 @@
+-target_link_libraries(kutils LINK_INTERFACE_LIBRARIES kdecore kdeui ${QT_QTGUI_LIBRARY} kemoticons kidletime kcmutils kprintutils)
++target_link_libraries(kutils INTERFACE kdecore kdeui ${QT_QTGUI_LIBRARY} kemoticons kidletime kcmutils kprintutils)
+--- a/nepomuk/CMakeLists.txt
++++ b/nepomuk/CMakeLists.txt
+@@ -145 +145 @@
+-  LINK_INTERFACE_LIBRARIES
++  INTERFACE
+--- a/plasma/CMakeLists.txt
++++ b/plasma/CMakeLists.txt
+@@ -301 +301 @@
+-target_link_libraries(plasma LINK_INTERFACE_LIBRARIES kdeui kdecore ${QT_QTGUI_LIBRARY})
++target_link_libraries(plasma INTERFACE kdeui kdecore ${QT_QTGUI_LIBRARY})
+--- a/solid/solid/CMakeLists.txt
++++ b/solid/solid/CMakeLists.txt
+@@ -456 +456 @@
+-target_link_libraries(solid LINK_INTERFACE_LIBRARIES ${QT_CORE_LIBRARY} )
++target_link_libraries(solid INTERFACE ${QT_CORE_LIBRARY} )
+--- a/threadweaver/Weaver/CMakeLists.txt
++++ b/threadweaver/Weaver/CMakeLists.txt
+@@ -35 +35 @@
+-target_link_libraries(threadweaver LINK_INTERFACE_LIBRARIES ${QT_QTCORE_LIBRARY} )
++target_link_libraries(threadweaver INTERFACE ${QT_QTCORE_LIBRARY} )
