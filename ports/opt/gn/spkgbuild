@@ -5,16 +5,14 @@
 description="GN meta-build system used by Chromium"
 name=gn
 version=0.20260907
-release=1
+release=2
 # Custom build required: GN bootstraps its own Ninja graph with build/gen.py;
 # this is not a normal BFSOS configure/CMake/Meson/Make project.
+# The googlesource archive extracts flat, with no single source directory.
 source="https://gn.googlesource.com/gn/+archive/5df47e556efde72cc576d8a3af23b58b614345bd.tar.gz"
 
 build() {
-	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
-	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
-	[ -n "$_bfs_src" ] || return 1
-	cd "$_bfs_src" || return 1
+    [ -f build/gen.py ] || return 1
     python3 build/gen.py --allow-warnings || return 1
     ninja -C out gn || return 1
     install -Dm755 out/gn "$PKG/usr/bin/gn" || return 1

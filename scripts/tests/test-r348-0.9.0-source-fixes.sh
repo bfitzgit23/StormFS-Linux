@@ -273,4 +273,11 @@ grep -qx 'KEEP_DOC=yes' ports/opt/gtk-doc/spkgbuild || \
     fail 'gtk-doc Python runtime is still stripped by the docs cleanup'
 pass 'gtk-doc preserves its Python runtime under share/gtk-doc'
 
+grep -qx 'release=2' ports/opt/gn/spkgbuild || fail 'GN flat-archive release missing'
+grep -Fq 'python3 build/gen.py --allow-warnings' ports/opt/gn/spkgbuild || \
+    fail 'GN does not bootstrap from the archive root'
+! grep -Fq '_bfs_src=$(find' ports/opt/gn/spkgbuild || \
+    fail 'GN still descends into the first archive directory'
+pass 'GN builds from its flat googlesource archive root'
+
 echo 'r348 0.9.0 source regression checks passed.' 
