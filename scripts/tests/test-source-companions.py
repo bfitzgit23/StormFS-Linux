@@ -22,6 +22,9 @@ for pkgfile in sorted((ROOT / "ports").glob("*/*/spkgbuild")):
     except Exception as exc:
         errors.append((pkgfile.relative_to(ROOT), str(exc)))
         continue
+    if any(src == chr(92) for src in meta.sources):
+        errors.append((pkgfile.relative_to(ROOT), "source list contains a bare backslash", ""))
+        continue
     for src in meta.sources:
         if mod.source_url(src):
             remote += 1
