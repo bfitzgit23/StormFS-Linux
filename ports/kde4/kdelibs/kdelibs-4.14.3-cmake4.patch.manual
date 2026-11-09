@@ -286,3 +286,12 @@
 -
  # Only do something if it hasn't been found yet
  if(NOT KDE4_FOUND)
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -392,5 +392,5 @@
+         CODE "set(EXPORT_INSTALL_DIR \"${DATA_INSTALL_DIR}/cmake/modules\")"
+         SCRIPT "${CMAKE_SOURCE_DIR}/cmake/modules/check_installed_exports_file.cmake" )
+-install( EXPORT kdelibsLibraryTargets DESTINATION ${DATA_INSTALL_DIR}/cmake/modules NAMESPACE ${KDE4_TARGET_PREFIX} FILE KDELibs4LibraryTargets.cmake )
++install( EXPORT kdelibsLibraryTargets DESTINATION ${DATA_INSTALL_DIR}/cmake/modules NAMESPACE ${KDE4_TARGET_PREFIX} FILE KDELibs4LibraryTargets.cmake EXPORT_LINK_INTERFACE_LIBRARIES )
+ install( EXPORT kdelibsToolsTargets   DESTINATION ${DATA_INSTALL_DIR}/cmake/modules NAMESPACE ${KDE4_TARGET_PREFIX} FILE KDELibs4ToolsTargets.cmake )
+ # the following will be the correct locations once cmake has the improved FIND_PACKAGE()

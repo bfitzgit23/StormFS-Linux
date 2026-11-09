@@ -5,14 +5,19 @@
 description="Automoc4 CMake helper for KDE 4"
 name=automoc4
 version=0.9.88
-release=1
-source="https://download.kde.org/Attic/automoc4/$version/automoc4-$version.tar.bz2"
+release=2
+source="https://download.kde.org/Attic/automoc4/$version/automoc4-$version.tar.bz2 automoc4-0.9.88-cmake4.patch.manual"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
 	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
 	[ -n "$_bfs_src" ] || return 1
 	cd "$_bfs_src" || return 1
+
+	# CMake 4 rejects add_dependencies() on the missing automoc target
+	# for sources that produce no moc work.  Only add the dependency when
+	# the target was actually created.
+	patch -p1 -i "$SRC/automoc4-0.9.88-cmake4.patch.manual" || return 1
 
 	export CMAKE_PREFIX_PATH="/opt/qt4:/usr"
 	export PATH="/opt/qt4/bin:$PATH"

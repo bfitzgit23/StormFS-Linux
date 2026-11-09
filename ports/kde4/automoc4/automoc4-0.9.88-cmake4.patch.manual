@@ -1,0 +1,33 @@
+--- a/Automoc4Config.cmake
++++ b/Automoc4Config.cmake
+@@ -217,7 +217,9 @@
+
+    _add_automoc4_target("${_target_NAME}_automoc" _SRCS)
+    add_executable(${_target_NAME} ${_add_executable_param} ${_SRCS})
+-   add_dependencies(${_target_NAME} "${_target_NAME}_automoc")
++   if(TARGET "${_target_NAME}_automoc")
++      add_dependencies(${_target_NAME} "${_target_NAME}_automoc")
++   endif()
+
+ endmacro(AUTOMOC4_ADD_EXECUTABLE)
+
+@@ -235,7 +237,9 @@
+
+    _add_automoc4_target("${_target_NAME}_automoc" _SRCS)
+    add_library(${_target_NAME} ${_add_executable_param} ${_SRCS})
+-   add_dependencies(${_target_NAME} "${_target_NAME}_automoc")
++   if(TARGET "${_target_NAME}_automoc")
++      add_dependencies(${_target_NAME} "${_target_NAME}_automoc")
++   endif()
+ endmacro(AUTOMOC4_ADD_LIBRARY)
+
+
+@@ -245,5 +249,7 @@
+
+
+ macro(_AUTOMOC4_KDE4_POST_TARGET_HANDLING _target)
+-   add_dependencies(${_target} "${_target}_automoc")
++   if(TARGET "${_target}_automoc")
++      add_dependencies(${_target} "${_target}_automoc")
++   endif()
+ endmacro(_AUTOMOC4_KDE4_POST_TARGET_HANDLING)
