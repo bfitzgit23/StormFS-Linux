@@ -5,8 +5,7 @@
 description="Vulkan ICD loader"
 name=vulkan-loader
 version=1.4.357.0
-release=5
-renames=(vulkan-loader-${version}.tar.gz)
+release=6
 source="https://github.com/KhronosGroup/Vulkan-Loader/archive/refs/tags/vulkan-sdk-${version}.tar.gz"
 
 build() {
