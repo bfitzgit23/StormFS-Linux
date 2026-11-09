@@ -73,3 +73,27 @@
          }
  
          //check if someone did the nasty trick of applets in applets, in this case we always want to be collapsed
+--- a/plasma/private/packages.cpp
++++ b/plasma/private/packages.cpp
+@@ -34,7 +34,9 @@
+ #include <knewstuff3/downloaddialog.h>
+ #endif
+ 
++#ifdef HAVE_QTDECLARATIVE
+ #include "kdeclarative.h"
++#endif
+ 
+ #include "private/wallpaper_p.h"
+ 
+@@ -44,7 +46,10 @@
+ PlasmoidPackage::PlasmoidPackage(QObject *parent)
+     : Plasma::PackageStructure(parent, QString("Plasmoid"))
+ {
+-    QStringList platform = KDeclarative::runtimePlatform();
++    QStringList platform;
++#ifdef HAVE_QTDECLARATIVE
++    platform = KDeclarative::runtimePlatform();
++#endif
+     if (!platform.isEmpty()) {
+         QMutableStringListIterator it(platform);
+         while (it.hasNext()) {
