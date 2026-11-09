@@ -5,7 +5,7 @@
 description="Compiz Reloaded compositing window manager (0.8.x series)"
 name=compiz
 version=0.8.18
-release=2
+release=3
 source="https://gitlab.com/compiz/compiz-core/-/archive/v$version/compiz-core-v$version.tar.bz2 https://gitlab.com/compiz/compiz-core/-/commit/c0c605dd.patch https://gitlab.com/compiz/compiz-core/-/commit/9f105a8b.patch https://gitlab.com/compiz/compiz-core/-/commit/ea7b3731.patch https://gitlab.com/compiz/compiz-core/-/commit/d4213fa4.patch"
 
 build() {
@@ -14,8 +14,13 @@ build() {
 	[ -n "$_bfs_src" ] || return 1
 	cd "$_bfs_src" || return 1
 
-	# Apply patch sources; pkgbuild does this automatically.
-	for _bfs_patch in "$SRC"/*.patch "$SRC"/*.diff; do
+	# 9f105a8b is a follow-up to c0c605dd; apply in dependency order
+	# because the alphabetic glob would sort 9f105a8b first.
+	for _bfs_patch in \
+		"$SRC/c0c605dd.patch" \
+		"$SRC/9f105a8b.patch" \
+		"$SRC/ea7b3731.patch" \
+		"$SRC/d4213fa4.patch"; do
 		[ -f "$_bfs_patch" ] || continue
 		patch -t "${patch_opt:--p1}" -i "$_bfs_patch" || return 1
 	done

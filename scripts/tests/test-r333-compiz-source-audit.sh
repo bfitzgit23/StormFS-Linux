@@ -28,6 +28,12 @@ rm -f /tmp/bfs-r333-compiz-local.$$
 grep -Fq '/usr/share/bfsos/' "$ROOT/ports/compiz/compiz-meta/spkgbuild" || fail "compiz-meta payload marker is not in /usr/share/bfsos"
 ! grep -Fq '/usr/share/doc' "$ROOT/ports/compiz/compiz-meta/spkgbuild" || fail "compiz-meta still uses stripped /usr/share/doc payload"
 
+compiz_recipe="$ROOT/ports/compiz/compiz/spkgbuild"
+line_c0=$(grep -nF '"$SRC/c0c605dd.patch"' "$compiz_recipe" | cut -d: -f1)
+line_9f=$(grep -nF '"$SRC/9f105a8b.patch"' "$compiz_recipe" | cut -d: -f1)
+[ -n "$line_c0" ] && [ -n "$line_9f" ] || fail "Compiz patch order is not explicit"
+[ "$line_c0" -lt "$line_9f" ] || fail "Compiz applies 9f105a8b before its c0c605dd prerequisite"
+
 echo "PASS: r333 Compiz source/dependency audit"
 
 # r355 follow-up: PyQt5.sip is a separate runtime extension package.
