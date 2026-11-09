@@ -1,0 +1,137 @@
+--- a/libs/plasmagenericshell/widgetsexplorer/widgetexplorer.cpp
++++ b/libs/plasmagenericshell/widgetsexplorer/widgetexplorer.cpp
+@@ -20,9 +20,11 @@
+ 
+ #include "widgetexplorer.h"
+ 
++#ifdef HAVE_QTDECLARATIVE
+ #include <QDeclarativeContext>
+ #include <QDeclarativeEngine>
+ #include <QDeclarativeComponent>
++#endif
+ 
+ #include <kaction.h>
+ #include <kconfig.h>
+@@ -45,7 +47,9 @@
+ #include <plasma/package.h>
+ #include <plasma/widgets/toolbutton.h>
+ #include <plasma/widgets/lineedit.h>
++#ifdef HAVE_QTDECLARATIVE
+ #include <Plasma/DeclarativeWidget>
++#endif
+ 
+ #include "kcategorizeditemsviewmodels_p.h"
+ #include "plasmaappletitemmodel_p.h"
+@@ -117,7 +121,9 @@
+     KCategorizedItemsViewModels::DefaultFilterModel filterModel;
+     DefaultItemFilterProxyModel filterItemModel;
+ 
++#ifdef HAVE_QTDECLARATIVE
+     Plasma::DeclarativeWidget *declarativeWidget;
++#endif
+ 
+     QGraphicsLinearLayout *mainLayout;
+ };
+@@ -171,6 +177,7 @@
+     Plasma::PackageStructure::Ptr structure = Plasma::PackageStructure::load("Plasma/Generic");
+     package = new Plasma::Package(QString(), "org.kde.desktop.widgetexplorer", structure);
+ 
++#ifdef HAVE_QTDECLARATIVE
+     declarativeWidget = new Plasma::DeclarativeWidget(q);
+     declarativeWidget->setInitializationDelayed(true);
+     declarativeWidget->setQmlPath(package->filePath("mainscript"));
+@@ -186,20 +193,24 @@
+             ctxt->setContextProperty("widgetExplorer", q);
+         }
+     }
++#endif
+ 
+     q->setLayout(mainLayout);
+ }
+ 
+ void WidgetExplorerPrivate::finished()
+ {
++#ifdef HAVE_QTDECLARATIVE
+     if (declarativeWidget->mainComponent()->isError()) {
+         return;
+     }
++#endif
+ 
+     emit q->widgetsMenuActionsChanged();
+     emit q->extraActionsChanged();
+ 
+     return;
++#ifdef HAVE_QTDECLARATIVE
+     QObject::connect(declarativeWidget->rootObject(), SIGNAL(addAppletRequested(const QString &)),
+                      q, SLOT(addApplet(const QString &)));
+     QObject::connect(declarativeWidget->rootObject(), SIGNAL(closeRequested()),
+@@ -211,6 +222,7 @@
+         actionList << action;
+     }
+     declarativeWidget->rootObject()->setProperty("extraActions", QVariant::fromValue(actionList));
++#endif
+ }
+ 
+ void WidgetExplorerPrivate::setLocation(const Plasma::Location loc)
+@@ -473,9 +485,11 @@
+         case QEvent::ActionAdded:
+         case QEvent::ActionChanged:
+         case QEvent::ActionRemoved:
++#ifdef HAVE_QTDECLARATIVE
+             if (d->declarativeWidget->rootObject()) {
+                 emit widgetsMenuActionsChanged();
+             }
++#endif
+             break;
+         default:
+             break;
+--- a/plasma/desktop/shell/activitymanager/activitymanager.cpp
++++ b/plasma/desktop/shell/activitymanager/activitymanager.cpp
+@@ -22,9 +22,11 @@
+ #include "activitymanager.h"
+ 
+ #include <QGraphicsLinearLayout>
++#ifdef HAVE_QTDECLARATIVE
+ #include <QDeclarativeContext>
+ #include <QDeclarativeEngine>
+ #include <QDeclarativeComponent>
++#endif
+ 
+ #include <KAuthorized>
+ #include <KStandardDirs>
+@@ -36,7 +38,9 @@
+ #include <plasma/containment.h>
+ #include <plasma/corona.h>
+ #include <plasma/package.h>
++#ifdef HAVE_QTDECLARATIVE
+ #include <plasma/widgets/declarativewidget.h>
++#endif
+ 
+ #include "kidenticongenerator.h"
+ #include "plasmaapp.h"
+@@ -62,7 +66,9 @@
+     Plasma::Location location;
+     ActivityManager *q;
+     Plasma::Containment *containment;
++#ifdef HAVE_QTDECLARATIVE
+     Plasma::DeclarativeWidget *declarativeWidget;
++#endif
+     Plasma::Package *package;
+ 
+     QGraphicsLinearLayout *mainLayout;
+@@ -103,6 +109,7 @@
+     package = new Plasma::Package(path, pluginName, structure);
+     KGlobal::locale()->insertCatalog("plasma_package_" + pluginName);
+ 
++#ifdef HAVE_QTDECLARATIVE
+     declarativeWidget = new Plasma::DeclarativeWidget(q);
+     declarativeWidget->setInitializationDelayed(true);
+     declarativeWidget->setQmlPath(package->filePath("mainscript"));
+@@ -115,6 +122,7 @@
+             ctxt->setContextProperty("activityManager", q);
+         }
+     }
++#endif
+ 
+     q->setLayout(mainLayout);
+ }
