@@ -93,6 +93,9 @@ grep -Fq 'bfs-logind-stub.h' ports/opt/accountsservice/spkgbuild || \
     fail 'AccountsService logind stubs are not packaged'
 grep -Fq 'logind_dep = declare_dependency()' ports/opt/accountsservice/openrc-no-logind.patch || \
     fail 'AccountsService still requires libsystemd'
+grep -qx 'release=2' ports/gnome/appstream/spkgbuild || fail 'AppStream OpenRC-only release missing'
+grep -Fq -- '-Dsystemd=false' ports/gnome/appstream/spkgbuild || \
+    fail 'AppStream still enables libsystemd'
 grep -qx 'release=3' ports/opt/upower/spkgbuild || fail 'UPower release missing'
 grep -Fq 'systemdsystemunitdir=no' ports/opt/upower/spkgbuild || fail 'UPower still installs systemd units'
 grep -qx 'release=3' ports/opt/udisks/spkgbuild || fail 'UDisks release missing'

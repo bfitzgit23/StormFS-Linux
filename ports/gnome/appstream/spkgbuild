@@ -4,7 +4,7 @@
 description="appstream package"
 name=appstream
 version=1.2.0
-release=1
+release=2
 source="https://www.freedesktop.org/software/${name}/releases/AppStream-${version}.tar.xz"
 
 build() {
@@ -22,6 +22,7 @@ build() {
         --prefix=/usr \
         --buildtype=release \
         -Dapidocs=false \
+        -Dsystemd=false \
         -Dstemming=false \
         || return 1
 
