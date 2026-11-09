@@ -369,6 +369,19 @@ if grep -qx 'python3-hatch-vcs' ports/core/python3-chardet/depends; then
 fi
 pass 'chardet builds from its shipped version without the hatch-vcs hook'
 
+grep -qx 'version=3.4.0' ports/opt/xapp/spkgbuild || \
+    fail 'xapp does not pin the current stable release'
+if grep -Fq 'samu' ports/opt/xapp/spkgbuild; then
+    fail 'xapp still invokes samu instead of ninja'
+fi
+grep -Fq -- '-Dstatus-notifier=false' ports/opt/xapp/spkgbuild || \
+    fail 'xapp still requires the missing dbusmenu-gtk3'
+grep -Fq -- '-Dkbd-layout-controller=disabled' ports/opt/xapp/spkgbuild || \
+    fail 'xapp still probes the missing libgnomekbd'
+grep -qx 'xapp' ports/opt/mintstick/depends || \
+    fail 'mintstick no longer depends on xapp'
+pass 'xapp builds with meson and ninja without the missing optional deps'
+
 grep -qx 'version=26.2.7' ports/opt/libreoffice-bin/spkgbuild || \
     fail 'libreoffice-bin does not pin a published release'
 grep -Fq 'deb/x86_64/LibreOffice_${version}_Linux_x86-64_deb.tar.gz' ports/opt/libreoffice-bin/spkgbuild || \

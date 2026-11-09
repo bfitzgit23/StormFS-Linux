@@ -1,0 +1,25 @@
+# description	: Common library for X-Apps project
+# homepage	: https://github.com/linuxmint/xapp
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+# optional	: gtk-layer-shell
+
+description="Common library for X-Apps project"
+name=xapp
+version=3.4.0
+release=1
+# The status-notifier watcher needs dbusmenu-gtk3, which this tree does not
+# carry, and the keyboard layout controller needs libgnomekbd.  Neither is
+# used by the XApp widgets mintstick relies on, so keep both out instead of
+# guessing dependencies for optional components.
+build_opt="-Dstatus-notifier=false
+-Dkbd-layout-controller=disabled"
+source="https://github.com/linuxmint/xapp/archive/refs/tags/$version/$name-$version.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
+	bfs_autobuild
+}

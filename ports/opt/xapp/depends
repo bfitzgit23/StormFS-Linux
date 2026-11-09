@@ -1,0 +1,6 @@
+dbus
+gobject-introspection
+gtk3
+libx11
+python3-gobject
+vala
