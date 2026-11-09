@@ -1,0 +1,35 @@
+# description	: Remote desktop software (prebuilt binary)
+# homepage	: https://github.com/rustdesk/rustdesk
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+description="Remote desktop software (prebuilt binary)"
+name=rustdesk
+version=1.5.1
+release=1
+nostrip="usr/share/rustdesk/rustdesk"
+source="$name-$version.tar.zst::https://github.com/rustdesk/rustdesk/releases/download/$version/rustdesk-$version-0-x86_64.pkg.tar.zst"
+
+build() {
+	[ -x "$SRC/usr/share/rustdesk/rustdesk" ] || {
+		echo "rustdesk: prebuilt executable is missing" >&2
+		return 1
+	}
+
+	install -d "$PKG/usr/share" "$PKG/usr/bin" || return 1
+	cp -a "$SRC/usr/share/rustdesk" "$PKG/usr/share/" || return 1
+	if [ -d "$SRC/usr/share/icons" ]; then
+		cp -a "$SRC/usr/share/icons" "$PKG/usr/share/" || return 1
+	fi
+
+	ln -s /usr/share/rustdesk/rustdesk "$PKG/usr/bin/rustdesk" || return 1
+
+	install -Dm644 "$SRC/usr/share/rustdesk/files/rustdesk.desktop" \
+		"$PKG/usr/share/applications/rustdesk.desktop" || return 1
+	install -Dm644 "$SRC/usr/share/rustdesk/files/rustdesk-link.desktop" \
+		"$PKG/usr/share/applications/rustdesk-link.desktop" || return 1
+
+	rm -rf "$PKG/usr/share/rustdesk/files" || return 1
+
+	install -d "$PKG/etc/revdep.d" || return 1
+	printf '%s\n' '/usr/share/rustdesk' > "$PKG/etc/revdep.d/rustdesk" || return 1
+}

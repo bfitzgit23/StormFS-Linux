@@ -1,0 +1,12 @@
+gtk2
+glib
+dbus
+dbus-glib
+gnutls
+libidn
+libxml2
+libx11
+libsm
+libice
+libxscrnsaver
+startup-notification

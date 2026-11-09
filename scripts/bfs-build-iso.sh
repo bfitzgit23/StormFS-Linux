@@ -75,6 +75,11 @@ iso_packages=(
     xfce4-meta lightdm lightdm-gtk-greeter calamares xinit xauth
     # Live applications
     chromium-bin firefox-bin fastfetch mousepad libreoffice-bin flameshot galculator vlc gparted mintstick
+    thunderbird-bin pidgin rustdesk engrampa
+    # Thunar integration and archive tools
+    thunar-volman thunar-archive-plugin thunar-media-tags-plugin p7zip unzip unrar
+    # Xfce panel plugins and session utilities
+    xfce4-docklike-plugin xfce4-weather-plugin xfce4-whiskermenu-plugin xfce4-power-manager xfce4-pulseaudio-plugin
     # Desktop themes and shell customisation
     adw-gtk3 tela-icon-theme stormfs-theme oh-my-bash
 )

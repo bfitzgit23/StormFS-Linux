@@ -1,0 +1,24 @@
+# description	: Archive manipulator for MATE
+# homepage	: https://mate-desktop.org
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+description="Archive manipulator for MATE"
+name=engrampa
+version=1.28.2
+release=1
+source="https://pub.mate-desktop.org/releases/${version%.*}/$name-$version.tar.xz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
+
+	# Engrampa's Caja extension is optional. Keep the standalone archive
+	# manager usable on the Xfce ISO without pulling in the MATE file manager.
+	./configure --prefix=/usr --libexecdir=/usr/lib --disable-nls \
+		--disable-caja-actions || return 1
+	make -j"${JOBS:-1}" || return 1
+	make DESTDIR="$PKG" install || return 1
+}

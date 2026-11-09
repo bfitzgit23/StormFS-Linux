@@ -1,0 +1,18 @@
+# description	: Library to create Wayland desktop components using the Layer Shell protocol
+# homepage	: https://github.com/wmww/gtk-layer-shell
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+description="Library to create Wayland desktop components using the Layer Shell protocol"
+name=gtk-layer-shell
+version=0.10.1
+release=1
+source="https://github.com/wmww/gtk-layer-shell/archive/refs/tags/v$version.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
+	bfs_autobuild
+}

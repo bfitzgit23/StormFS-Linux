@@ -1,0 +1,18 @@
+# description	: A modern, docklike, minimalist taskbar for Xfce
+# homepage	: https://docs.xfce.org/panel-plugins/xfce4-docklike-plugin/start
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+description="A modern, docklike, minimalist taskbar for Xfce"
+name=xfce4-docklike-plugin
+version=0.5.1
+release=1
+source="https://archive.xfce.org/src/panel-plugins/$name/${version%.*}/$name-$version.tar.xz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
+	bfs_autobuild
+}

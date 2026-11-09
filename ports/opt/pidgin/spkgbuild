@@ -1,0 +1,28 @@
+# description	: Multi-protocol instant messaging client
+# homepage	: https://www.pidgin.im/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+description="Multi-protocol instant messaging client"
+name=pidgin
+version=2.14.14
+release=1
+source="https://downloads.sourceforge.net/project/pidgin/Pidgin/$version/$name-$version.tar.bz2"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
+
+	./configure --prefix=/usr --sysconfdir=/etc --libexecdir=/usr/lib \
+		--localstatedir=/var --disable-static --disable-nls \
+		--disable-gtkspell --disable-gevolution --disable-gstreamer \
+		--disable-farstream --disable-vv --disable-meanwhile \
+		--disable-avahi --disable-nm --disable-perl --disable-tcl \
+		--disable-tk --disable-consoleui --disable-gestures \
+		--disable-schemas-install --disable-nss --enable-gnutls \
+		--with-system-ssl-certs=/etc/ssl/certs || return 1
+	make -j"${JOBS:-1}" || return 1
+	make DESTDIR="$PKG" install || return 1
+}

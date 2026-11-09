@@ -1,0 +1,38 @@
+# description	: Thunderbird email client (prebuilt binary)
+# homepage	: https://www.thunderbird.net/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+description="Thunderbird email client (prebuilt binary)"
+name=thunderbird-bin
+version=155.0.1
+release=1
+source="https://archive.mozilla.org/pub/thunderbird/releases/$version/linux-x86_64/en-US/thunderbird-$version.tar.xz
+	policies.json
+	thunderbird.desktop"
+
+build() {
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname thunderbird -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	[ -x "$_bfs_src/thunderbird" ] || {
+		echo "thunderbird-bin: staged Thunderbird executable is missing" >&2
+		return 1
+	}
+
+	install -d "$PKG/usr/lib" "$PKG/usr/bin" || return 1
+	cp -a "$_bfs_src" "$PKG/usr/lib/thunderbird-bin" || return 1
+	ln -s /usr/lib/thunderbird-bin/thunderbird "$PKG/usr/bin/thunderbird-bin" || return 1
+
+	install -d "$PKG/usr/lib/thunderbird-bin/distribution" || return 1
+	install -m644 "$SRC/policies.json" \
+		"$PKG/usr/lib/thunderbird-bin/distribution/policies.json" || return 1
+
+	install -Dm644 "$SRC/thunderbird.desktop" \
+		"$PKG/usr/share/applications/thunderbird-bin.desktop" || return 1
+	install -d "$PKG/usr/share/pixmaps" || return 1
+	ln -s /usr/lib/thunderbird-bin/chrome/icons/default/default32.png \
+		"$PKG/usr/share/pixmaps/thunderbird-bin.png" || return 1
+
+	install -d "$PKG/etc/revdep.d" || return 1
+	printf '%s\n' '/usr/lib/thunderbird-bin' > "$PKG/etc/revdep.d/thunderbird-bin" || return 1
+}

@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Thunderbird BIN
+Name[en_US]=Thunderbird BIN
+GenericName=Email Client
+GenericName[en_US]=Email Client
+Comment=Free email client from Mozilla
+Exec=thunderbird-bin %u
+Terminal=false
+Type=Application
+Icon=thunderbird-bin
+Categories=Network;Email;
+StartupNotify=true

@@ -1,0 +1,9 @@
+gtk3
+xdotool
+libxcb
+libxfixes
+pulseaudio
+libva
+libvdpau
+linux-pam
+gst-plugins-base
