@@ -5,7 +5,7 @@
 description="Strigi desktop search framework for KDE 4"
 name=strigi
 version=0.7.8
-release=3
+release=4
 # GitHub's archive omits Strigi's libstreams/libstreamanalyzer submodules.
 source="https://www.vandenoever.info/software/strigi/strigi-$version.tar.bz2 strigi-0.7.8-dbus-includes.patch.manual"
 
@@ -24,6 +24,10 @@ build() {
 	export CFLAGS="${CFLAGS:+$CFLAGS }-std=gnu99"
 	export CXXFLAGS="${CXXFLAGS:+$CXXFLAGS }-std=gnu++98 -fpermissive -Wno-deprecated-declarations"
 
+	# Strigi's optional FFmpeg analyzer predates FFmpeg 4 and uses removed
+	# APIs (av_register_all, AVLockOp, AVStream->codec, codec_name).
+	# Keep that unmaintained plugin out of the KDE4 build.
+	#
 	# CMake 4 rejects the duplicate outputs from Strigi's Perl DBus generator.
 	# The release tarball ships the generated DBus sources, so use those.
 	cmake -S . -B build -G Ninja \
@@ -33,6 +37,7 @@ build() {
 		-DCMAKE_DISABLE_FIND_PACKAGE_Perl=TRUE \
 		-DSTRIGI_SYNC_SUBMODULES=OFF \
 		-DENABLE_CLUCENE=OFF \
+		-DENABLE_FFMPEG=OFF \
 		-DENABLE_EXPAT=OFF \
 		-DENABLE_LIBXML2=ON \
 		-DENABLE_QT4=ON \
