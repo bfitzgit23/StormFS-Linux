@@ -10,8 +10,6 @@
 +logind_dep = declare_dependency()
 --- a/src/libaccountsservice/act-user-manager.c
 +++ b/src/libaccountsservice/act-user-manager.c
-@@ -41,3 +41,3 @@
- #include <gio/gio.h>
- #include <gio/gunixinputstream.h>
+@@ -43 +43 @@
 -#include <systemd/sd-login.h>
 +#include "bfs-logind-stub.h"
