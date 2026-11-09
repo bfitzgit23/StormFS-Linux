@@ -5,14 +5,19 @@
 description="KDE 4 core libraries"
 name=kdelibs
 version=4.14.3
-release=1
-source="https://download.kde.org/Attic/4.14.3/src/kdelibs-$version.tar.xz"
+release=2
+source="https://download.kde.org/Attic/4.14.3/src/kdelibs-$version.tar.xz kdelibs-4.14.3-cmake4.patch.manual"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
 	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
 	[ -n "$_bfs_src" ] || return 1
 	cd "$_bfs_src" || return 1
+
+	# CMake 4 rejects configure-time LOCATION reads and treats a bare TEST
+	# argument as the if() operator. Use target-file generator expressions
+	# and quoted comparisons, and declare the policy baseline explicitly.
+	patch -p1 -i "$SRC/kdelibs-4.14.3-cmake4.patch.manual" || return 1
 
 	export CMAKE_PREFIX_PATH="/opt/qt4:/usr"
 	export PATH="/opt/qt4/bin:$PATH"

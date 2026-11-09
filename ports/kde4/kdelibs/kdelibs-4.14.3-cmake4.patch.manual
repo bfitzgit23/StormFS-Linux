@@ -1,0 +1,175 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,3 +1,4 @@
++cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
+ project(kdelibs)
+ 
+ # where to look first for cmake modules, before ${CMAKE_ROOT}/Modules/ is checked
+--- a/cmake/modules/KDE4Macros.cmake
++++ b/cmake/modules/KDE4Macros.cmake
+@@ -589,7 +589,11 @@
+       else (APPLE)
+          set(_ld_library_path "${LIBRARY_OUTPUT_PATH}/${CMAKE_CFG_INTDIR}/:${LIB_INSTALL_DIR}:${KDE4_LIB_DIR}:${QT_LIBRARY_DIR}")
+       endif (APPLE)
+-      get_target_property(_executable ${_target_NAME} LOCATION )
++      if (POLICY CMP0026)
++         set(_executable $<TARGET_FILE:${_target_NAME}>)
++      else (POLICY CMP0026)
++         get_target_property(_executable ${_target_NAME} LOCATION )
++      endif (POLICY CMP0026)
+ 
+       # use add_custom_target() to have the sh-wrapper generated during build time instead of cmake time
+       if (CMAKE_VERSION VERSION_GREATER 2.8.4)
+@@ -617,11 +621,14 @@
+    else (UNIX)
+       # under windows, set the property WRAPPER_SCRIPT just to the name of the executable
+       # maybe later this will change to a generated batch file (for setting the PATH so that the Qt libs are found)
+-      get_target_property(_executable ${_target_NAME} LOCATION )
++      if (POLICY CMP0026)
++         set(_executable $<TARGET_FILE:${_target_NAME}>)
++      else (POLICY CMP0026)
++         get_target_property(_executable ${_target_NAME} LOCATION )
++      endif (POLICY CMP0026)
+       set_target_properties(${_target_NAME} PROPERTIES WRAPPER_SCRIPT ${_executable})
+ 
+       set(_ld_library_path "${LIBRARY_OUTPUT_PATH}/${CMAKE_CFG_INTDIR}\;${LIB_INSTALL_DIR}\;${KDE4_LIB_DIR}\;${QT_LIBRARY_DIR}")
+-      get_target_property(_executable ${_target_NAME} LOCATION )
+ 
+       # use add_custom_target() to have the batch-file-wrapper generated during build time instead of cmake time
+       add_custom_command(TARGET ${_target_NAME} POST_BUILD
+@@ -721,6 +728,12 @@
+ # "TEST" (which evaluates to TRUE in cmake), otherwise it is set empty
+ # (which evaluates to FALSE in cmake)
+ macro(KDE4_CHECK_EXECUTABLE_PARAMS _output_LIST _nogui _test)
++
++   if(POLICY CMP0054)
++      cmake_policy(PUSH)
++      cmake_policy(SET CMP0054 NEW)
++   endif()
++
+    set(${_nogui})
+    set(${_test})
+    set(${_output_LIST} ${ARGN})
+@@ -735,39 +748,43 @@
+ 
+    set(remove "NOTFOUND")
+ 
+-   if (${first_PARAM} STREQUAL "NOGUI")
++   if ("${first_PARAM}" STREQUAL "NOGUI")
+       set(${_nogui} "NOGUI")
+       set(remove 0)
+-   endif (${first_PARAM} STREQUAL "NOGUI")
++   endif ()
+ 
+-   if (${first_PARAM} STREQUAL "RUN_UNINSTALLED")
++   if ("${first_PARAM}" STREQUAL "RUN_UNINSTALLED")
+       set(remove 0)
+-   endif (${first_PARAM} STREQUAL "RUN_UNINSTALLED")
++   endif ()
+ 
+-   if (${first_PARAM} STREQUAL "TEST")
++   if ("${first_PARAM}" STREQUAL "TEST")
+       set(${_test} "TEST")
+       set(remove 0)
+-   endif (${first_PARAM} STREQUAL "TEST")
++   endif ()
+ 
+-   if (${second_PARAM} STREQUAL "NOGUI")
++   if ("${second_PARAM}" STREQUAL "NOGUI")
+       set(${_nogui} "NOGUI")
+       set(remove 0;1)
+-   endif (${second_PARAM} STREQUAL "NOGUI")
++   endif ()
+ 
+-   if (${second_PARAM} STREQUAL "RUN_UNINSTALLED")
++   if ("${second_PARAM}" STREQUAL "RUN_UNINSTALLED")
+       set(remove 0;1)
+-   endif (${second_PARAM} STREQUAL "RUN_UNINSTALLED")
++   endif ()
+ 
+-   if (${second_PARAM} STREQUAL "TEST")
++   if ("${second_PARAM}" STREQUAL "TEST")
+       set(${_test} "TEST")
+       set(remove 0;1)
+-   endif (${second_PARAM} STREQUAL "TEST")
++   endif ()
+ 
+ 
+    if (NOT "${remove}" STREQUAL "NOTFOUND")
+       list(REMOVE_AT ${_output_LIST} ${remove})
+    endif (NOT "${remove}" STREQUAL "NOTFOUND")
+ 
++   if(POLICY CMP0054)
++      cmake_policy(POP)
++   endif()
++
+ endmacro(KDE4_CHECK_EXECUTABLE_PARAMS)
+ 
+ 
+@@ -848,16 +865,16 @@
+ macro (KDE4_ADD_UNIT_TEST _test_NAME)
+     set(_srcList ${ARGN})
+     set(_targetName ${_test_NAME})
+-    if( ${ARGV1} STREQUAL "TESTNAME" )
++    if( "${ARGV1}" STREQUAL "TESTNAME" )
+         set(_targetName ${ARGV2})
+         list(REMOVE_AT _srcList 0 1)
+-    endif( ${ARGV1} STREQUAL "TESTNAME" )
++    endif()
+     
+     set(_nogui)
+     list(GET _srcList 0 first_PARAM)
+-    if( ${first_PARAM} STREQUAL "NOGUI" )
++    if( "${first_PARAM}" STREQUAL "NOGUI" )
+         set(_nogui "NOGUI")
+-    endif( ${first_PARAM} STREQUAL "NOGUI" )
++    endif()
+ 
+     kde4_add_executable( ${_test_NAME} TEST ${_srcList} )
+ 
+@@ -876,28 +893,37 @@
+         endif(NOT using_qtest)
+     endforeach(_filename)
+ 
+-    get_target_property( loc ${_test_NAME} LOCATION )
+     if(WIN32)
+-      if(MSVC_IDE)
++      if (POLICY CMP0026)
++        set(_executable "$<TARGET_FILE:${_test_NAME}>.bat")
++      else()
++        get_target_property( loc ${_test_NAME} LOCATION )
++        if(MSVC_IDE)
+         STRING(REGEX REPLACE "\\$\\(.*\\)" "\${CTEST_CONFIGURATION_TYPE}" loc "${loc}")
++        endif()
++        # .bat because of rpath handling
++        set(_executable "${loc}.bat")
+       endif()
+-      # .bat because of rpath handling
+-      set(_executable "${loc}.bat")
+     else(WIN32)
+       if (Q_WS_MAC AND NOT _nogui)
+         set(_executable ${EXECUTABLE_OUTPUT_PATH}/${_test_NAME}.app/Contents/MacOS/${_test_NAME})
+       else (Q_WS_MAC AND NOT _nogui)
+-        # .shell because of rpath handling
+-        set(_executable "${loc}.shell")
++        if (POLICY CMP0026)
++          set(_executable "$<TARGET_FILE:${_test_NAME}>.shell")
++        else()
++          get_target_property( loc ${_test_NAME} LOCATION )
++          # .shell because of rpath handling
++          set(_executable "${loc}.shell")
++        endif()
+       endif (Q_WS_MAC AND NOT _nogui)
+     endif(WIN32)
+     
+     if (using_qtest AND KDE4_TEST_OUTPUT STREQUAL "xml")
+         #MESSAGE(STATUS "${_targetName} : Using QTestLib, can produce XML report.")
+-        add_test( ${_targetName} ${_executable} -xml -o ${_targetName}.tml)
++        add_test(NAME ${_targetName} COMMAND ${_executable} -xml -o ${_targetName}.tml)
+     else (using_qtest AND KDE4_TEST_OUTPUT STREQUAL "xml")
+         #MESSAGE(STATUS "${_targetName} : NOT using QTestLib, can't produce XML report, please use QTestLib to write your unit tests.")
+-        add_test( ${_targetName} ${_executable} )
++        add_test(NAME ${_targetName} COMMAND ${_executable} )
+     endif (using_qtest AND KDE4_TEST_OUTPUT STREQUAL "xml")
+ 
+ #    add_test( ${_targetName} ${EXECUTABLE_OUTPUT_PATH}/${_test_NAME} -xml -o ${_test_NAME}.tml )

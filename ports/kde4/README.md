@@ -36,7 +36,9 @@ The `kde4` metapackage pulls in the complete list. KDE4-only packages use a
 
 Qt 4.8.7 and KDE 4.14.3 predate the current GCC and CMake toolchains. The
 recipes therefore build with `-std=gnu++98 -fpermissive` and pass
-`CMAKE_POLICY_VERSION_MINIMUM=3.5` to CMake 4.
+`CMAKE_POLICY_VERSION_MINIMUM=3.5` to CMake 4. `kdelibs` also patches KDE4's
+CMake macros to use `$<TARGET_FILE>` instead of reading the `LOCATION` property
+and to quote `if()` arguments that newer CMake treats as keywords.
 
 Qt 4 is built with OpenSSL 4 support (`-openssl-linked`), using the
 Debian/Arch OpenSSL 1.1 compatibility patch plus a small OpenSSL 4 update for
