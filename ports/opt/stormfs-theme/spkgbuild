@@ -5,10 +5,13 @@
 description="StormFS GTK theme, icon theme and wallpapers"
 name=stormfs-theme
 version=2026.08.24
-release=2
+release=3
 source="https://github.com/bfitzgit23/StormFS-Linux/releases/download/theme-pack/StormFS-Recovered-Theme-Icons-Wallpapers-StormPkg.zip xfce-xsettings.xml xfce-xfwm4.xml gtk-settings.ini"
 
 build() {
+	# The fetched archive and local companion files are staged in $SRC.
+	cd "$SRC" || return 1
+
 	unzip -q StormFS-Recovered-Theme-Icons-Wallpapers-StormPkg.zip || return 1
 	unzip -q StormFS-Recovered-Pack/StormFS-Theme-Icons-v3.zip || return 1
 	unzip -q StormFS-Recovered-Pack/stormd_wallpapers.zip -d wallpapers || return 1
