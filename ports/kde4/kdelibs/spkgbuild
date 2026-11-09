@@ -5,8 +5,8 @@
 description="KDE 4 core libraries"
 name=kdelibs
 version=4.14.3
-release=19
-source="https://download.kde.org/Attic/4.14.3/src/kdelibs-$version.tar.xz kdelibs-4.14.3-cmake4.patch.manual kdelibs-4.14.3-cmake4-interface-libs.patch.manual kdelibs-4.14.3-no-tests.patch.manual kdelibs-4.14.3-klocale-bool-comparison.patch.manual kdelibs-4.14.3-optional-dbusmenuqt.patch.manual kdelibs-4.14.3-optional-declarative.patch.manual kdelibs-4.14.3-ordered.patch.manual kdelibs-4.14.3-jasper-exported.patch.manual kdelibs-4.14.3-openssl-1.1.patch.manual"
+release=20
+source="https://download.kde.org/Attic/4.14.3/src/kdelibs-$version.tar.xz kdelibs-4.14.3-cmake4.patch.manual kdelibs-4.14.3-cmake4-interface-libs.patch.manual kdelibs-4.14.3-no-tests.patch.manual kdelibs-4.14.3-fake-kauth-backend.patch.manual kdelibs-4.14.3-klocale-bool-comparison.patch.manual kdelibs-4.14.3-optional-dbusmenuqt.patch.manual kdelibs-4.14.3-optional-declarative.patch.manual kdelibs-4.14.3-ordered.patch.manual kdelibs-4.14.3-jasper-exported.patch.manual kdelibs-4.14.3-openssl-1.1.patch.manual"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
@@ -25,6 +25,11 @@ build() {
 	#
 	# Qt 4 is built without QtWebKit, so omit the optional kdewebkit module
 	# and its Plasma and designer-plugin consumers.
+	#
+	# kdecore only builds kauth-policy-gen for a real KAuth backend, but
+	# FindKDE4Internal exports its build-tree location unconditionally.  With
+	# the Fake backend (BFSOS has no PolkitQt) that aborts configure with a
+	# non-existent-target error, so guard the lookup.
 	#
 	# klocale_kde.cpp compares the result of QString::contains() against zero.
 	# Qt 4 returns QBool there, which only converts to void*, so the ordered
@@ -60,6 +65,7 @@ build() {
 	patch -p1 -i "$SRC/kdelibs-4.14.3-cmake4.patch.manual" || return 1
 	patch -p1 -i "$SRC/kdelibs-4.14.3-cmake4-interface-libs.patch.manual" || return 1
 	patch -p1 -i "$SRC/kdelibs-4.14.3-no-tests.patch.manual" || return 1
+	patch -p1 -i "$SRC/kdelibs-4.14.3-fake-kauth-backend.patch.manual" || return 1
 	patch -p1 -i "$SRC/kdelibs-4.14.3-klocale-bool-comparison.patch.manual" || return 1
 	patch -p1 -i "$SRC/kdelibs-4.14.3-optional-dbusmenuqt.patch.manual" || return 1
 	patch -p1 -i "$SRC/kdelibs-4.14.3-optional-declarative.patch.manual" || return 1

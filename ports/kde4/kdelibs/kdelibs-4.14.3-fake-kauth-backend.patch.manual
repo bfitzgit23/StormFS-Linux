@@ -1,0 +1,12 @@
+--- a/cmake/modules/FindKDE4Internal.cmake
++++ b/cmake/modules/FindKDE4Internal.cmake
+@@ -611,7 +611,9 @@
+     set(KDE4_KCFGC_EXECUTABLE             ${HOST_BINDIR}/${CMAKE_CFG_INTDIR}/kconfig_compiler )
+     set(KDE4_MEINPROC_EXECUTABLE          ${HOST_BINDIR}/${CMAKE_CFG_INTDIR}/meinproc4 )
+    endif(NOT WINCE)
++   if (TARGET ${KDE4_TARGET_PREFIX}kauth-policy-gen)
+    get_target_property(KDE4_KAUTH_POLICY_GEN_EXECUTABLE  ${KDE4_TARGET_PREFIX}kauth-policy-gen    LOCATION_${_firstConfig})
++   endif (TARGET ${KDE4_TARGET_PREFIX}kauth-policy-gen)
+    get_target_property(KDE4_MAKEKDEWIDGETS_EXECUTABLE    ${KDE4_TARGET_PREFIX}makekdewidgets      LOCATION_${_firstConfig})
+ 
+    # allow searching cmake modules in all given kde install locations (KDEDIRS based)
