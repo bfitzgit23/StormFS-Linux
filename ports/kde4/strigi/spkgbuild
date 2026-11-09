@@ -5,15 +5,18 @@
 description="Strigi desktop search framework for KDE 4"
 name=strigi
 version=0.7.8
-release=2
+release=3
 # GitHub's archive omits Strigi's libstreams/libstreamanalyzer submodules.
-source="https://www.vandenoever.info/software/strigi/strigi-$version.tar.bz2"
+source="https://www.vandenoever.info/software/strigi/strigi-$version.tar.bz2 strigi-0.7.8-dbus-includes.patch.manual"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
 	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
 	[ -n "$_bfs_src" ] || return 1
 	cd "$_bfs_src" || return 1
+
+	# The generated DBus wrappers include source-tree headers by name.
+	patch -p1 -i "$SRC/strigi-0.7.8-dbus-includes.patch.manual" || return 1
 
 	export CMAKE_PREFIX_PATH="/opt/qt4:/usr"
 	export PATH="/opt/qt4/bin:$PATH"
