@@ -5,8 +5,8 @@
 description="KDE 4 core libraries"
 name=kdelibs
 version=4.14.3
-release=16
-source="https://download.kde.org/Attic/4.14.3/src/kdelibs-$version.tar.xz kdelibs-4.14.3-cmake4.patch.manual kdelibs-4.14.3-cmake4-interface-libs.patch.manual kdelibs-4.14.3-klocale-bool-comparison.patch.manual kdelibs-4.14.3-optional-dbusmenuqt.patch.manual kdelibs-4.14.3-optional-declarative.patch.manual kdelibs-4.14.3-ordered.patch.manual kdelibs-4.14.3-jasper-exported.patch.manual kdelibs-4.14.3-openssl-1.1.patch.manual"
+release=17
+source="https://download.kde.org/Attic/4.14.3/src/kdelibs-$version.tar.xz kdelibs-4.14.3-cmake4.patch.manual kdelibs-4.14.3-cmake4-interface-libs.patch.manual kdelibs-4.14.3-no-tests.patch.manual kdelibs-4.14.3-klocale-bool-comparison.patch.manual kdelibs-4.14.3-optional-dbusmenuqt.patch.manual kdelibs-4.14.3-optional-declarative.patch.manual kdelibs-4.14.3-ordered.patch.manual kdelibs-4.14.3-jasper-exported.patch.manual kdelibs-4.14.3-openssl-1.1.patch.manual"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
@@ -59,6 +59,7 @@ build() {
 	#     the kdewebkit module is already removed by the cmake4 patch above.
 	patch -p1 -i "$SRC/kdelibs-4.14.3-cmake4.patch.manual" || return 1
 	patch -p1 -i "$SRC/kdelibs-4.14.3-cmake4-interface-libs.patch.manual" || return 1
+	patch -p1 -i "$SRC/kdelibs-4.14.3-no-tests.patch.manual" || return 1
 	patch -p1 -i "$SRC/kdelibs-4.14.3-klocale-bool-comparison.patch.manual" || return 1
 	patch -p1 -i "$SRC/kdelibs-4.14.3-optional-dbusmenuqt.patch.manual" || return 1
 	patch -p1 -i "$SRC/kdelibs-4.14.3-optional-declarative.patch.manual" || return 1
@@ -76,7 +77,9 @@ build() {
 	# modules BFSOS does not ship, so leave them out of the package build.
 	# KDE4Defaults.cmake force-sets BUILD_TESTING to ON internally; the lever
 	# that matters is KDE4_BUILD_TESTS, which makes kde4_add_executable(TEST ...)
-	# targets EXCLUDE_FROM_ALL so "cmake --build" skips them.
+	# targets EXCLUDE_FROM_ALL so "cmake --build" skips them.  The no-tests
+	# patch also stops kdeui, kemoticons and solid from entering their tests
+	# directories, which contain executables that are not marked TEST.
 	cmake -S . -B build -G Ninja \
 		-DCMAKE_INSTALL_PREFIX=/usr \
 		-DCMAKE_BUILD_TYPE=Release \
