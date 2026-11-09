@@ -5,24 +5,20 @@
 description="Unicode Character Database"
 name=unicode-character-database
 version=17.0.0
-release=1
-renames=(UCD-$version.zip Unihan-$version.zip)
+release=2
+# Keep the archives packed: extracting them would scatter their data files
+# through the source directory, and pkgbuild has no way to rename them.
+noextract="UCD.zip Unihan.zip"
 source="https://www.unicode.org/Public/$version/ucd/UCD.zip https://www.unicode.org/Public/$version/ucd/Unihan.zip"
 
 build() {
-	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
-	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
-	[ -n "$_bfs_src" ] || return 1
-	cd "$_bfs_src" || return 1
-  cp $BFS_SOURCE_DIR/UCD-$version.zip .
-  cp $BFS_SOURCE_DIR/Unihan-$version.zip .
-  for _f in UCD Unihan; do
-    install -Dm644 $_f-$version.zip $PKG/usr/share/unicode/$_f.zip
-    bsdtar -C $PKG/usr/share/unicode -x --no-same-owner --no-same-permissions -f $_f-$version.zip
-  done
+    for _f in UCD Unihan; do
+        install -Dm644 "$SRC/$_f.zip" "$PKG/usr/share/unicode/$_f-$version.zip" || return 1
+        bsdtar -C "$PKG/usr/share/unicode" -x --no-same-owner --no-same-permissions -f "$SRC/$_f.zip" || return 1
+    done
 
-  ln -s . "$PKG/usr/share/unicode/ucd"
-  for _f in $name unicode-data unidata; do
-    ln -s unicode "$PKG/usr/share/$_f"
-  done
+    ln -s . "$PKG/usr/share/unicode/ucd" || return 1
+    for _f in $name unicode-data unidata; do
+        ln -s unicode "$PKG/usr/share/$_f" || return 1
+    done
 }

@@ -439,6 +439,17 @@ grep -Fq 'autoreconf -fi || return 1' ports/opt/aalib/spkgbuild || \
     fail 'aalib does not regenerate configure'
 pass 'aalib applies its source fixes before configuring'
 
+grep -qx 'release=2' ports/opt/unicode-character-database/spkgbuild || \
+    fail 'unicode-character-database rebuild release missing'
+if grep -q '^renames=' ports/opt/unicode-character-database/spkgbuild; then
+    fail 'unicode-character-database uses an unsupported renames array'
+fi
+grep -Fq 'noextract="UCD.zip Unihan.zip"' ports/opt/unicode-character-database/spkgbuild || \
+    fail 'unicode-character-database does not keep its archives packed'
+grep -Fq '"$SRC/$_f.zip"' ports/opt/unicode-character-database/spkgbuild || \
+    fail 'unicode-character-database does not install from the source directory'
+pass 'unicode-character-database installs the packed UCD archives'
+
 grep -qx 'version=26.2.7' ports/opt/libreoffice-bin/spkgbuild || \
     fail 'libreoffice-bin does not pin a published release'
 grep -Fq 'deb/x86_64/LibreOffice_${version}_Linux_x86-64_deb.tar.gz' ports/opt/libreoffice-bin/spkgbuild || \
