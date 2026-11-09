@@ -4,12 +4,14 @@
 
 description="Tela icon theme with light and dark variants"
 name=tela-icon-theme
-version=2026-07-07
+version=20260707
 release=1
-source="https://github.com/vinceliuice/Tela-icon-theme/archive/refs/tags/$version.tar.gz"
+# pkgbuild rejects '-' in version; keep the upstream date tag separate.
+_tag=2026-07-07
+source="https://github.com/vinceliuice/Tela-icon-theme/archive/refs/tags/$_tag.tar.gz"
 
 build() {
-	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "Tela-icon-theme-$version" -print -quit)
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "Tela-icon-theme-$_tag" -print -quit)
 	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
 	[ -n "$_bfs_src" ] || return 1
 	cd "$_bfs_src" || return 1
