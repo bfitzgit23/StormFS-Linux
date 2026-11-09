@@ -2,7 +2,7 @@ dbus
 desktop-file-utils
 eudev
 hicolor-icon-theme
-kactivities
+kactivities4
 kde-base-artwork
 kde-runtime
 kde-wallpapers
@@ -12,7 +12,7 @@ libcanberra
 libxklavier
 libxscrnsaver
 mesa
-oxygen-icons
+oxygen-icons4
 qt4
 shared-mime-info
 upower

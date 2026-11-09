@@ -3,13 +3,15 @@
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
 description="Additional Plasma widgets and plugins for KDE 4"
-name=kdeplasma-addons
+# Keep the KDE4 package name distinct from the KF6 package in ports/plasma.
+name=kdeplasma-addons4
+_pkgname=kdeplasma-addons
 version=4.14.3
 release=1
-source="https://download.kde.org/Attic/4.14.3/src/kdeplasma-addons-$version.tar.xz"
+source="https://download.kde.org/Attic/4.14.3/src/$_pkgname-$version.tar.xz"
 
 build() {
-	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$_pkgname-$version" -print -quit)
 	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
 	[ -n "$_bfs_src" ] || return 1
 	cd "$_bfs_src" || return 1

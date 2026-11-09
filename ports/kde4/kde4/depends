@@ -1,7 +1,7 @@
 akonadi
 attica4
 automoc4
-kactivities
+kactivities4
 kde-base-artwork
 kde-baseapps
 kde-runtime
@@ -9,9 +9,9 @@ kde-wallpapers
 kde-workspace
 kdeartwork
 kdelibs
-kdeplasma-addons
+kdeplasma-addons4
 kdepimlibs
-oxygen-icons
+oxygen-icons4
 phonon-backend-gstreamer
 phonon4
 qt4

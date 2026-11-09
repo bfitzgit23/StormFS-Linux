@@ -17,18 +17,20 @@ is installed under `/opt/qt4`; the KDE libraries and applications install under
 9. `akonadi`
 10. `kdelibs`
 11. `kdepimlibs`
-12. `kactivities`
+12. `kactivities4`
 13. `kde-runtime`
 14. `kde-baseapps`
-15. `oxygen-icons`
+15. `oxygen-icons4`
 16. `kde-base-artwork`
 17. `kde-wallpapers`
 18. `kde-workspace`
 19. `kdeartwork`
-20. `kdeplasma-addons`
+20. `kdeplasma-addons4`
 21. `kde4` (metapackage)
 
-The `kde4` metapackage pulls in the complete list.
+The `kde4` metapackage pulls in the complete list. KDE4-only packages use a
+`4` suffix where the same name is also used by the KF5/KF6 collection in
+`ports/plasma`.
 
 ## Toolchain compatibility
 
