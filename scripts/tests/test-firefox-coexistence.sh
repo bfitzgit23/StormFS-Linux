@@ -15,6 +15,7 @@ grep -q 'MOZ_APP_REMOTINGNAME=firefox-esr$' "$esr" || fail 'ESR remoting identit
 grep -q '/usr/lib/firefox-esr' "$esr" || fail 'ESR application root is not separate'
 grep -q 'Name=Firefox ESR' "$esr" || fail 'ESR visible identity is not Firefox ESR'
 
+grep -Fq 'source="https://archive.mozilla.org/pub/firefox/releases/$version/linux-x86_64/en-US/firefox-$version.tar.xz policies.json firefox.desktop firefox-bin"' "$bin" || fail 'binary source list contains a literal backslash'
 grep -q 'usr/lib/firefox-bin' "$bin" || fail 'binary application root is not separate'
 grep -q 'usr/bin/firefox-bin' "$bin" || fail 'binary launcher is not separate'
 grep -q 'firefox-bin.desktop' "$bin" || fail 'binary desktop filename is not separate'
