@@ -31,7 +31,10 @@ for pkgfile in sorted((ROOT / "ports").glob("*/*/spkgbuild")):
             continue
         local += 1
         filename = mod.source_filename(src)
-        if not (pkgfile.parent / filename).exists():
+        companion = pkgfile.parent / src
+        if not companion.exists():
+            companion = pkgfile.parent / filename
+        if not companion.exists():
             missing.append((pkgfile.relative_to(ROOT), src, filename))
 
 if errors or missing:
