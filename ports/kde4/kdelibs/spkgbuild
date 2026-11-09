@@ -5,7 +5,7 @@
 description="KDE 4 core libraries"
 name=kdelibs
 version=4.14.3
-release=2
+release=3
 source="https://download.kde.org/Attic/4.14.3/src/kdelibs-$version.tar.xz kdelibs-4.14.3-cmake4.patch.manual"
 
 build() {
@@ -15,8 +15,9 @@ build() {
 	cd "$_bfs_src" || return 1
 
 	# CMake 4 rejects configure-time LOCATION reads and treats a bare TEST
-	# argument as the if() operator. Use target-file generator expressions
-	# and quoted comparisons, and declare the policy baseline explicitly.
+	# argument as the if() operator, and kdeui has a duplicate else() branch.
+	# Use target-file generator expressions, quote comparisons, drop the
+	# duplicate branch, and declare the policy baseline.
 	patch -p1 -i "$SRC/kdelibs-4.14.3-cmake4.patch.manual" || return 1
 
 	export CMAKE_PREFIX_PATH="/opt/qt4:/usr"

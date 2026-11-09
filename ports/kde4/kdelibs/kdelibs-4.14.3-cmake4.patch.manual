@@ -173,3 +173,20 @@
      endif (using_qtest AND KDE4_TEST_OUTPUT STREQUAL "xml")
  
  #    add_test( ${_targetName} ${EXECUTABLE_OUTPUT_PATH}/${_test_NAME} -xml -o ${_test_NAME}.tml )
+--- a/kdeui/CMakeLists.txt
++++ b/kdeui/CMakeLists.txt
+@@ -311,11 +311,9 @@
+     FIND_LIBRARY(SECURITY_LIBRARY Security)
+     set(kdeui_LIB_SRCS ${kdeui_LIB_SRCS} util/kwallet_mac.cpp util/qosxkeychain.cpp)
+     add_definitions(-DMAC_USE_OSXKEYCHAIN)
+-else(Q_WS_MAC AND MAC_USE_OSXKEYCHAIN)
+-     set(kdeui_LIB_SRCS ${kdeui_LIB_SRCS} util/kwallet.cpp)
+-else(Q_WS_MAC AND MAC_USE_OSXKEYCHAIN)
+-  set(kdeui_LIB_SRCS ${kdeui_LIB_SRCS} util/kwallet.cpp)
+-endif(Q_WS_MAC AND MAC_USE_OSXKEYCHAIN)
++else()
++    set(kdeui_LIB_SRCS ${kdeui_LIB_SRCS} util/kwallet.cpp)
++endif()
+ 
+ if(NOT WINCE)
+ set(kdeui_LIB_SRCS
