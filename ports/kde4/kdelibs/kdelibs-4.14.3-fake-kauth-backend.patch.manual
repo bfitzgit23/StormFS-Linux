@@ -10,3 +10,80 @@
     get_target_property(KDE4_MAKEKDEWIDGETS_EXECUTABLE    ${KDE4_TARGET_PREFIX}makekdewidgets      LOCATION_${_firstConfig})
  
     # allow searching cmake modules in all given kde install locations (KDEDIRS based)
+--- a/kdecore/auth/ConfigureChecks.cmake
++++ b/kdecore/auth/ConfigureChecks.cmake
+@@ -175,6 +175,12 @@
+ elseif(KDE4_AUTH_BACKEND_NAME STREQUAL "POLKITQT-1")
+   set(KAUTH_POLICY_GEN_SRCS ${KAUTH_POLICY_GEN_SRCS}
+       auth/backends/polkit-1/kauth-policy-gen-polkit1.cpp )
++elseif(KDE4_AUTH_BACKEND_NAME STREQUAL "FAKE")
++  # Keep building the tool with the fake backend: the installed
++  # KDELibs4ToolsTargets.cmake has to export it, because FindKDE4Internal
++  # reads the location of the imported target unconditionally.
++  set(KAUTH_POLICY_GEN_SRCS ${KAUTH_POLICY_GEN_SRCS}
++      auth/backends/fake/kauth-policy-gen-fake.cpp )
+ endif()
+ 
+ ########################
+--- a/kdecore/CMakeLists.txt
++++ b/kdecore/CMakeLists.txt
+@@ -461,17 +461,16 @@
+ 
+ # KAuth policy generator executable
+ 
+-# Compile only if fake backend has not been selected
++# Always built, also for the fake backend, so the exported
++# KDELibs4ToolsTargets.cmake contains the imported kauth-policy-gen target.
+ 
+-if (NOT "${KDE4_AUTH_BACKEND_NAME}" STREQUAL "FAKE")
+-    # KAUTH_POLICY_GEN_SRCS has been generated from auth/ConfigureChecks.cmake
+-    kde4_add_executable(kauth-policy-gen NOGUI ${KAUTH_POLICY_GEN_SRCS})
++# KAUTH_POLICY_GEN_SRCS has been generated from auth/ConfigureChecks.cmake
++kde4_add_executable(kauth-policy-gen NOGUI ${KAUTH_POLICY_GEN_SRCS})
+ 
+-    # KAUTH_POLICY_GEN_LIBRARIES has been generated from auth/ConfigureChecks.cmake
+-    target_link_libraries( kauth-policy-gen ${KAUTH_POLICY_GEN_LIBRARIES} )
++# KAUTH_POLICY_GEN_LIBRARIES has been generated from auth/ConfigureChecks.cmake
++target_link_libraries( kauth-policy-gen ${KAUTH_POLICY_GEN_LIBRARIES} )
+ 
+-    install( TARGETS kauth-policy-gen EXPORT kdelibsToolsTargets DESTINATION ${LIBEXEC_INSTALL_DIR})
+-endif (NOT "${KDE4_AUTH_BACKEND_NAME}" STREQUAL "FAKE")
++install( TARGETS kauth-policy-gen EXPORT kdelibsToolsTargets DESTINATION ${LIBEXEC_INSTALL_DIR})
+ 
+ if ( NOT WINCE )
+     ########### next target ###############
+--- /dev/null
++++ b/kdecore/auth/backends/fake/kauth-policy-gen-fake.cpp
+@@ -0,0 +1,32 @@
++/*
++*   Copyright (C) 2014 KDE e.V.
++*
++*   This program is free software; you can redistribute it and/or modify
++*   it under the terms of the GNU Lesser General Public License as published by
++*   the Free Software Foundation; either version 2.1 of the License, or
++*   (at your option) any later version.
++*
++*   This program is distributed in the hope that it will be useful,
++*   but WITHOUT ANY WARRANTY; without even the implied warranty of
++*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++*   GNU General Public License for more details.
++*
++*   You should have received a copy of the GNU Lesser General Public License
++*   along with this program; if not, write to the Free Software
++*   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA .
++*/
++
++#include <auth/policy-gen/policy-gen.h>
++
++#include <cstdio>
++
++// The fake KAuth backend enforces nothing, so there is no policy file to
++// generate.  This stub only exists so the kauth-policy-gen executable (and
++// therefore its imported target in KDELibs4ToolsTargets.cmake) is always
++// present; no install rule invokes it for this backend.
++void output(QList<Action> actions, QHash<QString, QString> domain)
++{
++    (void)actions;
++    (void)domain;
++    std::fputs("kauth-policy-gen: built with the Fake KAuth backend, no policy written\n", stderr);
++}

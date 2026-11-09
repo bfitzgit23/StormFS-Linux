@@ -5,7 +5,7 @@
 description="KDE 4 core libraries"
 name=kdelibs
 version=4.14.3
-release=20
+release=21
 source="https://download.kde.org/Attic/4.14.3/src/kdelibs-$version.tar.xz kdelibs-4.14.3-cmake4.patch.manual kdelibs-4.14.3-cmake4-interface-libs.patch.manual kdelibs-4.14.3-no-tests.patch.manual kdelibs-4.14.3-fake-kauth-backend.patch.manual kdelibs-4.14.3-klocale-bool-comparison.patch.manual kdelibs-4.14.3-optional-dbusmenuqt.patch.manual kdelibs-4.14.3-optional-declarative.patch.manual kdelibs-4.14.3-ordered.patch.manual kdelibs-4.14.3-jasper-exported.patch.manual kdelibs-4.14.3-openssl-1.1.patch.manual"
 
 build() {
@@ -26,10 +26,12 @@ build() {
 	# Qt 4 is built without QtWebKit, so omit the optional kdewebkit module
 	# and its Plasma and designer-plugin consumers.
 	#
-	# kdecore only builds kauth-policy-gen for a real KAuth backend, but
-	# FindKDE4Internal exports its build-tree location unconditionally.  With
-	# the Fake backend (BFSOS has no PolkitQt) that aborts configure with a
-	# non-existent-target error, so guard the lookup.
+	# kdecore only built kauth-policy-gen for a real KAuth backend, but the
+	# installed KDELibs4ToolsTargets.cmake is what FindKDE4Internal probes for
+	# that target's location in every downstream project, so with the Fake
+	# backend every consumer aborted on a non-existent target.  Build the tool
+	# unconditionally with a stub writer, and keep the FindKDE4Internal lookup
+	# guarded for consumers that already have the old modules installed.
 	#
 	# klocale_kde.cpp compares the result of QString::contains() against zero.
 	# Qt 4 returns QBool there, which only converts to void*, so the ordered
