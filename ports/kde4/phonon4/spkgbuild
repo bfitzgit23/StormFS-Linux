@@ -5,14 +5,19 @@
 description="Phonon multimedia framework for Qt 4 and KDE 4"
 name=phonon4
 version=4.10.3
-release=1
-source="https://download.kde.org/Attic/phonon/$version/phonon-$version.tar.xz"
+release=2
+source="https://download.kde.org/Attic/phonon/$version/phonon-$version.tar.xz phonon-4.10.3-cmp0022.patch.manual"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "phonon-$version" -print -quit)
 	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
 	[ -n "$_bfs_src" ] || return 1
 	cd "$_bfs_src" || return 1
+
+	# CMake 4 forces CMP0022 to NEW and rejects exporting the old
+	# LINK_INTERFACE_LIBRARIES property. Keep the empty public link interface
+	# using the modern property instead.
+	patch -p1 -i "$SRC/phonon-4.10.3-cmp0022.patch.manual" || return 1
 
 	export CMAKE_PREFIX_PATH="/opt/qt4:/usr"
 	export PATH="/opt/qt4/bin:$PATH"

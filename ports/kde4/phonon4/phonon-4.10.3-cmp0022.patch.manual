@@ -1,0 +1,24 @@
+--- a/phonon/CMakeLists.txt
++++ b/phonon/CMakeLists.txt
+@@ -169,8 +169,8 @@
+                                            VERSION ${PHONON_LIB_VERSION}
+                                            SOVERSION ${PHONON_LIB_SOVERSION}
+                                            DEFINE_SYMBOL MAKE_PHONON_LIB
+-                                           LINK_INTERFACE_LIBRARIES "")
+-# LINK_INTERFACE_LIBRARIES: By default don't add any linked libraries to the "exported"
++                                           INTERFACE_LINK_LIBRARIES "")
++# INTERFACE_LINK_LIBRARIES: By default don't add any linked libraries to the "exported"
+ # link interfaces, so that executables linking against this library
+ # will not automatically add implicit dependencies to their link list.
+ # This reduces inter-package dependencies and makes it easier to remove
+--- a/phonon/experimental/CMakeLists.txt
++++ b/phonon/experimental/CMakeLists.txt
+@@ -26,7 +26,7 @@
+                                          VERSION ${PHONON_LIB_VERSION}
+                                          SOVERSION ${PHONON_LIB_SOVERSION}
+                                          DEFINE_SYMBOL MAKE_PHONONEXPERIMENTAL_LIB
+-                                         LINK_INTERFACE_LIBRARIES ""
++                                         INTERFACE_LINK_LIBRARIES ""
+                                          )
+ install(TARGETS ${PHONON_LIB_SONAME}experimental EXPORT PhononExperimentalLibs ${INSTALL_TARGETS_DEFAULT_ARGS})
+ target_include_directories(${PHONON_LIB_SONAME}experimental
