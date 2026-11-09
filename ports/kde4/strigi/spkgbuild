@@ -5,8 +5,9 @@
 description="Strigi desktop search framework for KDE 4"
 name=strigi
 version=0.7.8
-release=1
-source="https://github.com/KDE/strigi/archive/refs/tags/v$version.tar.gz"
+release=2
+# GitHub's archive omits Strigi's libstreams/libstreamanalyzer submodules.
+source="https://www.vandenoever.info/software/strigi/strigi-$version.tar.bz2"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
@@ -20,10 +21,13 @@ build() {
 	export CFLAGS="${CFLAGS:+$CFLAGS }-std=gnu99"
 	export CXXFLAGS="${CXXFLAGS:+$CXXFLAGS }-std=gnu++98 -fpermissive -Wno-deprecated-declarations"
 
+	# CMake 4 rejects the duplicate outputs from Strigi's Perl DBus generator.
+	# The release tarball ships the generated DBus sources, so use those.
 	cmake -S . -B build -G Ninja \
 		-DCMAKE_INSTALL_PREFIX=/usr \
 		-DCMAKE_BUILD_TYPE=Release \
 		-DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+		-DCMAKE_DISABLE_FIND_PACKAGE_Perl=TRUE \
 		-DSTRIGI_SYNC_SUBMODULES=OFF \
 		-DENABLE_CLUCENE=OFF \
 		-DENABLE_EXPAT=OFF \
