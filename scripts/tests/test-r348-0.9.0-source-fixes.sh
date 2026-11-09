@@ -304,4 +304,9 @@ grep -Fq 'DESTDIR="$PKG" ninja install' ports/gnome/vte/spkgbuild || \
     fail 'VTE still installs outside the package staging root'
 pass 'librest stages its payload and VTE builds without systemd'
 
+grep -qx 'release=2' ports/opt/rpcsvc-proto/spkgbuild || fail 'rpcsvc-proto mirror release missing'
+grep -Fq 'source="$name-$version.tar.xz::https://deb.debian.org/debian/pool/main/r/rpcsvc-proto/${name}_${version}.orig.tar.xz"' ports/opt/rpcsvc-proto/spkgbuild || \
+    fail 'rpcsvc-proto still fetches the failing GitHub release asset'
+pass 'rpcsvc-proto uses the verified Debian source mirror'
+
 echo 'r348 0.9.0 source regression checks passed.' 
