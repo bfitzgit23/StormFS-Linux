@@ -6,8 +6,10 @@
 description="liba52 is a free library for decoding ATSC A/52 (also known as AC-3) streams. The A/52 standard is used in a variety of applications, including digital television and DVD."
 name=liba52
 version=0.8.0
-release=1
-source="https://distfiles.adelielinux.org/source/a52dec/a52dec-$version.tar.gz"
+# Adelie's distfiles host currently returns 502 for this release; the BLFS
+# conglomeration mirror serves the same tarball (sha256 03c181ce...cffcc9).
+release=2
+source="https://mirror.freedif.org/pub/blfs/conglomeration/a52dec/a52dec-$version.tar.gz"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
