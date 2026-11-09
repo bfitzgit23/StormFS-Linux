@@ -23,8 +23,19 @@ build() {
 
     cmake --build build -j "${JOBS:-1}" || return 1
 
+    _vulkan_lib=$(find build -type f -name 'libvulkan.so.*' -print -quit)
+    [ -n "$_vulkan_lib" ] || {
+        echo "vulkan-loader: build did not produce libvulkan.so" >&2
+        return 1
+    }
+
     [ -n "$PKG" ] || return 1
-	cmake --install build --prefix "$PKG/usr" || return 1
+    cmake --install build --prefix "$PKG/usr" || return 1
+
+    install -d "$PKG/usr/lib" || return 1
+    install -m 0755 "$_vulkan_lib" "$PKG/usr/lib/${_vulkan_lib##*/}" || return 1
+    ln -sfn "${_vulkan_lib##*/}" "$PKG/usr/lib/libvulkan.so.1" || return 1
+    ln -sfn "${_vulkan_lib##*/}" "$PKG/usr/lib/libvulkan.so" || return 1
 
 	if [ ! -d "$PKG/usr/lib" ] || ! find "$PKG/usr/lib" -maxdepth 1 \
 		\( -name 'libvulkan.so' -o -name 'libvulkan.so.*' \) \
