@@ -5,7 +5,7 @@
 description="KDE 4 core libraries"
 name=kdelibs
 version=4.14.3
-release=13
+release=14
 source="https://download.kde.org/Attic/4.14.3/src/kdelibs-$version.tar.xz kdelibs-4.14.3-cmake4.patch.manual kdelibs-4.14.3-cmake4-interface-libs.patch.manual kdelibs-4.14.3-klocale-bool-comparison.patch.manual kdelibs-4.14.3-optional-dbusmenuqt.patch.manual kdelibs-4.14.3-optional-declarative.patch.manual kdelibs-4.14.3-ordered.patch.manual kdelibs-4.14.3-jasper-exported.patch.manual kdelibs-4.14.3-openssl-1.1.patch.manual"
 
 build() {
@@ -36,8 +36,10 @@ build() {
 	# fall back to the plain menu event filter when it is unavailable.
 	#
 	# Qt 4 is also built with -no-declarative/-no-script, so the QML bindings in
-	# experimental/libkdeclarative and the copies plasma compiles in cannot be
-	# built.  Skip them unless QtDeclarative and QtScript are actually present.
+	# experimental/libkdeclarative, the copies plasma compiles in, and the
+	# QDeclarativeItem use in plasma/popupapplet.cpp cannot be built.  Skip them
+	# unless QtDeclarative and QtScript are actually present, and only define
+	# HAVE_QTDECLARATIVE when FindQt4 found the module.
 	#
 	# The remaining patches are the Arch/AUR kdelibs fixes that still apply to
 	# 4.14.3: the QBool comparisons in kio, the libjasper exported entry point,

@@ -1,3 +1,16 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -313,6 +313,10 @@
+ 
+ ################# list the subdirectories #################
+ 
++if (QT_QTDECLARATIVE_LIBRARY)
++  add_definitions(-DHAVE_QTDECLARATIVE)
++endif (QT_QTDECLARATIVE_LIBRARY)
++
+ add_subdirectory( cmake )
+ add_subdirectory( kdecore )
+ add_subdirectory( kdeui )
 --- a/experimental/CMakeLists.txt
 +++ b/experimental/CMakeLists.txt
 @@ -22,4 +22,6 @@
@@ -30,3 +43,33 @@
  kde4_add_library(plasma ${LIBRARY_TYPE} ${plasma_LIB_SRCS})
  
  target_link_libraries(plasma ${QT_QTUITOOLS_LIBRARY} ${QT_QTWEBKIT_LIBRARY}
+--- a/plasma/popupapplet.cpp
++++ b/plasma/popupapplet.cpp
+@@ -27,7 +27,9 @@
+ #include <QGraphicsLinearLayout>
+ #include <QTimer>
+ #include <QVBoxLayout>
++#ifdef HAVE_QTDECLARATIVE
+ #include <QDeclarativeItem>
++#endif
+ 
+ #ifdef Q_WS_X11
+ #include <QX11Info>
+@@ -243,13 +245,17 @@
+ 
+         //99% of the times q->parentWidget() is the containment, but using it  we can also manage the applet-in-applet case (i.e. systray)
+         //there are also cases where the parentlayoutitem is bigger than the containment (e.g. newspaper)
++#ifdef HAVE_QTDECLARATIVE
+         QDeclarativeItem *di = qobject_cast<QDeclarativeItem *>(q->parentObject());
++#endif
+         if (q->parentLayoutItem()) {
+             parentSize = q->parentLayoutItem()->geometry().size();
+         } else if (q->parentWidget()) {
+             parentSize = q->parentWidget()->size();
++#ifdef HAVE_QTDECLARATIVE
+         } else if (di) {
+             parentSize = QSizeF(di->width(), di->height());
++#endif
+         }
+ 
+         //check if someone did the nasty trick of applets in applets, in this case we always want to be collapsed
