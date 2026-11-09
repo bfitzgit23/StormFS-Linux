@@ -16,6 +16,7 @@ libtiff
 libxml2
 libxslt
 mesa
+pcre
 phonon4
 qt4
 shared-desktop-ontologies
