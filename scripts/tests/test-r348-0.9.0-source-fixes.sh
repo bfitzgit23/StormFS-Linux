@@ -347,4 +347,23 @@ grep -Fq 'OPENSSL_VERSION_TEXT' ports/opt/kerberos/spkgbuild || \
     fail 'kerberos does not report the OpenSSL it builds against'
 pass 'kerberos never reverses applied patches and reports its OpenSSL'
 
+grep -qx 'release=2' ports/core/python3-hatch-vcs/spkgbuild || \
+    fail 'hatch-vcs rebuild release missing'
+grep -Fq 'python3 -m build --wheel --skip-dependency-check --no-isolation' ports/core/python3-hatch-vcs/spkgbuild || \
+    fail 'hatch-vcs no longer builds from its work tree'
+if grep -Fq '$SRC/hatch-vcs-' ports/core/python3-hatch-vcs/spkgbuild; then
+    fail 'hatch-vcs still changes into the source cache'
+fi
+grep -qx 'python3-setuptools-scm' ports/core/python3-hatch-vcs/depends || \
+    fail 'hatch-vcs runtime dependency is missing'
+pass 'hatch-vcs installs its vcs build hook into the package'
+
+grep -qx 'version=26.2.7' ports/opt/libreoffice-bin/spkgbuild || \
+    fail 'libreoffice-bin does not pin a published release'
+grep -Fq 'deb/x86_64/LibreOffice_${version}_Linux_x86-64_deb.tar.gz' ports/opt/libreoffice-bin/spkgbuild || \
+    fail 'libreoffice-bin source is not the verified archive'
+grep -Fq 'ar x' ports/opt/libreoffice-bin/spkgbuild || \
+    fail 'libreoffice-bin does not unpack the Debian payloads'
+pass 'libreoffice-bin fetches a live release and unpacks it without dpkg'
+
 echo 'r348 0.9.0 source regression checks passed.' 

@@ -5,15 +5,14 @@
 description="Hatch plugin for versioning with your preferred VCS"
 name=python3-hatch-vcs
 version=0.5.0
-release=1
+release=2
 source="https://github.com/ofek/hatch-vcs/archive/v$version/hatch-vcs-$version.tar.gz"
 
 build() {
-	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "hatch-vcs-0.5.0" -print -quit)
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "hatch-vcs-$version" -print -quit)
 	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
 	[ -n "$_bfs_src" ] || return 1
 	cd "$_bfs_src" || return 1
-  cd $SRC/hatch-vcs-$version
-  /usr/bin/python3 -m build --wheel --skip-dependency-check --no-isolation
-  /usr/bin/python3 -m installer --compile-bytecode 2 --destdir=$PKG dist/*.whl
+	python3 -m build --wheel --skip-dependency-check --no-isolation || return 1
+	python3 -m installer --compile-bytecode 2 --destdir="$PKG" dist/*.whl || return 1
 }

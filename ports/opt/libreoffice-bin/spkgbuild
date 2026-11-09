@@ -1,0 +1,34 @@
+# description	: LibreOffice binary office suite
+# homepage	: https://www.libreoffice.org/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+# depends	: avahi cups desktop-file-utils gst-plugins-base gtk3 krb5 nss
+
+description="LibreOffice binary office suite"
+name=libreoffice-bin
+version=26.2.7
+release=1
+build_work=disk
+source="LibreOffice_${version}_Linux_x86-64_deb.tar.gz::https://download.documentfoundation.org/libreoffice/stable/${version}/deb/x86_64/LibreOffice_${version}_Linux_x86-64_deb.tar.gz"
+
+build() {
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "LibreOffice_${version}*" -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+
+	install -d "$PKG" || return 1
+
+	# The archive carries Debian packages. Unpack each payload with ar and
+	# tar so the build host does not need dpkg or rpm tooling.
+	for _bfs_deb in "$_bfs_src"/DEBS/*.deb; do
+		[ -f "$_bfs_deb" ] || return 1
+		_bfs_tmp=$(mktemp -d) || return 1
+		( cd "$_bfs_tmp" && ar x "$_bfs_deb" ) || { rm -rf "$_bfs_tmp"; return 1; }
+		( cd "$_bfs_tmp" && tar -xf data.tar.* -C "$PKG" ) || { rm -rf "$_bfs_tmp"; return 1; }
+		rm -rf "$_bfs_tmp"
+	done
+
+	rm -f "$PKG"/opt/libreoffice*/CREDITS* \
+	      "$PKG"/opt/libreoffice*/LICENSE* \
+	      "$PKG"/opt/libreoffice*/NOTICE
+}
+
+# vim: set ts=4 et:
