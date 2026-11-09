@@ -8,6 +8,16 @@
  
  include(GenerateExportHeader)
  
+@@ -268,7 +267,8 @@
+ install(EXPORT kdepimlibsLibraryTargets
+         NAMESPACE ${KDEPIMLIBS_TARGET_PREFIX}
+         DESTINATION ${_KdepimLibsConfig_INSTALL_DIR}
+-        FILE KDEPimLibsLibraryTargetsWithPrefix.cmake )
++        FILE KDEPimLibsLibraryTargetsWithPrefix.cmake
++        EXPORT_LINK_INTERFACE_LIBRARIES )
+ 
+ # Install a KDEPimLibsDependencies.cmake so people using kdepimlibs 4.2 with kdelibs < 4.2 get a useful error message, Alex
+ file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/KDEPimLibsDependencies.cmake "\n message(FATAL_ERROR \"For using this version of kdepimlibs (${KDEPIMLIBS_VERSION}) you need a newer version of kdelibs, please update.\")\n")
 --- a/akonadi/CMakeLists.txt
 +++ b/akonadi/CMakeLists.txt
 @@ -299,7 +299,7 @@

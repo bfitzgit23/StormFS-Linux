@@ -5,7 +5,7 @@
 description="KDE 4 PIM libraries"
 name=kdepimlibs
 version=4.14.3
-release=7
+release=8
 source="https://download.kde.org/Attic/4.14.3/src/kdepimlibs-$version.tar.xz kdepimlibs-4.14.3-cmake-minimum.patch.manual kdepimlibs-4.14.3-export-library-dependencies.patch.manual kdepimlibs-4.14.3-findgpgme-pkgconfig.patch.manual kdepimlibs-4.14.3-gpgmepp-location.patch.manual kdepimlibs-4.14.3-cmp0022-export.patch.manual kdepimlibs-4.14.3-akonadi-location.patch.manual"
 
 build() {
@@ -26,6 +26,13 @@ build() {
 	patch -p1 -i "$SRC/kdepimlibs-4.14.3-gpgmepp-location.patch.manual" || return 1
 	patch -p1 -i "$SRC/kdepimlibs-4.14.3-cmp0022-export.patch.manual" || return 1
 	patch -p1 -i "$SRC/kdepimlibs-4.14.3-akonadi-location.patch.manual" || return 1
+
+	# The exported target file must carry the keyword, otherwise CMake refuses
+	# to export any target that still has an old-style link interface.
+	grep -q EXPORT_LINK_INTERFACE_LIBRARIES CMakeLists.txt || {
+		echo "$name: export patch did not apply to the source tree" >&2
+		return 1
+	}
 
 	# kdelibs before 4.14.3-21 shipped cmake modules that read the location of a
 	# kauth-policy-gen target its exported tools file never contained, so every
