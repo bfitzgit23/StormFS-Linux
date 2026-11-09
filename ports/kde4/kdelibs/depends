@@ -6,6 +6,7 @@ bzip2
 cups
 dbus
 desktop-file-utils
+eudev
 giflib
 hicolor-icon-theme
 libjpeg-turbo

@@ -15,6 +15,8 @@ build() {
 	cd "$_bfs_src" || return 1
 
 	export CMAKE_PREFIX_PATH="/opt/qt4:/usr"
+	export PATH="/opt/qt4/bin:$PATH"
+	export QT_QMAKE_EXECUTABLE=/opt/qt4/bin/qmake
 	export CFLAGS="${CFLAGS:+$CFLAGS }-std=gnu99"
 	export CXXFLAGS="${CXXFLAGS:+$CXXFLAGS }-std=gnu++98 -fpermissive -Wno-deprecated-declarations"
 
@@ -38,7 +40,7 @@ build() {
 		-DWITH_PolkitQt1=OFF \
 		-DWITH_UDISKS=OFF \
 		-DWITH_UDISKS2=OFF \
-		-DWITH_UDEV=OFF \
+		-DWITH_UDEV=ON \
 		-DWITH_OPENGL=ON \
 		-DWITH_ACL=ON \
 		-DWITH_Soprano=ON \
