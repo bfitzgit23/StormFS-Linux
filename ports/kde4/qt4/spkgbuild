@@ -21,9 +21,10 @@ build() {
 	patch -p1 -i "$SRC/qt4-gcc-requires.patch.manual" || return 1
 
 	export CFLAGS="${CFLAGS:+$CFLAGS }-std=gnu99"
-	# ICU 78 exposes C++17-only header APIs unless both guards are disabled.
-	# Qt4 is C++98 and only consumes ICU's C API.
-	export CXXFLAGS="${CXXFLAGS:+$CXXFLAGS }-std=gnu++98 -fpermissive -Wno-deprecated-declarations -DU_SHOW_CPLUSPLUS_API=0 -DU_SHOW_CPLUSPLUS_HEADER_API=0"
+	# ICU 78 defaults UChar to C++11 char16_t and exposes C++17-only header
+	# APIs. Qt4 is C++98 and only consumes ICU's C ABI.
+	export CXXFLAGS="${CXXFLAGS:+$CXXFLAGS }-std=gnu++98 -fpermissive -Wno-deprecated-declarations"
+	export CXXFLAGS="$CXXFLAGS -DU_SHOW_CPLUSPLUS_API=0 -DU_SHOW_CPLUSPLUS_HEADER_API=0 -DUCHAR_TYPE=uint16_t"
 
 	./configure \
 		-prefix /opt/qt4 \
