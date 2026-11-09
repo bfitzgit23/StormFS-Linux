@@ -160,7 +160,9 @@ bfs_cmake_policy_args() {
     BFS_CMAKE_POLICY_ARGS=""
     [ "${SPKG_CMAKE_POLICY_COMPAT:-yes}" = no ] && return 0
 
-    eval 'BFS_BUILD_OPTS="${build_opt[*]}"' 2>/dev/null || true
+    if [ -n "${build_opt:-}" ]; then
+        eval 'BFS_BUILD_OPTS="${build_opt[*]}"' 2>/dev/null || BFS_BUILD_OPTS=""
+    fi
     case " $BFS_BUILD_OPTS " in
         *-DCMAKE_POLICY_VERSION_MINIMUM*) return 0 ;;
     esac

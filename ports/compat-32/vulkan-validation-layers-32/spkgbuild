@@ -8,7 +8,7 @@ name=vulkan-validation-layers-32
 _name=Vulkan-ValidationLayers
 version=1.4.357.0
 _version=vulkan-sdk-$version
-release=3
+release=4
 source="https://github.com/KhronosGroup/Vulkan-ValidationLayers/archive/$_version/$_name-$version.tar.gz"
 
 build() {
@@ -20,7 +20,8 @@ build() {
 	cd "$_bfs_src" || return 1
   (
     set -e
-	prt-get isinst wayland-32 || SPKG_VULKAN_VALIDATION_LAYERS+=' -D BUILD_WSI_WAYLAND_SUPPORT=OFF'
+	prt-get isinst wayland-32 >/dev/null 2>&1 || \
+		SPKG_VULKAN_VALIDATION_LAYERS="${SPKG_VULKAN_VALIDATION_LAYERS:-} -D BUILD_WSI_WAYLAND_SUPPORT=OFF"
 
 	cmake -S . -B build -G Ninja $SPKG_VULKAN_VALIDATION_LAYERS \
 		-D CMAKE_INSTALL_PREFIX=/usr \

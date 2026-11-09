@@ -6,7 +6,7 @@
 description="Vulkan loader, 32bit"
 name=vulkan-loader-32
 version=1.4.357.0
-release=4
+release=5
 source="https://github.com/KhronosGroup/Vulkan-Loader/archive/refs/tags/vulkan-sdk-$version.tar.gz"
 
 build() {
@@ -18,7 +18,8 @@ build() {
 	cd "$_bfs_src" || return 1
   (
     set -e
-	prt-get isinst wayland-32 || SPKG_VULKAN_LOADER+=' -D BUILD_WSI_WAYLAND_SUPPORT=OFF'
+	prt-get isinst wayland-32 >/dev/null 2>&1 || \
+		SPKG_VULKAN_LOADER="${SPKG_VULKAN_LOADER:-} -D BUILD_WSI_WAYLAND_SUPPORT=OFF"
 
 	export ASFLAGS='--32'
 
@@ -32,7 +33,33 @@ build() {
 		-D BUILD_TESTS=OFF
 
 	cmake --build build
-	DESTDIR=$PKG cmake --build build --target install
+	DESTDIR="$PKG" cmake --install build
+
+	_vulkan_lib=
+	[ -d "$PKG/usr/lib32" ] && _vulkan_lib=$(find "$PKG/usr/lib32" -maxdepth 1 -type f \
+		\( -name 'libvulkan.so' -o -name 'libvulkan.so.*' \) -print -quit)
+	if [ -z "$_vulkan_lib" ]; then
+		_vulkan_lib=$(find . -type f \
+			\( -name 'libvulkan.so' -o -name 'libvulkan.so.*' \) -print -quit)
+		[ -n "$_vulkan_lib" ] || {
+			echo "vulkan-loader-32: build did not produce libvulkan.so" >&2
+			exit 1
+		}
+		install -d "$PKG/usr/lib32" || exit 1
+		install -m 0755 "$_vulkan_lib" "$PKG/usr/lib32/${_vulkan_lib##*/}" || exit 1
+	fi
+
+	_vulkan_name=${_vulkan_lib##*/}
+	ln -sfn "$_vulkan_name" "$PKG/usr/lib32/libvulkan.so.1" || exit 1
+	[ "$_vulkan_name" = libvulkan.so ] ||
+		ln -sfn "$_vulkan_name" "$PKG/usr/lib32/libvulkan.so" || exit 1
+
+	find "$PKG/usr/lib32" -maxdepth 1 \
+		\( -name 'libvulkan.so' -o -name 'libvulkan.so.*' \) \
+		-print -quit | grep -q . || {
+		echo "vulkan-loader-32: libvulkan.so was not staged" >&2
+		exit 1
+	}
   )
 	bfs_compat32_validate || return 1
 }
