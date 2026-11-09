@@ -42,3 +42,14 @@ grep -Eq '^version=12\.19\.0$' "$ROOT/ports/opt/pyqt5-sip/spkgbuild" || { echo "
 grep -qx 'pyqt5-sip' "$ROOT/ports/opt/python3-pyqt5/depends" || { echo "python3-pyqt5 missing pyqt5-sip runtime dependency" >&2; exit 1; }
 grep -qx 'pyqt5-sip' "$ROOT/ports/compiz/fusion-icon/depends" || { echo "fusion-icon missing pyqt5-sip dependency" >&2; exit 1; }
 ! grep -qx 'python3-pyqt5' "$ROOT/ports/opt/pyqt5-sip/depends" 2>/dev/null || { echo "pyqt5-sip dependency cycle detected" >&2; exit 1; }
+
+pyqt5="$ROOT/ports/opt/python3-pyqt5/spkgbuild"
+for dep in python3 python3-build python3-installer; do
+    grep -qx "$dep" "$ROOT/ports/opt/python3-pyqt5/depends" || fail "python3-pyqt5 missing $dep dependency"
+done
+grep -Fq 'python3 -m build --wheel --no-isolation' "$pyqt5" || fail 'python3-pyqt5 does not build a wheel'
+grep -Fq 'python3 -m installer --compile-bytecode 2 --destdir="$PKG" dist/*.whl' "$pyqt5" || fail 'python3-pyqt5 does not stage its wheel with installer'
+if grep -Eq '^[[:space:]]*sip-install([[:space:]]|$)' "$pyqt5"; then
+    fail 'python3-pyqt5 still uses sip-install without a staging root'
+fi
+echo "PASS: r333 PyQt5 wheel staging"

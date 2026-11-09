@@ -5,7 +5,7 @@
 description="Python 3 bindings for Qt 5"
 name=python3-pyqt5
 version=5.15.11
-release=3
+release=4
 source="https://files.pythonhosted.org/packages/source/P/PyQt5/PyQt5-$version.tar.gz"
 
 build() {
@@ -16,10 +16,15 @@ build() {
     local pyver
     pyver=$(python3 -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')
 
+    # sip-install has no staging-root option, so DESTDIR was ignored and the
+    # payload landed in the live root. Build a wheel and stage it explicitly.
     yes yes | \
       PATH=/opt/qt5/bin:$PATH \
-      DESTDIR="$PKG" \
-      sip-install \
-        --target-dir "/usr/lib/python${pyver}/site-packages" \
-        --scripts-dir "/usr/bin" || return 1
+      python3 -m build --wheel --no-isolation || return 1
+    python3 -m installer --compile-bytecode 2 --destdir="$PKG" dist/*.whl || return 1
+
+    test -d "$PKG/usr/lib/python${pyver}/site-packages/PyQt5" || {
+        echo "ERROR: PyQt5 bindings were not staged under site-packages" >&2
+        return 1
+    }
 }
