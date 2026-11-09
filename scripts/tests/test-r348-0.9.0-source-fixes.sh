@@ -364,6 +364,10 @@ grep -Fq 'deb/x86_64/LibreOffice_${version}_Linux_x86-64_deb.tar.gz' ports/opt/l
     fail 'libreoffice-bin source is not the verified archive'
 grep -Fq 'ar x' ports/opt/libreoffice-bin/spkgbuild || \
     fail 'libreoffice-bin does not unpack the Debian payloads'
+grep -Fq 'find "$PWD" -mindepth 1 -type d -name DEBS' ports/opt/libreoffice-bin/spkgbuild || \
+    fail 'libreoffice-bin locates DEBS by a relative path'
+grep -Fq '_bfs_debcount' ports/opt/libreoffice-bin/spkgbuild || \
+    fail 'libreoffice-bin does not verify that payloads were unpacked'
 pass 'libreoffice-bin fetches a live release and unpacks it without dpkg'
 
 grep -qx 'release=2' ports/gnome/tinysparql/spkgbuild || \

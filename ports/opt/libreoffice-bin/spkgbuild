@@ -11,20 +11,33 @@ build_work=disk
 source="LibreOffice_${version}_Linux_x86-64_deb.tar.gz::https://download.documentfoundation.org/libreoffice/stable/${version}/deb/x86_64/LibreOffice_${version}_Linux_x86-64_deb.tar.gz"
 
 build() {
-	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "LibreOffice_${version}*" -print -quit)
-	[ -n "$_bfs_src" ] || return 1
+	# The archive unpacks to a versioned directory whose fourth component is
+	# not part of the download name, so locate DEBS by content rather than by
+	# guessing the path.  Keep the path absolute: the loop below changes into
+	# a scratch directory before running ar.
+	_bfs_debdir=$(find "$PWD" -mindepth 1 -type d -name DEBS -print -quit)
+	[ -n "$_bfs_debdir" ] || {
+		echo "libreoffice-bin: no DEBS directory in the unpacked archive" >&2
+		return 1
+	}
 
 	install -d "$PKG" || return 1
 
 	# The archive carries Debian packages. Unpack each payload with ar and
 	# tar so the build host does not need dpkg or rpm tooling.
-	for _bfs_deb in "$_bfs_src"/DEBS/*.deb; do
-		[ -f "$_bfs_deb" ] || return 1
+	_bfs_debcount=0
+	for _bfs_deb in "$_bfs_debdir"/*.deb; do
+		[ -f "$_bfs_deb" ] || continue
 		_bfs_tmp=$(mktemp -d) || return 1
 		( cd "$_bfs_tmp" && ar x "$_bfs_deb" ) || { rm -rf "$_bfs_tmp"; return 1; }
 		( cd "$_bfs_tmp" && tar -xf data.tar.* -C "$PKG" ) || { rm -rf "$_bfs_tmp"; return 1; }
 		rm -rf "$_bfs_tmp"
+		_bfs_debcount=$((_bfs_debcount + 1))
 	done
+	[ "$_bfs_debcount" -gt 0 ] || {
+		echo "libreoffice-bin: DEBS contains no .deb payloads" >&2
+		return 1
+	}
 
 	rm -f "$PKG"/opt/libreoffice*/CREDITS* \
 	      "$PKG"/opt/libreoffice*/LICENSE* \
