@@ -1,0 +1,58 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -147,6 +147,10 @@
+                       )
+ 
+ find_package(DBusMenuQt)
++
++if (DBUSMENUQT_FOUND)
++  add_definitions(-DHAVE_DBUSMENUQT)
++endif (DBUSMENUQT_FOUND)
+ set_package_properties(DBusMenuQt PROPERTIES DESCRIPTION "Support for notification area menus via the DBusMenu protocol"
+                        URL "https://launchpad.net/libdbusmenu-qt"
+                        TYPE REQUIRED
+--- a/kdeui/notifications/kstatusnotifieritem.cpp
++++ b/kdeui/notifications/kstatusnotifieritem.cpp
+@@ -45,12 +45,15 @@
+ 
+ #include <netinet/in.h>
+ 
++#ifdef HAVE_DBUSMENUQT
+ #include <dbusmenuexporter.h>
++#endif
+ 
+ #include "statusnotifieritemadaptor.h"
+ 
+ static const QString s_statusNotifierWatcherServiceName("org.kde.StatusNotifierWatcher");
+ 
++#ifdef HAVE_DBUSMENUQT
+ /**
+  * Specialization to provide access to KDE icon names
+  */
+@@ -97,6 +100,7 @@
+ #endif
+     }
+ };
++#endif
+ 
+ KStatusNotifierItem::KStatusNotifierItem(QObject *parent)
+       : QObject(parent),
+@@ -444,6 +448,7 @@
+     if (d->systemTrayIcon) {
+         d->systemTrayIcon->setContextMenu(menu);
+     } else if (d->menu != menu) {
++#ifdef HAVE_DBUSMENUQT
+         if (getenv("KSNI_NO_DBUSMENU")) {
+             // This is a hack to make it possible to disable DBusMenu in an
+             // application. The string "/NO_DBUSMENU" must be the same as in
+@@ -455,6 +460,10 @@
+             d->menuObjectPath = "/MenuBar";
+             new KDBusMenuExporter(d->menuObjectPath, menu, d->statusNotifierItemDBus->dbusConnection());
+         }
++#else
++        d->menuObjectPath = "/NO_DBUSMENU";
++        menu->installEventFilter(this);
++#endif
+ 
+         connect(menu, SIGNAL(aboutToShow()), this, SLOT(contextMenuAboutToShow()));
+     }

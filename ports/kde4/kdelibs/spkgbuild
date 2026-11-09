@@ -5,8 +5,8 @@
 description="KDE 4 core libraries"
 name=kdelibs
 version=4.14.3
-release=10
-source="https://download.kde.org/Attic/4.14.3/src/kdelibs-$version.tar.xz kdelibs-4.14.3-cmake4.patch.manual kdelibs-4.14.3-cmake4-interface-libs.patch.manual kdelibs-4.14.3-klocale-bool-comparison.patch.manual"
+release=11
+source="https://download.kde.org/Attic/4.14.3/src/kdelibs-$version.tar.xz kdelibs-4.14.3-cmake4.patch.manual kdelibs-4.14.3-cmake4-interface-libs.patch.manual kdelibs-4.14.3-klocale-bool-comparison.patch.manual kdelibs-4.14.3-optional-dbusmenuqt.patch.manual kdelibs-4.14.3-ordered.patch.manual kdelibs-4.14.3-qt4-qmake.patch.manual kdelibs-4.14.3-jasper-exported.patch.manual kdelibs-4.14.3-openssl-1.1.patch.manual"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
@@ -30,9 +30,32 @@ build() {
 	# Qt 4 returns QBool there, which only converts to void*, so the ordered
 	# pointer/integer comparison is an error rather than something -fpermissive
 	# can downgrade.  Test the boolean conversion directly instead.
+	#
+	# kstatusnotifieritem.cpp includes <dbusmenuexporter.h> unconditionally,
+	# but dbusmenu-qt is not part of BFSOS.  Make that dependency optional and
+	# fall back to the plain menu event filter when it is unavailable.
+	#
+	# The remaining patches are the Arch/AUR kdelibs fixes that still apply to
+	# 4.14.3: the Qt 5 qmake preference in FindQt4, the QBool comparisons in
+	# kio, the libjasper exported entry point, and the OpenSSL 1.1 API (inert
+	# while OpenSSL is disabled below).
+	#
+	# Three further AUR patches are shipped but deliberately not applied:
+	#   kdelibs-4.14.3-archlinux-menu.patch.manual adds an "Arch Linux" menu
+	#     to the XDG layout, which is the wrong branding for BFSOS.
+	#   kdelibs-4.14.3-kde-applications-menu.patch.manual renames the installed
+	#     menu file to coexist with gnome-menus; nothing else here installs
+	#     applications.menu.
+	#   kdelibs-4.14.3-no-kdewebkit.patch.manual does not apply to 4.14.3, and
+	#     the kdewebkit module is already removed by the cmake4 patch above.
 	patch -p1 -i "$SRC/kdelibs-4.14.3-cmake4.patch.manual" || return 1
 	patch -p1 -i "$SRC/kdelibs-4.14.3-cmake4-interface-libs.patch.manual" || return 1
 	patch -p1 -i "$SRC/kdelibs-4.14.3-klocale-bool-comparison.patch.manual" || return 1
+	patch -p1 -i "$SRC/kdelibs-4.14.3-optional-dbusmenuqt.patch.manual" || return 1
+	patch -p1 -i "$SRC/kdelibs-4.14.3-ordered.patch.manual" || return 1
+	patch -p1 -i "$SRC/kdelibs-4.14.3-qt4-qmake.patch.manual" || return 1
+	patch -p1 -i "$SRC/kdelibs-4.14.3-jasper-exported.patch.manual" || return 1
+	patch -p1 -i "$SRC/kdelibs-4.14.3-openssl-1.1.patch.manual" || return 1
 
 	export CMAKE_PREFIX_PATH="/opt/qt4:/usr"
 	export PATH="/opt/qt4/bin:$PATH"
