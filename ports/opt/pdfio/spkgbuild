@@ -1,0 +1,21 @@
+# description	: PDF read/write library
+# homepage	: https://www.msweet.org/pdfio/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+description="PDF read/write library"
+name=pdfio
+version=1.6.4
+release=1
+build_opt="--prefix=/usr
+           --disable-static
+           --enable-shared"
+source="https://github.com/michaelrsweet/pdfio/releases/download/v$version/$name-$version.tar.gz"
+
+build() {
+	. /usr/share/bfsos/spkgbuild.helper || return 1
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
+	bfs_autobuild
+}
