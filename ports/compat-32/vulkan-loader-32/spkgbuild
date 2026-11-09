@@ -6,8 +6,15 @@
 description="Vulkan loader, 32bit"
 name=vulkan-loader-32
 version=1.4.357.0
-release=5
-source="https://github.com/KhronosGroup/Vulkan-Loader/archive/refs/tags/vulkan-sdk-$version.tar.gz"
+# Keep this cache name package-specific: Vulkan-Headers publishes the same
+# vulkan-sdk-$version.tar.gz basename and scratchpkg keys sources by filename.
+release=6
+source="${name}-${version}.tar.gz::https://github.com/KhronosGroup/Vulkan-Loader/archive/refs/tags/vulkan-sdk-$version.tar.gz"
+# Drop a manifest written for the old shared cache filename; pkgbuild will
+# regenerate it for the package-specific source name above.
+if [ -f .checksums ] && ! grep -q "[[:space:]]${name}-${version}[.]tar[.]gz$" .checksums; then
+    rm -f .checksums
+fi
 
 build() {
 	. /usr/share/bfsos/spkgbuild.helper || return 1

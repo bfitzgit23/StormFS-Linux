@@ -5,8 +5,16 @@
 description="Vulkan ICD loader"
 name=vulkan-loader
 version=1.4.357.0
-release=7
-source="https://github.com/KhronosGroup/Vulkan-Loader/archive/refs/tags/vulkan-sdk-${version}.tar.gz"
+# scratchpkg caches sources by filename.  Vulkan-Headers and Vulkan-Loader
+# both publish vulkan-sdk-${version}.tar.gz, so use a package-specific cache
+# name or one package silently builds from the other package's archive.
+release=8
+source="${name}-${version}.tar.gz::https://github.com/KhronosGroup/Vulkan-Loader/archive/refs/tags/vulkan-sdk-${version}.tar.gz"
+# Drop a manifest written for the old shared cache filename; pkgbuild will
+# regenerate it for the package-specific source name above.
+if [ -f .checksums ] && ! grep -q "[[:space:]]${name}-${version}[.]tar[.]gz$" .checksums; then
+    rm -f .checksums
+fi
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
