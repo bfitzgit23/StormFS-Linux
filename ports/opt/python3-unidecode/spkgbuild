@@ -1,0 +1,19 @@
+# description	: ASCII transliterations of Unicode text
+# homepage	: https://pypi.org/project/Unidecode/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+description="ASCII transliterations of Unicode text"
+name=python3-unidecode
+version=1.4.0
+release=1
+source="https://files.pythonhosted.org/packages/source/U/Unidecode/Unidecode-${version}.tar.gz"
+
+build() {
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "unidecode-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
+
+	python3 setup.py build || return 1
+	python3 setup.py install --root="$PKG" --prefix=/usr --optimize=1 || return 1
+}

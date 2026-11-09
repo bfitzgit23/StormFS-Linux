@@ -1,0 +1,34 @@
+# description	: USB image writer and USB stick formatter
+# homepage	: https://github.com/linuxmint/mintstick
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+description="USB image writer and USB stick formatter"
+name=mintstick
+version=1.6.8
+release=1
+# Debian archives the exact upstream release tarball used by Linux Mint.
+source="https://deb.debian.org/debian/pool/main/m/mintstick/mintstick_${version}.orig.tar.xz"
+
+build() {
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -name "$name" -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
+
+	install -d "$PKG/usr/bin" "$PKG/usr/lib/mintstick" \
+		"$PKG/usr/share" "$PKG/usr/share/applications" \
+		"$PKG/usr/share/kde4/apps/solid/actions" \
+		"$PKG/usr/share/man/man1" "$PKG/usr/share/mintstick" \
+		"$PKG/usr/share/nemo/actions" "$PKG/usr/share/polkit-1/actions" || return 1
+
+	install -m755 lib/*.py "$PKG/usr/lib/mintstick/" || return 1
+	install -m644 share/mintstick/* "$PKG/usr/share/mintstick/" || return 1
+	install -m644 share/applications/* "$PKG/usr/share/applications/" || return 1
+	install -m644 share/polkit/* "$PKG/usr/share/polkit-1/actions/" || return 1
+	install -m644 share/nemo/actions/* "$PKG/usr/share/nemo/actions/" || return 1
+	install -m644 share/kde4/* "$PKG/usr/share/kde4/apps/solid/actions/" || return 1
+	install -m755 mintstick mint-iso-verify "$PKG/usr/bin/" || return 1
+	install -m755 bin/* "$PKG/usr/bin/" || return 1
+	install -m644 debian/mintstick.1 "$PKG/usr/share/man/man1/" || return 1
+	cp -a share/icons "$PKG/usr/share/" || return 1
+}

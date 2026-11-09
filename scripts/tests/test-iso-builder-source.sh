@@ -18,8 +18,12 @@ done
 for pkg in networkmanager-iso openssh git sudo wget wpa_supplicant wireless-regdb gpm lynx-iso chrony cryptsetup lvm2 mdadm snapper grub grub-efi squashfs-tools libisoburn; do
     grep -q "\b$pkg\b" "$iso" || fail "ISO package set is missing $pkg"
 done
-for pkg in xfce4-meta lightdm lightdm-gtk-greeter chromium-bin firefox-bin fastfetch mousepad libreoffice-bin flameshot galculator vlc gparted; do
+for pkg in xfce4-meta lightdm lightdm-gtk-greeter chromium-bin firefox-bin fastfetch mousepad libreoffice-bin flameshot galculator vlc gparted mintstick; do
     grep -q "\b$pkg\b" "$iso" || fail "ISO desktop package set is missing $pkg"
+done
+[ -f "$ROOT/ports/opt/mintstick/spkgbuild" ] || fail 'mintstick port is missing'
+for dep in python3-gnupg python3-pyparted python3-unidecode; do
+    [ -f "$ROOT/ports/opt/$dep/spkgbuild" ] || fail "mintstick dependency port is missing: $dep"
 done
 ! grep -Eq '(^|[[:space:]])chromium([[:space:]]|$)' "$iso" || \
     fail 'ISO still includes the source-built chromium package'
