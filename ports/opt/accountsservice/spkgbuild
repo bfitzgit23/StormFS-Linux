@@ -6,14 +6,18 @@
 description="D-Bus interfaces and daemon for querying and manipulating user accounts"
 name=accountsservice
 version=26.27.3
-release=3
-source="https://gitlab.freedesktop.org/accountsservice/accountsservice/-/archive/$version/accountsservice-$version.tar.bz2"
+release=4
+skip_patch=1
+source="https://gitlab.freedesktop.org/accountsservice/accountsservice/-/archive/$version/accountsservice-$version.tar.bz2 openrc-no-logind.patch bfs-logind-stub.h"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
 	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
 	[ -n "$_bfs_src" ] || return 1
 	cd "$_bfs_src" || return 1
+
+    cp "$SRC/bfs-logind-stub.h" src/libaccountsservice/ || return 1
+    patch -Np1 -i "$SRC/openrc-no-logind.patch" || return 1
     sed -i '/^SIMULATED_SYSTEM_LOCALE/s/en_IE.UTF-8/en_HK.iso88591/' tests/test-daemon.py
 
     meson setup build \

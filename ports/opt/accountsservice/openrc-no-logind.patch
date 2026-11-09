@@ -1,0 +1,17 @@
+--- a/meson.build
++++ b/meson.build
+@@ -241,5 +241,2 @@
+-if get_option('elogind')
+-  logind_dep = dependency('libelogind', version: '>= 229.4')
+-else
+-  logind_dep = dependency('libsystemd', version: '>= 186')
+-endif
++# BFSOS uses OpenRC without logind; use the local session stubs.
++logind_dep = declare_dependency()
+--- a/src/libaccountsservice/act-user-manager.c
++++ b/src/libaccountsservice/act-user-manager.c
+@@ -41,3 +41,3 @@
+ #include <gio/gio.h>
+ #include <gio/gunixinputstream.h>
+-#include <systemd/sd-login.h>
++#include "bfs-logind-stub.h"
