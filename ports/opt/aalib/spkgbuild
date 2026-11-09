@@ -4,7 +4,7 @@
 description="aalib package"
 name=aalib
 version=1.4rc5
-release=1
+release=2
 source="https://downloads.sourceforge.net/aa-project/${name}-${version}.tar.gz aalib-aalinuxkbd-return.patch aalib-c99.patch aalib-mouse.patch aalib-fix-aarender.patch aalib-opaque-ncurses-fix.patch aalib-free-offset-pointer.patch aalib-key-down-OOB.patch"
 
 build() {
@@ -13,32 +13,32 @@ build() {
 	[ -n "$_bfs_src" ] || return 1
 	cd "$_bfs_src" || return 1
 
-	# Apply patch sources; pkgbuild does this automatically.
+	# pkgbuild copies the patch sources into $SRC; they still need applying.
 	for _bfs_patch in "$SRC"/*.patch "$SRC"/*.diff; do
 		[ -f "$_bfs_patch" ] || continue
 		patch -t "${patch_opt:--p1}" -i "$_bfs_patch" || return 1
 	done
-autoreconf -fi
-./configure --prefix=/usr             \
-            --infodir=/usr/share/info \
-            --mandir=/usr/share/man   \
-            --disable-static          &&
-make
-make DESTDIR="$PKG" install
-sed -i -e '/AM_PATH_AALIB,/s/AM_PATH_AALIB/[&]/' aalib.m4
-sed -e 's/8x13bold/-*-luxi mono-bold-r-normal--13-120-*-*-m-*-*-*/' \
-    -i src/aax.c
-sed 's/stdscr->_max\([xy]\) + 1/getmax\1(stdscr)/' \
-    -i src/aacurses.c
-sed -i '1i#include <stdlib.h>'                            \
-    src/aa{fire,info,lib,linuxkbd,savefont,test,regist}.c &&
-sed -i '1i#include <string.h>'                            \
-    src/aa{kbdreg,moureg,test,regist}.c                   &&
-sed -i '/X11_KBDDRIVER/a#include <X11/Xutil.h>'           \
-    src/aaxkbd.c                                          &&
-sed -i '/rawmode_init/,/^}/s/return;/return 0;/'          \
-}
 
-    src/aalinuxkbd.c                                      &&
-autoconf
+	# aalib.m4 predates modern m4 quoting, so fix it before regenerating.
+	sed -i -e '/AM_PATH_AALIB,/s/AM_PATH_AALIB/[&]/' aalib.m4 || return 1
+	sed -e 's/8x13bold/-*-luxi mono-bold-r-normal--13-120-*-*-m-*-*-*/' \
+	    -i src/aax.c || return 1
+	sed 's/stdscr->_max\([xy]\) + 1/getmax\1(stdscr)/' \
+	    -i src/aacurses.c || return 1
+	sed -i '1i#include <stdlib.h>' \
+	    src/aa{fire,info,lib,linuxkbd,savefont,test,regist}.c || return 1
+	sed -i '1i#include <string.h>' \
+	    src/aa{kbdreg,moureg,test,regist}.c || return 1
+	sed -i '/X11_KBDDRIVER/a#include <X11/Xutil.h>' \
+	    src/aaxkbd.c || return 1
+	sed -i '/rawmode_init/,/^}/s/return;/return 0;/' \
+	    src/aalinuxkbd.c || return 1
+
+	autoreconf -fi || return 1
+	./configure --prefix=/usr             \
+	            --infodir=/usr/share/info \
+	            --mandir=/usr/share/man   \
+	            --disable-static || return 1
+	make || return 1
+	make DESTDIR="$PKG" install || return 1
 }

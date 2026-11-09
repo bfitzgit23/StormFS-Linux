@@ -430,6 +430,15 @@ grep -Fq 'ftp.osuosl.org/pub/xiph/releases/speex' ports/opt/speex/spkgbuild || \
     fail 'speex does not use the stable Xiph mirror'
 pass 'speex fetches its archives from the stable Xiph mirror'
 
+grep -qx 'release=2' ports/opt/aalib/spkgbuild || \
+    fail 'aalib rebuild release missing'
+if grep -A2 -x '}' ports/opt/aalib/spkgbuild | grep -q 'src/aalinuxkbd.c'; then
+    fail 'aalib closes build before applying the aalinuxkbd fix'
+fi
+grep -Fq 'autoreconf -fi || return 1' ports/opt/aalib/spkgbuild || \
+    fail 'aalib does not regenerate configure'
+pass 'aalib applies its source fixes before configuring'
+
 grep -qx 'version=26.2.7' ports/opt/libreoffice-bin/spkgbuild || \
     fail 'libreoffice-bin does not pin a published release'
 grep -Fq 'deb/x86_64/LibreOffice_${version}_Linux_x86-64_deb.tar.gz' ports/opt/libreoffice-bin/spkgbuild || \
