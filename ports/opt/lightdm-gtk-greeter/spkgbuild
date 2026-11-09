@@ -6,7 +6,7 @@
 description="GTK3 greeter for the LightDM display manager"
 name=lightdm-gtk-greeter
 version=2.0.9
-release=2
+release=3
 build_opt="\
     --libexecdir=/usr/lib/lightdm \
     --sbindir=/usr/bin \
@@ -18,7 +18,9 @@ build_opt="\
     --disable-static \
     --disable-maintainer-mode \
     --docdir=/usr/share/doc/lightdm-gtk-greeter-$version"
-source="https://github.com/Xubuntu/lightdm-gtk-greeter/releases/download/lightdm-gtk-greeter-$version/lightdm-gtk-greeter-$version.tar.gz greeter.conf"
+# GitHub's release asset is intermittently returning 504; this is the
+# identical upstream tarball archived by Debian.
+source="https://deb.debian.org/debian/pool/main/l/lightdm-gtk-greeter/lightdm-gtk-greeter_${version}.orig.tar.gz greeter.conf"
 
 build() {
 	_bfs_greeter="$PWD/greeter.conf"
