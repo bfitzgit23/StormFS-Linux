@@ -6,8 +6,8 @@
 description="Qt 4.8 compatibility framework for KDE 4"
 name=qt4
 version=4.8.7
-release=3
-source="https://download.qt.io/archive/qt/4.8/$version/qt-everywhere-opensource-src-$version.tar.gz qt4-gcc-requires.patch.manual qt4-4.8.7-qforeach-gcc9.patch.manual"
+release=4
+source="https://download.qt.io/archive/qt/4.8/$version/qt-everywhere-opensource-src-$version.tar.gz qt4-gcc-requires.patch.manual qt4-4.8.7-qforeach-gcc9.patch.manual qt4-4.8.7-linguist-pointer-compare.patch.manual"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "qt-everywhere-opensource-src-$version" -print -quit)
@@ -23,6 +23,10 @@ build() {
 	# GCC 9 changed the scope of a break inside the extension used by Qt4's
 	# Q_FOREACH. The broken loop makes uic emit incomplete UI headers.
 	patch -p1 -i "$SRC/qt4-4.8.7-qforeach-gcc9.patch.manual" || return 1
+
+	# ContextItem::findMessage returns a MessageItem pointer. Ordered
+	# comparison against an integer is ill-formed and newer GCC rejects it.
+	patch -p1 -i "$SRC/qt4-4.8.7-linguist-pointer-compare.patch.manual" || return 1
 
 	# A previous failed build may have left those incomplete uic headers behind.
 	find . -type f -path '*/.uic/*' -name 'ui_*.h' -delete
