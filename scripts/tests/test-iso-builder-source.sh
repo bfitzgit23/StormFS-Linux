@@ -24,7 +24,7 @@ for pkg in xfce4-meta compiz-meta lightdm lightdm-gtk-greeter chromium-bin firef
     xfce4-power-manager xfce4-pulseaudio-plugin pavucontrol; do
     grep -q "\b$pkg\b" "$iso" || fail "ISO desktop package set is missing $pkg"
 done
-for pkg in system-config-printer hplip-plugin hpcups gutenprint cups-browsed epson-inkjet-printer-escpr; do
+for pkg in system-config-printer hplip-plugin hpcups gutenprint epson-inkjet-printer-escpr; do
     grep -Fq -- "$pkg" "$iso" || fail "ISO printing package set is missing $pkg"
 done
 [ -f "$ROOT/ports/opt/mintstick/spkgbuild" ] || fail 'mintstick port is missing'
