@@ -8,7 +8,7 @@ name=vulkan-validation-layers
 _name=Vulkan-ValidationLayers
 version=1.4.357.0
 _version=vulkan-sdk-$version
-release=1
+release=2
 source="https://github.com/KhronosGroup/Vulkan-ValidationLayers/archive/$_version/$_name-$version.tar.gz"
 
 build() {
@@ -16,7 +16,8 @@ build() {
 	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
 	[ -n "$_bfs_src" ] || return 1
 	cd "$_bfs_src" || return 1
-	scratch isinstalled wayland || BFS_VULKAN_VALIDATION_LAYERS+=' -D BUILD_WSI_WAYLAND_SUPPORT=OFF'
+	scratch isinstalled wayland >/dev/null 2>&1 || \
+		BFS_VULKAN_VALIDATION_LAYERS="${BFS_VULKAN_VALIDATION_LAYERS:-} -D BUILD_WSI_WAYLAND_SUPPORT=OFF"
 
 	cmake -S $_name-$_version -B build -G Ninja $BFS_VULKAN_VALIDATION_LAYERS \
 		-D CMAKE_INSTALL_PREFIX=/usr \
