@@ -5,7 +5,7 @@
 description="KDE 4 core libraries"
 name=kdelibs
 version=4.14.3
-release=8
+release=9
 source="https://download.kde.org/Attic/4.14.3/src/kdelibs-$version.tar.xz kdelibs-4.14.3-cmake4.patch.manual kdelibs-4.14.3-cmake4-interface-libs.patch.manual"
 
 build() {
@@ -18,8 +18,10 @@ build() {
 	# behavior, treats a bare TEST argument as the if() operator, and kdeui has
 	# a duplicate else() branch.  Use target-file generator expressions, quote
 	# comparisons, drop the duplicate branch, and use the 3.5 policy baseline.
-	# CMake 4 enables CMP0022, so use INTERFACE_LINK_LIBRARIES for KDE4's
-	# target link interfaces instead of the removed old-style properties.
+	# CMake 4 enables CMP0022, so set KDE4's interface link libraries with
+	# the INTERFACE_LINK_LIBRARIES property.  This avoids mixing plain and
+	# keyword target_link_libraries signatures and the removed old-style
+	# properties.  Normalize the icon install destinations under CMP0177.
 	#
 	# Qt 4 is built without QtWebKit, so omit the optional kdewebkit module
 	# and its Plasma and designer-plugin consumers.
