@@ -1,0 +1,79 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -42,13 +42,13 @@
+ find_package(DBusMenuQt 0.6.0)
+ set_package_properties(DBusMenuQt PROPERTIES DESCRIPTION "Support for notification area menus via the DBusMenu protocol"
+                        URL "https://launchpad.net/libdbusmenu-qt"
+-                       TYPE REQUIRED
++                       TYPE OPTIONAL
+                       )
+ 
+ find_package(QImageBlitz)
+ set_package_properties(QImageBlitz PROPERTIES DESCRIPTION "An image effects library"
+                        URL "http://sourceforge.net/projects/qimageblitz"
+-                       TYPE REQUIRED
++                       TYPE OPTIONAL
+                       )
+ 
+ find_package(KDeclarative QUIET CONFIG)
+@@ -259,7 +259,9 @@
+       macro_optional_add_subdirectory(khotkeys)
+       macro_optional_add_subdirectory(kwrited)
+       macro_optional_add_subdirectory(ksystraycmd)
+-      macro_optional_add_subdirectory(appmenu)
++      if(DBUSMENUQT_FOUND)
++         macro_optional_add_subdirectory(appmenu)
++      endif(DBUSMENUQT_FOUND)
+    endif(NOT WIN32)
+ 
+    if(X11_Xau_FOUND AND X11_Xdmcp_FOUND)
+--- a/plasma/generic/dataengines/CMakeLists.txt
++++ b/plasma/generic/dataengines/CMakeLists.txt
+@@ -19,7 +19,10 @@
+ add_subdirectory(soliddevice)
+ add_subdirectory(time)
+ add_subdirectory(weather)
+-add_subdirectory(statusnotifieritem)
++# The status notifier item engine builds its context menus with DBusMenuQt.
++if(DBUSMENUQT_FOUND)
++   add_subdirectory(statusnotifieritem)
++endif(DBUSMENUQT_FOUND)
+ add_subdirectory(share)
+ 
+ if (NepomukCore_FOUND AND Soprano_FOUND)
+--- a/ksmserver/curtaineffect.cpp
++++ b/ksmserver/curtaineffect.cpp
+@@ -31,7 +31,9 @@
+ #include <QTimer>
+ #include "config-workspace.h"
+ 
++#ifdef HAVE_QIMAGEBLITZ
+ #include <qimageblitz.h>
++#endif
+ 
+ CurtainEffect::CurtainEffect(QWidget *parent, QPixmap *pixmap)
+     : LogoutEffect(parent, pixmap)
+@@ -49,8 +51,10 @@
+ {
+     QImage image = QPixmap::grabWindow(QApplication::desktop()->winId(), 0, currentY,
+                                        parent->width(), 10 ).toImage();
++#ifdef HAVE_QIMAGEBLITZ
+     Blitz::intensity(image, -0.4);
+     Blitz::grayscale(image);
++#endif
+ 
+     QPainter painter(pixmap);
+     painter.drawImage(0, currentY, image);
+--- a/ksmserver/CMakeLists.txt
++++ b/ksmserver/CMakeLists.txt
+@@ -3,6 +3,10 @@
+ add_subdirectory( kcm )
+ endif(${KDE_PLATFORM_PROFILE} STREQUAL "Desktop")
+ 
++if(QIMAGEBLITZ_FOUND)
++   add_definitions(-DHAVE_QIMAGEBLITZ)
++endif(QIMAGEBLITZ_FOUND)
++
+ include_directories(
+    ${KDEBASE_WORKSPACE_SOURCE_DIR}/libs
+    ${QIMAGEBLITZ_INCLUDES}
