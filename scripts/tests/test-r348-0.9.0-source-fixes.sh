@@ -371,16 +371,28 @@ pass 'chardet builds from its shipped version without the hatch-vcs hook'
 
 grep -qx 'version=3.4.0' ports/opt/xapp/spkgbuild || \
     fail 'xapp does not pin the current stable release'
+grep -qx 'release=2' ports/opt/xapp/spkgbuild || \
+    fail 'xapp rebuild release missing'
 if grep -Fq 'samu' ports/opt/xapp/spkgbuild; then
     fail 'xapp still invokes samu instead of ninja'
 fi
-grep -Fq -- '-Dstatus-notifier=false' ports/opt/xapp/spkgbuild || \
-    fail 'xapp still requires the missing dbusmenu-gtk3'
-grep -Fq -- '-Dkbd-layout-controller=disabled' ports/opt/xapp/spkgbuild || \
-    fail 'xapp still probes the missing libgnomekbd'
+grep -Fq -- '-Dstatus-notifier=true' ports/opt/xapp/spkgbuild || \
+    fail 'xapp does not build the status notifier'
+grep -Fq -- '-Dkbd-layout-controller=enabled' ports/opt/xapp/spkgbuild || \
+    fail 'xapp does not build the keyboard layout controller'
+grep -qx 'libdbusmenu-gtk3' ports/opt/xapp/depends || \
+    fail 'xapp does not depend on dbusmenu-gtk3'
+grep -qx 'libgnomekbd' ports/opt/xapp/depends || \
+    fail 'xapp does not depend on libgnomekbd'
+grep -qx 'version=18.10' ports/contrib/libdbusmenu-gtk3/spkgbuild || \
+    fail 'dbusmenu-gtk3 is missing or unpinned'
+grep -Fq -- '--with-gtk=3' ports/contrib/libdbusmenu-gtk3/spkgbuild || \
+    fail 'dbusmenu-gtk3 does not build the GTK3 sublibrary'
+grep -qx 'version=3.28.1' ports/gnome/libgnomekbd/spkgbuild || \
+    fail 'libgnomekbd is missing or unpinned'
 grep -qx 'xapp' ports/opt/mintstick/depends || \
     fail 'mintstick no longer depends on xapp'
-pass 'xapp builds with meson and ninja without the missing optional deps'
+pass 'xapp builds its status notifier and keyboard layout controller'
 
 grep -qx 'version=26.2.7' ports/opt/libreoffice-bin/spkgbuild || \
     fail 'libreoffice-bin does not pin a published release'

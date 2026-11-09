@@ -1,0 +1,6 @@
+glib
+gobject-introspection
+gtk3
+libx11
+libxklavier
+vala

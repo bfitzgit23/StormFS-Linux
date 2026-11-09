@@ -1,6 +1,8 @@
 dbus
 gobject-introspection
 gtk3
+libdbusmenu-gtk3
+libgnomekbd
 libx11
 python3-gobject
 vala

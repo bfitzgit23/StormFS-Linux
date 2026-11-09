@@ -6,13 +6,11 @@
 description="Common library for X-Apps project"
 name=xapp
 version=3.4.0
-release=1
-# The status-notifier watcher needs dbusmenu-gtk3, which this tree does not
-# carry, and the keyboard layout controller needs libgnomekbd.  Neither is
-# used by the XApp widgets mintstick relies on, so keep both out instead of
-# guessing dependencies for optional components.
-build_opt="-Dstatus-notifier=false
--Dkbd-layout-controller=disabled"
+release=2
+# Both optional components are available in the tree: the status notifier
+# needs libdbusmenu-gtk3 and the keyboard layout controller needs libgnomekbd.
+build_opt="-Dstatus-notifier=true
+-Dkbd-layout-controller=enabled"
 source="https://github.com/linuxmint/xapp/archive/refs/tags/$version/$name-$version.tar.gz"
 
 build() {
