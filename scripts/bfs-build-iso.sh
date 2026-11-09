@@ -74,7 +74,7 @@ iso_packages=(
     # Desktop, session, display manager and installer
     xfce4-meta lightdm lightdm-gtk-greeter calamares xinit xauth
     # Live applications
-    chromium-bin firefox-bin fastfetch mousepad libreoffice-bin flameshot galculator vlc gparted mintstick
+    chromium-bin firefox-bin fastfetch mousepad libreoffice-bin flameshot galculator vlc gparted mintstick gvfs gnupg
     thunderbird-bin pidgin rustdesk engrampa
     # Thunar integration and archive tools
     thunar-volman thunar-archive-plugin thunar-media-tags-plugin p7zip unzip unrar

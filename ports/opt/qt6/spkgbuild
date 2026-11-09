@@ -6,7 +6,7 @@
 description="Qt 6 framework (base/modules excluding QtWebEngine)"
 name=qt6
 version=6.11.2
-release=9
+release=10
 keep_static=1
 build_work=disk
 source="https://download.qt.io/official_releases/qt/6.11/$version/single/qt-everywhere-src-$version.tar.xz"
@@ -41,7 +41,7 @@ build() {
         -nomake examples \
         -no-rpath \
         -no-sbom \
-        -journald || return 1
+        -no-journald || return 1
 
     ninja -j "${JOBS:-1}" || return 1
 

@@ -6,8 +6,9 @@
 description="Audio/video recording, conversion and streaming framework"
 name=ffmpeg
 version=9.0.1
-release=4
-source="https://ffmpeg.org/releases/ffmpeg-$version.tar.xz https://www.linuxfromscratch.org/patches/blfs/svn/ffmpeg-$version-chromium_method-1.patch"
+release=5
+# The BLFS svn patch directory no longer carries the 9.0.1 patch.
+source="https://ffmpeg.org/releases/ffmpeg-$version.tar.xz https://www.linuxfromscratch.org/patches/blfs/13.1/ffmpeg-$version-chromium_method-1.patch"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
