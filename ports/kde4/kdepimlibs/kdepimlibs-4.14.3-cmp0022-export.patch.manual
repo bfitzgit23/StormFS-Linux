@@ -1,0 +1,62 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -23,7 +23,6 @@
+ include(FeatureSummary)
+ 
+ set(CMAKE_AUTOMOC ON)
+-set(CMAKE_LINK_INTERFACE_LIBRARIES "")
+ 
+ include(GenerateExportHeader)
+ 
+--- a/akonadi/CMakeLists.txt
++++ b/akonadi/CMakeLists.txt
+@@ -299,7 +299,7 @@
+ target_link_libraries( akonadi-kde ${QT_QTDECLARATIVE_LIBRARY} )
+ endif()
+ 
+-target_link_libraries( akonadi-kde LINK_INTERFACE_LIBRARIES ${AKONADI_KDE_DEPS})
++target_link_libraries( akonadi-kde INTERFACE ${AKONADI_KDE_DEPS})
+ 
+ set_target_properties( akonadi-kde PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION} )
+ install( TARGETS akonadi-kde EXPORT kdepimlibsLibraryTargets  ${INSTALL_TARGETS_DEFAULT_ARGS} )
+--- a/akonadi/contact/CMakeLists.txt
++++ b/akonadi/contact/CMakeLists.txt
+@@ -157,7 +157,7 @@
+ target_link_libraries(akonadi-contact ${PRISON_LIBRARIES})
+ endif()
+ 
+-target_link_libraries(akonadi-contact LINK_INTERFACE_LIBRARIES
++target_link_libraries(akonadi-contact INTERFACE
+                                       akonadi-kde
+                                       kabc
+                                       kcalcore
+--- a/kabc/CMakeLists.txt
++++ b/kabc/CMakeLists.txt
+@@ -92,10 +92,10 @@
+ generate_export_header(kabc)
+ 
+ target_link_libraries(kabc ${KDE4_KDEUI_LIBS} ${KDE4_KDECORE_LIBS})
+-target_link_libraries(kabc LINK_INTERFACE_LIBRARIES ${KDE4_KDEUI_LIBS})
++target_link_libraries(kabc INTERFACE ${KDE4_KDEUI_LIBS})
+ if(NOT KDEPIM_NO_KRESOURCES)
+   target_link_libraries(kabc kresources)
+-  target_link_libraries(kabc LINK_INTERFACE_LIBRARIES kresources)
++  target_link_libraries(kabc INTERFACE kresources)
+ endif()
+ 
+ set_target_properties(
+--- a/kcal/CMakeLists.txt
++++ b/kcal/CMakeLists.txt
+@@ -107,10 +107,10 @@
+ generate_export_header(kcal)
+ 
+ target_link_libraries(kcal ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${QT_QTXML_LIBRARY} kabc kpimutils ${LIBICAL_LIBRARIES})
+-target_link_libraries(kcal LINK_INTERFACE_LIBRARIES kabc)
++target_link_libraries(kcal INTERFACE kabc)
+ if (NOT KDEPIM_NO_KRESOURCES)
+   target_link_libraries(kcal kresources)
+-  target_link_libraries(kcal LINK_INTERFACE_LIBRARIES kresources)
++  target_link_libraries(kcal INTERFACE kresources)
+ endif()
+ 
+ set_target_properties(kcal PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION})

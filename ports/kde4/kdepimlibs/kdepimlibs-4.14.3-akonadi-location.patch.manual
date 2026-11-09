@@ -1,0 +1,12 @@
+--- a/akonadi/AkonadiMacros.cmake
++++ b/akonadi/AkonadiMacros.cmake
+@@ -76,8 +76,7 @@
+   endif()
+   # based on kde4_add_unit_test
+   if (WIN32)
+-    get_target_property( _loc ${_name} LOCATION )
+-    set(_executable ${_loc}.bat)
++    set(_executable $<TARGET_FILE:${_name}>.bat)
+     set(_testrunner ${_testrunner_BIN_DIR}/akonaditest.exe)
+   else()
+     set(_executable ${EXECUTABLE_OUTPUT_PATH}/${_name})
