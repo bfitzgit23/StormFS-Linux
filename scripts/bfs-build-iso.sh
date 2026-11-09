@@ -80,6 +80,8 @@ iso_packages=(
     thunar-volman thunar-archive-plugin thunar-media-tags-plugin p7zip unzip unrar
     # Xfce panel plugins and session utilities
     xfce4-docklike-plugin xfce4-weather-plugin xfce4-whiskermenu-plugin xfce4-power-manager xfce4-pulseaudio-plugin pavucontrol
+    # Printing
+    system-config-printer hplip-plugin hpcups gutenprint cups-browsed epson-inkjet-printer-escpr
     # Desktop themes and shell customisation
     adw-gtk3 tela-icon-theme stormfs-theme oh-my-bash
 )
