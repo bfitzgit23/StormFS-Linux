@@ -18,9 +18,11 @@ done
 for pkg in networkmanager-iso openssh git sudo wget wpa_supplicant wireless-regdb gpm lynx-iso chrony cryptsetup lvm2 mdadm snapper grub grub-efi squashfs-tools libisoburn; do
     grep -q "\b$pkg\b" "$iso" || fail "ISO package set is missing $pkg"
 done
-for pkg in xfce4-meta lightdm lightdm-gtk-greeter chromium firefox-bin fastfetch mousepad libreoffice-bin flameshot galculator vlc gparted; do
+for pkg in xfce4-meta lightdm lightdm-gtk-greeter chromium-bin firefox-bin fastfetch mousepad libreoffice-bin flameshot galculator vlc gparted; do
     grep -q "\b$pkg\b" "$iso" || fail "ISO desktop package set is missing $pkg"
 done
+! grep -Eq '(^|[[:space:]])chromium([[:space:]]|$)' "$iso" || \
+    fail 'ISO still includes the source-built chromium package'
 for pkg in calamares adw-gtk3 tela-icon-theme stormfs-theme oh-my-bash xinit xauth shadow; do
     grep -q "\b$pkg\b" "$iso" || fail "ISO installer/theme package set is missing $pkg"
 done

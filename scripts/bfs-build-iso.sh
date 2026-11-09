@@ -74,7 +74,7 @@ iso_packages=(
     # Desktop, session, display manager and installer
     xfce4-meta lightdm lightdm-gtk-greeter calamares xinit xauth
     # Live applications
-    chromium firefox-bin fastfetch mousepad libreoffice-bin flameshot galculator vlc gparted
+    chromium-bin firefox-bin fastfetch mousepad libreoffice-bin flameshot galculator vlc gparted
     # Desktop themes and shell customisation
     adw-gtk3 tela-icon-theme stormfs-theme oh-my-bash
 )
