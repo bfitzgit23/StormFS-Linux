@@ -5,7 +5,7 @@
 description="KDE 4 base artwork and branding"
 name=kde-base-artwork
 version=4.14.3
-release=2
+release=3
 source="https://download.kde.org/Attic/4.14.3/src/kde-base-artwork-$version.tar.xz"
 
 build() {
@@ -13,6 +13,10 @@ build() {
 	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
 	[ -n "$_bfs_src" ] || return 1
 	cd "$_bfs_src" || return 1
+
+	export CMAKE_PREFIX_PATH="/opt/qt4:/usr"
+	export PATH="/opt/qt4/bin:$PATH"
+	export QT_QMAKE_EXECUTABLE=/opt/qt4/bin/qmake
 
 	# kdelibs before 4.14.3-21 shipped cmake modules that read the location of a
 	# kauth-policy-gen target its exported tools file never contained, so every
