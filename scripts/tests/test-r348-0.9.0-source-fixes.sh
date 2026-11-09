@@ -463,14 +463,14 @@ grep -qx 'gtk4' ports/opt/ibus/depends || \
     fail 'ibus does not depend on gtk4 although configure enables it'
 pass 'ibus installs no systemd services'
 
-grep -qx 'release=5' ports/opt/lua52/spkgbuild || \
+grep -qx 'release=6' ports/opt/lua52/spkgbuild || \
     fail 'lua52 rebuild release missing'
-grep -Fq 'https://lua.org/ftp/lua-$version.tar.gz' ports/opt/lua52/spkgbuild || \
-    fail 'lua52 does not use the reachable HTTPS host'
-if grep -Fq 'http://www.lua.org' ports/opt/lua52/spkgbuild; then
-    fail 'lua52 still uses the broken plain-HTTP URL'
+grep -Fq 'https://distfiles.macports.org/lua/lua-$version.tar.gz' ports/opt/lua52/spkgbuild || \
+    fail 'lua52 does not use the stable distfiles mirror'
+if grep -Eq '^source=.*https?://(www\.)?lua\.org' ports/opt/lua52/spkgbuild; then
+    fail 'lua52 still uses the flaky Lua origin'
 fi
-pass 'lua52 downloads over HTTPS from the reachable Lua host'
+pass 'lua52 downloads from the stable MacPorts mirror'
 
 grep -qx 'version=26.2.7' ports/opt/libreoffice-bin/spkgbuild || \
     fail 'libreoffice-bin does not pin a published release'
