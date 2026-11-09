@@ -5,7 +5,7 @@
 description="KDE 4 core libraries"
 name=kdelibs
 version=4.14.3
-release=15
+release=16
 source="https://download.kde.org/Attic/4.14.3/src/kdelibs-$version.tar.xz kdelibs-4.14.3-cmake4.patch.manual kdelibs-4.14.3-cmake4-interface-libs.patch.manual kdelibs-4.14.3-klocale-bool-comparison.patch.manual kdelibs-4.14.3-optional-dbusmenuqt.patch.manual kdelibs-4.14.3-optional-declarative.patch.manual kdelibs-4.14.3-ordered.patch.manual kdelibs-4.14.3-jasper-exported.patch.manual kdelibs-4.14.3-openssl-1.1.patch.manual"
 
 build() {
@@ -72,11 +72,17 @@ build() {
 	export CFLAGS="${CFLAGS:+$CFLAGS }-std=gnu99"
 	export CXXFLAGS="${CXXFLAGS:+$CXXFLAGS }-std=gnu++98 -fpermissive -Wno-deprecated-declarations"
 
+	# The test programs are not installed and several of them target optional
+	# modules BFSOS does not ship, so leave them out of the package build.
+	# KDE4Defaults.cmake force-sets BUILD_TESTING to ON internally; the lever
+	# that matters is KDE4_BUILD_TESTS, which makes kde4_add_executable(TEST ...)
+	# targets EXCLUDE_FROM_ALL so "cmake --build" skips them.
 	cmake -S . -B build -G Ninja \
 		-DCMAKE_INSTALL_PREFIX=/usr \
 		-DCMAKE_BUILD_TYPE=Release \
 		-DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
 		-DQT_QMAKE_EXECUTABLE=/opt/qt4/bin/qmake \
+		-DKDE4_BUILD_TESTS=OFF \
 		-DKHTML_BUILD_TESTREGRESSION=OFF \
 		-DSTATIC_LIBRARY=OFF \
 		-DWITH_SOLID_UDISKS2=OFF \
