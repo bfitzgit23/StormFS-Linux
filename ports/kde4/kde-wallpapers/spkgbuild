@@ -5,7 +5,7 @@
 description="KDE 4 desktop wallpapers"
 name=kde-wallpapers
 version=4.14.3
-release=1
+release=2
 source="https://download.kde.org/Attic/4.14.3/src/kde-wallpapers-$version.tar.xz"
 
 build() {
@@ -13,6 +13,12 @@ build() {
 	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
 	[ -n "$_bfs_src" ] || return 1
 	cd "$_bfs_src" || return 1
+
+	# The bundled CMakeLists starts with find_package(KDE4), so FindQt4 needs a
+	# qmake to interrogate; without this it only searches the default PATH.
+	export CMAKE_PREFIX_PATH="/opt/qt4:/usr"
+	export PATH="/opt/qt4/bin:$PATH"
+	export QT_QMAKE_EXECUTABLE=/opt/qt4/bin/qmake
 
 	if [ -f CMakeLists.txt ]; then
 		cmake -S . -B build -G Ninja \
