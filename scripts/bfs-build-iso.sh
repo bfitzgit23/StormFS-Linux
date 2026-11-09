@@ -1197,10 +1197,27 @@ done
 EOS
     chmod 0755 "$root/usr/local/sbin/bfs-live-menu"
 
+    # LXDM owns the live graphical session; tty1 remains a recovery menu.
+    if [ ! -f "$root/etc/lxdm/lxdm.conf" ]; then
+        die "live root has no LXDM configuration"
+    fi
+    if grep -q '^autologin=' "$root/etc/lxdm/lxdm.conf"; then
+        sed -i 's/^autologin=.*/autologin=bfs/' "$root/etc/lxdm/lxdm.conf"
+    else
+        sed -i '/^\[base\]/a autologin=bfs' "$root/etc/lxdm/lxdm.conf"
+    fi
+    if grep -q '^timeout=' "$root/etc/lxdm/lxdm.conf"; then
+        sed -i 's/^timeout=.*/timeout=5/' "$root/etc/lxdm/lxdm.conf"
+    else
+        sed -i '/^autologin=bfs$/a timeout=5' "$root/etc/lxdm/lxdm.conf"
+    fi
+    grep -q '^timeout=5$' "$root/etc/lxdm/lxdm.conf" ||
+        die "live LXDM autologin timeout is not configured"
+    grep -q '^session=/usr/bin/startxfce4$' "$root/etc/lxdm/lxdm.conf" ||
+        die "live LXDM configuration does not start Xfce"
+    grep -q '^theme=StormFS$' "$root/etc/lxdm/lxdm.conf" ||
+        die "live LXDM configuration does not use the StormFS theme"
     cat > "$root/home/bfs/.bash_profile" <<'EOS'
-if [ -z "${DISPLAY-}" ] && [ "$(tty 2>/dev/null)" = "/dev/tty1" ]; then
-    startx
-fi
 if [ -z "${BFS_LIVE_MENU_STARTED:-}" ] && [ -t 0 ]; then
     export BFS_LIVE_MENU_STARTED=1
     /usr/local/sbin/bfs-live-menu
@@ -1229,10 +1246,13 @@ EOS
     chroot "$root" /bin/bash -lc '
         rc-update add bfs-live-init default 2>/dev/null || true
         rc-update add networkmanager default 2>/dev/null || true
+        rc-update add lxdm default 2>/dev/null || true
         # Chrony is the live ISO time-sync policy; bfs-live-init starts it only
         # after NetworkManager reports usable connectivity.
         rc-update del chronyd default 2>/dev/null || true
     ' || true
+    [ -e "$root/etc/runlevels/default/lxdm" ] ||
+        die "LXDM is not enabled in the live default runlevel"
 
         # BFSOS live-media policy: SSH and rsync must never be enabled at boot.
     local unit runlevel

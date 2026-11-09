@@ -106,6 +106,11 @@ fi
 # Enable the LXDM display manager selected by the ISO.
 _run rc-update add lxdm default 2>/dev/null || true
 
+# Drop the live-only LXDM autologin before the installed system boots.
+if [ -f "$ROOT/etc/lxdm/lxdm.conf" ]; then
+	sed -i '/^autologin=bfs$/d' "$ROOT/etc/lxdm/lxdm.conf" || true
+fi
+
 # Cleanup: remove installer and live session artifacts
 rm -f "$ROOT/usr/bin/stormfs-installer"
 rm -f "$ROOT/root/live_script.sh"

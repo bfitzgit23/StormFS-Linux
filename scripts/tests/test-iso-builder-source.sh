@@ -93,6 +93,10 @@ grep -q 'openrc-init-scripts' "$iso" || fail 'ISO package set does not install t
 grep -q 'need networkmanager' "$iso" || fail 'live init does not depend on networkmanager'
 ! grep -q 'need NetworkManager' "$iso" || fail 'live init still uses the systemd-style NetworkManager name'
 grep -q 'rootfs.squashfs' "$iso" || fail 'SquashFS live-root staging is missing'
+grep -q 'autologin=bfs' "$iso" || fail 'live LXDM autologin is missing'
+grep -q 'timeout=5' "$iso" || fail 'live LXDM autologin timeout is missing'
+grep -q 'rc-update add lxdm default' "$iso" || fail 'live LXDM service is not enabled'
+! grep -Fq '    startx' "$iso" || fail 'live session still starts startx'
 grep -q 'mount -t overlay overlay' "$iso" || fail 'writable overlay root is missing'
 
 grep -q -- '-comp xz -b 1M -Xdict-size 100% -Xbcj x86' "$iso" || fail 'size-oriented SquashFS settings are missing'

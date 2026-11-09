@@ -99,7 +99,11 @@ grep -Fq -- '--with-systemdsystemunitdir=no' "$ROOT/ports/opt/lxdm/spkgbuild" ||
 for pkg in calamares adw-gtk3 tela-icon-theme stormfs-theme stormfs-lxdm-theme lxdm oh-my-bash xinit xauth shadow; do
     grep -q "\b$pkg\b" "$iso" || fail "ISO package set is missing $pkg"
 done
-grep -q 'startx' "$iso" || fail 'live session does not start X'
+! grep -Fq '    startx' "$iso" || fail 'live session still starts startx'
+grep -q 'autologin=bfs' "$iso" || fail 'live LXDM autologin is not configured'
+grep -q 'timeout=5' "$iso" || fail 'live LXDM autologin timeout is not configured'
+grep -q 'rc-update add lxdm default' "$iso" || fail 'live LXDM service is not enabled'
+grep -q 'autologin=bfs' "$cal/shellprocess.conf" || fail 'installer does not clear live LXDM autologin'
 grep -q 'exec startxfce4' "$iso" || fail 'live session does not start XFCE'
 grep -q 'autostart/calamares.desktop' "$iso" || fail 'live session does not install a Calamares autostart entry'
 grep -q 'sudo -n calamares' "$iso" || fail 'Calamares autostart is not non-interactive'
