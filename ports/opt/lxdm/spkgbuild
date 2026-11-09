@@ -6,7 +6,7 @@
 description="Lightweight GTK2 display manager"
 name=lxdm
 version=0.5.3
-release=1
+release=2
 source="https://downloads.sourceforge.net/project/lxdm/lxdm%200.5.3/$name-$version.tar.xz bfs-lxdm.pam Xsession"
 
 build() {

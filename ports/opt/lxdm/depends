@@ -6,5 +6,6 @@ intltool
 iso-codes
 librsvg
 linux-pam
+openrc-init-scripts
 xauth
 xorg-server

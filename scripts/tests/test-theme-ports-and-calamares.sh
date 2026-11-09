@@ -91,6 +91,7 @@ grep -q '^Name=StormFS$' "$lxdm_theme/index.theme" || fail 'LXDM theme is not na
 grep -q 'background.jpg' "$lxdm_theme/gtkrc" || fail 'LXDM GTK2 theme does not use the StormFS background'
 grep -q 'login.svg' "$lxdm_theme/greeter.ui" || fail 'LXDM greeter does not use the StormFS wordmark'
 [ -f "$ROOT/ports/opt/openrc-init-scripts/lxdm" ] || fail 'OpenRC LXDM service is missing'
+grep -qx 'openrc-init-scripts' "$ROOT/ports/opt/lxdm/depends" || fail 'lxdm does not depend on the OpenRC service package'
 grep -q '^name=lxdm$' "$ROOT/ports/opt/lxdm/spkgbuild" || fail 'LXDM port name changed'
 grep -Fq -- '--with-systemdsystemunitdir=no' "$ROOT/ports/opt/lxdm/spkgbuild" || fail 'LXDM still enables systemd units'
 ! grep -q 'pam_systemd' "$ROOT/ports/opt/lxdm/bfs-lxdm.pam" || fail 'LXDM PAM stack references pam_systemd'
