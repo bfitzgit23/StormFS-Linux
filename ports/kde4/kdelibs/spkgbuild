@@ -5,7 +5,7 @@
 description="KDE 4 core libraries"
 name=kdelibs
 version=4.14.3
-release=4
+release=5
 source="https://download.kde.org/Attic/4.14.3/src/kdelibs-$version.tar.xz kdelibs-4.14.3-cmake4.patch.manual"
 
 build() {
@@ -18,6 +18,9 @@ build() {
 	# argument as the if() operator, and kdeui has a duplicate else() branch.
 	# Use target-file generator expressions, quote comparisons, drop the
 	# duplicate branch, and declare the policy baseline.
+	#
+	# Qt 4 is built without QtWebKit, so omit the optional kdewebkit module
+	# and its Plasma and designer-plugin consumers.
 	patch -p1 -i "$SRC/kdelibs-4.14.3-cmake4.patch.manual" || return 1
 
 	export CMAKE_PREFIX_PATH="/opt/qt4:/usr"
@@ -41,7 +44,6 @@ build() {
 		-DWITH_ENCHANT=OFF \
 		-DWITH_HUNSPELL=OFF \
 		-DWITH_KDE3SUPPORT=OFF \
-		-DWITH_QtWebKit=OFF \
 		-DWITH_PolkitQt=OFF \
 		-DWITH_PolkitQt1=OFF \
 		-DWITH_UDISKS=OFF \

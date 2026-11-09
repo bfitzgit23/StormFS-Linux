@@ -190,3 +190,57 @@
  
  if(NOT WINCE)
  set(kdeui_LIB_SRCS
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -365 +364,0 @@
+-add_subdirectory( kdewebkit )
+--- a/kdewidgets/CMakeLists.txt
++++ b/kdewidgets/CMakeLists.txt
+@@ -92,34 +91,0 @@
+-  # kdewebkit widgets
+-  include_directories(
+-    ${CMAKE_SOURCE_DIR}/kdewebkit
+-  )
+-
+-  add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/kdewebkitwidgets.cpp
+-    COMMAND "${MAKEKDEWIDGETS_EXECUTABLE}" -o ${CMAKE_CURRENT_BINARY_DIR}/kdewebkitwidgets.cpp ${CMAKE_CURRENT_SOURCE_DIR}/kdewebkit.widgets
+-    MAIN_DEPENDENCY kdewebkit.widgets DEPENDS makekdewidgets)
+-
+-  set(kdewebkitwidgets_PART_SRCS
+-     classpreviews.cpp
+-     ${CMAKE_CURRENT_BINARY_DIR}/kdewebkitwidgets.cpp
+-  )
+-
+-  qt4_generate_moc(${CMAKE_CURRENT_BINARY_DIR}/kdewebkitwidgets.cpp ${CMAKE_CURRENT_BINARY_DIR}/kdewebkitwidgets.moc)
+-
+-
+-  qt4_add_resources(kdewebkitwidgets_PART_SRCS kdewebkitwidgets.qrc)
+-
+-  kde4_add_plugin(kdewebkitwidgets ${kdewebkitwidgets_PART_SRCS})
+-
+-  target_link_libraries(kdewebkitwidgets ${KDE4_KDEUI_LIBS} ${KDE4_KDEWEBKIT_LIBS} ${QT_QTWEBKIT_LIBRARY})
+-  if(NOT WIN32)
+-    set_target_properties(kdewebkitwidgets PROPERTIES
+-                                     INSTALL_RPATH_USE_LINK_PATH TRUE
+-                                     SKIP_BUILD_RPATH TRUE
+-                                     BUILD_WITH_INSTALL_RPATH TRUE
+-                                     INSTALL_RPATH ${LIB_INSTALL_DIR}
+-                         )
+-  endif(NOT WIN32)
+-
+-  install(TARGETS kdewebkitwidgets  DESTINATION ${PLUGIN_INSTALL_DIR}/plugins/designer )
+-
+-
+--- a/plasma/CMakeLists.txt
++++ b/plasma/CMakeLists.txt
+@@ -13,0 +14 @@
++set(PLASMA_NO_KDEWEBKIT TRUE)
+@@ -124 +124,0 @@
+-    private/animablegraphicswebview.cpp
+@@ -214 +213,0 @@
+-    widgets/webview.cpp
+@@ -278 +277 @@
+-target_link_libraries(plasma ${QT_QTUITOOLS_LIBRARY} ${QT_QTWEBKIT_LIBRARY}
++target_link_libraries(plasma ${QT_QTUITOOLS_LIBRARY}
+@@ -418 +416,0 @@
+-    widgets/webview.h
