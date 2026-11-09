@@ -4,7 +4,7 @@
 description="gvfs package"
 name=gvfs
 version=1.62.0
-release=1
+release=2
 build_opt="-Donedrive=false
 -Dfuse=true
 -Dgphoto2=false
@@ -15,7 +15,10 @@ build_opt="-Donedrive=false
 -Dsmb=true
 -Ddnssd=true
 -Dgoa=true
--Dgoogle=true"
+-Dgoogle=true
+-Dsystemduserunitdir=no
+-Dtmpfilesdir=no
+-Dlogind=false"
 source="https://download.gnome.org/sources/${name}/${version%.*}/${name}-${version}.tar.xz"
 
 build() {
