@@ -6,16 +6,16 @@
 description="libcanberra is an implementation of the XDG Sound Theme and Name Specifications, for generating event sounds on free desktops, such as GNOME."
 name=libcanberra
 version=0.30
-release=1
+release=2
 skip_patch=1
-source="https://0pointer.de/lennart/projects/$name/$name-$version.tar.xz https://www.linuxfromscratch.org/patches/blfs/svn/$name-$version-wayland-1.patch"
+source="https://0pointer.de/lennart/projects/$name/$name-$version.tar.xz https://www.linuxfromscratch.org/patches/blfs/13.1/$name-$version-wayland-1.patch"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
 	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
 	[ -n "$_bfs_src" ] || return 1
 	cd "$_bfs_src" || return 1
-patch -Np1 -i $BFS_SOURCE_DIR/$name-$version-wayland-1.patch
+patch -Np1 -i "../$name-$version-wayland-1.patch" || return 1
 #autoreconf -fi
 	./configure --prefix=/usr --disable-oss &&
 make
