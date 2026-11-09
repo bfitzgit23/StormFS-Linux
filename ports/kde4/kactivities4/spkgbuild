@@ -7,14 +7,29 @@ description="KDE 4 activity manager"
 name=kactivities4
 _pkgname=kactivities
 version=4.13.3
-release=1
-source="https://download.kde.org/Attic/4.13.3/src/$_pkgname-$version.tar.xz"
+release=2
+source="https://download.kde.org/Attic/4.13.3/src/$_pkgname-$version.tar.xz kactivities4-4.13.3-cmake4-optional-qml.patch.manual"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$_pkgname-$version" -print -quit)
 	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
 	[ -n "$_bfs_src" ] || return 1
 	cd "$_bfs_src" || return 1
+
+	# 4.13.3 predates CMake's requirement for an explicit minimum version: its
+	# top-level CMakeLists.txt starts at project() with no cmake_minimum_required
+	# at all, which CMake 4.4 rejects outright.  Add the version upstream used in
+	# the surrounding KDE 4.13 modules; the policy floor below keeps CMake 4 from
+	# refusing the old compatibility level.
+	#
+	# The models library builds a QML extension plugin that includes
+	# <QtDeclarative/qdeclarative.h>, but Qt 4 is built with -no-declarative.
+	# Build and install that plugin only when FindQt4 actually found the module.
+	#
+	# The workspace settings module needs libkdeclarative from kdelibs, which is
+	# not built without QtDeclarative.  Its directory is already added only when
+	# KDeclarative is found, so stop reporting it as a required feature.
+	patch -p1 -i "$SRC/kactivities4-4.13.3-cmake4-optional-qml.patch.manual" || return 1
 
 	export CMAKE_PREFIX_PATH="/opt/qt4:/usr"
 	export PATH="/opt/qt4/bin:$PATH"

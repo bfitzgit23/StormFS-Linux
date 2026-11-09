@@ -1,0 +1,73 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,3 +1,4 @@
++cmake_minimum_required(VERSION 2.8.12)
+ project (KACTIVITIES)
+ 
+ find_package (KDE4 REQUIRED)
+--- a/src/lib/models/CMakeLists.txt
++++ b/src/lib/models/CMakeLists.txt
+@@ -118,10 +118,12 @@
+     ${kactivities-models_LIB_SRCS}
+     )
+ 
++if (QT_QTDECLARATIVE_LIBRARY)
+ kde4_add_library (
+     kactivities-models-component-plugin SHARED
+     ${kactivities-models-component_LIB_SRCS}
+     )
++endif (QT_QTDECLARATIVE_LIBRARY)
+ 
+ set_target_properties (
+     kactivities-models
+@@ -138,6 +140,7 @@
+     ${SOPRANO_LIBRARIES}
+     )
+ 
++if (QT_QTDECLARATIVE_LIBRARY)
+ target_link_libraries (
+     kactivities-models-component-plugin
+     kactivities-models
+@@ -147,6 +150,7 @@
+     ${SOPRANO_LIBRARIES}
+     ${QT_QTDECLARATIVE_LIBRARY}
+     )
++endif (QT_QTDECLARATIVE_LIBRARY)
+ 
+ ## install
+ 
+@@ -188,19 +192,23 @@
+     FILE KActivitiesModelsLibraryTargets.cmake
+     )
+ 
++if (QT_QTDECLARATIVE_LIBRARY)
+ install (
+     TARGETS
+     kactivities-models-component-plugin
+     DESTINATION
+     ${IMPORTS_INSTALL_DIR}/org/kde/activities/models
+     )
++endif (QT_QTDECLARATIVE_LIBRARY)
+ 
++if (QT_QTDECLARATIVE_LIBRARY)
+ install (
+     FILES
+     qmldir
+     DESTINATION
+     ${IMPORTS_INSTALL_DIR}/org/kde/activities/models
+     )
++endif (QT_QTDECLARATIVE_LIBRARY)
+ 
+ if (NOT WIN32)
+     configure_file (${CMAKE_CURRENT_SOURCE_DIR}/libkactivities-models.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/libkactivities-models.pc)
+--- a/src/workspace/CMakeLists.txt
++++ b/src/workspace/CMakeLists.txt
+@@ -21,7 +21,7 @@
+ 
+ macro_log_feature (
+     KDeclarative_FOUND "libkdeclarative" "KDE Declarative (QML) support from kdelibs is needed for the settings module" "http://www.kde.org"
+-    TRUE "" ""
++    FALSE "" ""
+ )
+ 
+ if (KDeclarative_FOUND)
