@@ -394,6 +394,17 @@ grep -qx 'xapp' ports/opt/mintstick/depends || \
     fail 'mintstick no longer depends on xapp'
 pass 'xapp builds its status notifier and keyboard layout controller'
 
+grep -qx 'release=2' ports/opt/xdotool/spkgbuild || \
+    fail 'xdotool rebuild release missing'
+if grep -Fq 'releases/download' ports/opt/xdotool/spkgbuild; then
+    fail 'xdotool uses a release asset that upstream does not publish'
+fi
+grep -Fq 'archive/refs/tags/v${version}' ports/opt/xdotool/spkgbuild || \
+    fail 'xdotool does not use the tag source archive'
+grep -qx 'libxkbcommon' ports/opt/xdotool/depends || \
+    fail 'xdotool is missing its X11 runtime dependencies'
+pass 'xdotool downloads the tag archive that upstream actually publishes'
+
 grep -qx 'version=26.2.7' ports/opt/libreoffice-bin/spkgbuild || \
     fail 'libreoffice-bin does not pin a published release'
 grep -Fq 'deb/x86_64/LibreOffice_${version}_Linux_x86-64_deb.tar.gz' ports/opt/libreoffice-bin/spkgbuild || \

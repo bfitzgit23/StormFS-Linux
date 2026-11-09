@@ -1,17 +1,19 @@
 # description	: xdotool package
+# homepage	: https://github.com/jordansissel/xdotool
 # maintainer	: Brian Madonna <bmadonnaster@gmail.com>
 
 description="xdotool package"
 name=xdotool
 version=4.20260303.1
-release=1
-source="https://github.com/jordansissel/${name}/releases/download/v${version}/${name}-${version}.tar.gz"
+release=2
+# Upstream publishes no release asset, only the source archive for the tag.
+source="https://github.com/jordansissel/${name}/archive/refs/tags/v${version}/${name}-${version}.tar.gz"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
 	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
 	[ -n "$_bfs_src" ] || return 1
 	cd "$_bfs_src" || return 1
-make WITHOUT_RPATH_FIX=1
-make PREFIX=/usr INSTALLMAN=/usr/share/man DESTDIR=$PKG install
+	make WITHOUT_RPATH_FIX=1 || return 1
+	make PREFIX=/usr INSTALLMAN=/usr/share/man DESTDIR="$PKG" install || return 1
 }
