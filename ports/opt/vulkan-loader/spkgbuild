@@ -5,7 +5,7 @@
 description="Vulkan ICD loader"
 name=vulkan-loader
 version=1.4.357.0
-release=6
+release=7
 source="https://github.com/KhronosGroup/Vulkan-Loader/archive/refs/tags/vulkan-sdk-${version}.tar.gz"
 
 build() {
@@ -22,19 +22,27 @@ build() {
 
     cmake --build build -j "${JOBS:-1}" || return 1
 
-    _vulkan_lib=$(find build -type f -name 'libvulkan.so.*' -print -quit)
-    [ -n "$_vulkan_lib" ] || {
-        echo "vulkan-loader: build did not produce libvulkan.so" >&2
-        return 1
-    }
-
     [ -n "$PKG" ] || return 1
     cmake --install build --prefix "$PKG/usr" || return 1
 
-    install -d "$PKG/usr/lib" || return 1
-    install -m 0755 "$_vulkan_lib" "$PKG/usr/lib/${_vulkan_lib##*/}" || return 1
-    ln -sfn "${_vulkan_lib##*/}" "$PKG/usr/lib/libvulkan.so.1" || return 1
-    ln -sfn "${_vulkan_lib##*/}" "$PKG/usr/lib/libvulkan.so" || return 1
+    _vulkan_lib=
+    [ -d "$PKG/usr/lib" ] && _vulkan_lib=$(find "$PKG/usr/lib" -maxdepth 1 -type f \
+        \( -name 'libvulkan.so' -o -name 'libvulkan.so.*' \) -print -quit)
+    if [ -z "$_vulkan_lib" ]; then
+        _vulkan_lib=$(find . -type f \
+            \( -name 'libvulkan.so' -o -name 'libvulkan.so.*' \) -print -quit)
+        [ -n "$_vulkan_lib" ] || {
+            echo "vulkan-loader: build did not produce libvulkan.so" >&2
+            return 1
+        }
+        install -d "$PKG/usr/lib" || return 1
+        install -m 0755 "$_vulkan_lib" "$PKG/usr/lib/${_vulkan_lib##*/}" || return 1
+    fi
+
+    _vulkan_name=${_vulkan_lib##*/}
+    ln -sfn "$_vulkan_name" "$PKG/usr/lib/libvulkan.so.1" || return 1
+    [ "$_vulkan_name" = libvulkan.so ] ||
+        ln -sfn "$_vulkan_name" "$PKG/usr/lib/libvulkan.so" || return 1
 
 	if [ ! -d "$PKG/usr/lib" ] || ! find "$PKG/usr/lib" -maxdepth 1 \
 		\( -name 'libvulkan.so' -o -name 'libvulkan.so.*' \) \
