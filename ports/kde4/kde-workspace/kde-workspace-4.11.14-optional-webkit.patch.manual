@@ -1,0 +1,115 @@
+--- a/libs/ksysguard/processui/CMakeLists.txt
++++ b/libs/ksysguard/processui/CMakeLists.txt
+@@ -12,9 +12,15 @@
+    ProcessModel.cpp
+    ReniceDlg.cpp
+    KTextEditVT.cpp
+-   scripting.cpp
+ )
+ 
++# The scripting console renders its help and script output with QtWebKit and
++# runs the scripts with QtScript.  Build it only when both modules exist.
++if(QT_QTWEBKIT_FOUND AND QT_QTSCRIPT_FOUND)
++   set(processui_LIB_SRCS ${processui_LIB_SRCS} scripting.cpp)
++   add_definitions(-DHAVE_KSYSGUARD_SCRIPTING)
++endif(QT_QTWEBKIT_FOUND AND QT_QTSCRIPT_FOUND)
++
+ kde4_add_ui_files( processui_LIB_SRCS
+    ReniceDlgUi.ui
+    ProcessWidgetUI.ui
+@@ -27,7 +33,10 @@
+   include_directories(${X11_XRes_INCLUDE_PATH})
+ endif(X11_XRes_FOUND)
+ 
+-target_link_libraries(processui ${KDE4_KDEUI_LIBS} ${QT_QTSCRIPT_LIBRARY} ${QT_QTWEBKIT_LIBRARY} processcore)
++target_link_libraries(processui ${KDE4_KDEUI_LIBS} processcore)
++if(QT_QTWEBKIT_FOUND AND QT_QTSCRIPT_FOUND)
++   target_link_libraries(processui ${QT_QTSCRIPT_LIBRARY} ${QT_QTWEBKIT_LIBRARY})
++endif(QT_QTWEBKIT_FOUND AND QT_QTSCRIPT_FOUND)
+ target_link_libraries(processui LINK_INTERFACE_LIBRARIES ${KDE4_KDEUI_LIBS} processcore)
+ 
+ 
+--- a/libs/ksysguard/processui/ksysguardprocesslist.cpp
++++ b/libs/ksysguard/processui/ksysguardprocesslist.cpp
+@@ -58,7 +58,9 @@
+ 
+ #include "ReniceDlg.h"
+ #include "ui_ProcessWidgetUI.h"
++#ifdef HAVE_KSYSGUARD_SCRIPTING
+ #include "scripting.h"
++#endif
+ 
+ #include <sys/types.h>
+ #include <unistd.h>
+@@ -151,7 +153,9 @@
+     KSysGuardProcessListPrivate(KSysGuardProcessList* q, const QString &hostName)
+         : mModel(q, hostName), mFilterModel(q), mUi(new Ui::ProcessWidget()), mProcessContextMenu(NULL), mUpdateTimer(NULL)
+     {
++#ifdef HAVE_KSYSGUARD_SCRIPTING
+         mScripting = NULL;
++#endif
+         mNeedToExpandInit = false;
+         mNumItemsSelected = -1;
+         mResortCountDown = 2; //The items added initially will be already sorted, but without CPU info.  On the second refresh we will have CPU usage, so /then/ we can resort
+@@ -218,8 +222,10 @@
+     /** Number of items that are selected */
+     int mNumItemsSelected;
+ 
++#ifdef HAVE_KSYSGUARD_SCRIPTING
+     /** Class to deal with the scripting. NULL if scripting is disabled */
+     Scripting *mScripting;
++#endif
+ 
+     /** A counter to mark when to resort, so that we do not resort on every update */
+     int mResortCountDown;
+@@ -488,11 +494,13 @@
+         d->mProcessContextMenu->addAction(d->resume);
+     }
+ 
++#ifdef HAVE_KSYSGUARD_SCRIPTING
+     if(numProcesses == 1 && d->mScripting) {
+         foreach(QAction *action, d->mScripting->actions()) {
+             d->mProcessContextMenu->addAction(action);
+         }
+     }
++#endif
+     if (showSignalingEntries) {
+         d->mProcessContextMenu->addSeparator();
+         d->mProcessContextMenu->addAction(d->terminate);
+@@ -916,9 +924,11 @@
+     //Stop updating the process list if we are hidden
+     if(d->mUpdateTimer)
+         d->mUpdateTimer->stop();
++#ifdef HAVE_KSYSGUARD_SCRIPTING
+     //stop any scripts running, to save on memory
+     if(d->mScripting)
+         d->mScripting->stopAllScripts();
++#endif
+     QWidget::hideEvent(event);
+ }
+ 
+@@ -1478,10 +1488,15 @@
+ }
+ bool KSysGuardProcessList::scriptingEnabled() const
+ {
++#ifdef HAVE_KSYSGUARD_SCRIPTING
+     return !!d->mScripting;
++#else
++    return false;
++#endif
+ }
+ void KSysGuardProcessList::setScriptingEnabled(bool enabled)
+ {
++#ifdef HAVE_KSYSGUARD_SCRIPTING
+     if(!!d->mScripting == enabled)
+         return;  //Nothing changed
+     if(!enabled) {
+@@ -1491,5 +1506,8 @@
+         d->mScripting = new Scripting(this);
+         d->mScripting->hide();
+     }
++#else
++    Q_UNUSED(enabled); //No scripting support was compiled in
++#endif
+ 
+ }

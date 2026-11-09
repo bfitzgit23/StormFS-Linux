@@ -1,0 +1,27 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -54,8 +54,8 @@
+ find_package(KDeclarative QUIET CONFIG)
+ set_package_properties(KDeclarative PROPERTIES DESCRIPTION "KDE Declarative (QML) support from kdelibs"
+                        URL "http://www.kde.org"
+-                       TYPE REQUIRED
+-                       PURPOSE "Required for building ksmserver"
++                       TYPE OPTIONAL
++                       PURPOSE "Used by the QML parts of the workspace, which are skipped when unavailable"
+                       )
+ 
+ macro_optional_find_package(OpenGL)
+--- a/plasma/generic/applets/CMakeLists.txt
++++ b/plasma/generic/applets/CMakeLists.txt
+@@ -22,6 +22,10 @@
+    #should compile also on windows? (even if doesn't really make sense)
+    add_subdirectory(notifications)
+    if(${KDE_PLATFORM_PROFILE} STREQUAL "Desktop")
+-      add_subdirectory(systemtray)
++      # The systemtray applet is written in QML and needs QtDeclarative plus
++      # Plasma::DeclarativeWidget, neither of which exists without QtDeclarative.
++      if(QT_QTDECLARATIVE_LIBRARY)
++         add_subdirectory(systemtray)
++      endif(QT_QTDECLARATIVE_LIBRARY)
+    endif(${KDE_PLATFORM_PROFILE} STREQUAL "Desktop")
+ endif(NOT WIN32)

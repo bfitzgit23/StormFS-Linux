@@ -5,14 +5,29 @@
 description="KDE 4 Plasma workspace and window manager"
 name=kde-workspace
 version=4.11.14
-release=1
-source="https://download.kde.org/Attic/4.14.3/src/kde-workspace-$version.tar.xz"
+release=2
+source="https://download.kde.org/Attic/4.14.3/src/kde-workspace-$version.tar.xz kde-workspace-4.11.14-optional-qtdeclarative.patch.manual kde-workspace-4.11.14-optional-webkit.patch.manual"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
 	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
 	[ -n "$_bfs_src" ] || return 1
 	cd "$_bfs_src" || return 1
+
+	# Qt 4 is built without QtDeclarative, so the systemtray applet cannot be
+	# compiled: its UI includes the QtDeclarative headers and instantiates
+	# Plasma::DeclarativeWidget, which kdelibs leaves out in the same
+	# configuration.  Skip the applet like the WebKit one above, and report
+	# KDeclarative (the QML support module from kdelibs) as optional so the
+	# required-package summary does not abort the configure step.
+	#
+	# ksysguard's process UI renders its scripting console with QtWebKit and
+	# evaluates the scripts with QtScript.  BFSOS ships neither module, so only
+	# build the console when both are present and let KSysGuardProcessList
+	# report scripting as unavailable, which also omits the script actions from
+	# the process context menu.
+	patch -p1 -i "$SRC/kde-workspace-4.11.14-optional-qtdeclarative.patch.manual" || return 1
+	patch -p1 -i "$SRC/kde-workspace-4.11.14-optional-webkit.patch.manual" || return 1
 
 	export CMAKE_PREFIX_PATH="/opt/qt4:/usr"
 	export PATH="/opt/qt4/bin:$PATH"
