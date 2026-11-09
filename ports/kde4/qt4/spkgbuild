@@ -6,8 +6,8 @@
 description="Qt 4.8 compatibility framework for KDE 4"
 name=qt4
 version=4.8.7
-release=1
-source="https://download.qt.io/archive/qt/4.8/$version/qt-everywhere-opensource-src-$version.tar.gz qt4-gcc-requires.patch.manual"
+release=2
+source="https://download.qt.io/archive/qt/4.8/$version/qt-everywhere-opensource-src-$version.tar.gz qt4-gcc-requires.patch.manual qt4-4.8.7-qforeach-gcc9.patch.manual"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "qt-everywhere-opensource-src-$version" -print -quit)
@@ -19,6 +19,13 @@ build() {
 	# local identifier. Keep this patch manual so it is not picked up by an
 	# automatic *.patch loop and applied twice.
 	patch -p1 -i "$SRC/qt4-gcc-requires.patch.manual" || return 1
+
+	# GCC 9 changed the scope of a break inside the extension used by Qt4's
+	# Q_FOREACH. The broken loop makes uic emit incomplete UI headers.
+	patch -p1 -i "$SRC/qt4-4.8.7-qforeach-gcc9.patch.manual" || return 1
+
+	# A previous failed build may have left those incomplete uic headers behind.
+	find . -type f -path '*/.uic/*' -name 'ui_*.h' -delete
 
 	export CFLAGS="${CFLAGS:+$CFLAGS }-std=gnu99"
 	# ICU 78 defaults UChar to C++11 char16_t and exposes C++17-only header
