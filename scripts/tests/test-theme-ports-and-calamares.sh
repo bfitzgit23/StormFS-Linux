@@ -17,6 +17,8 @@ done
 grep -q '^name=stormfs-theme$' "$theme/spkgbuild" || fail 'theme pack package name changed'
 grep -Fq 'cd "$SRC" || return 1' "$theme/spkgbuild" || \
     fail 'theme pack build does not enter the source cache'
+! grep -Fq 'unzip -q StormFS-Recovered-Theme-Icons-Wallpapers-StormPkg.zip' "$theme/spkgbuild" || \
+    fail 'theme pack tries to unpack the pkgbuild-extracted outer archive'
 grep -q 'StormFS-Theme-Icons-v3.zip' "$theme/spkgbuild" || \
     fail 'StormFS theme pack no longer installs the GTK/icon theme'
 grep -q 'stormd_wallpapers.zip' "$theme/spkgbuild" || \
