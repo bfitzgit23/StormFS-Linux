@@ -414,6 +414,12 @@ grep -Fq 'qtbase-opensource-src_5.15.19+dfsg-7.debian.tar.xz' ports/opt/qt5/spkg
     fail 'qt5 does not use the current Debian qtbase revision'
 pass 'qt5 uses the current Debian qtbase patch archive'
 
+grep -qx 'release=4' ports/opt/speex/spkgbuild || \
+    fail 'speex rebuild release missing'
+grep -Fq 'ftp.osuosl.org/pub/xiph/releases/speex' ports/opt/speex/spkgbuild || \
+    fail 'speex does not use the stable Xiph mirror'
+pass 'speex fetches its archives from the stable Xiph mirror'
+
 grep -qx 'version=26.2.7' ports/opt/libreoffice-bin/spkgbuild || \
     fail 'libreoffice-bin does not pin a published release'
 grep -Fq 'deb/x86_64/LibreOffice_${version}_Linux_x86-64_deb.tar.gz' ports/opt/libreoffice-bin/spkgbuild || \

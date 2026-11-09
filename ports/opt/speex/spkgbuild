@@ -6,20 +6,23 @@
 description="Speex speech codec and SpeexDSP library"
 name=speex
 version=1.2.1
-release=3
-source="https://downloads.xiph.org/releases/speex/speex-$version.tar.gz https://downloads.xiph.org/releases/speex/speexdsp-$version.tar.gz"
+release=4
+# downloads.xiph.org intermittently truncates these transfers, which fails
+# extraction with an end-of-file error. OSUOSL mirrors Xiph's releases and
+# serves byte-identical archives.
+source="https://ftp.osuosl.org/pub/xiph/releases/speex/speex-$version.tar.gz https://ftp.osuosl.org/pub/xiph/releases/speex/speexdsp-$version.tar.gz"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
 	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
 	[ -n "$_bfs_src" ] || return 1
 	cd "$_bfs_src" || return 1
-    ./configure --prefix=/usr --disable-static --docdir=/usr/share/doc/speex-$version
-    make -j "${JOBS:-1}"
-    make DESTDIR="$PKG" install
+    ./configure --prefix=/usr --disable-static --docdir=/usr/share/doc/speex-$version || return 1
+    make -j "${JOBS:-1}" || return 1
+    make DESTDIR="$PKG" install || return 1
 
-    cd "$SRC/speexdsp-$version"
-    ./configure --prefix=/usr --disable-static --docdir=/usr/share/doc/speexdsp-$version
-    make -j "${JOBS:-1}"
-    make DESTDIR="$PKG" install
+    cd "$SRC/speexdsp-$version" || return 1
+    ./configure --prefix=/usr --disable-static --docdir=/usr/share/doc/speexdsp-$version || return 1
+    make -j "${JOBS:-1}" || return 1
+    make DESTDIR="$PKG" install || return 1
 }
