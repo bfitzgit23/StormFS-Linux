@@ -21,13 +21,13 @@ done
 for pkg in xfce4-meta compiz-meta lightdm lightdm-gtk-greeter chromium-bin firefox-bin fastfetch mousepad libreoffice-bin flameshot galculator vlc gparted mintstick \
     thunderbird-bin pidgin rustdesk engrampa thunar-volman thunar-archive-plugin thunar-media-tags-plugin \
     p7zip unzip unrar gvfs gnupg xfce4-docklike-plugin xfce4-weather-plugin xfce4-whiskermenu-plugin \
-    xfce4-power-manager xfce4-pulseaudio-plugin; do
+    xfce4-power-manager xfce4-pulseaudio-plugin pavucontrol; do
     grep -q "\b$pkg\b" "$iso" || fail "ISO desktop package set is missing $pkg"
 done
 [ -f "$ROOT/ports/opt/mintstick/spkgbuild" ] || fail 'mintstick port is missing'
 for port in \
     compiz/compiz-meta opt/engrampa opt/pidgin opt/rustdesk opt/thunderbird-bin \
-    opt/p7zip opt/unzip opt/unrar opt/gtk-layer-shell opt/gnupg \
+    opt/p7zip opt/unzip opt/unrar opt/gtk-layer-shell opt/gnupg opt/pavucontrol \
     gnome/gvfs xfce/thunar-volman xfce/thunar-archive-plugin xfce/thunar-media-tags-plugin \
     xfce/xfce4-docklike-plugin xfce/xfce4-power-manager \
     xfce/xfce4-pulseaudio-plugin xfce/xfce4-weather-plugin \

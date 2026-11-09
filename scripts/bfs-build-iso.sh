@@ -79,7 +79,7 @@ iso_packages=(
     # Thunar integration and archive tools
     thunar-volman thunar-archive-plugin thunar-media-tags-plugin p7zip unzip unrar
     # Xfce panel plugins and session utilities
-    xfce4-docklike-plugin xfce4-weather-plugin xfce4-whiskermenu-plugin xfce4-power-manager xfce4-pulseaudio-plugin
+    xfce4-docklike-plugin xfce4-weather-plugin xfce4-whiskermenu-plugin xfce4-power-manager xfce4-pulseaudio-plugin pavucontrol
     # Desktop themes and shell customisation
     adw-gtk3 tela-icon-theme stormfs-theme oh-my-bash
 )
