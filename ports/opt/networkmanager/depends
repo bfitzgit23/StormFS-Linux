@@ -6,4 +6,5 @@ libpsl
 newt
 nss
 polkit
+python3-gobject
 wpa_supplicant

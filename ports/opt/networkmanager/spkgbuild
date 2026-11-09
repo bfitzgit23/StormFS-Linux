@@ -6,7 +6,7 @@
 description="Core NetworkManager daemon, nmcli, nm-online and nmtui"
 name=networkmanager
 version=1.58.1
-release=5
+release=6
 source="https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/releases/$version/downloads/NetworkManager-$version.tar.xz"
 
 build() {
