@@ -15,6 +15,7 @@ libpng
 libtiff
 libwebp
 mesa
+openssl
 perl
 sqlite
 xorg-libs

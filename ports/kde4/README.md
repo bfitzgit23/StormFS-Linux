@@ -38,9 +38,13 @@ Qt 4.8.7 and KDE 4.14.3 predate the current GCC and CMake toolchains. The
 recipes therefore build with `-std=gnu++98 -fpermissive` and pass
 `CMAKE_POLICY_VERSION_MINIMUM=3.5` to CMake 4.
 
-Qt 4 is built without OpenSSL, QtWebKit, QtDeclarative, or the bundled Phonon.
-KDE 4 uses the separate `phonon4` package, and `kdelibs` disables its optional
-OpenSSL, WebKit, QCA2, udisks, PolicyKit, aspell, and Enchant integrations.
+Qt 4 is built with OpenSSL 4 support (`-openssl-linked`), using the
+Debian/Arch OpenSSL 1.1 compatibility patch plus a small OpenSSL 4 update for
+opaque ASN.1/X509 accessors, const-correct signatures, and removed protocol
+methods. QtWebKit, QtDeclarative, and the bundled Phonon remain disabled. KDE
+4 uses the separate `phonon4` package, and `kdelibs` disables its optional
+direct OpenSSL, WebKit, QCA2, udisks, PolicyKit, aspell, and Enchant
+integrations; its TLS paths use QtNetwork's OpenSSL support.
 
 `phonon-backend-gstreamer` supplies the Qt 4 Phonon backend. `gst-plugins-base`
 and `gst-plugins-good` provide the ALSA and PulseAudio output paths used by the

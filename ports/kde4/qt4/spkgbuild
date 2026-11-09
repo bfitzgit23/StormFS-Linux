@@ -6,8 +6,8 @@
 description="Qt 4.8 compatibility framework for KDE 4"
 name=qt4
 version=4.8.7
-release=4
-source="https://download.qt.io/archive/qt/4.8/$version/qt-everywhere-opensource-src-$version.tar.gz qt4-gcc-requires.patch.manual qt4-4.8.7-qforeach-gcc9.patch.manual qt4-4.8.7-linguist-pointer-compare.patch.manual"
+release=5
+source="https://download.qt.io/archive/qt/4.8/$version/qt-everywhere-opensource-src-$version.tar.gz qt4-gcc-requires.patch.manual qt4-4.8.7-qforeach-gcc9.patch.manual qt4-4.8.7-linguist-pointer-compare.patch.manual qt4-openssl-1.1.patch.manual qt4-openssl4.patch.manual"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "qt-everywhere-opensource-src-$version" -print -quit)
@@ -27,6 +27,13 @@ build() {
 	# ContextItem::findMessage returns a MessageItem pointer. Ordered
 	# comparison against an integer is ill-formed and newer GCC rejects it.
 	patch -p1 -i "$SRC/qt4-4.8.7-linguist-pointer-compare.patch.manual" || return 1
+
+	# Qt 4.8.7 predates OpenSSL 1.1. The first patch ports the SSL backend
+	# to the opaque OpenSSL API; the second updates the remaining ASN.1 and
+	# X509 accessors, const-correctness, and removed protocol methods for
+	# OpenSSL 4.
+	patch -p1 -i "$SRC/qt4-openssl-1.1.patch.manual" || return 1
+	patch -p1 -i "$SRC/qt4-openssl4.patch.manual" || return 1
 
 	# A previous failed build may have left those incomplete uic headers behind.
 	find . -type f -path '*/.uic/*' -name 'ui_*.h' -delete
@@ -56,7 +63,7 @@ build() {
 		-system-libmng \
 		-system-sqlite \
 		-dbus-linked \
-		-no-openssl \
+		-openssl-linked \
 		-no-webkit \
 		-no-phonon \
 		-no-declarative \
