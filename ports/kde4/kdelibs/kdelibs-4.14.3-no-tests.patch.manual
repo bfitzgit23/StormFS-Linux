@@ -29,3 +29,18 @@
 +if (KDE4_BUILD_TESTS)
 +    add_subdirectory( tests )
 +endif (KDE4_BUILD_TESTS)
+--- a/cmake/modules/KDE4Macros.cmake
++++ b/cmake/modules/KDE4Macros.cmake
+@@ -905,10 +905,10 @@
+     if (NOT MSVC_IDE)   #not needed for the ide
+         # if the tests are EXCLUDE_FROM_ALL, add a target "buildtests" to build all tests
+         if (NOT KDE4_BUILD_TESTS)
+-           get_directory_property(_buildtestsAdded BUILDTESTS_ADDED)
++           get_property(_buildtestsAdded GLOBAL PROPERTY KDE4_BUILDTESTS_ADDED)
+            if(NOT _buildtestsAdded)
+               add_custom_target(buildtests)
+-              set_directory_properties(PROPERTIES BUILDTESTS_ADDED TRUE)
++              set_property(GLOBAL PROPERTY KDE4_BUILDTESTS_ADDED TRUE)
+            endif(NOT _buildtestsAdded)
+            add_dependencies(buildtests ${_test_NAME})
+         endif (NOT KDE4_BUILD_TESTS)

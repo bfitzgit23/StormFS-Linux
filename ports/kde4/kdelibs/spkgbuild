@@ -5,7 +5,7 @@
 description="KDE 4 core libraries"
 name=kdelibs
 version=4.14.3
-release=17
+release=18
 source="https://download.kde.org/Attic/4.14.3/src/kdelibs-$version.tar.xz kdelibs-4.14.3-cmake4.patch.manual kdelibs-4.14.3-cmake4-interface-libs.patch.manual kdelibs-4.14.3-no-tests.patch.manual kdelibs-4.14.3-klocale-bool-comparison.patch.manual kdelibs-4.14.3-optional-dbusmenuqt.patch.manual kdelibs-4.14.3-optional-declarative.patch.manual kdelibs-4.14.3-ordered.patch.manual kdelibs-4.14.3-jasper-exported.patch.manual kdelibs-4.14.3-openssl-1.1.patch.manual"
 
 build() {
@@ -79,7 +79,9 @@ build() {
 	# that matters is KDE4_BUILD_TESTS, which makes kde4_add_executable(TEST ...)
 	# targets EXCLUDE_FROM_ALL so "cmake --build" skips them.  The no-tests
 	# patch also stops kdeui, kemoticons and solid from entering their tests
-	# directories, which contain executables that are not marked TEST.
+	# directories, which contain executables that are not marked TEST, and makes
+	# the macro's "buildtests" helper target global so it is created once
+	# instead of once per test directory.
 	cmake -S . -B build -G Ninja \
 		-DCMAKE_INSTALL_PREFIX=/usr \
 		-DCMAKE_BUILD_TYPE=Release \
@@ -87,9 +89,7 @@ build() {
 		-DQT_QMAKE_EXECUTABLE=/opt/qt4/bin/qmake \
 		-DKDE4_BUILD_TESTS=OFF \
 		-DKHTML_BUILD_TESTREGRESSION=OFF \
-		-DSTATIC_LIBRARY=OFF \
-		-DWITH_SOLID_UDISKS2=OFF \
-		-DWITH_SOLID_WMI=OFF \
+		-DFORCE_JSON=OFF \
 		-DCMAKE_DISABLE_FIND_PACKAGE_OpenSSL=TRUE \
 		-DCMAKE_DISABLE_FIND_PACKAGE_DBusMenuQt=TRUE \
 		-DCMAKE_DISABLE_FIND_PACKAGE_QCA2=TRUE \
