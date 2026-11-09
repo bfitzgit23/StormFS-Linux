@@ -5,8 +5,8 @@
 description="KDE 4 PIM libraries"
 name=kdepimlibs
 version=4.14.3
-release=1
-source="https://download.kde.org/Attic/4.14.3/src/kdepimlibs-$version.tar.xz"
+release=2
+source="https://download.kde.org/Attic/4.14.3/src/kdepimlibs-$version.tar.xz kdepimlibs-4.14.3-cmake-minimum.patch.manual"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
@@ -19,6 +19,8 @@ build() {
 	export QT_QMAKE_EXECUTABLE=/opt/qt4/bin/qmake
 	export CFLAGS="${CFLAGS:+$CFLAGS }-std=gnu99"
 	export CXXFLAGS="${CXXFLAGS:+$CXXFLAGS }-std=gnu++98 -fpermissive -Wno-deprecated-declarations"
+
+	patch -p1 -i "$SRC/kdepimlibs-4.14.3-cmake-minimum.patch.manual" || return 1
 
 	cmake -S . -B build -G Ninja \
 		-DCMAKE_INSTALL_PREFIX=/usr \
