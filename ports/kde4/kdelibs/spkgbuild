@@ -5,7 +5,7 @@
 description="KDE 4 core libraries"
 name=kdelibs
 version=4.14.3
-release=5
+release=6
 source="https://download.kde.org/Attic/4.14.3/src/kdelibs-$version.tar.xz kdelibs-4.14.3-cmake4.patch.manual"
 
 build() {
@@ -14,10 +14,10 @@ build() {
 	[ -n "$_bfs_src" ] || return 1
 	cd "$_bfs_src" || return 1
 
-	# CMake 4 rejects configure-time LOCATION reads and treats a bare TEST
-	# argument as the if() operator, and kdeui has a duplicate else() branch.
-	# Use target-file generator expressions, quote comparisons, drop the
-	# duplicate branch, and declare the policy baseline.
+	# CMake 4 rejects configure-time LOCATION reads and the removed OLD policy
+	# behavior, treats a bare TEST argument as the if() operator, and kdeui has
+	# a duplicate else() branch.  Use target-file generator expressions, quote
+	# comparisons, drop the duplicate branch, and use the 3.5 policy baseline.
 	#
 	# Qt 4 is built without QtWebKit, so omit the optional kdewebkit module
 	# and its Plasma and designer-plugin consumers.
