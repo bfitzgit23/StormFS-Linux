@@ -6,7 +6,7 @@
 description="MIT Kerberos V5 network authentication implementation"
 name=kerberos
 version=1.22.2
-release=4
+release=5
 source="https://kerberos.org/dist/krb5/${version%.*}/krb5-$version.tar.gz https://www.linuxfromscratch.org/patches/blfs/13.1/mitkrb-$version-upstream_fix-1.patch https://www.linuxfromscratch.org/patches/blfs/13.1/mitkrb-$version-security_fix-1.patch https://www.linuxfromscratch.org/patches/blfs/13.1/mitkrb-$version-openssl_4_fixes-1.patch krb5-$version-remove-openssl-1.0.patch"
 
 build() {
@@ -17,22 +17,43 @@ build() {
 
 	# Apply patches in dependency order. The upstream OpenSSL-1.0 removal
 	# backport must follow the BLFS OpenSSL-4 compatibility fixes.
-	for _bfs_patch in \
-		"$SRC/mitkrb-$version-upstream_fix-1.patch" \
-		"$SRC/mitkrb-$version-security_fix-1.patch" \
-		"$SRC/mitkrb-$version-openssl_4_fixes-1.patch" \
-		"$SRC/krb5-$version-remove-openssl-1.0.patch"
-	do
-		[ -f "$_bfs_patch" ] || return 1
-		patch -t "${patch_opt:--p1}" -i "$_bfs_patch" || return 1
-	done
+	#
+	# pkgbuild normally starts from an unpacked tree, but a kept work tree
+	# must not be patched twice: patch -t assumes -R for an existing hunk and
+	# would silently undo these fixes. Skip a fully patched tree and never
+	# let patch reverse a hunk.
+	if grep -q 'need 1\.1\.0' src/configure.ac 2>/dev/null &&
+	   grep -q 'X509_STORE_CTX_set0_trusted_stack' \
+		src/plugins/preauth/pkinit/pkinit_crypto_openssl.c 2>/dev/null; then
+		echo "Kerberos: source tree is already patched; skipping patch series"
+	else
+		for _bfs_patch in \
+			"$SRC/mitkrb-$version-upstream_fix-1.patch" \
+			"$SRC/mitkrb-$version-security_fix-1.patch" \
+			"$SRC/mitkrb-$version-openssl_4_fixes-1.patch" \
+			"$SRC/krb5-$version-remove-openssl-1.0.patch"
+		do
+			[ -f "$_bfs_patch" ] || return 1
+			patch -N -t "${patch_opt:--p1}" -i "$_bfs_patch" || {
+				echo "ERROR: Kerberos patch does not apply: $_bfs_patch" >&2
+				return 1
+			}
+		done
+	fi
     cd src || return 1
 
     sed -i -e '/eq 0/{N;s/12 //}' \
         plugins/kdb/db2/libdb2/test/run.test \
         || return 1
 
-    config_opts=(
+	# Krb5 1.22 requires OpenSSL 1.1 or newer. Report the version the compiler
+	# will actually see, so a stale header in a reused build root is visible.
+	if [ -r /usr/include/openssl/opensslv.h ]; then
+		_bfs_ssl_text=$(sed -n 's/^# *define *OPENSSL_VERSION_TEXT *"\([^"]*\)".*/\1/p' /usr/include/openssl/opensslv.h | head -n 1)
+		[ -n "$_bfs_ssl_text" ] && echo "Kerberos: building against $_bfs_ssl_text"
+	fi
+
+	config_opts=(
         --prefix=/usr
         --sysconfdir=/etc
         --localstatedir=/var/lib

@@ -309,7 +309,7 @@ grep -Fq 'source="$name-$version.tar.xz::https://deb.debian.org/debian/pool/main
     fail 'rpcsvc-proto still fetches the failing GitHub release asset'
 pass 'rpcsvc-proto uses the verified Debian source mirror'
 
-grep -qx 'release=4' ports/opt/kerberos/spkgbuild || fail 'kerberos OpenSSL-4 fix release missing'
+grep -qx 'release=5' ports/opt/kerberos/spkgbuild || fail 'kerberos OpenSSL-4 fix release missing'
 grep -Fq 'https://www.linuxfromscratch.org/patches/blfs/13.1/mitkrb-$version-upstream_fix-1.patch' ports/opt/kerberos/spkgbuild || \
     fail 'kerberos upstream patch is not on the stable BLFS mirror'
 grep -Fq 'https://www.linuxfromscratch.org/patches/blfs/13.1/mitkrb-$version-security_fix-1.patch' ports/opt/kerberos/spkgbuild || \
@@ -331,5 +331,13 @@ line_kerberos_remove=$(grep -n -F '"$SRC/krb5-$version-remove-openssl-1.0.patch"
 (( line_kerberos_security < line_kerberos_openssl )) || fail 'kerberos security patch must precede OpenSSL patch'
 (( line_kerberos_openssl < line_kerberos_remove )) || fail 'kerberos OpenSSL patch must precede OpenSSL-1.0 removal'
 pass 'kerberos applies stable OpenSSL-4 fixes in dependency order'
+
+grep -Fq 'patch -N -t' ports/opt/kerberos/spkgbuild || \
+    fail 'kerberos patch application must be forward only'
+grep -Fq 'already patched; skipping patch series' ports/opt/kerberos/spkgbuild || \
+    fail 'kerberos must not re-apply its patch series to a kept work tree'
+grep -Fq 'OPENSSL_VERSION_TEXT' ports/opt/kerberos/spkgbuild || \
+    fail 'kerberos does not report the OpenSSL it builds against'
+pass 'kerberos never reverses applied patches and reports its OpenSSL'
 
 echo 'r348 0.9.0 source regression checks passed.' 
