@@ -12,7 +12,7 @@ release=4
 keep_static=1
 build_opt="--prefix=/usr --libdir=/usr/lib --enable-win64 --enable-archs=i386,x86_64"
 # Custom build required: staging patch application and Wine multi-architecture configure flow
-source="https://dl.winehq.org/wine/source/11.x/wine-$version.tar.xz \ https://github.com/$name/$name/archive/v$version/$name-$version.tar.gz \ https://dl.winehq.org/wine/wine-gecko/2.47.4/wine-gecko-2.47.4-x86.msi \ https://dl.winehq.org/wine/wine-gecko/2.47.4/wine-gecko-2.47.4-x86_64.msi \ https://dl.winehq.org/wine/wine-mono/11.3.0/wine-mono-11.3.0-x86.msi"
+source="https://dl.winehq.org/wine/source/11.x/wine-$version.tar.xz https://github.com/$name/$name/archive/v$version/$name-$version.tar.gz https://dl.winehq.org/wine/wine-gecko/2.47.4/wine-gecko-2.47.4-x86.msi https://dl.winehq.org/wine/wine-gecko/2.47.4/wine-gecko-2.47.4-x86_64.msi https://dl.winehq.org/wine/wine-mono/11.3.0/wine-mono-11.3.0-x86.msi"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)

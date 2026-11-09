@@ -67,6 +67,10 @@ pipewire = (COMPAT / "pipewire-32/spkgbuild").read_text()
 assert "xorg-libxcb-32" not in pipewire and "libxcb-32" in pipewire
 
 wine = (CONTRIB / "wine-staging/spkgbuild").read_text()
+for label, recipe in (("openssl11-32", openssl), ("wine-staging", wine)):
+    source = re.search(r'(?m)^source="([^"]*)"$', recipe)
+    assert source, label
+    assert "\\" not in source.group(1).split(), label
 assert '"$SRC/wine-staging-$version/staging/patchinstall.py"' in wine
 assert '"$SRC/wine-$version/configure" $build_opt' in wine
 steam = (CONTRIB / "steam/depends").read_text().split()
