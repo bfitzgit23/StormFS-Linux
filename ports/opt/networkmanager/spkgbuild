@@ -6,7 +6,7 @@
 description="Core NetworkManager daemon, nmcli, nm-online and nmtui"
 name=networkmanager
 version=1.58.1
-release=4
+release=5
 source="https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/releases/$version/downloads/NetworkManager-$version.tar.xz"
 
 build() {
@@ -17,6 +17,7 @@ build() {
     grep -rl '^#!.*python$' . |
         xargs -r sed -i '1s/python$/python3/' || return 1
 
+    # Keep NM-1.0.gir installed for libnma and other introspection consumers.
     meson setup build \
         --prefix=/usr \
         --buildtype=release \
@@ -36,7 +37,7 @@ build() {
         -Dnm_cloud_setup=false \
         -Dclat=false \
         -Dmodem_manager=false \
-        -Dintrospection=false \
+        -Dintrospection=true \
         -Dvapi=false \
         -Ddocs=false || return 1
 

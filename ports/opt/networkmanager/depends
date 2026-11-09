@@ -1,4 +1,5 @@
 curl
+gobject-introspection
 iptables
 libndp
 libpsl
