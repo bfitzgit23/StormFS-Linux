@@ -5,8 +5,8 @@
 description="KDE 4 Plasma workspace and window manager"
 name=kde-workspace
 version=4.11.14
-release=3
-source="https://download.kde.org/Attic/4.14.3/src/kde-workspace-$version.tar.xz kde-workspace-4.11.14-optional-qtdeclarative.patch.manual kde-workspace-4.11.14-optional-webkit.patch.manual kde-workspace-4.11.14-optional-dbusmenu-blitz.patch.manual"
+release=4
+source="https://download.kde.org/Attic/4.14.3/src/kde-workspace-$version.tar.xz kde-workspace-4.11.14-optional-qtdeclarative.patch.manual kde-workspace-4.11.14-optional-webkit.patch.manual kde-workspace-4.11.14-optional-dbusmenu-blitz.patch.manual kde-workspace-4.11.14-optional-qml-sweep.patch.manual"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
@@ -33,6 +33,7 @@ build() {
 	patch -p1 -i "$SRC/kde-workspace-4.11.14-optional-qtdeclarative.patch.manual" || return 1
 	patch -p1 -i "$SRC/kde-workspace-4.11.14-optional-webkit.patch.manual" || return 1
 	patch -p1 -i "$SRC/kde-workspace-4.11.14-optional-dbusmenu-blitz.patch.manual" || return 1
+	patch -p1 -i "$SRC/kde-workspace-4.11.14-optional-qml-sweep.patch.manual" || return 1
 
 	export CMAKE_PREFIX_PATH="/opt/qt4:/usr"
 	export PATH="/opt/qt4/bin:$PATH"

@@ -1,0 +1,438 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -58,6 +58,10 @@
+                        PURPOSE "Used by the QML parts of the workspace, which are skipped when unavailable"
+                       )
+ 
++if(QT_QTDECLARATIVE_LIBRARY AND KDeclarative_FOUND)
++   add_definitions(-DHAVE_QTDECLARATIVE)
++endif(QT_QTDECLARATIVE_LIBRARY AND KDeclarative_FOUND)
++
+ macro_optional_find_package(OpenGL)
+ set_package_properties(OpenGL PROPERTIES DESCRIPTION "The OpenGL libraries"
+                        URL "http://www.opengl.org"
+--- a/ksplash/CMakeLists.txt
++++ b/ksplash/CMakeLists.txt
+@@ -2,4 +2,6 @@
+ add_subdirectory( simple )
+ add_subdirectory( none )
+ add_subdirectory( kcm )
+-add_subdirectory( ksplashqml )
++if(QT_QTDECLARATIVE_LIBRARY)
++    add_subdirectory( ksplashqml )
++endif(QT_QTDECLARATIVE_LIBRARY)
+--- a/ksmserver/screenlocker/CMakeLists.txt
++++ b/ksmserver/screenlocker/CMakeLists.txt
+@@ -3,7 +3,10 @@
+ 
+ add_definitions(-DKDE_DEFAULT_DEBUG_AREA=1223)
+ add_subdirectory(data)
+-add_subdirectory(greeter)
++# The greeter is a QML application and cannot be built without QtDeclarative.
++if(QT_QTDECLARATIVE_LIBRARY)
++    add_subdirectory(greeter)
++endif(QT_QTDECLARATIVE_LIBRARY)
+ 
+ # for dbus_add_activation_service
+ include(PkgConfigGetVar)
+--- a/ksmserver/shutdowndlg.h
++++ b/ksmserver/shutdowndlg.h
+@@ -69,7 +69,9 @@
+     bool initialized;
+ };
+ 
++#ifdef HAVE_QTDECLARATIVE
+ class QDeclarativeView;
++#endif
+ 
+ // The confirmation dialog
+ class KSMShutdownDlg : public QDialog
+@@ -97,7 +99,9 @@
+     KWorkSpace::ShutdownType m_shutdownType;
+     QString m_bootOption;
+     QStringList rebootOptions;
++#ifdef HAVE_QTDECLARATIVE
+     QDeclarativeView* m_view;
++#endif
+ };
+ 
+ #endif
+--- a/ksmserver/shutdowndlg.cpp
++++ b/ksmserver/shutdowndlg.cpp
+@@ -34,10 +34,12 @@
+ #include <QtDBus/QDBusConnection>
+ #include <QtDBus/QDBusMessage>
+ #include <QtDBus/QDBusPendingCall>
++#ifdef HAVE_QTDECLARATIVE
+ #include <QDeclarativeView>
+ #include <QDeclarativeContext>
+ #include <QDeclarativeEngine>
+ #include <QDeclarativePropertyMap>
++#endif
+ 
+ #include <kdialog.h>
+ #include <kiconloader.h>
+@@ -47,13 +49,18 @@
+ #include <kwindowsystem.h>
+ #include <netwm.h>
+ #include <KStandardDirs>
++#ifdef HAVE_QTDECLARATIVE
+ #include <kdeclarative.h>
++#endif
+ 
+ #include <stdio.h>
+ #include <kxerrorhandler.h>
+ 
+ #include <kworkspace/kdisplaymanager.h>
+ 
++#include <QLabel>
++#include <QVBoxLayout>
++
+ #include <config-workspace.h>
+ 
+ #include "logouteffect.h"
+@@ -181,6 +188,7 @@
+ 
+     KDialog::centerOnScreen(this, -3);
+ 
++#ifdef HAVE_QTDECLARATIVE
+     //kDebug() << "Creating QML view";
+     m_view = new QDeclarativeView(this);
+     QDeclarativeContext *context = m_view->rootContext();
+@@ -254,13 +262,42 @@
+     m_view->show();
+     m_view->setFocus();
+     adjustSize();
++#else
++    QVBoxLayout *layout = new QVBoxLayout(this);
++    QLabel *label = new QLabel(i18n("Do you really want to end the current session?"), this);
++    label->setAlignment(Qt::AlignCenter);
++    layout->addWidget(label);
++
++    QPushButton *logoutButton = new QPushButton(i18n("&Log Out"), this);
++    connect(logoutButton, SIGNAL(clicked()), this, SLOT(slotLogout()));
++    layout->addWidget(logoutButton);
++
++    if (maysd) {
++        QPushButton *haltButton = new QPushButton(i18n("Turn &Off Computer"), this);
++        connect(haltButton, SIGNAL(clicked()), this, SLOT(slotHalt()));
++        layout->addWidget(haltButton);
++
++        QPushButton *rebootButton = new QPushButton(i18n("&Restart Computer"), this);
++        connect(rebootButton, SIGNAL(clicked()), this, SLOT(slotReboot()));
++        layout->addWidget(rebootButton);
++    }
++
++    QPushButton *cancelButton = new QPushButton(i18n("&Cancel"), this);
++    connect(cancelButton, SIGNAL(clicked()), this, SLOT(reject()));
++    layout->addWidget(cancelButton);
++    layout->addStretch();
++    setModal(true);
++    resize(360, 200);
++#endif
+ }
+ 
+ bool KSMShutdownDlg::eventFilter ( QObject * watched, QEvent * event )
+ {
++#ifdef HAVE_QTDECLARATIVE
+     if (watched == m_view && event->type() == QEvent::Resize) {
+         adjustSize();
+     }
++#endif
+     return QDialog::eventFilter(watched, event);
+ }
+ 
+@@ -268,11 +305,13 @@
+ {
+     QDialog::resizeEvent( e );
+ 
++#ifdef HAVE_QTDECLARATIVE
+     if( KWindowSystem::compositingActive()) {
+         clearMask();
+     } else {
+         setMask(m_view->mask());
+     }
++#endif
+ 
+     KDialog::centerOnScreen(this, -3);
+ }
+--- a/kwin/CMakeLists.txt
++++ b/kwin/CMakeLists.txt
+@@ -34,6 +34,15 @@
+ 
+ cmake_dependent_option(KWIN_BUILD_KAPPMENU "Build without appmenu support" ON "KWIN_BUILD_DECORATIONS" FALSE)
+ 
++# The window switcher, the scripting interface and the QML thumbnail items all
++# need QtDeclarative; QtScript is also required by the scripting interface.
++if(NOT QT_QTDECLARATIVE_LIBRARY)
++    set(KWIN_BUILD_TABBOX OFF)
++endif(NOT QT_QTDECLARATIVE_LIBRARY)
++if(NOT QT_QTDECLARATIVE_LIBRARY OR NOT QT_QTSCRIPT_LIBRARY)
++    set(KWIN_BUILD_SCRIPTING OFF)
++endif(NOT QT_QTDECLARATIVE_LIBRARY OR NOT QT_QTSCRIPT_LIBRARY)
++
+ # KWIN_HAVE_XRENDER_COMPOSITING - whether XRender-based compositing support is available: may be disabled
+ if( KWIN_BUILD_XRENDER_COMPOSITING )
+     set( KWIN_HAVE_XRENDER_COMPOSITING 1 )
+@@ -135,7 +144,6 @@
+    scene_xrender.cpp
+    scene_opengl.cpp
+    glxbackend.cpp
+-   thumbnailitem.cpp
+    lanczosfilter.cpp
+    deleted.cpp
+    effects.cpp
+@@ -145,6 +153,10 @@
+    xcbutils.cpp
+    )
+ 
++if(QT_QTDECLARATIVE_LIBRARY)
++    set(kwin_KDEINIT_SRCS ${kwin_KDEINIT_SRCS} thumbnailitem.cpp)
++endif(QT_QTDECLARATIVE_LIBRARY)
++
+ if(KWIN_BUILD_SCRIPTING)
+     set(
+         kwin_KDEINIT_SRCS ${kwin_KDEINIT_SRCS}
+@@ -163,7 +175,6 @@
+         kwin_KDEINIT_SRCS ${kwin_KDEINIT_SRCS}
+         tabbox/tabbox.cpp
+         tabbox/clientmodel.cpp
+-        tabbox/declarative.cpp
+         tabbox/desktopchain.cpp
+         tabbox/desktopmodel.cpp
+         tabbox/tabboxconfig.cpp
+--- a/kwin/effects.h
++++ b/kwin/effects.h
+@@ -40,9 +40,11 @@
+ namespace KWin
+ {
+ 
++#ifdef HAVE_QTDECLARATIVE
+ class AbstractThumbnailItem;
+ class DesktopThumbnailItem;
+ class WindowThumbnailItem;
++#endif
+ 
+ class Client;
+ class Compositor;
+@@ -316,6 +318,7 @@
+     void setData(int role, const QVariant &data);
+     QVariant data(int role) const;
+ 
++#ifdef HAVE_QTDECLARATIVE
+     void registerThumbnail(AbstractThumbnailItem *item);
+     QHash<WindowThumbnailItem*, QWeakPointer<EffectWindowImpl> > const &thumbnails() const {
+         return m_thumbnails;
+@@ -323,17 +326,24 @@
+     QList<DesktopThumbnailItem*> const &desktopThumbnails() const {
+         return m_desktopThumbnails;
+     }
++#endif
+ private Q_SLOTS:
++#ifdef HAVE_QTDECLARATIVE
+     void thumbnailDestroyed(QObject *object);
+     void thumbnailTargetChanged();
+     void desktopThumbnailDestroyed(QObject *object);
++#endif
+ private:
++#ifdef HAVE_QTDECLARATIVE
+     void insertThumbnail(WindowThumbnailItem *item);
++#endif
+     Toplevel* toplevel;
+     Scene::Window* sw; // This one is used only during paint pass.
+     QHash<int, QVariant> dataMap;
++#ifdef HAVE_QTDECLARATIVE
+     QHash<WindowThumbnailItem*, QWeakPointer<EffectWindowImpl> > m_thumbnails;
+     QList<DesktopThumbnailItem*> m_desktopThumbnails;
++#endif
+ };
+ 
+ class EffectWindowGroupImpl
+--- a/kwin/effects.cpp
++++ b/kwin/effects.cpp
+@@ -43,7 +43,9 @@
+ #include "scripting/scriptedeffect.h"
+ #endif
+ #include "screens.h"
++#ifdef HAVE_QTDECLARATIVE
+ #include "thumbnailitem.h"
++#endif
+ #include "virtualdesktops.h"
+ #include "workspace.h"
+ #include "kwinglutils.h"
+@@ -1794,6 +1796,7 @@
+     effects->setElevatedWindow(this, elevate);
+ }
+ 
++#ifdef HAVE_QTDECLARATIVE
+ void EffectWindowImpl::registerThumbnail(AbstractThumbnailItem *item)
+ {
+     if (WindowThumbnailItem *thumb = qobject_cast<WindowThumbnailItem*>(item)) {
+@@ -1834,6 +1837,7 @@
+     // we know it is a DesktopThumbnailItem
+     m_desktopThumbnails.removeAll(static_cast<DesktopThumbnailItem*>(object));
+ }
++#endif
+ 
+ void EffectWindowImpl::referencePreviousWindowPixmap()
+ {
+--- a/kwin/scene.h
++++ b/kwin/scene.h
+@@ -32,7 +32,9 @@
+ namespace KWin
+ {
+ 
++#ifdef HAVE_QTDECLARATIVE
+ class AbstractThumbnailItem;
++#endif
+ class Workspace;
+ class Deleted;
+ class EffectFrameImpl;
+@@ -170,14 +172,18 @@
+     QElapsedTimer last_time;
+     Workspace* wspace;
+ private:
++#ifdef HAVE_QTDECLARATIVE
+     void paintWindowThumbnails(Scene::Window *w, QRegion region, qreal opacity, qreal brightness, qreal saturation);
+     void paintDesktopThumbnails(Scene::Window *w);
++#endif
+     /**
+     * Helper function to find the GraphicsView the ThumbnailItem @p item is rendered in which
+     * matches our Window @p w.
+     * If not found @c NULL is returned.
+     **/
++#ifdef HAVE_QTDECLARATIVE
+     QGraphicsView *findViewForThumbnailItem(AbstractThumbnailItem *item, Scene::Window *w);
++#endif
+     QPoint findOffsetInWindow(QWidget *view, xcb_window_t idOfTopmostWindow);
+ };
+ 
+--- a/kwin/scene.cpp
++++ b/kwin/scene.cpp
+@@ -81,7 +81,9 @@
+ #include "overlaywindow.h"
+ #include "shadow.h"
+ 
++#ifdef HAVE_QTDECLARATIVE
+ #include "thumbnailitem.h"
++#endif
+ #include "workspace.h"
+ 
+ namespace KWin
+@@ -414,12 +416,15 @@
+     WindowPaintData data(w->window()->effectWindow());
+     data.quads = quads;
+     effects->paintWindow(effectWindow(w), mask, region, data);
++#ifdef HAVE_QTDECLARATIVE
+     // paint thumbnails on top of window
+     paintWindowThumbnails(w, region, data.opacity(), data.brightness(), data.saturation());
+     // and desktop thumbnails
+     paintDesktopThumbnails(w);
++#endif
+ }
+ 
++#ifdef HAVE_QTDECLARATIVE
+ void Scene::paintWindowThumbnails(Scene::Window *w, QRegion region, qreal opacity, qreal brightness, qreal saturation)
+ {
+     EffectWindowImpl *wImpl = static_cast<EffectWindowImpl*>(effectWindow(w));
+@@ -537,7 +542,9 @@
+         s_recursionCheck = NULL;
+     }
+ }
++#endif
+ 
++#ifdef HAVE_QTDECLARATIVE
+ QGraphicsView *Scene::findViewForThumbnailItem(AbstractThumbnailItem *item, Scene::Window *w)
+ {
+     // in principle there could be more than one QGraphicsView per QGraphicsScene,
+@@ -558,6 +565,7 @@
+     }
+     return NULL;
+ }
++#endif
+ 
+ QPoint Scene::findOffsetInWindow(QWidget *view, xcb_window_t idOfTopmostWindow)
+ {
+--- a/kwin/clients/CMakeLists.txt
++++ b/kwin/clients/CMakeLists.txt
+@@ -1,4 +1,7 @@
+-add_subdirectory( aurorae )
++# Aurorae decorations are QML scenes.
++if(QT_QTDECLARATIVE_LIBRARY)
++    add_subdirectory( aurorae )
++endif(QT_QTDECLARATIVE_LIBRARY)
+ if(KWIN_BUILD_OXYGEN)
+     add_subdirectory( oxygen )
+ endif()
+--- a/kwin/effects/CMakeLists.txt
++++ b/kwin/effects/CMakeLists.txt
+@@ -114,7 +114,10 @@
+ 
+ # Common effects
+ include( kscreen/CMakeLists.txt )
+-include( presentwindows/CMakeLists.txt )
++# The present windows effect renders windows through QML thumbnail items.
++if(QT_QTDECLARATIVE_LIBRARY)
++    include( presentwindows/CMakeLists.txt )
++endif(QT_QTDECLARATIVE_LIBRARY)
+ include( screenedge/CMakeLists.txt )
+ include( slidingpopups/CMakeLists.txt )
+ include( taskbarthumbnail/CMakeLists.txt )
+@@ -122,7 +125,9 @@
+ # Common effects only relevant to desktop
+ if( NOT KWIN_MOBILE_EFFECTS )
+     include( dashboard/CMakeLists.txt )
+-    include( desktopgrid/CMakeLists.txt )
++    if(QT_QTDECLARATIVE_LIBRARY)
++        include( desktopgrid/CMakeLists.txt )
++    endif(QT_QTDECLARATIVE_LIBRARY)
+     include( diminactive/CMakeLists.txt )
+     include( dimscreen/CMakeLists.txt )
+     include( fallapart/CMakeLists.txt )
+--- a/kwin/kcmkwin/CMakeLists.txt
++++ b/kwin/kcmkwin/CMakeLists.txt
+@@ -1,5 +1,7 @@
+ add_subdirectory( kwinoptions )
+-add_subdirectory( kwindecoration )
++if(QT_QTDECLARATIVE_LIBRARY)
++    add_subdirectory( kwindecoration )
++endif(QT_QTDECLARATIVE_LIBRARY)
+ add_subdirectory( kwinrules )
+ add_subdirectory( kwincompositing )
+ if(KWIN_BUILD_SCREENEDGES)
+@@ -10,6 +12,6 @@
+ endif()
+ add_subdirectory( kwindesktop )
+ 
+-if( KWIN_BUILD_TABBOX )
++if( KWIN_BUILD_TABBOX AND QT_QTDECLARATIVE_LIBRARY )
+ add_subdirectory( kwintabbox )
+ endif()
+--- a/plasma/desktop/applets/CMakeLists.txt
++++ b/plasma/desktop/applets/CMakeLists.txt
+@@ -4,8 +4,12 @@
+ 
+ if(NOT WIN32)
+     #task and windowlist depend on libs/taskmanager
+-   add_subdirectory(tasks)
++   if(QT_QTDECLARATIVE_LIBRARY)
++      add_subdirectory(tasks)
++   endif(QT_QTDECLARATIVE_LIBRARY)
+    add_subdirectory(windowlist)
+ 
+-   add_subdirectory(pager)
++   if(QT_QTDECLARATIVE_LIBRARY)
++      add_subdirectory(pager)
++   endif(QT_QTDECLARATIVE_LIBRARY)
+ endif(NOT WIN32)
+--- a/plasma/screensaver/CMakeLists.txt
++++ b/plasma/screensaver/CMakeLists.txt
+@@ -1,6 +1,8 @@
+ add_subdirectory(containments)
+ if(NOT WIN32)
++if(QT_QTDECLARATIVE_LIBRARY)
+ add_subdirectory(shell)
++endif(QT_QTDECLARATIVE_LIBRARY)
+ endif(NOT WIN32)
+ 
+ 
