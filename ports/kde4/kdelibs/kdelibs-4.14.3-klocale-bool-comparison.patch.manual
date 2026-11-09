@@ -1,0 +1,14 @@
+--- a/kdecore/localization/klocale_kde.cpp
++++ b/kdecore/localization/klocale_kde.cpp
+@@ -2439,9 +2439,9 @@
+ bool KLocalePrivate::use12Clock() const
+ {
+-    if ((timeFormat().contains(QString::fromLatin1("%I")) > 0) ||
+-        (timeFormat().contains(QString::fromLatin1("%l")) > 0)) {
++    if (bool(timeFormat().contains(QString::fromLatin1("%I"))) ||
++        bool(timeFormat().contains(QString::fromLatin1("%l")))) {
+         return true;
+     } else {
+         return false;
+     }
+ }

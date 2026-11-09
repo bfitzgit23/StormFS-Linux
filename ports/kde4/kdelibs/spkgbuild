@@ -5,8 +5,8 @@
 description="KDE 4 core libraries"
 name=kdelibs
 version=4.14.3
-release=9
-source="https://download.kde.org/Attic/4.14.3/src/kdelibs-$version.tar.xz kdelibs-4.14.3-cmake4.patch.manual kdelibs-4.14.3-cmake4-interface-libs.patch.manual"
+release=10
+source="https://download.kde.org/Attic/4.14.3/src/kdelibs-$version.tar.xz kdelibs-4.14.3-cmake4.patch.manual kdelibs-4.14.3-cmake4-interface-libs.patch.manual kdelibs-4.14.3-klocale-bool-comparison.patch.manual"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
@@ -25,8 +25,14 @@ build() {
 	#
 	# Qt 4 is built without QtWebKit, so omit the optional kdewebkit module
 	# and its Plasma and designer-plugin consumers.
+	#
+	# klocale_kde.cpp compares the result of QString::contains() against zero.
+	# Qt 4 returns QBool there, which only converts to void*, so the ordered
+	# pointer/integer comparison is an error rather than something -fpermissive
+	# can downgrade.  Test the boolean conversion directly instead.
 	patch -p1 -i "$SRC/kdelibs-4.14.3-cmake4.patch.manual" || return 1
 	patch -p1 -i "$SRC/kdelibs-4.14.3-cmake4-interface-libs.patch.manual" || return 1
+	patch -p1 -i "$SRC/kdelibs-4.14.3-klocale-bool-comparison.patch.manual" || return 1
 
 	export CMAKE_PREFIX_PATH="/opt/qt4:/usr"
 	export PATH="/opt/qt4/bin:$PATH"
