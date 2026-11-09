@@ -7,7 +7,7 @@ description="KDE 4 activity manager"
 name=kactivities4
 _pkgname=kactivities
 version=4.13.3
-release=2
+release=3
 source="https://download.kde.org/Attic/4.13.3/src/$_pkgname-$version.tar.xz kactivities4-4.13.3-cmake4-optional-qml.patch.manual"
 
 build() {
@@ -35,7 +35,11 @@ build() {
 	export PATH="/opt/qt4/bin:$PATH"
 	export QT_QMAKE_EXECUTABLE=/opt/qt4/bin/qmake
 	export CFLAGS="${CFLAGS:+$CFLAGS }-std=gnu99"
-	export CXXFLAGS="${CXXFLAGS:+$CXXFLAGS }-std=gnu++98 -fpermissive -Wno-deprecated-declarations"
+	# 4.13.3 probes for C++11 (auto, lambdas, unique_ptr, variadic templates,
+	# initializer lists) before it adds src/service and src/workspace, so a
+	# global -std=gnu++98 leaves those probes failing and the activity manager
+	# is silently skipped.  Compile the whole package as C++11 instead.
+	export CXXFLAGS="${CXXFLAGS:+$CXXFLAGS }-std=gnu++11 -fpermissive -Wno-deprecated-declarations"
 
 	cmake -S . -B build -G Ninja \
 		-DCMAKE_INSTALL_PREFIX=/usr \
