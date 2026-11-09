@@ -11,8 +11,8 @@ def deps(rel):
     return (root / rel / 'depends').read_text().split()
 
 gn = text('ports/opt/gn/spkgbuild')
-assert 'version=0.20260907' in gn
-assert '5df47e556efde72cc576d8a3af23b58b614345bd' in gn
+assert 'version=0.20261008' in gn
+assert '0035961837fbcfe875d855744b3eda4fd2eefb43' in gn
 
 qemu = text('ports/opt/qemu/spkgbuild')
 assert int(re.search(r'^release=(\d+)$', qemu, re.M).group(1)) >= 2
@@ -68,13 +68,28 @@ for dep in ['dav1d', 'desktop-file-utils', 'hicolor-icon-theme', 'libgcrypt',
             'gperf', 'pipewire', 'typescript']:
     assert dep in chromium_deps, dep
 
+chromium_bin = text('ports/opt/chromium-bin/spkgbuild')
+assert 'version=156.0.8078.79' in chromium_bin
+assert 'chrome-sandbox' in chromium_bin
+assert 'nostrip="usr/lib/chromium/chrome-sandbox"' in chromium_bin
+assert '/usr/lib/chromium/chromium' in chromium_bin
+assert '/etc/revdep.d/chromium-bin' in chromium_bin
+chromium_bin_deps = deps('ports/opt/chromium-bin')
+for dep in ['double-conversion', 'eudev', 'highway', 'simdutf', 'libxscrnsaver',
+            'nss', 'nspr']:
+    assert dep in chromium_bin_deps, dep
+assert 'systemd' not in chromium_bin_deps
+assert 'systemd-libs' not in chromium_bin_deps
+assert 'version=9.2.2' in text('ports/opt/simdutf/spkgbuild')
+
 # Every hard dependency introduced/retained by these ports must resolve to a
 # maintained BFSOS port identity.
 ports = root / 'ports'
 identities = {p.name for collection in ports.iterdir() if collection.is_dir()
               for p in collection.iterdir() if p.is_dir() and (p / 'spkgbuild').exists()}
 for rel in ['ports/opt/qemu', 'ports/opt/libvirt', 'ports/opt/libvirt-python',
-            'ports/opt/virt-manager', 'ports/opt/chromium']:
+            'ports/opt/virt-manager', 'ports/opt/chromium',
+            'ports/opt/chromium-bin']:
     declared = deps(rel)
     assert declared, f'{rel}: empty depends file'
     known = {i.lower() for i in identities}

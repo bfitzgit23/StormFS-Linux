@@ -1,0 +1,51 @@
+# description	: Open-source Chromium web browser (prebuilt binary)
+# homepage	: https://www.chromium.org/
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+# optional	: qt6 gnome-keyring kdialog gtk4
+
+description="Open-source Chromium web browser (prebuilt binary)"
+name=chromium-bin
+version=156.0.8078.79
+release=1
+build_work=disk
+# Arch's current Chromium build is a complete, dynamically linked /usr tree.
+# Its declared systemd dependency is packaging metadata only: neither the
+# launcher nor the browser links libsystemd, so OpenRC does not need it.
+# Keep the setuid sandbox out of the shared-library stripping pass.
+nostrip="usr/lib/chromium/chrome-sandbox"
+source="https://archive.archlinux.org/packages/c/chromium/chromium-$version-1-x86_64.pkg.tar.zst"
+
+build() {
+    local _bfs_usr
+
+    _bfs_usr=$(find . -mindepth 1 -maxdepth 2 -type d -name usr -print -quit)
+    [ -n "$_bfs_usr" ] || return 1
+
+    [ -x "$_bfs_usr/lib/chromium/chromium" ] || {
+        echo "chromium-bin: staged Chromium executable is missing" >&2
+        return 1
+    }
+    [ -x "$_bfs_usr/bin/chromedriver" ] || {
+        echo "chromium-bin: staged chromedriver is missing" >&2
+        return 1
+    }
+    [ -f "$_bfs_usr/lib/chromium/chrome-sandbox" ] || {
+        echo "chromium-bin: staged setuid sandbox is missing" >&2
+        return 1
+    }
+
+    install -d "$PKG" || return 1
+    cp -a "$_bfs_usr" "$PKG/usr" || return 1
+    chmod 4755 "$PKG/usr/lib/chromium/chrome-sandbox" || return 1
+
+    # Arch's launcher identifies the build as "Arch Linux". Use the same plain
+    # launcher as the source-built port so BFSOS owns the version string.
+    cat > "$PKG/usr/bin/chromium" <<'WRAP'
+#!/bin/sh
+exec /usr/lib/chromium/chromium "$@"
+WRAP
+    chmod 755 "$PKG/usr/bin/chromium" || return 1
+
+    install -d "$PKG/etc/revdep.d" || return 1
+    printf '%s\n' '/usr/lib/chromium' > "$PKG/etc/revdep.d/chromium-bin" || return 1
+}

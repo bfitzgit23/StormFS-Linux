@@ -4,12 +4,15 @@
 
 description="GN meta-build system used by Chromium"
 name=gn
-version=0.20260907
-release=2
+version=0.20261008
+release=3
 # Custom build required: GN bootstraps its own Ninja graph with build/gen.py;
 # this is not a normal BFSOS configure/CMake/Meson/Make project.
 # The googlesource archive extracts flat, with no single source directory.
-source="https://gn.googlesource.com/gn/+archive/5df47e556efde72cc576d8a3af23b58b614345bd.tar.gz"
+# Chromium 157 assigns allow_circular_includes_from_allowlist in its root .gn.
+# Older GN releases reject that setting with "Assignment had no effect"; this
+# is the revision Chromium 157 pins in its DEPS file.
+source="https://gn.googlesource.com/gn/+archive/0035961837fbcfe875d855744b3eda4fd2eefb43.tar.gz"
 
 build() {
     [ -f build/gen.py ] || return 1

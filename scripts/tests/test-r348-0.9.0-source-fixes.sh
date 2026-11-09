@@ -273,7 +273,7 @@ grep -qx 'KEEP_DOC=yes' ports/opt/gtk-doc/spkgbuild || \
     fail 'gtk-doc Python runtime is still stripped by the docs cleanup'
 pass 'gtk-doc preserves its Python runtime under share/gtk-doc'
 
-grep -qx 'release=2' ports/opt/gn/spkgbuild || fail 'GN flat-archive release missing'
+grep -qx 'release=3' ports/opt/gn/spkgbuild || fail 'GN Chromium-157 revision release missing'
 grep -Fq 'python3 build/gen.py --allow-warnings' ports/opt/gn/spkgbuild || \
     fail 'GN does not bootstrap from the archive root'
 ! grep -Fq '_bfs_src=$(find' ports/opt/gn/spkgbuild || \
