@@ -7,7 +7,7 @@ description="KDE 4 activity manager"
 name=kactivities4
 _pkgname=kactivities
 version=4.13.3
-release=3
+release=4
 source="https://download.kde.org/Attic/4.13.3/src/$_pkgname-$version.tar.xz kactivities4-4.13.3-cmake4-optional-qml.patch.manual"
 
 build() {
@@ -40,6 +40,18 @@ build() {
 	# global -std=gnu++98 leaves those probes failing and the activity manager
 	# is silently skipped.  Compile the whole package as C++11 instead.
 	export CXXFLAGS="${CXXFLAGS:+$CXXFLAGS }-std=gnu++11 -fpermissive -Wno-deprecated-declarations"
+
+	# kdelibs before 4.14.3-21 shipped cmake modules that read the location of a
+	# kauth-policy-gen target its exported tools file never contained, so every
+	# KDE 4 configure aborted in get_target_property().  Report that here instead
+	# of letting the raw missing-target error escape.
+	_bfs_kdelibs_modules=$(kde4-config --path data 2>/dev/null | cut -d: -f1)/cmake/modules
+	if [ -f "$_bfs_kdelibs_modules/FindKDE4Internal.cmake" ] &&
+	   ! grep -qF 'TARGET ${KDE4_TARGET_PREFIX}kauth-policy-gen' "$_bfs_kdelibs_modules/FindKDE4Internal.cmake"; then
+		echo "$name: installed kdelibs is older than 4.14.3-21;" >&2
+		echo "$name: rebuild and reinstall kdelibs before building this package." >&2
+		return 1
+	fi
 
 	cmake -S . -B build -G Ninja \
 		-DCMAKE_INSTALL_PREFIX=/usr \
