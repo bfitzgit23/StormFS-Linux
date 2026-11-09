@@ -95,8 +95,8 @@ else
     bad "sddm executable missing"
 fi
 enabled_dms=0
-for dm_unit in sddm.service plasmalogin.service gdm.service lightdm.service; do
-    if rc-update show | grep -q "$dm_unit" >/dev/null 2>&1; then
+for dm_unit in sddm plasmalogin gdm lightdm lxdm; do
+    if rc-update show | grep -Eq "^[[:space:]]*$dm_unit([[:space:]]|$)" >/dev/null 2>&1; then
         ok "$dm_unit explicitly enabled"
         enabled_dms=$((enabled_dms + 1))
     fi

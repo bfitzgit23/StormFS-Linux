@@ -216,7 +216,7 @@ grep -Fq 'for service_pkg in chrony avahi cups smartmontools accountsservice' "$
     fail "installer does not discard stale OpenRC service packages"
 grep -Fq 'packages/$service_pkg' "$inst" || \
     fail "installer service-package cache cleanup is missing"
-for service_pkg in chrony avahi cups smartmontools accountsservice upower udisks lightdm sddm wireplumber polkit linux-pam; do
+for service_pkg in chrony avahi cups smartmontools accountsservice upower udisks lightdm lxdm sddm wireplumber polkit linux-pam; do
     grep -Fq "$service_pkg" "$inst" || fail "installer service-package list omits $service_pkg"
 done
 grep -Fq 'for desktop_port in opt/libedit plasma/plasma-login-manager; do' "$inst" || \

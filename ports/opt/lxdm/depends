@@ -1,0 +1,10 @@
+consolekit
+dbus
+gettext
+gtk
+intltool
+iso-codes
+librsvg
+linux-pam
+xauth
+xorg-server

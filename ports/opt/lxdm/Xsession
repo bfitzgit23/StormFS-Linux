@@ -1,0 +1,14 @@
+#!/bin/bash
+# BFSOS LXDM session wrapper.  LXDM passes the selected session as $1.
+set -u
+
+if [ -n "${1:-}" ]; then
+	LXSESSION=$1
+else
+	LXSESSION=/usr/bin/startxfce4
+fi
+
+[ -r /etc/profile ] && . /etc/profile
+[ -r "${HOME:-/root}/.xprofile" ] && . "${HOME:-/root}/.xprofile"
+
+exec -l bash -c "$LXSESSION"

@@ -6,7 +6,7 @@ cal="$ROOT/ports/opt/calamares"
 theme="$ROOT/ports/opt/stormfs-theme"
 fail() { echo "Theme port/Calamares regression: FAIL: $*" >&2; exit 1; }
 
-for port in adw-gtk3 tela-icon-theme oh-my-bash stormfs-theme; do
+for port in adw-gtk3 tela-icon-theme oh-my-bash stormfs-theme lxdm stormfs-lxdm-theme; do
     file="$ROOT/ports/opt/$port/spkgbuild"
     [ -f "$file" ] || fail "ports/opt/$port/spkgbuild is missing"
     grep -q '^name=' "$file" || fail "$port has no package name"
@@ -79,15 +79,24 @@ grep -Fq 'local.bfsos-disabled' "$cal/shellprocess.conf" || fail 'Calamares clea
 grep -Fq 'remove_deprecated_local_start_hook' "$ROOT/scripts/install-bfs-menu-current.sh" ||     fail 'menu installer has no local_start cleanup'
 grep -Fq 'local.bfsos-disabled' "$ROOT/scripts/install-bfs-menu-current.sh" ||     fail 'menu installer does not disable the legacy local hook'
 
-for conf in "$ROOT/ports/opt/lightdm-gtk-greeter/greeter.conf" \
-            "$ROOT/iso-builder/liverootfs/etc/lightdm/lightdm-gtk-greeter.conf"; do
-    [ -f "$conf" ] || fail "greeter configuration is missing: $conf"
-    grep -q '^theme-name=StormFS$' "$conf" || fail "greeter theme is not StormFS: $conf"
-    grep -q '^icon-theme-name=StormFS-Icons$' "$conf" || fail "greeter icon theme is not StormFS-Icons: $conf"
-    ! grep -q 'Numix\|Tela-circle-dark' "$conf" || fail "greeter still references an uninstalled theme: $conf"
+lxdm_theme="$ROOT/ports/opt/stormfs-lxdm-theme"
+for file in lxdm.conf gtkrc greeter.ui index.theme background.jpg login.svg; do
+    [ -f "$lxdm_theme/$file" ] || fail "LXDM theme file is missing: $file"
 done
+grep -q '^theme=StormFS$' "$lxdm_theme/lxdm.conf" || fail 'LXDM greeter theme is not StormFS'
+grep -q '^gtk_theme=Clearlooks$' "$lxdm_theme/lxdm.conf" || fail 'LXDM GTK2 widget theme is not configured'
+grep -q '^bg=/usr/share/lxdm/themes/StormFS/background.jpg$' "$lxdm_theme/lxdm.conf" || fail 'LXDM theme background is not configured'
+grep -q '^session=/usr/bin/startxfce4$' "$lxdm_theme/lxdm.conf" || fail 'LXDM does not start Xfce'
+grep -q '^Name=StormFS$' "$lxdm_theme/index.theme" || fail 'LXDM theme is not named StormFS'
+grep -q 'background.jpg' "$lxdm_theme/gtkrc" || fail 'LXDM GTK2 theme does not use the StormFS background'
+grep -q 'login.svg' "$lxdm_theme/greeter.ui" || fail 'LXDM greeter does not use the StormFS wordmark'
+[ -f "$ROOT/ports/opt/openrc-init-scripts/lxdm" ] || fail 'OpenRC LXDM service is missing'
+grep -q '^name=lxdm$' "$ROOT/ports/opt/lxdm/spkgbuild" || fail 'LXDM port name changed'
+grep -Fq -- '--with-systemdsystemunitdir=no' "$ROOT/ports/opt/lxdm/spkgbuild" || fail 'LXDM still enables systemd units'
+! grep -q 'pam_systemd' "$ROOT/ports/opt/lxdm/bfs-lxdm.pam" || fail 'LXDM PAM stack references pam_systemd'
+[ ! -e "$ROOT/iso-builder/liverootfs/etc/lightdm" ] || fail 'LightDM live configuration still exists'
 
-for pkg in calamares adw-gtk3 tela-icon-theme stormfs-theme oh-my-bash xinit xauth shadow; do
+for pkg in calamares adw-gtk3 tela-icon-theme stormfs-theme stormfs-lxdm-theme lxdm oh-my-bash xinit xauth shadow; do
     grep -q "\b$pkg\b" "$iso" || fail "ISO package set is missing $pkg"
 done
 grep -q 'startx' "$iso" || fail 'live session does not start X'

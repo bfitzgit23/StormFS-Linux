@@ -1,0 +1,24 @@
+# description	: StormFS theme and defaults for the LXDM display manager
+# homepage	: https://github.com/bfitzgit23/StormFS-Linux
+# maintainer	: StormFS maintainers
+
+description="StormFS theme and defaults for the LXDM display manager"
+name=stormfs-lxdm-theme
+version=1.0
+release=1
+source="lxdm.conf index.theme gtkrc greeter.ui background.jpg login.svg session.png lang.png nobody.png README"
+
+build() {
+	cd "$SRC" || return 1
+
+	install -d -m 0755 \
+		"$PKG/etc/lxdm" \
+		"$PKG/usr/share/lxdm/themes/StormFS" \
+		"$PKG/usr/share/doc/$name" || return 1
+
+	install -m 0644 lxdm.conf "$PKG/etc/lxdm/lxdm.conf" || return 1
+	install -m 0644 index.theme gtkrc greeter.ui background.jpg login.svg \
+		session.png lang.png nobody.png \
+		"$PKG/usr/share/lxdm/themes/StormFS/" || return 1
+	install -m 0644 README "$PKG/usr/share/doc/$name/README" || return 1
+}

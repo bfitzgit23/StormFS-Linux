@@ -26,7 +26,7 @@ StormFS builds upon the Linux From Scratch methodology but diverges in several i
 3. **OpenRC** as the default service manager, with systemd compatibility documented separately
 4. **Multilib** as a first-class target (32-bit libraries under `/usr/lib32`)
 5. **PyQt5 graphical installer** for deployment
-6. **Live ISO** with LightDM, XFCE default desktop, and auto-login
+6. **Live ISO** with LXDM, XFCE default desktop, and auto-login
 
 ## 1.2 Host System Requirements
 

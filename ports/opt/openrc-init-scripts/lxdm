@@ -1,0 +1,17 @@
+#!/sbin/openrc-run
+name="lxdm"
+description="LXDM display manager"
+command="/usr/sbin/lxdm"
+command_background=true
+pidfile="/run/lxdm.pid"
+
+depend() {
+	need localmount
+	after bootmisc modules dbus
+	use logger
+}
+
+# LXDM claims the first free virtual terminal.  Make sure no agetty line in
+# /etc/inittab owns that console before enabling, then run:
+#   rc-update add lxdm default
+# Activating a display manager is always an explicit admin action in BFSOS.

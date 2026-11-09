@@ -1,0 +1,20 @@
+StormFS LXDM theme
+==================
+
+This package installs the StormFS greeter theme and the default LXDM
+configuration used by the StormFS Linux ISO.
+
+Contents
+--------
+  /etc/lxdm/lxdm.conf
+  /usr/share/lxdm/themes/StormFS/gtkrc
+  /usr/share/lxdm/themes/StormFS/greeter.ui
+  /usr/share/lxdm/themes/StormFS/index.theme
+  /usr/share/lxdm/themes/StormFS/background.jpg
+  /usr/share/lxdm/themes/StormFS/login.svg
+
+The greeter layout is derived from LXDM 0.5.3's Industrial theme, which is
+distributed under the GNU General Public License version 3 or later.  The
+StormFS color work, login wordmark, and configuration are StormFS-specific.
+The background is the StormFS "Lightning" wallpaper also shipped with the
+StormFS installer.

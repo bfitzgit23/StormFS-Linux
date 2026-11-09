@@ -15,7 +15,7 @@ StormFS is an x86_64 source-built Linux distribution maintained by the StormFS c
 - Dracut initramfs generation and GRUB bootloader support.
 - UEFI and legacy BIOS installation paths.
 - PyQt5 graphical installer with disk partitioning, system configuration, and desktop environment selection.
-- Live ISO with LightDM, XFCE default desktop, and auto-login.
+- Live ISO with LXDM, XFCE default desktop, and auto-login.
 - Installer support for Btrfs subvolumes/snapshots, LUKS, LVM, md RAID (linear/JBOD, RAID0, RAID1, RAID10, RAID4/5/6), and combinations of those layers.
 - Kernel selection between the current StormFS kernel and a broad-support Linux 6.12 LTS flavor carrying the Debian 6.12 patch series.
 - Optional installer-managed ZRAM swap with explicit enable/disable and configurable sizing.
@@ -106,7 +106,7 @@ The PyQt5-based installer (`stormfs-gui.py`) provides a wizard-style interface f
 ## Live ISO features
 
 - Boot modes: UEFI and legacy BIOS
-- LightDM display manager with GTK greeter
+- LXDM display manager with the StormFS greeter theme
 - Auto-login as live user `stormfs`
 - Default XFCE desktop environment
 - Desktop installer shortcut

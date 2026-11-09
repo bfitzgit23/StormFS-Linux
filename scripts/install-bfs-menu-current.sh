@@ -7503,7 +7503,7 @@ write_chroot_installer() {
         # only receives the OpenRC/ConsoleKit integration.
         local service_port
         for service_port in opt/chrony opt/avahi opt/cups opt/smartmontools \
-                opt/accountsservice opt/upower opt/udisks opt/lightdm \
+                opt/accountsservice opt/upower opt/udisks opt/lightdm opt/lxdm \
                 plasma/sddm opt/wireplumber opt/polkit core/linux-pam; do
                 if [[ -d "$PROJECT_DIR/ports/$service_port" ]]; then
                         install -d -m 0755 "$TARGET/usr/ports/${service_port%/*}"
@@ -7514,7 +7514,7 @@ write_chroot_installer() {
         done
         local service_pkg
         for service_pkg in chrony avahi cups smartmontools accountsservice \
-                upower udisks lightdm sddm wireplumber polkit linux-pam; do
+                upower udisks lightdm lxdm sddm wireplumber polkit linux-pam; do
                 rm -f "$TARGET/var/cache/scratchpkg/packages/$service_pkg"#*.pkg.tar.*
         done
 

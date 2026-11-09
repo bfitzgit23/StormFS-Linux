@@ -103,8 +103,8 @@ if [ -f "$ROOT/etc/sudoers" ]; then
 		echo "$USERNAME ALL=(ALL) NOPASSWD: ALL" >> "$ROOT/etc/sudoers"
 fi
 
-# Set default graphical target
-_run rc-update add display-manager default 2>/dev/null || true
+# Enable the LXDM display manager selected by the ISO.
+_run rc-update add lxdm default 2>/dev/null || true
 
 # Cleanup: remove installer and live session artifacts
 rm -f "$ROOT/usr/bin/stormfs-installer"
@@ -112,8 +112,7 @@ rm -f "$ROOT/root/live_script.sh"
 rm -f "$ROOT/root/post-install.sh"
 rm -f "$ROOT/root/post-extract.sh"
 rm -f "$ROOT/root/splash.png"
-# Note: keep lightdm.conf on installed system for graphical login
-rm -f "$ROOT/etc/lightdm/lightdm.conf.d/99-live.conf" 2>/dev/null || true
+# Keep the LXDM package configuration on the installed system.
 rm -f "$ROOT/fastboot"
 
 # Remove live desktop shortcuts (installer is only for live session)

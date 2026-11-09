@@ -1,0 +1,9 @@
+#%PAM-1.0
+# BFSOS LXDM PAM stack.  Session tracking is provided by ConsoleKit through
+# /etc/pam.d/system-session; systemd-logind integration is intentionally absent.
+auth       requisite    pam_nologin.so
+auth       include      system-auth
+account    include      system-account
+password   include      system-password
+session    required     pam_limits.so
+session    include      system-session

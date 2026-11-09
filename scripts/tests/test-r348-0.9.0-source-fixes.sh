@@ -36,7 +36,7 @@ grep -Fq 'rm -rf "$PKG/usr/lib/systemd" "$PKG/lib/systemd"' ports/opt/bluez/spkg
     fail 'BlueZ does not strip packaged systemd units'
 grep -Fq 'need dbus' ports/opt/openrc-init-scripts/bluetooth || \
     fail 'BlueZ OpenRC service does not require dbus'
-grep -qx 'release=5' ports/opt/openrc-init-scripts/spkgbuild || \
+grep -qx 'release=6' ports/opt/openrc-init-scripts/spkgbuild || \
     fail 'OpenRC service-script release missing'
 pass 'BlueZ OpenRC-only build and service dependency'
 
@@ -111,6 +111,7 @@ grep -Fq 'pam_ck_connector' ports/core/linux-pam/system-session || \
 grep -Fq 'systemd=disabled' ports/opt/wireplumber/spkgbuild || fail 'WirePlumber still enables systemd units'
 grep -Fq 'smartd' ports/opt/openrc-init-scripts/spkgbuild || fail 'OpenRC service package omits smartd'
 [ -x ports/opt/openrc-init-scripts/smartd ] || fail 'openrc-init-scripts is missing smartd'
+[ -f ports/opt/openrc-init-scripts/lxdm ] || fail 'openrc-init-scripts is missing lxdm'
 grep -Fq 'command_args="-n"' ports/opt/openrc-init-scripts/smartd || \
     fail 'smartd wrapper does not keep smartd in the foreground'
 grep -Fq 'prt-get install smartmontools openrc-init-scripts' docs/openrc-book/chapters/14-system-services.md || \

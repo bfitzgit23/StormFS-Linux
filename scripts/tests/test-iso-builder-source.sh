@@ -18,7 +18,7 @@ done
 for pkg in networkmanager-iso openssh git sudo wget wpa_supplicant wireless-regdb gpm lynx-iso chrony cryptsetup lvm2 mdadm snapper grub grub-efi squashfs-tools libisoburn; do
     grep -q "\b$pkg\b" "$iso" || fail "ISO package set is missing $pkg"
 done
-for pkg in xfce4-meta compiz-meta lightdm lightdm-gtk-greeter chromium-bin firefox-bin fastfetch mousepad libreoffice-bin flameshot galculator vlc gparted mintstick \
+for pkg in xfce4-meta compiz-meta lxdm stormfs-lxdm-theme chromium-bin firefox-bin fastfetch mousepad libreoffice-bin flameshot galculator vlc gparted mintstick \
     thunderbird-bin pidgin rustdesk engrampa thunar-volman thunar-archive-plugin thunar-media-tags-plugin \
     p7zip unzip unrar gvfs gnupg xfce4-docklike-plugin xfce4-weather-plugin xfce4-whiskermenu-plugin \
     xfce4-power-manager xfce4-pulseaudio-plugin pavucontrol; do
@@ -29,7 +29,7 @@ for pkg in system-config-printer hplip-plugin hpcups gutenprint epson-inkjet-pri
 done
 [ -f "$ROOT/ports/opt/mintstick/spkgbuild" ] || fail 'mintstick port is missing'
 for port in \
-    compiz/compiz-meta opt/engrampa opt/pidgin opt/rustdesk opt/thunderbird-bin \
+    compiz/compiz-meta opt/lxdm opt/stormfs-lxdm-theme opt/engrampa opt/pidgin opt/rustdesk opt/thunderbird-bin \
     opt/p7zip opt/unzip opt/unrar opt/gtk-layer-shell opt/gnupg opt/pavucontrol \
     gnome/gvfs xfce/thunar-volman xfce/thunar-archive-plugin xfce/thunar-media-tags-plugin \
     xfce/xfce4-docklike-plugin xfce/xfce4-power-manager \
@@ -42,7 +42,9 @@ for dep in python3-gnupg python3-pyparted python3-unidecode; do
 done
 ! grep -Eq '(^|[[:space:]])chromium([[:space:]]|$)' "$iso" || \
     fail 'ISO still includes the source-built chromium package'
-for pkg in calamares adw-gtk3 tela-icon-theme stormfs-theme oh-my-bash xinit xauth shadow; do
+! grep -Eq '(^|[[:space:]])lightdm([[:space:]]|$)' "$iso" || \
+    fail 'ISO package set still includes LightDM'
+for pkg in calamares adw-gtk3 tela-icon-theme stormfs-theme stormfs-lxdm-theme oh-my-bash xinit xauth shadow; do
     grep -q "\b$pkg\b" "$iso" || fail "ISO installer/theme package set is missing $pkg"
 done
 

@@ -9,7 +9,7 @@ thunar-volman
 tumbler
 xfce4-power-manager
 xfce4-apps-meta
-lightdm-gtk-greeter
+lxdm
 pipewire
 wireplumber
 alsa-utils

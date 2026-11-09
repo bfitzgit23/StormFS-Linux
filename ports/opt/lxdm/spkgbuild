@@ -1,0 +1,54 @@
+# description	: Lightweight GTK2 display manager
+# homepage	: https://sourceforge.net/projects/lxdm/
+# maintainer	: StormFS maintainers
+# optional	: consolekit
+
+description="Lightweight GTK2 display manager"
+name=lxdm
+version=0.5.3
+release=1
+source="https://downloads.sourceforge.net/project/lxdm/lxdm%200.5.3/$name-$version.tar.xz bfs-lxdm.pam Xsession"
+
+build() {
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
+
+	# BFSOS has no systemd.  Use the GTK2 greeter, which is the path validated
+	# by BLFS, and let the PAM system-session stack handle ConsoleKit.
+	./configure \
+		--prefix=/usr \
+		--sysconfdir=/etc \
+		--localstatedir=/var \
+		--libexecdir=/usr/lib/lxdm \
+		--with-pam \
+		--with-systemdsystemunitdir=no \
+		--disable-consolekit \
+		|| return 1
+
+	make -j"${JOBS:-1}" || return 1
+	make DESTDIR="$PKG" install || return 1
+
+	# Replace upstream's mixed-distribution PAM stack with BFSOS's shared
+	# system-auth/system-session files.  Do not ship pam_systemd.
+	install -Dm644 "$SRC/bfs-lxdm.pam" "$PKG/etc/pam.d/lxdm" || return 1
+	if grep -Rq 'pam_systemd' "$PKG/etc/pam.d"; then
+		echo 'ERROR: LXDM PAM files still reference pam_systemd' >&2
+		return 1
+	fi
+
+	# LXDM's upstream Xsession probes several foreign distributions.  Use a
+	# deterministic login-shell wrapper for BFSOS.
+	install -Dm755 "$SRC/Xsession" "$PKG/etc/lxdm/Xsession" || return 1
+
+	# The upstream default is LXDE; BFSOS's desktop is Xfce.
+	if [ -f "$PKG/etc/lxdm/lxdm.conf" ]; then
+		sed -i 's|^# session=/usr/bin/startlxde$|session=/usr/bin/startxfce4|' \
+			"$PKG/etc/lxdm/lxdm.conf" || return 1
+	fi
+
+	# Keep the package OpenRC-only even if a future archive starts installing
+	# a generated unit.
+	rm -rf "$PKG/usr/lib/systemd" "$PKG/lib/systemd" || return 1
+}

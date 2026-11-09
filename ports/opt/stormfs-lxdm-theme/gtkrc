@@ -1,0 +1,56 @@
+# StormFS LXDM greeter theme (GTK2).
+# The layout is based on LXDM's Industrial theme; colors and branding are
+# StormFS-specific.  See README for attribution and licensing.
+
+style "stormfs-window"
+{
+	bg_pixmap[NORMAL] = "background.jpg"
+	fg[NORMAL] = "#E6F8FF"
+	fg[PRELIGHT] = "#FFFFFF"
+	fg[SELECTED] = "#06131F"
+	bg[NORMAL] = "#06131F"
+	bg[ACTIVE] = "#0B2232"
+	bg[PRELIGHT] = "#123A50"
+	bg[SELECTED] = "#22D3EE"
+	base[NORMAL] = "#081A27"
+	base[SELECTED] = "#0E7490"
+	text[NORMAL] = "#E6F8FF"
+	text[SELECTED] = "#031018"
+	font_name = "Sans 11"
+}
+
+style "stormfs-time"
+{
+	fg[NORMAL] = "#A5F3FC"
+	font_name = "Sans Bold 13"
+}
+
+style "stormfs-prompt"
+{
+	fg[NORMAL] = "#E6F8FF"
+	font_name = "Sans Bold 12"
+}
+
+style "stormfs-bottom"
+{
+	fg[NORMAL] = "#A5F3FC"
+	bg[NORMAL] = "#06131F"
+	font_name = "Sans 10"
+}
+
+style "stormfs-entry"
+{
+	base[NORMAL] = "#0B2232"
+	base[ACTIVE] = "#123A50"
+	text[NORMAL] = "#F0FDFF"
+	fg[NORMAL] = "#F0FDFF"
+	bg[NORMAL] = "#0B2232"
+}
+
+widget "lxdm" style "stormfs-window"
+widget "lxdm.*.time" style "stormfs-time"
+widget "*.prompt" style "stormfs-prompt"
+widget "lxdm.*.bottom_pane" style "stormfs-bottom"
+widget "*.login_entry" style "stormfs-entry"
+widget "*.sessions" style "stormfs-entry"
+widget_class "GtkWindow.*.GtkEventBox.*.<GtkLabel>" style "stormfs-bottom"

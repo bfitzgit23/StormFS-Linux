@@ -72,7 +72,7 @@ iso_packages=(
     dialog squashfs-tools grub grub-efi dosfstools mtools efibootmgr libisoburn syslinux
     meson ninja scratch
     # Desktop, session, display manager and installer
-    xfce4-meta compiz-meta lightdm lightdm-gtk-greeter calamares xinit xauth
+    xfce4-meta compiz-meta lxdm stormfs-lxdm-theme calamares xinit xauth
     # Live applications
     chromium-bin firefox-bin fastfetch mousepad libreoffice-bin flameshot galculator vlc gparted mintstick gvfs gnupg
     thunderbird-bin pidgin rustdesk engrampa
