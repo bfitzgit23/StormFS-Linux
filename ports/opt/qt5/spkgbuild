@@ -7,7 +7,7 @@ keep_static=1
 description="Qt 5 compatibility framework (QtWebEngine packaged separately)"
 name=qt5
 version=5.15.19
-release=15
+release=16
 # Keep Debian's small quilt metadata archives as opaque build inputs.  BFSOS
 # uses the official complete Qt source archive, but Debian currently carries
 # compatibility fixes needed by modern OpenSSL/GCC/ICU/glibc.  QtWebEngine is
@@ -41,7 +41,7 @@ build() {
         -skip qtwebengine \
         -nomake examples \
         -no-rpath \
-        -journald || return 1
+        -no-journald || return 1
 
     make -j "${JOBS:-1}" || return 1
     make -j1 INSTALL_ROOT="$PKG" install || return 1
