@@ -4,7 +4,7 @@
 description="python3-chardet package"
 name=python3-chardet
 version=7.6.0
-release=3
+release=4
 source="https://files.pythonhosted.org/packages/source/c/chardet/chardet-${version}.tar.gz"
 
 build() {
@@ -12,6 +12,18 @@ build() {
 	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
 	[ -n "$_bfs_src" ] || return 1
 	cd "$_bfs_src" || return 1
-    python3 -m build --wheel --no-isolation || return 1
+
+	# The sdist already ships src/chardet/_version.py.  The hatch-vcs hook
+	# only regenerates that file, so replace it with hatchling's static path
+	# source and build without the plugin instead of failing when hatch-vcs
+	# is missing or broken on the build host.
+	sed -i '/^\[tool\.hatch\.build\.hooks\.vcs\]$/,/^$/d' pyproject.toml || return 1
+	sed -i 's/^source = "vcs"$/path = "src\/chardet\/_version.py"/' pyproject.toml || return 1
+	grep -qx 'path = "src/chardet/_version.py"' pyproject.toml || {
+		echo "python3-chardet: could not switch pyproject.toml to the shipped version" >&2
+		return 1
+	}
+
+    python3 -m build --wheel --skip-dependency-check --no-isolation || return 1
     python3 -m installer --destdir="$PKG" dist/*.whl || return 1
 }

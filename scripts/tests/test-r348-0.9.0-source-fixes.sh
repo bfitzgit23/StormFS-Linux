@@ -358,6 +358,17 @@ grep -qx 'python3-setuptools-scm' ports/core/python3-hatch-vcs/depends || \
     fail 'hatch-vcs runtime dependency is missing'
 pass 'hatch-vcs installs its vcs build hook into the package'
 
+grep -qx 'release=4' ports/core/python3-chardet/spkgbuild || \
+    fail 'chardet rebuild release missing'
+grep -Fq 'tool\.hatch\.build\.hooks\.vcs' ports/core/python3-chardet/spkgbuild || \
+    fail 'chardet no longer removes the vcs build hook'
+grep -Fq 'src\/chardet\/_version.py' ports/core/python3-chardet/spkgbuild || \
+    fail 'chardet does not use the shipped version file'
+if grep -qx 'python3-hatch-vcs' ports/core/python3-chardet/depends; then
+    fail 'chardet still depends on the hatch-vcs plugin'
+fi
+pass 'chardet builds from its shipped version without the hatch-vcs hook'
+
 grep -qx 'version=26.2.7' ports/opt/libreoffice-bin/spkgbuild || \
     fail 'libreoffice-bin does not pin a published release'
 grep -Fq 'deb/x86_64/LibreOffice_${version}_Linux_x86-64_deb.tar.gz' ports/opt/libreoffice-bin/spkgbuild || \
