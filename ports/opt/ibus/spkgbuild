@@ -4,7 +4,7 @@
 description="ibus package"
 name=ibus
 version=1.5.34
-release=2
+release=3
 source="https://github.com/${name}/${name}/archive/${version}/${name}-${version}.tar.gz"
 
 build() {
@@ -12,17 +12,19 @@ build() {
 	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
 	[ -n "$_bfs_src" ] || return 1
 	cd "$_bfs_src" || return 1
-sed -e 's@/desktop/ibus@/org/freedesktop/ibus@g' \
-    -i data/dconf/org.freedesktop.ibus.gschema.xml
-SAVE_DIST_FILES=1 NOCONFIGURE=1 ./autogen.sh &&
+	sed -e 's@/desktop/ibus@/org/freedesktop/ibus@g' \
+	    -i data/dconf/org.freedesktop.ibus.gschema.xml || return 1
+	SAVE_DIST_FILES=1 NOCONFIGURE=1 ./autogen.sh || return 1
 
-PYTHON=python3                     \
-./configure --prefix=/usr          \
-            --sysconfdir=/etc      \
-            --disable-python2      \
-            --disable-appindicator \
-            --disable-gtk2         \
-            --disable-emoji-dict   &&
-make
-make DESTDIR="$PKG" install
+	# systemd-services defaults to enabled, which requires libsystemd.
+	PYTHON=python3                     \
+	./configure --prefix=/usr          \
+	            --sysconfdir=/etc      \
+	            --disable-python2      \
+	            --disable-appindicator \
+	            --disable-gtk2         \
+	            --disable-emoji-dict   \
+	            --disable-systemd-services || return 1
+	make || return 1
+	make DESTDIR="$PKG" install || return 1
 }

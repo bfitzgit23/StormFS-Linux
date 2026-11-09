@@ -455,6 +455,14 @@ grep -Fq '"$SRC/$_f.zip"' ports/opt/unicode-character-database/spkgbuild || \
     fail 'unicode-character-database does not install from the source directory'
 pass 'unicode-character-database installs the packed UCD archives'
 
+grep -qx 'release=3' ports/opt/ibus/spkgbuild || \
+    fail 'ibus rebuild release missing'
+grep -Fq -- '--disable-systemd-services' ports/opt/ibus/spkgbuild || \
+    fail 'ibus requires systemd services on OpenRC'
+grep -qx 'gtk4' ports/opt/ibus/depends || \
+    fail 'ibus does not depend on gtk4 although configure enables it'
+pass 'ibus installs no systemd services'
+
 grep -qx 'version=26.2.7' ports/opt/libreoffice-bin/spkgbuild || \
     fail 'libreoffice-bin does not pin a published release'
 grep -Fq 'deb/x86_64/LibreOffice_${version}_Linux_x86-64_deb.tar.gz' ports/opt/libreoffice-bin/spkgbuild || \
