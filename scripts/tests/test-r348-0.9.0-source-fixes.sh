@@ -366,4 +366,14 @@ grep -Fq 'ar x' ports/opt/libreoffice-bin/spkgbuild || \
     fail 'libreoffice-bin does not unpack the Debian payloads'
 pass 'libreoffice-bin fetches a live release and unpacks it without dpkg'
 
+grep -qx 'release=2' ports/gnome/tinysparql/spkgbuild || \
+    fail 'tinysparql rebuild release missing'
+grep -Fq -- '-Dsystemd_user_services=false' ports/gnome/tinysparql/spkgbuild || \
+    fail 'tinysparql still installs systemd user services'
+grep -qx 'release=2' ports/gnome/localsearch/spkgbuild || \
+    fail 'localsearch rebuild release missing'
+grep -Fq -- '-Dsystemd_user_services=false' ports/gnome/localsearch/spkgbuild || \
+    fail 'localsearch still installs systemd user services'
+pass 'tinysparql and localsearch do not install systemd user services'
+
 echo 'r348 0.9.0 source regression checks passed.' 
