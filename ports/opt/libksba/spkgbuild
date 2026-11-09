@@ -5,8 +5,9 @@
 description="libksba package"
 name=libksba
 version=1.8.1
-release=1
-source="https://mirrors.dotsrc.org/gcrypt/${name}/${name}-${version}.tar.bz2"
+# dotsrc's gcrypt mirror no longer carries 1.8.1; use the upstream GnuPG copy.
+release=2
+source="https://www.gnupg.org/ftp/gcrypt/${name}/${name}-${version}.tar.bz2"
 
 build() {
 	. /usr/share/bfsos/spkgbuild.helper || return 1
