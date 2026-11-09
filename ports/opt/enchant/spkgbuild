@@ -4,8 +4,8 @@
 description="enchant package"
 name=enchant
 version=2.8.21
-release=1
-source="https://github.com/rrthomas/$name/releases/download/v$version/$name-$version.tar.gz"
+release=2
+source="$name-$version.tar.gz::https://github.com/rrthomas/$name/releases/download/v$version/$name-$version.tar.gz?download=1"
 
 build() {
 	. /usr/share/bfsos/spkgbuild.helper || return 1

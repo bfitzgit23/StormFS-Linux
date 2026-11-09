@@ -289,4 +289,9 @@ grep -Fq 'python3 build/gen.py --allow-warnings' ports/opt/gn/spkgbuild || \
     fail 'GN still descends into the first archive directory'
 pass 'GN builds from its flat googlesource archive root'
 
+grep -qx 'release=2' ports/opt/enchant/spkgbuild || fail 'Enchant release asset fix missing'
+grep -Fq 'source="$name-$version.tar.gz::https://github.com/rrthomas/$name/releases/download/v$version/$name-$version.tar.gz?download=1"' ports/opt/enchant/spkgbuild || \
+    fail 'Enchant release asset does not use the working download query and filename alias'
+pass 'Enchant release asset uses the working download query and keeps its archive name'
+
 echo 'r348 0.9.0 source regression checks passed.' 
