@@ -5,7 +5,7 @@
 description="KDE 4 PIM libraries"
 name=kdepimlibs
 version=4.14.3
-release=12
+release=13
 source="https://download.kde.org/Attic/4.14.3/src/kdepimlibs-$version.tar.xz kdepimlibs-4.14.3-cmake-minimum.patch.manual kdepimlibs-4.14.3-export-library-dependencies.patch.manual kdepimlibs-4.14.3-findgpgme-pkgconfig.patch.manual kdepimlibs-4.14.3-gpgmepp-location.patch.manual kdepimlibs-4.14.3-cmp0022-export.patch.manual kdepimlibs-4.14.3-akonadi-location.patch.manual"
 
 build() {
@@ -22,12 +22,10 @@ build() {
 	# kcalcore/kcal use the libical 1.0 API that libical 3 and 4 removed
 	# (is_utc, the _r names, by-value icalrecurrencetype), so build against
 	# the pinned libical1 port and never fall back to /usr/include/libical.
-	_bfs_libical_inc=$(find /opt/libical/include -name ical.h -print -quit 2>/dev/null)
-	if [ -z "$_bfs_libical_inc" ]; then
+	if [ ! -f /opt/libical/include/libical/ical.h ]; then
 		echo "$name: /opt/libical is missing; build and install libical1 first." >&2
 		return 1
 	fi
-	_bfs_libical_inc=${_bfs_libical_inc%/libical/ical.h}
 
 	export LIBICAL_BASE=/opt/libical
 	export LD_LIBRARY_PATH="/opt/libical/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
@@ -62,7 +60,7 @@ build() {
 		-DCMAKE_INSTALL_PREFIX=/usr \
 		-DCMAKE_BUILD_TYPE=Release \
 		-DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
-		-DLIBICAL_INCLUDE_DIRS="$_bfs_libical_inc" \
+		-DLIBICAL_INCLUDE_DIRS=/opt/libical/include \
 		-DLIBICAL_LIBRARY=/opt/libical/lib/libical.so \
 		-DLIBICALSS_LIBRARY=/opt/libical/lib/libicalss.so \
 		-DKDE4_BUILD_TESTS=OFF \
