@@ -44,6 +44,15 @@ grep -qx 'release=9' ports/opt/openrc-init-scripts/spkgbuild || \
     fail 'OpenRC service-script release missing'
 pass 'BlueZ OpenRC-only build and service dependency'
 
+[ -f ports/kde4/akonadi4/spkgbuild ] || fail 'KDE4 Akonadi package is missing its KF6/KDE6-safe name'
+[ ! -e ports/kde4/akonadi ] || fail 'KDE4 still exposes the colliding unqualified akonadi package'
+grep -qx 'akonadi4' ports/kde4/kde4/depends || fail 'KDE4 metapackage still depends on unqualified akonadi'
+grep -qx 'akonadi4' ports/kde4/kdepimlibs/depends || fail 'KDE4 PIM libraries still depend on unqualified akonadi'
+if grep -Rqx 'akonadi' ports/kde4 --include=depends; then
+    fail 'KDE4 dependency still resolves to the KDE6 akonadi package'
+fi
+pass 'KDE4 Akonadi dependency is isolated from the KDE6 collection'
+
 grep -qx 'release=2' ports/opt/libedit/spkgbuild || fail 'libedit man-page fix release missing'
 grep -Fq 'rm -f "$PKG/usr/share/man/man3/history.3"' ports/opt/libedit/spkgbuild || \
     fail 'libedit still removes the absent history man page unconditionally'

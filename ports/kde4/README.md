@@ -16,7 +16,7 @@ is installed under `/opt/qt4`; the KDE libraries and applications install under
 8. `soprano`
 9. `strigi`
 10. `shared-desktop-ontologies`
-11. `akonadi`
+11. `akonadi4`
 12. `kdelibs`
 13. `kdepimlibs`
 14. `kactivities4`

@@ -5,7 +5,7 @@
 description="KDE Software Compilation 4.14 desktop stack"
 name=kde4
 version=4.14.3
-release=2
+release=3
 source="kde-plasma.desktop"
 
 build() {
