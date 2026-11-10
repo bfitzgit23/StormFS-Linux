@@ -1,0 +1,11 @@
+--- a/khotkeys/libkhotkeysprivate/windows_helper/window_selection_rules.cpp
++++ b/khotkeys/libkhotkeysprivate/windows_helper/window_selection_rules.cpp
+@@ -91,7 +91,7 @@
+         case NOT_IMPORTANT :
+           return true;
+         case CONTAINS :
+-          return str1_P.contains( str2_P ) > 0;
++          return str1_P.contains( str2_P );
+         case IS :
+           return str1_P == str2_P;
+         case REGEXP :
