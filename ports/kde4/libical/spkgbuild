@@ -1,0 +1,35 @@
+# description	: iCalendar library (KDE 4 PIM compatible API)
+# homepage	: https://github.com/libical
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+description="iCalendar library for the KDE 4 PIM stack"
+name=libical
+version=1.0.1
+release=1
+source="https://github.com/$name/$name/releases/download/v$version/$name-$version.tar.gz"
+
+build() {
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
+
+	# KDE 4.14 predates C23; build the C library as C99 so the implicit
+	# declarations in the 2014 sources stay warnings.
+	export CFLAGS="${CFLAGS:+$CFLAGS }-std=gnu99 -O2"
+	export CXXFLAGS="${CXXFLAGS:+$CXXFLAGS }-std=gnu++98 -O2"
+
+	cmake -S . -B build -G Ninja \
+		-DCMAKE_INSTALL_PREFIX=/opt/libical \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+		-DSHARED_ONLY=ON \
+		-DICAL_ERRORS_ARE_FATAL=OFF \
+		-DGOBJECT_INTROSPECTION=OFF || return 1
+
+	cmake --build build -j "${JOBS:-1}" || return 1
+	DESTDIR="$PKG" cmake --install build || return 1
+
+	install -d "$PKG/etc/ld.so.conf.d" || return 1
+	printf '%s\n' '/opt/libical/lib' > "$PKG/etc/ld.so.conf.d/libical.conf" || return 1
+}

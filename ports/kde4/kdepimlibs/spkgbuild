@@ -5,7 +5,7 @@
 description="KDE 4 PIM libraries"
 name=kdepimlibs
 version=4.14.3
-release=10
+release=11
 source="https://download.kde.org/Attic/4.14.3/src/kdepimlibs-$version.tar.xz kdepimlibs-4.14.3-cmake-minimum.patch.manual kdepimlibs-4.14.3-export-library-dependencies.patch.manual kdepimlibs-4.14.3-findgpgme-pkgconfig.patch.manual kdepimlibs-4.14.3-gpgmepp-location.patch.manual kdepimlibs-4.14.3-cmp0022-export.patch.manual kdepimlibs-4.14.3-akonadi-location.patch.manual"
 
 build() {
@@ -19,6 +19,9 @@ build() {
 	export QT_QMAKE_EXECUTABLE=/opt/qt4/bin/qmake
 	export CFLAGS="${CFLAGS:+$CFLAGS }-std=gnu99"
 	export CXXFLAGS="${CXXFLAGS:+$CXXFLAGS }-std=gnu++11 -fpermissive -Wno-deprecated-declarations"
+	# kcalcore/kcal use the libical 1.0 API, which libical 3 removed.
+	export LIBICAL_BASE=/opt/libical
+	export LD_LIBRARY_PATH="/opt/libical/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
 
 	patch -p1 -i "$SRC/kdepimlibs-4.14.3-cmake-minimum.patch.manual" || return 1
 	patch -p1 -i "$SRC/kdepimlibs-4.14.3-export-library-dependencies.patch.manual" || return 1
@@ -55,7 +58,6 @@ build() {
 		-DKDEPIM_MOBILE_UI=OFF \
 		-DKDEPIMLIBS_RUN_ISOLATED_TESTS=OFF \
 		-DSTATIC_LIBRARY=OFF \
-		-DCMAKE_DISABLE_FIND_PACKAGE_Libical=TRUE \
 		-DCMAKE_DISABLE_FIND_PACKAGE_QJSON=TRUE \
 		-DCMAKE_DISABLE_FIND_PACKAGE_Qca2=TRUE || return 1
 
