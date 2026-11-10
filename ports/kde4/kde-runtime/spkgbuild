@@ -5,7 +5,7 @@
 description="KDE 4 runtime components"
 name=kde-runtime
 version=4.14.3
-release=10
+release=11
 source="https://download.kde.org/Attic/4.14.3/src/kde-runtime-$version.tar.xz kde-runtime-4.14.3-cmake-minimum.patch.manual kde-runtime-4.14.3-optional-kdeclarative.patch.manual kde-runtime-4.14.3-duplicate-handbook-targets.patch.manual kde-runtime-4.14.3-skip-html-thumbnail.patch.manual kde-runtime-4.14.3-error-dialog-without-kwebkit.patch.manual kde-runtime-4.14.3-skip-declarative-scriptengines.patch.manual kde-runtime-4.14.3-drop-kdewebkit-link.patch.manual"
 
 build() {
