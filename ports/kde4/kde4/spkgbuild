@@ -5,10 +5,17 @@
 description="KDE Software Compilation 4.14 desktop stack"
 name=kde4
 version=4.14.3
-release=1
-source=""
+release=2
+source="kde-plasma.desktop"
 
 build() {
 	install -d "$PKG/usr/share/bfsos/metapackages" || return 1
 	printf '%s\n' "$name $version" > "$PKG/usr/share/bfsos/metapackages/$name" || return 1
+
+	# kde-workspace builds with WITH_KDM=OFF, so the KDM session entry is
+	# never installed and /usr/share/xsessions has no KDE session for LXDM
+	# or any other display manager to list.  Ship the entry with the meta
+	# package, which pulls in startkde through kde-workspace.
+	install -Dm644 "$SRC/kde-plasma.desktop" \
+		"$PKG/usr/share/xsessions/kde-plasma.desktop" || return 1
 }
