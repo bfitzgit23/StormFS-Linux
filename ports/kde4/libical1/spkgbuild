@@ -5,7 +5,7 @@
 description="iCalendar library for the KDE 4 PIM stack"
 name=libical1
 version=1.0.1
-release=1
+release=2
 source="https://github.com/libical/libical/releases/download/v$version/libical-$version.tar.gz"
 
 build() {
@@ -13,6 +13,16 @@ build() {
 	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
 	[ -n "$_bfs_src" ] || return 1
 	cd "$_bfs_src" || return 1
+
+	# The 2014 CMake files request CMP0005 OLD and pin compatibility below
+	# 3.5, neither of which CMake 4 accepts.  Drop just those directives.
+	find . -name CMakeLists.txt -print0 |
+		xargs -0 sed -i -e '/cmake_policy(SET CMP[0-9][0-9]* OLD)/d' \
+			-e '/^[[:space:]]*cmake_policy(VERSION [0-9]/d' || return 1
+	if grep -rq 'cmake_policy(SET CMP[0-9]* OLD)' --include=CMakeLists.txt .; then
+		echo "$name: unsupported OLD cmake policies remain in the source tree" >&2
+		return 1
+	fi
 
 	# KDE 4.14 predates C23; build the C library as C99 so the implicit
 	# declarations in the 2014 sources stay warnings.
