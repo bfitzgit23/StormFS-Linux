@@ -1,0 +1,13 @@
+--- a/applets/CMakeLists.txt
++++ b/applets/CMakeLists.txt
+@@ -41,7 +41,9 @@
+ add_subdirectory(nowplaying)
+ if(LIBATTICA_FOUND)
+   add_subdirectory(knowledgebase)
+-  add_subdirectory(community)
++  if(QT_QTWEBKIT_FOUND)
++    add_subdirectory(community)
++  endif(QT_QTWEBKIT_FOUND)
+   add_subdirectory(social-news)
+ endif(LIBATTICA_FOUND)
+ add_subdirectory(pastebin)
