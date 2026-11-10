@@ -5,7 +5,7 @@
 description="KDE 4 PIM libraries"
 name=kdepimlibs
 version=4.14.3
-release=13
+release=14
 source="https://download.kde.org/Attic/4.14.3/src/kdepimlibs-$version.tar.xz kdepimlibs-4.14.3-cmake-minimum.patch.manual kdepimlibs-4.14.3-export-library-dependencies.patch.manual kdepimlibs-4.14.3-findgpgme-pkgconfig.patch.manual kdepimlibs-4.14.3-gpgmepp-location.patch.manual kdepimlibs-4.14.3-cmp0022-export.patch.manual kdepimlibs-4.14.3-akonadi-location.patch.manual"
 
 build() {
@@ -18,7 +18,15 @@ build() {
 	export PATH="/opt/qt4/bin:$PATH"
 	export QT_QMAKE_EXECUTABLE=/opt/qt4/bin/qmake
 	export CFLAGS="${CFLAGS:+$CFLAGS }-std=gnu99"
+	# Qt 4.8 headers and the 2014 sources are noisy under a current GCC:
+	# -Wdeprecated-copy fires inside qstring.h/qlist.h/qstyleoption.h, and
+	# -Wdangling-reference, -Wimplicit-fallthrough and -Wtemplate-id-cdtor fire
+	# on code that predates those warnings.  -Wno-cpp drops the
+	# "_BSD_SOURCE and _SVID_SOURCE are deprecated" #warning from features.h.
+	# Without these the warnings bury the actual compile errors in the log.
 	export CXXFLAGS="${CXXFLAGS:+$CXXFLAGS }-std=gnu++11 -fpermissive -Wno-deprecated-declarations"
+	export CXXFLAGS="$CXXFLAGS -Wno-deprecated-copy -Wno-dangling-reference"
+	export CXXFLAGS="$CXXFLAGS -Wno-implicit-fallthrough -Wno-template-id-cdtor -Wno-cpp"
 	# kcalcore/kcal use the libical 1.0 API that libical 3 and 4 removed
 	# (is_utc, the _r names, by-value icalrecurrencetype), so build against
 	# the pinned libical1 port and never fall back to /usr/include/libical.
