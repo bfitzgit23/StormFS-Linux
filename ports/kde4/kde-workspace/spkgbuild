@@ -5,8 +5,8 @@
 description="KDE 4 Plasma workspace and window manager"
 name=kde-workspace
 version=4.11.14
-release=16
-source="https://download.kde.org/Attic/4.14.3/src/kde-workspace-$version.tar.xz kde-workspace-4.11.14-optional-qtdeclarative.patch.manual kde-workspace-4.11.14-optional-webkit.patch.manual kde-workspace-4.11.14-optional-dbusmenu-blitz.patch.manual kde-workspace-4.11.14-optional-qml-sweep.patch.manual kde-workspace-4.11.14-optional-qml-shell.patch.manual kde-workspace-4.11.14-unique-test-names.patch.manual kde-workspace-4.11.14-window-selection-contains.patch.manual kde-workspace-4.11.14-fontconfig-freetype-header.patch.manual kde-workspace-4.11.14-taskmanager-contains.patch.manual kde-workspace-4.11.14-joystick-strict-ansi.patch.manual kde-workspace-4.11.14-kdm-c99.patch.manual kde-workspace-4.11.14-kdm-qimageblitz-fallback.patch.manual"
+release=17
+source="https://download.kde.org/Attic/4.14.3/src/kde-workspace-$version.tar.xz kde-workspace-4.11.14-optional-qtdeclarative.patch.manual kde-workspace-4.11.14-optional-webkit.patch.manual kde-workspace-4.11.14-optional-dbusmenu-blitz.patch.manual kde-workspace-4.11.14-optional-qml-sweep.patch.manual kde-workspace-4.11.14-optional-qml-shell.patch.manual kde-workspace-4.11.14-unique-test-names.patch.manual kde-workspace-4.11.14-window-selection-contains.patch.manual kde-workspace-4.11.14-fontconfig-freetype-header.patch.manual kde-workspace-4.11.14-taskmanager-contains.patch.manual kde-workspace-4.11.14-joystick-strict-ansi.patch.manual kde-workspace-4.11.14-kdm-c99.patch.manual kde-workspace-4.11.14-kdm-qimageblitz-fallback.patch.manual kde-workspace-4.11.14-bbcukmet-contains.patch.manual"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
@@ -63,6 +63,9 @@ build() {
 
 	# QImageBlitz is disabled, so kdm needs the Qt fallback.
 	patch -p1 -i "$SRC/kde-workspace-4.11.14-kdm-qimageblitz-fallback.patch.manual" || return 1
+
+	# QString::contains() is used as a boolean here; GCC 16 rejects > 0.
+	patch -p1 -i "$SRC/kde-workspace-4.11.14-bbcukmet-contains.patch.manual" || return 1
 
 	export CMAKE_PREFIX_PATH="/opt/qt4:/usr"
 	export PATH="/opt/qt4/bin:$PATH"
