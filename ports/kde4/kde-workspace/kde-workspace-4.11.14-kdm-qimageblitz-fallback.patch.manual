@@ -1,0 +1,202 @@
+--- a/kdm/kcm/background/bgrender.cpp
++++ b/kdm/kcm/background/bgrender.cpp
+@@ -31,7 +31,96 @@
+ #include <kconfig.h>
+ #include <kdebug.h>
+ #include <kstandarddirs.h>
+-#include <qimageblitz.h>
++#ifdef HAVE_QIMAGEBLITZ
++# include <qimageblitz.h>
++# define BG_GRADIENT(size, ca, cb, type) Blitz::gradient(size, ca, cb, type)
++# define BG_FLATTEN(img, ca, cb) Blitz::flatten(img, ca, cb)
++# define BG_HORIZONTAL Blitz::HorizontalGradient
++# define BG_VERTICAL Blitz::VerticalGradient
++# define BG_PYRAMID Blitz::PyramidGradient
++# define BG_PIPECROSS Blitz::PipeCrossGradient
++# define BG_ELLIPTIC Blitz::EllipticGradient
++#else
++# include <QLinearGradient>
++# include <QRadialGradient>
++# include <QPointF>
++
++// QImageBlitz is optional, so the renderer falls back to plain Qt.  The
++// radial gradient shapes are approximated and the modulate() blend modes are
++// skipped, like the gradient blend modes that are already disabled below.
++enum BgGradientType {
++    BgHorizontalGradient, BgVerticalGradient, BgPyramidGradient,
++    BgPipeCrossGradient, BgEllipticGradient
++};
++
++static void bgFlatten(QImage &img, const QColor &ca, const QColor &cb)
++{
++    for (int y = 0; y < img.height(); ++y) {
++        QRgb *line = reinterpret_cast<QRgb *>(img.scanLine(y));
++        for (int x = 0; x < img.width(); ++x) {
++            int l = qGray(line[x]);
++            line[x] = qRgb(ca.red() + (cb.red() - ca.red()) * l / 255,
++                           ca.green() + (cb.green() - ca.green()) * l / 255,
++                           ca.blue() + (cb.blue() - ca.blue()) * l / 255);
++        }
++    }
++}
++
++static QImage bgGradient(const QSize &size, const QColor &ca, const QColor &cb,
++                         BgGradientType type)
++{
++    QImage img(size, QImage::Format_RGB32);
++    QPainter p(&img);
++    switch (type) {
++    case BgHorizontalGradient: {
++        QLinearGradient g(0, 0, size.width(), 0);
++        g.setColorAt(0, ca);
++        g.setColorAt(1, cb);
++        p.fillRect(img.rect(), g);
++        break;
++    }
++    case BgVerticalGradient: {
++        QLinearGradient g(0, 0, 0, size.height());
++        g.setColorAt(0, ca);
++        g.setColorAt(1, cb);
++        p.fillRect(img.rect(), g);
++        break;
++    }
++    case BgPyramidGradient:
++    case BgEllipticGradient: {
++        QRadialGradient g(QPointF(size.width() / 2.0, size.height() / 2.0),
++                          qMax(size.width(), size.height()) / 2.0);
++        g.setColorAt(0, ca);
++        g.setColorAt(1, cb);
++        p.fillRect(img.rect(), g);
++        break;
++    }
++    case BgPipeCrossGradient: {
++        QLinearGradient h(0, 0, size.width(), 0);
++        h.setColorAt(0, cb);
++        h.setColorAt(0.5, ca);
++        h.setColorAt(1, cb);
++        QLinearGradient v(0, 0, 0, size.height());
++        v.setColorAt(0, cb);
++        v.setColorAt(0.5, ca);
++        v.setColorAt(1, cb);
++        p.fillRect(img.rect(), h);
++        p.setCompositionMode(QPainter::CompositionMode_Multiply);
++        p.fillRect(img.rect(), v);
++        break;
++    }
++    }
++    return img;
++}
++
++# define BG_GRADIENT(size, ca, cb, type) bgGradient(size, ca, cb, type)
++# define BG_FLATTEN(img, ca, cb) bgFlatten(img, ca, cb)
++# define BG_HORIZONTAL BgHorizontalGradient
++# define BG_VERTICAL BgVerticalGradient
++# define BG_PYRAMID BgPyramidGradient
++# define BG_PIPECROSS BgPipeCrossGradient
++# define BG_ELLIPTIC BgEllipticGradient
++#endif
+ #include <ktemporaryfile.h>
+ #include <kcursor.h>
+ #include <kfilemetainfo.h>
+@@ -191,7 +280,7 @@
+             h = qMin(h, m_Size.height());
+             m_Background = m_Background.copy(0, 0, w, h);
+         }
+-        Blitz::flatten(m_Background, colorA(), colorB());
++        BG_FLATTEN(m_Background, colorA(), colorB());
+         break;
+     }
+     case Program:
+@@ -219,8 +308,7 @@
+         // on <16bpp displays the gradient sucks when tiled because of dithering
+         if (canTile())
+             size.setHeight(tileHeight);
+-        m_Background = Blitz::gradient(size, colorA(), colorB(),
+-                                       Blitz::HorizontalGradient);
++        m_Background = BG_GRADIENT(size, colorA(), colorB(), BG_HORIZONTAL);
+         break;
+     }
+     case VerticalGradient: {
+@@ -228,23 +316,19 @@
+         // on <16bpp displays the gradient sucks when tiled because of dithering
+         if (canTile())
+             size.setWidth(tileWidth);
+-        m_Background = Blitz::gradient(size, colorA(), colorB(),
+-                                       Blitz::VerticalGradient);
++        m_Background = BG_GRADIENT(size, colorA(), colorB(), BG_VERTICAL);
+         break;
+     }
+     case PyramidGradient:
+-        m_Background = Blitz::gradient(m_Size, colorA(), colorB(),
+-                                       Blitz::PyramidGradient);
++        m_Background = BG_GRADIENT(m_Size, colorA(), colorB(), BG_PYRAMID);
+         break;
+ 
+     case PipeCrossGradient:
+-        m_Background = Blitz::gradient(m_Size, colorA(), colorB(),
+-                                       Blitz::PipeCrossGradient);
++        m_Background = BG_GRADIENT(m_Size, colorA(), colorB(), BG_PIPECROSS);
+         break;
+ 
+     case EllipticGradient:
+-        m_Background = Blitz::gradient(m_Size, colorA(), colorB(),
+-                                       Blitz::EllipticGradient);
++        m_Background = BG_GRADIENT(m_Size, colorA(), colorB(), BG_ELLIPTIC);
+         break;
+     }
+ 
+@@ -603,6 +687,9 @@
+     // blend whole desktop
+     if (wallpaperMode() != NoWallpaper) {
+         int bal = blendBalance();
++#ifndef HAVE_QIMAGEBLITZ
++        Q_UNUSED(bal);
++#endif
+ 
+         switch (blendMode()) {
+             /* TODO disabled for now
+@@ -638,23 +725,31 @@
+             */
+ 
+         case IntensityBlending:
++#ifdef HAVE_QIMAGEBLITZ
+             Blitz::modulate(m_Image, m_Background, reverseBlending(),
+                             Blitz::Intensity, bal, Blitz::All);
++#endif
+             break;
+ 
+         case SaturateBlending:
++#ifdef HAVE_QIMAGEBLITZ
+             Blitz::modulate(m_Image, m_Background, reverseBlending(),
+                             Blitz::Saturation, bal, Blitz::Brightness);
++#endif
+             break;
+ 
+         case ContrastBlending:
++#ifdef HAVE_QIMAGEBLITZ
+             Blitz::modulate(m_Image, m_Background, reverseBlending(),
+                             Blitz::Contrast, bal, Blitz::All);
++#endif
+             break;
+ 
+         case HueShiftBlending:
++#ifdef HAVE_QIMAGEBLITZ
+             Blitz::modulate(m_Image, m_Background, reverseBlending(),
+                             Blitz::HueShift, bal, Blitz::Brightness);
++#endif
+             break;
+ 
+         case FlatBlending:
+--- a/kdm/CMakeLists.txt
++++ b/kdm/CMakeLists.txt
+@@ -5,6 +5,10 @@
+ 
+ include(ConfigureChecks.cmake)
+ 
++if(QIMAGEBLITZ_FOUND)
++   add_definitions(-DHAVE_QIMAGEBLITZ)
++endif(QIMAGEBLITZ_FOUND)
++
+ install( FILES README DESTINATION ${DATA_INSTALL_DIR}/doc/kdm )
+ 
+ set(confproc ${CMAKE_CURRENT_SOURCE_DIR}/confproc.pl)
