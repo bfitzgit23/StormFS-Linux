@@ -1,0 +1,55 @@
+--- a/applets/CMakeLists.txt
++++ b/applets/CMakeLists.txt
+@@ -12,7 +12,9 @@
+ if(KDE4WORKSPACE_FOUND)
+   add_subdirectory(binary-clock)
+   add_subdirectory(fuzzy-clock)
++  if(QT_QTDECLARATIVE_LIBRARY)
+   add_subdirectory(weather)
++  endif(QT_QTDECLARATIVE_LIBRARY)
+   if(NOT WIN32 AND DBUSMENUQT_FOUND)
+     add_subdirectory(icontasks)
+  endif(NOT WIN32 AND DBUSMENUQT_FOUND)
+@@ -22,7 +24,9 @@
+ add_subdirectory(bubblemon)
+ add_subdirectory(calculator)
+ add_subdirectory(charselect)
+-add_subdirectory(comic)
++if(QT_QTDECLARATIVE_LIBRARY)
++  add_subdirectory(comic)
++endif(QT_QTDECLARATIVE_LIBRARY)
+ add_subdirectory(fifteenPuzzle)
+ add_subdirectory(fileWatcher)
+ add_subdirectory(frame)
+@@ -51,7 +55,9 @@
+ add_subdirectory(eyes)
+ 
+ add_subdirectory(unitconverter)
+-add_subdirectory(weatherstation)
++if(QT_QTDECLARATIVE_LIBRARY)
++  add_subdirectory(weatherstation)
++endif(QT_QTDECLARATIVE_LIBRARY)
+ 
+ if(QT_QTWEBKIT_FOUND)
+   add_subdirectory(dict)
+@@ -96,4 +102,6 @@
+    endif (X11_Xrender_FOUND)
+ endif (Q_WS_X11)
+ 
+-add_subdirectory(webslice)
++if(QT_QTWEBKIT_FOUND)
++  add_subdirectory(webslice)
++endif(QT_QTWEBKIT_FOUND)
+--- a/wallpapers/CMakeLists.txt
++++ b/wallpapers/CMakeLists.txt
+@@ -3,7 +3,9 @@
+ add_subdirectory(potd)
+ add_subdirectory(virus)
+ add_subdirectory(weather)
+-add_subdirectory(qmlwallpapers)
++if(QT_QTDECLARATIVE_LIBRARY)
++  add_subdirectory(qmlwallpapers)
++endif(QT_QTDECLARATIVE_LIBRARY)
+ 
+ if(MARBLE_FOUND)
+     add_subdirectory(marble)
