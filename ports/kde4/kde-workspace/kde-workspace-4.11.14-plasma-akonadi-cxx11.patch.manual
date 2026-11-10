@@ -1,0 +1,20 @@
+--- a/plasma/generic/dataengines/calendar/CMakeLists.txt
++++ b/plasma/generic/dataengines/calendar/CMakeLists.txt
+@@ -19,6 +19,7 @@
+ endif(Akonadi_FOUND)
+ 
+ kde4_add_plugin(plasma_engine_calendar ${calendar_engine_srcs})
++set_property(TARGET plasma_engine_calendar APPEND_STRING PROPERTY COMPILE_FLAGS " -std=gnu++11")
+ 
+ target_link_libraries(
+     plasma_engine_calendar
+--- a/plasma/generic/dataengines/akonadi/CMakeLists.txt
++++ b/plasma/generic/dataengines/akonadi/CMakeLists.txt
+@@ -10,6 +10,7 @@
+ )
+ 
+ kde4_add_plugin(plasma_engine_akonadi ${akonadi_engine_srcs})
++set_property(TARGET plasma_engine_akonadi APPEND_STRING PROPERTY COMPILE_FLAGS " -std=gnu++11")
+ 
+ target_link_libraries(
+     plasma_engine_akonadi
