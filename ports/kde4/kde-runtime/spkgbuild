@@ -5,7 +5,7 @@
 description="KDE 4 runtime components"
 name=kde-runtime
 version=4.14.3
-release=9
+release=10
 source="https://download.kde.org/Attic/4.14.3/src/kde-runtime-$version.tar.xz kde-runtime-4.14.3-cmake-minimum.patch.manual kde-runtime-4.14.3-optional-kdeclarative.patch.manual kde-runtime-4.14.3-duplicate-handbook-targets.patch.manual kde-runtime-4.14.3-skip-html-thumbnail.patch.manual kde-runtime-4.14.3-error-dialog-without-kwebkit.patch.manual kde-runtime-4.14.3-skip-declarative-scriptengines.patch.manual kde-runtime-4.14.3-drop-kdewebkit-link.patch.manual"
 
 build() {
@@ -56,10 +56,10 @@ build() {
 	# plugins, whose sources never touch those headers.
 	patch -p1 -i "$SRC/kde-runtime-4.14.3-skip-declarative-scriptengines.patch.manual" || return 1
 
-	# The installed kdelibs cmake modules still expand KDE4_KDEWEBKIT_LIBS to
-	# -lkdewebkit even though kdelibs does not build that module here, so the
-	# linker goes looking for a library that does not exist.  Nothing in
-	# kde-runtime refers to a kdewebkit symbol any more, so drop the token.
+	# The installed kdelibs cmake modules still expand KDE4_KDEWEBKIT_LIBRARY/LIBS
+	# and QT_QTWEBKIT_LIBRARY to -lkdewebkit and a missing Qt module, so the
+	# linker goes looking for libraries that do not exist.  Nothing in
+	# kde-runtime refers to a WebKit symbol any more, so drop the references.
 	patch -p1 -i "$SRC/kde-runtime-4.14.3-drop-kdewebkit-link.patch.manual" || return 1
 
 	# kdelibs before 4.14.3-21 shipped cmake modules that read the location of a
