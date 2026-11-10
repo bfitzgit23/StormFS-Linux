@@ -7,7 +7,7 @@ description="Additional Plasma widgets and plugins for KDE 4"
 name=kdeplasma-addons4
 _pkgname=kdeplasma-addons
 version=4.14.3
-release=9
+release=10
 source="https://download.kde.org/Attic/4.14.3/src/$_pkgname-$version.tar.xz kdeplasma-addons4-4.14.3-cmake-minimum.patch.manual kdeplasma-addons4-4.14.3-pattern-qimageblitz-fallback.patch.manual kdeplasma-addons4-4.14.3-akonadi-cxx11.patch.manual kdeplasma-addons4-4.14.3-rtm-tests-off.patch.manual kdeplasma-addons4-4.14.3-qtdeclarative-guard.patch.manual kdeplasma-addons4-4.14.3-find-akonadi.patch.manual"
 
 build() {
