@@ -110,12 +110,12 @@ if [ -f "$ROOT/etc/sudoers" ]; then
 		echo "$USERNAME ALL=(ALL) NOPASSWD: ALL" >> "$ROOT/etc/sudoers"
 fi
 
-# Enable the LXDM display manager selected by the ISO.
-_run rc-update add lxdm default 2>/dev/null || true
+# Enable the LightDM display manager selected by the ISO.
+_run rc-update add lightdm default 2>/dev/null || true
 
-# Drop the live-only LXDM autologin before the installed system boots.
-if [ -f "$ROOT/etc/lxdm/lxdm.conf" ]; then
-	sed -i '/^autologin=bfs$/d' "$ROOT/etc/lxdm/lxdm.conf" || true
+# Drop the live-only LightDM autologin before the installed system boots.
+if [ -f "$ROOT/etc/lightdm/lightdm.conf" ]; then
+	sed -i -e '/^autologin-user[[:space:]]*=/d' -e '/^autologin-user-timeout[[:space:]]*=/d' "$ROOT/etc/lightdm/lightdm.conf" || true
 fi
 
 # Cleanup: remove installer and live session artifacts
@@ -124,7 +124,7 @@ rm -f "$ROOT/root/live_script.sh"
 rm -f "$ROOT/root/post-install.sh"
 rm -f "$ROOT/root/post-extract.sh"
 rm -f "$ROOT/root/splash.png"
-# Keep the LXDM package configuration on the installed system.
+# Keep the LightDM package configuration on the installed system.
 rm -f "$ROOT/fastboot"
 
 # Remove live desktop shortcuts (installer is only for live session)

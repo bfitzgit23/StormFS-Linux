@@ -72,7 +72,7 @@ iso_packages=(
     dialog squashfs-tools grub grub-efi dosfstools mtools efibootmgr libisoburn syslinux
     meson ninja scratch
     # Desktop, session, display manager and installer
-    xfce4-meta compiz-meta lxdm stormfs-lxdm-theme calamares xinit xauth
+    xfce4-meta compiz-meta lightdm lightdm-gtk-greeter calamares xinit xauth
     # Live applications
     chromium-bin firefox-bin fastfetch mousepad libreoffice-bin flameshot galculator vlc gparted mintstick gvfs gnupg
     thunderbird-bin pidgin rustdesk engrampa
@@ -1197,26 +1197,24 @@ done
 EOS
     chmod 0755 "$root/usr/local/sbin/bfs-live-menu"
 
-    # LXDM owns the live graphical session; tty1 remains a recovery menu.
-    if [ ! -f "$root/etc/lxdm/lxdm.conf" ]; then
-        die "live root has no LXDM configuration"
-    fi
-    if grep -q '^autologin=' "$root/etc/lxdm/lxdm.conf"; then
-        sed -i 's/^autologin=.*/autologin=bfs/' "$root/etc/lxdm/lxdm.conf"
-    else
-        sed -i '/^\[base\]/a autologin=bfs' "$root/etc/lxdm/lxdm.conf"
-    fi
-    if grep -q '^timeout=' "$root/etc/lxdm/lxdm.conf"; then
-        sed -i 's/^timeout=.*/timeout=5/' "$root/etc/lxdm/lxdm.conf"
-    else
-        sed -i '/^autologin=bfs$/a timeout=5' "$root/etc/lxdm/lxdm.conf"
-    fi
-    grep -q '^timeout=5$' "$root/etc/lxdm/lxdm.conf" ||
-        die "live LXDM autologin timeout is not configured"
-    grep -q '^session=/usr/bin/startxfce4$' "$root/etc/lxdm/lxdm.conf" ||
-        die "live LXDM configuration does not start Xfce"
-    grep -q '^theme=StormFS$' "$root/etc/lxdm/lxdm.conf" ||
-        die "live LXDM configuration does not use the StormFS theme"
+    # LightDM owns the live graphical session; tty1 remains a recovery menu.
+    install -d "$root/etc/lightdm"
+    cat > "$root/etc/lightdm/lightdm.conf" <<'EOS'
+[Seat:*]
+autologin-user=bfs
+autologin-user-timeout=0
+autologin-session=xfce
+greeter-session=lightdm-gtk-greeter
+user-session=xfce
+EOS
+    [ -f "$root/usr/share/xsessions/xfce.desktop" ] ||
+        die "live root has no Xfce session entry"
+    grep -q '^autologin-user=bfs$' "$root/etc/lightdm/lightdm.conf" ||
+        die "live LightDM autologin is not configured"
+    grep -q '^autologin-session=xfce$' "$root/etc/lightdm/lightdm.conf" ||
+        die "live LightDM autologin session is not Xfce"
+    grep -q '^greeter-session=lightdm-gtk-greeter$' "$root/etc/lightdm/lightdm.conf" ||
+        die "live LightDM greeter is not configured"
     cat > "$root/home/bfs/.bash_profile" <<'EOS'
 if [ -z "${BFS_LIVE_MENU_STARTED:-}" ] && [ -t 0 ]; then
     export BFS_LIVE_MENU_STARTED=1
@@ -1248,13 +1246,13 @@ EOS
         rc-update add udev-postmount sysinit 2>/dev/null || true
         rc-update add bfs-live-init default 2>/dev/null || true
         rc-update add networkmanager default 2>/dev/null || true
-        rc-update add lxdm default 2>/dev/null || true
+        rc-update add lightdm default 2>/dev/null || true
         # Chrony is the live ISO time-sync policy; bfs-live-init starts it only
         # after NetworkManager reports usable connectivity.
         rc-update del chronyd default 2>/dev/null || true
     ' || true
-    [ -e "$root/etc/runlevels/default/lxdm" ] ||
-        die "LXDM is not enabled in the live default runlevel"
+    [ -e "$root/etc/runlevels/default/lightdm" ] ||
+        die "LightDM is not enabled in the live default runlevel"
 
         # BFSOS live-media policy: SSH and rsync must never be enabled at boot.
     local unit runlevel

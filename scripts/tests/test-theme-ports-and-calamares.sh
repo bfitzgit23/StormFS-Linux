@@ -6,7 +6,7 @@ cal="$ROOT/ports/opt/calamares"
 theme="$ROOT/ports/opt/stormfs-theme"
 fail() { echo "Theme port/Calamares regression: FAIL: $*" >&2; exit 1; }
 
-for port in adw-gtk3 tela-icon-theme oh-my-bash stormfs-theme lxdm stormfs-lxdm-theme; do
+for port in adw-gtk3 tela-icon-theme oh-my-bash stormfs-theme lxdm stormfs-lxdm-theme lightdm lightdm-gtk-greeter; do
     file="$ROOT/ports/opt/$port/spkgbuild"
     [ -f "$file" ] || fail "ports/opt/$port/spkgbuild is missing"
     grep -q '^name=' "$file" || fail "$port has no package name"
@@ -95,16 +95,16 @@ grep -qx 'openrc-init-scripts' "$ROOT/ports/opt/lxdm/depends" || fail 'lxdm does
 grep -q '^name=lxdm$' "$ROOT/ports/opt/lxdm/spkgbuild" || fail 'LXDM port name changed'
 grep -Fq -- '--with-systemdsystemunitdir=no' "$ROOT/ports/opt/lxdm/spkgbuild" || fail 'LXDM still enables systemd units'
 ! grep -q 'pam_systemd' "$ROOT/ports/opt/lxdm/bfs-lxdm.pam" || fail 'LXDM PAM stack references pam_systemd'
-[ ! -e "$ROOT/iso-builder/liverootfs/etc/lightdm" ] || fail 'LightDM live configuration still exists'
+grep -q '/etc/lightdm/lightdm.conf' "$iso" || fail 'live LightDM configuration is missing'
 
-for pkg in calamares adw-gtk3 tela-icon-theme stormfs-theme stormfs-lxdm-theme lxdm oh-my-bash xinit xauth shadow; do
+for pkg in calamares adw-gtk3 tela-icon-theme stormfs-theme lightdm lightdm-gtk-greeter oh-my-bash xinit xauth shadow; do
     grep -q "\b$pkg\b" "$iso" || fail "ISO package set is missing $pkg"
 done
 ! grep -Fq '    startx' "$iso" || fail 'live session still starts startx'
-grep -q 'autologin=bfs' "$iso" || fail 'live LXDM autologin is not configured'
-grep -q 'timeout=5' "$iso" || fail 'live LXDM autologin timeout is not configured'
-grep -q 'rc-update add lxdm default' "$iso" || fail 'live LXDM service is not enabled'
-grep -q 'autologin=bfs' "$cal/shellprocess.conf" || fail 'installer does not clear live LXDM autologin'
+grep -q 'autologin-user=bfs' "$iso" || fail 'live LightDM autologin is not configured'
+grep -q 'autologin-user-timeout=0' "$iso" || fail 'live LightDM autologin timeout is not configured'
+grep -q 'rc-update add lightdm default' "$iso" || fail 'live LightDM service is not enabled'
+grep -q '/etc/lightdm/lightdm.conf' "$cal/shellprocess.conf" || fail 'installer does not clear live LightDM autologin'
 grep -q 'exec startxfce4' "$iso" || fail 'live session does not start XFCE'
 grep -q 'autostart/calamares.desktop' "$iso" || fail 'live session does not install a Calamares autostart entry'
 grep -q 'sudo -n calamares' "$iso" || fail 'Calamares autostart is not non-interactive'
