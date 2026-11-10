@@ -5,7 +5,7 @@
 description="iCalendar library for the KDE 4 PIM stack"
 name=libical1
 version=1.0.1
-release=2
+release=3
 source="https://github.com/libical/libical/releases/download/v$version/libical-$version.tar.gz"
 
 build() {
@@ -23,6 +23,23 @@ build() {
 		echo "$name: unsupported OLD cmake policies remain in the source tree" >&2
 		return 1
 	fi
+
+	# CMP0005 OLD no longer exists, so add_definitions() escapes the quotes
+	# these two pre-quoted paths already carry: the macro becomes -DNAME=\"...\"
+	# and the C string literals break.  Define them the modern way instead.
+	sed -i \
+		-e 's|^[[:space:]]*set(TEST_DATADIR .*|set(TEST_DATADIR "${CMAKE_SOURCE_DIR}/test-data")|' \
+		-e 's|^[[:space:]]*add_definitions(-DTEST_DATADIR=.*|add_compile_definitions(TEST_DATADIR="${TEST_DATADIR}")|' \
+		src/test/CMakeLists.txt || return 1
+	sed -i \
+		-e 's|^[[:space:]]*set(PACKAGE_DATA_DIR .*|set(PACKAGE_DATA_DIR "${CMAKE_INSTALL_PREFIX}/share/libical")|' \
+		-e 's|^[[:space:]]*add_definitions(-DPACKAGE_DATA_DIR=.*|add_compile_definitions(PACKAGE_DATA_DIR="${PACKAGE_DATA_DIR}")|' \
+		src/libical/CMakeLists.txt || return 1
+	grep -q 'add_compile_definitions(TEST_DATADIR=' src/test/CMakeLists.txt &&
+		grep -q 'add_compile_definitions(PACKAGE_DATA_DIR=' src/libical/CMakeLists.txt || {
+		echo "$name: quoted compile definitions were not modernised" >&2
+		return 1
+	}
 
 	# KDE 4.14 predates C23; build the C library as C99 so the implicit
 	# declarations in the 2014 sources stay warnings.
