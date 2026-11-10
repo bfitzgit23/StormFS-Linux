@@ -6,7 +6,7 @@
 description="The BlueZ package contains the Bluetooth protocol stack for Linux."
 name=bluez
 version=5.87
-release=3
+release=4
 build_opt="--prefix=/usr
             --sysconfdir=/etc
             --localstatedir=/var

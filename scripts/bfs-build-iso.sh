@@ -72,7 +72,7 @@ iso_packages=(
     dialog squashfs-tools grub grub-efi dosfstools mtools efibootmgr libisoburn syslinux
     meson ninja scratch
     # Desktop, session, display manager and installer
-    xfce4-meta compiz-meta lightdm lightdm-gtk-greeter calamares xinit xauth
+    dbus xfce4-meta compiz-meta lightdm lightdm-gtk-greeter calamares xinit xauth
     # Live applications
     chromium-bin firefox-bin fastfetch mousepad libreoffice-bin flameshot galculator vlc gparted mintstick gvfs gnupg
     thunderbird-bin pidgin rustdesk engrampa
@@ -954,7 +954,14 @@ install_live_runtime() {
             useradd -m -g bfs -G "$(IFS=,; echo "${live_groups[*]}")" -s /bin/bash bfs
         fi
 
-        passwd -l bfs >/dev/null 2>&1 || true
+        # The live image must remain recoverable if LightDM autologin or the
+        # greeter fails. Keep a known fallback console password instead of
+        # locking the account and making every tty login impossible.
+        echo bfs:stormfs | chpasswd -c SHA512
+        passwd -S bfs | grep -q "^bfs P " || {
+            echo "Failed to set the live bfs fallback password" >&2
+            exit 1
+        }
 
         # The source checkout is staged while the ISO root is assembled as
         # root. Normalize the complete live checkout to the normal live user
@@ -1245,12 +1252,20 @@ EOS
         rc-update add udev sysinit 2>/dev/null || true
         rc-update add udev-postmount sysinit 2>/dev/null || true
         rc-update add bfs-live-init default 2>/dev/null || true
+        rc-update add dbus default 2>/dev/null || true
+        rc-update add consolekit default 2>/dev/null || true
         rc-update add networkmanager default 2>/dev/null || true
         rc-update add lightdm default 2>/dev/null || true
         # Chrony is the live ISO time-sync policy; bfs-live-init starts it only
         # after NetworkManager reports usable connectivity.
         rc-update del chronyd default 2>/dev/null || true
     ' || true
+    [ -x "$root/etc/init.d/dbus" ] ||
+        die "live root has no D-Bus service"
+    [ -e "$root/etc/runlevels/default/dbus" ] ||
+        die "D-Bus is not enabled in the live default runlevel"
+    [ -e "$root/etc/runlevels/default/consolekit" ] ||
+        die "ConsoleKit is not enabled in the live default runlevel"
     [ -e "$root/etc/runlevels/default/lightdm" ] ||
         die "LightDM is not enabled in the live default runlevel"
 

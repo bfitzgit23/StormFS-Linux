@@ -6,7 +6,7 @@
 description="Lightweight cross-desktop display manager"
 name=lightdm
 version=1.33.1
-release=4
+release=5
 source="https://github.com/ubuntu/lightdm/archive/$version/$name-$version.tar.gz"
 
 build() {
@@ -51,6 +51,12 @@ build() {
         echo 'ERROR: LightDM PAM files still reference pam_systemd' >&2
         return 1
     fi
+    for pam_service in lightdm lightdm-autologin lightdm-greeter; do
+        if [ ! -f "$PKG/etc/pam.d/$pam_service" ]; then
+            echo "ERROR: LightDM did not install PAM service $pam_service" >&2
+            return 1
+        fi
+    done
 
     # Ensure graphical sessions use the normal BFSOS login environment.
     install -Dm755 \
@@ -74,5 +80,10 @@ build() {
         "$PKG/var/log/lightdm" \
         || return 1
 
-rm -f "$PKG/usr/share/dbus-1/system.d/org.freedesktop.DisplayManager.conf"
+    # Keep the upstream D-Bus policy: the greeter talks to the daemon through
+    # org.freedesktop.DisplayManager on the system bus.
+    if [ ! -f "$PKG/usr/share/dbus-1/system.d/org.freedesktop.DisplayManager.conf" ]; then
+        echo 'ERROR: LightDM D-Bus policy was not installed' >&2
+        return 1
+    fi
 }

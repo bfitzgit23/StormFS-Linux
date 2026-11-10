@@ -96,7 +96,12 @@ grep -q 'rootfs.squashfs' "$iso" || fail 'SquashFS live-root staging is missing'
 grep -q 'autologin-user=bfs' "$iso" || fail 'live LightDM autologin is missing'
 grep -q 'autologin-user-timeout=0' "$iso" || fail 'live LightDM autologin timeout is missing'
 grep -q 'autologin-session=xfce' "$iso" || fail 'live LightDM autologin session is missing'
+grep -q 'rc-update add dbus default' "$iso" || fail 'live D-Bus service is not enabled'
+grep -q 'rc-update add consolekit default' "$iso" || fail 'live ConsoleKit service is not enabled'
 grep -q 'rc-update add lightdm default' "$iso" || fail 'live LightDM service is not enabled'
+grep -q 'chpasswd -c SHA512' "$iso" || fail 'live bfs fallback password is not set'
+grep -q 'need localmount dbus' "$ROOT/ports/opt/openrc-init-scripts/lightdm" || \
+	fail 'LightDM does not require the D-Bus service'
 ! grep -Fq '    startx' "$iso" || fail 'live session still starts startx'
 grep -q 'mount -t overlay overlay' "$iso" || fail 'writable overlay root is missing'
 

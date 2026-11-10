@@ -6,8 +6,8 @@ command_background=true
 pidfile="/run/lxdm.pid"
 
 depend() {
-	need localmount
-	after bootmisc modules dbus
+	need localmount dbus
+	after bootmisc modules
 	use logger
 }
 

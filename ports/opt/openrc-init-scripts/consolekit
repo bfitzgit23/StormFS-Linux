@@ -1,0 +1,12 @@
+#!/sbin/openrc-run
+name="consolekit"
+description="ConsoleKit session and seat daemon"
+command="/usr/sbin/console-kit-daemon"
+command_args="--no-daemon"
+command_background=true
+pidfile="/run/consolekit.pid"
+
+depend() {
+    need dbus
+    after bootmisc modules
+}

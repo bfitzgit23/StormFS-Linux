@@ -103,7 +103,10 @@ done
 ! grep -Fq '    startx' "$iso" || fail 'live session still starts startx'
 grep -q 'autologin-user=bfs' "$iso" || fail 'live LightDM autologin is not configured'
 grep -q 'autologin-user-timeout=0' "$iso" || fail 'live LightDM autologin timeout is not configured'
+grep -q 'rc-update add dbus default' "$iso" || fail 'live D-Bus service is not enabled'
 grep -q 'rc-update add lightdm default' "$iso" || fail 'live LightDM service is not enabled'
+grep -q 'need localmount dbus' "$ROOT/ports/opt/openrc-init-scripts/lightdm" || \
+	fail 'LightDM does not require the D-Bus service'
 grep -q '/etc/lightdm/lightdm.conf' "$cal/shellprocess.conf" || fail 'installer does not clear live LightDM autologin'
 grep -q 'exec startxfce4' "$iso" || fail 'live session does not start XFCE'
 grep -q 'autostart/calamares.desktop' "$iso" || fail 'live session does not install a Calamares autostart entry'

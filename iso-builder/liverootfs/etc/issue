@@ -1,9 +1,7 @@
-
 Welcome to StormFS Linux Live
 
 Default login:
-  username: stormfs
+  username: bfs
   password: stormfs
 
 Run 'stormfs-installer' as root to install StormFS to disk.
-

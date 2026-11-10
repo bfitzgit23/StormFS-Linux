@@ -46,11 +46,21 @@ echo "LANG=${LOCALE}.UTF-8" > "$ROOT/etc/locale.conf"
 _run locale-gen 2>/dev/null || true
 
 # Root password
-echo "root:$ROOT_PSWD" | chpasswd -R "$ROOT" -c SHA512
+if ! printf '%s:%s\n' root "$ROOT_PSWD" | chpasswd -R "$ROOT" -c SHA512; then
+	echo 'ERROR: failed to set the root password' >&2
+	exit 1
+fi
 
 # Create user
 _run useradd -m -G users,wheel,audio,video -s /bin/bash "$USERNAME" 2>/dev/null || true
-echo "$USERNAME:$USER_PSWD" | chpasswd -R "$ROOT" -c SHA512
+if ! _run id "$USERNAME" >/dev/null 2>&1; then
+	echo "ERROR: failed to create user $USERNAME" >&2
+	exit 1
+fi
+if ! printf '%s:%s\n' "$USERNAME" "$USER_PSWD" | chpasswd -R "$ROOT" -c SHA512; then
+	echo "ERROR: failed to set the password for $USERNAME" >&2
+	exit 1
+fi
 
 # Initramfs
 _run dracut --force 2>/dev/null || _run mkinitramfs 2>/dev/null || true
@@ -97,9 +107,8 @@ mkdir -p "$ROOT/etc/runlevels/sysinit"
 _run rc-update add udev sysinit 2>/dev/null || true
 _run rc-update add udev-postmount sysinit 2>/dev/null || true
 
-for svc in dbus NetworkManager sshd; do
-	if [ -f "$ROOT/usr/lib/systemd/system/${svc}.service" ] || \
-	   [ -f "$ROOT/etc/systemd/system/${svc}.service" ]; then
+for svc in dbus consolekit networkmanager sshd; do
+	if [ -x "$ROOT/etc/init.d/$svc" ]; then
 		_run rc-update add "$svc" default 2>/dev/null || true
 	fi
 done

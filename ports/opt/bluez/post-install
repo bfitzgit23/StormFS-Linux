@@ -1,5 +1,8 @@
 #!/bin/bash
 ln -svf ../libexec/bluetooth/bluetoothd /usr/sbin
+# Compatibility for older BFSOS service scripts that used this path.
+install -d -m0755 /usr/libexec/bluetoothd
+ln -sfn ../bluetooth/bluetoothd /usr/libexec/bluetoothd/bluetoothd
 cat > /etc/bluetooth/rfcomm.conf << "EOF"
 # Start rfcomm.conf
 # Set up the RFCOMM configuration of the Bluetooth subsystem in the Linux kernel.

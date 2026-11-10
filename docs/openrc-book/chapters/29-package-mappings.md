@@ -19,7 +19,7 @@ Status values mean:
 | StormFS service wrappers | `openrc-init-scripts` | `/etc/init.d/*` | Installs the shared service scripts listed in Chapter 14. | Ready |
 | D-Bus | `dbus` | `dbus` | Enable in `boot`; desktop daemons use the system bus. | Ready |
 | eudev | `eudev` | `udev`, `udev-postmount` | Enable both in `sysinit`, in that order. | Ready |
-| ConsoleKit2 | `consolekit2` | D-Bus activation | Provides session and seat tracking without a systemd unit. Do not add it to a runlevel. | Ready |
+| ConsoleKit2 | `consolekit2` | D-Bus activation or `consolekit` | Provides session and seat tracking without a systemd unit. The optional OpenRC service is enabled by the installers and can also start on demand through D-Bus. | Ready |
 | Sysklogd | `sysklogd` | `syslog` | Install the wrapper and enable `syslog` in `boot`. Do not run two syslog daemons. | Ready |
 | Cronie | `cronie` | `crond` | Use the wrapper supplied by `openrc-init-scripts`; timers become cron entries. | Ready |
 

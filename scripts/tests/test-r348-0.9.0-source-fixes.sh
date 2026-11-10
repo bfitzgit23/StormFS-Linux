@@ -30,13 +30,17 @@ line_openrc_meson=$(grep -n 'meson setup' "$openrc_recipe" | cut -d: -f1)
 (( line_openrc_patch < line_openrc_meson )) || fail 'OpenRC lock patch must be applied before meson setup'
 pass 'OpenRC lock patch and uucp_group option'
 
-grep -qx 'release=3' ports/opt/bluez/spkgbuild || fail 'BlueZ OpenRC-only recipe release missing'
+grep -qx 'release=4' ports/opt/bluez/spkgbuild || fail 'BlueZ OpenRC-only recipe release missing'
 grep -Fq -- '--disable-systemd' ports/opt/bluez/spkgbuild || fail 'BlueZ still enables systemd integration'
 grep -Fq 'rm -rf "$PKG/usr/lib/systemd" "$PKG/lib/systemd"' ports/opt/bluez/spkgbuild || \
     fail 'BlueZ does not strip packaged systemd units'
 grep -Fq 'need dbus' ports/opt/openrc-init-scripts/bluetooth || \
     fail 'BlueZ OpenRC service does not require dbus'
-grep -qx 'release=6' ports/opt/openrc-init-scripts/spkgbuild || \
+grep -Fq 'need localmount dbus' ports/opt/openrc-init-scripts/lightdm || \
+    fail 'LightDM OpenRC service does not require dbus'
+grep -Fq 'need localmount dbus' ports/opt/openrc-init-scripts/lxdm || \
+    fail 'LXDM OpenRC service does not require dbus'
+grep -qx 'release=9' ports/opt/openrc-init-scripts/spkgbuild || \
     fail 'OpenRC service-script release missing'
 pass 'BlueZ OpenRC-only build and service dependency'
 
@@ -100,8 +104,10 @@ grep -qx 'release=3' ports/opt/upower/spkgbuild || fail 'UPower release missing'
 grep -Fq 'systemdsystemunitdir=no' ports/opt/upower/spkgbuild || fail 'UPower still installs systemd units'
 grep -qx 'release=3' ports/opt/udisks/spkgbuild || fail 'UDisks release missing'
 grep -Fq 'with-tmpfilesdir=no' ports/opt/udisks/spkgbuild || fail 'UDisks still packages systemd tmpfiles'
-grep -qx 'release=4' ports/opt/lightdm/spkgbuild || fail 'LightDM ConsoleKit release missing'
+grep -qx 'release=5' ports/opt/lightdm/spkgbuild || fail 'LightDM ConsoleKit release missing'
 grep -Fq 'pam_ck_connector' ports/opt/lightdm/spkgbuild || fail 'LightDM still references pam_systemd'
+grep -Fq 'org.freedesktop.DisplayManager.conf' ports/opt/lightdm/spkgbuild || \
+    fail 'LightDM no longer preserves its D-Bus policy'
 grep -qx 'release=5' ports/plasma/sddm/spkgbuild || fail 'SDDM OpenRC-only release missing'
 grep -Fq 'NO_SYSTEMD=ON' ports/plasma/sddm/spkgbuild || fail 'SDDM still builds systemd support'
 ! grep -Fq 'pam_systemd' ports/plasma/sddm/post-install || fail 'SDDM PAM policy still references pam_systemd'
@@ -111,7 +117,24 @@ grep -Fq 'pam_ck_connector' ports/core/linux-pam/system-session || \
 grep -Fq 'systemd=disabled' ports/opt/wireplumber/spkgbuild || fail 'WirePlumber still enables systemd units'
 grep -Fq 'smartd' ports/opt/openrc-init-scripts/spkgbuild || fail 'OpenRC service package omits smartd'
 [ -x ports/opt/openrc-init-scripts/smartd ] || fail 'openrc-init-scripts is missing smartd'
+[ -x ports/opt/openrc-init-scripts/consolekit ] || fail 'openrc-init-scripts is missing the ConsoleKit service'
+[ -x ports/opt/openrc-init-scripts/kdm ] || fail 'openrc-init-scripts is missing the KDM service'
+grep -qx 'release=3' ports/core/shadow/spkgbuild || fail 'Shadow PAM login fix release missing'
+! grep -Fq 'pam_access.so' ports/core/shadow/spkgbuild || fail 'console login still depends on an unmanaged pam_access policy'
+grep -qx 'release=10' ports/opt/calamares/spkgbuild || fail 'Calamares ConsoleKit service release missing'
+grep -Fq 'command="/usr/sbin/console-kit-daemon"' ports/opt/openrc-init-scripts/consolekit || \
+    fail 'ConsoleKit service does not launch console-kit-daemon'
+grep -Fq 'need dbus' ports/opt/openrc-init-scripts/consolekit || \
+    fail 'ConsoleKit service does not require D-Bus'
+grep -Fq 'command="/usr/bin/kdm"' ports/opt/openrc-init-scripts/kdm || \
+    fail 'KDM service does not launch kdm'
 [ -f ports/opt/openrc-init-scripts/lxdm ] || fail 'openrc-init-scripts is missing lxdm'
+grep -Fq '/usr/libexec/bluetoothd/bluetoothd' ports/opt/bluez/post-install || \
+    fail 'BlueZ compatibility daemon path is missing'
+grep -Fq 'for svc in dbus consolekit networkmanager sshd; do' iso-builder/liverootfs/root/post-install.sh || \
+    fail 'installer does not enable the OpenRC D-Bus/ConsoleKit/NetworkManager services'
+grep -Fq 'rc-update", "add", svc, "default"' stormfs-gui.py || \
+    fail 'graphical installer does not use rc-update'
 grep -Fq 'command_args="-n"' ports/opt/openrc-init-scripts/smartd || \
     fail 'smartd wrapper does not keep smartd in the foreground'
 grep -Fq 'prt-get install smartmontools openrc-init-scripts' docs/openrc-book/chapters/14-system-services.md || \

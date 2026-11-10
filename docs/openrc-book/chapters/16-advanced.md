@@ -299,7 +299,7 @@ pgrep -a dbus-daemon
 pgrep -a xdg-desktop-portal
 ```
 
-`consolekit2` supplies the session and seat integration used by this repository. It is D-Bus activated and does not need its own `rc-update` entry. For portals launched per user, use the desktop session's autostart mechanism rather than a systemd user unit.
+`consolekit2` supplies the session and seat integration used by this repository. It can be started on demand through D-Bus, and BFSOS also ships an optional `consolekit` OpenRC service that the installer enables in `default`. For portals launched per user, use the desktop session's autostart mechanism rather than a systemd user unit.
 
 ### Systemd Compatibility
 

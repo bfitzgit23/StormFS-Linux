@@ -1,0 +1,17 @@
+#!/sbin/openrc-run
+name="kdm"
+description="KDE Display Manager"
+command="/usr/bin/kdm"
+command_background=true
+pidfile="/run/kdm.pid"
+
+depend() {
+    need localmount dbus
+    after bootmisc modules
+    use logger
+}
+
+# KDM is optional: the current kde-workspace recipe builds with
+# WITH_KDM=OFF, so LightDM is the ISO display manager.  This service is
+# available for installations that provide /usr/bin/kdm.
+# Enable with:  rc-update add kdm default

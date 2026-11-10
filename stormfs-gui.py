@@ -631,11 +631,11 @@ def build_app():
             sudoers.chmod(0o440)
 
             # enable services
-            self.log_signal.emit("  Enabling systemd services...")
-            for svc in ["dbus", "NetworkManager", "sshd"]:
+            self.log_signal.emit("  Enabling OpenRC services...")
+            for svc in ["dbus", "consolekit", "networkmanager", "sshd", "lightdm"]:
                 try:
                     subprocess.check_call(
-                        ["chroot", root, "systemctl", "enable", svc],
+                        ["chroot", root, "rc-update", "add", svc, "default"],
                         timeout=30
                     )
                 except Exception:

@@ -35,7 +35,7 @@ rc-update add syslog boot
 rc-update add networking boot
 ```
 
-The `syslog`, `crond`, and other service names above refer to the scripts supplied by the StormFS OpenRC profile. `consolekit2` is D-Bus activated and is not added as an OpenRC runlevel service. Check `/etc/init.d/` and use the exact installed name before enabling a service.
+The `syslog`, `crond`, and other service names above refer to the scripts supplied by the StormFS OpenRC profile. `consolekit2` is normally D-Bus activated; BFSOS also ships an optional `consolekit` OpenRC service and enables it in `default` for desktop installs. D-Bus activation reuses the running daemon. Check `/etc/init.d/` and use the exact installed name before enabling a service.
 
 ### Journald to Syslog
 
