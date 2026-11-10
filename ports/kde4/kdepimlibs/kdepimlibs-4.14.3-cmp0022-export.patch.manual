@@ -25,7 +25,7 @@
  endif()
  
 -target_link_libraries( akonadi-kde LINK_INTERFACE_LIBRARIES ${AKONADI_KDE_DEPS})
-+target_link_libraries( akonadi-kde INTERFACE ${AKONADI_KDE_DEPS})
++set_property(TARGET akonadi-kde APPEND PROPERTY INTERFACE_LINK_LIBRARIES ${AKONADI_KDE_DEPS})
  
  set_target_properties( akonadi-kde PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION} )
  install( TARGETS akonadi-kde EXPORT kdepimlibsLibraryTargets  ${INSTALL_TARGETS_DEFAULT_ARGS} )
@@ -36,7 +36,7 @@
  endif()
  
 -target_link_libraries(akonadi-contact LINK_INTERFACE_LIBRARIES
-+target_link_libraries(akonadi-contact INTERFACE
++set_property(TARGET akonadi-contact APPEND PROPERTY INTERFACE_LINK_LIBRARIES
                                        akonadi-kde
                                        kabc
                                        kcalcore
@@ -47,11 +47,11 @@
  
  target_link_libraries(kabc ${KDE4_KDEUI_LIBS} ${KDE4_KDECORE_LIBS})
 -target_link_libraries(kabc LINK_INTERFACE_LIBRARIES ${KDE4_KDEUI_LIBS})
-+target_link_libraries(kabc INTERFACE ${KDE4_KDEUI_LIBS})
++set_property(TARGET kabc APPEND PROPERTY INTERFACE_LINK_LIBRARIES ${KDE4_KDEUI_LIBS})
  if(NOT KDEPIM_NO_KRESOURCES)
    target_link_libraries(kabc kresources)
 -  target_link_libraries(kabc LINK_INTERFACE_LIBRARIES kresources)
-+  target_link_libraries(kabc INTERFACE kresources)
++  set_property(TARGET kabc APPEND PROPERTY INTERFACE_LINK_LIBRARIES kresources)
  endif()
  
  set_target_properties(
@@ -62,11 +62,11 @@
  
  target_link_libraries(kcal ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${QT_QTXML_LIBRARY} kabc kpimutils ${LIBICAL_LIBRARIES})
 -target_link_libraries(kcal LINK_INTERFACE_LIBRARIES kabc)
-+target_link_libraries(kcal INTERFACE kabc)
++set_property(TARGET kcal APPEND PROPERTY INTERFACE_LINK_LIBRARIES kabc)
  if (NOT KDEPIM_NO_KRESOURCES)
    target_link_libraries(kcal kresources)
 -  target_link_libraries(kcal LINK_INTERFACE_LIBRARIES kresources)
-+  target_link_libraries(kcal INTERFACE kresources)
++  set_property(TARGET kcal APPEND PROPERTY INTERFACE_LINK_LIBRARIES kresources)
  endif()
  
  set_target_properties(kcal PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION})

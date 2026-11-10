@@ -5,7 +5,7 @@
 description="KDE 4 PIM libraries"
 name=kdepimlibs
 version=4.14.3
-release=8
+release=9
 source="https://download.kde.org/Attic/4.14.3/src/kdepimlibs-$version.tar.xz kdepimlibs-4.14.3-cmake-minimum.patch.manual kdepimlibs-4.14.3-export-library-dependencies.patch.manual kdepimlibs-4.14.3-findgpgme-pkgconfig.patch.manual kdepimlibs-4.14.3-gpgmepp-location.patch.manual kdepimlibs-4.14.3-cmp0022-export.patch.manual kdepimlibs-4.14.3-akonadi-location.patch.manual"
 
 build() {
