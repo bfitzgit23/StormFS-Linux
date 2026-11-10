@@ -3,7 +3,7 @@ boost
 cyrus-sasl
 gpgme
 kdelibs
-libical
+libical1
 libxml2
 libxslt
 qt4

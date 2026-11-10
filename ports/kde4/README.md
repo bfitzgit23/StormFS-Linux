@@ -6,7 +6,7 @@ is installed under `/opt/qt4`; the KDE libraries and applications install under
 
 ## Build order
 
-1. `libical` (1.0.1, installed under `/opt/libical`)
+1. `libical1` (1.0.1, installed under `/opt/libical`)
 2. `qt4`
 3. `automoc4`
 4. `phonon4`
@@ -56,7 +56,7 @@ and `gst-plugins-good` provide the ALSA and PulseAudio output paths used by the
 backend.
 
 `kdepimlibs` retains its required GPGME dependency and builds the KDE 4 PIM
-libraries used by the runtime and workspace. It links the `libical` port pinned
+libraries used by the runtime and workspace. It links the `libical1` port pinned
 at 1.0.1 under `/opt/libical`, because kcalcore/kcal use the libical 1.0 API
 (`icalcomponent_as_ical_string_r`, `icaltimetype.is_utc`,
 `icalrecurrencetype_clear`) that libical 3 and later removed. The system
