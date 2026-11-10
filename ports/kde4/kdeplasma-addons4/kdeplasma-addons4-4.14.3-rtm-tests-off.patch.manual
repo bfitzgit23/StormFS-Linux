@@ -1,0 +1,10 @@
+--- a/libs/rtm/CMakeLists.txt
++++ b/libs/rtm/CMakeLists.txt
+@@ -43,4 +43,6 @@
+ 
+ #install(FILES FindRTM.cmake DESTINATION ${DATA_INSTALL_DIR}/cmake/modules)
+ 
+-add_subdirectory(tests)
++if(BUILD_TESTING)
++    add_subdirectory(tests)
++endif()
