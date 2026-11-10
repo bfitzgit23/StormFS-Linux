@@ -72,7 +72,7 @@
  
  #include <kdialog.h>
  #include <kiconloader.h>
-@@ -47,13 +49,19 @@
+@@ -47,13 +49,20 @@
  #include <kwindowsystem.h>
  #include <netwm.h>
  #include <KStandardDirs>
@@ -86,13 +86,14 @@
  #include <kworkspace/kdisplaymanager.h>
  
 +#include <QLabel>
++#include <QPainter>
 +#include <QPushButton>
 +#include <QVBoxLayout>
 +
  #include <config-workspace.h>
  
  #include "logouteffect.h"
-@@ -181,6 +189,7 @@
+@@ -181,6 +190,7 @@
  
      KDialog::centerOnScreen(this, -3);
  
@@ -100,7 +101,7 @@
      //kDebug() << "Creating QML view";
      m_view = new QDeclarativeView(this);
      QDeclarativeContext *context = m_view->rootContext();
-@@ -254,13 +263,42 @@
+@@ -254,13 +264,42 @@
      m_view->show();
      m_view->setFocus();
      adjustSize();
@@ -143,7 +144,7 @@
      return QDialog::eventFilter(watched, event);
  }
  
-@@ -268,11 +306,13 @@
+@@ -268,11 +307,13 @@
  {
      QDialog::resizeEvent( e );
  
