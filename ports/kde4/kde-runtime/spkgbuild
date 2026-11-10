@@ -5,8 +5,8 @@
 description="KDE 4 runtime components"
 name=kde-runtime
 version=4.14.3
-release=7
-source="https://download.kde.org/Attic/4.14.3/src/kde-runtime-$version.tar.xz kde-runtime-4.14.3-cmake-minimum.patch.manual kde-runtime-4.14.3-optional-kdeclarative.patch.manual kde-runtime-4.14.3-duplicate-handbook-targets.patch.manual kde-runtime-4.14.3-skip-html-thumbnail.patch.manual kde-runtime-4.14.3-error-dialog-without-kwebkit.patch.manual"
+release=8
+source="https://download.kde.org/Attic/4.14.3/src/kde-runtime-$version.tar.xz kde-runtime-4.14.3-cmake-minimum.patch.manual kde-runtime-4.14.3-optional-kdeclarative.patch.manual kde-runtime-4.14.3-duplicate-handbook-targets.patch.manual kde-runtime-4.14.3-skip-html-thumbnail.patch.manual kde-runtime-4.14.3-error-dialog-without-kwebkit.patch.manual kde-runtime-4.14.3-skip-declarative-scriptengines.patch.manual"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
@@ -48,6 +48,13 @@ build() {
 	# kdewebkit module, which is not built here because Qt has no WebKit.
 	# QTextBrowser renders the same HTML subset without needing that module.
 	patch -p1 -i "$SRC/kde-runtime-4.14.3-error-dialog-without-kwebkit.patch.manual" || return 1
+
+	# Qt is configured -no-declarative, so QtDeclarative does not exist and
+	# plasmoid/appletinterface.h (which pulls in declarative/toolboxproxy.h and
+	# declarative/appletcontainer.h) cannot compile.  Skip the two applet
+	# script engines and keep the runner, dataengine and addon-packagestructure
+	# plugins, whose sources never touch those headers.
+	patch -p1 -i "$SRC/kde-runtime-4.14.3-skip-declarative-scriptengines.patch.manual" || return 1
 
 	# kdelibs before 4.14.3-21 shipped cmake modules that read the location of a
 	# kauth-policy-gen target its exported tools file never contained, so every
