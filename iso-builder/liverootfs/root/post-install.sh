@@ -122,6 +122,13 @@ fi
 # Enable the LightDM display manager selected by the ISO.
 _run rc-update add lightdm default 2>/dev/null || true
 
+# OpenRC's local service runs an inherited local_start() hook without a
+# timeout. Disable it before the first boot so getty is not blocked.
+if [ -f "$ROOT/etc/conf.d/local" ] &&
+   grep -q "^[[:space:]]*local_start[[:space:]]*(" "$ROOT/etc/conf.d/local"; then
+	mv "$ROOT/etc/conf.d/local" "$ROOT/etc/conf.d/local.bfsos-disabled"
+fi
+
 # Drop the live-only LightDM autologin before the installed system boots.
 if [ -f "$ROOT/etc/lightdm/lightdm.conf" ]; then
 	sed -i -e '/^autologin-user[[:space:]]*=/d' -e '/^autologin-user-timeout[[:space:]]*=/d' "$ROOT/etc/lightdm/lightdm.conf" || true

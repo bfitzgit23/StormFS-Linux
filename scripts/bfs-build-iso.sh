@@ -925,9 +925,24 @@ build_iso_package_set() {
     trap - RETURN
 }
 
+remove_deprecated_local_start_hook() {
+    local root="$1"
+    local local_conf="$root/etc/conf.d/local"
+
+    # OpenRC's local service executes a legacy local_start() hook without a
+    # timeout. If an inherited base image still contains that hook, the
+    # default runlevel can stall at "Starting local" and no getty starts.
+    if [ -f "$local_conf" ] &&
+       grep -q "^[[:space:]]*local_start[[:space:]]*(" "$local_conf"; then
+        mv "$local_conf" "$local_conf.bfsos-disabled"
+        log "Disabled inherited OpenRC local_start hook in the live root"
+    fi
+}
+
 install_live_runtime() {
     local root="$1"
     log "Installing BFSOS live-session policy"
+    remove_deprecated_local_start_hook "$root"
     mkdir -p "$root/home/bfs" "$root/usr/local/sbin" "$root/etc/sudoers.d"
     mkdir -p "$root/etc/init.d" "$root/etc/runlevels/default" "$root/etc/runlevels/sysinit"
     mkdir -p "$root/home/bfs/BFSOS"
@@ -1105,6 +1120,13 @@ set -u
 # Live-media only: an installed system may have inherited this service.
 if ! grep -qw 'bfs.live=1' /proc/cmdline; then
     exit 0
+fi
+
+# Do not let a legacy hook inherited from the base image block the local
+# service before getty starts.
+if [ -f /etc/conf.d/local ] &&
+   grep -q "^[[:space:]]*local_start[[:space:]]*(" /etc/conf.d/local; then
+    mv /etc/conf.d/local /etc/conf.d/local.bfsos-disabled
 fi
 
 exec </dev/tty1 >/dev/tty1 2>&1
@@ -1593,7 +1615,7 @@ main() {
     log "Extracting verified base into isolated ISO live root"
     sudo bash -c "$(declare -f extract_archive die); extract_archive '$base_archive' '$WORK_DIR/live-root'"
 
-    sudo env BUILD_PROJECT_DIR="$BUILD_PROJECT_DIR" PROJECT_DIR="$PROJECT_DIR" VENOM_PORTS_DIR="$VENOM_PORTS_DIR" WORK_DIR="$WORK_DIR" BFS_ISO_KERNEL="${BFS_ISO_KERNEL:-lts}" bash -c "$(declare -f log die mount_chroot_fs umount_chroot_fs register_iso_port_collections build_iso_package_set install_live_runtime install_dracut_live_module); $(declare -p iso_packages); build_iso_package_set '$WORK_DIR/live-root'; install_live_runtime '$WORK_DIR/live-root'; install_dracut_live_module '$WORK_DIR/live-root'"
+    sudo env BUILD_PROJECT_DIR="$BUILD_PROJECT_DIR" PROJECT_DIR="$PROJECT_DIR" VENOM_PORTS_DIR="$VENOM_PORTS_DIR" WORK_DIR="$WORK_DIR" BFS_ISO_KERNEL="${BFS_ISO_KERNEL:-lts}" bash -c "$(declare -f log die mount_chroot_fs umount_chroot_fs register_iso_port_collections build_iso_package_set remove_deprecated_local_start_hook install_live_runtime install_dracut_live_module); $(declare -p iso_packages); build_iso_package_set '$WORK_DIR/live-root'; install_live_runtime '$WORK_DIR/live-root'; install_dracut_live_module '$WORK_DIR/live-root'"
 
     mapfile -t boot_files < <(sudo env WORK_DIR="$WORK_DIR" BFS_ISO_KERNEL="${BFS_ISO_KERNEL:-lts}" bash -c "$(declare -f log die mount_chroot_fs umount_chroot_fs create_live_initramfs); create_live_initramfs '$WORK_DIR/live-root'" | tail -n2)
     ((${#boot_files[@]} == 2)) || die "Could not determine generated live kernel/initramfs"

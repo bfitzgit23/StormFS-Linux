@@ -78,6 +78,7 @@ grep -Fq 'local_start' "$cal/shellprocess.conf" || fail 'Calamares cleanup does 
 grep -Fq 'local.bfsos-disabled' "$cal/shellprocess.conf" || fail 'Calamares cleanup does not disable the legacy local hook'
 grep -Fq 'remove_deprecated_local_start_hook' "$ROOT/scripts/install-bfs-menu-current.sh" ||     fail 'menu installer has no local_start cleanup'
 grep -Fq 'local.bfsos-disabled' "$ROOT/scripts/install-bfs-menu-current.sh" ||     fail 'menu installer does not disable the legacy local hook'
+grep -Fq 'local.bfsos-disabled' "$ROOT/iso-builder/liverootfs/root/post-install.sh" || fail 'legacy post-install path does not disable the local hook'
 
 lxdm_theme="$ROOT/ports/opt/stormfs-lxdm-theme"
 for file in lxdm.conf gtkrc greeter.ui index.theme background.jpg login.svg; do

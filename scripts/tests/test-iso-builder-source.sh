@@ -84,6 +84,8 @@ grep -q 'git pull --ff-only' "$iso" || fail 'safe live online project refresh is
 grep -q 'GIT_TERMINAL_PROMPT=0' "$iso" || fail 'live project refresh can block on Git credentials'
 grep -Fq "grep -qw 'bfs.live=1' /proc/cmdline" "$iso" || fail 'live init has no installed-system guard'
 ! grep -q '/usr/local/sbin/bfs-live-console-font || true' "$iso" || fail 'boot-time console-font prompt blocks local'
+grep -Fq 'remove_deprecated_local_start_hook' "$iso" || fail 'ISO builder does not disable legacy local_start hooks'
+grep -Fq 'local.bfsos-disabled' "$iso" || fail 'ISO builder does not disable the inherited local hook'
 grep -q 'passwd bfs' "$iso" || fail 'temporary bfs live-password prompt is missing'
 grep -q 'ssh-keygen -A' "$iso" || fail 'runtime SSH host-key generation is missing'
 grep -q 'rc-service sshd' "$iso" || fail 'runtime SSH startup is missing'
