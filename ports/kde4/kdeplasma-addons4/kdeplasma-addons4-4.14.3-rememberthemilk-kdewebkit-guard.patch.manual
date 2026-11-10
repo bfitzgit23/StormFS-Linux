@@ -1,0 +1,13 @@
+--- a/applets/CMakeLists.txt
++++ b/applets/CMakeLists.txt
+@@ -48,7 +48,9 @@
+ endif(LIBATTICA_FOUND)
+ add_subdirectory(pastebin)
+ add_subdirectory(previewer)
+-add_subdirectory(rememberthemilk)
++if(QT_QTWEBKIT_FOUND AND KDE4_KDEWEBKIT_LIBS)
++  add_subdirectory(rememberthemilk)
++endif(QT_QTWEBKIT_FOUND AND KDE4_KDEWEBKIT_LIBS)
+ add_subdirectory(rssnow)
+ add_subdirectory(spellcheck)
+ add_subdirectory(showdashboard)

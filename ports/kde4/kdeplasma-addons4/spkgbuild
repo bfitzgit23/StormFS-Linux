@@ -7,8 +7,8 @@ description="Additional Plasma widgets and plugins for KDE 4"
 name=kdeplasma-addons4
 _pkgname=kdeplasma-addons
 version=4.14.3
-release=11
-source="https://download.kde.org/Attic/4.14.3/src/$_pkgname-$version.tar.xz kdeplasma-addons4-4.14.3-cmake-minimum.patch.manual kdeplasma-addons4-4.14.3-pattern-qimageblitz-fallback.patch.manual kdeplasma-addons4-4.14.3-akonadi-cxx11.patch.manual kdeplasma-addons4-4.14.3-rtm-tests-off.patch.manual kdeplasma-addons4-4.14.3-qtdeclarative-guard.patch.manual kdeplasma-addons4-4.14.3-find-akonadi.patch.manual kdeplasma-addons4-4.14.3-community-qtwebkit-guard.patch.manual"
+release=12
+source="https://download.kde.org/Attic/4.14.3/src/$_pkgname-$version.tar.xz kdeplasma-addons4-4.14.3-cmake-minimum.patch.manual kdeplasma-addons4-4.14.3-pattern-qimageblitz-fallback.patch.manual kdeplasma-addons4-4.14.3-akonadi-cxx11.patch.manual kdeplasma-addons4-4.14.3-rtm-tests-off.patch.manual kdeplasma-addons4-4.14.3-qtdeclarative-guard.patch.manual kdeplasma-addons4-4.14.3-find-akonadi.patch.manual kdeplasma-addons4-4.14.3-community-qtwebkit-guard.patch.manual kdeplasma-addons4-4.14.3-rememberthemilk-kdewebkit-guard.patch.manual"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$_pkgname-$version" -print -quit)
@@ -42,6 +42,9 @@ build() {
 
 	# The opendesktop applet renders contact info with QtWebKit.
 	patch -p1 -i "$SRC/kdeplasma-addons4-4.14.3-community-qtwebkit-guard.patch.manual" || return 1
+
+	# The RTM applet embeds KWebView from the omitted kdewebkit module.
+	patch -p1 -i "$SRC/kdeplasma-addons4-4.14.3-rememberthemilk-kdewebkit-guard.patch.manual" || return 1
 
 	# kdelibs before 4.14.3-21 shipped cmake modules that read the location of a
 	# kauth-policy-gen target its exported tools file never contained, so every
