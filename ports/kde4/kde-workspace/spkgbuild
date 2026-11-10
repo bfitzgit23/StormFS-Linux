@@ -5,8 +5,8 @@
 description="KDE 4 Plasma workspace and window manager"
 name=kde-workspace
 version=4.11.14
-release=13
-source="https://download.kde.org/Attic/4.14.3/src/kde-workspace-$version.tar.xz kde-workspace-4.11.14-optional-qtdeclarative.patch.manual kde-workspace-4.11.14-optional-webkit.patch.manual kde-workspace-4.11.14-optional-dbusmenu-blitz.patch.manual kde-workspace-4.11.14-optional-qml-sweep.patch.manual kde-workspace-4.11.14-optional-qml-shell.patch.manual kde-workspace-4.11.14-unique-test-names.patch.manual kde-workspace-4.11.14-window-selection-contains.patch.manual kde-workspace-4.11.14-fontconfig-freetype-header.patch.manual kde-workspace-4.11.14-taskmanager-contains.patch.manual"
+release=14
+source="https://download.kde.org/Attic/4.14.3/src/kde-workspace-$version.tar.xz kde-workspace-4.11.14-optional-qtdeclarative.patch.manual kde-workspace-4.11.14-optional-webkit.patch.manual kde-workspace-4.11.14-optional-dbusmenu-blitz.patch.manual kde-workspace-4.11.14-optional-qml-sweep.patch.manual kde-workspace-4.11.14-optional-qml-shell.patch.manual kde-workspace-4.11.14-unique-test-names.patch.manual kde-workspace-4.11.14-window-selection-contains.patch.manual kde-workspace-4.11.14-fontconfig-freetype-header.patch.manual kde-workspace-4.11.14-taskmanager-contains.patch.manual kde-workspace-4.11.14-joystick-strict-ansi.patch.manual"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
@@ -53,6 +53,10 @@ build() {
 	# Same GCC 16 rejection of "bool > 0" that khotkeys hit: Task::idMatch()
 	# compares two QString::contains() results against 0.
 	patch -p1 -i "$SRC/kde-workspace-4.11.14-taskmanager-contains.patch.manual" || return 1
+
+	# joydevice.h defines __STRICT_ANSI__ unconditionally after
+	# including linux/joystick.h; restore the previous state instead.
+	patch -p1 -i "$SRC/kde-workspace-4.11.14-joystick-strict-ansi.patch.manual" || return 1
 
 	export CMAKE_PREFIX_PATH="/opt/qt4:/usr"
 	export PATH="/opt/qt4/bin:$PATH"

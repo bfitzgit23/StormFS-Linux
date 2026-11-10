@@ -1,0 +1,26 @@
+--- a/kcontrol/hardware/joystick/joydevice.h
++++ b/kcontrol/hardware/joystick/joydevice.h
+@@ -26,9 +26,21 @@
+ #include <sys/types.h>
+ 
+ #ifdef Q_OS_LINUX
+-#undef __STRICT_ANSI__
++// <linux/joystick.h> needs the non-strict <asm/types.h>, whose
++// __u8/__u32 typedefs hide behind __STRICT_ANSI__ on old headers.
++// Lift the guard only while including it, then restore the previous
++// state: defining __STRICT_ANSI__ unconditionally leaves libstdc++
++// configured for strict ANSI although the compiler runs in gnu++98
++// mode, which duplicates the __int128 abs()/__is_integer overloads.
++#ifdef __STRICT_ANSI__
++#  define JOYDEVICE_RESTORE_STRICT_ANSI 1
++#  undef __STRICT_ANSI__
++#endif
+ #include <linux/joystick.h>
+-#define __STRICT_ANSI__
++#ifdef JOYDEVICE_RESTORE_STRICT_ANSI
++#  define __STRICT_ANSI__ 1
++#  undef JOYDEVICE_RESTORE_STRICT_ANSI
++#endif
+ #endif
+ 
+ #ifdef Q_OS_FREEBSD
