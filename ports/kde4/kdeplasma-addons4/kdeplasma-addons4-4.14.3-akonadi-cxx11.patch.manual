@@ -1,0 +1,38 @@
+--- a/libs/lancelot-datamodels/CMakeLists.txt
++++ b/libs/lancelot-datamodels/CMakeLists.txt
+@@ -107,6 +107,7 @@
+ 
+ 
+ kde4_add_library(lancelot-datamodels SHARED ${lancelot_datamodels_LIB_SRCS})
++set_property(TARGET lancelot-datamodels APPEND_STRING PROPERTY COMPILE_FLAGS " -std=gnu++11")
+ 
+ target_link_libraries(
+    lancelot-datamodels
+--- a/runners/events/CMakeLists.txt
++++ b/runners/events/CMakeLists.txt
+@@ -10,6 +10,7 @@
+ set(events_SRCS events.cpp datetime_parser.cpp datetime_range.cpp collection_selector.cpp)
+ 
+ kde4_add_plugin(plasma_runner_events ${events_SRCS})
++set_property(TARGET plasma_runner_events APPEND_STRING PROPERTY COMPILE_FLAGS " -std=gnu++11")
+ target_link_libraries(plasma_runner_events ${KDE4_PLASMA_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_AKONADI_LIBS} ${KDEPIMLIBS_KCALCORE_LIBS})
+ add_dependencies(plasma_runner_events kcm_plasma_runner_events)
+ 
+@@ -18,6 +19,7 @@
+ 
+ kde4_add_ui_files(kcm_events_SRCS events_config.ui)
+ kde4_add_plugin(kcm_plasma_runner_events ${kcm_events_SRCS})
++set_property(TARGET kcm_plasma_runner_events APPEND_STRING PROPERTY COMPILE_FLAGS " -std=gnu++11")
+ target_link_libraries(kcm_plasma_runner_events ${KDE4_PLASMA_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_AKONADI_LIBS} ${KDEPIMLIBS_KCALCORE_LIBS})
+ 
+ # Installation
+--- a/runners/contacts/CMakeLists.txt
++++ b/runners/contacts/CMakeLists.txt
+@@ -4,6 +4,7 @@
+ )
+ 
+ kde4_add_plugin(krunner_contacts ${krunner_contacts_SRCS})
++set_property(TARGET krunner_contacts APPEND_STRING PROPERTY COMPILE_FLAGS " -std=gnu++11")
+ target_link_libraries(krunner_contacts ${KDE4_KIO_LIBS} ${KDE4_PLASMA_LIBS}
+ ${KDEPIMLIBS_KABC_LIBS} ${KDE4_AKONADI_CONTACT_LIBS})
+ 
