@@ -1,0 +1,21 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -21,7 +21,7 @@
+ find_package(KDeclarative QUIET CONFIG)
+ set_package_properties(KDeclarative PROPERTIES DESCRIPTION "KDE Declarative (QML) support from kdelibs"
+                        URL "http://www.kde.org"
+-                       TYPE REQUIRED
++                       TYPE OPTIONAL
+                        PURPOSE "Required by corebindingsplugin (org.kde.plasma.core)"
+                       )
+ 
+--- a/plasma/CMakeLists.txt
++++ b/plasma/CMakeLists.txt
+@@ -1,5 +1,7 @@
+ add_subdirectory(containments)
++if(KDeclarative_FOUND)
+ add_subdirectory(declarativeimports)
++endif()
+ add_subdirectory(kpart)
+ add_subdirectory(remotewidgetshelper)
+ add_subdirectory(scriptengines)

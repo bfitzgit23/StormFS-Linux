@@ -5,8 +5,8 @@
 description="KDE 4 runtime components"
 name=kde-runtime
 version=4.14.3
-release=3
-source="https://download.kde.org/Attic/4.14.3/src/kde-runtime-$version.tar.xz kde-runtime-4.14.3-cmake-minimum.patch.manual"
+release=4
+source="https://download.kde.org/Attic/4.14.3/src/kde-runtime-$version.tar.xz kde-runtime-4.14.3-cmake-minimum.patch.manual kde-runtime-4.14.3-optional-kdeclarative.patch.manual"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
@@ -21,6 +21,14 @@ build() {
 	export CXXFLAGS="${CXXFLAGS:+$CXXFLAGS }-std=gnu++98 -fpermissive -Wno-deprecated-declarations"
 
 	patch -p1 -i "$SRC/kde-runtime-4.14.3-cmake-minimum.patch.manual" || return 1
+
+	# kdelibs is built against Qt 4 without QtDeclarative, so its
+	# experimental/libkdeclarative is skipped and no KDeclarative config is
+	# installed.  kde-runtime marks the package TYPE REQUIRED and ends with
+	# feature_summary(FATAL_ON_MISSING_REQUIRED_PACKAGES), which aborted the
+	# configure; only the QML plugins in plasma/declarativeimports need it, so
+	# make the find optional and skip that directory when it is absent.
+	patch -p1 -i "$SRC/kde-runtime-4.14.3-optional-kdeclarative.patch.manual" || return 1
 
 	# kdelibs before 4.14.3-21 shipped cmake modules that read the location of a
 	# kauth-policy-gen target its exported tools file never contained, so every
