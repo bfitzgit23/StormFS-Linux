@@ -7,8 +7,8 @@ description="Additional Plasma widgets and plugins for KDE 4"
 name=kdeplasma-addons4
 _pkgname=kdeplasma-addons
 version=4.14.3
-release=8
-source="https://download.kde.org/Attic/4.14.3/src/$_pkgname-$version.tar.xz kdeplasma-addons4-4.14.3-cmake-minimum.patch.manual kdeplasma-addons4-4.14.3-pattern-qimageblitz-fallback.patch.manual kdeplasma-addons4-4.14.3-akonadi-cxx11.patch.manual kdeplasma-addons4-4.14.3-rtm-tests-off.patch.manual kdeplasma-addons4-4.14.3-qtdeclarative-guard.patch.manual"
+release=9
+source="https://download.kde.org/Attic/4.14.3/src/$_pkgname-$version.tar.xz kdeplasma-addons4-4.14.3-cmake-minimum.patch.manual kdeplasma-addons4-4.14.3-pattern-qimageblitz-fallback.patch.manual kdeplasma-addons4-4.14.3-akonadi-cxx11.patch.manual kdeplasma-addons4-4.14.3-rtm-tests-off.patch.manual kdeplasma-addons4-4.14.3-qtdeclarative-guard.patch.manual kdeplasma-addons4-4.14.3-find-akonadi.patch.manual"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$_pkgname-$version" -print -quit)
@@ -36,6 +36,9 @@ build() {
 
 	# Qt4 here has no QtDeclarative; the QML applets cannot build.
 	patch -p1 -i "$SRC/kdeplasma-addons4-4.14.3-qtdeclarative-guard.patch.manual" || return 1
+
+	# kdepimlibs' export references the imported Akonadi target by name.
+	patch -p1 -i "$SRC/kdeplasma-addons4-4.14.3-find-akonadi.patch.manual" || return 1
 
 	# kdelibs before 4.14.3-21 shipped cmake modules that read the location of a
 	# kauth-policy-gen target its exported tools file never contained, so every

@@ -1,0 +1,17 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -15,7 +15,13 @@
+ 
+ macro_optional_find_package(KdepimLibs)
+ macro_log_feature(KDEPIMLIBS_FOUND "kdepimlibs" "KDE PIM libraries" "http://www.kde.org" FALSE "" "Needed for building several Plasma plugins")
+-find_package(Boost)
++
++# kdepimlibs' exported targets link the imported Akonadi target by name,
++# so Akonadi's own config must be loaded or the link line ends up with a
++# bogus -lAkonadi__akonadiprotocolinternals.
++if(KDEPIMLIBS_FOUND)
++  find_package(Akonadi REQUIRED)
++endif()find_package(Boost)
+ 
+ set(LIBATTICA_MIN_VERSION "0.1.1")
+ macro_optional_find_package(LibAttica)
