@@ -7,7 +7,7 @@ description="Additional Plasma widgets and plugins for KDE 4"
 name=kdeplasma-addons4
 _pkgname=kdeplasma-addons
 version=4.14.3
-release=4
+release=5
 source="https://download.kde.org/Attic/4.14.3/src/$_pkgname-$version.tar.xz kdeplasma-addons4-4.14.3-cmake-minimum.patch.manual kdeplasma-addons4-4.14.3-pattern-qimageblitz-fallback.patch.manual"
 
 build() {
@@ -22,7 +22,10 @@ build() {
 	export CFLAGS="${CFLAGS:+$CFLAGS }-std=gnu99"
 	export CXXFLAGS="${CXXFLAGS:+$CXXFLAGS }-std=gnu++98 -fpermissive -Wno-deprecated-declarations"
 
-	patch -p1 -i "$SRC/kdeplasma-addons4-4.14.3-cmake-minimum.patch.manual kdeplasma-addons4-4.14.3-pattern-qimageblitz-fallback.patch.manual" || return 1
+	patch -p1 -i "$SRC/kdeplasma-addons4-4.14.3-cmake-minimum.patch.manual" || return 1
+
+	# QImageBlitz is not packaged; the pattern wallpaper falls back to Qt.
+	patch -p1 -i "$SRC/kdeplasma-addons4-4.14.3-pattern-qimageblitz-fallback.patch.manual" || return 1
 
 	# kdelibs before 4.14.3-21 shipped cmake modules that read the location of a
 	# kauth-policy-gen target its exported tools file never contained, so every
