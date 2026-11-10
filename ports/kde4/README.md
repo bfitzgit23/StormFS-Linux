@@ -73,3 +73,9 @@ config-mode branch when that file resolves and then demands a `QJSON_CONFIG`
 variable the config never defines; the pkg-config fallback is the branch that
 actually works. The other KDE 4 recipes still pass
 `-DCMAKE_DISABLE_FIND_PACKAGE_QJSON=TRUE` because they treat QJSON as optional.
+
+gpgme 2.0 removed the trustlist API outright (`gpgme_op_trustlist_start`,
+`_next`, `_end`, `gpgme_trust_item_t`), yet gpgme++ still compiles against it.
+The recipe generates `gpgme2-trustlist-compat.h` and force-includes it, which
+restores the deleted names as stubs that return `GPG_ERR_NOT_IMPLEMENTED` --
+the same result gpgme has produced for those calls since 1.14.

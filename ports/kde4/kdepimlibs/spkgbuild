@@ -5,7 +5,7 @@
 description="KDE 4 PIM libraries"
 name=kdepimlibs
 version=4.14.3
-release=15
+release=16
 source="https://download.kde.org/Attic/4.14.3/src/kdepimlibs-$version.tar.xz kdepimlibs-4.14.3-cmake-minimum.patch.manual kdepimlibs-4.14.3-export-library-dependencies.patch.manual kdepimlibs-4.14.3-findgpgme-pkgconfig.patch.manual kdepimlibs-4.14.3-gpgmepp-location.patch.manual kdepimlibs-4.14.3-cmp0022-export.patch.manual kdepimlibs-4.14.3-akonadi-location.patch.manual"
 
 build() {
@@ -27,6 +27,80 @@ build() {
 	export CXXFLAGS="${CXXFLAGS:+$CXXFLAGS }-std=gnu++11 -fpermissive -Wno-deprecated-declarations"
 	export CXXFLAGS="$CXXFLAGS -Wno-deprecated-copy -Wno-dangling-reference"
 	export CXXFLAGS="$CXXFLAGS -Wno-implicit-fallthrough -Wno-template-id-cdtor -Wno-cpp"
+
+	# gpgme 2.0 removed the entire trustlist API: gpgme_op_trustlist_start,
+	# _next and _end, gpgme_trust_item_t and the ref/unref helpers.  gpgme++
+	# still compiles against it in trustitem.cpp, context.cpp and
+	# eventloopinteractor.cpp.  The feature has been dead since gpgme 1.14
+	# (every call returns GPG_ERR_NOT_IMPLEMENTED), so put the names back
+	# locally and force the header into every translation unit instead of
+	# rewriting three 2014 sources.
+	cat > "$PWD/gpgme2-trustlist-compat.h" <<'BFS_GPGME_TRUSTLIST_EOF'
+/* gpgme 2.0 removed the trustlist API that gpgme++ 2.8 still compiles
+   against.  Restore the declarations it names; nothing here performs an
+   operation, matching the GPG_ERR_NOT_IMPLEMENTED gpgme has returned from
+   these calls since 1.14. */
+#include <gpgme.h>
+
+#if defined(GPGME_VERSION_NUMBER) && GPGME_VERSION_NUMBER >= 0x020000
+
+struct _gpgme_trust_item {
+    unsigned int _refs;
+    const char *keyid;
+    const char *name;
+    int type;
+    int level;
+    const char *owner_trust;
+    const char *validity;
+    struct _gpgme_trust_item *next;
+};
+
+typedef struct _gpgme_trust_item *gpgme_trust_item_t;
+
+/* gpgme 2 never emits this event any more.  Use a value outside the
+   remaining gpgme_event_io_t members so the switch in
+   eventloopinteractor.cpp does not end up with duplicate case labels. */
+#define GPGME_EVENT_NEXT_TRUSTITEM 0x100
+
+static inline gpgme_error_t
+gpgme_op_trustlist_start( gpgme_ctx_t ctx, const char *pattern, int max_level )
+{
+    (void)ctx; (void)pattern; (void)max_level;
+    return gpgme_error( GPG_ERR_NOT_IMPLEMENTED );
+}
+
+static inline gpgme_error_t
+gpgme_op_trustlist_next( gpgme_ctx_t ctx, gpgme_trust_item_t *item )
+{
+    (void)ctx;
+    if ( item ) {
+        *item = 0;
+    }
+    return gpgme_error( GPG_ERR_NOT_IMPLEMENTED );
+}
+
+static inline gpgme_error_t
+gpgme_op_trustlist_end( gpgme_ctx_t ctx )
+{
+    (void)ctx;
+    return gpgme_error( GPG_ERR_NOT_IMPLEMENTED );
+}
+
+static inline gpgme_trust_item_t
+gpgme_trust_item_ref( gpgme_trust_item_t item )
+{
+    return item;
+}
+
+static inline void
+gpgme_trust_item_unref( gpgme_trust_item_t item )
+{
+    (void)item;
+}
+
+#endif /* gpgme >= 2.0 */
+BFS_GPGME_TRUSTLIST_EOF
+	export CXXFLAGS="$CXXFLAGS -include $PWD/gpgme2-trustlist-compat.h"
 	# kcalcore/kcal use the libical 1.0 API that libical 3 and 4 removed
 	# (is_utc, the _r names, by-value icalrecurrencetype), so build against
 	# the pinned libical1 port and never fall back to /usr/include/libical.
