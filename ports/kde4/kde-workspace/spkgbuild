@@ -5,8 +5,8 @@
 description="KDE 4 Plasma workspace and window manager"
 name=kde-workspace
 version=4.11.14
-release=8
-source="https://download.kde.org/Attic/4.14.3/src/kde-workspace-$version.tar.xz kde-workspace-4.11.14-optional-qtdeclarative.patch.manual kde-workspace-4.11.14-optional-webkit.patch.manual kde-workspace-4.11.14-optional-dbusmenu-blitz.patch.manual kde-workspace-4.11.14-optional-qml-sweep.patch.manual kde-workspace-4.11.14-optional-qml-shell.patch.manual kde-workspace-4.11.14-unique-test-names.patch.manual kde-workspace-4.11.14-window-selection-contains.patch.manual"
+release=9
+source="https://download.kde.org/Attic/4.14.3/src/kde-workspace-$version.tar.xz kde-workspace-4.11.14-optional-qtdeclarative.patch.manual kde-workspace-4.11.14-optional-webkit.patch.manual kde-workspace-4.11.14-optional-dbusmenu-blitz.patch.manual kde-workspace-4.11.14-optional-qml-sweep.patch.manual kde-workspace-4.11.14-optional-qml-shell.patch.manual kde-workspace-4.11.14-unique-test-names.patch.manual kde-workspace-4.11.14-window-selection-contains.patch.manual kde-workspace-4.11.14-fontconfig-freetype-header.patch.manual"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
@@ -44,6 +44,11 @@ build() {
 	# QString::contains() returns bool; the extra "> 0" is what GCC 16 now
 	# rejects, since it no longer accepts the ordered comparison.
 	patch -p1 -i "$SRC/kde-workspace-4.11.14-window-selection-contains.patch.manual" || return 1
+
+	# FcFreeTypeQuery() is declared in fontconfig/fcfreetype.h, but Fc.cpp,
+	# FcEngine.cpp and Utils.cpp call it after including only fontconfig.h,
+	# so the declaration is missing.  Include the header where it is used.
+	patch -p1 -i "$SRC/kde-workspace-4.11.14-fontconfig-freetype-header.patch.manual" || return 1
 
 	export CMAKE_PREFIX_PATH="/opt/qt4:/usr"
 	export PATH="/opt/qt4/bin:$PATH"
