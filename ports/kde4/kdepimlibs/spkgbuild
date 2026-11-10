@@ -5,7 +5,7 @@
 description="KDE 4 PIM libraries"
 name=kdepimlibs
 version=4.14.3
-release=14
+release=15
 source="https://download.kde.org/Attic/4.14.3/src/kdepimlibs-$version.tar.xz kdepimlibs-4.14.3-cmake-minimum.patch.manual kdepimlibs-4.14.3-export-library-dependencies.patch.manual kdepimlibs-4.14.3-findgpgme-pkgconfig.patch.manual kdepimlibs-4.14.3-gpgmepp-location.patch.manual kdepimlibs-4.14.3-cmp0022-export.patch.manual kdepimlibs-4.14.3-akonadi-location.patch.manual"
 
 build() {
@@ -32,6 +32,15 @@ build() {
 	# the pinned libical1 port and never fall back to /usr/include/libical.
 	if [ ! -f /opt/libical/include/libical/ical.h ]; then
 		echo "$name: /opt/libical is missing; build and install libical1 first." >&2
+		return 1
+	fi
+
+	# kdepimlibs marks QJSON TYPE REQUIRED upstream and ends its CMakeLists
+	# with feature_summary(FATAL_ON_MISSING_REQUIRED_PACKAGES), so configure
+	# aborts in that summary when the library is absent -- or when the find is
+	# explicitly disabled.  Fail here with a readable message instead.
+	if [ ! -f /usr/include/qjson/parser.h ]; then
+		echo "$name: /usr/include/qjson/parser.h is missing; build and install qjson first." >&2
 		return 1
 	fi
 
@@ -76,7 +85,6 @@ build() {
 		-DKDEPIM_MOBILE_UI=OFF \
 		-DKDEPIMLIBS_RUN_ISOLATED_TESTS=OFF \
 		-DSTATIC_LIBRARY=OFF \
-		-DCMAKE_DISABLE_FIND_PACKAGE_QJSON=TRUE \
 		-DCMAKE_DISABLE_FIND_PACKAGE_Qca2=TRUE || return 1
 
 	cmake --build build -j "${JOBS:-1}" || return 1

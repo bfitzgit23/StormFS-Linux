@@ -6,6 +6,7 @@ kdelibs
 libical1
 libxml2
 libxslt
+qjson
 qt4
 shared-desktop-ontologies
 shared-mime-info

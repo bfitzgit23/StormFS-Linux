@@ -1,0 +1,40 @@
+# description	: QJson JSON parsing and serialisation library for Qt 4
+# homepage	: https://github.com/flavio/qjson
+# maintainer	: Brian Madonna <bmadonnaster@gmail.com>
+
+description="QJson JSON parsing and serialisation library for Qt 4"
+name=qjson
+version=0.8.1
+release=1
+source="https://github.com/flavio/qjson/archive/refs/tags/$version.tar.gz"
+
+build() {
+	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
+	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+	[ -n "$_bfs_src" ] || return 1
+	cd "$_bfs_src" || return 1
+
+	export CMAKE_PREFIX_PATH="/opt/qt4:/usr"
+	export PATH="/opt/qt4/bin:$PATH"
+	export QT_QMAKE_EXECUTABLE=/opt/qt4/bin/qmake
+	export CFLAGS="${CFLAGS:+$CFLAGS }-std=gnu99"
+	export CXXFLAGS="${CXXFLAGS:+$CXXFLAGS }-std=gnu++98 -fpermissive -Wno-deprecated-declarations"
+
+	cmake -S . -B build -G Ninja \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+		-DQJSON_BUILD_TESTS=OFF || return 1
+
+	cmake --build build -j "${JOBS:-1}" || return 1
+	DESTDIR="$PKG" cmake --install build || return 1
+
+	# qjson 0.8.1 installs a QJSONConfig.cmake that sets QJSON_LIBRARIES and
+	# QJSON_INCLUDE_DIR but never QJSON_CONFIG.  kdepimlibs' FindQJSON.cmake
+	# takes the config-mode branch when that file resolves and then requires
+	# QJSON_CONFIG, so the package reports as missing even though it is right
+	# there.  Ship the pieces that module's fallback path uses instead --
+	# QJson.pc, libqjson.so and include/qjson/*.h -- and leave out the CMake
+	# config that cannot satisfy it.
+	rm -rf "$PKG/usr/lib/cmake/qjson" || return 1
+}
