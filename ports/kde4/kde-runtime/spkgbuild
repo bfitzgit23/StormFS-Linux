@@ -5,8 +5,8 @@
 description="KDE 4 runtime components"
 name=kde-runtime
 version=4.14.3
-release=4
-source="https://download.kde.org/Attic/4.14.3/src/kde-runtime-$version.tar.xz kde-runtime-4.14.3-cmake-minimum.patch.manual kde-runtime-4.14.3-optional-kdeclarative.patch.manual"
+release=5
+source="https://download.kde.org/Attic/4.14.3/src/kde-runtime-$version.tar.xz kde-runtime-4.14.3-cmake-minimum.patch.manual kde-runtime-4.14.3-optional-kdeclarative.patch.manual kde-runtime-4.14.3-duplicate-handbook-targets.patch.manual"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
@@ -29,6 +29,13 @@ build() {
 	# configure; only the QML plugins in plasma/declarativeimports need it, so
 	# make the find optional and skip that directory when it is absent.
 	patch -p1 -i "$SRC/kde-runtime-4.14.3-optional-kdeclarative.patch.manual" || return 1
+
+	# kde4_create_handbook() names its custom target after the directory it
+	# runs in, so doc/kcontrol/bookmarks and doc/kioslave/bookmarks both want
+	# "bookmarks-handbook" (likewise smb).  CMake 4 with the raised policy
+	# minimum enforces CMP0002 and aborts on the duplicate; skip the kioslave
+	# copies so the kcontrol handbook is the one that gets built.
+	patch -p1 -i "$SRC/kde-runtime-4.14.3-duplicate-handbook-targets.patch.manual" || return 1
 
 	# kdelibs before 4.14.3-21 shipped cmake modules that read the location of a
 	# kauth-policy-gen target its exported tools file never contained, so every
