@@ -5,8 +5,8 @@
 description="KDE 4 runtime components"
 name=kde-runtime
 version=4.14.3
-release=5
-source="https://download.kde.org/Attic/4.14.3/src/kde-runtime-$version.tar.xz kde-runtime-4.14.3-cmake-minimum.patch.manual kde-runtime-4.14.3-optional-kdeclarative.patch.manual kde-runtime-4.14.3-duplicate-handbook-targets.patch.manual"
+release=6
+source="https://download.kde.org/Attic/4.14.3/src/kde-runtime-$version.tar.xz kde-runtime-4.14.3-cmake-minimum.patch.manual kde-runtime-4.14.3-optional-kdeclarative.patch.manual kde-runtime-4.14.3-duplicate-handbook-targets.patch.manual kde-runtime-4.14.3-skip-html-thumbnail.patch.manual"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
@@ -36,6 +36,13 @@ build() {
 	# minimum enforces CMP0002 and aborts on the duplicate; skip the kioslave
 	# copies so the kcontrol handbook is the one that gets built.
 	patch -p1 -i "$SRC/kde-runtime-4.14.3-duplicate-handbook-targets.patch.manual" || return 1
+
+	# htmlcreator.cpp is a QtWebKit plugin: it includes <QtWebKit/QWebFrame>
+	# and <kwebpage.h> from kdelibs' kdewebkit module.  Qt 4 here is configured
+	# without WebKit and kdelibs no longer builds kdewebkit, so the plugin can
+	# never compile; skip it and drop its service file so nothing advertises a
+	# thumbnailer that is not installed.
+	patch -p1 -i "$SRC/kde-runtime-4.14.3-skip-html-thumbnail.patch.manual" || return 1
 
 	# kdelibs before 4.14.3-21 shipped cmake modules that read the location of a
 	# kauth-policy-gen target its exported tools file never contained, so every

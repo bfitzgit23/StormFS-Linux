@@ -1,0 +1,26 @@
+--- a/kioslave/thumbnail/CMakeLists.txt
++++ b/kioslave/thumbnail/CMakeLists.txt
+@@ -90,6 +90,7 @@
+ ########### next target ###############
+ 
+ if(NOT WINCE)
++if(QT_QTWEBKIT_LIBRARY AND KDE4_KDEWEBKIT_LIBS)
+ set(htmlthumbnail_PART_SRCS htmlcreator.cpp)
+ 
+ kde4_add_plugin(htmlthumbnail ${htmlthumbnail_PART_SRCS})
+@@ -97,6 +98,7 @@
+ target_link_libraries(htmlthumbnail ${KDE4_KDEWEBKIT_LIBS})
+ 
+ install(TARGETS htmlthumbnail DESTINATION ${PLUGIN_INSTALL_DIR})
++endif(QT_QTWEBKIT_LIBRARY AND KDE4_KDEWEBKIT_LIBS)
+ endif(NOT WINCE)
+ 
+ ########### next target ###############
+@@ -189,7 +191,6 @@
+     imagethumbnail.desktop
+     jpegthumbnail.desktop
+     textthumbnail.desktop
+-    htmlthumbnail.desktop
+     djvuthumbnail.desktop
+     desktopthumbnail.desktop
+     comicbookthumbnail.desktop
