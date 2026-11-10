@@ -1,0 +1,20 @@
+--- a/drkonqi/reportassistantpages_bugzilla.cpp
++++ b/drkonqi/reportassistantpages_bugzilla.cpp
+@@ -38,7 +38,7 @@
+ 
+ /* Unhandled error dialog includes */
+ #include <KFileDialog>
+-#include <KWebView>
++#include <QTextBrowser>
+ #include <KIO/Job>
+ #include <KIO/NetAccess>
+ #include <KTemporaryFile>
+@@ -806,7 +806,7 @@
+ 
+     setAttribute(Qt::WA_DeleteOnClose);
+ 
+-    KWebView * htmlView = new KWebView(this);
++    QTextBrowser *htmlView = new QTextBrowser(this);
+ 
+     QLabel * iconLabel = new QLabel(this);
+     iconLabel->setFixedSize(32, 32);
