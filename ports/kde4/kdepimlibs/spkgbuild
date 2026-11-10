@@ -5,8 +5,8 @@
 description="KDE 4 PIM libraries"
 name=kdepimlibs
 version=4.14.3
-release=16
-source="https://download.kde.org/Attic/4.14.3/src/kdepimlibs-$version.tar.xz kdepimlibs-4.14.3-cmake-minimum.patch.manual kdepimlibs-4.14.3-export-library-dependencies.patch.manual kdepimlibs-4.14.3-findgpgme-pkgconfig.patch.manual kdepimlibs-4.14.3-gpgmepp-location.patch.manual kdepimlibs-4.14.3-cmp0022-export.patch.manual kdepimlibs-4.14.3-akonadi-location.patch.manual"
+release=17
+source="https://download.kde.org/Attic/4.14.3/src/kdepimlibs-$version.tar.xz kdepimlibs-4.14.3-cmake-minimum.patch.manual kdepimlibs-4.14.3-export-library-dependencies.patch.manual kdepimlibs-4.14.3-findgpgme-pkgconfig.patch.manual kdepimlibs-4.14.3-gpgmepp-location.patch.manual kdepimlibs-4.14.3-cmp0022-export.patch.manual kdepimlibs-4.14.3-akonadi-location.patch.manual kdepimlibs-4.14.3-bug338658-1.patch.manual kdepimlibs-4.14.3-bug338658-2.patch.manual"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
@@ -127,6 +127,16 @@ BFS_GPGME_TRUSTLIST_EOF
 	patch -p1 -i "$SRC/kdepimlibs-4.14.3-gpgmepp-location.patch.manual" || return 1
 	patch -p1 -i "$SRC/kdepimlibs-4.14.3-cmp0022-export.patch.manual" || return 1
 	patch -p1 -i "$SRC/kdepimlibs-4.14.3-akonadi-location.patch.manual" || return 1
+
+	# The two patches Arch's kdepimlibs4 package carried, for KDE bug 338658.
+	# ItemSync merged on GID, which is not guaranteed unique within a
+	# collection, so a resource could run into "multiple merge candidates" and
+	# abort the sync.  Upstream 4.14.11 (commits 4429619 and d8b5da7) made RID
+	# the default and left GID as an explicit opt-in; both hunks apply to
+	# 4.14.3 with a small offset and touch only akonadi/itemsync.*,
+	# akonadi/resourcebase.* and akonadi/tests/itemsynctest.cpp.
+	patch -p1 -i "$SRC/kdepimlibs-4.14.3-bug338658-1.patch.manual" || return 1
+	patch -p1 -i "$SRC/kdepimlibs-4.14.3-bug338658-2.patch.manual" || return 1
 
 	# The exported target file must carry the keyword, otherwise CMake refuses
 	# to export any target that still has an old-style link interface.

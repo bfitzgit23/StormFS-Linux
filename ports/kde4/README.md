@@ -79,3 +79,8 @@ gpgme 2.0 removed the trustlist API outright (`gpgme_op_trustlist_start`,
 The recipe generates `gpgme2-trustlist-compat.h` and force-includes it, which
 restores the deleted names as stubs that return `GPG_ERR_NOT_IMPLEMENTED` --
 the same result gpgme has produced for those calls since 1.14.
+
+Two further patches are the ones Arch's `kdepimlibs4` package carried for KDE
+bug 338658: they make `ItemSync` merge on RID by default and keep GID as an
+explicit opt-in, so a resource no longer aborts with "multiple merge
+candidates" when GIDs collide. Both apply to 4.14.3 with small offsets.

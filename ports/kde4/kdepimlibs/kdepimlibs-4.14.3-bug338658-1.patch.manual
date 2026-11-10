@@ -1,0 +1,191 @@
+--- a/akonadi/itemsync.cpp
++++ b/akonadi/itemsync.cpp
+@@ -61,6 +61,7 @@ public:
+         , mProcessingBatch(false)
+         , mDisableAutomaticDeliveryDone(false)
+         , mBatchSize(10)
++        , mMergeMode(Akonadi::ItemSync::RIDMerge)
+     {
+         // we want to fetch all data by default
+         mFetchScope.fetchFullPayload();
+@@ -116,6 +117,7 @@ public:
+     bool mDisableAutomaticDeliveryDone;
+ 
+     int mBatchSize;
++    Akonadi::ItemSync::MergeMode mMergeMode;
+ };
+ 
+ void ItemSyncPrivate::createOrMerge(const Item &item)
+@@ -127,11 +129,13 @@ void ItemSyncPrivate::createOrMerge(const Item &item)
+     }
+     mPendingJobs++;
+     ItemCreateJob *create = new ItemCreateJob(item, mSyncCollection, subjobParent());
+-    if (!item.gid().isEmpty()) {
+-        create->setMerge(ItemCreateJob::GID|ItemCreateJob::Silent);
+-    } else {
+-        create->setMerge(ItemCreateJob::RID|ItemCreateJob::Silent);
++    ItemCreateJob::MergeOptions merge = ItemCreateJob::Silent;
++    if (mMergeMode == ItemSync::RIDMerge) {
++        merge |= ItemCreateJob::RID;
++    } else if (mMergeMode == ItemSync::GIDMerge && !item.gid().isEmpty()) {
++        merge |= ItemCreateJob::GID;
+     }
++    create->setMerge(merge);
+     q->connect(create, SIGNAL(result(KJob*)), q, SLOT(slotLocalChangeDone(KJob*)));
+ }
+ 
+@@ -539,5 +543,16 @@ void ItemSync::setBatchSize(int size)
+     d->mBatchSize = size;
+ }
+ 
++ItemSync::MergeMode ItemSync::mergeMode() const
++{
++    Q_D(const ItemSync);
++    return d->mMergeMode;
++}
++
++void ItemSync::setMergeMode(MergeMode mergeMode)
++{
++    Q_D(ItemSync);
++    d->mMergeMode = mergeMode;
++}
+ 
+ #include "moc_itemsync.cpp"
+diff --git a/akonadi/itemsync.h b/akonadi/itemsync.h
+index 08729bdad..e56609863 100644
+--- a/akonadi/itemsync.h
++++ b/akonadi/itemsync.h
+@@ -56,6 +56,12 @@ class AKONADI_EXPORT ItemSync : public Job
+     Q_OBJECT
+ 
+ public:
++    enum MergeMode
++    {
++        RIDMerge,
++        GIDMerge
++    };
++
+     /**
+      * Creates a new item synchronizer.
+      *
+@@ -209,6 +215,27 @@ public:
+      */
+     void setDisableAutomaticDeliveryDone(bool disable);
+ 
++    /**
++     * Returns current merge mode
++     *
++     * @see setMergeMode()
++     * @since 5.1
++     */
++    MergeMode mergeMode() const;
++
++    /**
++     * Set what merge method should be used for next ItemSync run
++     *
++     * By default ItemSync uses RIDMerge method.
++     *
++     * See ItemCreateJob for details on Item merging.
++     *
++     * @note You must call this method before starting the sync, changes afterwards lead to undefined results.
++     * @see mergeMode
++     * @since 4.14.11
++     */
++    void setMergeMode(MergeMode mergeMode);
++
+ Q_SIGNALS:
+     /**
+      * Signals the resource that new items can be delivered.
+diff --git a/akonadi/resourcebase.cpp b/akonadi/resourcebase.cpp
+index 5cd0afd40..8a5bb60a3 100644
+--- a/akonadi/resourcebase.cpp
++++ b/akonadi/resourcebase.cpp
+@@ -75,6 +75,7 @@ public:
+         , mItemSyncer(0)
+         , mItemSyncFetchScope(0)
+         , mItemTransactionMode(ItemSync::SingleTransaction)
++        , mItemMergeMode(ItemSync::RIDMerge)
+         , mCollectionSyncer(0)
+         , mHierarchicalRid(false)
+         , mUnemittedProgress(0)
+@@ -179,6 +180,7 @@ public:
+             mItemSyncer = new ItemSync(q->currentCollection());
+             mItemSyncer->setTransactionMode(mItemTransactionMode);
+             mItemSyncer->setBatchSize(mItemSyncBatchSize);
++            mItemSyncer->setMergeMode(mItemMergeMode);
+             if (mItemSyncFetchScope) {
+                 mItemSyncer->setFetchScope(*mItemSyncFetchScope);
+             }
+@@ -448,6 +450,7 @@ public:
+     ItemSync *mItemSyncer;
+     ItemFetchScope *mItemSyncFetchScope;
+     ItemSync::TransactionMode mItemTransactionMode;
++    ItemSync::MergeMode mItemMergeMode;
+     CollectionSync *mCollectionSyncer;
+     bool mHierarchicalRid;
+     QTimer mProgressEmissionCompressor;
+@@ -1314,6 +1317,12 @@ void ResourceBase::setItemSynchronizationFetchScope(const ItemFetchScope &fetchS
+     *(d->mItemSyncFetchScope) = fetchScope;
+ }
+ 
++void ResourceBase::setItemMergingMode(ItemSync::MergeMode mode)
++{
++    Q_D(ResourceBase);
++    d->mItemMergeMode = mode;
++}
++
+ void ResourceBase::setAutomaticProgressReporting(bool enabled)
+ {
+     Q_D(ResourceBase);
+diff --git a/akonadi/resourcebase.h b/akonadi/resourcebase.h
+index 9e57d3a91..eba7f4b2c 100644
+--- a/akonadi/resourcebase.h
++++ b/akonadi/resourcebase.h
+@@ -529,6 +529,20 @@ protected:
+      */
+     void setItemTransactionMode(ItemSync::TransactionMode mode);
+ 
++    /**
++     * Set merge mode for item sync'ing.
++     *
++     * Default merge mode is RIDMerge.
++     *
++     * @note This method must be called before first call to itemRetrieved(),
++     * itemsRetrieved() or itemsRetrievedIncremental().
++     *
++     * @param mode Item merging mode (see ItemCreateJob for details on item merging)
++     * @see Akonadi::ItemSync::MergeMode
++     * @ince 4.14.11
++     */
++    void setItemMergingMode(ItemSync::MergeMode mode);
++
+     /**
+      * Set the fetch scope applied for item synchronization.
+      * By default, the one set on the changeRecorder() is used. However, it can make sense
+diff --git a/akonadi/tests/itemsynctest.cpp b/akonadi/tests/itemsynctest.cpp
+index 9ea7453bf..31f97ed3e 100644
+--- a/akonadi/tests/itemsynctest.cpp
++++ b/akonadi/tests/itemsynctest.cpp
+@@ -438,14 +438,19 @@ class ItemsyncTest : public QObject
+        AKVERIFYEXEC(syncer);
+ 
+        Item::List resultItems = fetchItems(col);
+-       QCOMPARE(resultItems.count(), 2);
++       QCOMPARE(resultItems.count(), 3);
+ 
+-       ItemFetchJob *fetchJob = new ItemFetchJob(modifiedItem);
++       Item item;
++       item.setGid(QLatin1String("gid2"));
++       ItemFetchJob *fetchJob = new ItemFetchJob(item);
+        fetchJob->fetchScope().fetchFullPayload();
+        AKVERIFYEXEC(fetchJob);
+-       QCOMPARE(fetchJob->items().size(), 1);
++       QCOMPARE(fetchJob->items().size(), 2);
+        QCOMPARE(fetchJob->items().first().payload<QByteArray>(), QByteArray("payload2"));
+        QCOMPARE(fetchJob->items().first().remoteId(), QString::fromLatin1("rid3"));
++       QCOMPARE(fetchJob->items().first().remoteId(), QLatin1String("rid3"));
++       QCOMPARE(fetchJob->items().at(1).payload<QByteArray>(), QByteArray("payload1"));
++       QCOMPARE(fetchJob->items().at(1).remoteId(), QLatin1String("rid2"));
+     }
+ 
+     /*
