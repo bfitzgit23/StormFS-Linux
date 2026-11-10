@@ -929,7 +929,7 @@ install_live_runtime() {
     local root="$1"
     log "Installing BFSOS live-session policy"
     mkdir -p "$root/home/bfs" "$root/usr/local/sbin" "$root/etc/sudoers.d"
-    mkdir -p "$root/etc/init.d" "$root/etc/runlevels/default"
+    mkdir -p "$root/etc/init.d" "$root/etc/runlevels/default" "$root/etc/runlevels/sysinit"
     mkdir -p "$root/home/bfs/BFSOS"
     rsync -a --delete \
         --exclude '/iso-work/' \
@@ -1244,6 +1244,8 @@ EOS
     chown 0:0 "$root/etc/init.d/bfs-live-init"
     rm -f "$root"/etc/ssh/ssh_host_*
     chroot "$root" /bin/bash -lc '
+        rc-update add udev sysinit 2>/dev/null || true
+        rc-update add udev-postmount sysinit 2>/dev/null || true
         rc-update add bfs-live-init default 2>/dev/null || true
         rc-update add networkmanager default 2>/dev/null || true
         rc-update add lxdm default 2>/dev/null || true

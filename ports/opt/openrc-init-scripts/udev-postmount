@@ -1,0 +1,18 @@
+#!/sbin/openrc-run
+description="Re-trigger udev events after the system has started"
+
+depend() {
+    after udev
+    keyword -docker -prefix -systemd-nspawn
+}
+
+start() {
+    ebegin "Re-triggering udev events"
+    /sbin/udevadm trigger --type=devices --action=change
+    /sbin/udevadm settle --timeout=30
+    eend $?
+}
+
+stop() {
+    return 0
+}

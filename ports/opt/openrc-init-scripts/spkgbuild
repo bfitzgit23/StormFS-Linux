@@ -6,8 +6,8 @@
 description="BFSOS OpenRC service scripts"
 name=openrc-init-scripts
 version=4
-release=6
-source="networkmanager acpid bluetooth dbus gpm chronyd cups sshd samba avahi-daemon nftables rsyncd krb5-kdc krb5-kadmind wpa_supplicant smartd bfs-kernel-finalize sddm lightdm lxdm plasmalogin virtlogd libvirtd pipewire.desktop pipewire-pulse.desktop wireplumber.desktop"
+release=7
+source="networkmanager acpid bluetooth dbus gpm chronyd cups sshd samba avahi-daemon nftables rsyncd krb5-kdc krb5-kadmind wpa_supplicant smartd bfs-kernel-finalize sddm lightdm lxdm plasmalogin virtlogd libvirtd pipewire.desktop pipewire-pulse.desktop wireplumber.desktop udev udev-postmount"
 
 build() {
     install -d -m 0755 "$PKG/etc/init.d" \
@@ -21,11 +21,14 @@ build() {
     # is not installed.  Enable with e.g.:
     #   rc-update add nftables default
     #   rc-update add sddm default   (after configuring the VT/inittab)
+    # udev must start in sysinit: it creates the /dev/input nodes that
+    # libinput and Xorg enumerate, so without it keyboards, mice and
+    # touchpads are invisible to the graphical session.
     for service in networkmanager acpid bluetooth dbus gpm chronyd \
                    cups sshd samba avahi-daemon nftables rsyncd \
                    krb5-kdc krb5-kadmind wpa_supplicant smartd \
                    bfs-kernel-finalize sddm lightdm lxdm plasmalogin \
-                   virtlogd libvirtd; do
+                   virtlogd libvirtd udev udev-postmount; do
         install -m 0755 "$service" "$PKG/etc/init.d/$service" || return 1
     done
 

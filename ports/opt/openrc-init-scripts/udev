@@ -1,0 +1,32 @@
+#!/sbin/openrc-run
+description="udev device manager"
+
+depend() {
+    need sysfs devfs
+    provide udev
+    before checkroot
+    keyword -docker -prefix -systemd-nspawn
+}
+
+start() {
+    ebegin "Starting udev"
+
+    # The initramfs may leave udevd running; eudev creates this control
+    # socket.  Starting a second daemon would only fail on it.
+    if [ ! -S /run/udev/control ]; then
+        /sbin/udevd --daemon --resolve-names=never
+    fi
+
+    /sbin/udevadm trigger --type=subsystems --action=add
+    /sbin/udevadm trigger --type=devices --action=add
+    /sbin/udevadm settle --timeout=30
+    eend $?
+}
+
+stop() {
+    ebegin "Stopping udev"
+    if [ -S /run/udev/control ]; then
+        /sbin/udevadm control --exit
+    fi
+    eend $?
+}

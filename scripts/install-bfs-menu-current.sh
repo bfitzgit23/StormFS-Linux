@@ -8534,7 +8534,7 @@ fi
 # absent one, so use a plain forced install unless the database says the
 # package is present but its service scripts are missing.
 bfs_openrc_scripts_missing=no
-for bfs_openrc_script in gpm networkmanager sshd dbus cups nftables rsyncd; do
+for bfs_openrc_script in gpm networkmanager sshd dbus cups nftables rsyncd udev; do
         [[ -x "/etc/init.d/$bfs_openrc_script" ]] || bfs_openrc_scripts_missing=yes
 done
 bfs_openrc_scripts_installed=no
@@ -8556,7 +8556,7 @@ if [[ "$bfs_openrc_scripts_installed" == no ||
                 }
         fi
 fi
-if [[ ! -x /etc/init.d/gpm || ! -x /etc/init.d/networkmanager ]]; then
+if [[ ! -x /etc/init.d/gpm || ! -x /etc/init.d/networkmanager || ! -x /etc/init.d/udev ]]; then
         echo "ERROR: openrc-init-scripts did not install the expected /etc/init.d scripts." >&2
         exit 1
 fi
@@ -8587,6 +8587,12 @@ remove_deprecated_local_start_hook() {
                 log "Disabled deprecated OpenRC local_start hook: $local_conf"
         fi
 }
+
+# udev belongs in sysinit: it creates the /dev/input nodes that libinput
+# enumerates, so without it keyboards, mice and touchpads do not work.
+mkdir -p /etc/runlevels/sysinit
+rc-update add udev sysinit 2>/dev/null || true
+rc-update add udev-postmount sysinit 2>/dev/null || true
 
 if [[ "$INSTALL_GPM_VALUE" == yes ]]; then
         if offline_rc_present gpm; then

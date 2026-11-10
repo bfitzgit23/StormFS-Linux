@@ -90,6 +90,13 @@ if [ -d "$ROOT/usr/share/grub/themes/stormfs" ]; then
 fi
 
 # Enable OpenRC services
+# udev belongs in sysinit: it creates the /dev/input nodes that libinput
+# enumerates, so without it keyboards, mice and touchpads do not work.
+# Older openrc packages only create /etc/runlevels itself.
+mkdir -p "$ROOT/etc/runlevels/sysinit"
+_run rc-update add udev sysinit 2>/dev/null || true
+_run rc-update add udev-postmount sysinit 2>/dev/null || true
+
 for svc in dbus NetworkManager sshd; do
 	if [ -f "$ROOT/usr/lib/systemd/system/${svc}.service" ] || \
 	   [ -f "$ROOT/etc/systemd/system/${svc}.service" ]; then
