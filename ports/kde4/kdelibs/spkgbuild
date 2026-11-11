@@ -5,8 +5,8 @@
 description="KDE 4 core libraries"
 name=kdelibs
 version=4.14.3
-release=22
-source="https://download.kde.org/Attic/4.14.3/src/kdelibs-$version.tar.xz kdelibs-4.14.3-cmake4.patch.manual kdelibs-4.14.3-cmake4-interface-libs.patch.manual kdelibs-4.14.3-no-tests.patch.manual kdelibs-4.14.3-fake-kauth-backend.patch.manual kdelibs-4.14.3-klocale-bool-comparison.patch.manual kdelibs-4.14.3-optional-dbusmenuqt.patch.manual kdelibs-4.14.3-optional-declarative.patch.manual kdelibs-4.14.3-ordered.patch.manual kdelibs-4.14.3-jasper-exported.patch.manual kdelibs-4.14.3-openssl-1.1.patch.manual"
+release=24
+source="https://download.kde.org/Attic/4.14.3/src/kdelibs-$version.tar.xz kdelibs-4.14.3-cmake4.patch.manual kdelibs-4.14.3-cmake4-interface-libs.patch.manual kdelibs-4.14.3-no-tests.patch.manual kdelibs-4.14.3-fake-kauth-backend.patch.manual kdelibs-4.14.3-klocale-bool-comparison.patch.manual kdelibs-4.14.3-optional-dbusmenuqt.patch.manual kdelibs-4.14.3-optional-declarative.patch.manual kdelibs-4.14.3-ordered.patch.manual kdelibs-4.14.3-jasper-exported.patch.manual kdelibs-4.14.3-openssl-1.1.patch.manual kdelibs-4.14.3-kauth-action-target.patch.manual kdelibs-4.14.3-no-qtwebkit-probes.patch.manual"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
@@ -74,6 +74,19 @@ build() {
 	patch -p1 -i "$SRC/kdelibs-4.14.3-ordered.patch.manual" || return 1
 	patch -p1 -i "$SRC/kdelibs-4.14.3-jasper-exported.patch.manual" || return 1
 	patch -p1 -i "$SRC/kdelibs-4.14.3-openssl-1.1.patch.manual" || return 1
+
+	# CMake 4 rejects target names containing spaces.  KDE4's KAuth
+	# policy generator used "actions for ${HELPER_ID}", so rename that
+	# custom target before downstream packages call the macro.
+	patch -p1 -i "$SRC/kdelibs-4.14.3-kauth-action-target.patch.manual" || return 1
+
+	# Qt 4 has no QtWebKit and kdelibs omits the kdewebkit module, but the
+	# installed FindQt4 and FindKDE4Internal modules still probe QtWebKit and
+	# export KDE4_KDEWEBKIT_*.  That lets downstream KDE 4 packages select
+	# WebKit code paths or link a library that was never built.  Remove the
+	# probes from the exported modules so the whole KDE 4 stack agrees that
+	# WebKit is unavailable.
+	patch -p1 -i "$SRC/kdelibs-4.14.3-no-qtwebkit-probes.patch.manual" || return 1
 
 	export CMAKE_PREFIX_PATH="/opt/qt4:/usr"
 	export PATH="/opt/qt4/bin:$PATH"
