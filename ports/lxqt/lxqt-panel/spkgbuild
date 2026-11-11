@@ -5,7 +5,7 @@
 description="Lxqt Panel component for LXQt"
 name=lxqt-panel
 version=2.4.1
-release=2
+release=3
 source="https://github.com/lxqt/${name}/releases/download/${version}/${name}-${version}.tar.xz"
 
 build() {
@@ -22,5 +22,5 @@ cmake -D CMAKE_INSTALL_PREFIX=/usr \
       -D CMAKE_BUILD_TYPE=Release  \
       ..                           &&
 make
-make install
+DESTDIR="$PKG" make install
 }

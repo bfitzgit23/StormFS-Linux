@@ -4,7 +4,7 @@
 description="telepathy-glib package"
 name=telepathy-glib
 version=0.24.2
-release=1
+release=2
 source="https://telepathy.freedesktop.org/releases/${name}/${name}-${version}.tar.gz"
 
 build() {
@@ -17,5 +17,5 @@ PYTHON=/usr/bin/python3 ./configure --prefix=/usr          \
                                     --enable-vala-bindings \
                                     --disable-static       &&
 make
-make install
+DESTDIR="$PKG" make install
 }

@@ -4,7 +4,7 @@
 description="seahorse package"
 name=seahorse
 version=47.0.1
-release=3
+release=4
 source="https://download.gnome.org/sources/$name/47/$name-$version.tar.xz"
 
 build() {
@@ -20,5 +20,5 @@ cd    build &&
 
 meson setup --prefix=/usr --buildtype=release .. &&
 ninja || return 1
-ninja install || return 1
+DESTDIR="$PKG" ninja install || return 1
 }

@@ -4,7 +4,7 @@
 description="gucharmap package"
 name=gucharmap
 version=17.0.2
-release=1
+release=2
 renames=(SKIP UCD.zipx Unihan.zipx)
 source="https://gitlab.gnome.org/GNOME/${name}/-/archive/${version}/${name}-${version}.tar.bz2 https://www.unicode.org/Public/17.0.0/ucd/UCD.zip https://www.unicode.org/Public/17.0.0/ucd/Unihan.zip"
 
@@ -26,5 +26,5 @@ meson setup --prefix=/usr       \
             -Ddocs=false        \
             ..                  &&
 ninja
-ninja install
+DESTDIR="$PKG" ninja install
 }
