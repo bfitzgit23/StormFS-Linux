@@ -14,5 +14,5 @@ libplasma
 linux-pam
 plasma-workspace
 kwin
-openrc-init-scripts
+sysvinit-init-scripts
 qt6

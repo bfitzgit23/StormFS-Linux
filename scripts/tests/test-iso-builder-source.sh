@@ -88,22 +88,20 @@ grep -Fq 'remove_deprecated_local_start_hook' "$iso" || fail 'ISO builder does n
 grep -Fq 'local.bfsos-disabled' "$iso" || fail 'ISO builder does not disable the inherited local hook'
 grep -q 'passwd bfs' "$iso" || fail 'temporary bfs live-password prompt is missing'
 grep -q 'ssh-keygen -A' "$iso" || fail 'runtime SSH host-key generation is missing'
-grep -q 'rc-service sshd' "$iso" || fail 'runtime SSH startup is missing'
-grep -q 'rc-update add networkmanager default' "$iso" \
-	|| fail 'NetworkManager live default is missing'
-grep -q 'openrc-init-scripts' "$iso" || fail 'ISO package set does not install the OpenRC service scripts'
-grep -q 'need networkmanager' "$iso" || fail 'live init does not depend on networkmanager'
-! grep -q 'need NetworkManager' "$iso" || fail 'live init still uses the systemd-style NetworkManager name'
+grep -q '/etc/rc.d/sshd start' "$iso" || fail 'runtime SSH startup is missing'
+grep -q 'DAEMONS="dbus consolekit networkmanager lightdm bfs-live-init"' "$iso" \
+	|| fail 'live rc.conf does not enable the expected services'
+grep -q 'sysvinit-init-scripts' "$iso" || fail 'ISO package set does not install the service scripts'
+grep -q 'consolekit' "$iso" || fail 'live rc.conf does not enable ConsoleKit'
 grep -q 'rootfs.squashfs' "$iso" || fail 'SquashFS live-root staging is missing'
 grep -q 'autologin-user=bfs' "$iso" || fail 'live LightDM autologin is missing'
 grep -q 'autologin-user-timeout=0' "$iso" || fail 'live LightDM autologin timeout is missing'
 grep -q 'autologin-session=xfce' "$iso" || fail 'live LightDM autologin session is missing'
-grep -q 'rc-update add dbus default' "$iso" || fail 'live D-Bus service is not enabled'
-grep -q 'rc-update add consolekit default' "$iso" || fail 'live ConsoleKit service is not enabled'
-grep -q 'rc-update add lightdm default' "$iso" || fail 'live LightDM service is not enabled'
+grep -q 'DAEMONS="dbus consolekit networkmanager lightdm bfs-live-init"' "$iso" \
+	|| fail 'live rc.conf does not enable the expected services'
 grep -q 'chpasswd -c SHA512' "$iso" || fail 'live bfs fallback password is not set'
-grep -q 'need localmount dbus' "$ROOT/ports/opt/openrc-init-scripts/lightdm" || \
-	fail 'LightDM does not require the D-Bus service'
+[ -x "$ROOT/ports/opt/sysvinit-init-scripts/lightdm" ] || \
+	fail 'LightDM rc service script is missing'
 ! grep -Fq '    startx' "$iso" || fail 'live session still starts startx'
 grep -q 'mount -t overlay overlay' "$iso" || fail 'writable overlay root is missing'
 

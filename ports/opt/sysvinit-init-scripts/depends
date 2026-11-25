@@ -1,6 +1,7 @@
 sysvinit
 lfs-bootscripts
 dbus
+consolekit
 networkmanager
 acpid
 bluez

@@ -88,9 +88,21 @@
 +set_property(TARGET khtml APPEND PROPERTY INTERFACE_LINK_LIBRARIES ${KDE4_PHONON_LIBRARY} kparts kjs kio kdeui kdecore ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
 --- a/kio/CMakeLists.txt
 +++ b/kio/CMakeLists.txt
+@@ -332 +332 @@
+-  target_link_libraries(kio ${KDE4_NEPOMUK_LIBRARY} nepomukquery nepomukutils)
++  target_link_libraries(kio LINK_PRIVATE ${KDE4_NEPOMUK_LIBRARY} nepomukquery nepomukutils)
+@@ -334 +334 @@
+-target_link_libraries(kio ${KDE4_KDEUI_LIBS} ${ZLIB_LIBRARY} ${QT_QTNETWORK_LIBRARY} ${QT_QTXML_LIBRARY} ${QT_QTSVG_LIBRARY} ${X11_LIBRARIES} ${KIO_EXTRA_LIBS})
++target_link_libraries(kio LINK_PRIVATE ${KDE4_KDEUI_LIBS} ${ZLIB_LIBRARY} ${QT_QTNETWORK_LIBRARY} ${QT_QTXML_LIBRARY} ${QT_QTSVG_LIBRARY} ${X11_LIBRARIES} ${KIO_EXTRA_LIBS})
 @@ -335 +335 @@
 -target_link_libraries(kio LINK_INTERFACE_LIBRARIES kdeui kdecore ${QT_QTNETWORK_LIBRARY} ${QT_QTXML_LIBRARY} ${QT_QTGUI_LIBRARY} )
 +set_property(TARGET kio APPEND PROPERTY INTERFACE_LINK_LIBRARIES kdeui kdecore ${QT_QTNETWORK_LIBRARY} ${QT_QTXML_LIBRARY} ${QT_QTGUI_LIBRARY})
+@@ -338 +338 @@
+-   target_link_libraries(kio ${ACL_LIBS})
++   target_link_libraries(kio LINK_PRIVATE ${ACL_LIBS})
+@@ -342 +342 @@
+-   target_link_libraries(kio ${X11_Xrender_LIB})
++   target_link_libraries(kio LINK_PRIVATE ${X11_Xrender_LIB})
 --- a/knewstuff/knewstuff2/CMakeLists.txt
 +++ b/knewstuff/knewstuff2/CMakeLists.txt
 @@ -57 +57 @@

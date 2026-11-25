@@ -12,10 +12,9 @@ build() {
 	install -d "$PKG/usr/share/bfsos/metapackages" || return 1
 	printf '%s\n' "$name $version" > "$PKG/usr/share/bfsos/metapackages/$name" || return 1
 
-	# kde-workspace builds with WITH_KDM=OFF, so the KDM session entry is
-	# never installed and /usr/share/xsessions has no KDE session for LXDM
-	# or any other display manager to list.  Ship the entry with the meta
-	# package, which pulls in startkde through kde-workspace.
+	# Keep a KDE session entry for display managers other than KDM.  KDM
+	# installs its own session entries under its data directory, but
+	# LightDM, LXDM and xinit read /usr/share/xsessions.
 	install -Dm644 "$SRC/kde-plasma.desktop" \
 		"$PKG/usr/share/xsessions/kde-plasma.desktop" || return 1
 }

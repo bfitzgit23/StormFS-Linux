@@ -2,6 +2,7 @@
 name="kdm"
 description="KDE Display Manager"
 command="/usr/bin/kdm"
+command_args="-nodaemon"
 command_background=true
 pidfile="/run/kdm.pid"
 
@@ -11,7 +12,5 @@ depend() {
     use logger
 }
 
-# KDM is optional: the current kde-workspace recipe builds with
-# WITH_KDM=OFF, so LightDM is the ISO display manager.  This service is
-# available for installations that provide /usr/bin/kdm.
+# kde-workspace now builds KDM.  Disable any other display manager first.
 # Enable with:  rc-update add kdm default

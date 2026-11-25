@@ -67,7 +67,7 @@ declare -A tool_packages=(
 # the live-media services/tools. Dependencies are resolved by scratch.
 iso_packages=(
     linux-firmware dracut
-    networkmanager-iso openrc-init-scripts openssh git sudo wget wpa_supplicant wireless-regdb gpm lynx-iso chrony kbd shadow
+    networkmanager-iso rc sysvinit-init-scripts openssh git sudo wget wpa_supplicant wireless-regdb gpm lynx-iso chrony kbd shadow
     cryptsetup lvm2 mdadm snapper pciutils parted
     dialog squashfs-tools grub grub-efi dosfstools mtools efibootmgr libisoburn syslinux
     meson ninja scratch
@@ -444,8 +444,7 @@ sync_host_time() {
     # can step a badly skewed clock immediately; otherwise fall back to
     # chronyd/ntp where available.
     if command -v chronyc >/dev/null 2>&1; then
-        sudo rc-service chronyd.service start 2>/dev/null || \
-            sudo rc-service chrony.service start 2>/dev/null || true
+        sudo chronyd -q >/dev/null 2>&1 || true
 
         if sudo chronyc -a makestep >/dev/null 2>&1; then
             sudo chronyc -a waitsync 10 0.5 >/dev/null 2>&1 || true
@@ -456,7 +455,7 @@ sync_host_time() {
 
     if command -v timedatectl >/dev/null 2>&1; then
         sudo timedatectl set-ntp true >/dev/null 2>&1 || true
-        sudo rc-service chronyd start >/dev/null 2>&1 ||         sudo chronyd -q >/dev/null 2>&1 || true
+        sudo chronyd -q >/dev/null 2>&1 || true
 
         # Give the service a short opportunity to acquire time. Do not block a
         # release build forever if the configured NTP service is unavailable.
@@ -929,13 +928,13 @@ remove_deprecated_local_start_hook() {
     local root="$1"
     local local_conf="$root/etc/conf.d/local"
 
-    # OpenRC's local service executes a legacy local_start() hook without a
+    # rc's local service executes a legacy local_start() hook without a
     # timeout. If an inherited base image still contains that hook, the
     # default runlevel can stall at "Starting local" and no getty starts.
     if [ -f "$local_conf" ] &&
        grep -q "^[[:space:]]*local_start[[:space:]]*(" "$local_conf"; then
         mv "$local_conf" "$local_conf.bfsos-disabled"
-        log "Disabled inherited OpenRC local_start hook in the live root"
+log "Disabled inherited local_start hook in the live root"
     fi
 }
 
@@ -944,7 +943,7 @@ install_live_runtime() {
     log "Installing BFSOS live-session policy"
     remove_deprecated_local_start_hook "$root"
     mkdir -p "$root/home/bfs" "$root/usr/local/sbin" "$root/etc/sudoers.d"
-    mkdir -p "$root/etc/init.d" "$root/etc/runlevels/default" "$root/etc/runlevels/sysinit"
+    mkdir -p "$root/etc/rc.d" "$root/etc/sysconfig"
     mkdir -p "$root/home/bfs/BFSOS"
     rsync -a --delete \
         --exclude '/iso-work/' \
@@ -996,12 +995,12 @@ Defaults env_keep += "DISPLAY XAUTHORITY DBUS_SESSION_BUS_ADDRESS"
 EOS
     chmod 0440 "$root/etc/sudoers.d/90-bfs-live"
 
-    # OpenRC starts the console login from /etc/inittab, so the live auto-login
+    # rc starts the console login from /etc/inittab, so the live auto-login
     # lives there instead of in a service drop-in.
     if [ -f "$root/etc/inittab" ]; then
-        sed -i -e 's|^\(tty1::\).*|respawn:/sbin/agetty --autologin bfs --noclear tty1 38400 linux|'             "$root/etc/inittab"
+        sed -i -e 's|^1:2:respawn:.*|1:2:respawn:/sbin/agetty --autologin bfs --noclear tty1 38400 linux|' "$root/etc/inittab"
     else
-        die "live root has no /etc/inittab; OpenRC cannot start a console login"
+        die "live root has no /etc/inittab; rc cannot start a console login"
     fi
 
     cat > "$root/usr/local/sbin/bfs-live-console-font" <<'EOS'
@@ -1137,13 +1136,13 @@ printf 'SSH is disabled by default. Enter 3) Shell from the live menu for manual
 # SSH host keys are intentionally not generated during normal live boot.
 # Users who need SSH explicitly generate keys and start the service from Shell.
 
-# Font selection is menu-only; prompting here would block OpenRC's local service.
+# Font selection is menu-only; prompting here would block rc's local service.
 
 if command -v nm-online >/dev/null 2>&1 && timeout 10 nm-online -q --timeout=5; then
     printf '\nNetwork is available. Starting live time synchronization...\n'
     if command -v chronyd >/dev/null 2>&1; then
-        rc-service chronyd.service start 2>/dev/null || \
-            rc-service chrony.service start 2>/dev/null || \
+        /etc/rc.d/init.d/chronyd start 2>/dev/null || true
+            true
             chronyd >/dev/null 2>&1 || true
         if command -v chronyc >/dev/null 2>&1; then
             chronyc waitsync 5 0.5 >/dev/null 2>&1 || true
@@ -1162,22 +1161,21 @@ printf '\nLive initialization complete. Starting bfs console session.\n'
 EOS
     chmod 0755 "$root/usr/local/sbin/bfs-live-init"
 
-    cat > "$root/etc/init.d/bfs-live-init" <<'EOS'
-#!/sbin/openrc-run
-description="BFSOS live-session initialization"
-
-depend() {
-    need networkmanager
-    before local
-}
-
-start() {
-    ebegin "Running BFSOS live-session initialization"
-    /usr/local/sbin/bfs-live-init </dev/tty1 >/dev/tty1 2>&1
-    eend $?
-}
+    cat > "$root/etc/rc.d/bfs-live-init" <<'EOS'
+#!/bin/sh
+case "$1" in
+    start)
+        /usr/local/sbin/bfs-live-init </dev/tty1 >/dev/tty1 2>&1
+        ;;
+    stop)
+        ;;
+    *)
+        echo "Usage: $0 {start|stop}" >&2
+        exit 1
+        ;;
+esac
 EOS
-    chmod 0755 "$root/etc/init.d/bfs-live-init"
+    chmod 0755 "$root/etc/rc.d/bfs-live-init"
 
     cat > "$root/usr/local/sbin/bfs-live-menu" <<'EOS'
 #!/usr/bin/env bash
@@ -1212,7 +1210,7 @@ while true; do
             printf 'SSH is disabled by default. To enable it for this live session:\n'
             printf '  sudo passwd bfs\n'
             printf '  sudo ssh-keygen -A\n'
-            printf '  sudo rc-service sshd.service start  # or ssh.service if that is the installed unit\n\n'
+            printf '  sudo /etc/rc.d/sshd start\n\n'
             if command -v script >/dev/null 2>&1; then
                 script -qec 'bash -il' /dev/null
             else
@@ -1268,40 +1266,35 @@ EOS
     chmod 0755 "$root/home/bfs/.xinitrc"
     chown bfs:bfs "$root/home/bfs/.bash_profile" "$root/home/bfs/.xinitrc"
     chown -R bfs:bfs "$root/home/bfs/.config"
-    chown 0:0 "$root/etc/init.d/bfs-live-init"
+    chown 0:0 "$root/etc/rc.d/bfs-live-init"
     rm -f "$root"/etc/ssh/ssh_host_*
-    chroot "$root" /bin/bash -lc '
-        rc-update add udev sysinit 2>/dev/null || true
-        rc-update add udev-postmount sysinit 2>/dev/null || true
-        rc-update add bfs-live-init default 2>/dev/null || true
-        rc-update add dbus default 2>/dev/null || true
-        rc-update add consolekit default 2>/dev/null || true
-        rc-update add networkmanager default 2>/dev/null || true
-        rc-update add lightdm default 2>/dev/null || true
-        # Chrony is the live ISO time-sync policy; bfs-live-init starts it only
-        # after NetworkManager reports usable connectivity.
-        rc-update del chronyd default 2>/dev/null || true
-    ' || true
-    [ -x "$root/etc/init.d/dbus" ] ||
+    cat > "$root/etc/rc.conf" <<'EOS'
+# Generated by the StormFS ISO builder. Live-media policy is removed by
+# the installed-system post-installation helpers.
+HARDWARECLOCK="UTC"
+TIMEZONE="UTC"
+KEYMAP="us"
+FONT=""
+DAEMONS="dbus consolekit networkmanager lightdm bfs-live-init"
+EOS
+    [ -x "$root/etc/rc.d/init.d/dbus" ] ||
         die "live root has no D-Bus service"
-    [ -e "$root/etc/runlevels/default/dbus" ] ||
-        die "D-Bus is not enabled in the live default runlevel"
-    [ -e "$root/etc/runlevels/default/consolekit" ] ||
-        die "ConsoleKit is not enabled in the live default runlevel"
-    [ -e "$root/etc/runlevels/default/lightdm" ] ||
-        die "LightDM is not enabled in the live default runlevel"
+    [ -x "$root/etc/rc.d/init.d/consolekit" ] ||
+        die "live root has no ConsoleKit service"
+    [ -x "$root/etc/rc.d/init.d/lightdm" ] ||
+        die "live root has no LightDM service"
+    grep -q '^DAEMONS="[^"]*dbus' "$root/etc/rc.conf" ||
+        die "D-Bus is not enabled in the live rc.conf"
+    grep -q '^DAEMONS="[^"]*consolekit' "$root/etc/rc.conf" ||
+        die "ConsoleKit is not enabled in the live rc.conf"
+    grep -q '^DAEMONS="[^"]*lightdm' "$root/etc/rc.conf" ||
+        die "LightDM is not enabled in the live rc.conf"
 
-        # BFSOS live-media policy: SSH and rsync must never be enabled at boot.
-    local unit runlevel
-    for unit in sshd ssh rsyncd rsync; do
-        for runlevel in "$root"/etc/runlevels/*; do
-            [ -d "$runlevel" ] || continue
-            rm -f "$runlevel/$unit" 2>/dev/null || true
-            [ -e "$runlevel/$unit" ] &&                 die "Live ISO policy violation: $unit is enabled in ${runlevel##*/}"
-        done
-    done
-
-    log "Verified: SSH/rsync have no runlevel enablement in the live root"
+    # BFSOS live-media policy: SSH and rsync must never be enabled at boot.
+    if grep -Eq '^DAEMONS="[^"]*(^|[[:space:]])(sshd|rsync)([[:space:]]|")' "$root/etc/rc.conf"; then
+        die "Live ISO policy violation: SSH or rsync is enabled in rc.conf"
+    fi
+    log "Verified: SSH/rsync are not enabled in the live rc.conf"
 }
 
 install_dracut_live_module() {

@@ -46,19 +46,21 @@ build() {
 
 ## Init system
 
-**OpenRC is the init system.** systemd has been removed from this tree: there is
-no systemd port, no systemd init profile, and no recipe builds systemd
-integration or ships unit files. Recipes that used to generate units or enable
-services now leave that to the init port (`ports/opt/openrc` and
-`ports/opt/openrc-init-scripts`).
+**rc is the default init system.** It is the BSD-style init from
+scratchpkg/Venom, installed by `ports/core/rc` with `ports/core/sysvinit` as
+PID 1. The LSB/BLFS service scripts live in
+`ports/opt/sysvinit-init-scripts` and are symlinked into `/etc/rc.d`, where
+rc's `DAEMONS` loop starts them.
 
-A SysVinit profile remains available as an alternative to OpenRC. Select it
-before a bootstrap:
+systemd has been removed from this tree: there is no systemd port, no systemd
+init profile, and no recipe builds systemd integration or ships unit files.
+A SysVinit profile remains available as an alternative to rc. Select it before
+a bootstrap:
 
 ```sh
-scripts/select-init-profile.sh openrc      # default
+scripts/select-init-profile.sh rc          # default
 scripts/select-init-profile.sh sysvinit
-BFS_INIT_SYSTEM=openrc ./bootstrap.sh 2
+BFS_INIT_SYSTEM=rc ./bootstrap.sh 2
 ```
 
 `profiles/init/` holds the per-profile base package manifests.
@@ -77,7 +79,7 @@ environment (`bfs_compat32`) and payload validation.
 | Collection | Contents |
 | --- | --- |
 | `core` | base system and build tools, including `scratchpkg` |
-| `opt` | desktop stack, OpenRC service scripts, Flatpak |
+| `opt` | desktop stack, rc/SysVinit service scripts, Flatpak |
 | `xorg`, `wayland-ish` desktop collections | X.Org, GNOME, Plasma, Xfce, LXQt |
 | `compat-32` | 32-bit libraries for Steam and Wine |
 | `iso` | live-media packages |

@@ -1,0 +1,52 @@
+#!/bin/sh
+########################################################################
+# Begin sddm
+#
+# Description : SDDM display manager
+#
+########################################################################
+
+### BEGIN INIT INFO
+# Provides:          sddm
+# Required-Start:    dbus
+# Required-Stop:     dbus
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: SDDM display manager.
+# Description:       SDDM display manager.
+### END INIT INFO
+
+. /lib/lsb/init-functions
+
+case "${1}" in
+   start)
+      log_info_msg "Starting the SDDM display manager..."
+      start_daemon /usr/bin/sddm
+      evaluate_retval
+      ;;
+
+   stop)
+      log_info_msg "Stopping the SDDM display manager..."
+      killproc /usr/bin/sddm
+      evaluate_retval
+      ;;
+
+   restart)
+      ${0} stop
+      sleep 1
+      ${0} start
+      ;;
+
+   status)
+      statusproc /usr/bin/sddm
+      ;;
+
+   *)
+      echo "Usage: ${0} {start|stop|restart|status}"
+      exit 1
+      ;;
+esac
+
+exit 0
+
+# End sddm

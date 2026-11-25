@@ -1,0 +1,24 @@
+# description	: BSD-style init (CRUX/scratchpkg inspired)
+# homepage	: https://github.com/venomlinux/rc
+# maintainer	: StormFS maintainers
+
+description="BSD-style init (CRUX/scratchpkg inspired)"
+name=rc
+version=20210521
+release=1
+backup="etc/rc.conf"
+source="https://github.com/venomlinux/rc/archive/65ef608163d72c16a721eeecf1f9865ed76f7920.tar.gz rc.conf"
+
+build() {
+    _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname 'rc-*' -print -quit)
+    [ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
+    [ -n "$_bfs_src" ] || return 1
+    cd "$_bfs_src" || return 1
+
+    make DESTDIR="$PKG" install || return 1
+
+    # rc installs an all-comments rc.conf. Ship a usable default for the base
+    # rootfs; the ISO builder and installers rewrite it with the live or
+    # installed system's timezone, keymap, font and enabled services.
+    install -m 0644 rc.conf "$PKG/etc/rc.conf" || return 1
+}

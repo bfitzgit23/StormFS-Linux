@@ -82,7 +82,7 @@ sync_system_clock() {
 
     if [ "$synced" != yes ] &&
        command -v timedatectl >/dev/null 2>&1 &&
-       [ -d /run/openrc ]; then
+       { [ -d /run/openrc ] || [ -f /etc/rc.conf ]; }; then
         if "${root_cmd[@]}" timedatectl set-ntp true >/dev/null 2>&1; then
             i=0
             while [ "$i" -lt 15 ]; do
@@ -4311,8 +4311,8 @@ _buildbase() {
     cat > "$LFS/tmp/scratchpkg.conf" <<EOF
 # scratchpkg configuration used while building Stages 2 and 3.
 #
-# Init is OpenRC for the whole tree: service integration belongs to the
-# init port, never to individual packages, and no systemd units are built.
+# Init is rc for the whole tree: service integration belongs to the init
+# port, never to individual packages, and no systemd units are built.
 export CFLAGS="$CFLAGS"
 export CXXFLAGS="${CFLAGS}"
 export CPPFLAGS="-idirafter /usr/include"

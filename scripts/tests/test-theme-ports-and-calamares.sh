@@ -34,19 +34,14 @@ grep -q 'value="StormFS"' "$theme/xfce-xfwm4.xml" || fail 'XFWM4 theme is not St
 grep -q '^gtk-theme-name=StormFS$' "$theme/gtk-settings.ini" || fail 'GTK theme is not StormFS'
 grep -q '^gtk-icon-theme-name=StormFS-Icons$' "$theme/gtk-settings.ini" || fail 'GTK icon theme is not StormFS-Icons'
 
-grep -q -- '-DWITH_MODULE_SERVICES_OPENRC=ON' "$cal/spkgbuild" || \
-    fail 'Calamares does not build the services-openrc module used by its sequence'
-! grep -q -- '-DWITH_MODULE_SERVICES_OPENRC=OFF' "$cal/spkgbuild" || \
-    fail 'Calamares still disables the services-openrc module'
 grep -q -- '-DWITH_MODULE_SHELLPROCESS=ON' "$cal/spkgbuild" || \
-    fail 'Calamares does not build the shellprocess cleanup module'
-if grep -q '^  - services-openrc$' "$cal/settings.conf"; then
-    [ -f "$cal/services-openrc.conf" ] || fail 'services-openrc module has no configuration'
-else
-    fail 'Calamares sequence no longer runs services-openrc'
-fi
-grep -q '^  - shellprocess$' "$cal/settings.conf" || fail 'Calamares sequence has no cleanup job'
+    fail 'Calamares does not build the shellprocess module'
+! grep -q '^  - services-openrc$' "$cal/settings.conf" || \
+    fail 'Calamares still runs the OpenRC-only services module'
+grep -q '^  - shellprocess$' "$cal/settings.conf" || fail 'Calamares sequence has no rc.conf job'
 [ -f "$cal/shellprocess.conf" ] || fail 'Calamares cleanup configuration is missing'
+grep -q 'stormfs-write-rc-conf' "$cal/shellprocess.conf" || fail 'Calamares does not generate rc.conf'
+[ -x "$cal/stormfs-write-rc-conf" ] || fail 'Calamares rc.conf generator is missing'
 grep -q 'scratch remove -y calamares' "$cal/shellprocess.conf" || fail 'cleanup does not uninstall Calamares'
 grep -q '/usr/bin/calamares' "$cal/shellprocess.conf" || fail 'cleanup has no binary-removal fallback'
 grep -Fq 'forbidden_names: [ root, bfs ]' "$cal/users.conf" || fail 'live account name is not reserved'
@@ -91,8 +86,8 @@ grep -q '^session=/usr/bin/startxfce4$' "$lxdm_theme/lxdm.conf" || fail 'LXDM do
 grep -q '^Name=StormFS$' "$lxdm_theme/index.theme" || fail 'LXDM theme is not named StormFS'
 grep -q 'background.jpg' "$lxdm_theme/gtkrc" || fail 'LXDM GTK2 theme does not use the StormFS background'
 grep -q 'login.svg' "$lxdm_theme/greeter.ui" || fail 'LXDM greeter does not use the StormFS wordmark'
-[ -f "$ROOT/ports/opt/openrc-init-scripts/lxdm" ] || fail 'OpenRC LXDM service is missing'
-grep -qx 'openrc-init-scripts' "$ROOT/ports/opt/lxdm/depends" || fail 'lxdm does not depend on the OpenRC service package'
+[ -x "$ROOT/ports/opt/sysvinit-init-scripts/lxdm" ] || fail 'rc LXDM service is missing'
+grep -qx 'sysvinit-init-scripts' "$ROOT/ports/opt/lxdm/depends" || fail 'lxdm does not depend on the rc service package'
 grep -q '^name=lxdm$' "$ROOT/ports/opt/lxdm/spkgbuild" || fail 'LXDM port name changed'
 grep -Fq -- '--with-systemdsystemunitdir=no' "$ROOT/ports/opt/lxdm/spkgbuild" || fail 'LXDM still enables systemd units'
 ! grep -q 'pam_systemd' "$ROOT/ports/opt/lxdm/bfs-lxdm.pam" || fail 'LXDM PAM stack references pam_systemd'
@@ -104,10 +99,10 @@ done
 ! grep -Fq '    startx' "$iso" || fail 'live session still starts startx'
 grep -q 'autologin-user=bfs' "$iso" || fail 'live LightDM autologin is not configured'
 grep -q 'autologin-user-timeout=0' "$iso" || fail 'live LightDM autologin timeout is not configured'
-grep -q 'rc-update add dbus default' "$iso" || fail 'live D-Bus service is not enabled'
-grep -q 'rc-update add lightdm default' "$iso" || fail 'live LightDM service is not enabled'
-grep -q 'need localmount dbus' "$ROOT/ports/opt/openrc-init-scripts/lightdm" || \
-	fail 'LightDM does not require the D-Bus service'
+grep -q 'DAEMONS="dbus consolekit networkmanager lightdm bfs-live-init"' "$iso" \
+	|| fail 'live rc.conf does not enable the expected services'
+[ -x "$ROOT/ports/opt/sysvinit-init-scripts/lightdm" ] || \
+	fail 'LightDM rc service script is missing'
 grep -q '/etc/lightdm/lightdm.conf' "$cal/shellprocess.conf" || fail 'installer does not clear live LightDM autologin'
 grep -q 'exec startxfce4' "$iso" || fail 'live session does not start XFCE'
 grep -q 'autostart/calamares.desktop' "$iso" || fail 'live session does not install a Calamares autostart entry'

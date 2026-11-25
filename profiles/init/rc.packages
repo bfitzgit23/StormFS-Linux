@@ -1,0 +1,13 @@
+# BFSOS build-time init profile: rc (BSD-style init from scratchpkg/Venom)
+rc
+sysvinit-init-scripts
+dbus
+networkmanager
+acpid
+bluez
+gpm
+chrony
+pipewire
+wireplumber
+cups
+avahi

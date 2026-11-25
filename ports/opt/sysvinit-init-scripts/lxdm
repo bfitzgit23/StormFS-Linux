@@ -1,0 +1,52 @@
+#!/bin/sh
+########################################################################
+# Begin lxdm
+#
+# Description : LXDM display manager
+#
+########################################################################
+
+### BEGIN INIT INFO
+# Provides:          lxdm
+# Required-Start:    dbus consolekit
+# Required-Stop:     dbus consolekit
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: LXDM display manager.
+# Description:       LXDM display manager.
+### END INIT INFO
+
+. /lib/lsb/init-functions
+
+case "${1}" in
+   start)
+      log_info_msg "Starting the LXDM display manager..."
+      start_daemon /usr/sbin/lxdm
+      evaluate_retval
+      ;;
+
+   stop)
+      log_info_msg "Stopping the LXDM display manager..."
+      killproc /usr/sbin/lxdm
+      evaluate_retval
+      ;;
+
+   restart)
+      ${0} stop
+      sleep 1
+      ${0} start
+      ;;
+
+   status)
+      statusproc /usr/sbin/lxdm
+      ;;
+
+   *)
+      echo "Usage: ${0} {start|stop|restart|status}"
+      exit 1
+      ;;
+esac
+
+exit 0
+
+# End lxdm

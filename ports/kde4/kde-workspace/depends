@@ -9,8 +9,11 @@ kde-wallpapers
 kdelibs
 kdepimlibs
 libcanberra
+libxau
+libxdmcp
 libxklavier
 libxscrnsaver
+linux-pam
 mesa
 oxygen-icons4
 qt4

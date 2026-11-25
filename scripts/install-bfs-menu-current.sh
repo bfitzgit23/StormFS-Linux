@@ -7450,7 +7450,7 @@ write_chroot_installer() {
         fi
 
         # Existing base archives build Polkit with the systemd logind backend,
-        # which needs libsystemd on this OpenRC target. Refresh Polkit and its
+        # which needs libsystemd on this rc target. Refresh Polkit and its
         # ConsoleKit session provider so the recipe uses ConsoleKit instead.
         local polkit_port
         for polkit_port in opt/polkit opt/consolekit; do
@@ -7462,32 +7462,32 @@ write_chroot_installer() {
                 fi
         done
 
-        # Older base archives predate the BFSOS OpenRC service scripts, so
-        # /etc/init.d can be empty even though OpenRC itself is installed.
-        # Refresh the package so the chroot installs the current scripts.
-        local openrc_scripts_port=opt/openrc-init-scripts
-        if [[ -d "$PROJECT_DIR/ports/$openrc_scripts_port" ]]; then
-                install -d -m 0755 "$TARGET/usr/ports/${openrc_scripts_port%/*}"
-                rm -rf "$TARGET/usr/ports/$openrc_scripts_port"
-                cp -a "$PROJECT_DIR/ports/$openrc_scripts_port" \
-                        "$TARGET/usr/ports/$openrc_scripts_port"
+        # Existing base archives may still carry OpenRC. Refresh the rc
+        # init recipe and the service-script port so the chroot installs
+        # the current /etc/rc.d startup path.
+        local rc_port=core/rc
+        if [[ -d "$PROJECT_DIR/ports/$rc_port" ]]; then
+                install -d -m 0755 "$TARGET/usr/ports/${rc_port%/*}"
+                rm -rf "$TARGET/usr/ports/$rc_port"
+                cp -a "$PROJECT_DIR/ports/$rc_port" \
+                        "$TARGET/usr/ports/$rc_port"
         fi
-        rm -f "$TARGET"/var/cache/scratchpkg/packages/openrc-init-scripts#*.pkg.tar.*
+        rm -f "$TARGET"/var/cache/scratchpkg/packages/rc#*.pkg.tar.*
 
-        # Existing base archives may also carry the OpenRC recipe that passes
-        # uucp_group before applying the Meson patch which defines it.
-        local openrc_port=opt/openrc
-        if [[ -d "$PROJECT_DIR/ports/$openrc_port" ]]; then
-                install -d -m 0755 "$TARGET/usr/ports/${openrc_port%/*}"
-                rm -rf "$TARGET/usr/ports/$openrc_port"
-                cp -a "$PROJECT_DIR/ports/$openrc_port" \
-                        "$TARGET/usr/ports/$openrc_port"
+        local rc_scripts_port=opt/sysvinit-init-scripts
+        if [[ -d "$PROJECT_DIR/ports/$rc_scripts_port" ]]; then
+                install -d -m 0755 "$TARGET/usr/ports/${rc_scripts_port%/*}"
+                rm -rf "$TARGET/usr/ports/$rc_scripts_port"
+                cp -a "$PROJECT_DIR/ports/$rc_scripts_port" \
+                        "$TARGET/usr/ports/$rc_scripts_port"
         fi
+        rm -f "$TARGET"/var/cache/scratchpkg/packages/sysvinit-init-scripts#*.pkg.tar.*
         rm -f "$TARGET"/var/cache/scratchpkg/packages/openrc#*.pkg.tar.*
+        rm -f "$TARGET"/var/cache/scratchpkg/packages/openrc-init-scripts#*.pkg.tar.*
 
         # Existing base archives build BlueZ without --disable-systemd and can
         # package upstream systemd units. Refresh the recipe and discard cached
-        # artifacts so the OpenRC-only release is used.
+        # artifacts so the rc-only release is used.
         local bluez_port=opt/bluez
         if [[ -d "$PROJECT_DIR/ports/$bluez_port" ]]; then
                 install -d -m 0755 "$TARGET/usr/ports/${bluez_port%/*}"
@@ -7499,8 +7499,8 @@ write_chroot_installer() {
 
         # Existing base archives contain the earlier service-package recipes,
         # which installed systemd units, sysusers/tmpfiles data, or called
-        # systemctl from post-install hooks. Refresh them so an OpenRC target
-        # only receives the OpenRC/ConsoleKit integration.
+        # systemctl from post-install hooks. Refresh them so an rc target
+        # only receives the rc/ConsoleKit integration.
         local service_port
         for service_port in opt/chrony opt/avahi opt/cups opt/smartmontools \
                 opt/accountsservice opt/upower opt/udisks opt/lightdm opt/lxdm \
@@ -7518,7 +7518,7 @@ write_chroot_installer() {
                 rm -f "$TARGET/var/cache/scratchpkg/packages/$service_pkg"#*.pkg.tar.*
         done
 
-        # Refresh the libedit man-page fix and the OpenRC-converted Plasma
+        # Refresh the libedit man-page fix and the init-converted Plasma
         # Login Manager so existing targets do not rebuild stale recipes.
         local desktop_port
         for desktop_port in opt/libedit plasma/plasma-login-manager; do
@@ -7890,7 +7890,7 @@ EOF_INPUTRC
 
 log "Configuring systemd"
 
-# BFSOS boots with OpenRC.  systemd-machine-id-setup is therefore not part of
+# BFSOS boots with rc.  systemd-machine-id-setup is therefore not part of
 # the installed system, but freedesktop services (notably D-Bus) still expect a
 # stable /etc/machine-id.  Generate it with the tools that are present instead
 # of making a successful install depend on the systemd package.
@@ -8528,81 +8528,88 @@ else
         log "Package transaction checkpoint already complete; skipping ports/sysup/depinst"
 fi
 
-# Older base archives predate openrc-init-scripts, so /etc/init.d may be
-# empty. Install it even when the package checkpoint is already complete.
-# scratch's -r path only reinstalls an existing package and refuses an
-# absent one, so use a plain forced install unless the database says the
-# package is present but its service scripts are missing.
-bfs_openrc_scripts_missing=no
-for bfs_openrc_script in gpm networkmanager sshd dbus cups nftables rsyncd udev; do
-        [[ -x "/etc/init.d/$bfs_openrc_script" ]] || bfs_openrc_scripts_missing=yes
-done
-bfs_openrc_scripts_installed=no
-if scratch isinstalled openrc-init-scripts >/dev/null 2>&1; then
-        bfs_openrc_scripts_installed=yes
-fi
-if [[ "$bfs_openrc_scripts_installed" == no ||
-      "$bfs_openrc_scripts_missing" == yes ]]; then
-        log "Installing BFSOS OpenRC service scripts"
-        if [[ "$bfs_openrc_scripts_installed" == yes ]]; then
-                scratch install -f -r -y openrc-init-scripts || {
-                        echo "ERROR: reinstalling openrc-init-scripts failed" >&2
-                        exit 1
-                }
-        else
-                scratch install -f -y openrc-init-scripts || {
-                        echo "ERROR: installing openrc-init-scripts failed" >&2
-                        exit 1
-                }
+# The base archive may predate the rc migration. Ensure the init and the
+# LSB/rc service scripts are present even when the package checkpoint is
+# already complete. scratch -r refuses an absent package, so use a
+# forced install only when the package is absent or its scripts are missing.
+bfs_rc_scripts_missing=no
+for bfs_rc_script in dbus consolekit networkmanager acpid bluetooth gpm chronyd cups avahi lightdm; do
+        if [[ ! -x "/etc/rc.d/init.d/$bfs_rc_script" &&
+              ! -x "/etc/rc.d/$bfs_rc_script" ]]; then
+                bfs_rc_scripts_missing=yes
         fi
+done
+if ! scratch isinstalled rc >/dev/null 2>&1 ||
+   ! scratch isinstalled sysvinit-init-scripts >/dev/null 2>&1 ||
+   [[ "$bfs_rc_scripts_missing" == yes ]]; then
+        log "Installing/refreshing BFSOS rc and service scripts"
+        scratch install -f -y rc sysvinit-init-scripts || {
+                echo "ERROR: installing rc/sysvinit-init-scripts failed" >&2
+                exit 1
+        }
 fi
-if [[ ! -x /etc/init.d/gpm || ! -x /etc/init.d/networkmanager || ! -x /etc/init.d/udev ]]; then
-        echo "ERROR: openrc-init-scripts did not install the expected /etc/init.d scripts." >&2
-        exit 1
-fi
+for bfs_rc_script in dbus consolekit networkmanager acpid bluetooth gpm chronyd cups avahi lightdm; do
+        if [[ ! -x "/etc/rc.d/init.d/$bfs_rc_script" &&
+              ! -x "/etc/rc.d/$bfs_rc_script" ]]; then
+                echo "WARNING: rc service script is missing: $bfs_rc_script" >&2
+        fi
+done
 
-# OpenRC service helpers for the installed system.  This script is already
-# running inside the target chroot, so rc-update and /etc/init.d refer to the
-# target root without a second chroot.
+# rc service helpers for the installed system. DAEMONS is written to
+# /etc/rc.conf after optional services such as SSH, LVM and ZRAM are set.
+RC_DAEMONS="dbus consolekit"
 offline_rc_enable() {
-        rc-update add "${1%.service}" default 2>/dev/null || true
+        local svc="${1%.service}"
+        if [[ -x "/etc/rc.d/init.d/$svc" || -x "/etc/rc.d/$svc" ]]; then
+                case " $RC_DAEMONS " in
+                        *" $svc "*) ;;
+                        *) RC_DAEMONS="${RC_DAEMONS:+$RC_DAEMONS }$svc" ;;
+                esac
+        fi
 }
 
 offline_rc_disable() {
-        rc-update del "${1%.service}" default 2>/dev/null || true
+        local svc="${1%.service}"
+        RC_DAEMONS="$(printf "%s\n" $RC_DAEMONS | grep -vx "$svc" | tr "\n" " " | sed "s/[[:space:]]*$//")"
 }
 
 offline_rc_present() {
-        test -x "/etc/init.d/${1%.service}"
+        local svc="${1%.service}"
+        test -x "/etc/rc.d/init.d/$svc" || test -x "/etc/rc.d/$svc"
 }
 
-# OpenRC's local service still executes the deprecated local_start() hook
-# from /etc/conf.d/local with no timeout. An inherited hook can block the
-# installed system at "Starting local", so preserve it but disable it.
-remove_deprecated_local_start_hook() {
-        local local_conf="/etc/conf.d/local"
-        if [ -f "$local_conf" ] &&
-           grep -q "^[[:space:]]*local_start[[:space:]]*(" "$local_conf"; then
-                mv "$local_conf" "/etc/conf.d/local.bfsos-disabled"
-                log "Disabled deprecated OpenRC local_start hook: $local_conf"
-        fi
+write_rc_conf() {
+        local keymap font
+        keymap="$(sed -n 's/^KEYMAP="\{0,1\}\([^"]*\)"\{0,1\}$/\1/p' /etc/vconsole.conf 2>/dev/null | tail -n 1 || true)"
+        [ -n "$keymap" ] || keymap=us
+        font="$(sed -n 's/^FONT="\{0,1\}\([^"]*\)"\{0,1\}$/\1/p' /etc/vconsole.conf 2>/dev/null | tail -n 1 || true)"
+        cat > /etc/rc.conf <<RC_CONF
+#
+# /etc/rc.conf: StormFS system configuration
+# Generated by the StormFS installer.
+#
+HARDWARECLOCK="UTC"
+TIMEZONE="${TIMEZONE:-UTC}"
+KEYMAP="$keymap"
+FONT="$font"
+DAEMONS="$RC_DAEMONS"
+RC_CONF
 }
 
-# udev belongs in sysinit: it creates the /dev/input nodes that libinput
-# enumerates, so without it keyboards, mice and touchpads do not work.
-mkdir -p /etc/runlevels/sysinit
-rc-update add udev sysinit 2>/dev/null || true
-rc-update add udev-postmount sysinit 2>/dev/null || true
+# Start the session and hardware services that are present in this image.
+for bfs_rc_service in dbus consolekit networkmanager acpid bluetooth gpm chronyd cups avahi lightdm; do
+        offline_rc_enable "$bfs_rc_service"
+done
 
 if [[ "$INSTALL_GPM_VALUE" == yes ]]; then
-        if offline_rc_present gpm; then
-                offline_rc_enable gpm
-                if [[ ! -L /etc/runlevels/default/gpm ]]; then
-                        echo "WARNING: gpm was installed but its OpenRC service could not be enabled automatically." >&2
-                fi
-        else
-                echo "WARNING: gpm was selected/installed but no OpenRC service script was found." >&2
-        fi
+        offline_rc_enable gpm
+fi
+
+# rc has no /etc/conf.d/local runlevel script. Keep an inherited legacy
+# hook disabled so it cannot block startup if an old archive is reused.
+if [[ -f /etc/conf.d/local ]] &&
+   grep -q "^[[:space:]]*local_start[[:space:]]*(" /etc/conf.d/local; then
+        mv /etc/conf.d/local /etc/conf.d/local.bfsos-disabled
 fi
 
 if [[ "$INSTALL_SUDO_VALUE" == yes ]]; then
@@ -8648,7 +8655,7 @@ if [[ "$INSTALL_NETWORKMANAGER_VALUE" == yes ]]; then
                 log "Enabling NetworkManager"
                 offline_rc_enable NetworkManager
         else
-                echo "WARNING: NetworkManager was selected but no OpenRC service script was found." >&2
+                echo "WARNING: NetworkManager was selected but no rc service script was found." >&2
         fi
 fi
 
@@ -8658,7 +8665,7 @@ if [[ "$ENABLE_OPENSSH_VALUE" == yes ]]; then
         elif offline_rc_present ssh; then
                 offline_rc_enable ssh
         else
-                echo "WARNING: No OpenSSH OpenRC service script was found." >&2
+                echo "WARNING: No OpenSSH rc service script was found." >&2
         fi
 fi
 
@@ -9358,17 +9365,20 @@ verify_grub_storage_cmdline() {
         return 0
 }
 
+write_rc_conf
+
 configure_required_mdadm_conf || exit 1
 configure_md_618_compat_policy || exit 1
 configure_grub_storage_cmdline
 
 configure_zram_swap() {
-        local config="" module_found=no service="/etc/init.d/bfs-zram"
+        local config="" module_found=no service="/etc/rc.d/bfs-zram"
         rm -f /usr/lib/systemd/system/bfs-zram.service \
               /etc/systemd/system/swap.target.wants/bfs-zram.service
         [[ "$ZRAM_SWAP_VALUE" == yes ]] || {
                 rm -f "$service" /usr/libexec/bfs-zram-setup /usr/libexec/bfs-zram-stop
-                rm -f /etc/runlevels/*/bfs-zram
+                offline_rc_disable bfs-zram
+                write_rc_conf
                 return 0
         }
 
@@ -9384,7 +9394,7 @@ configure_zram_swap() {
                 exit 1
         }
 
-        mkdir -p /etc/init.d /usr/libexec
+        mkdir -p /etc/rc.d /usr/libexec
         cat > /usr/libexec/bfs-zram-setup <<'EOF_ZRAM_SETUP'
 #!/usr/bin/env bash
 set -e
@@ -9429,33 +9439,29 @@ EOF_ZRAM_STOP
         chmod 0755 /usr/libexec/bfs-zram-stop
 
         cat > "$service" <<'EOF_ZRAM_SERVICE'
-#!/sbin/openrc-run
-description="BFSOS compressed ZRAM swap"
-
-depend() {
-        after modules
-        before swap
-}
-
-start() {
-        ebegin "Starting BFSOS ZRAM swap"
-        /usr/libexec/bfs-zram-setup
-        eend $?
-}
-
-stop() {
-        ebegin "Stopping BFSOS ZRAM swap"
-        /usr/libexec/bfs-zram-stop
-        eend $?
-}
+#!/bin/sh
+case "$1" in
+        start)
+                /usr/libexec/bfs-zram-setup
+                ;;
+        stop)
+                /usr/libexec/bfs-zram-stop
+                ;;
+        restart)
+                /usr/libexec/bfs-zram-stop
+                /usr/libexec/bfs-zram-setup
+                ;;
+        *)
+                echo "Usage: $0 {start|stop|restart}" >&2
+                exit 1
+                ;;
+esac
 EOF_ZRAM_SERVICE
 
         chmod 0755 "$service"
-        rc-update add bfs-zram boot 2>/dev/null || true
-        [[ -L /etc/runlevels/boot/bfs-zram ]] || {
-                echo "ZRAM service was created but was not enabled successfully." >&2
-                exit 1
-        }
+        RC_DAEMONS="${RC_DAEMONS:+$RC_DAEMONS }bfs-zram"
+        write_rc_conf
+
         log "Configured ZRAM swap for boot"
 }
 

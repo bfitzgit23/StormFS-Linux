@@ -5,14 +5,22 @@
 description="KDE 4 Plasma workspace and window manager"
 name=kde-workspace
 version=4.11.14
-release=19
-source="https://download.kde.org/Attic/4.14.3/src/kde-workspace-$version.tar.xz kde-workspace-4.11.14-optional-qtdeclarative.patch.manual kde-workspace-4.11.14-optional-webkit.patch.manual kde-workspace-4.11.14-optional-dbusmenu-blitz.patch.manual kde-workspace-4.11.14-optional-qml-sweep.patch.manual kde-workspace-4.11.14-optional-qml-shell.patch.manual kde-workspace-4.11.14-unique-test-names.patch.manual kde-workspace-4.11.14-window-selection-contains.patch.manual kde-workspace-4.11.14-fontconfig-freetype-header.patch.manual kde-workspace-4.11.14-taskmanager-contains.patch.manual kde-workspace-4.11.14-joystick-strict-ansi.patch.manual kde-workspace-4.11.14-kdm-c99.patch.manual kde-workspace-4.11.14-kdm-qimageblitz-fallback.patch.manual kde-workspace-4.11.14-bbcukmet-contains.patch.manual kde-workspace-4.11.14-plasma-akonadi-cxx11.patch.manual kde-workspace-4.11.14-rss-cxx11.patch.manual"
+release=21
+source="https://download.kde.org/Attic/4.14.3/src/kde-workspace-$version.tar.xz kde-workspace-4.11.14-optional-qtdeclarative.patch.manual kde-workspace-4.11.14-optional-webkit.patch.manual kde-workspace-4.11.14-optional-dbusmenu-blitz.patch.manual kde-workspace-4.11.14-optional-qml-sweep.patch.manual kde-workspace-4.11.14-optional-qml-shell.patch.manual kde-workspace-4.11.14-unique-test-names.patch.manual kde-workspace-4.11.14-window-selection-contains.patch.manual kde-workspace-4.11.14-fontconfig-freetype-header.patch.manual kde-workspace-4.11.14-taskmanager-contains.patch.manual kde-workspace-4.11.14-joystick-strict-ansi.patch.manual kde-workspace-4.11.14-kdm-c99.patch.manual kde-workspace-4.11.14-kdm-qimageblitz-fallback.patch.manual kde-workspace-4.11.14-bbcukmet-contains.patch.manual kde-workspace-4.11.14-plasma-akonadi-cxx11.patch.manual kde-workspace-4.11.14-rss-cxx11.patch.manual org.kde.ksysguard.processlisthelper.policy"
 
 build() {
 	_bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -iname "$name-$version" -print -quit)
 	[ -n "$_bfs_src" ] || _bfs_src=$(find . -mindepth 1 -maxdepth 1 -type d -print -quit)
 	[ -n "$_bfs_src" ] || return 1
 	cd "$_bfs_src" || return 1
+
+	# KDM's greeter runs as this unprivileged account when it is present.
+	# Keep the BLFS-assigned IDs so upgrades and permissions stay stable.
+	getent group kdm >/dev/null 2>&1 || groupadd -g 37 kdm || return 1
+	id -u kdm >/dev/null 2>&1 || useradd \
+		-u 37 -g kdm -d /var/lib/kdm -s /bin/false \
+		-c "KDM Daemon Owner" kdm || return 1
+	install -d -o kdm -g kdm -m 0755 /var/lib/kdm || return 1
 
 	# Qt 4 is built without QtDeclarative, so the systemtray applet cannot be
 	# compiled: its UI includes the QtDeclarative headers and instantiates
@@ -106,7 +114,8 @@ build() {
 		-DWITH_Xfixes=ON \
 		-DWITH_XSCREENSAVER=ON \
 		-DWITH_Xscreensaver=ON \
-		-DWITH_KDM=OFF \
+		-DKDE4_KDM_PAM_SERVICE=kde \
+		-DWITH_KDM=ON \
 		-DWITH_Xmms=OFF \
 		-DWITH_XKB=ON \
 		-DWITH_GLIB2=ON \
@@ -138,4 +147,28 @@ build() {
 
 	cmake --build build -j "${JOBS:-1}" || return 1
 	DESTDIR="$PKG" cmake --install build || return 1
+
+	# This build uses the fake KAuth backend, whose policy generator emits
+	# nothing.  Install the process-list helper's actions explicitly so
+	# KSysGuard and KWin can discover the send-signal and priority actions.
+	install -Dm644 "$SRC/org.kde.ksysguard.processlisthelper.policy" \
+		"$PKG/usr/share/polkit-1/actions/org.kde.ksysguard.processlisthelper.policy" || return 1
+
+	# KDM's install-time PAM helper copies the host's login stack when it can.
+	# Pin the service definition so the installed image authenticates through
+	# the BFSOS PAM policy regardless of what the build host has in /etc/pam.d.
+	install -d -m 0755 "$PKG/etc/pam.d" || return 1
+	cat > "$PKG/etc/pam.d/kde" <<'EOF'
+#%PAM-1.0
+auth       requisite    pam_nologin.so
+auth       required     pam_env.so
+auth       required     pam_succeed_if.so uid >= 1000 quiet
+auth       include      system-auth
+account    include      system-account
+password   include      system-password
+session    include      system-session
+EOF
+	ln -sf kde "$PKG/etc/pam.d/kdm" || return 1
+
+	install -d -o kdm -g kdm -m 0755 "$PKG/var/lib/kdm" || return 1
 }

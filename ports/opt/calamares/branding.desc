@@ -23,7 +23,7 @@ strings:
   version: 1.0
   shortVersion: 1.0
   bootloader: GRUB
-  initSystem: OpenRC, systemd, or SysVinit
+  initSystem: rc (BSD-style) or SysVinit
 colors:
   accent: '#22d3ee'
   sidebarBackground: '#07111f'

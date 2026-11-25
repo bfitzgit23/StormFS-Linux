@@ -4,7 +4,7 @@
          DESTINATION  ${DATA_INSTALL_DIR}/kconf_update)
  
  kde4_add_library(kio ${LIBRARY_TYPE} ${kio_LIB_SRCS})
-+target_link_libraries(kio -lssl -lcrypto)
++target_link_libraries(kio LINK_PRIVATE -lssl -lcrypto)
  
  if(NOT KIO_NO_NEPOMUK)
    kde4_add_executable(kfilemetadatareader ${kfilemetadatareaderprocess_SRCS})

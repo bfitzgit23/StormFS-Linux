@@ -1,6 +1,6 @@
 # BFSOS
 
-**BFSOS** is a do-it-yourself, x86_64 source-built Linux distribution: you run one script and it builds the source code for every package on your own machine, so each program is compiled for *your* hardware. It uses an LFS/MLFS-style bootstrap, CRUX `pkgutils`/ports for package builds, and `scratch` for dependency-aware package management, with a choice of **systemd**, **OpenRC**, or **SysVinit** as the init system. Dracut initramfs generation, GRUB, and a Dialog-based installer that supports both straightforward and layered storage layouts are included.
+**BFSOS** is a do-it-yourself, x86_64 source-built Linux distribution: you run one script and it builds the source code for every package on your own machine, so each program is compiled for *your* hardware. It uses an LFS/MLFS-style bootstrap, CRUX `pkgutils`/ports for package builds, and `scratch` for dependency-aware package management, with **rc** (the BSD-style CRUX/scratchpkg init) or **SysVinit** as the init system. Dracut initramfs generation, GRUB, and a Dialog-based installer that supports both straightforward and layered storage layouts are included.
 
 BFSOS is maintained by Brian Madonna; the packaging baseline in this working tree (StormFS-Linux) is imported from <https://codeberg.org/bmadonnaster/BFSOS>, and the tree additionally carries the StormFS ports, the init-selection layer, and this documentation. The ISO builder fetches the Venom Linux ports collections from <https://codeberg.org/venomlinux/> so the live package set can draw on those repositories alongside the BFSOS-specific ISO ports.
 
@@ -33,7 +33,7 @@ Most Linux distros (Ubuntu, Fedora, Mint…) hand you pre-built programs that so
 | `.exe` / `.msi` / `.dmg` installers | **Ports** | There is no "installer download". A *port* is a small recipe file (`spkgbuild`) that says where to fetch the source and how to build it. You never run random installers from the internet. |
 | Windows Update / Software Update | `ports -u` + `scratch sysup` | Two commands update *everything* on the system. (The store's "Updates" button does the same thing graphically.) |
 | The Terminal (macOS) / PowerShell | **a terminal** | The black window where you type commands. On Linux it is the *fast, precise* way to do things — and for BFSOS administration it is the normal way. Give it a chance; it is easier than it looks. |
-| Services (`services.msc` / launchd) | **init system + services** | Background programs that start at boot (networking, Bluetooth, sound…). BFSOS lets you choose *which* init system manages them: **systemd**, **OpenRC**, or **SysVinit**. |
+| Services (`services.msc` / launchd) | **init system + services** | Background programs that start at boot (networking, Bluetooth, sound…). BFSOS lets you choose *which* init system manages them: **rc** or **SysVinit**. |
 | C: drive / Macintosh HD | `/` (the root filesystem) | Linux mounts everything under one tree starting at `/`. Your second disk might "live" at `/mnt/windows`, for example. |
 | Program Files | `/usr` | Installed software lives under `/usr` (and `/usr/local`). |
 | Documents and Settings / Users | `/home/yourname` | Your personal files. Each user has a folder under `/home`. |
@@ -103,31 +103,13 @@ flatpak uninstall com.spotify.Client
 4. **Don't fear breakage** — worst case you reinstall from the installer ISO; keep personal files in `/home` and they survive reinstalls.
 5. **When stuck, read the man page** — `man scratch`, `man flatpak`. Every command's manual is one command away.
 
-### Choosing your init system (systemd, OpenRC, or SysVinit)
+### Choosing your init system (rc or SysVinit)
 
-The **init system** is the first program that starts when you power on; it starts every service (network, Bluetooth, sound) in the right order. BFSOS supports all three major ones and builds whichever you select:
+The **init system** is the first program that starts when you power on; it starts every service
+(network, Bluetooth, sound) in the right order. BFSOS uses the small BSD-style **rc** from
+scratchpkg/Venom by default and keeps **SysVinit** as an alternative:
 
-| | **systemd** (default) | **OpenRC** | **SysVinit** |
-|---|---|---|---|
-| Feel | Modern, all-in-one | Classic, light, fast | Minimalist, old-school Unix |
-| Enable a service | `systemctl enable foo` | `rc-update add foo default` | edit `/etc/rc.conf` + symlinks |
-| Start/stop now | `systemctl start foo` | `rc-service foo start` | `/etc/rc.d/foo start` |
-| View logs | `journalctl` | plain logs in `/var/log` | plain logs in `/var/log` |
-| Good for | Desktops, snap-in features | Servers, minimalists, LFS purists | Learning, tiny systems |
-
-Pick it at bootstrap time (interactive prompt) or non-interactively:
-
-```sh
-scripts/select-init-profile.sh openrc    # or systemd | sysvinit
-./bootstrap.sh 2
-# or without the helper:
-BFS_INIT_SYSTEM=sysvinit ./bootstrap.sh 2
-```
-
-Each profile pulls in the matching service packages and dependency set automatically (see `profiles/init/`), and the selected profile is applied to the ports tree during bootstrap — non-selected init integration is simply not installed.
-
----
-
+| | **rc** (default) | **SysVinit** |
 ## Highlights
 
 - Source-built temporary toolchain and base system.
@@ -135,14 +117,14 @@ Each profile pulls in the matching service packages and dependency set automatic
 - CRUX-style ports and `pkgutils`, extended for BFSOS build conventions.
 - `scratch` dependency management and Git-backed ports synchronization.
 - x86_64 multilib support with 32-bit libraries under `/usr/lib32`.
-- Init-system choice per build: **systemd** (default), **OpenRC**, or **SysVinit**.
+- Init-system choice per build: **rc** (default) or **SysVinit**.
 - Dracut initramfs generation and GRUB bootloader support.
 - UEFI and legacy BIOS installation paths.
 - Installer support for Btrfs subvolumes/snapshots, LUKS, LVM, md RAID (linear/JBOD, RAID0, RAID1, RAID10, RAID4/5/6), and combinations of those layers.
 - Kernel selection between the BFSOS default `linux-lts` package (Linux 7.3 stable with broad x86_64 hardware support) and the optional `linux` 7.2.8 current kernel.
 - Optional installer-managed ZRAM swap with explicit enable/disable and configurable sizing.
 - Flatpak/Flathub support in the ports tree, integrated with gnome-software.
-- BFSOS-owned systemd units and user presets under `/usr/share/bfsos/systemd-units/`.
+- BFSOS-owned service integration and user presets.
 - Console-font choices on live media and the installed system for improved readability.
 - SourceForge-hosted release and base artifacts with versioned checksums.
 
@@ -156,7 +138,7 @@ Each profile pulls in the matching service packages and dependency set automatic
 - `scripts/bfs-publish-sourceforge.sh` — canonical SourceForge publisher.
 - `scripts/select-init-profile.sh` — init-profile selector used by the bootstrap.
 - `scripts/` — maintenance, migration, port, audit, and repository helpers, plus `scripts/tests/` source and regression checks.
-- `docs/` — installation, audit, tracker, maintenance, and reference documentation, including the LFS and OpenRC/BLFS books under `docs/`.
+- `docs/` — installation, audit, tracker, maintenance, and reference documentation, including the LFS/BLFS books under `docs/`; older OpenRC notes are retained as historical material.
 - `files/` — shared BFSOS build/runtime support files.
 - `archives/` — generated toolchain/base archives when present locally (normally not tracked).
 - `logs/` — local build/install logs (normally not part of release source archives).
@@ -283,16 +265,16 @@ Init-system selection is described in the newbie section above; the technical re
 
 The bootstrap supports one selected init system per build:
 
-- `systemd` — the upstream systemd profile;
-- `openrc` — OpenRC plus SysVinit compatibility and BFSOS OpenRC service scripts (the default);
-- `sysvinit` — SysVinit plus the LFS boot scripts.
+- `rc` — the BSD-style scratchpkg/Venom init, the LSB/rc service scripts, and the default
+  daemons (D-Bus, ConsoleKit, NetworkManager, bluez, chrony, PipeWire, cups, avahi);
+- `sysvinit` — SysVinit plus the LFS boot scripts, kept as an alternative.
 
 Select interactively or non-interactively before building:
 
 ```sh
 scripts/select-init-profile.sh
-scripts/select-init-profile.sh openrc
-BFS_INIT_SYSTEM=openrc ./bootstrap.sh 2
+scripts/select-init-profile.sh rc
+BFS_INIT_SYSTEM=rc ./bootstrap.sh 2
 ```
 
 The selection is stored in `.bfs-init-profile` and is consumed by the bootstrap's base package transaction. Profile package manifests live under `profiles/init/`; audit data is recorded in `profiles/init/systemd-audit.tsv`, and generated per-profile port overlays live under `profiles/init/overlays/<profile>/`.

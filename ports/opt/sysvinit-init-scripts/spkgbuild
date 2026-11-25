@@ -6,8 +6,8 @@
 description="LFS/BLFS SysVinit service scripts"
 name=sysvinit-init-scripts
 version=1
-release=1
-source="dbus networkmanager acpid bluetooth gpm chronyd cups avahi sshd samba rsyncd krb5 nftables wpa_supplicant bfs-kernel-finalize virtlogd libvirtd xdm sysconfig-xdm pipewire.desktop pipewire-pulse.desktop wireplumber.desktop"
+release=2
+source="dbus networkmanager acpid bluetooth gpm chronyd cups avahi sshd samba rsyncd krb5 nftables wpa_supplicant bfs-kernel-finalize virtlogd libvirtd xdm sysconfig-xdm consolekit lightdm lxdm sddm pipewire.desktop pipewire-pulse.desktop wireplumber.desktop"
 
 build() {
     install -d -m 0755 "$PKG/etc/rc.d/init.d" \
@@ -24,7 +24,7 @@ build() {
 
     # Every script installs; only the default set below receives rc?.d
     # links (the sysvinit equivalent of the services the installer enables
-    # via ports/opt/calamares/services-openrc.conf).  Optional services are
+    # by the rc/Calamares installer helpers).  Optional services are
     # enabled by the admin with the ln commands documented in the header of
     # each script:
     #
@@ -45,14 +45,24 @@ build() {
     for service in dbus networkmanager acpid bluetooth gpm chronyd \
                    cups avahi sshd samba rsyncd krb5 nftables \
                    wpa_supplicant bfs-kernel-finalize virtlogd libvirtd \
-                   xdm; do
+                   xdm consolekit lightdm lxdm sddm; do
         install -m 0755 "$service" "$PKG/etc/rc.d/init.d/$service" || return 1
+    done
+
+    # rc starts entries from /etc/rc.d/<name>, while the LSB scripts live in
+    # /etc/rc.d/init.d. Provide top-level names so DAEMONS= in rc.conf can use
+    # the same service names as the SysV profile and the installer.
+    for service in dbus networkmanager acpid bluetooth gpm chronyd cups \
+                   avahi sshd samba rsyncd krb5 nftables wpa_supplicant \
+                   bfs-kernel-finalize virtlogd libvirtd xdm consolekit \
+                   lightdm lxdm sddm; do
+        ln -sf "init.d/$service" "$PKG/etc/rc.d/$service" || return 1
     done
 
     install -m 0644 sysconfig-xdm "$PKG/etc/sysconfig/xdm" || return 1
 
     # The PipeWire session stack is per-user; it is launched by the desktop
-    # session from XDG autostart, identically to the OpenRC profile.
+    # session from XDG autostart, identically to the rc profile.
     for entry in pipewire.desktop pipewire-pulse.desktop wireplumber.desktop; do
         install -m 0644 "$entry" "$PKG/etc/xdg/autostart/$entry" || return 1
     done
@@ -73,6 +83,7 @@ build() {
     # Default set (chronyd mirrors the BLFS ntpd S36/K46 slot):
     enable 18 32 acpid
     enable 29 30 dbus
+    enable 30 29 consolekit
     enable 33 28 networkmanager
     enable 34 28 avahi
     enable 35 27 bluetooth
