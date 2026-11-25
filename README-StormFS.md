@@ -1,6 +1,6 @@
 # StormFS
 
-StormFS is an x86_64 source-built Linux distribution maintained by the StormFS community. It uses an LFS/MLFS-style bootstrap, CRUX `pkgutils`/ports for package builds, `prt-get` for dependency-aware package management, systemd as the default init system, a PyQt5 graphical installer, and a live ISO for easy deployment.
+StormFS is an x86_64 source-built Linux distribution maintained by the StormFS community. It uses an LFS/MLFS-style bootstrap, CRUX `pkgutils`/ports for package builds, `pacman` for package management, systemd as the default init system, a PyQt5 graphical installer, and a live ISO for easy deployment.
 
 > **Status:** StormFS is approaching the 1.0 release-candidate stage. The core bootstrap, graphical installer, storage stack, and boot path are under active regression testing. Treat current builds as development/RC software and keep backups of important data.
 
@@ -9,7 +9,8 @@ StormFS is an x86_64 source-built Linux distribution maintained by the StormFS c
 - Source-built temporary toolchain and base system.
 - Optional final-toolchain rebuild to validate that the base can rebuild itself.
 - CRUX-style ports and `pkgutils`, extended for StormFS build conventions.
-- `prt-get` dependency management and `ports -u` repository synchronization.
+- `pacman` as the package manager: the bootstrap installs it into the base set and registers every ports-built package in pacman's database.
+- `bfsos` (`bfs-build`, `bfs-deps`, `bfs-repo-add`) builds ports into pacman packages and drives installs and upgrades from the local repository.
 - x86_64 multilib support with 32-bit libraries under `/usr/lib32`.
 - systemd by default.
 - Dracut initramfs generation and GRUB bootloader support.
@@ -135,15 +136,24 @@ bootstrapped system is therefore pacman-managed from first boot:
 ```sh
 pacman -Q                  # every base package, including glibc and gcc
 pacman -Ql <package>       # files owned by a package
+pacman -Qi <package>       # version, dependencies, installed size
+pacman -Rns <package>      # remove a package and its unused dependencies
 ```
 
-The `bfsos` front end builds ports into pacman packages and installs them:
+The `bfsos` front end orders dependencies, builds ports into pacman packages
+and installs them:
 
 ```sh
-bfsos sync
-bfsos upgrade
-bfsos install <package>
+bfsos sync                 # refresh ports tree + pacman repositories
+bfsos upgrade              # upgrade the installed system
+bfsos install <package>    # build the package and missing dependencies from source
+bfsos remove <package>     # pacman -R
+bfsos native <args>        # pass arguments straight to pacman (-U, -D, -F)
 ```
+
+To build one port without installing it, run `bfsos build <package>` (or
+`bfs-build -d` in the port directory); the pacman package is written to the
+local `bfsos` repository.
 
 Recipes stay in the CRUX ports format (`ports/<collection>/<name>/Pkgfile`);
 `bfs-build` turns a recipe into a pacman package, so every package in the

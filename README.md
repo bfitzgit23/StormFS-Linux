@@ -1,6 +1,6 @@
 # BFSOS
 
-**BFSOS** is a do-it-yourself Linux operating system: you build it from source code on your own machine, so every package is compiled for *your* hardware. It uses an LFS/MLFS-style bootstrap, CRUX `pkgutils`/ports for package builds, and `prt-get` for dependency-aware package management, with a choice of **systemd**, **OpenRC**, or **SysVinit** as the init system.
+**BFSOS** is a do-it-yourself Linux operating system: you build it from source code on your own machine, so every package is compiled for *your* hardware. It uses an LFS/MLFS-style bootstrap, CRUX `pkgutils`/ports to build packages from source, and **pacman** as the package manager, with a choice of **systemd**, **OpenRC**, or **SysVinit** as the init system.
 
 BFSOS is an x86_64 source-built Linux distribution maintained by Brian Madonna. This repository (StormFS-Linux) carries the BFSOS baseline plus the StormFS ports, the init-selection layer, and documentation; the packaging baseline is imported from <https://codeberg.org/bmadonnaster/BFSOS>. Dracut initramfs generation, GRUB, and a Dialog-based installer with simple and layered storage layouts are included.
 
@@ -46,7 +46,7 @@ Most Linux distros (Ubuntu, Fedora, Mint…) hand you pre-built programs that so
 **Way 1 — the store (easiest).** Open **Software** from the applications menu. It looks and feels like the app stores you already know:
 
 - **Flathub apps** run in a security *sandbox* (see below) and work on any Linux distro. This is the closest experience to the macOS App Store.
-- **Native BFSOS packages** are built from source on your machine. The store lists them through a local AppStream catalog that BFSOS generates from the ports tree with `prt-get`/`pkgutils` (see *How gnome-software sees native packages* below).
+- **Native BFSOS packages** are built from source on your machine. The store lists them through a local AppStream catalog that BFSOS generates from the ports tree (see *How gnome-software sees native packages* below).
 
 **Way 2 — the terminal (faster, more precise).**
 
@@ -59,14 +59,15 @@ bfsos upgrade           # update every installed package
 To remove: `bfsos remove gimp`. To search: `bfsos search photo`. BFSOS packages are pacman packages, just built from source in your local repository rather than pulled from Arch.
 
 ```sh
-# The classic pkgutils commands remain available and are what the base
-# system bootstrap itself uses:
-ports -u                 # refresh the ports tree
-prt-get depinst gimp     # install GIMP and everything it depends on
-prt-get sysup            # update every installed package
+# pacman is the package manager; bfsos adds source builds on top of it.
+pacman -Q                # list installed packages
+pacman -Qi gimp          # version, dependencies, installed size
+pacman -Rns gimp         # remove a package and its unused dependencies
 ```
 
-To remove with prt-get: `prt-get rm gimp`. To search: `prt-get search photo`. To see what an update would do before doing it: `prt-get diff`.
+`pkgmk`, `pkgadd`, `ports -u` and `prt-get` still exist as low-level
+build/bootstrap tooling (the base system is built with them), but they are
+not the supported package-management interface.
 
 ### What is Flatpak and Flathub?
 
@@ -92,7 +93,7 @@ flatpak uninstall com.spotify.Client
 
 ### Switching from Windows specifically?
 
-- **No antivirus needed** in the way you are used to. Linux software is installed from signed, curated repositories — not random `.exe` downloads — and Flatpaks are sandboxed. Keep the system updated (`prt-get sysup`) and you are covered.
+- **No antivirus needed** in the way you are used to. Linux software is installed from signed, curated repositories — not random `.exe` downloads — and Flatpaks are sandboxed. Keep the system updated (`bfsos sync && bfsos upgrade`) and you are covered.
 - **NTFS and dual-boot work.** BFSOS reads and writes Windows NTFS drives, so your second SSD with Windows 11 is visible from Linux and your BFSOS disk is visible from Windows (with a WSL2 or ext4 driver). Install each OS on its own drive and let the boot menu (GRUB) pick between them.
 - **Office files:** LibreOffice (Flatpak or native) opens Word/Excel/PowerPoint files. OnlyOffice from Flathub is closest to the Microsoft look.
 - **Games:** Steam is available on Flathub; Proton runs most Windows games.
@@ -140,15 +141,15 @@ Each profile pulls in the matching service packages and dependency set automatic
 
 ## Core design
 
-BFSOS builds a temporary toolchain, uses it to build the base system, and can then rebuild that base with its own final toolchain as a self-hosting check. Package recipes follow the CRUX ports layout (`ports/<collection>/<name>/Pkgfile`), are consumed by `pkgutils`, and are resolved by `prt-get`; the same recipes additionally emit pacman-format packages into a local `bfsos` repository through the `bfs-build`/`bfs-deps`/`bfsos` pipeline. Init-system integration is selected per build rather than hard-coded, and every stage is reproducible from the tree with `bootstrap.sh`.
+BFSOS builds a temporary toolchain, uses it to build the base system, and can then rebuild that base with its own final toolchain as a self-hosting check. Package recipes follow the CRUX ports layout (`ports/<collection>/<name>/Pkgfile`) and `pkgutils` builds them; the bootstrap installs **pacman** into the base set and registers every ports-built package in pacman's database, and the same recipes emit pacman packages into the local `bfsos` repository through the `bfs-build`/`bfs-deps`/`bfsos` pipeline. Init-system integration is selected per build rather than hard-coded, and every stage is reproducible from the tree with `bootstrap.sh`.
 
 ## Highlights
 
 - Source-built temporary toolchain and base system.
 - Optional final-toolchain rebuild to verify that the base can rebuild itself.
 - CRUX-style ports and `pkgutils`, extended for BFSOS build conventions.
-- `prt-get` dependency management and Git-backed ports synchronization.
-- Post-install **pacman-format pipeline** (`bfs-build`, `bfs-deps`, `bfsos`, `pacman`): the same source-built ports emit pacman-compatible packages into a local repository, and `bfsos install/upgrade` is the supported day-to-day front end.
+- **pacman** as the package manager: the bootstrap installs it into the base set and registers every ports-built package in its local database, so `pacman -Q` covers glibc, gcc and the rest from first boot.
+- `bfsos` (with `bfs-build`, `bfs-deps`, `bfs-repo-add`) builds the same ports into pacman packages in a local repository; `bfsos install/upgrade` is the supported day-to-day front end.
 - A separate **scratchpkg variant** of the ports tree (on the `scratchpkg` branch) in the Venom-style `.spkgbuild` format, for anyone who prefers `scratch`/`pkgbuild` over `pkgutils`/pacman.
 - x86_64 multilib support with 32-bit libraries under `/usr/lib32`.
 - Init-system choice per build: **systemd** (default), **OpenRC**, or **SysVinit**, with an explicit BFSOS systemd service-preset policy.
@@ -297,42 +298,50 @@ Storage operations can destroy data. Review the filesystem plan and final instal
 
 ## Package management
 
-Update ports and installed packages with:
+`pacman` is the package manager. The bootstrap installs it into the base set
+and registers every package it builds from the ports tree in pacman's local
+database, so the whole system — glibc, gcc and the rest — is pacman-managed
+from first boot:
 
 ```sh
-ports -u
-prt-get sysup
+pacman -Q                  # list installed packages
+pacman -Ql bash            # files owned by a package
+pacman -Qi bash            # version, dependencies, installed size
+pacman -Rns bash           # remove a package and its unused dependencies
 ```
 
-Install a package and its dependencies with:
+Day-to-day installs and upgrades go through `bfsos`, which orders the
+dependencies, builds the missing ports with `bfs-build`, and installs the
+resulting pacman packages:
 
 ```sh
-prt-get depinst <package>
+bfsos sync                 # refresh ports tree + pacman repositories
+bfsos install <package>    # build the package and missing dependencies from source
+bfsos upgrade              # upgrade the installed system
+bfsos remove <package>     # pacman -R
+bfsos native <args>        # pass arguments straight to pacman (-U, -D, -F)
 ```
 
-Build a single port manually the way pkgutils does it:
-
-```sh
-cd /usr/ports/opt/flatpak && pkgmk -d && pkgadd flatpak#*.pkg.tar.zst
-```
+To build a single port without installing it, use `bfsos build flatpak` (or
+`bfs-build -d` in the port directory). The package is written to the local
+`bfsos` repository and can then be installed with `pacman -U`.
 
 BFSOS uses `python3` as the Python 3 package name; Python module ports use the `python3-*` naming convention.
 
 ### Package-management roles
 
-- `pkgutils` provides low-level package tools including `pkgmk` and `pkgadd`.
-- `ports` provides `ports -u` synchronization and repository drivers.
-- `prt-get` is the dependency-aware frontend used for `depinst`, `sysup`, and related operations.
+- `pacman` owns the installed package database, file lists, removals and upgrades.
+- `bfsos` is the source-build front end: it resolves dependencies (`bfs-deps`), builds ports into pacman packages (`bfs-build`), publishes them into the local repository (`bfs-repo-add`), and calls pacman to install or upgrade.
+- `pkgutils` (`pkgmk`, `pkgadd`, `pkginfo`) is the bootstrap build backend; `ports` provides `ports -u` synchronization, and `prt-get` remains available for dependency-aware port builds.
 - `prt-utils` provides maintenance helpers such as `revdep`.
-- `bfsos` (with `bfs-build`, `bfs-deps`, `bfs-repo-add`) builds the same ports into a local pacman repository, so `pacman`/`bfsos install` work on a system that has never used `pkgmk` directly.
 
-The two layers map onto each other: `bfsos sync` = `ports -u`, `bfsos install` = `prt-get depinst`, `bfsos upgrade` = `prt-get sysup`, and `bfs-deps missing` = `prt-get depinst` for just the missing dependencies. Bootstrap stages 1–5 use `pkgutils` to build, install `pacman` into the base set, and register every ports-built base package in pacman's database, so the bootstrapped system is pacman-managed from first boot. The LFS book's *Package Management* chapter traces this pipeline end to end.
+Bootstrap stages 1–5 use `pkgutils` because pacman cannot exist before glibc, libarchive and the build tools are installed. At the end of the base stage every ports-built package is registered in pacman's database, so first boot starts with a pacman-managed system. The LFS book's *Package Management* chapter traces this pipeline end to end.
 
 BFSOS-maintained collections use the Git-backed monorepo definition `/etc/ports/bfsos.git`.
 
 ### Software stores and Flathub
 
-- Install **`gnome-software`** (`prt-get depinst gnome-software`) for a graphical store covering both native BFSOS packages and Flatpak applications.
+- Install **`gnome-software`** (`bfsos install gnome-software`) for a graphical store covering both native BFSOS packages and Flatpak applications.
 - The **`flathub`** port registers the Flathub remote automatically (`flatpak remote-add --if-not-exists`); it is idempotent and safe across upgrades.
 - After installing native packages that ship desktop apps, refresh the store's native catalog with `bfsos-appstream` (installed by the `gnome-software` port).
 
@@ -372,7 +381,7 @@ When reporting a problem, include the failing stage/package, relevant log, stora
 - Installer configuration-profile support is partial; secrets such as passwords and LUKS passphrases are never stored.
 - GRUB is the currently validated bootloader path; alternative bootloaders such as Limine remain future work.
 - The gnome-software native-package integration is catalog-based (AppStream XML generated from the ports tree); deep PackageKit-style transactional native package management from the GUI is future work.
-- The scratchpkg variant keeps the bootstrapped base on `pkgutils`: `scratch`/`pkgbuild` currently build the ports tree, they do not yet drive the base-system bootstrap.
+- The scratchpkg variant builds the ports tree with `scratch`/`pkgbuild`; the base-system bootstrap itself still uses `pkgutils` and hands the result to pacman.
 
 ## License
 
