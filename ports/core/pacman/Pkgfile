@@ -1,7 +1,7 @@
 # Description: Pacman package manager wired for BFSOS source-built repositories
 # URL: https://gitlab.archlinux.org/pacman/pacman
 # Maintainer: Brian Madonna <bmadonnaster@gmail.com>
-# Depends on: libarchive curl gpgme meson ninja
+# Depends on: libarchive curl meson ninja
 
 name=pacman
 version=6.1.0
@@ -10,9 +10,11 @@ source=(https://gitlab.archlinux.org/pacman/pacman/-/archive/v$version/pacman-v$
         pacman.conf)
 
 # BFSOS keeps the pacman feature set small: no git download backend (the
-# ports tooling already owns source syncing), no Asciidoctor docs, no
-# gpgme-fallback paths. Shared libs come from core/libarchive and opt/gpgme
-# which are already present in the base system.
+# ports tooling already owns source syncing), no Asciidoctor docs, and no
+# gpgme. The bfsos repository is built locally and pacman.conf keeps
+# signature checking optional, so gpgme would drag gnupg into the bootstrap
+# base without protecting anything. Shared libs come from core/libarchive
+# and core/curl.
 pkg_build() {
     mkdir -p build && cd build
     meson setup .. \
@@ -24,7 +26,7 @@ pkg_build() {
         -Ddoxygen=disabled \
         -Dman=disabled \
         -Dcurl=enabled \
-        -Dgpgme=enabled || return 1
+        -Dgpgme=disabled || return 1
     meson compile -C . || return 1
     DESTDIR="$PKG" meson install --no-rebuild -C . || return 1
 

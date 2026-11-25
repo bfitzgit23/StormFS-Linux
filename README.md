@@ -326,7 +326,7 @@ BFSOS uses `python3` as the Python 3 package name; Python module ports use the `
 - `prt-utils` provides maintenance helpers such as `revdep`.
 - `bfsos` (with `bfs-build`, `bfs-deps`, `bfs-repo-add`) builds the same ports into a local pacman repository, so `pacman`/`bfsos install` work on a system that has never used `pkgmk` directly.
 
-The two layers map onto each other: `bfsos sync` = `ports -u`, `bfsos install` = `prt-get depinst`, `bfsos upgrade` = `prt-get sysup`, and `bfs-deps missing` = `prt-get depinst` for just the missing dependencies. Bootstrap stages 1–5 use `pkgutils`; daily package management on an installed system uses the `bfsos`/pacman layer. The LFS book's *Package Management* chapter traces this pipeline end to end.
+The two layers map onto each other: `bfsos sync` = `ports -u`, `bfsos install` = `prt-get depinst`, `bfsos upgrade` = `prt-get sysup`, and `bfs-deps missing` = `prt-get depinst` for just the missing dependencies. Bootstrap stages 1–5 use `pkgutils` to build, install `pacman` into the base set, and register every ports-built base package in pacman's database, so the bootstrapped system is pacman-managed from first boot. The LFS book's *Package Management* chapter traces this pipeline end to end.
 
 BFSOS-maintained collections use the Git-backed monorepo definition `/etc/ports/bfsos.git`.
 

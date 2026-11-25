@@ -128,18 +128,26 @@ Because storage/boot regressions can make a system unbootable, new RAID/LUKS/LVM
 
 ## Package management
 
-Update the ports tree and installed packages with:
+Bootstrap builds the base system from the `ports/` recipes with `pkgmk`, installs
+`pacman`, and registers every base package in pacman's local database. The
+bootstrapped system is therefore pacman-managed from first boot:
 
 ```sh
-ports -u
-prt-get sysup
+pacman -Q                  # every base package, including glibc and gcc
+pacman -Ql <package>       # files owned by a package
 ```
 
-Install a package and dependencies with:
+The `bfsos` front end builds ports into pacman packages and installs them:
 
 ```sh
-prt-get depinst <package>
+bfsos sync
+bfsos upgrade
+bfsos install <package>
 ```
+
+Recipes stay in the CRUX ports format (`ports/<collection>/<name>/Pkgfile`);
+`bfs-build` turns a recipe into a pacman package, so every package in the
+repository comes from a port.
 
 StormFS uses `python3` as the Python 3 package name; Python module ports use the `python3-*` naming convention.
 

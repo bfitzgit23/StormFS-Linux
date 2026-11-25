@@ -3571,6 +3571,172 @@ _compressrootfs() {
     fi
 }
 
+# ---------------------------------------------------------------------------
+# pacman handover
+#
+# The base system is built with pkgutils because pacman cannot exist before
+# glibc, libarchive and meson/ninja are installed.  Once the base set is
+# complete, every package that pkgadd installed from a ports recipe is
+# registered in pacman's local database.  The bootstrapped system is then
+# pacman-managed from first boot: pacman -Q, -Ql, -R and upgrades cover the
+# whole base instead of only packages installed after the handover.  The
+# recipes stay in the CRUX ports format; pacman only takes ownership of the
+# bytes pkgutils installed.
+# ---------------------------------------------------------------------------
+
+_pacman_local_db_ready() {
+    local root="$1"
+
+    [ -x "$root/usr/bin/pacman" ] || {
+        echo "ERROR: /usr/bin/pacman is missing from the base system." >&2
+        return 1
+    }
+    [ -r "$root/etc/pacman.conf" ] || {
+        echo "ERROR: /etc/pacman.conf is missing from the base system." >&2
+        return 1
+    }
+
+    mkdir -p "$root/var/lib/pacman/local" "$root/var/cache/repo/bfsos" || return 1
+
+    # Let pacman create ALPM_DB_VERSION itself so the handover cannot pin the
+    # wrong database revision.  A build that initializes lazily gets the
+    # current libalpm revision written explicitly as a fallback.
+    if [ ! -s "$root/var/lib/pacman/local/ALPM_DB_VERSION" ]; then
+        chroot "$root" env -i HOME=/root PATH=/usr/bin:/usr/sbin:/bin:/sbin \
+            /usr/bin/pacman -Q >/dev/null 2>&1 || true
+    fi
+    if [ ! -s "$root/var/lib/pacman/local/ALPM_DB_VERSION" ]; then
+        printf '9\n' > "$root/var/lib/pacman/local/ALPM_DB_VERSION" || return 1
+    fi
+    return 0
+}
+
+_pacman_register_pkg() {
+    local root="$1" name="$2" version="$3"
+    local pkgdir="$root/var/lib/pkg/$name"
+    local dbdir="$root/var/lib/pacman/local/$name-$version"
+    local port="" file="" paths="" archive="" desc="" url="" depends="" dep="" now=""
+
+    [ -n "$name" ] && [ -n "$version" ] || return 1
+
+    # The installed ports tree is the authoritative recipe location; the
+    # source tree is a fallback for a rootfs restored from an older archive.
+    for file in "$root"/usr/ports/*/"$name"/Pkgfile; do
+        [ -r "$file" ] || continue
+        port="$file"
+        break
+    done
+    if [ -z "$port" ]; then
+        for file in "$SCRIPT_DIR"/ports/*/"$name"/Pkgfile; do
+            [ -r "$file" ] || continue
+            port="$file"
+            break
+        done
+    fi
+
+    if [ -n "$port" ]; then
+        desc="$(sed -n 's/^# Description:[[:space:]]*//p' "$port" | head -n1)"
+        url="$(sed -n 's/^# URL:[[:space:]]*//p' "$port" | head -n1)"
+        depends="$(sed -n -e 's/^# Depends on:[[:space:]]*//p' \
+            -e 's/^# Depends:[[:space:]]*//p' "$port" | head -n1)"
+    fi
+
+    paths="$(mktemp /tmp/bfs-pacman-files.XXXXXX)" || return 1
+    if [ -r "$pkgdir/.footprint" ]; then
+        awk 'NF { print $NF }' "$pkgdir/.footprint" > "$paths"
+    fi
+    if [ ! -s "$paths" ]; then
+        # pkgadd normally records a footprint for every installed package.  If
+        # an older rootfs lost it, the build archive still lists the payload.
+        archive="$(ls -1 "$packagedir/$name#"* 2>/dev/null | tail -n1)"
+        if [ -n "$archive" ] && [ -f "$archive" ]; then
+            tar -tf "$archive" 2>/dev/null |
+                sed 's|^\./||' |
+                grep -vx -e '.PKGINFO' -e '.MTREE' > "$paths" || true
+        fi
+    fi
+    if [ ! -s "$paths" ]; then
+        echo "ERROR: no pkgutils footprint or package archive for $name;" >&2
+        echo "       refusing to register an incomplete pacman entry." >&2
+        rm -f "$paths"
+        return 1
+    fi
+
+    now="$(date +%s)"
+    mkdir -p "$dbdir" || return 1
+
+    {
+        printf '%%NAME%%\n%s\n\n' "$name"
+        printf '%%VERSION%%\n%s\n\n' "$version"
+        printf '%%BASE%%\n%s\n\n' "$name"
+        [ -z "$desc" ] || printf '%%DESC%%\n%s\n\n' "$desc"
+        [ -z "$url" ] || printf '%%URL%%\n%s\n\n' "$url"
+        printf '%%ARCH%%\nx86_64\n\n'
+        printf '%%BUILDDATE%%\n%s\n\n' "$now"
+        printf '%%INSTALLDATE%%\n%s\n\n' "$now"
+        printf '%%PACKAGER%%\nStormFS Bootstrap <root@localhost>\n\n'
+        printf '%%REASON%%\n0\n\n'
+        printf '%%VALIDATION%%\nnone\n\n'
+        if [ -n "$depends" ]; then
+            printf '%%DEPENDS%%\n'
+            for dep in $depends; do
+                printf '%s\n' "$dep"
+            done
+            printf '\n'
+        fi
+    } > "$dbdir/desc" || return 1
+
+    {
+        printf '%%FILES%%\n'
+        sed -e 's|^/||' -e 's|^\./||' -e '/^$/d' "$paths" |
+            awk '!seen[$0]++'
+    } > "$dbdir/files" || return 1
+    rm -f "$paths"
+
+    chroot "$root" env -i HOME=/root PATH=/usr/bin:/usr/sbin:/bin:/sbin \
+        /usr/bin/pacman -Q "$name" >/dev/null 2>&1 || {
+        echo "ERROR: pacman did not accept the local database entry for $name." >&2
+        return 1
+    }
+    return 0
+}
+
+_pacman_import_base() {
+    local root="${1:-$LFS}"
+    local name="" version="" rest="" registered=0 failed=0
+
+    _pacman_local_db_ready "$root" || return 1
+
+    [ -r "$root/var/lib/pkg/db" ] || {
+        echo "ERROR: pkgutils package database is missing: $root/var/lib/pkg/db" >&2
+        return 1
+    }
+
+    while read -r name version rest || [ -n "$name" ]; do
+        [ -n "$name" ] || continue
+        case "$name" in \#*) continue ;; esac
+        [ -z "$rest" ] || version="$version-$rest"
+        if _pacman_register_pkg "$root" "$name" "$version"; then
+            registered=$((registered + 1))
+        else
+            failed=$((failed + 1))
+        fi
+    done < "$root/var/lib/pkg/db"
+
+    if [ "$registered" -eq 0 ] || [ "$failed" -ne 0 ]; then
+        echo "ERROR: pacman registration failed: $registered registered, $failed failed." >&2
+        return 1
+    fi
+
+    echo "pacman now owns $registered ports-built base packages."
+    chroot "$root" env -i HOME=/root PATH=/usr/bin:/usr/sbin:/bin:/sbin \
+        /usr/bin/pacman -Q >/dev/null || {
+        echo "ERROR: pacman cannot read the base package database." >&2
+        return 1
+    }
+    return 0
+}
+
 _buildbase() {
     if [ "$(id -u)" != 0 ]; then
         echo "ERROR: Stages 2 and 3 must be run as root." >&2
@@ -3938,6 +4104,22 @@ EOF
                     return "$status"
                 }
 
+            # Verify the pacman handover as soon as pacman itself exists, so a
+            # malformed local database cannot surface only after the whole
+            # base set has finished building.
+            if [ "$i" = pacman ]; then
+                echo
+                echo "Handing the installed base packages to pacman..."
+                if _pacman_import_base "$LFS"; then
+                    :
+                else
+                    status=$?
+                    _close_active_package_log "$status"
+                    umountfs
+                    return "$status"
+                fi
+            fi
+
             case "$i" in
                 ca-certificates)
                     if ! chroot "$LFS" /bin/sh -c 'test -s /etc/pki/tls/certs/ca-bundle.crt'; then
@@ -4203,6 +4385,14 @@ EOF
                 CCACHE_DIR=/var/cache/ccache /usr/bin/ccache -s 2>/dev/null || true
     fi
 
+    # The base set is complete: give every ports-built package to pacman.
+    # Run while the chroot mounts are still active so pacman has /dev and /proc.
+    if ! _pacman_import_base "$LFS"; then
+        echo "ERROR: The base system was built but pacman could not take ownership of its packages." >&2
+        umountfs
+        return 1
+    fi
+
     umountfs
 
     if [ "${1:-}" = rebuild ]; then
@@ -4409,6 +4599,7 @@ xxhash
 ccache
 boost
 meson
+pacman
 p11-kit
 make-ca
 kmod

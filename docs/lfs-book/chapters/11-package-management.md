@@ -2,10 +2,15 @@
 
 StormFS Linux ships **two cooperating package layers**: the traditional
 CRUX **pkgutils/ports** recipes (`Pkgfile`, `pkgmk`, `pkgadd`, `prt-get`)
-that the bootstrap uses to build the base system, and the newer
-**pacman-format pipeline** (`bfs-build`, `bfs-deps`, `bfsos`, `pacman`)
-that is the supported front end for post-install package management.
-This chapter covers both, and when to use which.
+that the bootstrap uses to build the base system, and **pacman**, which the
+bootstrap installs into the base and hands every ports-built package to at
+the end of the base stage. This chapter covers both, and when to use which.
+
+`pkgmk` is the build tool: every package, in the base and in the local
+repository, comes from a `ports/<collection>/<name>/Pkgfile`. `pacman` is
+the package manager: after the handover it owns the whole base system
+(`pacman -Q` lists glibc, gcc and the rest), and the `bfsos` front end
+builds updated ports into pacman packages for install, upgrade and removal.
 
 ## 11.1 pkgutils Overview
 
