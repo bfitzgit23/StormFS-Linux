@@ -141,14 +141,14 @@ Each profile pulls in the matching service packages and dependency set automatic
 
 ## Core design
 
-BFSOS builds a temporary toolchain, uses it to build the base system, and can then rebuild that base with its own final toolchain as a self-hosting check. Package recipes follow the CRUX ports layout (`ports/<collection>/<name>/Pkgfile`) and `pkgutils` builds them; the bootstrap installs **pacman** into the base set and registers every ports-built package in pacman's database, and the same recipes emit pacman packages into the local `bfsos` repository through the `bfs-build`/`bfs-deps`/`bfsos` pipeline. Init-system integration is selected per build rather than hard-coded, and every stage is reproducible from the tree with `bootstrap.sh`.
+BFSOS builds a temporary toolchain, uses it to build the base system, and can then rebuild that base with its own final toolchain as a self-hosting check. Package recipes follow the CRUX ports layout (`ports/<collection>/<name>/Pkgfile`) and `pkgutils` builds them; the bootstrap installs **pacman** into the base set, registers the packages built before it, installs every later base package with `pacman -U`, and the same recipes emit pacman packages into the local `bfsos` repository through the `bfs-build`/`bfs-deps`/`bfsos` pipeline. Init-system integration is selected per build rather than hard-coded, and every stage is reproducible from the tree with `bootstrap.sh`.
 
 ## Highlights
 
 - Source-built temporary toolchain and base system.
 - Optional final-toolchain rebuild to verify that the base can rebuild itself.
 - CRUX-style ports and `pkgutils`, extended for BFSOS build conventions.
-- **pacman** as the package manager: the bootstrap installs it into the base set and registers every ports-built package in its local database, so `pacman -Q` covers glibc, gcc and the rest from first boot.
+- **pacman** as the package manager: the bootstrap installs it into the base set, then installs every remaining base package with `pacman -U`, so `pacman -Q` covers glibc, gcc and the rest from first boot.
 - `bfsos` (with `bfs-build`, `bfs-deps`, `bfs-repo-add`) builds the same ports into pacman packages in a local repository; `bfsos install/upgrade` is the supported day-to-day front end.
 - A separate **scratchpkg variant** of the ports tree (on the `scratchpkg` branch) in the Venom-style `.spkgbuild` format, for anyone who prefers `scratch`/`pkgbuild` over `pkgutils`/pacman.
 - x86_64 multilib support with 32-bit libraries under `/usr/lib32`.
@@ -298,9 +298,10 @@ Storage operations can destroy data. Review the filesystem plan and final instal
 
 ## Package management
 
-`pacman` is the package manager. The bootstrap installs it into the base set
-and registers every package it builds from the ports tree in pacman's local
-database, so the whole system — glibc, gcc and the rest — is pacman-managed
+`pacman` is the package manager. The bootstrap installs pacman as soon as
+its own dependencies are built, registers the packages that were installed
+before it, and from that point installs every remaining base package with
+`pacman -U`. The whole system — glibc, gcc and the rest — is pacman-managed
 from first boot:
 
 ```sh
@@ -335,7 +336,7 @@ BFSOS uses `python3` as the Python 3 package name; Python module ports use the `
 - `pkgutils` (`pkgmk`, `pkgadd`, `pkginfo`) is the bootstrap build backend; `ports` provides `ports -u` synchronization, and `prt-get` remains available for dependency-aware port builds.
 - `prt-utils` provides maintenance helpers such as `revdep`.
 
-Bootstrap stages 1–5 use `pkgutils` because pacman cannot exist before glibc, libarchive and the build tools are installed. At the end of the base stage every ports-built package is registered in pacman's database, so first boot starts with a pacman-managed system. The LFS book's *Package Management* chapter traces this pipeline end to end.
+Bootstrap stages 1–5 build every package with `pkgutils`, because pacman cannot install anything before glibc, libarchive and the build tools exist. pkgadd installs only the packages up to pacman itself; those are registered in pacman's database, and every later base package is built with `pkgmk`, repacked with `.PKGINFO`, and installed with `pacman -U`. The LFS book's *Package Management* chapter traces this pipeline end to end.
 
 BFSOS-maintained collections use the Git-backed monorepo definition `/etc/ports/bfsos.git`.
 

@@ -3574,14 +3574,13 @@ _compressrootfs() {
 # ---------------------------------------------------------------------------
 # pacman handover
 #
-# The base system is built with pkgutils because pacman cannot exist before
-# glibc, libarchive and meson/ninja are installed.  Once the base set is
-# complete, every package that pkgadd installed from a ports recipe is
-# registered in pacman's local database.  The bootstrapped system is then
-# pacman-managed from first boot: pacman -Q, -Ql, -R and upgrades cover the
-# whole base instead of only packages installed after the handover.  The
-# recipes stay in the CRUX ports format; pacman only takes ownership of the
-# bytes pkgutils installed.
+# pkgadd has to install the packages up to and including pacman itself:
+# pacman cannot exist before glibc, libarchive and meson/ninja are built.
+# Those early packages are registered in pacman's local database from the
+# pkgutils manifest.  From that point the base loop installs every later
+# package with `pacman -U`: pkgmk still builds the port, then the payload is
+# repacked with .PKGINFO derived from the same Pkgfile.  Recipes stay in the
+# CRUX ports format throughout.
 # ---------------------------------------------------------------------------
 
 _pacman_local_db_ready() {
@@ -3643,11 +3642,15 @@ _pacman_register_pkg() {
 
     paths="$(mktemp /tmp/bfs-pacman-files.XXXXXX)" || return 1
     if [ -r "$pkgdir/.footprint" ]; then
-        awk 'NF { print $NF }' "$pkgdir/.footprint" > "$paths"
+        # Footprint columns are mode<TAB>owner<TAB>path; symlinks and device
+        # nodes append " -> target" / " (major, minor)" to the path.
+        awk -F'\t' 'NF >= 3 { print $3 }' "$pkgdir/.footprint" |
+            sed -e 's/ -> .*$//' -e 's/ ([0-9][0-9]*, [0-9][0-9]*)$//' > "$paths"
     fi
     if [ ! -s "$paths" ]; then
-        # pkgadd normally records a footprint for every installed package.  If
-        # an older rootfs lost it, the build archive still lists the payload.
+        # pkgadd 5.40 keeps file lists only in /var/lib/pkg/db, so the build
+        # archive is the normal source here.  An older rootfs may still carry
+        # a per-package .footprint.
         archive="$(ls -1 "$packagedir/$name#"* 2>/dev/null | tail -n1)"
         if [ -n "$archive" ] && [ -f "$archive" ]; then
             tar -tf "$archive" 2>/dev/null |
@@ -3728,12 +3731,125 @@ _pacman_import_base() {
         return 1
     fi
 
-    echo "pacman now owns $registered ports-built base packages."
+    echo "pacman owns $registered packages that were installed before pacman existed."
     chroot "$root" env -i HOME=/root PATH=/usr/bin:/usr/sbin:/bin:/sbin \
         /usr/bin/pacman -Q >/dev/null || {
         echo "ERROR: pacman cannot read the base package database." >&2
         return 1
     }
+    return 0
+}
+
+# True when the target rootfs already has the package, whether pkgadd or
+# pacman installed it.  Stage 2/3 runs consult this to resume cleanly after
+# the install path switches.
+_base_package_installed() {
+    local root="$1" name="$2"
+
+    if [ -x "$root/usr/bin/pacman" ] &&
+       chroot "$root" env -i HOME=/root PATH=/usr/bin:/usr/sbin:/bin:/sbin \
+           /usr/bin/pacman -Q "$name" >/dev/null 2>&1; then
+        return 0
+    fi
+    pkginfo -i -r "$root" 2>/dev/null | awk '{print $1}' | grep -qx "$name"
+}
+
+# Repack a pkgmk archive as a pacman package.
+#
+# The payload is installed unchanged; only the metadata is added. pkgmk
+# remains the builder (its footprint/extension behaviour is what the base
+# recipes expect), and pacman gets a package it can own, query and remove.
+_pacman_package_from_pkgmk() {
+    local archive="$1" pkgfile="$2" outdir="$3"
+    local name="" version="" release="" desc="" url="" depends="" dep=""
+    local work="" payload="" out="" ext="" isize="" unpack_ok=""
+    local -a pack=()
+
+    [ -f "$archive" ] || {
+        echo "ERROR: package archive does not exist: $archive" >&2
+        return 1
+    }
+    [ -r "$pkgfile" ] || {
+        echo "ERROR: port recipe does not exist: $pkgfile" >&2
+        return 1
+    }
+
+    name="$(sed -n 's/^name=//p' "$pkgfile" | head -n1 | tr -d '"')"
+    version="$(sed -n 's/^version=//p' "$pkgfile" | head -n1 | tr -d '"')"
+    release="$(sed -n 's/^release=//p' "$pkgfile" | head -n1 | tr -d '"')"
+    if [ -z "$name" ] || [ -z "$version" ] || [ -z "$release" ]; then
+        echo "ERROR: $pkgfile does not declare name/version/release." >&2
+        return 1
+    fi
+
+    desc="$(sed -n 's/^# Description:[[:space:]]*//p' "$pkgfile" | head -n1)"
+    url="$(sed -n 's/^# URL:[[:space:]]*//p' "$pkgfile" | head -n1)"
+    depends="$(sed -n -e 's/^# Depends on:[[:space:]]*//p' \
+        -e 's/^# Depends:[[:space:]]*//p' "$pkgfile" | head -n1)"
+
+    work="$(mktemp -d /tmp/bfs-pacman-pkg.XXXXXX)" || return 1
+    payload="$work/payload"
+    mkdir -p "$payload" || { rm -rf "$work"; return 1; }
+    case "$archive" in
+        *.zst) tar --zstd -xf "$archive" -C "$payload" && unpack_ok=yes ;;
+        *.xz)  tar --xz -xf "$archive" -C "$payload" && unpack_ok=yes ;;
+        *.gz)  tar -xzf "$archive" -C "$payload" && unpack_ok=yes ;;
+        *)     tar -xf "$archive" -C "$payload" && unpack_ok=yes ;;
+    esac
+    if [ "$unpack_ok" != yes ]; then
+        # Older tar builds auto-detect on extract; retry without a suffix hint.
+        rm -rf "$payload"
+        mkdir -p "$payload" || { rm -rf "$work"; return 1; }
+        tar -xf "$archive" -C "$payload" && unpack_ok=yes
+    fi
+    if [ "$unpack_ok" != yes ] || [ -z "$(ls -A "$payload" 2>/dev/null)" ]; then
+        echo "ERROR: could not unpack $archive." >&2
+        rm -rf "$work"
+        return 1
+    fi
+
+    isize="$(du -sb "$payload" 2>/dev/null | awk '{print $1}')"
+    {
+        printf 'pkgname = %s\n' "$name"
+        printf 'pkgver = %s-%s\n' "$version" "$release"
+        [ -z "$desc" ] || printf 'pkgdesc = %s\n' "$desc"
+        [ -z "$url" ] || printf 'url = %s\n' "$url"
+        printf 'builddate = %s\n' "$(date +%s)"
+        printf 'packager = StormFS Bootstrap <root@localhost>\n'
+        printf 'size = %s\n' "${isize:-0}"
+        printf 'arch = x86_64\n'
+        for dep in $depends; do
+            printf 'depend = %s\n' "$dep"
+        done
+    } > "$payload/.PKGINFO" || {
+        rm -rf "$work"
+        return 1
+    }
+
+    if command -v zstd >/dev/null 2>&1; then
+        ext=zst
+    elif command -v xz >/dev/null 2>&1; then
+        ext=xz
+    else
+        ext=gz
+    fi
+
+    mkdir -p "$outdir" || { rm -rf "$work"; return 1; }
+    out="$outdir/$name-$version-$release-x86_64.pkg.tar.$ext"
+    rm -f "$out"
+    case "$ext" in
+        zst) pack=(--zstd -cf "$out" .) ;;
+        xz)  pack=(--xz -cf "$out" .) ;;
+        *)   pack=(-czf "$out" .) ;;
+    esac
+    if ! ( cd "$payload" && tar "${pack[@]}" ); then
+        echo "ERROR: could not create the pacman package for $name." >&2
+        rm -rf "$work"
+        rm -f "$out"
+        return 1
+    fi
+    rm -rf "$work"
+    printf '%s\n' "$out"
     return 0
 }
 
@@ -4052,10 +4168,7 @@ EOF
 
     for i in $basepkg; do
         if [ "${1:-}" != rebuild ]; then
-            pkginfo -i -r "$LFS" |
-                awk '{print $1}' |
-                grep -qx "$i" &&
-                continue
+            _base_package_installed "$LFS" "$i" && continue
 
             _start_package_log base "$i"
 
@@ -4095,21 +4208,66 @@ EOF
                     return "$status"
                 }
 
-            pkgadd -r "$LFS" ${_force:-} -f \
-                "$(ls -1 "$packagedir/$i#"* | tail -n1)" \
-                || {
+            package_file="$(ls -1 "$packagedir/$i#"* 2>/dev/null | tail -n1)"
+            if [ -z "$package_file" ] || [ ! -f "$package_file" ]; then
+                echo "ERROR: $i produced no package archive in $packagedir." >&2
+                _close_active_package_log 1
+                umountfs
+                return 1
+            fi
+
+            if [ "$i" = pacman ] || [ ! -x "$LFS/usr/bin/pacman" ]; then
+                # Everything up to and including pacman itself has to go
+                # through pkgadd; pacman is the package being installed.
+                pkgadd -r "$LFS" ${_force:-} -f "$package_file" \
+                    || {
+                        status=$?
+                        _close_active_package_log "$status"
+                        umountfs
+                        return "$status"
+                    }
+            else
+                # pacman exists now: install this package with pacman. pkgmk
+                # still builds it from the port; the payload is repacked with
+                # .PKGINFO so pacman owns the files it extracts.
+                port_dir="$(_find_port_dir "$i")" || {
+                    echo "ERROR: could not locate the port directory for $i." >&2
+                    _close_active_package_log 1
+                    umountfs
+                    return 1
+                }
+                pacman_package="$(_pacman_package_from_pkgmk \
+                    "$package_file" "$port_dir/Pkgfile" "$packagedir")" || {
                     status=$?
                     _close_active_package_log "$status"
                     umountfs
                     return "$status"
                 }
+                echo "Installing with pacman: $(basename "$pacman_package")"
+                # -dd: the base list is the ordering authority and some port
+                # dependency headers name packages outside the base set
+                # (grub -> fuse2, systemd -> polkit). pkgadd never checked
+                # dependencies either; pacman still records them.
+                chroot "$LFS" \
+                    env -i \
+                    HOME=/root \
+                    PATH=/usr/bin:/usr/sbin:/bin:/sbin \
+                    /usr/bin/pacman -U --noconfirm --overwrite '*' -dd \
+                    "/$pkgmkpkg/$(basename "$pacman_package")" \
+                    || {
+                        status=$?
+                        _close_active_package_log "$status"
+                        umountfs
+                        return "$status"
+                    }
+            fi
 
             # Verify the pacman handover as soon as pacman itself exists, so a
             # malformed local database cannot surface only after the whole
             # base set has finished building.
             if [ "$i" = pacman ]; then
                 echo
-                echo "Handing the installed base packages to pacman..."
+                echo "Registering the base packages installed before pacman..."
                 if _pacman_import_base "$LFS"; then
                     :
                 else
@@ -4311,12 +4469,7 @@ EOF
             # Stage 3 may only rebuild packages that Stage 2 already installed.
             # If basepkg changed after Stage 2, stop and require Stage 2 again
             # instead of silently growing the base through dependency resolution.
-            if ! chroot "$LFS" \
-                env -i \
-                HOME=/root \
-                PATH=/usr/bin:/usr/sbin:/bin:/sbin \
-                /usr/bin/pkginfo -i | awk '{print $1}' | grep -qx "$i"
-            then
+            if ! _base_package_installed "$LFS" "$i"; then
                 echo "ERROR: Stage 3 expected '$i' to already be installed by Stage 2." >&2
                 echo "ERROR: Re-run Stage 2 before Stage 3; Stage 3 will not install new base packages." >&2
                 _close_active_package_log 1
@@ -4359,17 +4512,45 @@ EOF
             fi
 
             echo "Stage 3: reinstalling exact rebuilt package: $(basename "$package_file")"
-            chroot "$LFS" \
-                env -i \
-                HOME=/root \
-                PATH=/usr/bin:/usr/sbin:/bin:/sbin \
-                /usr/bin/pkgadd -u -f "/$pkgmkpkg/$(basename "$package_file")" \
-                || {
+            if [ -x "$LFS/usr/bin/pacman" ]; then
+                port_dir="$(_find_port_dir "$i")" || {
+                    echo "ERROR: could not locate the port directory for $i." >&2
+                    _close_active_package_log 1
+                    umountfs
+                    return 1
+                }
+                pacman_package="$(_pacman_package_from_pkgmk \
+                    "$package_file" "$port_dir/Pkgfile" "$packagedir")" || {
                     status=$?
                     _close_active_package_log "$status"
                     umountfs
                     return "$status"
                 }
+                chroot "$LFS" \
+                    env -i \
+                    HOME=/root \
+                    PATH=/usr/bin:/usr/sbin:/bin:/sbin \
+                    /usr/bin/pacman -U --noconfirm --overwrite '*' -dd \
+                    "/$pkgmkpkg/$(basename "$pacman_package")" \
+                    || {
+                        status=$?
+                        _close_active_package_log "$status"
+                        umountfs
+                        return "$status"
+                    }
+            else
+                chroot "$LFS" \
+                    env -i \
+                    HOME=/root \
+                    PATH=/usr/bin:/usr/sbin:/bin:/sbin \
+                    /usr/bin/pkgadd -u -f "/$pkgmkpkg/$(basename "$package_file")" \
+                    || {
+                        status=$?
+                        _close_active_package_log "$status"
+                        umountfs
+                        return "$status"
+                    }
+            fi
 
             _close_active_package_log 0
         fi
@@ -4385,10 +4566,11 @@ EOF
                 CCACHE_DIR=/var/cache/ccache /usr/bin/ccache -s 2>/dev/null || true
     fi
 
-    # The base set is complete: give every ports-built package to pacman.
-    # Run while the chroot mounts are still active so pacman has /dev and /proc.
+    # Register the packages that predate pacman; everything after it was
+    # installed by pacman itself. Run while the chroot mounts are still
+    # active so pacman has /dev and /proc.
     if ! _pacman_import_base "$LFS"; then
-        echo "ERROR: The base system was built but pacman could not take ownership of its packages." >&2
+        echo "ERROR: pacman could not register the packages installed before it." >&2
         umountfs
         return 1
     fi

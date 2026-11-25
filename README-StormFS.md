@@ -9,7 +9,7 @@ StormFS is an x86_64 source-built Linux distribution maintained by the StormFS c
 - Source-built temporary toolchain and base system.
 - Optional final-toolchain rebuild to validate that the base can rebuild itself.
 - CRUX-style ports and `pkgutils`, extended for StormFS build conventions.
-- `pacman` as the package manager: the bootstrap installs it into the base set and registers every ports-built package in pacman's database.
+- `pacman` as the package manager: the bootstrap installs it into the base set and from that point installs the remaining base packages with `pacman -U`.
 - `bfsos` (`bfs-build`, `bfs-deps`, `bfs-repo-add`) builds ports into pacman packages and drives installs and upgrades from the local repository.
 - x86_64 multilib support with 32-bit libraries under `/usr/lib32`.
 - systemd by default.
@@ -129,9 +129,11 @@ Because storage/boot regressions can make a system unbootable, new RAID/LUKS/LVM
 
 ## Package management
 
-Bootstrap builds the base system from the `ports/` recipes with `pkgmk`, installs
-`pacman`, and registers every base package in pacman's local database. The
-bootstrapped system is therefore pacman-managed from first boot:
+Bootstrap builds the base system from the `ports/` recipes with `pkgmk`. It
+installs `pacman` as soon as its own dependencies exist, registers the
+packages built before it, then installs every later base package with
+`pacman -U`. The bootstrapped system is therefore pacman-managed from first
+boot:
 
 ```sh
 pacman -Q                  # every base package, including glibc and gcc
