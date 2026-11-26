@@ -3940,6 +3940,49 @@ _base_package_installed() {
     pkginfo -i -r "$root" 2>/dev/null | awk '{print $1}' | grep -qx "$name"
 }
 
+# prt-get, pkgadd and prt-utils read the legacy pkgutils database
+# (/var/lib/pkg/db), which pacman never updates.  Once Stage 2 hands package
+# ownership to pacman that database stops at the handover, so the base looks
+# half-installed to prt-get: pkgadd then installs a package whose files already
+# exist and aborts with "listed file(s) already installed".  Rebuild the
+# database from pacman's local database so both agree on what is installed.
+_pkgdb_import_pacman() {
+    local root="$1" localdb tmp dir name version imported=0
+
+    localdb="$root/var/lib/pacman/local"
+    [ -d "$localdb" ] || return 0
+
+    tmp="$root/var/lib/pkg/db.bfsos-new"
+    mkdir -p "${tmp%/*}" || return 1
+    : > "$tmp" || return 1
+
+    for dir in "$localdb"/*/; do
+        [ -f "$dir/desc" ] || continue
+        name="$(sed -n '/^%NAME%$/{n;p;q}' "$dir/desc")"
+        version="$(sed -n '/^%VERSION%$/{n;p;q}' "$dir/desc")"
+        [ -n "$name" ] && [ -n "$version" ] || continue
+
+        {
+            printf '%s\n%s\n' "$name" "$version"
+            if [ -f "$dir/files" ]; then
+                sed -e '1d' -e 's|^/||' "$dir/files"
+            fi
+            printf '\n'
+        } >> "$tmp" || { rm -f "$tmp"; return 1; }
+        imported=$((imported + 1))
+    done
+
+    if [ "$imported" -eq 0 ]; then
+        rm -f "$tmp"
+        return 0
+    fi
+
+    chmod 0644 "$tmp" || { rm -f "$tmp"; return 1; }
+    mv -f "$tmp" "$root/var/lib/pkg/db" || { rm -f "$tmp"; return 1; }
+    echo "Rebuilt /var/lib/pkg/db from pacman ($imported packages)."
+    return 0
+}
+
 # Repack a pkgmk archive as a pacman package.
 #
 # The payload is installed unchanged; only the metadata is added. pkgmk
@@ -4893,6 +4936,15 @@ EOF
     # active so pacman has /dev and /proc.
     if ! _pacman_import_base "$LFS"; then
         echo "ERROR: pacman could not register the packages installed before it." >&2
+        umountfs
+        return 1
+    fi
+
+    # The mirror image of the import above: prt-get/pkgadd still read
+    # /var/lib/pkg/db, which pacman never writes, so a pacman-finished base
+    # looks half-installed to them and pkgadd refuses to install anything.
+    if ! _pkgdb_import_pacman "$LFS"; then
+        echo "ERROR: could not rebuild /var/lib/pkg/db from the pacman database." >&2
         umountfs
         return 1
     fi

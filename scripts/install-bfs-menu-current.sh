@@ -9801,11 +9801,57 @@ repair_build_only_paths() {
         return 0
 }
 
+# prt-get, pkgadd and prt-utils read /var/lib/pkg/db, which pacman never
+# updates.  On a base installed through pacman that database stops at the
+# handover: prt-get then reports installed packages as missing and pkgadd
+# refuses the install because its files already exist.  Rebuild the database
+# from pacman's local database so both agree on what is installed.
+sync_pkg_db_from_pacman() {
+        local localdb="$TARGET/var/lib/pacman/local" tmp dir name version imported=0
+
+        [[ -d "$localdb" ]] || return 0
+
+        tmp="$TARGET/var/lib/pkg/db.bfsos-new"
+        mkdir -p "${tmp%/*}" || return 1
+        : > "$tmp" || return 1
+
+        for dir in "$localdb"/*/; do
+                [[ -f "$dir/desc" ]] || continue
+                name="$(sed -n '/^%NAME%$/{n;p;q}' "$dir/desc")"
+                version="$(sed -n '/^%VERSION%$/{n;p;q}' "$dir/desc")"
+                [[ -n "$name" && -n "$version" ]] || continue
+
+                {
+                        printf '%s\n%s\n' "$name" "$version"
+                        if [[ -f "$dir/files" ]]; then
+                                sed -e '1d' -e 's|^/||' "$dir/files"
+                        fi
+                        printf '\n'
+                } >> "$tmp" || { rm -f "$tmp"; return 1; }
+                imported=$((imported + 1))
+        done
+
+        if ((imported == 0)); then
+                rm -f "$tmp"
+                return 0
+        fi
+
+        chmod 0644 "$tmp" || { rm -f "$tmp"; return 1; }
+        mv -f "$tmp" "$TARGET/var/lib/pkg/db" || { rm -f "$tmp"; return 1; }
+        log "Rebuilt /var/lib/pkg/db from pacman ($imported packages)"
+        return 0
+}
+
 run_chroot_installer() {
         local status=0
 
         if ! repair_build_only_paths; then
                 echo "ERROR: could not repair build-only paths under $TARGET/usr/bin." >&2
+                return 1
+        fi
+
+        if ! sync_pkg_db_from_pacman; then
+                echo "ERROR: could not rebuild $TARGET/var/lib/pkg/db from pacman." >&2
                 return 1
         fi
 
