@@ -2802,6 +2802,45 @@ EOF_CPP
     return 1
 }
 
+# BFSOS: strip each inode once (hard links share one inode).
+# GCC installs its drivers as hard links (g++, c++ and the versioned
+# x86_64-*-gcc-16.2.0 share one inode) and stripping keeps that link, because
+# binutils strip rewrites ELF files in place.  pkgmk passes every path to a
+# parallel `xargs -P strip` run, so two strips of one inode read and rewrite
+# the same data at once: strip reports "invalid operation" on
+# .rodata/.eh_frame_hdr and can die with SIGBUS.  Collapse the file list to one
+# path per inode.  This edits the pkgmk script itself, so toolchains and
+# rootfs pkgmk copies from before the fix are repaired in place.
+_pkgmk_strip_hardlinks() {
+    local target="$1" tmp
+
+    [ -f "$target" ] || return 1
+    grep -Fq 'BFSOS: strip each inode once' "$target" && return 0
+
+    tmp="${target}.bfsos-strip-hardlinks.$$"
+
+    awk '
+    index($0, "find . -type f -printf \"%P\\n\"") && !done {
+            print "\t# BFSOS: strip each inode once (hard links share one inode)."
+            print "\tfind . -type f -printf \"%i %P\\n\"                          \\"
+            print "\t\t| sort -k1,1 -u | sed \"s/^[0-9]* //\"            \\"
+            print "\t\t| $FILTER                                         \\"
+            done = 1
+            next
+    }
+    { print }
+    ' "$target" > "$tmp" || { rm -f "$tmp"; return 1; }
+
+    if ! grep -Fq 'BFSOS: strip each inode once' "$tmp"; then
+        rm -f "$tmp"
+        return 1
+    fi
+
+    # Rename rather than truncate: a pkgmk that is still running keeps its
+    # old inode, and no half-written script is ever visible under this name.
+    mv -f "$tmp" "$target" || { rm -f "$tmp"; return 1; }
+}
+
 _buildtoolchain() {
     _ensure_archive_dirs
     _start_stage_preflight_log 1 || {
@@ -3017,32 +3056,10 @@ fi\
 unset _bfs_utf8_locale _bfs_locale _bfs_locale_cmd _bfs_pkgmk_path' \
             /tmp/pkgutils-5.40.12/pkgmk.in
 
-        # BFSOS: strip each inode once (hard links share one inode).
-        # GCC installs its drivers as hard links (g++, c++ and the versioned
-        # x86_64-*-gcc-16.2.0 share one inode) and stripping keeps that link,
-        # because binutils strip rewrites ELF files in place.  pkgmk passes
-        # every path to a parallel `xargs -P strip` run, so two strips of one
-        # inode read and rewrite the same data at once: strip reports
-        # "invalid operation" on .rodata/.eh_frame_hdr and can die with SIGBUS.
-        awk '
-        index($0, "find . -type f -printf \"%P\\n\"") && !done {
-                print "\t# BFSOS: strip each inode once (hard links share one inode)."
-                print "\tfind . -type f -printf \"%i %P\\n\"                          \\"
-                print "\t\t| sort -k1,1 -u | sed \"s/^[0-9]* //\"            \\"
-                print "\t\t| $FILTER                                         \\"
-                done = 1
-                next
-        }
-        { print }
-        ' /tmp/pkgutils-5.40.12/pkgmk.in > /tmp/pkgutils-5.40.12/pkgmk.in.new || return 1
-
-        cat /tmp/pkgutils-5.40.12/pkgmk.in.new > /tmp/pkgutils-5.40.12/pkgmk.in || return 1
-        rm -f /tmp/pkgutils-5.40.12/pkgmk.in.new
-
-        if ! grep -Fq 'BFSOS: strip each inode once' /tmp/pkgutils-5.40.12/pkgmk.in; then
+        _pkgmk_strip_hardlinks /tmp/pkgutils-5.40.12/pkgmk.in || {
             echo "ERROR: failed to collapse the pkgmk strip file list by inode" >&2
             return 1
-        fi
+        }
 
         sed -i \
             -e 's/ --static//' \
@@ -3885,6 +3902,16 @@ _buildbase() {
     if [ "$(id -u)" != 0 ]; then
         echo "ERROR: Stages 2 and 3 must be run as root." >&2
         return 1
+    fi
+
+    # Every package payload in this stage is stripped by the toolchain or
+    # rootfs pkgmk.  Repair one that predates the hard-link strip fix.
+    _pkgmk_strip_hardlinks "$TOOLS/bin/pkgmk" ||
+        echo "WARNING: could not update $TOOLS/bin/pkgmk for hard-linked strips." >&2
+
+    if [ -f "$LFS/usr/bin/pkgmk" ]; then
+        _pkgmk_strip_hardlinks "$LFS/usr/bin/pkgmk" ||
+            echo "WARNING: could not update $LFS/usr/bin/pkgmk for hard-linked strips." >&2
     fi
 
     # Any Stage 2/3 build changes the rootfs. Require Stage 4 to verify it again
