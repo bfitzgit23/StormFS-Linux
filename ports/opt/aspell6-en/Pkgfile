@@ -4,9 +4,12 @@
 # Depends on:  aspell which
 
 name=aspell6-en
-version=2026.02.25-0
+# pacman keeps the last '-' as the pkgrel separator and rejects a pkgver that
+# contains one, so version= must use '_'; srcver keeps the upstream spelling.
+version=2026.02.25_0
+srcver=2026.02.25-0
 release=1
-source=(https://ftp.gnu.org/gnu/aspell/dict/en/$name-$version.tar.bz2)
+source=(https://ftp.gnu.org/gnu/aspell/dict/en/$name-$srcver.tar.bz2)
 
 pkg_build() {
 

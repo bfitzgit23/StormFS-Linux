@@ -4,9 +4,12 @@
 # Depends on: libXScrnSaver xorg-server
 
 name=xf86-video-intel
-version=2.99.917-931
+# pacman keeps the last '-' as the pkgrel separator and rejects a pkgver that
+# contains one, so version= must use '_'; srcver keeps the upstream spelling.
+version=2.99.917_931
+srcver=2.99.917-931
 release=1
-source=(https://crux.nu/files/distfiles/xf86-video-intel-$version.tar.xz)
+source=(https://crux.nu/files/distfiles/xf86-video-intel-$srcver.tar.xz)
 
 pkg_build() {
 

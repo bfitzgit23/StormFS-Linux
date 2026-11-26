@@ -3935,6 +3935,18 @@ _pacman_package_from_pkgmk() {
         return 1
     fi
 
+    # pacman reserves the last '-' of the full version for the pkgrel and
+    # rejects a pkgver that contains one of its own; it then reports the whole
+    # archive as "invalid or corrupted package".  Name the port-level cause.
+    case "$version" in
+        *-*|*/*)
+            echo "ERROR: $pkgfile: version '$version' cannot be used as a pacman" >&2
+            echo "       pkgver (only one '-' is allowed, for the pkgrel)." >&2
+            echo "       Use '_' in version= and keep the upstream spelling in the URL." >&2
+            return 1
+            ;;
+    esac
+
     desc="$(sed -n 's/^# Description:[[:space:]]*//p' "$pkgfile" | head -n1)"
     url="$(sed -n 's/^# URL:[[:space:]]*//p' "$pkgfile" | head -n1)"
     depends="$(sed -n -e 's/^# Depends on:[[:space:]]*//p' \

@@ -4,11 +4,14 @@
 # Depends on: avahi dbus-32 gdbm-32 glib-32 libcap-32 libdaemon-32 libevent-32
 
 name=avahi-32
-version=0.9-rc5
+# pacman keeps the last '-' as the pkgrel separator and rejects a pkgver that
+# contains one, so version= must use '_'; srcver keeps the upstream spelling.
+version=0.9_rc5
+srcver=0.9-rc5
 release=8
 source=(
-  https://github.com/avahi/avahi/archive/v$version/avahi-$version.tar.gz
-  https://www.linuxfromscratch.org/patches/blfs/svn/avahi-$version-ipv6_race_condition_fix-1.patch
+  https://github.com/avahi/avahi/archive/v$srcver/avahi-$srcver.tar.gz
+  https://www.linuxfromscratch.org/patches/blfs/svn/avahi-$srcver-ipv6_race_condition_fix-1.patch
 )
 
 build_opt="--with-distro=none --disable-static --disable-gtk --disable-gtk3 --disable-qt3 --disable-qt4 --disable-qt5 --disable-python --disable-pygobject --disable-python-dbus --disable-mono --disable-monodoc --disable-nls --disable-manpages --enable-compat-libdns_sd --disable-libsystemd"

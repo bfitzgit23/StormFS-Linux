@@ -4,9 +4,12 @@
 # Depends on:  which
 
 name=lm-sensors
-version=3-6-2
+# pacman keeps the last '-' as the pkgrel separator and rejects a pkgver that
+# contains one, so version= must use '_'; srcver keeps the upstream spelling.
+version=3_6_2
+srcver=3-6-2
 release=1
-source=(https://github.com/lm-sensors/$name/archive/V$version/$name-$version.tar.gz)
+source=(https://github.com/lm-sensors/$name/archive/V$srcver/$name-$srcver.tar.gz)
 
 pkg_build() {
 
@@ -17,7 +20,7 @@ pkg_build() {
      BUILD_STATIC_LIB=0 \
      MANDIR=/usr/share/man install &&
 
-install -v -m755 -d $PKG/usr/share/doc/lm_sensors-$version &&
+install -v -m755 -d $PKG/usr/share/doc/lm_sensors-$srcver &&
 cp -rv              README INSTALL doc/* \
-                    $PKG/usr/share/doc/lm_sensors-$version
+                    $PKG/usr/share/doc/lm_sensors-$srcver
 }

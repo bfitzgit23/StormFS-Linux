@@ -2,9 +2,12 @@
 # Depends on: xorg-libs llvm cups curl ffmpeg fftw p7zip wget xdg-utils xterm jasper lcms2 libgxps libjpeg-turbo libjxl libpng libraw librsvg libtiff libwebp openjpeg2 pango
 
 name=imagemagick
-version=7.1.2-31
+# pacman keeps the last '-' as the pkgrel separator and rejects a pkgver that
+# contains one, so version= must use '_'; srcver keeps the upstream spelling.
+version=7.1.2_31
+srcver=7.1.2-31
 release=1
-source=(https://download.imagemagick.org/releases/ImageMagick-${version}.tar.xz)
+source=(https://download.imagemagick.org/releases/ImageMagick-${srcver}.tar.xz)
 
 build_opt="--prefix=/usr
             --sysconfdir=/etc
