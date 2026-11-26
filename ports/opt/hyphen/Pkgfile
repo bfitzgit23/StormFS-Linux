@@ -4,11 +4,15 @@
 
 name=hyphen
 version=2.8.9
-release=1
+release=2
 source=(https://github.com/hunspell/hyphen/archive/refs/tags/v$version.tar.gz)
 
 pkg_build() {
-  ./configure --prefix=/usr
+  # The GitHub tag archive is a source snapshot: configure.ac and Makefile.am
+  # are present but the generated configure script is not.
+  autoreconf -fi || return 1
+
+  ./configure --prefix=/usr || return 1
 
   make
   make DESTDIR="$PKG" install
