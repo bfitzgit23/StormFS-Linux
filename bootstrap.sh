@@ -2815,7 +2815,15 @@ _pkgmk_strip_hardlinks() {
     local target="$1" tmp
 
     [ -f "$target" ] || return 1
-    grep -Fq 'BFSOS: strip each inode once' "$target" && return 0
+
+    # pkgin runs this file.  The rewrite below renames a fresh file over it,
+    # and awk creates that file 0644, so an earlier version of this helper
+    # left pkgmk non-executable and stage 2 died with "Permission denied".
+    # Repair such a copy instead of trusting the marker alone.
+    if grep -Fq 'BFSOS: strip each inode once' "$target"; then
+        [ -x "$target" ] || chmod 0755 "$target" || return 1
+        return 0
+    fi
 
     tmp="${target}.bfsos-strip-hardlinks.$$"
 
@@ -2835,6 +2843,13 @@ _pkgmk_strip_hardlinks() {
         rm -f "$tmp"
         return 1
     fi
+
+    # Carry the original mode over the temporary file so the rename cannot
+    # drop the executable bit pkgmk needs.
+    chmod --reference="$target" "$tmp" 2>/dev/null || chmod 0755 "$tmp" || {
+        rm -f "$tmp"
+        return 1
+    }
 
     # Rename rather than truncate: a pkgmk that is still running keeps its
     # old inode, and no half-written script is ever visible under this name.
