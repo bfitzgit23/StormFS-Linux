@@ -9769,8 +9769,46 @@ show_install_failure_dialog() {
         dialog_message "Installation operation failed" "$message"
 }
 
+# A base built while the bootstrap's temporary toolchain was on PATH can carry
+# /tmp/lfs-tools paths in the files it installed.  autom4te is the important
+# one: it records the m4 it was configured with, so autoreconf fails on the
+# installed system even though /usr/bin/m4 is present and working.  groff's
+# chem/gperl/glilypond have the pkgmk staging directory substituted in the
+# same way.  Repair them before the chroot runs any package build.
+repair_build_only_paths() {
+        local file repaired=no
+
+        for file in "$TARGET/usr/bin/autom4te" \
+                    "$TARGET/usr/bin/autoupdate" \
+                    "$TARGET/usr/bin/checkmk"; do
+                [[ -f "$file" ]] || continue
+                grep -IqF '/tmp/lfs-tools/bin/' "$file" 2>/dev/null || continue
+                sed -i 's|/tmp/lfs-tools/bin/|/usr/bin/|g' "$file" || return 1
+                log "Rewrote temporary-toolchain paths in ${file#"$TARGET"}"
+                repaired=yes
+        done
+
+        for file in chem gperl glilypond; do
+                file="$TARGET/usr/bin/$file"
+                [[ -f "$file" ]] || continue
+                grep -IqF '/var/cache/pkg/build-work/pkgmk-' "$file" 2>/dev/null || continue
+                sed -i 's|/var/cache/pkg/build-work/pkgmk-[^/]*/pkg||g' "$file" || return 1
+                log "Rewrote staging paths in ${file#"$TARGET"}"
+                repaired=yes
+        done
+
+        [[ "$repaired" == no ]] || log "Repaired files installed with build-only paths"
+        return 0
+}
+
 run_chroot_installer() {
         local status=0
+
+        if ! repair_build_only_paths; then
+                echo "ERROR: could not repair build-only paths under $TARGET/usr/bin." >&2
+                return 1
+        fi
+
         log "Entering BFS chroot"
         set +e
         if chroot "$TARGET" /usr/bin/env -i \
