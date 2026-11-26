@@ -3965,7 +3965,9 @@ _pkgdb_import_pacman() {
         {
             printf '%s\n%s\n' "$name" "$version"
             if [ -f "$dir/files" ]; then
-                sed -e '1d' -e 's|^/||' "$dir/files"
+                # Drop the %FILES% header and pacman's trailing blank line:
+                # a blank line ends a record in the pkgutils database.
+                sed -e '1d' -e '/^$/d' -e 's|^/||' "$dir/files"
             fi
             printf '\n'
         } >> "$tmp" || { rm -f "$tmp"; return 1; }
