@@ -4026,6 +4026,45 @@ _pacman_package_from_pkgmk() {
     return 0
 }
 
+# Publish a repacked package into the local [bfsos] repository so pacman
+# inside the chroot can resolve it with -S/-Si instead of only installing a
+# local file with -U.  repo-add ships with pacman and needs bsdtar plus
+# libmakepkg; both are installed by the time the first package is repacked.
+# The sync copies of the databases are refreshed the way `pacman -Sy` against
+# the file:// mirror would, so nothing has to be downloaded.
+_pacman_repo_publish() {
+    local root="$1" package="$2"
+    local repodir="" base=""
+
+    [ -f "$package" ] || return 1
+    base="$(basename "$package")"
+    repodir="$root/var/cache/repo/bfsos"
+
+    _pacman_local_db_ready "$root" || return 1
+    cp -f "$package" "$repodir/$base" || return 1
+
+    if [ ! -x "$root/usr/bin/repo-add" ]; then
+        echo "WARNING: repo-add is missing from the base system; $base was not published to the bfsos repository." >&2
+        return 0
+    fi
+
+    # repo-add only accepts a database argument that carries the archive
+    # extension, and it maintains the package and file databases together.
+    chroot "$root" env -i HOME=/root PATH=/usr/bin:/usr/sbin:/bin:/sbin \
+        /usr/bin/repo-add --nocolor -q \
+        "/var/cache/repo/bfsos/bfsos.db.tar.gz" \
+        "/var/cache/repo/bfsos/$base" || return 1
+
+    mkdir -p "$root/var/lib/pacman/sync" || return 1
+    cp -f "$repodir/bfsos.db.tar.gz" \
+        "$root/var/lib/pacman/sync/bfsos.db" || return 1
+    if [ -f "$repodir/bfsos.files.tar.gz" ]; then
+        cp -f "$repodir/bfsos.files.tar.gz" \
+            "$root/var/lib/pacman/sync/bfsos.files" || return 1
+    fi
+    return 0
+}
+
 _buildbase() {
     if [ "$(id -u)" != 0 ]; then
         echo "ERROR: Stages 2 and 3 must be run as root." >&2
@@ -4462,6 +4501,8 @@ EOF
                     umountfs
                     return "$status"
                 }
+                _pacman_repo_publish "$LFS" "$pacman_package" ||
+                    echo "WARNING: could not publish $(basename "$pacman_package") to the bfsos repository." >&2
                 echo "Installing with pacman: $(basename "$pacman_package")"
                 # -dd: the base list is the ordering authority and some port
                 # dependency headers name packages outside the base set
@@ -4745,6 +4786,8 @@ EOF
                     umountfs
                     return "$status"
                 }
+                _pacman_repo_publish "$LFS" "$pacman_package" ||
+                    echo "WARNING: could not publish $(basename "$pacman_package") to the bfsos repository." >&2
                 chroot "$LFS" \
                     env -i \
                     HOME=/root \
