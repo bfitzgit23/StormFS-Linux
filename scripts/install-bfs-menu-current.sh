@@ -8110,7 +8110,11 @@ INSTALL_PACMAN_PIPE="${BFS_INSTALL_PACMAN:-yes}"
 if [[ "$INSTALL_PACMAN_PIPE" == yes ]]; then
         if [[ -d "$PROJECT_DIR/ports/core/pacman" && -f "$PROJECT_DIR/ports/core/pacman/Pkgfile" ]]; then
                 log "Pacman pipeline requested; building and installing core/pacman"
-                if prt-get isinst pacman >/dev/null 2>&1; then
+                # pacman is deliberately kept out of the pkgutils database so
+                # prt-get cannot manage the package manager, so ask pacman
+                # itself whether it is installed.
+                if command -v pacman >/dev/null 2>&1 &&
+                        pacman -Q pacman >/dev/null 2>&1; then
                         log "pacman is already installed; skipping"
                 else
                         run_package_operation "pacman pipeline installation" \
@@ -9804,16 +9808,33 @@ repair_build_only_paths() {
 # prt-get, pkgadd and prt-utils read /var/lib/pkg/db, which pacman never
 # updates.  On a base installed through pacman that database stops at the
 # handover: prt-get then reports installed packages as missing and pkgadd
-# refuses the install because its files already exist.  Rebuild the database
-# from pacman's local database so both agree on what is installed.
+# refuses the install because its files already exist.  Merge pacman's local
+# database into it so both agree: pacman's records win, and records only the
+# pkgutils side knows about are kept.
 sync_pkg_db_from_pacman() {
-        local localdb="$TARGET/var/lib/pacman/local" tmp dir name version imported=0
+        local localdb="$TARGET/var/lib/pacman/local" db="$TARGET/var/lib/pkg/db"
+        local work="$TARGET/var/lib/pkg/db.bfsos-work" tmp="$TARGET/var/lib/pkg/db.bfsos-new"
+        local dir name version record imported=0 kept=0
 
         [[ -d "$localdb" ]] || return 0
 
-        tmp="$TARGET/var/lib/pkg/db.bfsos-new"
-        mkdir -p "${tmp%/*}" || return 1
-        : > "$tmp" || return 1
+        rm -rf "$work"
+        mkdir -p "$work" || return 1
+        : > "$tmp" || { rm -rf "$work"; return 1; }
+
+        # Split the existing database into one record per package, so records
+        # for packages pacman does not know (installed by pkgadd) survive.
+        if [[ -f "$db" ]]; then
+                awk -v dir="$work" '
+                    $0 == "" {
+                        if (name != "") { f = dir "/" name; printf "%s", buf > f; close(f) }
+                        name = ""; buf = ""; next
+                    }
+                    name == "" { name = $0; buf = $0 "\n"; next }
+                    { buf = buf $0 "\n" }
+                    END { if (name != "") { f = dir "/" name; printf "%s", buf > f; close(f) } }
+                ' "$db" || { rm -rf "$work" "$tmp"; return 1; }
+        fi
 
         for dir in "$localdb"/*/; do
                 [[ -f "$dir/desc" ]] || continue
@@ -9821,7 +9842,7 @@ sync_pkg_db_from_pacman() {
                 version="$(sed -n '/^%VERSION%$/{n;p;q}' "$dir/desc")"
                 [[ -n "$name" && -n "$version" ]] || continue
                 # pacman is the package manager now; prt-get must not manage it.
-                [[ "$name" == pacman ]] && continue
+                [[ "$name" == pacman ]] && { rm -f "$work/pacman"; continue; }
 
                 {
                         printf '%s\n%s\n' "$name" "$version"
@@ -9831,18 +9852,25 @@ sync_pkg_db_from_pacman() {
                                 sed -e '1d' -e '/^$/d' -e 's|^/||' "$dir/files"
                         fi
                         printf '\n'
-                } >> "$tmp" || { rm -f "$tmp"; return 1; }
+                } > "$work/$name" || { rm -rf "$work" "$tmp"; return 1; }
                 imported=$((imported + 1))
         done
 
-        if ((imported == 0)); then
+        for record in "$work"/*; do
+                [[ -f "$record" ]] || continue
+                cat "$record" >> "$tmp" || { rm -rf "$work" "$tmp"; return 1; }
+                kept=$((kept + 1))
+        done
+        rm -rf "$work"
+
+        if ((kept == 0)); then
                 rm -f "$tmp"
                 return 0
         fi
 
         chmod 0644 "$tmp" || { rm -f "$tmp"; return 1; }
-        mv -f "$tmp" "$TARGET/var/lib/pkg/db" || { rm -f "$tmp"; return 1; }
-        log "Rebuilt /var/lib/pkg/db from pacman ($imported packages)"
+        mv -f "$tmp" "$db" || { rm -f "$tmp"; return 1; }
+        log "Merged pacman's database into /var/lib/pkg/db ($imported refreshed, $kept records)"
         return 0
 }
 

@@ -3944,17 +3944,36 @@ _base_package_installed() {
 # (/var/lib/pkg/db), which pacman never updates.  Once Stage 2 hands package
 # ownership to pacman that database stops at the handover, so the base looks
 # half-installed to prt-get: pkgadd then installs a package whose files already
-# exist and aborts with "listed file(s) already installed".  Rebuild the
-# database from pacman's local database so both agree on what is installed.
+# exist and aborts with "listed file(s) already installed".  Merge pacman's
+# local database into it so both agree on what is installed: pacman's records
+# win, and records only the pkgutils side knows about are kept.
 _pkgdb_import_pacman() {
-    local root="$1" localdb tmp dir name version imported=0
+    local root="$1" localdb db work tmp dir name version imported=0 kept=0 record
 
     localdb="$root/var/lib/pacman/local"
+    db="$root/var/lib/pkg/db"
     [ -d "$localdb" ] || return 0
 
+    work="$root/var/lib/pkg/db.bfsos-work"
     tmp="$root/var/lib/pkg/db.bfsos-new"
-    mkdir -p "${tmp%/*}" || return 1
-    : > "$tmp" || return 1
+    rm -rf "$work"
+    mkdir -p "$work" || return 1
+    : > "$tmp" || { rm -rf "$work"; return 1; }
+
+    # Split the existing database into one record per package, so records for
+    # packages pacman does not know (installed by pkgadd after the handover)
+    # survive the merge.
+    if [ -f "$db" ]; then
+        awk -v dir="$work" '
+            $0 == "" {
+                if (name != "") { f = dir "/" name; printf "%s", buf > f; close(f) }
+                name = ""; buf = ""; next
+            }
+            name == "" { name = $0; buf = $0 "\n"; next }
+            { buf = buf $0 "\n" }
+            END { if (name != "") { f = dir "/" name; printf "%s", buf > f; close(f) } }
+        ' "$db" || { rm -rf "$work" "$tmp"; return 1; }
+    fi
 
     for dir in "$localdb"/*/; do
         [ -f "$dir/desc" ] || continue
@@ -3963,7 +3982,7 @@ _pkgdb_import_pacman() {
         [ -n "$name" ] && [ -n "$version" ] || continue
         # pacman is the package manager now; letting prt-get manage it would
         # make sysup rebuild pacman into the system that is using it.
-        [ "$name" = pacman ] && continue
+        [ "$name" = pacman ] && { rm -f "$work/pacman"; continue; }
 
         {
             printf '%s\n%s\n' "$name" "$version"
@@ -3973,18 +3992,25 @@ _pkgdb_import_pacman() {
                 sed -e '1d' -e '/^$/d' -e 's|^/||' "$dir/files"
             fi
             printf '\n'
-        } >> "$tmp" || { rm -f "$tmp"; return 1; }
+        } > "$work/$name" || { rm -rf "$work" "$tmp"; return 1; }
         imported=$((imported + 1))
     done
 
-    if [ "$imported" -eq 0 ]; then
+    for record in "$work"/*; do
+        [ -f "$record" ] || continue
+        cat "$record" >> "$tmp" || { rm -rf "$work" "$tmp"; return 1; }
+        kept=$((kept + 1))
+    done
+    rm -rf "$work"
+
+    if [ "$kept" -eq 0 ]; then
         rm -f "$tmp"
         return 0
     fi
 
     chmod 0644 "$tmp" || { rm -f "$tmp"; return 1; }
-    mv -f "$tmp" "$root/var/lib/pkg/db" || { rm -f "$tmp"; return 1; }
-    echo "Rebuilt /var/lib/pkg/db from pacman ($imported packages)."
+    mv -f "$tmp" "$db" || { rm -f "$tmp"; return 1; }
+    echo "Merged pacman's database into /var/lib/pkg/db ($imported refreshed, $kept records)."
     return 0
 }
 
