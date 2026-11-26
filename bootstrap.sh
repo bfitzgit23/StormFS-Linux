@@ -4273,15 +4273,26 @@ EOF
     for i in $basepkg; do
         if [ "${1:-}" != rebuild ]; then
             if _base_package_installed "$LFS" "$i"; then
-                # An interrupted attempt can leave pacman installed with an
-                # empty base database.  Its import has to run before any
-                # package is installed with pacman, not only after a build.
-                if [ "$i" = pacman ] && ! _pacman_import_base "$LFS"; then
-                    echo "ERROR: pacman could not register the packages installed before it." >&2
-                    umountfs
-                    return 1
+                if [ "$i" = pacman ]; then
+                    # An interrupted attempt can leave pacman installed but
+                    # unusable: an empty base database to import, or a
+                    # pacman.conf it refuses to read.  Only a pacman that can
+                    # query its database may be skipped; otherwise rebuild it,
+                    # which also refreshes /etc/pacman.conf from the port.
+                    if chroot "$LFS" env -i HOME=/root \
+                            PATH=/usr/bin:/usr/sbin:/bin:/sbin \
+                            /usr/bin/pacman -Q >/dev/null 2>&1; then
+                        if ! _pacman_import_base "$LFS"; then
+                            echo "ERROR: pacman could not register the packages installed before it." >&2
+                            umountfs
+                            return 1
+                        fi
+                        continue
+                    fi
+                    echo "Installed pacman cannot read its database; rebuilding it."
+                else
+                    continue
                 fi
-                continue
             fi
 
             _start_package_log base "$i"

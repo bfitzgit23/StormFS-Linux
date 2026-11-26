@@ -5,7 +5,7 @@
 
 name=pacman
 version=6.1.0
-release=3
+release=4
 source=(https://gitlab.archlinux.org/pacman/pacman/-/archive/v$version/pacman-v$version.tar.gz
         pacman.conf)
 
