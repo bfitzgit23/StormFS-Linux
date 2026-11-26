@@ -4344,7 +4344,15 @@ EOF
             if [ "$i" = pacman ] || [ ! -x "$LFS/usr/bin/pacman" ]; then
                 # Everything up to and including pacman itself has to go
                 # through pkgadd; pacman is the package being installed.
-                pkgadd -r "$LFS" ${_force:-} -f "$package_file" \
+                # A resumed run can find an older pacman already installed
+                # (for example one whose pacman.conf it cannot read), and
+                # pkgadd replaces an installed package only with -u.
+                pkgadd_opts="${_force:-} -f"
+                if [ "$i" = pacman ] &&
+                   _base_package_installed "$LFS" pacman; then
+                    pkgadd_opts="-u"
+                fi
+                pkgadd -r "$LFS" $pkgadd_opts "$package_file" \
                     || {
                         status=$?
                         _close_active_package_log "$status"
