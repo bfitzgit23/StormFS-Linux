@@ -5,12 +5,11 @@
 
 name=pacman
 version=6.1.0
-release=2
+release=3
 source=(https://gitlab.archlinux.org/pacman/pacman/-/archive/v$version/pacman-v$version.tar.gz
         pacman.conf)
 
-# BFSOS keeps the pacman feature set small: no git download backend (the
-# ports tooling already owns source syncing), no Asciidoctor docs, and no
+# BFSOS keeps the pacman feature set small: no Asciidoctor docs and no
 # gpgme. The bfsos repository is built locally and pacman.conf keeps
 # signature checking optional, so gpgme would drag gnupg into the bootstrap
 # base without protecting anything. Shared libs come from core/libarchive
@@ -21,10 +20,8 @@ pkg_build() {
         --prefix=/usr \
         --libdir=/usr/lib \
         --buildtype=plain \
-        -Dgit=disabled \
         -Ddoc=disabled \
         -Ddoxygen=disabled \
-        -Dman=disabled \
         -Dcurl=enabled \
         -Dgpgme=disabled || return 1
     meson compile -C . || return 1
