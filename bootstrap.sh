@@ -3966,12 +3966,12 @@ _pkgdb_import_pacman() {
     if [ -f "$db" ]; then
         awk -v dir="$work" '
             $0 == "" {
-                if (name != "") { f = dir "/" name; printf "%s", buf > f; close(f) }
+                if (name != "") { f = dir "/" name; printf "%s\n", buf > f; close(f) }
                 name = ""; buf = ""; next
             }
             name == "" { name = $0; buf = $0 "\n"; next }
             { buf = buf $0 "\n" }
-            END { if (name != "") { f = dir "/" name; printf "%s", buf > f; close(f) } }
+            END { if (name != "") { f = dir "/" name; printf "%s\n", buf > f; close(f) } }
         ' "$db" || { rm -rf "$work" "$tmp"; return 1; }
     fi
 
