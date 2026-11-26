@@ -3693,6 +3693,29 @@ _pacman_local_db_ready() {
 
     mkdir -p "$root/var/lib/pacman/local" "$root/var/cache/repo/bfsos" || return 1
 
+    # pacman.conf enables [bfsos] against the local mirror, but nothing has
+    # published a repository database this early, so every pacman call warns
+    # "database file for 'bfsos' does not exist".  Publish the database
+    # repo-add leaves behind for an empty repository (a gzipped tarball with
+    # no entries, plus the .db symlink repo-add creates) and install the copy
+    # pacman actually reads from its sync database.  The first bfs-build /
+    # bfs-repo-add publish replaces both.
+    if [ ! -s "$root/var/cache/repo/bfsos/bfsos.db" ]; then
+        if ! tar -czf "$root/var/cache/repo/bfsos/bfsos.db.tar.gz" \
+                --files-from /dev/null 2>/dev/null ||
+           ! ln -sfn bfsos.db.tar.gz "$root/var/cache/repo/bfsos/bfsos.db"; then
+            echo "WARNING: could not publish an empty bfsos repository database." >&2
+        fi
+    fi
+    if [ ! -s "$root/var/lib/pacman/sync/bfsos.db" ]; then
+        if ! mkdir -p "$root/var/lib/pacman/sync" ||
+           ! cp -f "$root/var/cache/repo/bfsos/bfsos.db.tar.gz" \
+                "$root/var/lib/pacman/sync/bfsos.db"; then
+            echo "WARNING: could not install the empty bfsos sync database." >&2
+            echo "WARNING: pacman will keep reporting it as missing." >&2
+        fi
+    fi
+
     # Let pacman create ALPM_DB_VERSION itself so the handover cannot pin the
     # wrong database revision.  A build that initializes lazily gets the
     # current libalpm revision written explicitly as a fallback.
