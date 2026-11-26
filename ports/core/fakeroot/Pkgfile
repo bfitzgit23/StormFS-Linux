@@ -4,10 +4,15 @@
 
 name=fakeroot
 version=2.1.4
-release=1
+release=2
 source=(https://deb.debian.org/debian/pool/main/f/$name/${name}_${version}.orig.tar.xz)
 
 pkg_build() {
+	# autom4te keeps the m4 path autoconf was configured with.  When the base
+	# was built through the temporary toolchain that path is
+	# /tmp/lfs-tools/bin/m4, which does not exist on an installed system, so
+	# autoreconf fails here.  M4 overrides the built-in value.
+	export M4=/usr/bin/m4
 	sed -i '/^SUBDIRS/d' doc/Makefile.am
 	./bootstrap
 	./configure --prefix=/usr

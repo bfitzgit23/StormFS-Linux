@@ -7989,41 +7989,11 @@ configure_pkgmk_integrity_settings_early() {
 
 configure_pkgmk_integrity_settings_early
 
-ensure_bfsos_git_ports() {
-        local config=/etc/ports/bfsos.git
-        local driver=/etc/ports/drivers/git
-
-        if ! command -v git >/dev/null 2>&1; then
-                log "Git is required by BFSOS ports; installing it from the existing base ports tree before ports -u"
-                run_package_operation "required Git installation for ports synchronization" prt-get depinst git
-        fi
-        command -v git >/dev/null 2>&1 || { echo "Git installation completed but git is still unavailable." >&2; return 1; }
-
-        mkdir -p /etc/ports/drivers
-        if [[ -r /root/.bfsos-git-driver ]]; then
-                install -m 0755 /root/.bfsos-git-driver "$driver"
-        fi
-        [[ -x "$driver" ]] || { echo "CRUX/BFSOS Git ports driver is missing after Git installation." >&2; return 1; }
-
-        cat > "$config" <<'EOF_BFSOS_GIT'
-URL=https://github.com/bmadonnaster/BFSOS.git
-NAME=bfsos
-BRANCH=main
-LOCAL_REPOSITORY=/var/cache/ports-git/bfsos
-COLLECTIONS="compat-32:ports/compat-32 compiz:ports/compiz contrib:ports/contrib core:ports/core gnome:ports/gnome iso:ports/iso lxqt:ports/lxqt opt:ports/opt plasma:ports/plasma xfce:ports/xfce xorg:ports/xorg"
-EOF_BFSOS_GIT
-
-        # Retire only BFSOS-owned legacy HttpUp definitions. Third-party *.httpup
-        # files remain untouched and continue to use the generic HttpUp driver.
-        local collection
-        for collection in compat-32 compiz contrib core gnome iso lxqt opt plasma xfce xorg; do
-                rm -f "/etc/ports/$collection.httpup"
-        done
-}
-
-ensure_bfsos_git_ports || exit 1
-log "Synchronizing BFSOS ports tree through Git"
-run_package_operation "ports synchronization (ports -u)" ports -u
+# BFSOS ports ship inside the base archive that was just extracted, and the
+# installed system must match that archive.  The installer therefore does not
+# run a Git ports update: pulling a newer tree from the maintainer repository
+# at install time made the installed package set disagree with the base it was
+# installed from (and failed outright when the repository was unreachable).
 
 # GLib/GObject-Introspection bootstrap ordering.
 #

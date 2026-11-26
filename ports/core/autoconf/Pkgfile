@@ -1,5 +1,13 @@
 # Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 name=autoconf
 version=2.73
-release=1
+release=2
 source=(https://ftp.gnu.org/gnu/autoconf/autoconf-$version.tar.xz)
+
+post_build() {
+	# configure substitutes the m4 and awk paths it resolved.  Early in the
+	# base build those come from the temporary toolchain, so the installed
+	# autom4te, autoupdate and checkmk would keep pointing at /tmp/lfs-tools,
+	# which does not exist on an installed system.
+	find "$PKG/usr/bin" -type f -exec sed -i 's|/tmp/lfs-tools/bin/|/usr/bin/|g' {} +
+}
