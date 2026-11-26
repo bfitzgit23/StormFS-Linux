@@ -3671,7 +3671,7 @@ _pacman_local_db_ready() {
 }
 
 _pacman_register_pkg() {
-    local root="$1" name="$2" version="$3"
+    local root="$1" name="$2" version="$3" filelist="${4:-}"
     local pkgdir="$root/var/lib/pkg/$name"
     local dbdir="$root/var/lib/pacman/local/$name-$version"
     local port="" file="" paths="" archive="" desc="" url="" depends="" dep="" now=""
@@ -3701,7 +3701,12 @@ _pacman_register_pkg() {
     fi
 
     paths="$(mktemp /tmp/bfs-pacman-files.XXXXXX)" || return 1
-    if [ -r "$pkgdir/.footprint" ]; then
+    if [ -n "$filelist" ] && [ -s "$filelist" ]; then
+        # pkgadd 5.40 keeps the installed file list in /var/lib/pkg/db; the
+        # db reader passes that package's block here.
+        sed -e 's|^\./||' -e '/^$/d' "$filelist" > "$paths"
+    fi
+    if [ ! -s "$paths" ] && [ -r "$pkgdir/.footprint" ]; then
         # Footprint columns are mode<TAB>owner<TAB>path; symlinks and device
         # nodes append " -> target" / " (major, minor)" to the path.
         awk -F'\t' 'NF >= 3 { print $3 }' "$pkgdir/.footprint" |
@@ -3766,7 +3771,8 @@ _pacman_register_pkg() {
 
 _pacman_import_base() {
     local root="${1:-$LFS}"
-    local name="" version="" rest="" registered=0 failed=0
+    local name="" version="" line="" filelist=""
+    local registered=0 skipped=0 failed=0
 
     _pacman_local_db_ready "$root" || return 1
 
@@ -3775,18 +3781,46 @@ _pacman_import_base() {
         return 1
     }
 
-    while read -r name version rest || [ -n "$name" ]; do
-        [ -n "$name" ] || continue
-        case "$name" in \#*) continue ;; esac
-        [ -z "$rest" ] || version="$version-$rest"
-        if _pacman_register_pkg "$root" "$name" "$version"; then
-            registered=$((registered + 1))
-        else
-            failed=$((failed + 1))
-        fi
-    done < "$root/var/lib/pkg/db"
+    # pkgadd 5.40 writes one block per installed package: the name, the
+    # version, then the installed paths, terminated by an empty line.  The
+    # appended newline terminates the final block.
+    filelist="$(mktemp /tmp/bfs-pacman-import.XXXXXX)" || return 1
 
-    if [ "$registered" -eq 0 ] || [ "$failed" -ne 0 ]; then
+    while IFS= read -r line || [ -n "$line" ]; do
+        if [ -z "$line" ]; then
+            if [ -n "$name" ]; then
+                if [ -z "$version" ]; then
+                    echo "ERROR: pkgutils db entry for $name has no version." >&2
+                    failed=$((failed + 1))
+                elif chroot "$root" env -i HOME=/root \
+                        PATH=/usr/bin:/usr/sbin:/bin:/sbin \
+                        /usr/bin/pacman -Q "$name" >/dev/null 2>&1; then
+                    # pacman installed this one itself; keep its own entry.
+                    skipped=$((skipped + 1))
+                elif _pacman_register_pkg "$root" "$name" "$version" "$filelist"; then
+                    registered=$((registered + 1))
+                else
+                    failed=$((failed + 1))
+                fi
+            fi
+            name=""
+            version=""
+            : > "$filelist"
+            continue
+        fi
+        case "$line" in \#*) continue ;; esac
+        if [ -z "$name" ]; then
+            name="$line"
+        elif [ -z "$version" ]; then
+            version="$line"
+        else
+            printf '%s\n' "$line" >> "$filelist"
+        fi
+    done < <(cat "$root/var/lib/pkg/db"; printf '\n')
+
+    rm -f "$filelist"
+
+    if [ "$failed" -ne 0 ] || [ $((registered + skipped)) -eq 0 ]; then
         echo "ERROR: pacman registration failed: $registered registered, $failed failed." >&2
         return 1
     fi
@@ -4238,7 +4272,17 @@ EOF
 
     for i in $basepkg; do
         if [ "${1:-}" != rebuild ]; then
-            _base_package_installed "$LFS" "$i" && continue
+            if _base_package_installed "$LFS" "$i"; then
+                # An interrupted attempt can leave pacman installed with an
+                # empty base database.  Its import has to run before any
+                # package is installed with pacman, not only after a build.
+                if [ "$i" = pacman ] && ! _pacman_import_base "$LFS"; then
+                    echo "ERROR: pacman could not register the packages installed before it." >&2
+                    umountfs
+                    return 1
+                fi
+                continue
+            fi
 
             _start_package_log base "$i"
 
