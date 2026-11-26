@@ -2856,6 +2856,42 @@ _pkgmk_strip_hardlinks() {
     mv -f "$tmp" "$target" || { rm -f "$tmp"; return 1; }
 }
 
+# The rootfs is usrmerged: aaa_filesystem ships bin, sbin and lib as symlinks
+# into usr/.  A package whose payload holds a real top-level bin/, sbin/ or
+# lib/ (kmod ships sbin/modprobe symlinks) makes pacman replace the symlink
+# with a directory, which hides /bin/sh and breaks every script that uses it.
+# Fold such leftover directories back into usr/ before building, so an
+# interrupted run can be resumed.
+_repair_usr_merge() {
+    local dir entry name target repaired=no
+
+    for dir in bin sbin lib lib32; do
+        [ -L "$LFS/$dir" ] && continue
+        [ -d "$LFS/$dir" ] || continue
+
+        target="$LFS/usr/$dir"
+        mkdir -p "$target" || return 1
+
+        for entry in "$LFS/$dir"/* "$LFS/$dir"/.[!.]*; do
+            [ -e "$entry" ] || [ -L "$entry" ] || continue
+            name="${entry##*/}"
+            if [ -e "$target/$name" ] || [ -L "$target/$name" ]; then
+                rm -rf "$entry" || return 1
+            else
+                mv "$entry" "$target/$name" || return 1
+            fi
+        done
+
+        rmdir "$LFS/$dir" || return 1
+        ln -s "usr/$dir" "$LFS/$dir" || return 1
+        repaired=yes
+    done
+
+    [ "$repaired" = no ] ||
+        echo "Restored the usr merge symlinks under $LFS."
+    return 0
+}
+
 _buildtoolchain() {
     _ensure_archive_dirs
     _start_stage_preflight_log 1 || {
@@ -3902,6 +3938,20 @@ _pacman_package_from_pkgmk() {
         return 1
     fi
 
+    # The rootfs is usrmerged, but a pkgmk payload can still carry legacy
+    # top-level directories (kmod ships sbin/modprobe symlinks, dash bin/sh).
+    # pacman replaces the rootfs symlink with a real directory in that case,
+    # hiding /bin/sh, so fold those directories into usr/ first.
+    for legacy in bin sbin lib lib32; do
+        [ -d "$payload/$legacy" ] && [ ! -L "$payload/$legacy" ] || continue
+        mkdir -p "$payload/usr/$legacy" || { rm -rf "$work"; return 1; }
+        cp -a "$payload/$legacy/." "$payload/usr/$legacy/" || {
+            rm -rf "$work"
+            return 1
+        }
+        rm -rf "$payload/$legacy" || { rm -rf "$work"; return 1; }
+    done
+
     isize="$(du -sb "$payload" 2>/dev/null | awk '{print $1}')"
     {
         printf 'pkgname = %s\n' "$name"
@@ -3967,6 +4017,13 @@ _buildbase() {
     if [ -f "$LFS/usr/bin/pkgmk" ]; then
         _pkgmk_strip_hardlinks "$LFS/usr/bin/pkgmk" ||
             echo "WARNING: could not update $LFS/usr/bin/pkgmk for hard-linked strips." >&2
+    fi
+
+    # An interrupted run can leave real /bin, /sbin or /lib directories in
+    # place of the usr/ symlinks; restore them before anything is executed.
+    if ! _repair_usr_merge; then
+        echo "ERROR: could not restore the usr merge symlinks under $LFS." >&2
+        return 1
     fi
 
     # Any Stage 2/3 build changes the rootfs. Require Stage 4 to verify it again
