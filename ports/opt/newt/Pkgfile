@@ -6,10 +6,15 @@
 
 name=newt
 version=0.52.25
-release=2
+release=3
 source=(https://releases.pagure.org/$name/$name-$version.tar.gz)
 
 pkg_build() {
+    # The pagure tarball is a source snapshot: it ships configure.ac and
+    # autogen.sh but not the generated configure script.
+    autoheader || return 1
+    autoconf || return 1
+
     sed \
         -e '/install -m 644 $(LIBNEWT)/ s/^/#/' \
         -e '/$(LIBNEWT):/,/rv/ s/^/#/' \
