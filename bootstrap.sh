@@ -3961,6 +3961,9 @@ _pkgdb_import_pacman() {
         name="$(sed -n '/^%NAME%$/{n;p;q}' "$dir/desc")"
         version="$(sed -n '/^%VERSION%$/{n;p;q}' "$dir/desc")"
         [ -n "$name" ] && [ -n "$version" ] || continue
+        # pacman is the package manager now; letting prt-get manage it would
+        # make sysup rebuild pacman into the system that is using it.
+        [ "$name" = pacman ] && continue
 
         {
             printf '%s\n%s\n' "$name" "$version"

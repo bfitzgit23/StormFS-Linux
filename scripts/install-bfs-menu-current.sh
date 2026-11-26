@@ -9820,6 +9820,8 @@ sync_pkg_db_from_pacman() {
                 name="$(sed -n '/^%NAME%$/{n;p;q}' "$dir/desc")"
                 version="$(sed -n '/^%VERSION%$/{n;p;q}' "$dir/desc")"
                 [[ -n "$name" && -n "$version" ]] || continue
+                # pacman is the package manager now; prt-get must not manage it.
+                [[ "$name" == pacman ]] && continue
 
                 {
                         printf '%s\n%s\n' "$name" "$version"
