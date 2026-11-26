@@ -3932,11 +3932,17 @@ _pacman_package_from_pkgmk() {
     out="$outdir/$name-$version-$release-x86_64.pkg.tar.$ext"
     rm -f "$out"
     case "$ext" in
-        zst) pack=(--zstd -cf "$out" .) ;;
-        xz)  pack=(--xz -cf "$out" .) ;;
-        *)   pack=(-czf "$out" .) ;;
+        zst) pack=(--zstd -cf "$out") ;;
+        xz)  pack=(--xz -cf "$out") ;;
+        *)   pack=(-czf "$out") ;;
     esac
-    if ! ( cd "$payload" && tar "${pack[@]}" ); then
+    # Store members without a "./" prefix: pacman looks for an entry named
+    # exactly ".PKGINFO" and otherwise rejects the archive as missing package
+    # metadata.  Listing the top level lets tar recurse with plain names.
+    if ! ( cd "$payload" &&
+           find . -mindepth 1 -maxdepth 1 -printf '%P\0' |
+               LC_ALL=C sort -z |
+               tar "${pack[@]}" --null -T - ); then
         echo "ERROR: could not create the pacman package for $name." >&2
         rm -rf "$work"
         rm -f "$out"
