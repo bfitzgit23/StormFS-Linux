@@ -2961,7 +2961,8 @@ EOF
     # Existing /tmp/lfs-tools may contain a pristine CRUX pkgmk from an earlier
     # interrupted bootstrap.  Rebuild it if BFSOS fallback support is missing.
     if [ ! "$(PATH=$TOOLS/bin command -v pkgmk)" ] || \
-       ! grep -q 'try_source_fallbacks()' "$TOOLS/bin/pkgmk" 2>/dev/null; then
+       ! grep -q 'try_source_fallbacks()' "$TOOLS/bin/pkgmk" 2>/dev/null || \
+       ! grep -q 'BFSOS: strip each inode once' "$TOOLS/bin/pkgmk" 2>/dev/null; then
         # The first pkgutils build happens before pkgmk exists, so seed its
         # source into the same package namespace normal pkgmk will use later.
         mkdir -p "$sourcedir/pkgutils" || return 1
@@ -3015,6 +3016,33 @@ else\
 fi\
 unset _bfs_utf8_locale _bfs_locale _bfs_locale_cmd _bfs_pkgmk_path' \
             /tmp/pkgutils-5.40.12/pkgmk.in
+
+        # BFSOS: strip each inode once (hard links share one inode).
+        # GCC installs its drivers as hard links (g++, c++ and the versioned
+        # x86_64-*-gcc-16.2.0 share one inode) and stripping keeps that link,
+        # because binutils strip rewrites ELF files in place.  pkgmk passes
+        # every path to a parallel `xargs -P strip` run, so two strips of one
+        # inode read and rewrite the same data at once: strip reports
+        # "invalid operation" on .rodata/.eh_frame_hdr and can die with SIGBUS.
+        awk '
+        index($0, "find . -type f -printf \"%P\\n\"") && !done {
+                print "\t# BFSOS: strip each inode once (hard links share one inode)."
+                print "\tfind . -type f -printf \"%i %P\\n\"                          \\"
+                print "\t\t| sort -k1,1 -u | sed \"s/^[0-9]* //\"            \\"
+                print "\t\t| $FILTER                                         \\"
+                done = 1
+                next
+        }
+        { print }
+        ' /tmp/pkgutils-5.40.12/pkgmk.in > /tmp/pkgutils-5.40.12/pkgmk.in.new || return 1
+
+        cat /tmp/pkgutils-5.40.12/pkgmk.in.new > /tmp/pkgutils-5.40.12/pkgmk.in || return 1
+        rm -f /tmp/pkgutils-5.40.12/pkgmk.in.new
+
+        if ! grep -Fq 'BFSOS: strip each inode once' /tmp/pkgutils-5.40.12/pkgmk.in; then
+            echo "ERROR: failed to collapse the pkgmk strip file list by inode" >&2
+            return 1
+        fi
 
         sed -i \
             -e 's/ --static//' \

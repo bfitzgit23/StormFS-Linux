@@ -5,7 +5,7 @@
 
 name=pkgutils
 version=5.40.12
-release=39
+release=40
 source=(https://crux.nu/files/$name-$version.tar.xz
         pkgadd.conf
         pkgmk.conf
@@ -107,6 +107,41 @@ fix_pkgmk_curl_compatible_downloader() {
         }
 }
 
+# BFSOS: strip each inode once.
+# GCC installs its drivers as hard links (g++, c++ and the versioned
+# x86_64-*-gcc-16.2.0 share one inode), and stripping keeps that link because
+# binutils strip rewrites ELF files in place.  pkgmk hands every path to a
+# parallel `xargs -P` strip run, so two strips of one inode read and rewrite
+# the same data at the same time: strip reports "invalid operation" on
+# .rodata/.eh_frame_hdr and can then die with SIGBUS.  Collapse the file list
+# to one path per inode before it reaches xargs.
+fix_pkgmk_strip_hardlinks() {
+        local target="$1" tmp="${1}.bfsos-strip-hardlinks"
+
+        grep -Fq 'BFSOS: strip each inode once' "$target" && return 0
+
+        awk '
+        index($0, "find . -type f -printf \"%P\\n\"") && !done {
+                print "\t# BFSOS: strip each inode once (hard links share one inode)."
+                print "\tfind . -type f -printf \"%i %P\\n\"                          \\"
+                print "\t\t| sort -k1,1 -u | sed \"s/^[0-9]* //\"            \\"
+                print "\t\t| $FILTER                                         \\"
+                done = 1
+                next
+        }
+        { print }
+        ' "$target" > "$tmp" || return 1
+
+        grep -Fq 'BFSOS: strip each inode once' "$tmp" || {
+                echo "pkgutils: failed to locate the pkgmk strip file list" >&2
+                rm -f "$tmp"
+                return 1
+        }
+
+        cat "$tmp" > "$target" || return 1
+        rm -f "$tmp"
+}
+
 
 # r152: retire the r148 download_source wrapper experiment. Live sysup
 # testing proved that rewriting the core function could leave pkgmk calling
@@ -144,6 +179,7 @@ unset _bfs_utf8_locale _bfs_locale _bfs_locale_cmd _bfs_pkgmk_path' pkgmk.in
 
         fix_pkgmk_cli_precedence pkgmk.in
         fix_pkgmk_curl_compatible_downloader pkgmk.in
+        fix_pkgmk_strip_hardlinks pkgmk.in
 
         sed -i -e 's/ --static//' \
                -e 's/ -static//' Makefile
@@ -156,6 +192,7 @@ post_build() {
         harden_pkgmk_work_cleanup "$PKG/usr/bin/pkgmk"
         fix_pkgmk_cli_precedence "$PKG/usr/bin/pkgmk"
         fix_pkgmk_curl_compatible_downloader "$PKG/usr/bin/pkgmk"
+        fix_pkgmk_strip_hardlinks "$PKG/usr/bin/pkgmk"
 
         # Final/installed pkgmk needs a UTF-8-capable C locale for archives
         # containing non-ASCII pathnames (notably GCC). Support both common
