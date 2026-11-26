@@ -4467,7 +4467,16 @@ EOF
                     fi
                     echo "Installed pacman cannot read its database; rebuilding it."
                 else
-                    continue
+                    # autoconf records the m4 it was configured with, and a base
+                    # built through the temporary toolchain records
+                    # /tmp/lfs-tools/bin/m4 in autom4te.  automake drives that
+                    # tool, so both are rebuilt on every Stage 2: the packaged
+                    # payload then carries an installed-system path, which the
+                    # recipe also enforces, instead of relying on a patched copy.
+                    case $i in
+                        autoconf|automake) ;;
+                        *) continue ;;
+                    esac
                 fi
             fi
 
@@ -4476,7 +4485,7 @@ EOF
             unset _force
 
             case $i in
-                aaa_filesystem|gcc|bash|dash|perl|coreutils|pkgutils)
+                aaa_filesystem|gcc|bash|dash|perl|coreutils|pkgutils|autoconf|automake)
                     _force=-f
                     ;;
             esac
