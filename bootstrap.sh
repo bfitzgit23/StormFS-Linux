@@ -2892,6 +2892,39 @@ _repair_usr_merge() {
     return 0
 }
 
+# A base built while the temporary toolchain was on PATH can carry paths that
+# only exist during the build:
+#
+#   * autoconf records the m4 it was configured with, and checkmk's interpreter,
+#     which early in Stage 2 is the toolchain copy under /tmp/lfs-tools;
+#   * install rules that substitute DESTDIR (groff's chem, gperl, glilypond)
+#     record the pkgmk staging directory.
+#
+# Neither exists on an installed BFSOS system, so rewrite them in place.  The
+# pkgutils tools are skipped: their /tmp/lfs-tools handling is deliberate.
+_repair_stale_build_paths() {
+    local dir="$LFS/usr/bin" file repaired=no
+
+    [ -d "$dir" ] || return 0
+
+    for file in "$dir"/*; do
+        [ -f "$file" ] || continue
+        case "${file##*/}" in
+            pkgmk|bfs-pkgmk|bfs-build) continue ;;
+        esac
+        grep -IqF -e '/tmp/lfs-tools/bin/' -e '/var/cache/pkg/build-work/pkgmk-' \
+            "$file" 2>/dev/null || continue
+        sed -i -e 's|/tmp/lfs-tools/bin/|/usr/bin/|g' \
+               -e 's|/var/cache/pkg/build-work/pkgmk-[^/]*/pkg||g' "$file" || return 1
+        echo "Rewrote build-only paths in ${file#"$LFS"}"
+        repaired=yes
+    done
+
+    [ "$repaired" = no ] ||
+        echo "Repaired files installed with build-only paths under $LFS/usr/bin."
+    return 0
+}
+
 _buildtoolchain() {
     _ensure_archive_dirs
     _start_stage_preflight_log 1 || {
@@ -4097,6 +4130,12 @@ _buildbase() {
     # place of the usr/ symlinks; restore them before anything is executed.
     if ! _repair_usr_merge; then
         echo "ERROR: could not restore the usr merge symlinks under $LFS." >&2
+        return 1
+    fi
+
+    # Repair payloads built before the staging paths were stripped.
+    if ! _repair_stale_build_paths; then
+        echo "ERROR: could not rewrite build-only paths under $LFS." >&2
         return 1
     fi
 

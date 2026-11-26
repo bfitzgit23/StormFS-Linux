@@ -77,6 +77,24 @@ _bfs_setup_prefix_env() {
 
 _bfs_setup_prefix_env
 
+# Some upstream install rules substitute the staging directory into the files
+# they generate (groff's chem/gperl/glilypond, boost's CMake exports).  That
+# prefix never exists on an installed system, so drop it from text files before
+# the footprint is generated.  Ports with their own build() keep responsibility
+# for their payload.
+_bfs_strip_staged_prefix() {
+	local staged="${PKG%/}" file
+
+	[ -n "$staged" ] || return 0
+	[ -d "$staged" ] || return 0
+
+	while IFS= read -r file; do
+		sed -i "s|$staged||g" "$file" || return 1
+	done < <(grep -rIlF -- "$staged" "$staged" 2>/dev/null)
+
+	return 0
+}
+
 # use these only if build() function not exist
 if [ ! "$(command -v build)" ]; then
 	# override stupid function in pkgmk
@@ -540,6 +558,8 @@ if [ ! "$(command -v build)" ]; then
 			rm -rf $PKG/usr/share/doc
 			rm -rf $PKG/usr/doc
 		fi
+
+		_bfs_strip_staged_prefix || return $?
 		
 	}
 fi

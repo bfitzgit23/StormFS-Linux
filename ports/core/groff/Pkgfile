@@ -1,7 +1,19 @@
 # Maintainer: Brian Madonna <bmadonnaster@gmail.com>
 name=groff
 version=1.24.1
-release=1
+release=2
 source=(https://ftp.gnu.org/gnu/groff/groff-$version.tar.gz)
 export PAGE=Letter
 build_opt="--without-x"
+
+post_build() {
+	# groff substitutes DESTDIR into the helper scripts it generates, so chem,
+	# gperl and glilypond would look for their macros and libraries under the
+	# pkgmk staging directory instead of /usr.
+	local script
+
+	for script in chem gperl glilypond; do
+		[ -f "$PKG/usr/bin/$script" ] || continue
+		sed -i "s|$PKG||g" "$PKG/usr/bin/$script" || return 1
+	done
+}
