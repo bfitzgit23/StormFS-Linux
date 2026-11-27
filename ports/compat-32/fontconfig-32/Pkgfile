@@ -6,7 +6,7 @@
 name=fontconfig-32
 version=2.18.3
 release=3
-source=(https://fontconfig.org/release/fontconfig-$version.tar.xz)
+source=(https://ftp2.osuosl.org/pub/blfs/conglomeration/fontconfig/fontconfig-$version.tar.xz)
 
 build_opt="-D doc-man=enabled -D doc=disabled -D nls=disabled -D tests=disabled -D cache-build=disabled"
 

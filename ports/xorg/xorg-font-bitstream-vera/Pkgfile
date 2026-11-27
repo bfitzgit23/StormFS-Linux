@@ -5,7 +5,7 @@
 name=xorg-font-bitstream-vera
 version=1.10
 release=3
-source=(https://download.gnome.org/pub/GNOME/sources/ttf-bitstream-vera/1.10/ttf-bitstream-vera-$version.tar.bz2)
+source=(https://download.gnome.org/sources/ttf-bitstream-vera/1.10/ttf-bitstream-vera-$version.tar.bz2)
 
 pkg_build() {
 

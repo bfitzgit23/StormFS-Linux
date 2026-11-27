@@ -6,7 +6,7 @@
 name=icu-32
 version=78.3
 release=3
-source=(https://github.com/unicode-org/icu/releases/download/release-${version//./-}/icu4c-${version/./_}-src.tgz)
+source=(https://github.com/unicode-org/icu/releases/download/release-${version}/icu4c-${version}-sources.tgz)
 
 build_opt="--disable-samples --disable-tests"
 

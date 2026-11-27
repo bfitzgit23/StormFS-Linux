@@ -6,7 +6,7 @@
 name=libgpg-error-32
 version=1.61
 release=2
-source=(https://mirrors.dotsrc.org/gcrypt/${name%-*}/${name%-*}-$version.tar.bz2)
+source=(https://www.gnupg.org/ftp/gcrypt/${name%-*}/${name%-*}-$version.tar.bz2)
 
 build_opt="--disable-nls --enable-static"
 

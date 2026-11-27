@@ -6,7 +6,7 @@
 name=libgcrypt-32
 version=1.12.3
 release=2
-source=(https://mirrors.dotsrc.org/gcrypt/${name%-*}/${name%-*}-$version.tar.bz2)
+source=(https://www.gnupg.org/ftp/gcrypt/${name%-*}/${name%-*}-$version.tar.bz2)
 
 build_opt="--disable-padlock-support --enable-static=yes --disable-asm"
 

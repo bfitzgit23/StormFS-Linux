@@ -7,7 +7,7 @@ name=calamares
 version=3.4.3
 release=3
 source=(
-    https://codeberg.org/Calamares/calamares/archive/calamares-$version.tar.gz
+    https://codeberg.org/Calamares/calamares/archive/v$version.tar.gz
     branding.desc stylesheet.qss show.qml
     settings.conf services-openrc.conf partition.conf bootloader.conf
     grubcfg.conf users.conf locale.conf keyboard.conf mount.conf initramfs.conf

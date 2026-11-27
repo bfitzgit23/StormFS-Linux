@@ -8,7 +8,7 @@ version=1.12.3
 release=1
 
 source=(
-    https://mirrors.dotsrc.org/gcrypt/libgcrypt/$name-$version.tar.bz2
+    https://www.gnupg.org/ftp/gcrypt/libgcrypt/$name-$version.tar.bz2
 )
 
 build_opt=(
