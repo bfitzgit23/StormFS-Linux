@@ -7369,14 +7369,20 @@ write_chroot_installer() {
         log "Preparing chroot configuration"
         install -d -m 0755 "$TARGET/root"
 
-        # Transitional support for installs made from an older base archive:
-        # seed the current Git port so Git can be installed before the first
-        # Git-backed `ports -u`, and seed the updated driver independently of
-        # which Git package release the base archive contains.
-        if [[ -d "$PROJECT_DIR/ports/opt/git" ]]; then
-                install -d -m 0755 "$TARGET/usr/ports/opt"
+        # The base archive ships the ports tree as it stood when that base was
+        # built, so a recipe fixed afterwards still builds from its old Pkgfile
+        # inside the chroot (that is why newt kept failing on a missing
+        # ./configure long after the recipe was fixed).  Overlay the tree from
+        # the project this installer belongs to, which is the tree the base was
+        # built from: no remote repository is contacted, and the base's
+        # installed files are left untouched.  The Git driver is seeded
+        # independently of which Git package release the base contains.
+        if [[ -d "$PROJECT_DIR/ports" ]]; then
+                install -d -m 0755 "$TARGET/usr/ports"
                 rm -rf "$TARGET/usr/ports/opt/git"
-                cp -a "$PROJECT_DIR/ports/opt/git" "$TARGET/usr/ports/opt/git"
+                cp -a "$PROJECT_DIR/ports/." "$TARGET/usr/ports/"
+        fi
+        if [[ -f "$PROJECT_DIR/ports/opt/git/git" ]]; then
                 install -m 0755 "$PROJECT_DIR/ports/opt/git/git" "$TARGET/root/.bfsos-git-driver"
         fi
 
